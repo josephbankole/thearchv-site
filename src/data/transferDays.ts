@@ -11,8 +11,8 @@ export const transferDays: DayEntry[] = [
     dek: 'Fernandes the name. Not the only one.',
     body: 'The move building steam is Mateus Fernandes. Manchester United are preparing an opening bid for the West Ham midfielder, the twenty one year old Portugal international whose relegation-hit club have set an eighty million pound price. Jorge Mendes is in the middle of it. RUMOUR for now, with no bid confirmed, and Real Madrid, Arsenal and Paris Saint-Germain are all circling the same name. He is not the only one. United want two from a shortlist that runs through Adam Wharton, Carlos Baleba and Elliot Anderson, with the futures of Casemiro, Ugarte, Bruno Fernandes and Kobbie Mainoo all unsettled. The rebuild starts in the middle.',
     status: 'verified',
-    image: '/heads/baleba.webp',
-    imageAlt: 'Carlos Baleba, illustrated by The ARCHV.',
+    image: '/heads/fernandes.webp',
+    imageAlt: 'Mateus Fernandes, illustrated by The ARCHV.',
   },
   {
     date: '2026-06-12', day: 'Friday',

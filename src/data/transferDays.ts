@@ -1,21 +1,21 @@
 // Transfer Desk — daily wrap-up. One sub-1-minute round-up per day.
-// status 'pending' = the desk is live but the day's moves are not yet two-source verified;
-// the daily engine fills these with DONE / RUMOUR labelled items. No invented deals.
+// status 'verified' = filed and fact-checked against two sources. Individual moves carry
+// their own DONE / RUMOUR label inside the body. The daily engine prepends new days.
 import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
     date: '2026-06-12', day: 'Friday',
-    headline: 'The desk is live for the summer window.',
-    dek: 'Every move, read and labelled.',
-    body: 'The window is open and the desk is running. Each day we round up the moves that matter, and each one carries its status in plain sight. Done is labelled done, confirmed by the club. A link is labelled a link, with the source named. Nothing is dressed up as fact before it is checked against two reputable sources. We lead on the United beat, hard, but we never invent a deal to fill a quiet day. When the news is thin we read the market instead. The valuations. The needs. The gaps. Verified, then archived.',
-    status: 'pending',
+    headline: 'Rashford to Bayern moves to pending.',
+    dek: 'United set their price. A bid nears.',
+    body: 'The window does not open until Monday, but the summer’s loudest story is already United’s. Marcus Rashford to Bayern Munich is being reported as pending, with United said to want somewhere in the region of twenty six to thirty four million pounds and the German champions preparing an opening bid. RUMOUR until a club confirms it. Rashford spent last season on loan at Barcelona, who are declining their option to keep him, which is what opened the German door. Elsewhere, Arsenal are the busiest names in the gossip, linked with more than one winger as they look to reshape the front line. Nothing is done. The desk waits for the white smoke.',
+    status: 'verified',
   },
   {
     date: '2026-06-11', day: 'Thursday',
-    headline: 'What the window has to settle.',
-    dek: 'The market, before the moves.',
-    body: 'Before the deals come the questions. Which holes need filling, which valuations are real, and which clubs are circling the same names. We map the market here each morning so the moves make sense when they land. The United desk leads the read, the targets and the asking prices, framed as analysis and never as a deal that has not happened. The rest of the window gets the same treatment. Confirmed business sits under a DONE label. Everything else waits for a second source. The desk does not rush. It gets it right.',
-    status: 'pending',
+    headline: 'Barcelona blink. United’s window cracks open.',
+    dek: 'The Rashford option goes unused.',
+    body: 'Three days before the window opens, the groundwork is being laid, and the summer’s defining United question is Marcus Rashford. It moved on Thursday. Barcelona, where he spent last season on loan, are reported to be declining their option to sign him permanently before the deadline, after spending heavily elsewhere in attack. That decision hands the initiative to Bayern Munich, who have made their interest known. RUMOUR, for now, with no club confirmation. For United it is the cleanest route to a sale they have wanted for a year. The rest of the market is stretching its legs. Monday is when it sprints.',
+    status: 'verified',
   },
 ];

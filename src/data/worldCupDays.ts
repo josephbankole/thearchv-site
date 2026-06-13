@@ -1,6 +1,6 @@
 // World Cup — daily wrap-up. Each entry is a sub-1-minute read for one match day.
-// status 'pending' = the live tracker is ready but the day's results are not yet verified;
-// the daily engine replaces these with confirmed wraps (two-source gate). No invented scores.
+// status 'verified' = filed and fact-checked against two sources. 'pending' = the live
+// tracker is ready but the day is not yet written. The daily engine prepends new days.
 export interface DayEntry {
   date: string;     // ISO
   day: string;      // short label, e.g. "Day 2"
@@ -13,16 +13,16 @@ export interface DayEntry {
 export const worldCupDays: DayEntry[] = [
   {
     date: '2026-06-12', day: 'Day 2',
-    headline: 'The group stage finds its feet.',
-    dek: 'The first full day of group play.',
-    body: 'The opening night is behind us and the group stage proper gets under way. Across the host cities the early fixtures arrive in a rush, the first standings take shape, and the contenders begin to show their hand. We log every kick off, every scoreline and every decisive moment here, the moment it is confirmed against two independent sources. Nothing lands on this card until it is verified. A permanent archive earns its place through accuracy, not haste. The Archive does not guess. It records.',
-    status: 'pending',
+    headline: 'The hosts arrive. The USA make a statement.',
+    dek: "Balogun's brace, Canada rescued late.",
+    body: 'Day two belonged to the co-hosts. The United States opened with a four one win over Paraguay, Folarin Balogun scoring twice inside the first half before an own goal and a late Gio Reyna strike finished the job. It was the dominant start the tournament wanted from its biggest host. Canada had to settle for less. Bosnia and Herzegovina led in Toronto, and the home side needed Cyle Larin, set up by Jonathan David, to level it one all deep in the game. One host roared. One host survived. The group stage was up and running.',
+    status: 'verified',
   },
   {
     date: '2026-06-11', day: 'Day 1',
-    headline: 'The 2026 World Cup is under way.',
-    dek: 'It begins, across three nations.',
-    body: 'It begins. The largest finals in the tournament history opens across North America, the anthems ring out, and a summer of football is set in motion. The host takes centre stage for the curtain raiser as a new chapter of the archive opens with it. We record the opening fixture here, scoreline and scorers included, the moment it is confirmed against two reputable sources. Until then the card stays clean. An indexed, permanent page is no place for a guessed result. The wait is brief. The history is forever.',
-    status: 'pending',
+    headline: 'It begins at the Azteca. And it bites.',
+    dek: 'Mexico win the opener amid three red cards.',
+    body: 'The tournament kicked off where two of its greatest editions were staged. Mexico beat South Africa two nil at the Estadio Azteca, Julián Quiñones striking inside nine minutes and Raúl Jiménez adding the second, on a feisty night that produced three red cards. The Azteca became the first ground to host matches at three different mens World Cups, after 1970 and 1986. Later, in Guadalajara, South Korea came from behind to beat Czechia two one. Ladislav Krejci put the Czechs ahead, then In-Beom Hwang and Hyeon-Gyu Oh turned it around. A comeback to close the opening day. The tournament had found its jeopardy early.',
+    status: 'verified',
   },
 ];

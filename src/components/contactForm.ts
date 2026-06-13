@@ -32,8 +32,10 @@ export function initContactForm(): void {
 
     const key = getKey();
     if (key === FALLBACK_KEY) {
-      status.className = 'form__status is-err';
-      status.textContent = 'The form is not connected yet. Add your Web3Forms key to go live.';
+      // Form intentionally dormant: route enquiries to Instagram DMs for now.
+      status.className = 'form__status is-ok';
+      status.textContent = 'Thank you. For partnerships, message us on Instagram @thearchv_ca and we will pick it up.';
+      track('partnership_intent', {});
       return;
     }
 

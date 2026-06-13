@@ -3,6 +3,7 @@ import '@fontsource-variable/inter-tight';
 import './style.css';
 
 import { initGiantKillers } from './components/giantKillers';
+import { initLongReads } from './components/longReads';
 import { initArchiveRail } from './components/archiveRail';
 import { initDailyDigest } from './components/dailyDigest';
 import { initContactForm } from './components/contactForm';
@@ -21,6 +22,7 @@ function boot(): void {
   initDailyDigest('transfer-days', transferDays, 'transfer');
   initDailyDigest('worldcup-days', worldCupDays, 'worldcup');
   initGiantKillers(animate);
+  initLongReads(animate);
   initArchiveRail();
   initContactForm();
   initStickyFollow();

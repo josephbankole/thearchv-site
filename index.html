@@ -1,155 +1,224 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The ARCHV — Illustrated stories from football history</title>
-<meta name="description" content="The ARCHV — illustrated stories from football history. The matches, the heartbreak, the nights that never let go. Featuring The Giant-Killers: 10 of the greatest World Cup upsets of all time.">
-<meta property="og:title" content="The ARCHV — Illustrated stories from football history">
-<meta property="og:description" content="The matches, the heartbreak, the nights that never let go.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://thearchv.ca/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,900;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0e0f12; --panel:#15171c; --ink:#f4f1ea; --muted:#a7a39a;
-    --gold:#c9a227; --line:#2a2d34;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:inherit}
-  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-  /* HERO */
-  header{padding:88px 0 56px;text-align:center;border-bottom:1px solid var(--line)}
-  .kicker{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
-  .wordmark{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(48px,11vw,104px);line-height:.92;letter-spacing:-.01em}
-  .wordmark .dim{color:var(--muted);font-weight:400}
-  .tag{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(17px,3.4vw,23px);color:var(--ink);max-width:540px;margin:26px auto 0}
-  .cta{margin-top:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .btn{display:inline-block;padding:13px 22px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;transition:.18s}
-  .btn-primary{background:var(--gold);color:#1a1407}
-  .btn-primary:hover{background:#dbb53a}
-  .btn-ghost{border:1px solid var(--line);color:var(--ink)}
-  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+    <title>The ARCHV — Football History, Illustrated</title>
+    <meta name="description" content="Illustrated stories from football history. The Giant-Killers, every final since 1970, and the moments that still hurt. From @thearchv_ca." />
+    <meta name="author" content="The ARCHV" />
+    <link rel="canonical" href="https://thearchv.ca/" />
+    <meta name="theme-color" content="#0C2A3E" />
 
-  /* MANIFESTO */
-  .manifesto{padding:56px 0;border-bottom:1px solid var(--line);text-align:center}
-  .manifesto p{font-size:18px;color:var(--muted);max-width:600px;margin:0 auto}
-  .manifesto strong{color:var(--ink);font-weight:600}
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The ARCHV" />
+    <meta property="og:title" content="The ARCHV — Football History, Illustrated" />
+    <meta property="og:description" content="Ten nights the bracket broke, and every final drawn down to the moment that decided it." />
+    <meta property="og:url" content="https://thearchv.ca/" />
+    <meta property="og:image" content="https://thearchv.ca/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The ARCHV — Football History, Illustrated" />
+    <meta name="twitter:description" content="Ten nights the bracket broke, and every final drawn down to the moment that decided it." />
+    <meta name="twitter:image" content="https://thearchv.ca/og.jpg" />
 
-  /* ARTICLE */
-  article{padding:64px 0}
-  .feat-kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-  .feat-title{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(32px,6.5vw,52px);line-height:1.02;letter-spacing:-.01em}
-  .feat-sub{font-family:'Fraunces',serif;font-style:italic;font-size:20px;color:var(--muted);margin-top:14px}
-  .lede{font-size:18px;margin:30px 0 8px;color:var(--ink)}
-  .entry{padding:26px 0;border-top:1px solid var(--line)}
-  .entry:first-of-type{border-top:none}
-  .entry h3{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--ink);margin-bottom:8px}
-  .entry h3 .yr{color:var(--gold)}
-  .entry p{color:var(--muted);font-size:16.5px}
-  .pull{font-family:'Fraunces',serif;font-style:italic;font-size:22px;color:var(--ink);text-align:center;margin:40px 0;padding:0 12px}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
 
-  /* FOLLOW STRIP */
-  .follow{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:38px 28px;text-align:center;margin:8px 0 0}
-  .follow h2{font-family:'Fraunces',serif;font-weight:900;font-size:28px;margin-bottom:10px}
-  .follow p{color:var(--muted);max-width:460px;margin:0 auto 22px}
+    <!-- Content Security Policy. GitHub Pages cannot send headers, so this meta is the ceiling.
+         If the domain is fronted by a CDN (Cloudflare), promote these to real response headers
+         and add frame-ancestors + HSTS. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-  /* FOOTER */
-  footer{border-top:1px solid var(--line);padding:44px 0 64px;text-align:center;color:var(--muted);font-size:14px}
-  footer a{color:var(--gold);text-decoration:none}
-  .enq{margin-bottom:18px;font-size:15px;color:var(--ink)}
-</style>
-</head>
-<body>
+    <!-- JSON-LD: the flagship article. No trademarked terms in structured data. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Giant-Killers",
+        "description": "Ten nights the smallest team in the room refused to lose.",
+        "author": { "@type": "Organization", "name": "The ARCHV" },
+        "publisher": { "@type": "Organization", "name": "The ARCHV" },
+        "image": "https://thearchv.ca/og.jpg",
+        "datePublished": "2026-06-12",
+        "inLanguage": "en-GB"
+      }
+    </script>
 
-<header>
-  <div class="wrap">
-    <div class="kicker">The Football Archive</div>
-    <h1 class="wordmark">THE&nbsp;ARCHV</h1>
-    <p class="tag">Illustrated stories from football history — the matches, the heartbreak, the nights that never let go.</p>
-    <div class="cta">
-      <a class="btn btn-primary" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener">Follow on Instagram</a>
-      <a class="btn btn-ghost" href="https://x.com/thearchv_ca" target="_blank" rel="noopener">On X / Twitter</a>
+    <!-- Early bootstrap: flag JS, reduced-motion and mobile before first paint.
+         Allowed via the CSP hash above. Keep this byte-stable. -->
+    <script>(function(){var e=document.documentElement;e.classList.add('js');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)e.classList.add('reduced-motion');if(matchMedia('(max-width: 900px), (pointer: coarse)').matches)e.classList.add('is-mobile');}catch(x){}})();</script>
+
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+
+  <body>
+    <a class="skip" href="#archive">Skip to the archive</a>
+
+    <!-- WebGL canvas lives behind everything; content never waits on it. -->
+    <div id="webgl" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <a class="wordmark" href="#top" aria-label="The ARCHV, home">
+        <img class="wordmark__badge" src="/brand/logo-badge.png" width="38" height="38" alt="" />
+        <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+      </a>
+      <a class="btn btn--ghost masthead__follow" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer">Follow</a>
+    </header>
+
+    <main id="top">
+      <!-- 1. HERO — static headline + CTA, instant, no-JS proof -->
+      <section class="hero" id="hero">
+        <div class="hero__inner">
+          <p class="eyebrow" data-reveal>The archive, alive.</p>
+          <h1 class="hero__title">
+            <span data-reveal-line>Football has a memory.</span>
+            <span data-reveal-line>This is the <em>ARCHV<span class="dot">.</span></em></span>
+          </h1>
+          <p class="hero__sub" data-reveal>Illustrated football history. The upsets, the finals, the nights that still hurt twenty years on. Every club, every era.</p>
+          <div class="hero__cta" data-reveal>
+            <a class="btn btn--gold" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>Follow on Instagram</a>
+            <a class="btn btn--text" href="#giant-killers">Read The Giant-Killers</a>
+          </div>
+        </div>
+        <a class="hero__scroll" href="#manifesto" aria-label="Scroll">
+          <span>Scroll</span><span class="hero__scroll-line" aria-hidden="true"></span>
+        </a>
+      </section>
+
+      <!-- MANIFESTO — short, un-numbered bridge -->
+      <section class="manifesto" id="manifesto">
+        <div class="wrap">
+          <h2 class="manifesto__title" data-reveal>The favourites are never as safe as the bracket says.</h2>
+          <p class="manifesto__line" data-reveal>We keep the other history. We start the debate, and we never pick the side.</p>
+        </div>
+      </section>
+
+      <!-- 1. THE TRANSFER DESK -->
+      <section class="desk" id="transfer-desk">
+        <div class="wrap">
+          <p class="section-index">01 / The transfer desk</p>
+          <h2 class="desk__title" data-reveal>The window, documented.</h2>
+          <p class="desk__lede" data-reveal>The lead franchise of the archive. Every move read, verified against two sources, drawn the same day. Done is labelled done, rumour is labelled rumour. Scroll the days.</p>
+        </div>
+        <div class="rail day-rail" id="transfer-days" role="list" aria-label="Transfer desk, daily wrap-ups"></div>
+      </section>
+
+      <!-- 2. THE WORLD CUP -->
+      <section class="worldcup" id="world-cup">
+        <div class="wrap">
+          <p class="section-index">02 / The World Cup</p>
+          <h2 class="desk__title" data-reveal>Every day, documented.</h2>
+          <p class="desk__lede" data-reveal>A sub-one-minute wrap of the tournament, every day it runs. Verified against two sources before it lands. Scroll the days.</p>
+        </div>
+        <div class="rail day-rail" id="worldcup-days" role="list" aria-label="World Cup, daily wrap-ups"></div>
+      </section>
+
+      <!-- BANNER BAND — animated brand plaque -->
+      <section class="banner-band" aria-hidden="true">
+        <img class="banner-band__img" src="/brand/banner.webp" alt="" width="2000" height="1117" loading="lazy" decoding="async" />
+      </section>
+
+      <!-- 3. THE ARCHIVE — poster gallery -->
+      <section class="archive" id="archive">
+        <div class="wrap">
+          <p class="section-index">03 / The archive</p>
+          <h2 class="archive__title" data-reveal>From the archive.</h2>
+          <p class="archive__lede" data-reveal>Football history, drawn down to the moment that decided it. Every final from Mexico in 1970 to Lusail in 2022. Drag to explore.</p>
+        </div>
+        <div class="rail" id="rail" role="list" aria-label="Poster archive"></div>
+        <div class="wrap archive__hint"><span id="rail-progress" class="rail__progress" aria-hidden="true"></span></div>
+      </section>
+
+      <!-- THE GIANT-KILLERS — archival long read -->
+      <section class="killers" id="giant-killers">
+        <div class="wrap">
+          <p class="section-index">The archive · Long read</p>
+          <h2 class="killers__title" data-reveal>The Giant-Killers<span class="dot">.</span></h2>
+          <p class="killers__lede" data-reveal id="killers-intro"></p>
+          <ol class="killers__list" id="killers-list" aria-label="Ten football upsets"></ol>
+          <p class="killers__outro" data-reveal id="killers-outro"></p>
+          <a class="btn btn--gold killers__follow" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>Follow for the next one</a>
+        </div>
+      </section>
+
+      <!-- 7. PARTNERSHIPS -->
+      <section class="partner" id="partnerships">
+        <div class="wrap">
+          <p class="section-index">Work with the archive</p>
+          <h2 class="partner__title" data-reveal>Make work people keep.</h2>
+          <p class="partner__lede" data-reveal>For brands building around football history, the 2026 tournament, or the transfer window. The audience is obsessed, the artwork is rights-clean, and the work outlives the campaign. Tell us what you are building.</p>
+
+          <form class="form" id="partner-form" novalidate>
+            <div class="form__row">
+              <label class="field">
+                <span>Your name</span>
+                <input type="text" name="name" autocomplete="name" required />
+              </label>
+              <label class="field">
+                <span>Brand or company</span>
+                <input type="text" name="company" autocomplete="organization" required />
+              </label>
+            </div>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label class="field">
+              <span>What are you building?</span>
+              <textarea name="message" rows="4" required></textarea>
+            </label>
+            <!-- Honeypot: hidden from humans, catches bots. -->
+            <input type="text" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button class="btn btn--gold form__submit" type="submit">Send partnership enquiry</button>
+            <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer__top">
+          <a class="footer__brand" href="#top" aria-label="The ARCHV">
+            <img class="footer__badge" src="/brand/logo-badge.png" width="72" height="72" alt="" />
+            <span class="wordmark wordmark--lg">
+              <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+            </span>
+          </a>
+          <nav class="footer__links" aria-label="Social">
+            <a href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>Instagram</a>
+            <a href="https://x.com/thearchv_ca" target="_blank" rel="noopener noreferrer">X</a>
+            <a href="#partnerships">Partnerships</a>
+          </nav>
+        </div>
+        <p class="footer__tag">Football history, illustrated. Daily.</p>
+        <p class="footer__legal">
+          The ARCHV is an independent football-history publication. We are not affiliated with, endorsed by, or connected to any governing body, confederation, league, club, or competition organiser. All club names, competition names, and tournaments are referenced for editorial and historical commentary only, and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs, and are published as editorial commentary. No official marks, crests, or competition logos are used. © 2026 The ARCHV. All original artwork and writing are our own.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Lightbox for the poster archive -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Poster" hidden>
+      <button class="lightbox__close" id="lightbox-close" aria-label="Close">Close</button>
+      <figure class="lightbox__fig">
+        <img id="lightbox-img" alt="" />
+        <figcaption id="lightbox-cap"></figcaption>
+      </figure>
     </div>
-  </div>
-</header>
 
-<section class="manifesto">
-  <div class="wrap">
-    <p>We document the game the way it actually felt — <strong>illustrated, story-first, the moments that still hurt twenty years later.</strong> One archive, building in real time through this World Cup.</p>
-  </div>
-</section>
+    <!-- Persistent mobile Follow bar -->
+    <a class="follow-bar" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>
+      Follow <strong>@thearchv_ca</strong>
+    </a>
 
-<article>
-  <div class="wrap">
-    <div class="feat-kicker">The Field Guide · No. 01</div>
-    <h2 class="feat-title">The Giant-Killers</h2>
-    <p class="feat-sub">10 World Cup nights when the smallest team in the room refused to lose.</p>
-
-    <p class="lede">Every World Cup sells you the favourites. This is the other history — the nights the bracket broke, the holders went home, and a country nobody fancied walked off the pitch immortal.</p>
-
-    <div class="entry">
-      <h3>1. USA 1–0 England · <span class="yr">1950</span></h3>
-      <p>England arrived as the inventors of the game and a favourite to win it. A part-time American side — a dishwasher, a teacher, a hearse driver among them — wasn't supposed to lay a glove on them. Then Joe Gaetjens threw himself at a header before half-time. The English press reportedly thought the scoreline was a typo. It wasn't.</p>
-    </div>
-    <div class="entry">
-      <h3>2. North Korea 1–0 Italy · <span class="yr">1966</span></h3>
-      <p>Two-time world champions against a side almost no one in England had seen play. Pak Doo-ik struck just before half-time, the defence held, and Italy were out. Middlesbrough adopted the underdogs on the spot — still one of the most improbable results the tournament has produced.</p>
-    </div>
-    <div class="entry">
-      <h3>3. Algeria 2–1 West Germany · <span class="yr">1982</span></h3>
-      <p>The reigning European champions, humbled by a nation in its first ever World Cup. Madjer and Belloumi tore the favourites apart. What happened next — West Germany and Austria's mutually convenient 1–0 — is why every final group game now kicks off at the same time. The upset literally changed the rules.</p>
-    </div>
-    <div class="entry">
-      <h3>4. Cameroon 1–0 Argentina · <span class="yr">1990</span></h3>
-      <p>Defending champions. Maradona. Opening night. Cameroon finished it with <strong>nine men</strong> after two red cards — and still won, Omam-Biyik's header squirming under the keeper. The Indomitable Lions reached the quarter-finals and changed how the world saw African football forever.</p>
-    </div>
-    <div class="entry">
-      <h3>5. Senegal 1–0 France · <span class="yr">2002</span></h3>
-      <p>The holders. The world champions. Beaten in the very first game by a Senegal side on its tournament debut. Papa Bouba Diop's scrappy goal, and the shirt-by-the-corner-flag dance, became the image of the tournament.</p>
-    </div>
-    <div class="entry">
-      <h3>6. USA 2–0 Portugal · <span class="yr">2002</span></h3>
-      <p>A Portugal golden generation of Figo and Rui Costa, stunned 3–0 inside 36 minutes by a USA team no one rated. It announced the Americans as a side that could hurt anybody on the day — and it still defines a generation of US fans.</p>
-    </div>
-    <div class="entry">
-      <h3>7. South Korea 2–0 Germany · <span class="yr">2018</span></h3>
-      <p>The defending champions needed a win to survive. Two stoppage-time goals sent Germany out in the group stage for the first time in 80 years. Neuer caught upfield as Son rolled into an empty net — one of the great holders'-curse photographs.</p>
-    </div>
-    <div class="entry">
-      <h3>8. Saudi Arabia 2–1 Argentina · <span class="yr">2022</span></h3>
-      <p>Messi scored early. Then the 51st-ranked team in the world scored twice in five second-half minutes and defended like their lives depended on it — ending Argentina's <strong>36-match unbeaten run</strong>. Argentina won the whole tournament. They lost only once all the way through: here.</p>
-    </div>
-    <div class="entry">
-      <h3>9. Japan 2–1 Germany &amp; 2–1 Spain · <span class="yr">2022</span></h3>
-      <p>Not one shock but two. Japan came from behind to beat Germany, then did the exact same thing to Spain — identical 2–1 comebacks — to win the "group of death" ahead of both. Germany were eliminated in the group stage for the second World Cup running.</p>
-    </div>
-    <div class="entry">
-      <h3>10. Morocco's run · <span class="yr">2022</span></h3>
-      <p>Top of a group with Croatia and Belgium. Spain beaten on penalties. Portugal beaten 1–0. The Atlas Lions became the <strong>first African nation ever to reach a World Cup semi-final</strong> — carried by a wall of a defence and the loudest travelling support in Qatar.</p>
-    </div>
-
-    <p class="pull">"The favourites are never as safe as the bracket says. That's the whole reason we watch."</p>
-
-    <div class="follow">
-      <h2>Don't miss the next one</h2>
-      <p>We're documenting this World Cup as it happens — illustrated, story-first. Follow along on Instagram.</p>
-      <a class="btn btn-primary" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener">@thearchv_ca</a>
-    </div>
-  </div>
-</article>
-
-<footer>
-  <div class="wrap">
-    <div class="enq">Brand &amp; partnership enquiries — <a href="mailto:folaban@gmail.com">folaban@gmail.com</a></div>
-    <div>© 2026 The ARCHV · Illustrated stories from football history</div>
-  </div>
-</footer>
-
-</body>
+    <noscript>
+      <style>#webgl,.grain,.hero__scroll{display:none}</style>
+    </noscript>
+  </body>
 </html>

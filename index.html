@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>The ARCHV — Football History, Illustrated</title>
+    <meta name="description" content="Illustrated stories from football history. The Giant-Killers, every final since 1970, and the moments that still hurt. From @thearchv_ca." />
+    <meta name="author" content="The ARCHV" />
+    <link rel="canonical" href="https://thearchv.ca/" />
+    <meta name="theme-color" content="#0C2A3E" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The ARCHV" />
+    <meta property="og:title" content="The ARCHV — Football History, Illustrated" />
+    <meta property="og:description" content="Ten nights the bracket broke, and every final drawn down to the moment that decided it." />
+    <meta property="og:url" content="https://thearchv.ca/" />
+    <meta property="og:image" content="https://thearchv.ca/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The ARCHV — Football History, Illustrated" />
+    <meta name="twitter:description" content="Ten nights the bracket broke, and every final drawn down to the moment that decided it." />
+    <meta name="twitter:image" content="https://thearchv.ca/og.jpg" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Content Security Policy. GitHub Pages cannot send headers, so this meta is the ceiling.
+         If the domain is fronted by a CDN (Cloudflare), promote these to real response headers
+         and add frame-ancestors + HSTS. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- JSON-LD: the flagship article. No trademarked terms in structured data. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Giant-Killers",
+        "description": "Ten nights the smallest team in the room refused to lose.",
+        "author": { "@type": "Organization", "name": "The ARCHV" },
+        "publisher": { "@type": "Organization", "name": "The ARCHV" },
+        "image": "https://thearchv.ca/og.jpg",
+        "datePublished": "2026-06-12",
+        "inLanguage": "en-GB"
+      }
+    </script>
+
+    <!-- Early bootstrap: flag JS, reduced-motion and mobile before first paint.
+         Allowed via the CSP hash above. Keep this byte-stable. -->
+    <script>(function(){var e=document.documentElement;e.classList.add('js');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)e.classList.add('reduced-motion');if(matchMedia('(max-width: 900px), (pointer: coarse)').matches)e.classList.add('is-mobile');}catch(x){}})();</script>
+
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+
+  <body>
+    <a class="skip" href="#archive">Skip to the archive</a>
+
+    <!-- WebGL canvas lives behind everything; content never waits on it. -->
+    <div id="webgl" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <a class="wordmark" href="#top" aria-label="The ARCHV, home">
+        <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+      </a>
+      <a class="btn btn--ghost masthead__follow" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer">Follow</a>
+    </header>
+
+    <main id="top">
+      <!-- 1. HERO — static headline + CTA, instant, no-JS proof -->
+      <section class="hero" id="hero">
+        <div class="hero__inner">
+          <p class="eyebrow" data-reveal>The archive, alive.</p>
+          <h1 class="hero__title">
+            <span data-reveal-line>Football has a memory.</span>
+            <span data-reveal-line>We are the <em>archive<span class="dot">.</span></em></span>
+          </h1>
+          <p class="hero__sub" data-reveal>Illustrated football history. The upsets, the finals, the nights that still hurt twenty years on. Every club, every era.</p>
+          <div class="hero__cta" data-reveal>
+            <a class="btn btn--gold" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>Follow on Instagram</a>
+            <a class="btn btn--text" href="#giant-killers">Read The Giant-Killers</a>
+          </div>
+        </div>
+        <a class="hero__scroll" href="#manifesto" aria-label="Scroll">
+          <span>Scroll</span><span class="hero__scroll-line" aria-hidden="true"></span>
+        </a>
+      </section>
+
+      <!-- 2. MANIFESTO -->
+      <section class="manifesto" id="manifesto">
+        <div class="wrap">
+          <p class="section-index">01 / The promise</p>
+          <h2 class="manifesto__title" data-reveal>The favourites are never as safe as the bracket says.</h2>
+          <div class="manifesto__body">
+            <p data-reveal>Every tournament sells you the favourites. We keep the other history. Story first, drawn by hand, built to be remembered.</p>
+            <p data-reveal>We are the memory of football, and the argument it never settles. We start the debate. We never pick the side.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. THE GIANT-KILLERS (featured article) -->
+      <section class="killers" id="giant-killers">
+        <div class="wrap">
+          <p class="section-index">02 / The feature</p>
+          <h2 class="killers__title" data-reveal>The Giant-Killers<span class="dot">.</span></h2>
+          <p class="killers__lede" data-reveal id="killers-intro"></p>
+          <ol class="killers__list" id="killers-list" aria-label="Ten football upsets"></ol>
+          <p class="killers__outro" data-reveal id="killers-outro"></p>
+          <a class="btn btn--gold killers__follow" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>Follow for the next one</a>
+        </div>
+      </section>
+
+      <!-- 4. THE ARCHIVE — poster gallery -->
+      <section class="archive" id="archive">
+        <div class="wrap">
+          <p class="section-index">03 / The archive</p>
+          <h2 class="archive__title" data-reveal>Nine finals. One archive.</h2>
+          <p class="archive__lede" data-reveal>Every final drawn down to the moment that decided it. From Mexico in 1970 to Lusail in 2022. Drag to explore.</p>
+        </div>
+        <div class="rail" id="rail" role="list" aria-label="Poster archive"></div>
+        <div class="wrap archive__hint"><span id="rail-progress" class="rail__progress" aria-hidden="true"></span></div>
+      </section>
+
+      <!-- 5. THE TRANSFER DESK (contained) -->
+      <section class="desk" id="transfer-desk">
+        <div class="wrap">
+          <p class="section-index">04 / The transfer desk</p>
+          <h2 class="desk__title" data-reveal>The window, documented.</h2>
+          <p class="desk__lede" data-reveal>One franchise inside the archive. Every move read, verified against two sources, and drawn the same day. Rumour is labelled rumour. Done is labelled done.</p>
+          <div class="ticker" id="ticker" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- 6. WHAT WE DO / CREDIBILITY -->
+      <section class="craft" id="craft">
+        <div class="wrap">
+          <p class="section-index">05 / The craft</p>
+          <h2 class="craft__title" data-reveal>An illustrated football archive, published daily.</h2>
+          <div class="craft__grid">
+            <article class="card" data-reveal>
+              <h3>Drawn, not lifted</h3>
+              <p>Original illustration only. No photographs, no crests, no borrowed marks. The house style is the signature.</p>
+            </article>
+            <article class="card" data-reveal>
+              <h3>Verified, not viral</h3>
+              <p>Every fact checked against two reputable sources before it ships. Accuracy over volume, always.</p>
+            </article>
+            <article class="card" data-reveal>
+              <h3>Story first</h3>
+              <p>We do not report the news. We keep the memory. The moments that will still hurt in twenty years.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. PARTNERSHIPS -->
+      <section class="partner" id="partnerships">
+        <div class="wrap">
+          <p class="section-index">06 / Work with the archive</p>
+          <h2 class="partner__title" data-reveal>Make work people keep.</h2>
+          <p class="partner__lede" data-reveal>For brands building around football history, the 2026 tournament, or the transfer window. The audience is obsessed, the artwork is rights-clean, and the work outlives the campaign. Tell us what you are building.</p>
+
+          <form class="form" id="partner-form" novalidate>
+            <div class="form__row">
+              <label class="field">
+                <span>Your name</span>
+                <input type="text" name="name" autocomplete="name" required />
+              </label>
+              <label class="field">
+                <span>Brand or company</span>
+                <input type="text" name="company" autocomplete="organization" required />
+              </label>
+            </div>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label class="field">
+              <span>What are you building?</span>
+              <textarea name="message" rows="4" required></textarea>
+            </label>
+            <!-- Honeypot: hidden from humans, catches bots. -->
+            <input type="text" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button class="btn btn--gold form__submit" type="submit">Send partnership enquiry</button>
+            <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer__top">
+          <a class="wordmark wordmark--lg" href="#top" aria-label="The ARCHV">
+            <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+          </a>
+          <nav class="footer__links" aria-label="Social">
+            <a href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>Instagram</a>
+            <a href="https://x.com/thearchv_ca" target="_blank" rel="noopener noreferrer">X</a>
+            <a href="#partnerships">Partnerships</a>
+          </nav>
+        </div>
+        <p class="footer__tag">Football history, illustrated. Daily.</p>
+        <p class="footer__legal">
+          The ARCHV is an independent football-history publication. We are not affiliated with, endorsed by, or connected to any governing body, confederation, league, club, or competition organiser. All club names, competition names, and tournaments are referenced for editorial and historical commentary only, and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs, and are published as editorial commentary. No official marks, crests, or competition logos are used. © 2026 The ARCHV. All original artwork and writing are our own.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Lightbox for the poster archive -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Poster" hidden>
+      <button class="lightbox__close" id="lightbox-close" aria-label="Close">Close</button>
+      <figure class="lightbox__fig">
+        <img id="lightbox-img" alt="" />
+        <figcaption id="lightbox-cap"></figcaption>
+      </figure>
+    </div>
+
+    <!-- Persistent mobile Follow bar -->
+    <a class="follow-bar" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>
+      Follow <strong>@thearchv_ca</strong>
+    </a>
+
+    <noscript>
+      <style>#webgl,.grain,.hero__scroll{display:none}</style>
+    </noscript>
+  </body>
+</html>

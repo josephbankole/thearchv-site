@@ -1,0 +1,26 @@
+{
+  "name": "thearchv-site",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "The ARCHV — Football history, illustrated. The owned site for @thearchv_ca.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173",
+    "assets": "node scripts/optimize-posters.mjs",
+    "og": "node scripts/make-og.mjs"
+  },
+  "devDependencies": {
+    "@types/three": "^0.169.0",
+    "sharp": "^0.33.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.1.0",
+    "@fontsource-variable/inter-tight": "^5.1.0",
+    "gsap": "^3.12.5",
+    "three": "^0.169.0"
+  }
+}

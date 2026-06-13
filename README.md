@@ -71,6 +71,23 @@ verified entries under the two-source gate. No scores or deals are invented in t
 - `src/data/transferDays.ts` — Transfer Desk daily wrap-ups
 - `src/data/worldCupDays.ts` — World Cup daily wrap-ups (`DayEntry` shape; set `status: 'verified'` once filled)
 
+## Commerce — Etsy prints (Printful)
+
+The Archive posters are wired to link to their Etsy listings (fulfilled by Printful, store
+`joeydesignca.etsy.com`). Each `Poster` in `src/data/posters.ts` has an optional `etsyUrl`.
+When set, a gold **"Shop this print"** button appears in that poster's lightbox; until then it
+stays hidden. Populate `etsyUrl` per poster as listings go live (a pipeline step for when traffic
+picks up). No fake links ship.
+
+## Player headshots — brand illustrations only
+
+Story cards (`src/data/*Days.ts`) take an optional `image` (+ `imageAlt`). **Only brand-illustrated
+headshots** are allowed: navy ground, no crest, no kit logo, no sponsor mark, not a photo, and no
+`@fifa.archv`/legacy watermark. Source them from the headshot bank or by cropping the face out of a
+brand cover (watermark/title-bar excluded), then optimize to `public/heads/*.webp` (~240px). Club
+"welcome" graphics and kit photos are forbidden. Keep headshots in editorial cards only, never in
+the partnerships section.
+
 ## Deploy (GitHub Pages)
 
 1. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds and publishes `dist/`.

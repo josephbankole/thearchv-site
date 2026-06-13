@@ -307,6 +307,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .lightbox__fig img { max-height: 80vh; max-width: 100%; object-fit: contain; border-radius: 2px; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8); }
 .lightbox__fig figcaption { text-align: center; color: var(--cream-dim); font-size: 0.95rem; max-width: 50ch; }
 .lightbox__fig figcaption strong { color: var(--cream); font-family: var(--serif); font-weight: 360; display: block; font-size: 1.2rem; margin-bottom: 0.3rem; }
+.lightbox__shop { margin-top: 0.25rem; }
+.lightbox__shop[hidden] { display: none; }
 
 /* ---------- mobile follow bar ---------- */
 .follow-bar {

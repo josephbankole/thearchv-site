@@ -5,11 +5,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 // All scroll motion. Never called under prefers-reduced-motion (CSS shows everything).
 export function initScroll(): void {
-  // hero lines settle in on load
+  // hero lines settle in on load (gsap.from: visible by default, animates from hidden)
   const heroLines = gsap.utils.toArray<HTMLElement>('[data-reveal-line]');
-  gsap.to(heroLines, {
-    opacity: 1,
-    y: 0,
+  gsap.from(heroLines, {
+    opacity: 0,
+    y: 30,
     duration: 1.1,
     ease: 'expo.out',
     stagger: 0.12,
@@ -17,9 +17,9 @@ export function initScroll(): void {
   });
 
   // hero supporting elements
-  gsap.to('.hero [data-reveal]', {
-    opacity: 1,
-    y: 0,
+  gsap.from('.hero [data-reveal]', {
+    opacity: 0,
+    y: 24,
     duration: 1,
     ease: 'power3.out',
     stagger: 0.1,
@@ -29,9 +29,9 @@ export function initScroll(): void {
   // generic scroll reveals for everything below the fold
   gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
     if (el.closest('.hero')) return; // hero handled above
-    gsap.to(el, {
-      opacity: 1,
-      y: 0,
+    gsap.from(el, {
+      opacity: 0,
+      y: 24,
       duration: 0.9,
       ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 85%', once: true },

@@ -320,10 +320,9 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .follow-bar.is-visible { transform: translateY(0); }
 .is-mobile .footer { padding-bottom: 7rem; }
 
-/* ---------- reveal states (only when JS is on) ---------- */
-.js [data-reveal], .js [data-reveal-line] { opacity: 0; }
-.js [data-reveal] { transform: translateY(24px); }
-.js [data-reveal-line] { transform: translateY(0.6em); }
+/* ---------- reveal states ----------
+   Content is visible by default. GSAP uses gsap.from() to animate it in, so if the
+   motion layer ever fails to load, nothing is ever left hidden (no JS-gated content). */
 
 /* reduced motion: show everything, no transforms, no webgl, no decorative loops */
 .reduced-motion [data-reveal], .reduced-motion [data-reveal-line] { opacity: 1 !important; transform: none !important; }

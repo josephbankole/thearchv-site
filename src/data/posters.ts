@@ -8,6 +8,10 @@ export interface Poster {
   title: string;
   moment: string;
   stamp: string;
+  // Optional Etsy listing (print fulfilled by Printful). Leave undefined until the listing
+  // is live; the daily/commerce pipeline populates it and the lightbox "Shop this print"
+  // CTA appears automatically. Store: joeydesignca.etsy.com.
+  etsyUrl?: string;
 }
 
 export const posters: Poster[] = [

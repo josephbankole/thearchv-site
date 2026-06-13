@@ -79,12 +79,14 @@ export function initArchiveRail(): void {
 let lb: HTMLElement | null = null;
 let lbImg: HTMLImageElement | null = null;
 let lbCap: HTMLElement | null = null;
+let lbShop: HTMLAnchorElement | null = null;
 let lastFocus: HTMLElement | null = null;
 
 function initLightbox(): void {
   lb = document.getElementById('lightbox');
   lbImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
   lbCap = document.getElementById('lightbox-cap');
+  lbShop = document.getElementById('lightbox-shop') as HTMLAnchorElement | null;
   const close = document.getElementById('lightbox-close');
   close?.addEventListener('click', closeLightbox);
   lb?.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
@@ -98,6 +100,11 @@ function openLightbox(slug: string): void {
   lbImg.src = `/posters/${slug}@2x.webp`;
   lbImg.alt = `${p.title}. The ${p.year} final at ${p.host}. Original ARCHV illustration.`;
   lbCap.innerHTML = `<strong>${p.title}</strong>${p.host} · ${p.stamp}. ${p.moment}`;
+  // "Shop this print" appears only once an Etsy listing URL is set on the poster.
+  if (lbShop) {
+    if (p.etsyUrl) { lbShop.href = p.etsyUrl; lbShop.hidden = false; }
+    else { lbShop.hidden = true; lbShop.removeAttribute('href'); }
+  }
   lb.hidden = false;
   requestAnimationFrame(() => lb?.classList.add('is-open'));
   document.body.style.overflow = 'hidden';

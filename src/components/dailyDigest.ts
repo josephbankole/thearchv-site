@@ -24,8 +24,14 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
         ? '<span class="day__status day__status--live">Updated daily</span>'
         : '<span class="day__status day__status--done">Verified</span>';
 
+    // Optional brand-illustrated headshot (editorial; never a club photo/crest).
+    const avatar = entry.image
+      ? `<img class="day__avatar" src="${entry.image}" alt="${entry.imageAlt ?? ''}" loading="lazy" decoding="async" width="52" height="52" />`
+      : '';
+
     card.innerHTML = `
       <div class="day__top">
+        ${avatar}
         <span class="day__date">${fmt(entry.date)}</span>
         <span class="day__label">${entry.day}</span>
         ${status}

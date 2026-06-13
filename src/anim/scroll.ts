@@ -55,6 +55,22 @@ export function initScroll(): void {
     );
   });
 
+  // banner band: gentle parallax + reveal as it crosses the viewport
+  const banner = document.querySelector<HTMLElement>('.banner-band__img');
+  if (banner) {
+    gsap.fromTo(
+      banner,
+      { yPercent: -8, scale: 1.06, opacity: 0.55 },
+      {
+        yPercent: 8,
+        scale: 1,
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: { trigger: '.banner-band', start: 'top bottom', end: 'bottom top', scrub: true },
+      },
+    );
+  }
+
   // masthead: hide on scroll down, reveal on scroll up
   const masthead = document.querySelector<HTMLElement>('.masthead');
   if (masthead) {

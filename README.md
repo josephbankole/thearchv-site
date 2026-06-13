@@ -46,6 +46,31 @@ public-safe by design (it only routes mail to your verified address).
    `<meta name="web3forms-key" content="YOUR-KEY" />`
 3. Rebuild. Until a key is set, the form validates but shows "not connected yet."
 
+## Analytics (PostHog)
+
+Privacy-friendly, opt-in, and **dormant until a key is set** (no key = zero network, zero cookies).
+Config is lean by design: autocapture OFF, session recording OFF, respects Do Not Track,
+`localStorage` persistence (no third-party cookies). Only explicit events are sent.
+
+Activate:
+1. Create a free project at [posthog.com](https://posthog.com) and copy the **Project API key** (`phc_…`).
+2. Set it one of two ways:
+   - build env: `VITE_POSTHOG_KEY=phc_xxx` (and `VITE_POSTHOG_HOST=https://us.i.posthog.com` or the EU host), or
+   - in `index.html` head: `<meta name="posthog-key" content="phc_xxx">` (+ optional `<meta name="posthog-host" …>`).
+3. Rebuild. Verify in PostHog → Activity (events arrive within seconds).
+
+Events captured: `site_loaded`, `$pageview`, `section_view` (per section), `scroll_depth`
+(25/50/75/100), `follow_click` (every Instagram CTA), `digest_day_view` (each day card),
+`partnership_submit`. The CSP already allows the PostHog US/EU ingest + asset hosts.
+
+## Content — the daily engine fills these
+
+Two sections are "live trackers" seeded with honest, clearly-labelled placeholder cards
+(`status: 'pending'`, shown as **Updated daily**). The daily engine replaces them with
+verified entries under the two-source gate. No scores or deals are invented in the repo.
+- `src/data/transferDays.ts` — Transfer Desk daily wrap-ups
+- `src/data/worldCupDays.ts` — World Cup daily wrap-ups (`DayEntry` shape; set `status: 'verified'` once filled)
+
 ## Deploy (GitHub Pages)
 
 1. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds and publishes `dist/`.

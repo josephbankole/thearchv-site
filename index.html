@@ -30,7 +30,7 @@
     <!-- Content Security Policy. GitHub Pages cannot send headers, so this meta is the ceiling.
          If the domain is fronted by a CDN (Cloudflare), promote these to real response headers
          and add frame-ancestors + HSTS. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <!-- JSON-LD: the flagship article. No trademarked terms in structured data. -->
@@ -64,6 +64,7 @@
 
     <header class="masthead">
       <a class="wordmark" href="#top" aria-label="The ARCHV, home">
+        <img class="wordmark__badge" src="/brand/logo-badge.png" width="38" height="38" alt="" />
         <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
       </a>
       <a class="btn btn--ghost masthead__follow" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer">Follow</a>
@@ -84,9 +85,17 @@
             <a class="btn btn--text" href="#giant-killers">Read The Giant-Killers</a>
           </div>
         </div>
-        <a class="hero__scroll" href="#transfer-desk" aria-label="Scroll">
+        <a class="hero__scroll" href="#manifesto" aria-label="Scroll">
           <span>Scroll</span><span class="hero__scroll-line" aria-hidden="true"></span>
         </a>
+      </section>
+
+      <!-- MANIFESTO — short, un-numbered bridge -->
+      <section class="manifesto" id="manifesto">
+        <div class="wrap">
+          <h2 class="manifesto__title" data-reveal>The favourites are never as safe as the bracket says.</h2>
+          <p class="manifesto__line" data-reveal>We keep the other history. We start the debate, and we never pick the side.</p>
+        </div>
       </section>
 
       <!-- 1. THE TRANSFER DESK -->
@@ -94,27 +103,41 @@
         <div class="wrap">
           <p class="section-index">01 / The transfer desk</p>
           <h2 class="desk__title" data-reveal>The window, documented.</h2>
-          <p class="desk__lede" data-reveal>The lead franchise of the archive. Every move read, verified against two sources, and drawn the same day. Rumour is labelled rumour. Done is labelled done.</p>
-          <div class="ticker" id="ticker" aria-hidden="true"></div>
+          <p class="desk__lede" data-reveal>The lead franchise of the archive. Every move read, verified against two sources, drawn the same day. Done is labelled done, rumour is labelled rumour. Scroll the days.</p>
         </div>
+        <div class="rail day-rail" id="transfer-days" role="list" aria-label="Transfer desk, daily wrap-ups"></div>
       </section>
 
-      <!-- 2. MANIFESTO -->
-      <section class="manifesto" id="manifesto">
+      <!-- 2. THE WORLD CUP -->
+      <section class="worldcup" id="world-cup">
         <div class="wrap">
-          <p class="section-index">02 / The promise</p>
-          <h2 class="manifesto__title" data-reveal>The favourites are never as safe as the bracket says.</h2>
-          <div class="manifesto__body">
-            <p data-reveal>Every tournament sells you the favourites. We keep the other history. Story first, drawn by hand, built to be remembered.</p>
-            <p data-reveal>We are the memory of football, and the argument it never settles. We start the debate. We never pick the side.</p>
-          </div>
+          <p class="section-index">02 / The World Cup</p>
+          <h2 class="desk__title" data-reveal>Every day, documented.</h2>
+          <p class="desk__lede" data-reveal>A sub-one-minute wrap of the tournament, every day it runs. Verified against two sources before it lands. Scroll the days.</p>
         </div>
+        <div class="rail day-rail" id="worldcup-days" role="list" aria-label="World Cup, daily wrap-ups"></div>
       </section>
 
-      <!-- 3. THE GIANT-KILLERS (featured article) -->
+      <!-- BANNER BAND — animated brand plaque -->
+      <section class="banner-band" aria-hidden="true">
+        <img class="banner-band__img" src="/brand/banner.webp" alt="" width="2000" height="1117" loading="lazy" decoding="async" />
+      </section>
+
+      <!-- 3. THE ARCHIVE — poster gallery -->
+      <section class="archive" id="archive">
+        <div class="wrap">
+          <p class="section-index">03 / The archive</p>
+          <h2 class="archive__title" data-reveal>From the archive.</h2>
+          <p class="archive__lede" data-reveal>Football history, drawn down to the moment that decided it. Every final from Mexico in 1970 to Lusail in 2022. Drag to explore.</p>
+        </div>
+        <div class="rail" id="rail" role="list" aria-label="Poster archive"></div>
+        <div class="wrap archive__hint"><span id="rail-progress" class="rail__progress" aria-hidden="true"></span></div>
+      </section>
+
+      <!-- THE GIANT-KILLERS — archival long read -->
       <section class="killers" id="giant-killers">
         <div class="wrap">
-          <p class="section-index">03 / The feature</p>
+          <p class="section-index">The archive · Long read</p>
           <h2 class="killers__title" data-reveal>The Giant-Killers<span class="dot">.</span></h2>
           <p class="killers__lede" data-reveal id="killers-intro"></p>
           <ol class="killers__list" id="killers-list" aria-label="Ten football upsets"></ol>
@@ -123,43 +146,10 @@
         </div>
       </section>
 
-      <!-- 4. THE ARCHIVE — poster gallery -->
-      <section class="archive" id="archive">
-        <div class="wrap">
-          <p class="section-index">04 / The archive</p>
-          <h2 class="archive__title" data-reveal>Nine finals. One archive.</h2>
-          <p class="archive__lede" data-reveal>Every final drawn down to the moment that decided it. From Mexico in 1970 to Lusail in 2022. Drag to explore.</p>
-        </div>
-        <div class="rail" id="rail" role="list" aria-label="Poster archive"></div>
-        <div class="wrap archive__hint"><span id="rail-progress" class="rail__progress" aria-hidden="true"></span></div>
-      </section>
-
-      <!-- WHAT WE DO / CREDIBILITY -->
-      <section class="craft" id="craft">
-        <div class="wrap">
-          <p class="section-index">05 / The craft</p>
-          <h2 class="craft__title" data-reveal>An illustrated football archive, published daily.</h2>
-          <div class="craft__grid">
-            <article class="card" data-reveal>
-              <h3>Drawn, not lifted</h3>
-              <p>Original illustration only. No photographs, no crests, no borrowed marks. The house style is the signature.</p>
-            </article>
-            <article class="card" data-reveal>
-              <h3>Verified, not viral</h3>
-              <p>Every fact checked against two reputable sources before it ships. Accuracy over volume, always.</p>
-            </article>
-            <article class="card" data-reveal>
-              <h3>Story first</h3>
-              <p>We do not report the news. We keep the memory. The moments that will still hurt in twenty years.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <!-- 7. PARTNERSHIPS -->
       <section class="partner" id="partnerships">
         <div class="wrap">
-          <p class="section-index">06 / Work with the archive</p>
+          <p class="section-index">Work with the archive</p>
           <h2 class="partner__title" data-reveal>Make work people keep.</h2>
           <p class="partner__lede" data-reveal>For brands building around football history, the 2026 tournament, or the transfer window. The audience is obsessed, the artwork is rights-clean, and the work outlives the campaign. Tell us what you are building.</p>
 
@@ -194,8 +184,11 @@
     <footer class="footer">
       <div class="wrap">
         <div class="footer__top">
-          <a class="wordmark wordmark--lg" href="#top" aria-label="The ARCHV">
-            <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+          <a class="footer__brand" href="#top" aria-label="The ARCHV">
+            <img class="footer__badge" src="/brand/logo-badge.png" width="72" height="72" alt="" />
+            <span class="wordmark wordmark--lg">
+              <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+            </span>
           </a>
           <nav class="footer__links" aria-label="Social">
             <a href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer" data-follow>Instagram</a>

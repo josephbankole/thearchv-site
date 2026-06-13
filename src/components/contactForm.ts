@@ -2,6 +2,8 @@
 // design: it only routes mail to the address the founder verified at web3forms.com.
 // To activate: create a key at https://web3forms.com (enter your destination email),
 // then set it in index.html as  <meta name="web3forms-key" content="YOUR-KEY">  or replace below.
+import { track } from '../analytics';
+
 const FALLBACK_KEY = 'REPLACE_WITH_WEB3FORMS_ACCESS_KEY';
 const ENDPOINT = 'https://api.web3forms.com/submit';
 
@@ -59,6 +61,7 @@ export function initContactForm(): void {
       if (res.ok && json.success) {
         status.className = 'form__status is-ok';
         status.textContent = 'Thank you. We will be in touch.';
+        track('partnership_submit', {});
         form.reset();
       } else {
         throw new Error(json.message || 'Request failed');

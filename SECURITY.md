@@ -1,7 +1,8 @@
 # Security Assessment — thearchv.ca
 
 **Scope:** static single-page site (Vite build), deployed to GitHub Pages behind `thearchv.ca`.
-**Date:** 2026-06-12. **Result: PASS — cleared for launch** with the hardening notes below.
+**Date:** 2026-06-13. **Result: PASS — cleared for launch** with the hardening notes below.
+**Re-audited** after the content restructure + PostHog analytics were added.
 
 ## Posture summary
 
@@ -24,6 +25,8 @@ CDN or analytics script is loaded. This is a strong baseline.
 | 8 | Source-map / info leak | ✅ Pass | Production build emits no `.map` files; no stack traces or comments leaking internals. |
 | 9 | Form abuse | ✅ Pass | Honeypot field + required-field validation. Web3Forms applies its own spam filtering and rate limits. |
 | 10 | Transport security | ✅ Pass (config) | GitHub Pages serves HTTPS; enable **Enforce HTTPS** after DNS. |
+| 11 | Analytics (PostHog) | ✅ Pass | Dormant until a key is set (no key = no network/cookies). Autocapture + session recording OFF, respects DNT, `localStorage` only, `identified_only` profiles. Only explicit events sent. CSP scoped to PostHog US/EU ingest (connect-src) + asset (script-src) hosts. |
+| 12 | Inline event handlers (re-check) | ✅ Pass | `index.html` has 0. The 3 `on*=` hits in the bundle are PostHog's `el.onload`/`el.onerror` JS property assignments (its script-loader), not inline HTML handlers, and not a CSP/XSS concern. |
 
 ## Limitations of a GitHub Pages host (and mitigations)
 

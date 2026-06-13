@@ -5,6 +5,13 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: '2026-06-13', day: 'Saturday',
+    headline: 'United’s midfield hunt gathers pace.',
+    dek: 'Fernandes the name. Not the only one.',
+    body: 'The move building steam is Mateus Fernandes. Manchester United are preparing an opening bid for the West Ham midfielder, the twenty one year old Portugal international whose relegation-hit club have set an eighty million pound price. Jorge Mendes is in the middle of it. RUMOUR for now, with no bid confirmed, and Real Madrid, Arsenal and Paris Saint-Germain are all circling the same name. He is not the only one. United want two from a shortlist that runs through Adam Wharton, Carlos Baleba and Elliot Anderson, with the futures of Casemiro, Ugarte, Bruno Fernandes and Kobbie Mainoo all unsettled. The rebuild starts in the middle.',
+    status: 'verified',
+  },
+  {
     date: '2026-06-12', day: 'Friday',
     headline: 'Rashford to Bayern moves to pending.',
     dek: 'United set their price. A bid nears.',

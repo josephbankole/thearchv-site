@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-13",
+    day: "Day 3",
+    headline: "Scotland end a 36-year wait. The favourites stumble.",
+    dek: "McGinn settles it as Brazil and Switzerland drop points.",
+    body: "Day three belonged to the underdogs. Scotland beat Haiti one nil in Group C, John McGinn turning in a rebound on twenty eight minutes for the Tartan Army's first World Cup win since 1990, enough to sit top of the group on the night. Above them the favourites wobbled. Brazil were held to a one all draw by Morocco, and Switzerland, dominant for long spells, conceded a late Boualem Khoukhi equaliser to draw one all with Qatar after Breel Embolo's early penalty. Australia delivered the upset of the day, beating Turkiye two nil in Vancouver through Nestory Irankunda and Connor Metcalfe. The big names have been warned.",
+    status: "verified",
+  },
+  {
     date: '2026-06-12', day: 'Day 2',
     headline: 'The hosts arrive. The USA make a statement.',
     dek: "Balogun's brace, Canada rescued late.",

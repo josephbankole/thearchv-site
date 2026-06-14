@@ -136,11 +136,13 @@ main, .masthead, .footer { position: relative; z-index: 2; }
   min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
   padding: 8rem var(--gutter) 4rem; max-width: var(--maxw); margin: 0 auto; position: relative;
 }
-.hero__inner { max-width: min(92vw, 56rem); }
+.hero__inner { max-width: min(92vw, 56rem); animation: heroIn 0.7s var(--ease) both; }
+@keyframes heroIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .hero__inner { animation: none; } }
 .hero .eyebrow { margin-bottom: 1.5rem; }
 .hero__title {
   font-family: var(--serif);
-  font-weight: 300;
+  font-weight: 400;
   font-size: var(--t-display);
   line-height: 0.98;
   letter-spacing: -0.035em;
@@ -173,7 +175,7 @@ main, .masthead, .footer { position: relative; z-index: 2; }
 /* ---------- generic section rhythm ---------- */
 section { padding-block: clamp(5rem, 12vh, 10rem); }
 .manifesto__title, .killers__title, .archive__title, .desk__title, .craft__title, .partner__title {
-  font-family: var(--serif); font-weight: 320; letter-spacing: -0.02em; line-height: 1.04;
+  font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em; line-height: 1.04;
   font-size: var(--t-h2); max-width: 20ch;
 }
 
@@ -217,7 +219,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .archive__lede { max-width: 46ch; color: var(--cream-dim); }
 .rail {
   display: flex; gap: clamp(1rem, 3vw, 2.5rem); margin-top: 3.5rem;
-  padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x mandatory;
+  padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
   scrollbar-width: none; cursor: grab; -webkit-overflow-scrolling: touch;
 }
 .rail::-webkit-scrollbar { display: none; }

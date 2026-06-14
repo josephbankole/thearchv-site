@@ -5,26 +5,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 // All scroll motion. Never called under prefers-reduced-motion (CSS shows everything).
 export function initScroll(): void {
-  // hero lines settle in on load (gsap.from: visible by default, animates from hidden)
-  const heroLines = gsap.utils.toArray<HTMLElement>('[data-reveal-line]');
-  gsap.from(heroLines, {
-    opacity: 0,
-    y: 30,
-    duration: 1.1,
-    ease: 'expo.out',
-    stagger: 0.12,
-    delay: 0.15,
-  });
-
-  // hero supporting elements
-  gsap.from('.hero [data-reveal]', {
-    opacity: 0,
-    y: 24,
-    duration: 1,
-    ease: 'power3.out',
-    stagger: 0.1,
-    delay: 0.5,
-  });
+  // Hero is intentionally NOT hidden by JS. This module is dynamically imported, so
+  // gating hero visibility on it left the hero blank until the chunk loaded and the
+  // tween finished. The hero entrance is now a pure-CSS fade (.hero__inner in
+  // style.css) that paints immediately and is disabled under prefers-reduced-motion.
 
   // generic scroll reveals for everything below the fold
   gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {

@@ -14,6 +14,13 @@ const HS = 'https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3
 
 export const legends: Legend[] = [
   {
+    no: 'No. 01',
+    name: 'Patrice Evra',
+    nation: 'France',
+    headshot: HS + 'hf_20260614_133137_e76bb856-3f52-412b-84c8-579bc4d424da_min.webp',
+    bio: 'Monaco-made left-back who became the heartbeat of Manchester United’s defence and captain of France. One of the great modern full-backs.',
+  },
+  {
     no: 'No. 02',
     name: 'Diogo Jota',
     nation: 'Portugal',

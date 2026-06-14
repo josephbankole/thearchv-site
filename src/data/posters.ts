@@ -10,7 +10,7 @@ export interface Poster {
   stamp: string;
   // Optional Etsy listing (print fulfilled by Printful). Leave undefined until the listing
   // is live; the daily/commerce pipeline populates it and the lightbox "Shop this print"
-  // CTA appears automatically. Store: joeydesignca.etsy.com.
+  // CTA appears automatically. Store: thearchvca.etsy.com (etsy.com/shop/TheARCHVCA).
   etsyUrl?: string;
 }
 

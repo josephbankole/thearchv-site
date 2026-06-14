@@ -74,10 +74,9 @@ verified entries under the two-source gate. No scores or deals are invented in t
 ## Commerce — Etsy prints (Printful)
 
 The Archive posters are wired to link to their Etsy listings (fulfilled by Printful, store
-`joeydesignca.etsy.com`). Each `Poster` in `src/data/posters.ts` has an optional `etsyUrl`.
+`etsy.com/shop/TheARCHVCA`). Each `Poster` in `src/data/posters.ts` has an optional `etsyUrl`.
 When set, a gold **"Shop this print"** button appears in that poster's lightbox; until then it
-stays hidden. Populate `etsyUrl` per poster as listings go live (a pipeline step for when traffic
-picks up). No fake links ship.
+stays hidden. As of Jun 2026 all nine archive posters are live and wired. No fake links ship.
 
 ## Player headshots — brand illustrations only
 

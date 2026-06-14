@@ -2,7 +2,6 @@ import '@fontsource-variable/fraunces';
 import '@fontsource-variable/inter-tight';
 import './style.css';
 
-import { initGiantKillers } from './components/giantKillers';
 import { initLongReads } from './components/longReads';
 import { initArchiveRail } from './components/archiveRail';
 import { initDailyDigest } from './components/dailyDigest';
@@ -21,7 +20,6 @@ function boot(): void {
   // Content + conversion paths (must work with zero motion)
   initDailyDigest('transfer-days', transferDays, 'transfer');
   initDailyDigest('worldcup-days', worldCupDays, 'worldcup');
-  initGiantKillers(animate);
   initLongReads(animate);
   initArchiveRail();
   initContactForm();

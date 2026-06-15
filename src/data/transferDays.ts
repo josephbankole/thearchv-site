@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-14",
+    day: "Sunday",
+    headline: "United firm up for Fernandes. Bayern close on Rashford.",
+    dek: "A priority midfielder, and a Barcelona deadline that opens the exit door.",
+    body: "Two United threads tightened on Sunday. The first is Mateus Fernandes. United are said to be growing confident of landing the twenty one year old West Ham midfielder, now their priority in the middle, with the Hammers' price set around eighty million pounds. RUMOUR, no bid lodged yet, and Liverpool are circling the same name. The second is the exit United have chased for a year. Marcus Rashford looks bound for Bayern Munich, who are reported to be readying an opening offer near twenty five million euros. The timing is the story. Barcelona's thirty million euro option to keep him expires on Monday, and Fabrizio Romano says they will not pay it. The door is fully open.",
+    status: "verified",
+    image: "/heads/fernandes.webp",
+    imageAlt: "Mateus Fernandes, illustrated by The ARCHV.",
+  },
+  {
     date: '2026-06-13', day: 'Saturday',
     headline: 'United’s midfield hunt gathers pace.',
     dek: 'Fernandes the name. Not the only one.',

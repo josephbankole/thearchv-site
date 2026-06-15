@@ -33,18 +33,53 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- JSON-LD: the flagship article. No trademarked terms in structured data. -->
+    <!-- JSON-LD: Organization + WebSite + poster ItemList. No trademarked terms in structured data. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "headline": "The ARCHV — football history, illustrated",
-        "description": "Illustrated football history: every final since 1970, a daily transfer desk, and long reads on the systems behind the game.",
-        "author": { "@type": "Organization", "name": "The ARCHV" },
-        "publisher": { "@type": "Organization", "name": "The ARCHV" },
-        "image": "https://thearchv.ca/og.jpg",
-        "datePublished": "2026-06-12",
-        "inLanguage": "en-GB"
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://thearchv.ca/#org",
+            "name": "The ARCHV",
+            "url": "https://thearchv.ca/",
+            "description": "Illustrated football history: every final since 1970, a daily transfer desk, and long reads on the systems behind the game.",
+            "logo": "https://thearchv.ca/brand/logo-badge@192.png",
+            "image": "https://thearchv.ca/og.jpg",
+            "sameAs": [
+              "https://instagram.com/thearchv_ca",
+              "https://x.com/thearchv_ca",
+              "https://www.etsy.com/shop/TheARCHVCA"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://thearchv.ca/#website",
+            "url": "https://thearchv.ca/",
+            "name": "The ARCHV — Football History, Illustrated",
+            "description": "Illustrated football history: every final since 1970, a daily transfer desk, and long reads on the systems behind the game.",
+            "inLanguage": "en-GB",
+            "publisher": { "@id": "https://thearchv.ca/#org" }
+          },
+          {
+            "@type": "ItemList",
+            "name": "The ARCHV World Cup final poster archive",
+            "description": "Original illustrated posters of every World Cup final, México 1970 through Lusail 2022.",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": 9,
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "México 1970 — The Beautiful Game, In Colour", "image": "https://thearchv.ca/posters/mexico-1970.webp", "url": "https://www.etsy.com/listing/4521782964" },
+              { "@type": "ListItem", "position": 2, "name": "Azteca 1986 — Four Minutes In June", "image": "https://thearchv.ca/posters/azteca-1986.webp", "url": "https://www.etsy.com/listing/4521779161" },
+              { "@type": "ListItem", "position": 3, "name": "Italia 1990 — Notti Magiche", "image": "https://thearchv.ca/posters/italia-1990.webp", "url": "https://www.etsy.com/listing/4521788550" },
+              { "@type": "ListItem", "position": 4, "name": "Paris 1998 — The Night It Turned Blue", "image": "https://thearchv.ca/posters/paris-1998.webp", "url": "https://www.etsy.com/listing/4521790986" },
+              { "@type": "ListItem", "position": 5, "name": "Yokohama 2002 — Redemption", "image": "https://thearchv.ca/posters/yokohama-2002.webp", "url": "https://www.etsy.com/listing/4521787127" },
+              { "@type": "ListItem", "position": 6, "name": "Berlin 2006 — Decided From Twelve Yards", "image": "https://thearchv.ca/posters/berlin-2006.webp", "url": "https://www.etsy.com/listing/4521795838" },
+              { "@type": "ListItem", "position": 7, "name": "Johannesburg 2010 — Minute 116", "image": "https://thearchv.ca/posters/johannesburg-2010.webp", "url": "https://www.etsy.com/listing/4521798166" },
+              { "@type": "ListItem", "position": 8, "name": "Maracanã 2014 — The Volley", "image": "https://thearchv.ca/posters/maracana-2014.webp", "url": "https://www.etsy.com/listing/4521795943" },
+              { "@type": "ListItem", "position": 9, "name": "Lusail 2022 — The Greatest Final", "image": "https://thearchv.ca/posters/lusail-2022.webp", "url": "https://www.etsy.com/listing/4521798833" }
+            ]
+          }
+        ]
       }
     </script>
 
@@ -152,6 +187,50 @@
       </section>
 
       <!-- 7. PARTNERSHIPS -->
+      <!-- FAQ — answer blocks for AI/answer-engine extraction (verified, evergreen). -->
+      <section class="faq" id="faq">
+        <div class="wrap">
+          <p class="section-index">Football, explained</p>
+          <h2 class="killers__title" data-reveal>Quick answers<span class="dot">.</span></h2>
+          <p class="killers__lede" data-reveal>The questions fans actually search, answered plainly.</p>
+          <dl class="faq__list">
+            <div class="faq__item">
+              <dt>What does xG (expected goals) mean?</dt>
+              <dd>xG rates the quality of a chance as a number between 0 and 1: the probability, based on historical data, that a shot from that position and situation ends in a goal. A penalty is worth about 0.76 xG.</dd>
+            </div>
+            <div class="faq__item">
+              <dt>What is a false 9 in football?</dt>
+              <dd>A false 9 is a centre-forward who drops deep into midfield instead of holding the front line. The movement drags defenders out of position and opens space for team-mates. Lionel Messi under Pep Guardiola is the classic example.</dd>
+            </div>
+            <div class="faq__item">
+              <dt>How does the offside rule work?</dt>
+              <dd>A player is offside if, at the moment the ball is played to them, they are nearer the opponent's goal line than both the ball and the second-to-last defender, and they are then involved in the play. Standing in an offside position alone is not an offence.</dd>
+            </div>
+            <div class="faq__item">
+              <dt>What is VAR in football?</dt>
+              <dd>VAR is the Video Assistant Referee: an official who reviews video to help the on-field referee on four match-changing calls only: goals, penalty decisions, straight red cards, and mistaken identity.</dd>
+            </div>
+            <div class="faq__item">
+              <dt>What is The ARCHV?</dt>
+              <dd>The ARCHV is an illustrated football-history project: original artwork of every World Cup final since 1970, a daily transfer desk, and long reads on how the game really works. Follow @thearchv_ca.</dd>
+            </div>
+          </dl>
+        </div>
+        <script type="application/ld+json">
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": "What does xG (expected goals) mean?", "acceptedAnswer": { "@type": "Answer", "text": "xG rates the quality of a chance as a number between 0 and 1: the probability, based on historical data, that a shot from that position and situation ends in a goal. A penalty is worth about 0.76 xG." } },
+              { "@type": "Question", "name": "What is a false 9 in football?", "acceptedAnswer": { "@type": "Answer", "text": "A false 9 is a centre-forward who drops deep into midfield instead of holding the front line. The movement drags defenders out of position and opens space for team-mates. Lionel Messi under Pep Guardiola is the classic example." } },
+              { "@type": "Question", "name": "How does the offside rule work?", "acceptedAnswer": { "@type": "Answer", "text": "A player is offside if, at the moment the ball is played to them, they are nearer the opponent's goal line than both the ball and the second-to-last defender, and they are then involved in the play. Standing in an offside position alone is not an offence." } },
+              { "@type": "Question", "name": "What is VAR in football?", "acceptedAnswer": { "@type": "Answer", "text": "VAR is the Video Assistant Referee: an official who reviews video to help the on-field referee on four match-changing calls only: goals, penalty decisions, straight red cards, and mistaken identity." } },
+              { "@type": "Question", "name": "What is The ARCHV?", "acceptedAnswer": { "@type": "Answer", "text": "The ARCHV is an illustrated football-history project: original artwork of every World Cup final since 1970, a daily transfer desk, and long reads on how the game really works. Follow @thearchv_ca." } }
+            ]
+          }
+        </script>
+      </section>
+
       <section class="partner" id="partnerships">
         <div class="wrap">
           <p class="section-index">Partner with the archive</p>

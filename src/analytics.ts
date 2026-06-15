@@ -58,6 +58,16 @@ export async function initAnalytics(): Promise<void> {
   setupFollowTracking();
   setupScrollDepth();
   setupSectionViews();
+  setupOutboundTracking();
+}
+
+// Track outbound clicks to the Etsy shop/listings (the poster-funnel KPI).
+function setupOutboundTracking(): void {
+  document.querySelectorAll<HTMLAnchorElement>('a[href*="etsy.com"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      track('etsy_click', { href: el.href, location: el.closest('section')?.id || el.className });
+    });
+  });
 }
 
 function setupFollowTracking(): void {

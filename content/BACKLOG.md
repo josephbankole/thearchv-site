@@ -7,13 +7,13 @@ Status key: todo / drafted / live
 ## C2 — World Cup finals cluster (art exists for all 9)
 - [live] finals/mexico-1970 — Brazil 4-1 Italy, 1970 (SAMPLE, Phase 0)
 - [live] finals/azteca-1986 — Argentina 3-2 West Germany, 1986
-- [todo] finals/italia-1990 — West Germany 1-0 Argentina, 1990
-- [todo] finals/paris-1998 — France 3-0 Brazil, 1998
-- [todo] finals/yokohama-2002 — Brazil 2-0 Germany, 2002
-- [todo] finals/berlin-2006 — Italy 1-1 France (Italy on pens), 2006
-- [todo] finals/johannesburg-2010 — Spain 1-0 Netherlands, 2010
-- [todo] finals/maracana-2014 — Germany 1-0 Argentina, 2014
-- [todo] finals/lusail-2022 — Argentina 3-3 France (Argentina on pens), 2022
+- [drafted] finals/italia-1990 — West Germany 1-0 Argentina, 1990 (hand-built 2026-06-15)
+- [drafted] finals/paris-1998 — France 3-0 Brazil, 1998 (hand-built 2026-06-15)
+- [drafted] finals/yokohama-2002 — Brazil 2-0 Germany, 2002 (hand-built 2026-06-15)
+- [drafted] finals/berlin-2006 — Italy 1-1 France (Italy on pens), 2006 (hand-built 2026-06-15)
+- [drafted] finals/johannesburg-2010 — Spain 1-0 Netherlands, 2010 (hand-built 2026-06-15)
+- [drafted] finals/maracana-2014 — Germany 1-0 Argentina, 2014 (hand-built 2026-06-15)
+- [drafted] finals/lusail-2022 — Argentina 3-3 France (Argentina on pens), 2022 (hand-built 2026-06-15)
 
 ## C3 — ARCHV explainers (history-angled; start with 6)
 - [todo] explainers/false-9-hidegkuti-to-messi — the false 9, from Hidegkuti to Messi

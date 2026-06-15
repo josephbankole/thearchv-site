@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-14",
+    day: "Day 4",
+    headline: "Amad's late strike stuns Ecuador. The big guns roar.",
+    dek: "Ivory Coast nick it in the ninetieth as Germany and Sweden run riot.",
+    body: "Day four had a ninetieth-minute twist. Amad Diallo came off the bench, met Wilfried Singo's cutback and steered it past the keeper. Ivory Coast won one nil, ended Ecuador's nineteen-match unbeaten run and took their first World Cup win since 2014. The favourites were blunter about it. Germany battered Curacao seven one for the biggest scoreline of the tournament so far, Kai Havertz scoring twice. Sweden kept pace, seeing off Tunisia five one on a Yasin Ayari brace, with Alexander Isak and Viktor Gyokeres also on the mark. The best of the football came in a draw. Japan twice pegged the Netherlands back to finish two all, Daichi Kamada level at eighty eight minutes.",
+    status: "verified",
+  },
+  {
     date: "2026-06-13",
     day: "Day 3",
     headline: "Scotland end a 36-year wait. The favourites stumble.",

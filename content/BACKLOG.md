@@ -6,7 +6,7 @@ Status key: todo / drafted / live
 
 ## C2 — World Cup finals cluster (art exists for all 9)
 - [live] finals/mexico-1970 — Brazil 4-1 Italy, 1970 (SAMPLE, Phase 0)
-- [drafted] finals/azteca-1986 — Argentina 3-2 West Germany, 1986
+- [live] finals/azteca-1986 — Argentina 3-2 West Germany, 1986
 - [todo] finals/italia-1990 — West Germany 1-0 Argentina, 1990
 - [todo] finals/paris-1998 — France 3-0 Brazil, 1998
 - [todo] finals/yokohama-2002 — Brazil 2-0 Germany, 2002

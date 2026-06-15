@@ -402,3 +402,10 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .legend__name { color: var(--cream); font-size: 1.12rem; line-height: 1.2; margin: 0 0 0.3rem; }
 .legend__meta { color: var(--cream-faint); font-size: 0.82rem; margin: 0 0 0.85rem; }
 .legend__bio { color: var(--cream-dim); font-size: 0.92rem; line-height: 1.5; margin: 0; }
+
+/* FAQ — answer blocks (SEO/AEO) */
+.faq { padding: clamp(3rem, 8vw, 6rem) 0; }
+.faq__list { margin: 2rem 0 0; max-width: 60ch; }
+.faq__item { padding: 1.1rem 0; border-top: 1px solid var(--cream-faint); }
+.faq__item dt { color: var(--cream); font-size: 1.05rem; font-weight: 500; margin: 0 0 0.5rem; }
+.faq__item dd { color: var(--cream-dim); font-size: 0.95rem; line-height: 1.6; margin: 0; }

@@ -32,3 +32,6 @@ Status key: todo / drafted / live
 
 ## Verify-first reminder
 Every fact = 2 reputable sources (ESPN/BBC/FIFA/official/Romano), cited inline in the draft for the founder to check. D50 on all art. Humanize all prose. Agent never deploys.
+
+## Publish checklist (agent: every finals page)
+When drafting a finals page, also add a crawlable homepage link: insert `<li><a href="/finals/<slug>/">Page title</a></li>` into the `archive__reads-list` block in index.html (the static "Read the finals, in full" list). The deploy publishes the new page and the homepage link together. Same idea for explainers/United later once those hubs exist.

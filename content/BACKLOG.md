@@ -53,5 +53,5 @@ Cap ~3-5 durable long-forms/week. Every page: byline + sourcing note + watermark
 
 ## PIPELINE TRIGGERS (agent: watch in the weekly scorecard)
 - **Ezoic:** turn on as soon as there is any meaningful organic traffic (no traffic minimum). Founder action; agent flags when GSC shows real clicks landing.
-- **Email capture:** add a one-field "get the new piece" capture once traffic appears (NOT a newsletter relaunch). Agent flags when to add.
+- **Email / owned audience (LIVE, D93):** The ARCHV Dispatch is live on Substack (thearchvdispatch.substack.com) as a weekly digest. The site carries a subscribe CTA; the `archv-dispatch-weekly` task drafts each issue. Keep linking site long-forms <-> Dispatch issues.
 - **Raptive milestone:** the headline KPI is **25,000 pageviews/month** (+50%+ tier-1). When PostHog approaches it, flag the switch from Ezoic to Raptive.

@@ -10,6 +10,12 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = join(ROOT, "content");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SITE = "https://thearchv.ca";
+const SECTION = {
+  finals: { label: "Finals", href: "/#archive", more: "More finals" },
+  united: { label: "Manchester United", href: "/#transfer-desk", more: "More United history" },
+  explainers: { label: "Explained", href: "/#faq", more: "More explainers" },
+};
+const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More from the archive" };
 
 const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
@@ -84,7 +90,7 @@ function schema(p, url) {
       "image": `${SITE}${p.ogImage || "/og.jpg"}`, "mainEntityOfPage": url, "inLanguage": "en-GB" },
     { "@type": "BreadcrumbList", "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": `${SITE}/` },
-      { "@type": "ListItem", "position": 2, "name": "Finals", "item": `${SITE}/#archive` },
+      { "@type": "ListItem", "position": 2, "name": sect(p.section).label, "item": `${SITE}${sect(p.section).href}` },
       { "@type": "ListItem", "position": 3, "name": p.title, "item": url } ] },
   ];
   if (p.section === "finals" && Array.isArray(p.teams) && p.eventDate) {
@@ -98,9 +104,12 @@ function schema(p, url) {
 }
 
 /* ---------- page template ---------- */
-function render(p, allFinals) {
+function render(p, allPages) {
   const url = `${SITE}/${p.section}/${p.slug}/`;
-  const related = allFinals.filter((x) => x.slug !== p.slug).slice(0, 6);
+  const meta = sect(p.section);
+  let related = allPages.filter((x) => x.section === p.section && x.slug !== p.slug);
+  if (!related.length) related = allPages.filter((x) => x.slug !== p.slug);
+  related = related.slice(0, 6);
   const fig = p.posterImage ? `
         <figure class="article__fig">
           <img src="${escAttr(p.posterImage)}" alt="${escAttr(p.posterAlt || p.title)}" width="1080" height="1350" loading="eager" />
@@ -117,8 +126,8 @@ function render(p, allFinals) {
           <a class="btn btn--gold" href="${escAttr(p.posterEtsy)}" target="_blank" rel="noopener noreferrer">Buy the poster</a>
         </div>` : "";
   const rel = related.length ? `
-        <nav class="related" aria-label="More finals">
-          <h2>More from the archive<span class="dot">.</span></h2>
+        <nav class="related" aria-label="${escAttr(meta.more)}">
+          <h2>${esc(meta.more)}<span class="dot">.</span></h2>
           <ul>${related.map((r) => `<li><a href="/${r.section}/${r.slug}/">${esc(r.title)}</a></li>`).join("")}</ul>
         </nav>` : "";
   return `<!doctype html>
@@ -154,7 +163,7 @@ function render(p, allFinals) {
   </header>
   <main class="wrap">
     <article class="article">
-      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/#archive">Finals</a></p>
+      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(meta.href)}">${esc(meta.label)}</a></p>
       <p class="article__eyebrow">${esc(p.eyebrow || "")}</p>
       <h1>${esc(p.title)}</h1>
       <p class="article__meta">${[p.score, p.venue, p.eventDate ? new Date(p.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : ""].filter(Boolean).join(" · ")}</p>${fig}${qa}
@@ -186,7 +195,7 @@ let n = 0;
 for (const p of pages) {
   const dir = join(OUT, p.section, p.slug);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "index.html"), render(p, finals));
+  writeFileSync(join(dir, "index.html"), render(p, pages));
   n++;
 }
 

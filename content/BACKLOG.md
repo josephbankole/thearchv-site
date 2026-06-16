@@ -24,11 +24,11 @@ Status key: todo / drafted / live
 - [todo] explainers/why-var-takes-so-long — why a VAR check takes so long
 
 ## C4 — Man United history cluster (Transfer Desk links into these; start with 5)
-- [todo] united/treble-1999 — the 1999 treble, how it was built
-- [todo] united/fergie-greatest-xi — Ferguson's greatest XI, debated
-- [todo] united/united-record-signings — every United transfer record, 1962 to now
-- [todo] united/class-of-92 — the Class of '92, and why it can't be repeated
-- [todo] united/united-european-nights — United's great European nights
+- [drafted] united/treble-1999 — the 1999 treble, how it was built (hand-built 2026-06-15)
+- [drafted] united/fergie-greatest-xi — Ferguson's greatest XI, debated (hand-built 2026-06-15)
+- [drafted] united/united-record-signings — every United transfer record, 1962 to now (hand-built 2026-06-15)
+- [drafted] united/class-of-92 — the Class of '92, and why it can't be repeated (hand-built 2026-06-15)
+- [drafted] united/united-european-nights — United's great European nights (hand-built 2026-06-15)
 
 ## Verify-first reminder
 Every fact = 2 reputable sources (ESPN/BBC/FIFA/official/Romano), cited inline in the draft for the founder to check. D50 on all art. Humanize all prose. Agent never deploys.

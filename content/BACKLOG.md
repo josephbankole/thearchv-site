@@ -35,3 +35,23 @@ Every fact = 2 reputable sources (ESPN/BBC/FIFA/official/Romano), cited inline i
 
 ## Publish checklist (agent: every finals page)
 When drafting a finals page, also add a crawlable homepage link: insert `<li><a href="/finals/<slug>/">Page title</a></li>` into the `archive__reads-list` block in index.html (the static "Read the finals, in full" list). The deploy publishes the new page and the homepage link together. Same idea for explainers/United later once those hubs exist.
+
+## C5 — World Cup evergreen cluster (D92, ride the live window with durable pages, NOT fixtures)
+Peg to live storylines via /Users/josephbankole/Claude/fifa.archv/wc2026-storyline-tracker.md. Illustrated, verify-first, 2,250-3,000 words. These re-spike every 4 years.
+- [drafted] explainers/biggest-world-cup-upsets — the upsets canon (hand-built 2026-06-16, homepage-linked)
+- [todo] explainers/most-world-cup-titles — every winner
+- [todo] explainers/world-cup-hosts-history — hosts + 2026 three-nation first
+- [todo] explainers/usa-at-the-world-cup — host-nation history (tier-1)
+- [todo] explainers/canada-at-the-world-cup — host-nation history (home market)
+- [todo] explainers/oldest-world-cup-goalscorers — links the Milla legend page
+
+## SEQUENCING (D92) — priority order for the agent
+1. NOW–Jul 19: WC evergreen cluster (C5) + storyline-pegged pages (ride the live window).
+2. Late Jul–Aug: go DEEP on the United pillar (C4) before the summer transfer window peak. United-deep-before-broad.
+3. Sept+: broaden football-history (C2/C3) + interlink for authority.
+Cap ~3-5 durable long-forms/week. Every page: byline + sourcing note + watermark; link it from the homepage + relevant hub.
+
+## PIPELINE TRIGGERS (agent: watch in the weekly scorecard)
+- **Ezoic:** turn on as soon as there is any meaningful organic traffic (no traffic minimum). Founder action; agent flags when GSC shows real clicks landing.
+- **Email capture:** add a one-field "get the new piece" capture once traffic appears (NOT a newsletter relaunch). Agent flags when to add.
+- **Raptive milestone:** the headline KPI is **25,000 pageviews/month** (+50%+ tier-1). When PostHog approaches it, flag the switch from Ezoic to Raptive.

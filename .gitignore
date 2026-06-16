@@ -4,3 +4,7 @@ dist
 *.local
 .vite
 .env
+
+# build junk
+vite.config.ts.timestamp-*.mjs
+.claude/

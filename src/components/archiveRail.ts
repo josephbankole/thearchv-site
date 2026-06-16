@@ -1,5 +1,6 @@
 import { posters } from '../data/posters';
 import lqip from '../../public/posters/lqip.json';
+import { track } from '../analytics';
 
 const LQIP = lqip as Record<string, string>;
 
@@ -102,9 +103,17 @@ function openLightbox(slug: string): void {
   lbCap.innerHTML = `<strong>${p.title}</strong>${p.host} · ${p.stamp}. ${p.moment}`;
   // "Shop this print" appears only once an Etsy listing URL is set on the poster.
   if (lbShop) {
-    if (p.etsyUrl) { lbShop.href = p.etsyUrl; lbShop.hidden = false; }
-    else { lbShop.hidden = true; lbShop.removeAttribute('href'); }
+    if (p.etsyUrl) {
+      lbShop.href = p.etsyUrl;
+      lbShop.hidden = false;
+      lbShop.onclick = () => track('lightbox_shop_click', { slug, title: p.title, year: p.year, href: p.etsyUrl });
+    } else {
+      lbShop.hidden = true;
+      lbShop.removeAttribute('href');
+      lbShop.onclick = null;
+    }
   }
+  track('poster_open', { slug, title: p.title, year: p.year, host: p.host });
   lb.hidden = false;
   requestAnimationFrame(() => lb?.classList.add('is-open'));
   document.body.style.overflow = 'hidden';

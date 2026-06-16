@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { longReads } from '../data/longReads';
+import { track } from '../analytics';
 
 // Builds the Long Reads accordion (origin: ARCHV LinkedIn essays).
 // Full essay text is rendered into the DOM so it is crawlable for SEO.
@@ -46,6 +47,7 @@ export function initLongReads(animate: boolean): void {
       } else {
         panel.style.height = open ? 'auto' : '0';
       }
+      if (open) track('long_read_expand', { title: r.title, kicker: r.kicker, index: i });
     });
 
     li.append(head, panel);

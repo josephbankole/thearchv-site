@@ -47,6 +47,7 @@ export function initContactForm(): void {
       name: data.get('name'),
       company: data.get('company'),
       email: data.get('email'),
+      replyto: data.get('email'),
       message: data.get('message'),
     };
 

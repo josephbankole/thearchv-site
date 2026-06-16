@@ -159,6 +159,7 @@ function render(p, allPages) {
     <nav class="masthead__actions" aria-label="Primary">
       <a class="btn btn--ghost" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
       <a class="btn btn--ghost" href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer">Follow</a>
+      <a class="btn btn--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe</a>
     </nav>
   </header>
   <main class="wrap">
@@ -177,6 +178,7 @@ function render(p, allPages) {
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchv_ca" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchv_ca" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
       </nav>

@@ -59,6 +59,20 @@ export async function initAnalytics(): Promise<void> {
   setupScrollDepth();
   setupSectionViews();
   setupOutboundTracking();
+  setupArticleLinkTracking();
+}
+
+// Track clicks on finals and United long-form article deep-links.
+function setupArticleLinkTracking(): void {
+  document.querySelectorAll<HTMLAnchorElement>('.archive__reads a[href]').forEach((el) => {
+    el.addEventListener('click', () => {
+      track('article_link_click', {
+        href: el.getAttribute('href'),
+        text: el.textContent?.trim(),
+        section: el.closest('section')?.id || '',
+      });
+    });
+  });
 }
 
 // Track outbound clicks to the Etsy shop/listings (the poster-funnel KPI).

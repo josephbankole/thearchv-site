@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-15",
+    day: "Day 5",
+    headline: "A day of four draws. Cape Verde hold Spain.",
+    dek: "A forty year old goalkeeper denies the European champions.",
+    body: "Day five refused to pick a winner. All four matches finished level, and the one they will retell came in Atlanta. Cape Verde, on their World Cup debut, held European champions Spain to a goalless draw. Spain had twenty seven shots and could not beat Vozinha, the forty year old goalkeeper who turned aside Oyarzabal, Laporte and everything else thrown at him. For one of the smallest nations ever to qualify, a point off the favourites is a night they keep for good. The rest matched the mood. Iran and New Zealand traded blows in Los Angeles for a two all, Elijah Just scoring twice before Ramin Rezaeian and Mohammed Mohebbi hauled Iran level. Belgium drew with Egypt, Saudi Arabia with Uruguay.",
+    status: "verified",
+  },
+  {
     date: "2026-06-14",
     day: "Day 4",
     headline: "Amad's late strike stuns Ecuador. The big guns roar.",

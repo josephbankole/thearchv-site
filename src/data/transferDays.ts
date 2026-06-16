@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-15",
+    day: "Monday",
+    headline: "The window opens. Barcelona let Rashford go.",
+    dek: "United's exit clears as the market sprints.",
+    body: "The window opened on Monday, and United's clearest piece of business is a sale. Barcelona's option to sign Marcus Rashford permanently, set at around twenty six million pounds, expired today, and they let it lapse after a season-long loan, preferring another loan instead. That hands the move to Bayern Munich, who are readying an opening bid near twenty five million euros while United hold out for thirty. RUMOUR until a club confirms it, but the path is open. Around them the market did not wait. Barcelona signed Anthony Gordon from Newcastle, Chelsea pushed through four arrivals, and Tottenham added Andrew Robertson and Marcos Senesi on free transfers. United's midfield hunt rumbles on with nothing done yet. The white smoke is going up elsewhere first.",
+    status: "verified",
+    image: "/heads/rashford.webp",
+    imageAlt: "Marcus Rashford, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-14",
     day: "Sunday",
     headline: "United firm up for Fernandes. Bayern close on Rashford.",

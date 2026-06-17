@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-16",
+    day: "Day 6",
+    headline: "Messi answers with a hat-trick.",
+    dek: "The holders open with a statement; France and Norway roll.",
+    body: "The holders waited until day six to start, and Lionel Messi made it worth the wait. A hat-trick against Algeria, three goals in a three nil win, on his record sixth World Cup and his two hundredth cap for Argentina. The goals took him level with Miroslav Klose on sixteen, the most anyone has scored at World Cups. He was not the only one busy. France beat Senegal three one; Kylian Mbappé's two goals made him France's all time leading scorer. Erling Haaland struck twice in Norway's four one win over Iraq. Austria saw off Jordan three one. The big names arrived together.",
+    status: "verified",
+  },
+  {
     date: "2026-06-15",
     day: "Day 5",
     headline: "A day of four draws. Cape Verde hold Spain.",

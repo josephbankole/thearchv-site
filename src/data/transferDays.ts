@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-16",
+    day: "Tuesday",
+    headline: "United line up the midfield bids.",
+    dek: "A Fernandes offer nears; Baleba talks open.",
+    body: "With the window open, United started moving on the midfield they have wanted for a year. An opening bid for West Ham's Mateus Fernandes is being prepared, reported around seventy five million, under the eighty to eighty five million West Ham want for the Portugal international. RUMOUR until a bid is formally lodged. Carlos Baleba is the other name. The Brighton midfielder has spoken to Bruno Fernandes about the move, though United value him near fifty million and Brighton want a good deal more, so this one is not close. Add the agreed Éderson deal and the shape is plain: one midfielder in, at least one more wanted. Money talks this week. Whether it talks loudly enough is the question.",
+    status: "verified",
+    image: "/heads/baleba.webp",
+    imageAlt: "Carlos Baleba, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-15",
     day: "Monday",
     headline: "The window opens. Barcelona let Rashford go.",

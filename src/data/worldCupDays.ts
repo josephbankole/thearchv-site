@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-17",
+    day: "Day 7",
+    headline: "England open up. Kane closes on a record.",
+    dek: "Four past Croatia, and the captain ties Lineker.",
+    body: "England started their World Cup the hard way and still won it well, four two over Croatia in Group L. Harry Kane scored twice, the first from the spot, and his header drew him level with Gary Lineker on ten World Cup goals for England. Croatia twice hit back, through Martin Baturina and Petar Musa, but Jude Bellingham restored the lead straight after the break and Marcus Rashford came off the bench to finish it late. Colombia beat Uzbekistan three one, Ghana edged Panama one nil, and Portugal were held by DR Congo. The seventh day had its share of jeopardy.",
+    status: "verified",
+  },
+  {
     date: "2026-06-16",
     day: "Day 6",
     headline: "Messi answers with a hat-trick.",

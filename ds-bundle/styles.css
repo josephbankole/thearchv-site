@@ -1,0 +1,123 @@
+/* ============================================================
+   THE ARCHV — design system entry (styles.css)
+   This is the file rendered designs receive. Everything the brand
+   needs is reachable from here via @import: the fonts, the tokens,
+   and a small set of real primitives ported from the live site.
+
+   Palette is locked: navy base, cream text, gold accent (capped at
+   two per viewport), pitch green for confirm states. Display serif
+   runs light (weight ~300-360), never heavy.
+   ============================================================ */
+
+@import "./fonts/fonts.css";
+@import "./tokens/tokens.css";
+
+/* ---------------- baseline surface ---------------- */
+body {
+  background: var(--navy);
+  color: var(--cream);
+  font-family: var(--grotesque);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--gold); color: var(--navy); }
+a { color: inherit; text-decoration: none; }
+em { font-style: italic; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* ---------------- type primitives ---------------- */
+.display {
+  font-family: var(--serif);
+  font-weight: 340;            /* light by design */
+  font-size: var(--t-display);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+.h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: var(--t-h2);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+.h3 {
+  font-family: var(--serif);
+  font-weight: 360;
+  font-size: var(--t-h3);
+  letter-spacing: -0.01em;
+}
+.lede {
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--cream-dim);
+  font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+  line-height: 1.45;
+}
+.eyebrow, .section-index {
+  font-family: var(--grotesque);
+  font-size: var(--t-label);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  font-weight: 500;
+}
+.section-index { color: var(--cream-faint); display: inline-flex; align-items: center; gap: 0.85rem; }
+.index-tick { display: inline-block; width: 2.5rem; height: 1px; background: var(--gold); }
+.dot { color: var(--gold); }
+
+/* ---------------- buttons ---------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  font-family: var(--grotesque);
+  font-size: 0.9rem; font-weight: 500; letter-spacing: 0.04em;
+  padding: 0.95em 1.6em; border-radius: var(--r-sm);
+  min-height: 48px;
+  transition: transform 0.5s var(--ease), background 0.4s, color 0.4s, border-color 0.4s;
+  cursor: pointer; border: 1px solid transparent;
+}
+.btn--gold { background: var(--gold); color: var(--navy); font-weight: 600; }   /* counts toward the gold cap */
+.btn--gold:hover { transform: translateY(-2px); }
+.btn--ghost { border-color: var(--cream-faint); color: var(--cream); }
+.btn--ghost:hover { border-color: var(--cream); }
+.btn--text { padding-inline: 0; color: var(--cream-dim); position: relative; }
+.btn--text:hover { color: var(--cream); }
+
+/* ---------------- surfaces ---------------- */
+.card {
+  background: var(--navy-soft);
+  border: 1px solid var(--cream-faint);
+  border-radius: var(--r-lg);
+  padding: 1.75rem 1.5rem;
+}
+.card--flat { border-top: 1px solid var(--cream-faint); border-radius: 0; padding: 1.5rem 0 0; background: none; }
+.panel {
+  background: linear-gradient(180deg, rgba(19, 58, 82, 0.5), rgba(7, 28, 43, 0.5));
+  border: 1px solid var(--cream-faint);
+  border-radius: var(--r-md);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+/* ---------------- status tags ---------------- */
+.tag { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.2em 0.6em; border-radius: var(--r-sm); }
+.tag--done { background: var(--pitch); color: var(--cream); }
+.tag--live { color: var(--gold); border: 1px solid var(--gold-soft); }
+.tag--rumour { border: 1px solid var(--cream-faint); color: var(--cream-dim); }
+
+/* ---------------- form fields ---------------- */
+.field { display: grid; gap: 0.5rem; }
+.field span { font-size: var(--t-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-dim); }
+.field input, .field textarea {
+  background: rgba(242, 234, 211, 0.04);
+  border: 1px solid var(--cream-faint);
+  border-radius: var(--r-sm);
+  color: var(--cream);
+  font-family: var(--grotesque);
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  transition: border-color 0.4s, background 0.4s;
+}
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--gold); background: rgba(242, 234, 211, 0.06); }

@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-17",
+    day: "Wednesday",
+    headline: "Bayern ready their Rashford bid.",
+    dek: "United hold near thirty million. Wages the snag.",
+    body: "Bayern Munich are close to a first bid for Marcus Rashford, with United holding out for a fee in the region of twenty six to thirty million pounds after Barcelona let their option lapse. Club to club talk is described as positive, but this is not done. The sticking point is wages, with Rashford's salary needing to fit Bayern's tighter structure before anything is signed. RUMOUR, no confirmation from either club. Rashford, for what it is worth, spent Wednesday night scoring for England off the bench against Croatia, a reminder of the player United are trying to move on. The desk waits for the bid to land.",
+    status: "verified",
+    image: "/heads/rashford.webp",
+    imageAlt: "Marcus Rashford, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-16",
     day: "Tuesday",
     headline: "United line up the midfield bids.",

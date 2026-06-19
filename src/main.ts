@@ -8,6 +8,7 @@ import { initArchiveRail } from './components/archiveRail';
 import { initDailyDigest } from './components/dailyDigest';
 import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
+import { initChrome } from './ui/chrome';
 import { initAnalytics } from './analytics';
 import { transferDays } from './data/transferDays';
 import { worldCupDays } from './data/worldCupDays';
@@ -26,6 +27,10 @@ function boot(): void {
   initArchiveRail();
   initContactForm();
   initStickyFollow();
+
+  // Page chrome (progress bar + scroll-spy nav). Affordance, not decoration:
+  // runs in every mode; its motion is CSS-gated and reduced-motion safe.
+  initChrome();
 
   // Privacy-friendly analytics (no-op until a PostHog key is configured)
   initAnalytics();

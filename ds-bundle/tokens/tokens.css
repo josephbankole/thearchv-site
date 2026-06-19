@@ -1,0 +1,73 @@
+/* ============================================================
+   THE ARCHV — brand tokens (portable)
+   Extracted from src/style.css :root, reconciled with public/content.css.
+   Canonical, locked palette. Drop this :root into any project to inherit
+   the brand surface. Fonts: Fraunces (display) + Inter Tight (UI/body),
+   both variable — load them separately (see fonts note at bottom).
+   ============================================================ */
+
+:root {
+  /* ---- color: navy base ---- */
+  --navy: #0c2a3e;
+  --navy-deep: #071c2b;
+  --navy-soft: #133a52;
+
+  /* ---- color: cream text ---- */
+  --cream: #f2ead3;
+  --cream-dim: rgba(242, 234, 211, 0.6);
+  --cream-faint: rgba(242, 234, 211, 0.28);
+
+  /* ---- color: gold accent (capped — max 2 elements per viewport) ---- */
+  --gold: #c9a14a;
+  --gold-soft: rgba(201, 161, 74, 0.5);
+
+  /* ---- color: pitch green (confirm/done) ---- */
+  --pitch: #2e6b3a;
+
+  /* ---- color: form states ---- */
+  --error: #d9785f;
+  --error-border: #b5563f;
+
+  /* ---- type families ---- */
+  --serif: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
+  --grotesque: 'Inter Tight Variable', 'Inter Tight', system-ui, -apple-system, sans-serif;
+
+  /* ---- fluid type scale ---- */
+  --t-display: clamp(2.8rem, 8vw, 5rem);
+  --t-h2: clamp(2rem, 5.2vw, 4.4rem);
+  --t-h3: 1.375rem;
+  --t-body: clamp(1.0625rem, 1.4vw, 1.1875rem);
+  --t-label: 0.72rem;
+
+  /* ---- layout ---- */
+  --maxw: 1280px;     /* app */
+  --measure: 46rem;   /* article reading width */
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+
+  /* ---- radius ---- */
+  --r-sm: 2px;        /* default: buttons, frames, tags */
+  --r-md: 3px;        /* digest cards */
+  --r-lg: 10px;       /* legend cards */
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Baseline application of the surface (optional — copy what you need):
+body {
+  background: var(--navy);
+  color: var(--cream);
+  font-family: var(--grotesque);
+  font-size: var(--t-body);
+  line-height: 1.6;
+}
+::selection { background: var(--gold); color: var(--navy); }
+*/
+
+/* Fonts — both are variable. With npm:
+     import '@fontsource-variable/fraunces';
+     import '@fontsource-variable/inter-tight';
+   Or via Google Fonts:
+     https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter+Tight:wght@400..700&display=swap
+   Display type runs LIGHT — default Fraunces weight is ~340, not 400+. */

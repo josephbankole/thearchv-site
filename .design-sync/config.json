@@ -1,0 +1,7 @@
+{
+  "projectId": "0d8dc68b-818c-4243-b88e-9d87ac62a56f",
+  "projectName": "The ARCHV",
+  "shape": "tokens-only",
+  "localDir": "./ds-bundle",
+  "note": "Off-script brand/token system (vanilla Vite + Three.js site, no component library). Bundle is hand-built into ds-bundle/. No _ds_sync.json anchor — next sync re-derives from src/style.css. See NOTES.md."
+}

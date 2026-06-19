@@ -22,6 +22,26 @@ export function initScroll(): void {
     });
   });
 
+  // staggered group reveals: a container marked [data-stagger] cascades its items in.
+  // Items are the elements marked [data-stagger-item], or the container's direct children
+  // as a fallback. Content is visible by default (gsap.from), so a failed motion layer
+  // never hides anything.
+  gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+    const explicit = group.querySelectorAll<HTMLElement>('[data-stagger-item]');
+    const items = explicit.length
+      ? Array.from(explicit)
+      : (Array.from(group.children) as HTMLElement[]);
+    if (!items.length) return;
+    gsap.from(items, {
+      opacity: 0,
+      y: 20,
+      duration: 0.7,
+      ease: 'power3.out',
+      stagger: 0.08,
+      scrollTrigger: { trigger: group, start: 'top 82%', once: true },
+    });
+  });
+
   // section index numbers draw a thin gold tick as they enter (single accent per section)
   gsap.utils.toArray<HTMLElement>('.section-index').forEach((el) => {
     const tick = document.createElement('span');

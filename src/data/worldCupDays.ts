@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-18",
+    day: "Day 8",
+    headline: "Canada make history. Mexico go through.",
+    dek: "A six-goal rout, and the hosts qualify first.",
+    body: "Day eight closed the first full round of group games, and the co-hosts owned it. Canada thrashed Qatar six nil in Vancouver, Jonathan David helping himself to a hat-trick on a night that set a new mark for the country. Mexico were tighter but no less effective, Luis Romo's second-half goal beating South Korea one nil and making them the first team into the knockout rounds. Switzerland eased past Bosnia and Herzegovina four one. Czechia and South Africa could not be separated in a one all draw. The hosts are flying, and the new 48-team bracket is taking shape.",
+    status: "verified",
+  },
+  {
     date: "2026-06-17",
     day: "Day 7",
     headline: "England open up. Kane closes on a record.",

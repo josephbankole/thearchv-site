@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-18",
+    day: "Thursday",
+    headline: "United soften on Rashford to speed a signing.",
+    dek: "A lower price, and a quick winger eyed.",
+    body: "United are ready to take less than their 40 million pound valuation for Rashford, reports say, the priority now a clean exit that frees up the budget. The name attached to the other end of that money is Crysencio Summerville. David Ornstein reports United made an enquiry for the West Ham winger during talks over midfielder Mateus Fernandes, the 24-year-old fitting the age profile the club favour. All of it LINKED, nothing signed. The Fernandes midfield deal is the one to watch, with West Ham's relegation weakening their hand. United's window is taking a shape. Sell Rashford, sign a winger, fix the middle.",
+    status: "verified",
+    image: "/heads/rashford.webp",
+    imageAlt: "Marcus Rashford, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-17",
     day: "Wednesday",
     headline: "Bayern ready their Rashford bid.",

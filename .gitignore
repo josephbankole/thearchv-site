@@ -8,3 +8,6 @@ dist
 # build junk
 vite.config.ts.timestamp-*.mjs
 .claude/
+
+# transient esbuild bundle from scripts/build-feed.mjs
+.feed-bundle.mjs

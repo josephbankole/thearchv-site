@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Archive Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Inter+Tight:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.03;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+        }
+        .gold-hairline {
+            border-bottom: 0.5px solid rgba(201, 161, 74, 0.2);
+        }
+        .corner-bracket-tl {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            border-top: 1px solid #C9A14A;
+            border-left: 1px solid #C9A14A;
+        }
+        .corner-bracket-br {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            border-bottom: 1px solid #C9A14A;
+            border-right: 1px solid #C9A14A;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0C2A3E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C9A14A;
+            border-radius: 2px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#364959",
+                      "primary": "#C9A14A",
+                      "primary-fixed-dim": "#aecae3",
+                      "on-surface-variant": "#B3AB92",
+                      "primary-fixed": "#cbe6ff",
+                      "outline": "#8d9197",
+                      "surface-variant": "#393525",
+                      "surface-tint": "#aecae3",
+                      "tertiary-fixed-dim": "#ecc166",
+                      "secondary": "#b5c9dd",
+                      "surface-container-low": "#1f1c0e",
+                      "gold-accent": "#C9A14A",
+                      "inverse-on-surface": "#343021",
+                      "tertiary-fixed": "#ffdea0",
+                      "surface-dim": "#071C2B",
+                      "on-error-container": "#ffdad6",
+                      "error-container": "#93000a",
+                      "surface-container-high": "#2d2a1b",
+                      "error": "#ffb4ab",
+                      "on-tertiary": "#402d00",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-secondary": "#1f3242",
+                      "surface-bright": "#3d3929",
+                      "secondary-container": "#384b5c",
+                      "parchment-text": "#F2EAD3",
+                      "surface-container-highest": "#393525",
+                      "surface-container": "#232011",
+                      "on-secondary-fixed": "#081d2c",
+                      "on-secondary-container": "#a7bbcf",
+                      "inverse-primary": "#476177",
+                      "surface": "#071C2B",
+                      "tertiary": "#ecc166",
+                      "on-error": "#690005",
+                      "background": "#0C2A3E",
+                      "inverse-surface": "#eae2cb",
+                      "on-surface": "#eae2cb",
+                      "tertiary-container": "#352500",
+                      "on-tertiary-container": "#af8935",
+                      "primary-container": "#0c2a3e",
+                      "secondary-fixed-dim": "#b5c9dd",
+                      "outline-variant": "#43474c",
+                      "surface-container-lowest": "#110e03",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "on-primary-container": "#7792aa",
+                      "on-primary-fixed-variant": "#2f495f",
+                      "secondary-fixed": "#d1e5fa",
+                      "pitch-green": "#2E6B3A",
+                      "on-background": "#eae2cb",
+                      "on-primary": "#173347",
+                      "on-primary-fixed": "#001e30"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "container-max": "800px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "40px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Fraunces"],
+                      "headline-md": ["Fraunces"],
+                      "eyebrow": ["Inter Tight"],
+                      "body-lg": ["Inter Tight"],
+                      "headline-lg-mobile": ["Fraunces"],
+                      "body-md": ["Inter Tight"],
+                      "label-sm": ["Inter Tight"]
+              },
+              "fontSize": {
+                      "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                      "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                      "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-gold-accent selection:text-background overflow-x-hidden">
+<div class="film-grain"></div>
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-background border-b border-gold-accent/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist golden logo badge for ARCHV, featuring elegant serif typography and clean lines, set against a deep navy blue background. The aesthetic is sophisticated and archival, evoking a sense of history and premium curation for a football heritage publication." src="../assets/logo-badge.png"/>
+</div>
+<h1 class="text-headline-md font-headline-md text-gold-accent tracking-tighter">ARCHV</h1>
+</div>
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-gold-accent hover:opacity-80 transition-opacity">search</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile max-w-container-max mx-auto min-h-screen">
+<!-- Search Input Section -->
+<div class="mb-12">
+<div class="relative group">
+<span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-gold-accent opacity-60 group-focus-within:opacity-100 transition-opacity">search</span>
+<input class="w-full bg-transparent border-none border-b border-gold-accent/20 py-4 pl-10 focus:ring-0 focus:border-gold-accent text-headline-md font-headline-md text-parchment-text placeholder:text-gold-accent/30 transition-all" placeholder="Search the archives..." type="text"/>
+</div>
+</div>
+<!-- Recent Searches (Horizontal Scroll) -->
+<section class="mb-12">
+<h3 class="text-eyebrow font-eyebrow text-gold-accent mb-4 uppercase tracking-[0.2em]">Recent Inquiries</h3>
+<div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 border border-gold-accent/20 rounded-full text-label-sm font-label-sm hover:border-gold-accent/60 transition-colors">Zinedine Zidane '98</button>
+<button class="whitespace-nowrap px-4 py-2 border border-gold-accent/20 rounded-full text-label-sm font-label-sm hover:border-gold-accent/60 transition-colors">Milan 1994 Wrap</button>
+<button class="whitespace-nowrap px-4 py-2 border border-gold-accent/20 rounded-full text-label-sm font-label-sm hover:border-gold-accent/60 transition-colors">Pele Brazil '70</button>
+<button class="whitespace-nowrap px-4 py-2 border border-gold-accent/20 rounded-full text-label-sm font-label-sm hover:border-gold-accent/60 transition-colors">Ajax Total Football</button>
+</div>
+</section>
+<!-- Search Results Grid -->
+<div class="space-y-16">
+<!-- Category: Players -->
+<section>
+<div class="flex justify-between items-baseline mb-6 gold-hairline pb-2">
+<h2 class="text-eyebrow font-eyebrow text-gold-accent uppercase tracking-widest">Historical Icons</h2>
+<span class="text-label-sm font-label-sm opacity-40">12 FOUND</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+<!-- Player Card -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-32 h-32 rounded-full border border-gold-accent p-1 mb-4 group-hover:scale-105 transition-transform">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface">
+<img class="w-full h-full object-cover" data-alt="A vintage black and white studio portrait of a legendary 1970s football star with a focused gaze. The lighting is dramatic and moody, emphasizing a classic archival aesthetic. The image is slightly desaturated with a subtle film grain effect, fitting the premium minimalist editorial style of a luxury history publication." src="../assets/heads/jimenez.webp"/>
+</div>
+</div>
+<h4 class="font-headline-md text-body-md text-parchment-text text-center">Johan Cruyff</h4>
+<p class="font-label-sm text-label-sm text-gold-accent opacity-60">Netherlands</p>
+</div>
+<!-- Player Card -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-32 h-32 rounded-full border border-gold-accent p-1 mb-4 group-hover:scale-105 transition-transform">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface">
+<img class="w-full h-full object-cover" data-alt="A cinematic, low-key lighting close-up of a 1980s football manager in a trench coat, looking thoughtfully across the pitch. The photograph is treated with an archival gold tint and soft contrast, capturing the quiet authority and historical depth of a football icon. Minimalist and refined composition." src="../assets/heads/balogun.webp"/>
+</div>
+</div>
+<h4 class="font-headline-md text-body-md text-parchment-text text-center">Michel Platini</h4>
+<p class="font-label-sm text-label-sm text-gold-accent opacity-60">France</p>
+</div>
+</div>
+</section>
+<!-- Category: Wraps -->
+<section>
+<div class="flex justify-between items-baseline mb-6 gold-hairline pb-2">
+<h2 class="text-eyebrow font-eyebrow text-gold-accent uppercase tracking-widest">Editorial Wraps</h2>
+<span class="text-label-sm font-label-sm opacity-40">4 FOUND</span>
+</div>
+<div class="space-y-4">
+<!-- Wrap Item -->
+<div class="relative bg-surface p-6 border border-gold-accent/10 hover:border-gold-accent/40 transition-colors group cursor-pointer overflow-hidden">
+<div class="flex gap-6 items-center">
+<div class="w-20 h-20 shrink-0 relative overflow-hidden bg-surface">
+<img class="w-full h-full object-cover transition-all duration-500" data-alt="A detail-oriented close-up of a vintage football jersey textile from the 1990s, showcasing the intricate knit pattern and a faded national team crest. The shot uses high-contrast cinematic lighting with deep shadows and warm gold highlights to evoke a sense of preserved history and archival quality." src="../assets/posters/italia-1990.webp"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-pitch-green text-parchment-text text-[10px] font-eyebrow rounded-sm uppercase">Done</span>
+<span class="text-label-sm font-label-sm text-gold-accent">JUNE 1994</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-parchment-text leading-none mb-1">The Divine Ponytail: Baggio’s Tragedy</h3>
+<p class="text-label-sm font-label-sm text-gold-accent/60">A deep dive into the 1994 World Cup Finals.</p>
+</div>
+<span class="material-symbols-outlined text-gold-accent group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Category: Posters -->
+<section>
+<div class="flex justify-between items-baseline mb-6 gold-hairline pb-2">
+<h2 class="text-eyebrow font-eyebrow text-gold-accent uppercase tracking-widest">Archive Posters</h2>
+<span class="text-label-sm font-label-sm opacity-40">8 FOUND</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Poster Card -->
+<div class="relative aspect-[3/4] bg-surface group cursor-pointer overflow-hidden border border-gold-accent/5">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A high-end minimalist graphic poster for a 1966 World Cup match. The design features bold, asymmetric typography, a single abstract golden football icon, and a deep navy background. The layout is clean and technical, following a Swiss Design style with thin gold hairlines and corner brackets. Architectural and artistic." src="../assets/posters/paris-1998.webp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<h4 class="font-headline-md text-body-md text-parchment-text">London '66 Series</h4>
+<p class="font-label-sm text-[10px] text-gold-accent uppercase tracking-widest">Collector's Edition</p>
+</div>
+</div>
+<!-- Poster Card -->
+<div class="relative aspect-[3/4] bg-surface group cursor-pointer overflow-hidden border border-gold-accent/5">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="An artistic archival poster of the San Siro stadium under floodlights in the 1980s. The image is a grainy, atmospheric black and white photograph with a gold color wash in the highlights. It is framed with minimalist white text at the bottom specifying technical match details in a clean Inter Tight font." src="../assets/posters/yokohama-2002.webp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<h4 class="font-headline-md text-body-md text-parchment-text">Milan Cathedral: San Siro</h4>
+<p class="font-label-sm text-[10px] text-gold-accent uppercase tracking-widest">Architectural Stud.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 border-t border-gold-accent/20 bg-surface">
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-sm font-label-sm mt-1">Calendar</span>
+</a>
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="text-label-sm font-label-sm mt-1">Desk</span>
+</a>
+<a class="text-gold-accent scale-110 transition-transform flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="sports_soccer" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="text-label-sm font-label-sm mt-1">Explore</span>
+</a>
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="text-label-sm font-label-sm mt-1">History</span>
+</a>
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+<span class="text-label-sm font-label-sm mt-1">Saves</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for search input focus
+        const searchInput = document.querySelector('input');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('border-gold-accent');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('border-gold-accent');
+        });
+
+        // Add subtle scroll reveal logic
+        const sections = document.querySelectorAll('section');
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-8');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

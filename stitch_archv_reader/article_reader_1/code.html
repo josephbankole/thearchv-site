@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | London calls.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=Inter+Tight:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        .corner-bracket {
+            width: 12px;
+            height: 12px;
+            border-color: #C9A14A;
+            position: absolute;
+        }
+        .corner-tl { top: -1px; left: -1px; border-top-width: 1px; border-left-width: 1px; }
+        .corner-tr { top: -1px; right: -1px; border-top-width: 1px; border-right-width: 1px; }
+        .corner-bl { bottom: -1px; left: -1px; border-bottom-width: 1px; border-left-width: 1px; }
+        .corner-br { bottom: -1px; right: -1px; border-bottom-width: 1px; border-right-width: 1px; }
+        
+        body {
+            background-color: #0C2A3E;
+            color: #F2EAD3;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .article-canvas {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#364959",
+                      "primary": "#C9A14A",
+                      "primary-fixed-dim": "#aecae3",
+                      "on-surface-variant": "#B3AB92",
+                      "primary-fixed": "#cbe6ff",
+                      "outline": "#8d9197",
+                      "surface-variant": "#393525",
+                      "surface-tint": "#aecae3",
+                      "tertiary-fixed-dim": "#ecc166",
+                      "secondary": "#b5c9dd",
+                      "surface-container-low": "#1f1c0e",
+                      "gold-accent": "#C9A14A",
+                      "inverse-on-surface": "#343021",
+                      "tertiary-fixed": "#ffdea0",
+                      "surface-dim": "#071C2B",
+                      "on-error-container": "#ffdad6",
+                      "error-container": "#93000a",
+                      "surface-container-high": "#2d2a1b",
+                      "error": "#ffb4ab",
+                      "on-tertiary": "#402d00",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-secondary": "#1f3242",
+                      "surface-bright": "#3d3929",
+                      "secondary-container": "#384b5c",
+                      "parchment-text": "#F2EAD3",
+                      "surface-container-highest": "#393525",
+                      "surface-container": "#232011",
+                      "on-secondary-fixed": "#081d2c",
+                      "on-secondary-container": "#a7bbcf",
+                      "inverse-primary": "#476177",
+                      "surface": "#071C2B",
+                      "tertiary": "#ecc166",
+                      "on-error": "#690005",
+                      "background": "#0C2A3E",
+                      "inverse-surface": "#eae2cb",
+                      "on-surface": "#eae2cb",
+                      "tertiary-container": "#352500",
+                      "on-tertiary-container": "#af8935",
+                      "primary-container": "#0c2a3e",
+                      "secondary-fixed-dim": "#b5c9dd",
+                      "outline-variant": "#43474c",
+                      "surface-container-lowest": "#110e03",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "on-primary-container": "#7792aa",
+                      "on-primary-fixed-variant": "#2f495f",
+                      "secondary-fixed": "#d1e5fa",
+                      "pitch-green": "#2E6B3A",
+                      "on-background": "#eae2cb",
+                      "on-primary": "#173347",
+                      "on-primary-fixed": "#001e30"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "container-max": "800px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "40px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Fraunces"],
+                      "headline-md": ["Fraunces"],
+                      "eyebrow": ["Inter Tight"],
+                      "body-lg": ["Inter Tight"],
+                      "headline-lg-mobile": ["Fraunces"],
+                      "body-md": ["Inter Tight"],
+                      "label-sm": ["Inter Tight"]
+              },
+              "fontSize": {
+                      "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                      "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                      "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="overflow-x-hidden">
+<div class="grain-overlay"></div>
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-background border-b border-gold-accent/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist logo for an archival football publication. The badge features an abstract 'A' and 'V' interlocking in a premium gold finish against a deep navy blue background. The style is clean, modern, and high-end, using thin lines and perfect geometric symmetry to evoke a sense of quiet authority and heritage." src="../assets/logo-badge.png"/>
+</div>
+<span class="text-headline-md font-headline-md text-gold-accent tracking-tighter">THE ARCHV</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-gold-accent cursor-pointer hover:opacity-80 transition-opacity">search</span>
+<span class="material-symbols-outlined text-gold-accent cursor-pointer hover:opacity-80 transition-opacity">menu</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-margin-mobile article-canvas">
+<!-- Header Section -->
+<section class="mb-12">
+<div class="flex items-center gap-3 mb-6">
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase">Transfer Archives</span>
+<div class="h-[1px] flex-grow bg-gold-accent/20"></div>
+<span class="font-eyebrow text-eyebrow text-on-surface-variant">JULY 14, 1996</span>
+</div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text mb-8">
+                London calls<span class="text-gold-accent">.</span>
+</h1>
+<div class="relative w-full aspect-square md:aspect-video mb-12 group">
+<div class="absolute inset-0 border border-gold-accent/10 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A cinematic, high-contrast illustrated portrait of a legendary 1990s football manager in a trench coat, standing under a dim streetlamp in London. The style is moody and archival, with deep shadows and subtle film grain. The palette is dominated by dark navy and charcoal tones, with gold-rimmed highlights on his face and shoulders, conveying a sense of intrigue and historical significance." src="../assets/posters/mexico-1970.webp"/>
+</div>
+</div>
+</section>
+<!-- Article Body -->
+<article class="space-y-8 font-body-md text-body-md text-on-surface leading-relaxed">
+<p class="first-letter:text-5xl first-letter:font-headline-lg first-letter:text-gold-accent first-letter:float-left first-letter:mr-3 first-letter:mt-1">
+                The fog over the Thames was thick as the black cab pulled up to the Highbury gates. This wasn't just another signing; it was a shift in the tectonic plates of English football. For years, the continental style was whispered about in hushed tones in North London pubs, but today, the <span class="bg-pitch-green/20 text-pitch-green px-2 py-0.5 rounded-sm font-label-sm text-label-sm mx-1">DONE</span> deal felt like a manifesto.
+            </p>
+<p>
+                Critics argued that the "Professor" was taking a gamble on an aging squad, but the internal documents retrieved from the <span class="text-gold-accent italic">THE ARCHV</span> vault suggest otherwise. The vision was clear from the first scouting report. He wasn't just looking for players; he was looking for architects.
+            </p>
+<div class="py-6 border-y border-gold-accent/10 my-10">
+<p class="font-headline-md text-headline-md italic text-gold-accent text-center px-6">
+                    "I didn't come here to win a game. I came here to change the way the game is won."
+                </p>
+</div>
+<p>
+                Rumours began to circulate in the tabloid press late Tuesday night about a secondary arrival from the Dutch league. While most dismissed it as a <span class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-sm font-label-sm text-label-sm mx-1">RUMOUR</span>, the data points to a secret meeting held at a discreet hotel in Knightsbridge. The resulting signature would change the history of the Premier League forever.
+            </p>
+<p>
+                In the modern era of instant gratification, we often lose sight of the patience required to build a dynasty. Looking back through these physical files—the ink slightly faded, the paper yellowed—one can almost feel the weight of expectation that rested on those French shoulders that rainy July afternoon.
+            </p>
+</article>
+<!-- Social / Follow -->
+<section class="mt-20 py-12 border-t border-gold-accent/20 flex flex-col items-center gap-6">
+<button class="px-8 py-3 bg-gold-accent text-on-secondary font-eyebrow text-eyebrow uppercase tracking-widest hover:bg-parchment-text transition-colors">
+                Follow @thearchv_ca
+            </button>
+<p class="text-label-sm font-label-sm text-on-surface-variant opacity-60">CURATED FOOTBALL HISTORY DELIVERED DAILY</p>
+</section>
+<!-- Related Stories -->
+<section class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+<h3 class="col-span-full font-eyebrow text-eyebrow text-gold-accent uppercase mb-2">Related Files</h3>
+<!-- Card 1 -->
+<div class="bg-surface p-6 relative group cursor-pointer overflow-hidden border border-gold-accent/5">
+<div class="absolute top-0 left-0 w-full h-1 bg-gold-accent transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+<span class="font-eyebrow text-label-sm text-on-surface-variant block mb-2 uppercase">May 1998</span>
+<h4 class="font-headline-md text-headline-md text-parchment-text group-hover:text-gold-accent transition-colors">The Double: A French Revolution.</h4>
+<div class="mt-4 flex items-center text-gold-accent">
+<span class="font-label-sm text-label-sm uppercase tracking-widest mr-2">Open File</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface p-6 relative group cursor-pointer overflow-hidden border border-gold-accent/5">
+<div class="absolute top-0 left-0 w-full h-1 bg-gold-accent transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+<span class="font-eyebrow text-label-sm text-on-surface-variant block mb-2 uppercase">August 2003</span>
+<h4 class="font-headline-md text-headline-md text-parchment-text group-hover:text-gold-accent transition-colors">Invincibility: The Unbroken Run.</h4>
+<div class="mt-4 flex items-center text-gold-accent">
+<span class="font-label-sm text-label-sm uppercase tracking-widest mr-2">Open File</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Buttons -->
+<div class="fixed bottom-24 right-margin-mobile flex flex-col gap-4 z-50">
+<button class="w-12 h-12 rounded-full bg-surface border border-gold-accent/30 text-gold-accent flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+<button class="w-12 h-12 rounded-full bg-surface border border-gold-accent/30 text-gold-accent flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 bg-surface border-t border-gold-accent/20">
+<div class="flex flex-col items-center gap-1 cursor-pointer transition-all opacity-60 hover:opacity-100">
+<span class="material-symbols-outlined text-gold-accent">calendar_today</span>
+<span class="font-label-sm text-label-sm text-parchment-text">Archive</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer transition-all text-gold-accent scale-110">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-sm text-label-sm">Reading</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer transition-all opacity-60 hover:opacity-100">
+<span class="material-symbols-outlined">sports_soccer</span>
+<span class="font-label-sm text-label-sm text-parchment-text">Scores</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer transition-all opacity-60 hover:opacity-100">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-label-sm text-label-sm text-parchment-text">Stories</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer transition-all opacity-60 hover:opacity-100">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-sm text-label-sm text-parchment-text">Saved</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction for scroll depth progress
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement, 
+                  b = document.body,
+                  st = 'scrollTop',
+                  sh = 'scrollHeight';
+            const percent = (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;
+            // You could use this to update a progress bar if desired
+        });
+
+        // Simple animation for the corner brackets on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const brackets = document.querySelectorAll('.corner-bracket');
+            brackets.forEach((b, i) => {
+                b.style.opacity = '0';
+                b.style.transform = 'scale(1.5)';
+                setTimeout(() => {
+                    b.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+                    b.style.opacity = '1';
+                    b.style.transform = 'scale(1)';
+                }, 200 + (i * 100));
+            });
+        });
+    </script>
+</body></html>

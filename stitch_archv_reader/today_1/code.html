@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | Today</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;700&amp;family=Inter+Tight:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .film-grain {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            z-index: 9999;
+        }
+        .corner-bracket-tl { border-top: 1px solid #C9A14A; border-left: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; top: 0; left: 0; }
+        .corner-bracket-tr { border-top: 1px solid #C9A14A; border-right: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; top: 0; right: 0; }
+        .corner-bracket-bl { border-bottom: 1px solid #C9A14A; border-left: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; bottom: 0; left: 0; }
+        .corner-bracket-br { border-bottom: 1px solid #C9A14A; border-right: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; bottom: 0; right: 0; }
+        
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
+        .pull-to-refresh-indicator {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #C9A14A;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#364959",
+                        "primary": "#C9A14A",
+                        "primary-fixed-dim": "#aecae3",
+                        "on-surface-variant": "#B3AB92",
+                        "primary-fixed": "#cbe6ff",
+                        "outline": "#8d9197",
+                        "surface-variant": "#393525",
+                        "surface-tint": "#aecae3",
+                        "tertiary-fixed-dim": "#ecc166",
+                        "secondary": "#b5c9dd",
+                        "surface-container-low": "#1f1c0e",
+                        "gold-accent": "#C9A14A",
+                        "inverse-on-surface": "#343021",
+                        "tertiary-fixed": "#ffdea0",
+                        "surface-dim": "#071C2B",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2d2a1b",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#402d00",
+                        "on-tertiary-fixed": "#261a00",
+                        "on-secondary": "#1f3242",
+                        "surface-bright": "#3d3929",
+                        "secondary-container": "#384b5c",
+                        "parchment-text": "#F2EAD3",
+                        "surface-container-highest": "#393525",
+                        "surface-container": "#232011",
+                        "on-secondary-fixed": "#081d2c",
+                        "on-secondary-container": "#a7bbcf",
+                        "inverse-primary": "#476177",
+                        "surface": "#071C2B",
+                        "tertiary": "#ecc166",
+                        "on-error": "#690005",
+                        "background": "#0C2A3E",
+                        "inverse-surface": "#eae2cb",
+                        "on-surface": "#eae2cb",
+                        "tertiary-container": "#352500",
+                        "on-tertiary-container": "#af8935",
+                        "primary-container": "#0c2a3e",
+                        "secondary-fixed-dim": "#b5c9dd",
+                        "outline-variant": "#43474c",
+                        "surface-container-lowest": "#110e03",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-primary-container": "#7792aa",
+                        "on-primary-fixed-variant": "#2f495f",
+                        "secondary-fixed": "#d1e5fa",
+                        "pitch-green": "#2E6B3A",
+                        "on-background": "#eae2cb",
+                        "on-primary": "#173347",
+                        "on-primary-fixed": "#001e30"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "container-max": "800px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "40px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Fraunces"],
+                        "headline-md": ["Fraunces"],
+                        "eyebrow": ["Inter Tight"],
+                        "body-lg": ["Inter Tight"],
+                        "headline-lg-mobile": ["Fraunces"],
+                        "body-md": ["Inter Tight"],
+                        "label-sm": ["Inter Tight"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-gold-accent selection:text-background">
+<div class="film-grain"></div>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 border-b border-gold-accent/10 bg-background">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden bg-surface">
+<img class="w-full h-full object-cover" data-alt="A minimalist logo badge for ARCHV, a premium football history archive. The logo is a stylized, circular emblem featuring a golden 'A' in a classic serif font set against a deep navy background. The lighting is soft and cinematic, emphasizing the texture of the gold and the depth of the dark blue, creating a sense of history and quiet authority." src="../assets/logo-badge.png"/>
+</div>
+<span class="text-headline-md font-headline-md text-gold-accent tracking-tighter">THE ARCHV</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-gold-accent hover:opacity-80 transition-opacity flex items-center">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 max-w-container-max mx-auto px-margin-mobile">
+<!-- Pull to Refresh Simulated Indicator -->
+<div class="pull-to-refresh-indicator" id="ptr">
+<span class="material-symbols-outlined animate-spin">refresh</span>
+</div>
+<!-- Date Header -->
+<section class="mb-10 text-center md:text-left">
+<p class="font-eyebrow text-eyebrow text-gold-accent uppercase mb-2 tracking-[0.2em]">TODAY</p>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text">Monday, October 14.</h2>
+</section>
+<!-- Lead Story Hero Card -->
+<article class="relative bg-surface rounded-lg overflow-hidden mb-12 group">
+<div class="absolute inset-0 border border-gold-accent/20 z-10 pointer-events-none"></div>
+<div class="flex flex-col md:flex-row min-h-[500px]">
+<div class="w-full md:w-1/2 p-10 flex flex-col justify-center order-2 md:order-1">
+<div class="flex items-center gap-2 mb-6">
+<span class="px-2 py-1 border border-gold-accent/40 rounded text-label-sm font-label-sm text-gold-accent uppercase">Long Read</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">12 MIN</span>
+</div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-[44px] md:text-[56px] leading-[1.03] tracking-[-0.03em] text-parchment-text mb-6">
+                        The Architect of the Total Football.<span class="text-gold-accent">.</span>
+</h1>
+<p class="text-body-md text-on-surface-variant font-body-md mb-8 leading-relaxed">
+                        Rinus Michels didn't just change Ajax; he rewrote the geometric possibilities of the pitch. A deep dive into the 1971 European Cup final.
+                    </p>
+<button class="flex items-center gap-2 group-hover:translate-x-1 transition-transform text-gold-accent font-eyebrow text-eyebrow uppercase">
+                        Read the file <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="w-full md:w-1/2 h-64 md:h-auto order-1 md:order-2 relative overflow-hidden flex items-center justify-center bg-surface">
+<div class="w-48 h-48 md:w-64 md:h-64 rounded-full border border-gold-accent p-1 overflow-hidden">
+<img class="w-full h-full object-cover brightness-90 contrast-125" data-alt="A cinematic, archival-style portrait of Rinus Michels, the Dutch football manager. The image is circular and framed with a golden border. The lighting is dramatic and low-key, casting deep shadows to emphasize his focused, intellectual expression. The background is a secondary navy tone with a subtle film grain texture, evoking a mid-20th-century historical document feel." src="../assets/heads/jimenez.webp"/>
+</div>
+</div>
+</div>
+</article>
+<!-- Secondary Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+<!-- Transfer Desk Wrap -->
+<div class="bg-surface p-8 relative rounded-lg border border-gold-accent/10">
+<div class="flex justify-between items-start mb-6">
+<span class="font-eyebrow text-eyebrow text-gold-accent tracking-widest">TRANSFER DESK</span>
+<span class="bg-pitch-green text-parchment-text text-[10px] px-2 py-0.5 rounded-full font-bold">DONE</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-parchment-text mb-4">Galactico Origins: The 2001 Figo Deposition.</h3>
+<p class="text-on-surface-variant text-body-md mb-6 opacity-80">Unlocking the archived letters from the Florentino Pérez era that changed Madrid forever.</p>
+<div class="flex items-center gap-3 mt-auto">
+<span class="material-symbols-outlined text-gold-accent" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+<span class="text-label-sm font-label-sm text-gold-accent">VIEW RECORDS</span>
+</div>
+</div>
+<!-- World Cup Wrap -->
+<div class="bg-surface p-8 relative rounded-lg border border-gold-accent/10">
+<div class="flex justify-between items-start mb-6">
+<span class="font-eyebrow text-eyebrow text-gold-accent tracking-widest">WORLD CUP SERIES</span>
+<span class="text-on-surface-variant text-label-sm">VOL. 04</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-parchment-text mb-4">The Curse of the 1950 Maracanazo.</h3>
+<p class="text-on-surface-variant text-body-md mb-6 opacity-80">Recovered audio transcripts from the silence that deafened Rio for a generation.</p>
+<div class="flex items-center gap-3 mt-auto">
+<span class="material-symbols-outlined text-gold-accent" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="text-label-sm font-label-sm text-gold-accent">LISTEN NOW</span>
+</div>
+</div>
+</div>
+<!-- Vertical Poster Feature -->
+<section class="border-t border-gold-accent/10 pt-12">
+<p class="font-eyebrow text-eyebrow text-gold-accent uppercase mb-8 tracking-[0.2em] text-center">FROM THE ARCHIVE</p>
+<div class="max-w-md mx-auto relative group cursor-pointer">
+<div class="aspect-[2/3] w-full overflow-hidden bg-surface relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A vintage-inspired vertical football poster in 2:3 aspect ratio. The design features a stylized, minimalist illustration of an early 20th-century leather football resting on a pristine green pitch under a single dramatic spotlight. The color palette is composed of deep navy, ochre gold, and a muted forest green. High-contrast typography in a serif font reads 'EL CLASICO: 1929' with a film-grain overlay and subtle paper texture." src="../assets/posters/azteca-1986.webp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
+</div>
+<div class="mt-6 text-center">
+<h4 class="font-headline-md text-headline-md text-parchment-text">The First Clásico Poster</h4>
+<p class="text-on-surface-variant font-label-sm uppercase mt-2 tracking-widest">Barcelona, May 1929</p>
+</div>
+<!-- Brackets for poster -->
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 border-t border-gold-accent/20 bg-surface">
+<!-- Active Home Tab -->
+<a class="flex flex-col items-center gap-1 text-gold-accent scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="text-[10px] font-label-sm uppercase tracking-tighter">Today</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-[10px] font-label-sm uppercase tracking-tighter">Desk</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">sports_soccer</span>
+<span class="text-[10px] font-label-sm uppercase tracking-tighter">World Cup</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="text-[10px] font-label-sm uppercase tracking-tighter">Archive</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-[10px] font-label-sm uppercase tracking-tighter">Saved</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for pull-to-refresh simulation
+        let startY = 0;
+        const ptr = document.getElementById('ptr');
+        
+        window.addEventListener('touchstart', (e) => {
+            if (window.scrollY === 0) {
+                startY = e.touches[0].pageY;
+            }
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            const currentY = e.touches[0].pageY;
+            const diff = currentY - startY;
+            if (window.scrollY === 0 && diff > 0 && diff < 150) {
+                ptr.style.height = `${diff}px`;
+                ptr.style.opacity = diff / 150;
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            if (parseInt(ptr.style.height) > 60) {
+                // Trigger refresh logic
+                setTimeout(() => {
+                    ptr.style.height = '0px';
+                }, 1000);
+            } else {
+                ptr.style.height = '0px';
+            }
+        });
+
+        // Desktop scroll logic for navbar border
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('bg-background/95', 'backdrop-blur-md');
+            } else {
+                header.classList.remove('bg-background/95', 'backdrop-blur-md');
+            }
+        });
+    </script>
+</body></html>

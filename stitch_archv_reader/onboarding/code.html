@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;700&amp;family=Inter+Tight:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Components JSON (Reference only, Navigation suppressed for Onboarding) -->
+<!-- Suppression Logic: Transactional/Onboarding flow hide shell. -->
+<style>
+        body {
+            background-color: #0C2A3E;
+            color: #eae2cb;
+            font-family: 'Inter Tight', sans-serif;
+            overflow-x: hidden;
+        }
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+        }
+        .corner-bracket {
+            width: 12px;
+            height: 12px;
+            border-color: #C9A14A;
+            position: absolute;
+        }
+        .step-transition {
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+        }
+        .club-card.active {
+            border-color: #C9A14A;
+            background-color: rgba(201, 161, 74, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-gold-accent selection:text-background">
+<div class="film-grain"></div>
+<!-- Onboarding Container -->
+<main class="relative h-screen w-full overflow-hidden">
+<!-- Step 1: Full-Bleed Intro -->
+<section class="step-transition absolute inset-0 z-30 flex flex-col items-center justify-center bg-surface px-margin-mobile" id="step-1">
+<!-- Background Visual with Shader -->
+
+<div class="relative z-10 max-w-container-max text-center">
+<div class="mb-6 flex justify-center">
+<span class="material-symbols-outlined text-gold-accent text-5xl" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+</div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text mb-8">
+                    Football has a memory.<br/>
+<span class="text-gold-accent italic">This is the ARCHV.</span>
+</h1>
+<p class="font-body-md text-body-md text-on-primary-container max-w-md mx-auto mb-12 opacity-80">
+                    A curated history of the beautiful game, delivered with the depth it deserves. No noise. Just the archive.
+                </p>
+<button class="px-10 py-4 bg-gold-accent text-background font-eyebrow text-eyebrow rounded-sm uppercase tracking-widest hover:bg-parchment-text transition-colors" onclick="nextStep(2)">
+                    Begin Exploration
+                </button>
+</div>
+<div class="absolute bottom-12 w-full text-center">
+<button class="font-eyebrow text-eyebrow text-on-primary-container opacity-40 hover:opacity-100 transition-opacity tracking-widest uppercase" onclick="skipOnboarding()">Skip Intro</button>
+</div>
+</section>
+<!-- Step 2: Pick Your Clubs -->
+<section class="step-transition absolute inset-0 z-20 flex flex-col items-center bg-background px-margin-mobile translate-x-full opacity-0" id="step-2">
+<header class="w-full h-16 flex items-center justify-between max-w-container-max">
+<span class="font-headline-md text-headline-md text-gold-accent">THE ARCHV</span>
+<button class="font-eyebrow text-eyebrow text-gold-accent tracking-widest uppercase" onclick="nextStep(3)">Next</button>
+</header>
+<div class="mt-12 w-full max-w-container-max flex-1 overflow-y-auto pb-24 scrollbar-hide">
+<h2 class="font-headline-md text-headline-md text-parchment-text mb-2">The Collection</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">Select the institutions you wish to follow through time.</p>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<!-- Club Grid Item -->
+<div class="club-card relative p-6 bg-surface border border-gold-accent/10 cursor-pointer transition-all hover:border-gold-accent/40 group" onclick="toggleClub(this)">
+<div class="w-12 h-12 rounded-full border border-gold-accent/20 mb-4 overflow-hidden transition-all">
+<img class="w-full h-full object-cover" data-alt="A high-contrast, minimalist graphic crest for Real Madrid, rendered in gold and deep navy against a clean white background, archival sports style." src="../assets/heads/jimenez.webp"/>
+</div>
+<h3 class="font-eyebrow text-eyebrow text-parchment-text uppercase">Real Madrid</h3>
+<p class="text-[10px] text-on-surface-variant opacity-60">124 Years of History</p>
+</div>
+<div class="club-card relative p-6 bg-surface border border-gold-accent/10 cursor-pointer transition-all hover:border-gold-accent/40 group" onclick="toggleClub(this)">
+<div class="w-12 h-12 rounded-full border border-gold-accent/20 mb-4 overflow-hidden transition-all">
+<img class="w-full h-full object-cover" data-alt="A vintage, minimalist Liverpool FC crest featuring the Liver Bird, styled as a gold leaf engraving on a deep crimson and navy background, cinematic archival aesthetic." src="../assets/heads/jimenez.webp"/>
+</div>
+<h3 class="font-eyebrow text-eyebrow text-parchment-text uppercase">Liverpool</h3>
+<p class="text-[10px] text-on-surface-variant opacity-60">131 Years of History</p>
+</div>
+<div class="club-card relative p-6 bg-surface border border-gold-accent/10 cursor-pointer transition-all hover:border-gold-accent/40 group" onclick="toggleClub(this)">
+<div class="w-12 h-12 rounded-full border border-gold-accent/20 mb-4 overflow-hidden transition-all">
+<img class="w-full h-full object-cover" data-alt="AC Milan crest in a classic circular shield, detailed gold outlines and black stripes, soft desaturated vintage lighting, cinematic football archive style." src="../assets/heads/balogun.webp"/>
+</div>
+<h3 class="font-eyebrow text-eyebrow text-parchment-text uppercase">AC Milan</h3>
+<p class="text-[10px] text-on-surface-variant opacity-60">124 Years of History</p>
+</div>
+<div class="club-card relative p-6 bg-surface border border-gold-accent/10 cursor-pointer transition-all hover:border-gold-accent/40 group" onclick="toggleClub(this)">
+<div class="w-12 h-12 rounded-full border border-gold-accent/20 mb-4 overflow-hidden transition-all">
+<img class="w-full h-full object-cover" data-alt="A minimal black and white crest for Juventus FC, clean modern lines with a subtle gold glow, set against a deep secondary navy archival background." src="../assets/heads/rashford.webp"/>
+</div>
+<h3 class="font-eyebrow text-eyebrow text-parchment-text uppercase">Juventus</h3>
+<p class="text-[10px] text-on-surface-variant opacity-60">126 Years of History</p>
+</div>
+<div class="club-card relative p-6 bg-surface border border-gold-accent/10 cursor-pointer transition-all hover:border-gold-accent/40 group" onclick="toggleClub(this)">
+<div class="w-12 h-12 rounded-full border border-gold-accent/20 mb-4 overflow-hidden transition-all">
+<img class="w-full h-full object-cover" data-alt="Bayern Munich badge in a minimalist etched style, gold metallic details over a deep navy backdrop, high-end editorial football publication aesthetic." src="../assets/heads/fernandes.webp"/>
+</div>
+<h3 class="font-eyebrow text-eyebrow text-parchment-text uppercase">Bayern Munich</h3>
+<p class="text-[10px] text-on-surface-variant opacity-60">124 Years of History</p>
+</div>
+<div class="club-card relative p-6 bg-surface border border-gold-accent/10 cursor-pointer transition-all hover:border-gold-accent/40 group" onclick="toggleClub(this)">
+<div class="w-12 h-12 rounded-full border border-gold-accent/20 mb-4 overflow-hidden transition-all">
+<img class="w-full h-full object-cover" data-alt="Minimalist gold and navy Arsenal FC cannon emblem, archival sketch style on a textured dark background, premium editorial look." src="../assets/heads/baleba.webp"/>
+</div>
+<h3 class="font-eyebrow text-eyebrow text-parchment-text uppercase">Arsenal</h3>
+<p class="text-[10px] text-on-surface-variant opacity-60">137 Years of History</p>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-background to-transparent pointer-events-none"></div>
+</section>
+<!-- Step 3: Daily Wrap Toggle -->
+<section class="step-transition absolute inset-0 z-10 flex flex-col items-center justify-center bg-background px-margin-mobile translate-x-full opacity-0" id="step-3">
+<div class="relative w-full max-w-md text-center">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 w-px h-24 bg-gold-accent/30"></div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-parchment-text mb-6">One daily wrap.<br/>Nothing else.</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-12">No breaking news, no rumors. Just a singular, cinematic brief of the day's historic significance at 8:00 AM.</p>
+<!-- Custom Toggle Component -->
+<div class="flex flex-col items-center space-y-6">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-16 h-8 bg-surface peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-parchment-text after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-gold-accent"></div>
+<span class="ms-3 font-eyebrow text-eyebrow text-gold-accent uppercase tracking-widest">Enable Daily Briefing</span>
+</label>
+</div>
+<div class="mt-20">
+<button class="w-full py-4 border border-gold-accent/40 text-gold-accent font-eyebrow text-eyebrow rounded-sm uppercase tracking-widest hover:bg-gold-accent hover:text-background transition-all" onclick="finishOnboarding()">
+                        Enter The Archive
+                    </button>
+</div>
+</div>
+<!-- Corner Brackets for Step 3 Context -->
+<div class="absolute top-20 left-20 border-t border-l corner-bracket"></div>
+<div class="absolute top-20 right-20 border-t border-r corner-bracket"></div>
+<div class="absolute bottom-20 left-20 border-b border-l corner-bracket"></div>
+<div class="absolute bottom-20 right-20 border-b border-r corner-bracket"></div>
+</section>
+</main>
+<script>
+        let currentStep = 1;
+
+        function nextStep(step) {
+            const currentEl = document.getElementById(`step-${currentStep}`);
+            const nextEl = document.getElementById(`step-${step}`);
+
+            currentEl.style.transform = 'translateX(-100%)';
+            currentEl.style.opacity = '0';
+            currentEl.style.zIndex = '10';
+
+            nextEl.style.transform = 'translateX(0)';
+            nextEl.style.opacity = '1';
+            nextEl.style.zIndex = '30';
+
+            currentStep = step;
+        }
+
+        function skipOnboarding() {
+            // Animating out directly to step 3 or main
+            const currentEl = document.getElementById(`step-1`);
+            const finalEl = document.getElementById(`step-3`);
+            
+            currentEl.style.transform = 'translateX(-100%)';
+            currentEl.style.opacity = '0';
+            
+            finalEl.style.transform = 'translateX(0)';
+            finalEl.style.opacity = '1';
+            finalEl.style.zIndex = '30';
+            
+            currentStep = 3;
+        }
+
+        function toggleClub(el) {
+            el.classList.toggle('active');
+            // Micro-interaction
+            el.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                el.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        function finishOnboarding() {
+            // Visual feedback before redirecting/closing
+            document.body.style.transition = 'opacity 1s ease';
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                alert('Welcome to the ARCHV. Initializing history feed...');
+                // In a real app, this would route to /dashboard or /home
+            }, 800);
+        }
+    </script>
+</body></html>

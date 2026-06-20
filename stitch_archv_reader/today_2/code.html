@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>ARCHV. | The Archive of Football</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;700&amp;family=Inter+Tight:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#765700",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-low": "#001e30",
+                    "on-secondary-fixed": "#261a00",
+                    "surface-container-high": "#0f2c40",
+                    "outline": "#959086",
+                    "primary-container": "#eae2cb",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#95d69a",
+                    "tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#ecc166",
+                    "surface-container-lowest": "#00101c",
+                    "inverse-on-surface": "#173347",
+                    "on-surface": "#cbe6ff",
+                    "on-tertiary-container": "#34713f",
+                    "surface": "#071C2B",
+                    "background": "#0C2A3E",
+                    "on-background": "#cbe6ff",
+                    "surface-container-highest": "#1c374c",
+                    "outline-variant": "#49473e",
+                    "on-primary-container": "#696452",
+                    "on-surface-variant": "#B3AB92",
+                    "primary": "#C9A14A",
+                    "secondary-fixed": "#ffdea0",
+                    "on-primary-fixed-variant": "#4b4736",
+                    "on-primary-fixed": "#1f1c0e",
+                    "inverse-surface": "#cbe6ff",
+                    "on-tertiary": "#003914",
+                    "secondary": "#ecc166",
+                    "surface-tint": "#cdc6b0",
+                    "on-secondary-fixed-variant": "#5c4300",
+                    "primary-fixed": "#eae2cb",
+                    "surface-variant": "#1c374c",
+                    "inverse-primary": "#635e4c",
+                    "surface-dim": "#001524",
+                    "on-tertiary-fixed-variant": "#115224",
+                    "on-primary": "#343021",
+                    "surface-bright": "#203c50",
+                    "on-secondary-container": "#fbcf73",
+                    "tertiary-container": "#b0f2b4",
+                    "primary-fixed-dim": "#cdc6b0",
+                    "tertiary-fixed": "#b0f2b4",
+                    "on-tertiary-fixed": "#002108",
+                    "surface-container": "#022235",
+                    "error-container": "#93000a",
+                    "on-secondary": "#402d00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "unit": "4px",
+                    "stack-sm": "8px",
+                    "stack-md": "24px",
+                    "gutter": "16px",
+                    "stack-lg": "48px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Fraunces"],
+                    "body-md": ["Inter Tight"],
+                    "headline-lg": ["Fraunces"],
+                    "headline-sm": ["Fraunces"],
+                    "label-caps": ["Inter Tight"],
+                    "label-md": ["Inter Tight"],
+                    "body-lg": ["Inter Tight"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg": ["42px", {"lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                    "headline-sm": ["24px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0C2A3E; /* Deep Navy from Surface */
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Film Grain Effect */
+        .film-grain::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Corner Brackets */
+        .bracket-container { position: relative; }
+        .bracket {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-color: #ecc166; /* Gold/Secondary */
+            border-style: solid;
+            pointer-events: none;
+        }
+        .bracket-tl { top: -2px; left: -2px; border-width: 0.5px 0 0 0.5px; }
+        .bracket-br { bottom: -2px; right: -2px; border-width: 0 0.5px 0.5px 0; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 0; height: 0; }
+
+        .active-nav-item .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="film-grain font-body-md text-on-surface pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface flex justify-between items-center px-margin-mobile h-16 border-b border-outline-variant/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist circular brand insignia for ARCHV. featuring a sophisticated, vintage-inspired monogram rendered in deep navy and antique gold. The aesthetic is clean and authoritative, reflecting a high-end archival sports publication with a focus on historical football journalism. The lighting is soft and studio-quality, emphasizing the premium nature of the badge." src="../assets/logo-badge.png"/>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">ARCHV.</h1>
+</div>
+<button class="hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+</button>
+</header>
+<main class="mt-20 px-margin-mobile space-y-stack-lg">
+<!-- Today Section -->
+<section class="space-y-stack-sm">
+<div class="flex items-baseline justify-between">
+<p class="font-label-caps text-label-caps text-secondary tracking-[0.2em]">TODAY</p>
+<div class="h-[0.5px] flex-grow mx-4 bg-secondary/20"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">14 JUL.</p>
+</div>
+<!-- Hero: Lead Story -->
+<article class="bracket-container group">
+<div class="bracket bracket-tl"></div>
+<div class="bracket bracket-br"></div>
+<div class="relative overflow-hidden bg-surface-container-low h-[520px]">
+<img class="w-full h-full object-cover brightness-75 group-hover:scale-105 transition-transform duration-700" data-alt="A dramatic, high-contrast illustrated headshot of a distinguished football manager with glasses, captured in a painterly, archival style. The lighting is cinematic, casting deep shadows that blend into the navy background, highlighting textural details of his expression. The overall mood is one of quiet authority and intellectual intensity, reminiscent of a prestige magazine cover from the 1990s." src="../assets/posters/mexico-1970.webp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-gutter w-full">
+<span class="inline-block px-2 py-1 mb-4 bg-secondary text-on-secondary font-label-caps text-[10px] tracking-widest">LONG READ</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">London calls.</h2>
+<p class="font-body-lg text-body-lg text-secondary italic">The Professor arrives in North London.</p>
+</div>
+</div>
+</article>
+</section>
+<!-- Feed: Day Card System -->
+<section class="space-y-stack-md">
+<div class="grid grid-cols-1 gap-gutter">
+<!-- Transfer Desk Wrap Card -->
+<div class="bg-surface-container border border-outline-variant/10 p-gutter space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant tracking-widest">TRANSFER DESK</h3>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="font-body-md">Shearer to Newcastle</span>
+<span class="px-1.5 py-0.5 bg-[#2E6B3A] text-[#F2EAD3] font-label-caps text-[10px] rounded-sm">DONE</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="font-body-md">Zidane's Turin Departure</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant opacity-60">PENDING</span>
+</div>
+</div>
+</div>
+<!-- World Cup Wrap Card -->
+<div class="bg-surface-container-high relative overflow-hidden h-48 bracket-container">
+<div class="bracket bracket-tl"></div>
+<div class="bracket bracket-br"></div>
+<img class="w-full h-full object-cover opacity-40" data-alt="A textured, grainy wide-angle photograph of an iconic football stadium during a historic World Cup final. The image is filtered through a vintage sepia and deep teal lens, highlighting the massive crowd and the atmospheric haze of flares. The aesthetic is epic and nostalgic, capturing the immense scale of the tournament with a focus on tonal layering and dramatic light." src="../assets/posters/azteca-1986.webp"/>
+<div class="absolute inset-0 p-gutter flex flex-col justify-end">
+<h3 class="font-label-caps text-label-caps text-primary tracking-widest mb-1">WORLD CUP</h3>
+<p class="font-headline-sm text-headline-sm text-primary">The hand of God.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature: Archive Poster -->
+<section class="space-y-stack-sm pb-12">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary" data-icon="inventory_2">inventory_2</span>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant tracking-widest">FROM THE ARCHIVE</h3>
+</div>
+<div class="aspect-[2/3] w-full bg-surface-container-lowest bracket-container overflow-hidden">
+<div class="bracket bracket-tl"></div>
+<div class="bracket bracket-br"></div>
+<img class="w-full h-full object-cover transition-all duration-1000" data-alt="A stunning 2:3 vertical illustrated poster depicting a classic vintage football match from the 1960s. The artwork uses a limited palette of cream, gold, and deep navy, with bold graphic silhouettes of players in motion. The style is reminiscent of mid-century Swiss design, featuring clean lines, intentional whitespace, and a high-grain film texture that evokes the tactile feel of old newsprint." src="../assets/posters/italia-1990.webp"/>
+<div class="absolute top-6 right-6 text-right">
+<p class="font-headline-md text-primary leading-none">66.</p>
+<p class="font-label-caps text-[10px] text-secondary">WEMBLEY</p>
+</div>
+<div class="absolute bottom-0 left-0 w-full p-gutter bg-gradient-to-t from-surface-container-lowest to-transparent">
+<p class="font-body-md text-on-surface opacity-80 border-l border-secondary pl-3">A final that defined a generation. The controversial goal that still echoes through the halls of history.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe bg-surface-container-lowest h-20 border-t border-outline-variant/20">
+<!-- Today (Active) -->
+<a class="flex flex-col items-center justify-center text-secondary font-bold active-nav-item scale-110 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="today" style="font-variation-settings: 'FILL' 1;">today</span>
+<span class="font-label-caps text-[10px] tracking-tight">Today</span>
+</a>
+<!-- Desk -->
+<a class="flex flex-col items-center justify-center text-primary-fixed opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="newspaper">newspaper</span>
+<span class="font-label-caps text-[10px] tracking-tight">Desk</span>
+</a>
+<!-- World Cup -->
+<a class="flex flex-col items-center justify-center text-primary-fixed opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="trophy">trophy</span>
+<span class="font-label-caps text-[10px] tracking-tight">World Cup</span>
+</a>
+<!-- Archive -->
+<a class="flex flex-col items-center justify-center text-primary-fixed opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-caps text-[10px] tracking-tight">Archive</span>
+</a>
+<!-- Saved -->
+<a class="flex flex-col items-center justify-center text-primary-fixed opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="bookmark">bookmark</span>
+<span class="font-label-caps text-[10px] tracking-tight">Saved</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for list item period highlight
+        document.querySelectorAll('.border-b').forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.querySelector('span:first-child');
+                const original = text.innerHTML;
+                if (!original.endsWith('.')) {
+                    text.innerHTML = original + '<span class="text-secondary transition-all duration-300">.</span>';
+                    setTimeout(() => {
+                        text.innerHTML = original;
+                    }, 600);
+                }
+            });
+        });
+
+        // Atmospheric film grain drift
+        let grainX = 0;
+        let grainY = 0;
+        function driftGrain() {
+            grainX += (Math.random() - 0.5) * 0.5;
+            grainY += (Math.random() - 0.5) * 0.5;
+            document.querySelector('.film-grain').style.backgroundPosition = `${grainX}px ${grainY}px`;
+            requestAnimationFrame(driftGrain);
+        }
+        // driftGrain(); // Disabled for performance, can be enabled for ultra-premium feel
+    </script>
+</body></html>

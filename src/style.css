@@ -156,6 +156,13 @@ main, .masthead, .footer { position: relative; z-index: 2; }
 @media (prefers-reduced-motion: reduce) {
   .hero .eyebrow, .hero__title > [data-reveal-line], .hero__sub, .hero__cta, .hero__scroll { animation: none; }
 }
+.hero__crest {
+  width: clamp(88px, 11vw, 132px); height: auto; display: block; margin-bottom: 1.9rem;
+  filter: drop-shadow(0 8px 26px rgba(0,0,0,0.45));
+  animation: heroRise 0.85s var(--ease) both; animation-delay: 0s;
+}
+@media (prefers-reduced-motion: reduce) { .hero__crest { animation: none; } }
+@media (max-width: 640px) { .hero__crest { margin-bottom: 1.4rem; } }
 .hero .eyebrow { margin-bottom: 1.5rem; }
 .hero__title {
   font-family: var(--serif);

@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-19",
+    day: "Day 9",
+    headline: "The hosts are through. The casualties pile up.",
+    dek: "USA reach the knockouts. Scotland on the brink.",
+    body: "Day nine settled the first host. The United States beat Australia two nil in Seattle and reached the knockout rounds with a match to spare, an own goal and an Alex Freeman header doing the work. Not since 1930 had they won their opening two World Cup games. Around them the day turned cruel. Türkiye lost one nil to Paraguay and went out. Haiti were beaten three nil by Brazil, a Matheus Cunha brace easing Ancelotti's side along. Scotland left it latest of all, undone in Boston after seventy seconds when Ismael Saibari struck for Morocco, the fastest goal of the tournament. The Tartan Army are not finished, but they are close.",
+    status: "verified",
+    image: "/heads/balogun.webp",
+    imageAlt: "Folarin Balogun, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-18",
     day: "Day 8",
     headline: "Canada make history. Mexico go through.",

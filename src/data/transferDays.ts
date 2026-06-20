@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-19",
+    day: "Friday",
+    headline: "United land the first one. Now the next.",
+    dek: "Éderson agreed. Fernandes the next push.",
+    body: "The first piece is in place. Éderson, the Atalanta midfielder rather than the Manchester City goalkeeper who shares the name, has agreed personal terms with United and a fee around thirty eight million pounds. Sky Sports and Fabrizio Romano both have it agreed, with only the medical and signature left before United make it official. Call it agreed, not yet rubber-stamped. He will not be the last. United are pushing hardest for West Ham's Mateus Fernandes, the twenty one year old Portugal midfielder, with INEOS working to lower the price and Bradley Barcola also discussed. RUMOUR on both. André Onana's future is the other thread, with Trabzonspor keen on a fresh loan. The foundation is laid.",
+    status: "verified",
+    image: "/heads/fernandes.webp",
+    imageAlt: "Mateus Fernandes, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-18",
     day: "Thursday",
     headline: "United soften on Rashford to speed a signing.",

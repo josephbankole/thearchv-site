@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile & Settings | ARCHV</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;700&family=Inter+Tight:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .film-grain {
+            position: relative;
+        }
+        .film-grain::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: url('https://www.transparenttextures.com/patterns/p6.png');
+            opacity: 0.03;
+            z-index: 1;
+        }
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(201, 161, 74, 0.1);
+        }
+        .corner-bracket-tl { border-top: 1px solid #C9A14A; border-left: 1px solid #C9A14A; }
+        .corner-bracket-tr { border-top: 1px solid #C9A14A; border-right: 1px solid #C9A14A; }
+        .corner-bracket-bl { border-bottom: 1px solid #C9A14A; border-left: 1px solid #C9A14A; }
+        .corner-bracket-br { border-bottom: 1px solid #C9A14A; border-right: 1px solid #C9A14A; }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#364959",
+                    "primary": "#C9A14A",
+                    "primary-fixed-dim": "#aecae3",
+                    "on-surface-variant": "#B3AB92",
+                    "primary-fixed": "#cbe6ff",
+                    "outline": "#8d9197",
+                    "surface-variant": "#393525",
+                    "surface-tint": "#aecae3",
+                    "tertiary-fixed-dim": "#ecc166",
+                    "secondary": "#b5c9dd",
+                    "surface-container-low": "#1f1c0e",
+                    "gold-accent": "#C9A14A",
+                    "inverse-on-surface": "#343021",
+                    "tertiary-fixed": "#ffdea0",
+                    "surface-dim": "#071C2B",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#2d2a1b",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#402d00",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-secondary": "#1f3242",
+                    "surface-bright": "#3d3929",
+                    "secondary-container": "#384b5c",
+                    "parchment-text": "#F2EAD3",
+                    "surface-container-highest": "#393525",
+                    "surface-container": "#232011",
+                    "on-secondary-fixed": "#081d2c",
+                    "on-secondary-container": "#a7bbcf",
+                    "inverse-primary": "#476177",
+                    "surface": "#071C2B",
+                    "tertiary": "#ecc166",
+                    "on-error": "#690005",
+                    "background": "#0C2A3E",
+                    "inverse-surface": "#eae2cb",
+                    "on-surface": "#eae2cb",
+                    "tertiary-container": "#352500",
+                    "on-tertiary-container": "#af8935",
+                    "primary-container": "#0c2a3e",
+                    "secondary-fixed-dim": "#b5c9dd",
+                    "outline-variant": "#43474c",
+                    "surface-container-lowest": "#110e03",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-primary-container": "#7792aa",
+                    "on-primary-fixed-variant": "#2f495f",
+                    "secondary-fixed": "#d1e5fa",
+                    "pitch-green": "#2E6B3A",
+                    "on-background": "#eae2cb",
+                    "on-primary": "#173347",
+                    "on-primary-fixed": "#001e30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-max": "800px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "40px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Fraunces"],
+                    "headline-md": ["Fraunces"],
+                    "eyebrow": ["Inter Tight"],
+                    "body-lg": ["Inter Tight"],
+                    "headline-lg-mobile": ["Fraunces"],
+                    "body-md": ["Inter Tight"],
+                    "label-sm": ["Inter Tight"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-gold-accent selection:text-background film-grain">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 border-b border-gold-accent/10 bg-background">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist vector logo of a classic leather football inside a clean shield emblem, styled in gold and deep navy. The logo is desaturated to feel archival and premium, with high-contrast sharp edges and a slight metallic sheen. The background is a clean, solid secondary navy to maintain focus on the brand identity." src="../assets/logo-badge.png"/>
+</div>
+<span class="text-headline-md font-headline-md text-gold-accent tracking-tighter">THE ARCHV</span>
+</div>
+<button class="text-gold-accent hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile max-w-container-max mx-auto">
+<!-- Profile Header -->
+<section class="mb-12">
+<div class="flex items-end justify-between mb-8">
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile md:text-headline-lg md:font-headline-lg">Librarian Account</h1>
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase tracking-widest pb-2">EST. 2024</span>
+</div>
+<!-- Archive+ Membership Card -->
+<div class="relative p-8 bg-surface border border-gold-accent/30 gold-glow group overflow-hidden">
+<!-- Corner Brackets -->
+<div class="absolute top-2 left-2 w-4 h-4 corner-bracket-tl"></div>
+<div class="absolute top-2 right-2 w-4 h-4 corner-bracket-tr"></div>
+<div class="absolute bottom-2 left-2 w-4 h-4 corner-bracket-bl"></div>
+<div class="absolute bottom-2 right-2 w-4 h-4 corner-bracket-br"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-12">
+<div>
+<p class="font-eyebrow text-eyebrow text-gold-accent mb-1">MEMBERSHIP STATUS</p>
+<h2 class="text-headline-md font-headline-md text-parchment-text">Archive+</h2>
+</div>
+<span class="bg-gold-accent text-background px-3 py-1 font-eyebrow text-[10px] tracking-tighter rounded-full">EARLY ACCESS</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<p class="font-eyebrow text-eyebrow text-on-primary-container mb-1">MEMBER NAME</p>
+<p class="text-body-lg font-body-lg text-parchment-text">Arthur C. Clarke</p>
+</div>
+<div class="text-right">
+<p class="font-eyebrow text-eyebrow text-on-primary-container mb-1">ID NO.</p>
+<p class="font-mono text-xs text-gold-accent/80 tracking-widest">AV-990-2104X</p>
+</div>
+</div>
+</div>
+<!-- Abstract background pattern -->
+<div class="absolute -right-12 -bottom-12 w-64 h-64 border border-gold-accent/10 rounded-full group-hover:scale-110 transition-transform duration-1000"></div>
+<div class="absolute -right-8 -bottom-8 w-64 h-64 border border-gold-accent/5 rounded-full group-hover:scale-125 transition-transform duration-700"></div>
+</div>
+</section>
+<!-- Settings Sections -->
+<div class="space-y-12">
+<!-- Preferences -->
+<section>
+<h3 class="font-eyebrow text-eyebrow text-gold-accent mb-6 border-b border-gold-accent/10 pb-2">CURATION PREFERENCES</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-body-md font-body-md text-parchment-text">Daily Wrap</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">A singular, condensed digest of the day's history.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface border border-gold-accent/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-gold-accent after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-surface"></div>
+</label>
+</div>
+<div class="h-[1px] w-full bg-gold-accent/10"></div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-body-md font-body-md text-parchment-text">Historical Alerts</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">On-this-day notifications for iconic moments.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface border border-gold-accent/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-outline after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-surface"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Appearance -->
+<section>
+<h3 class="font-eyebrow text-eyebrow text-gold-accent mb-6 border-b border-gold-accent/10 pb-2">APPEARANCE SETTINGS</h3>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-6 bg-surface border border-gold-accent text-gold-accent">
+<span class="material-symbols-outlined mb-2" style="font-variation-settings: 'FILL' 1;">dark_mode</span>
+<span class="font-eyebrow text-eyebrow">DEEP NAVY</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 bg-surface-container border border-gold-accent/10 text-on-surface-variant hover:border-gold-accent/40 transition-colors">
+<span class="material-symbols-outlined mb-2">light_mode</span>
+<span class="font-eyebrow text-eyebrow">PARCHMENT</span>
+</button>
+</div>
+</section>
+<!-- Community & Support -->
+<section>
+<h3 class="font-eyebrow text-eyebrow text-gold-accent mb-6 border-b border-gold-accent/10 pb-2">CONNECTIONS</h3>
+<nav class="space-y-4">
+<a class="flex items-center justify-between py-2 group" href="#">
+<span class="text-body-md font-body-md text-parchment-text group-hover:text-gold-accent transition-colors">Follow @thearchv_ca</span>
+<span class="material-symbols-outlined text-gold-accent/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+<a class="flex items-center justify-between py-2 group" href="#">
+<span class="text-body-md font-body-md text-parchment-text group-hover:text-gold-accent transition-colors">Partner with us</span>
+<span class="material-symbols-outlined text-gold-accent/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+<a class="flex items-center justify-between py-2 group" href="#">
+<span class="text-body-md font-body-md text-parchment-text group-hover:text-gold-accent transition-colors">Submit an artifact</span>
+<span class="material-symbols-outlined text-gold-accent/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</nav>
+</section>
+<!-- Disclaimer -->
+<section class="pt-8 text-center opacity-40">
+<p class="text-label-sm font-label-sm leading-relaxed max-w-md mx-auto italic">
+                    The ARCHV is an independent football publication. Original art, verified history, honest transfer wraps. We are not affiliated with, endorsed by, or licensed by FIFA, any club, federation, competition, or player. All portraits are original illustrations, created for commentary and reporting.
+                </p>
+<p class="mt-4 font-eyebrow text-[10px] tracking-widest uppercase">Version 2.4.0 • Building for the Record</p>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 border-t border-gold-accent/20 bg-surface">
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+</a>
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+</a>
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">sports_soccer</span>
+</a>
+<a class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+</a>
+<a class="text-gold-accent scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for the Archive+ card
+        const card = document.querySelector('.bg-surface');
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        });
+    </script>
+</body></html>

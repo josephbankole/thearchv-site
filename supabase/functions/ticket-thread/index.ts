@@ -1,0 +1,56 @@
+// ticket-thread: the app's in-app inbox reads here.
+// POST { device_id, ticket_id? }
+//   with ticket_id -> { ticket, messages }  (one thread, public messages only)
+//   without        -> { tickets }           (the device's ticket list, newest first)
+// Ownership is enforced by matching device_id, since there is no login. Internal notes are never
+// returned. device_id is stripped from anything sent back to the app.
+import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
+
+  let payload: Record<string, unknown>;
+  try {
+    payload = await req.json();
+  } catch {
+    return json({ error: "invalid json" }, 400);
+  }
+
+  const device_id = typeof payload.device_id === "string" ? payload.device_id.trim() : "";
+  const ticket_id = typeof payload.ticket_id === "string" ? payload.ticket_id : null;
+  if (!device_id) return json({ error: "device_id required" }, 400);
+
+  const supabase = adminClient();
+
+  // List mode: every ticket this device opened.
+  if (!ticket_id) {
+    const { data, error } = await supabase
+      .from("tickets")
+      .select("id, category, subject, status, created_at, updated_at")
+      .eq("device_id", device_id)
+      .order("created_at", { ascending: false });
+    if (error) return json({ error: error.message }, 500);
+    return json({ tickets: data ?? [] }, 200);
+  }
+
+  // Thread mode: one ticket, verified to belong to this device.
+  const { data: ticket, error: tErr } = await supabase
+    .from("tickets")
+    .select("id, category, subject, status, created_at, updated_at, device_id")
+    .eq("id", ticket_id)
+    .maybeSingle();
+  if (tErr) return json({ error: tErr.message }, 500);
+  if (!ticket || ticket.device_id !== device_id) return json({ error: "not found" }, 404);
+
+  const { data: messages, error: mErr } = await supabase
+    .from("ticket_messages")
+    .select("author, body, created_at")
+    .eq("ticket_id", ticket_id)
+    .eq("internal", false)
+    .order("created_at", { ascending: true });
+  if (mErr) return json({ error: mErr.message }, 500);
+
+  const { device_id: _omit, ...safeTicket } = ticket;
+  return json({ ticket: safeTicket, messages: messages ?? [] }, 200);
+});

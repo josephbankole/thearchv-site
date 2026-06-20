@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | Poster Detail - Mexico 1970</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Inter+Tight:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#364959",
+                    "primary": "#C9A14A",
+                    "primary-fixed-dim": "#aecae3",
+                    "on-surface-variant": "#B3AB92",
+                    "primary-fixed": "#cbe6ff",
+                    "outline": "#8d9197",
+                    "surface-variant": "#393525",
+                    "surface-tint": "#aecae3",
+                    "tertiary-fixed-dim": "#ecc166",
+                    "secondary": "#b5c9dd",
+                    "surface-container-low": "#1f1c0e",
+                    "gold-accent": "#C9A14A",
+                    "inverse-on-surface": "#343021",
+                    "tertiary-fixed": "#ffdea0",
+                    "surface-dim": "#071C2B",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#2d2a1b",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#402d00",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-secondary": "#1f3242",
+                    "surface-bright": "#3d3929",
+                    "secondary-container": "#384b5c",
+                    "parchment-text": "#F2EAD3",
+                    "surface-container-highest": "#393525",
+                    "surface-container": "#232011",
+                    "on-secondary-fixed": "#081d2c",
+                    "on-secondary-container": "#a7bbcf",
+                    "inverse-primary": "#476177",
+                    "surface": "#071C2B",
+                    "tertiary": "#ecc166",
+                    "on-error": "#690005",
+                    "background": "#0C2A3E",
+                    "inverse-surface": "#eae2cb",
+                    "on-surface": "#eae2cb",
+                    "tertiary-container": "#352500",
+                    "on-tertiary-container": "#af8935",
+                    "primary-container": "#0c2a3e",
+                    "secondary-fixed-dim": "#b5c9dd",
+                    "outline-variant": "#43474c",
+                    "surface-container-lowest": "#110e03",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-primary-container": "#7792aa",
+                    "on-primary-fixed-variant": "#2f495f",
+                    "secondary-fixed": "#d1e5fa",
+                    "pitch-green": "#2E6B3A",
+                    "on-background": "#eae2cb",
+                    "on-primary": "#173347",
+                    "on-primary-fixed": "#001e30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-max": "800px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "40px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Fraunces"],
+                    "headline-md": ["Fraunces"],
+                    "eyebrow": ["Inter Tight"],
+                    "body-lg": ["Inter Tight"],
+                    "headline-lg-mobile": ["Fraunces"],
+                    "body-md": ["Inter Tight"],
+                    "label-sm": ["Inter Tight"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0C2A3E;
+            color: #eae2cb;
+            -webkit-font-smoothing: antialiased;
+        }
+        .film-grain {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.03;
+            z-index: 100;
+        }
+        .poster-canvas {
+            aspect-ratio: 2/3;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .corner-bracket {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: #C9A14A;
+        }
+        .bracket-tl { top: -1px; left: -1px; border-top-width: 1px; border-left-width: 1px; }
+        .bracket-tr { top: -1px; right: -1px; border-top-width: 1px; border-right-width: 1px; }
+        .bracket-bl { bottom: -1px; left: -1px; border-bottom-width: 1px; border-left-width: 1px; }
+        .bracket-br { bottom: -1px; right: -1px; border-bottom-width: 1px; border-right-width: 1px; }
+
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md selection:bg-gold-accent selection:text-background">
+<div class="film-grain"></div>
+<!-- Top Navigation (Shell suppressed but custom version for detail view) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-background/80 backdrop-blur-md">
+<button class="flex items-center gap-2 group transition-opacity hover:opacity-70" onclick="history.back()">
+<span class="material-symbols-outlined text-gold-accent">arrow_back</span>
+<span class="font-eyebrow text-eyebrow uppercase tracking-widest text-gold-accent">Gallery</span>
+</button>
+<div class="flex gap-6">
+<button class="material-symbols-outlined text-gold-accent hover:scale-110 transition-transform">bookmark</button>
+<button class="material-symbols-outlined text-gold-accent hover:scale-110 transition-transform">share</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile flex flex-col items-center">
+<!-- Full-Bleed Illustration Poster Section -->
+<div class="relative w-full max-w-[500px] mb-12">
+<!-- Corner Brackets -->
+<div class="corner-bracket bracket-tl"></div>
+<div class="corner-bracket bracket-tr"></div>
+<div class="corner-bracket bracket-bl"></div>
+<div class="corner-bracket bracket-br"></div>
+<!-- The Poster Image -->
+<div class="poster-canvas overflow-hidden border border-gold-accent/20 relative group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A premium archival football poster illustration for the 1970 Mexico World Cup. The style is vintage mid-century modern with bold geometric shapes, featuring a stylized sun and a soccer ball in vibrant oranges, deep navy, and gold accents. The lighting is soft and textured, mimicking aged paper or high-quality lithograph print on a dark background. The atmosphere is nostalgic, cinematic, and historically significant, reflecting the peak of global football culture in a minimalist editorial aesthetic." src="../assets/posters/mexico-1970.webp"/>
+<!-- Subtle internal hairline border -->
+<div class="absolute inset-4 border border-gold-accent/10 pointer-events-none"></div>
+</div>
+</div>
+<!-- Caption & Metadata Section -->
+<div class="w-full max-w-[500px] text-center md:text-left space-y-6">
+<div class="space-y-2">
+<p class="font-eyebrow text-eyebrow text-gold-accent uppercase tracking-[0.2em]">Archival Print No. 07</p>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text">Mexico 1970</h1>
+</div>
+<hr class="w-full h-px border-0 bg-gradient-to-r from-transparent via-gold-accent/30 to-transparent"/>
+<div class="grid grid-cols-2 gap-8 text-left">
+<div class="space-y-1">
+<span class="font-eyebrow text-[10px] text-gold-accent/60 uppercase">Historical Moment</span>
+<p class="font-body-md text-parchment-text leading-relaxed">The birth of Total Football and Pelé's final masterpiece under the Mexican sun.</p>
+</div>
+<div class="space-y-1">
+<span class="font-eyebrow text-[10px] text-gold-accent/60 uppercase">Print Quality</span>
+<p class="font-body-md text-parchment-text leading-relaxed">240gsm Giclée on Acid-Free Archival Paper.</p>
+</div>
+</div>
+<!-- Action Section -->
+<div class="pt-8 flex flex-col gap-4">
+<a href="https://joeydesignca.etsy.com?coupon=ARCHV10" target="_blank" rel="noopener noreferrer" class="w-full py-5 bg-gold-accent text-background font-eyebrow text-eyebrow uppercase tracking-widest hover:bg-parchment-text transition-colors flex justify-center items-center gap-3 active:scale-[0.98]">
+<span>Shop this print</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+<div class="flex justify-between items-center px-2">
+<span class="font-body-md text-gold-accent/80">$75.00</span>
+<span class="font-label-sm text-label-sm opacity-40 uppercase">Ships Worldwide</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav (Suppressed for Detail according to Shell Visibility Rule, but we maintain the system's "BottomNavBar" data in a contextual way if needed - here we prioritize the shop action) -->
+<footer class="fixed bottom-0 left-0 w-full px-margin-mobile py-8 bg-gradient-to-t from-background to-transparent pointer-events-none">
+<div class="max-w-[500px] mx-auto pointer-events-auto">
+<!-- Space for any floating elements if needed -->
+</div>
+</footer>
+<script>
+        // Micro-interactions for the poster view
+        document.querySelector('.poster-canvas').addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+            const x = (e.clientX - left) / width - 0.5;
+            const y = (e.clientY - top) / height - 0.5;
+            
+            e.currentTarget.style.transform = `perspective(1000px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+        });
+
+        document.querySelector('.poster-canvas').addEventListener('mouseleave', (e) => {
+            e.currentTarget.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`;
+        });
+    </script>
+</body></html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | World Cup Archive</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;700&family=Inter+Tight:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Fraunces';
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Inter Tight';
+            font-display: swap;
+        }
+        
+        body {
+            background-color: #0C2A3E;
+            color: #eae2cb;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .gold-hairline {
+            border-bottom: 0.5px solid rgba(201, 161, 74, 0.2);
+        }
+
+        .corner-bracket-tl { border-top: 1px solid #C9A14A; border-left: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; top: -2px; left: -2px; }
+        .corner-bracket-tr { border-top: 1px solid #C9A14A; border-right: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; top: -2px; right: -2px; }
+        .corner-bracket-bl { border-bottom: 1px solid #C9A14A; border-left: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; bottom: -2px; left: -2px; }
+        .corner-bracket-br { border-bottom: 1px solid #C9A14A; border-right: 1px solid #C9A14A; width: 12px; height: 12px; position: absolute; bottom: -2px; right: -2px; }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#364959",
+                        "primary": "#C9A14A",
+                        "primary-fixed-dim": "#aecae3",
+                        "on-surface-variant": "#B3AB92",
+                        "primary-fixed": "#cbe6ff",
+                        "outline": "#8d9197",
+                        "surface-variant": "#393525",
+                        "surface-tint": "#aecae3",
+                        "tertiary-fixed-dim": "#ecc166",
+                        "secondary": "#b5c9dd",
+                        "surface-container-low": "#1f1c0e",
+                        "gold-accent": "#C9A14A",
+                        "inverse-on-surface": "#343021",
+                        "tertiary-fixed": "#ffdea0",
+                        "surface-dim": "#071C2B",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2d2a1b",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#402d00",
+                        "on-tertiary-fixed": "#261a00",
+                        "on-secondary": "#1f3242",
+                        "surface-bright": "#3d3929",
+                        "secondary-container": "#384b5c",
+                        "parchment-text": "#F2EAD3",
+                        "surface-container-highest": "#393525",
+                        "surface-container": "#232011",
+                        "on-secondary-fixed": "#081d2c",
+                        "on-secondary-container": "#a7bbcf",
+                        "inverse-primary": "#476177",
+                        "surface": "#071C2B",
+                        "tertiary": "#ecc166",
+                        "on-error": "#690005",
+                        "background": "#0C2A3E",
+                        "inverse-surface": "#eae2cb",
+                        "on-surface": "#eae2cb",
+                        "tertiary-container": "#352500",
+                        "on-tertiary-container": "#af8935",
+                        "primary-container": "#0c2a3e",
+                        "secondary-fixed-dim": "#b5c9dd",
+                        "outline-variant": "#43474c",
+                        "surface-container-lowest": "#110e03",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-primary-container": "#7792aa",
+                        "on-primary-fixed-variant": "#2f495f",
+                        "secondary-fixed": "#d1e5fa",
+                        "pitch-green": "#2E6B3A",
+                        "on-background": "#eae2cb",
+                        "on-primary": "#173347",
+                        "on-primary-fixed": "#001e30"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "container-max": "800px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "40px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Fraunces"],
+                        "headline-md": ["Fraunces"],
+                        "eyebrow": ["Inter Tight"],
+                        "body-lg": ["Inter Tight"],
+                        "headline-lg-mobile": ["Fraunces"],
+                        "body-md": ["Inter Tight"],
+                        "label-sm": ["Inter Tight"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background selection:bg-gold-accent selection:text-background">
+<div class="film-grain"></div>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-background border-b border-gold-accent/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A refined, minimalist vector-style crest logo for a sports archive, featuring a simplified shield and an 'A' character. The design uses deep navy and gold colors with an archival, premium editorial feel, presented on a clean background." src="../assets/logo-badge.png"/>
+</div>
+<span class="text-headline-md font-headline-md text-gold-accent tracking-tighter">THE ARCHV</span>
+</div>
+<div class="flex items-center gap-4 text-gold-accent">
+<span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-opacity">search</span>
+</div>
+</header>
+<main class="pt-16 pb-32">
+<!-- Horizontal Fixtures Strip -->
+<section class="w-full overflow-x-auto hide-scrollbar bg-surface/20 border-b border-gold-accent/10 py-3 mb-8">
+<div class="flex gap-6 px-margin-mobile min-w-max items-center">
+<div class="flex flex-col items-center border-r border-gold-accent/10 pr-6">
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase mb-1">Group A</span>
+<div class="flex items-center gap-3 font-body-md text-parchment-text">
+<span>MEX</span>
+<span class="text-gold-accent font-bold">1 - 0</span>
+<span>CMR</span>
+</div>
+</div>
+<div class="flex flex-col items-center border-r border-gold-accent/10 pr-6">
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase mb-1">Group B</span>
+<div class="flex items-center gap-3 font-body-md text-parchment-text">
+<span>ESP</span>
+<span class="text-gold-accent font-bold">1 - 5</span>
+<span>NED</span>
+</div>
+</div>
+<div class="flex flex-col items-center border-r border-gold-accent/10 pr-6">
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase mb-1">Group B</span>
+<div class="flex items-center gap-3 font-body-md text-parchment-text">
+<span>CHI</span>
+<span class="text-gold-accent font-bold">3 - 1</span>
+<span>AUS</span>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase mb-1">Today</span>
+<div class="flex items-center gap-3 font-body-md text-parchment-text opacity-60">
+<span>COL</span>
+<span class="mx-1">vs</span>
+<span>GRE</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Archive Feed -->
+<div class="max-w-container-max mx-auto px-margin-mobile space-y-12">
+<!-- Day Card 1 -->
+<article class="relative bg-surface rounded-lg overflow-hidden border border-gold-accent/10 group transition-all duration-500 hover:border-gold-accent/30">
+<div class="p-6 md:p-8">
+<div class="flex justify-between items-start mb-6">
+<div class="px-3 py-1 border border-gold-accent/40 rounded text-eyebrow font-eyebrow text-gold-accent">
+                            JUNE 12, 2014
+                        </div>
+<div class="bg-pitch-green px-3 py-1 rounded-full text-label-sm font-label-sm text-parchment-text">
+                            MATCH DAY 01
+                        </div>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text mb-6">
+                        The hosts arrive<span class="text-gold-accent">.</span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+<div class="relative aspect-video rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A cinematic, wide-angle shot of a vibrant yellow football stadium at dusk, filled with an ocean of fans in yellow jerseys. The lighting is golden and dramatic, casting long shadows across the pitch. The aesthetic is high-contrast and moody, perfectly capturing a historic World Cup opening ceremony atmosphere with archival texture." src="../assets/posters/mexico-1970.webp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+</div>
+<div class="space-y-4">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                Brazil opens the tournament in Sao Paulo. A night of intense pressure, a controversial penalty, and Neymar's transcendence. The archive captures the electric tension of a nation holding its collective breath.
+                            </p>
+<div class="flex items-center gap-4 pt-2">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-secondary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized, illustrated headshot of a famous Brazilian football player with a focused expression. The art style is desaturated, archival, and premium, resembling a high-end editorial sketch with subtle gold highlights around the edges. Set against a dark navy background." src="../assets/heads/balogun.webp"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-secondary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An illustrated editorial portrait of a world-class football manager in a suit, looking thoughtful. The style is vintage, slightly grained, and uses a limited palette of deep blues and parchment tones to match the premium archive aesthetic." src="../assets/heads/rashford.webp"/>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-gold-accent uppercase tracking-widest">Key Figures</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Separator -->
+<div class="w-full flex items-center gap-4">
+<div class="h-[0.5px] flex-grow bg-gold-accent/20"></div>
+<span class="material-symbols-outlined text-gold-accent opacity-40">history_edu</span>
+<div class="h-[0.5px] flex-grow bg-gold-accent/20"></div>
+</div>
+<!-- Day Card 2 -->
+<article class="relative bg-surface rounded-lg overflow-hidden border border-gold-accent/10 group">
+<div class="p-6 md:p-8">
+<div class="flex justify-between items-start mb-6">
+<div class="px-3 py-1 border border-gold-accent/40 rounded text-eyebrow font-eyebrow text-gold-accent">
+                            JUNE 13, 2014
+                        </div>
+<div class="bg-pitch-green px-3 py-1 rounded-full text-label-sm font-label-sm text-parchment-text">
+                            MATCH DAY 02
+                        </div>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text mb-6">
+                        Revenge in Salvador<span class="text-gold-accent">.</span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-1">
+<div class="relative w-full aspect-square rounded-full border border-parchment-text/15 p-1 mb-4">
+<img class="w-full h-full object-cover rounded-full" data-alt="A highly detailed, desaturated archival illustration of a Dutch striker mid-flight during a header. The lighting is dramatic and focused, highlighting the athletic form against a secondary navy background. The style is minimalist-editorial, capturing a split-second of historic sporting action." src="../assets/heads/jimenez.webp"/>
+</div>
+<p class="font-eyebrow text-eyebrow text-center text-gold-accent uppercase">Robin van Persie</p>
+</div>
+<div class="md:col-span-2 flex flex-col justify-center">
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">
+                                A repeat of the 2010 final ends in a stunning role reversal. The Netherlands dismantles the reigning world champions in a display of tactical brilliance and clinical finishing.
+                            </p>
+<div class="p-4 bg-background/50 rounded border border-gold-accent/5 italic font-body-md text-on-primary-container">
+                                "The diving header that defined a generation. Spain's era of dominance begins its slow descent in the heat of Salvador."
+                            </div>
+</div>
+</div>
+</div>
+</article>
+<!-- Day Card 3 -->
+<article class="relative bg-surface rounded-lg overflow-hidden border border-gold-accent/10 group">
+<div class="p-6 md:p-8">
+<div class="flex justify-between items-start mb-6">
+<div class="px-3 py-1 border border-gold-accent/40 rounded text-eyebrow font-eyebrow text-gold-accent">
+                            JUNE 14, 2014
+                        </div>
+<div class="bg-pitch-green px-3 py-1 rounded-full text-label-sm font-label-sm text-parchment-text">
+                            MATCH DAY 03
+                        </div>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text mb-6">
+                        The heat of Manaus<span class="text-gold-accent">.</span>
+</h2>
+<div class="relative h-64 w-full mb-6 rounded overflow-hidden border border-parchment-text/15">
+<img class="w-full h-full object-cover" data-alt="A wide, cinematic view of a modern football stadium nestled within the lush green canopy of the Amazon rainforest. Mist rises from the trees in the background, under a hazy, humid sky. The color palette features deep forest greens, navy blues, and gold accents from the stadium lighting, treated with an archival film grain." src="../assets/posters/paris-1998.webp"/>
+<div class="absolute bottom-4 left-4 bg-background/80 px-3 py-1 text-label-sm font-label-sm text-gold-accent">
+                            ARENA DA AMAZÔNIA, MANAUS
+                        </div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                        England and Italy face off in the humidity of the jungle. A tactical masterclass from Pirlo and the emergence of a new generation. The archive notes the physical toll as players battle both the opposition and the climate.
+                    </p>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 bg-surface border-t border-gold-accent/20">
+<div class="flex flex-col items-center gap-1 cursor-pointer text-parchment-text opacity-60 hover:opacity-100 transition-all">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-sm font-label-sm">Timeline</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer text-parchment-text opacity-60 hover:opacity-100 transition-all">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-label-sm font-label-sm">Records</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer text-gold-accent scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="text-label-sm font-label-sm">World Cup</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer text-parchment-text opacity-60 hover:opacity-100 transition-all">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="text-label-sm font-label-sm">Library</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer text-parchment-text opacity-60 hover:opacity-100 transition-all">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-label-sm font-label-sm">Saved</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for card entrance
+        document.addEventListener('DOMContentLoaded', () => {
+            const articles = document.querySelectorAll('article');
+            articles.forEach((article, index) => {
+                article.style.opacity = '0';
+                article.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    article.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+                    article.style.opacity = '1';
+                    article.style.transform = 'translateY(0)';
+                }, 100 * (index + 1));
+            });
+        });
+
+        // Hover effect for fixtures
+        const fixtureItems = document.querySelectorAll('section > div > div');
+        fixtureItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.backgroundColor = 'rgba(201, 161, 74, 0.05)';
+                item.style.transition = 'background-color 0.3s ease';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.backgroundColor = 'transparent';
+            });
+        });
+    </script>
+</body></html>

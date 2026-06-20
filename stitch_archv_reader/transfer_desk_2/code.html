@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV. | Transfer Desk</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;700&family=Inter+Tight:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet"/>
+<style>/* Film Grain Effect */
+.film-grain::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url(../assets/posters/mexico-1970.webp)
+    }
+/* Material Symbols Weight */
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 4px
+    }
+::-webkit-scrollbar-track {
+    background: #00101c
+    }
+::-webkit-scrollbar-thumb {
+    background: #49473e
+    }
+.corner-bracket-tl {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 8px;
+    height: 8px;
+    border-top: 1px solid #ecc166;
+    border-left: 1px solid #ecc166
+    }
+.corner-bracket-br {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 8px;
+    height: 8px;
+    border-bottom: 1px solid #ecc166;
+    border-right: 1px solid #ecc166
+    }
+.gold-period::after {
+    content: ".";
+    color: #ecc166
+    }</style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#765700",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-low": "#001e30",
+                      "on-secondary-fixed": "#261a00",
+                      "surface-container-high": "#0f2c40",
+                      "outline": "#959086",
+                      "primary-container": "#eae2cb",
+                      "error": "#ffb4ab",
+                      "on-error": "#690005",
+                      "tertiary-fixed-dim": "#95d69a",
+                      "tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#ecc166",
+                      "surface-container-lowest": "#00101c",
+                      "inverse-on-surface": "#173347",
+                      "on-surface": "#cbe6ff",
+                      "on-tertiary-container": "#34713f",
+                      "surface": "#071C2B",
+                      "background": "#0C2A3E",
+                      "on-background": "#cbe6ff",
+                      "surface-container-highest": "#1c374c",
+                      "outline-variant": "#49473e",
+                      "on-primary-container": "#696452",
+                      "on-surface-variant": "#B3AB92",
+                      "primary": "#C9A14A",
+                      "secondary-fixed": "#ffdea0",
+                      "on-primary-fixed-variant": "#4b4736",
+                      "on-primary-fixed": "#1f1c0e",
+                      "inverse-surface": "#cbe6ff",
+                      "on-tertiary": "#003914",
+                      "secondary": "#ecc166",
+                      "surface-tint": "#cdc6b0",
+                      "on-secondary-fixed-variant": "#5c4300",
+                      "primary-fixed": "#eae2cb",
+                      "surface-variant": "#1c374c",
+                      "inverse-primary": "#635e4c",
+                      "surface-dim": "#001524",
+                      "on-tertiary-fixed-variant": "#115224",
+                      "on-primary": "#343021",
+                      "surface-bright": "#203c50",
+                      "on-secondary-container": "#fbcf73",
+                      "tertiary-container": "#b0f2b4",
+                      "primary-fixed-dim": "#cdc6b0",
+                      "tertiary-fixed": "#b0f2b4",
+                      "on-tertiary-fixed": "#002108",
+                      "surface-container": "#022235",
+                      "error-container": "#93000a",
+                      "on-secondary": "#402d00",
+                      "pitch-green": "#2E6B3A"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "unit": "4px",
+                      "stack-sm": "8px",
+                      "stack-md": "24px",
+                      "gutter": "16px",
+                      "stack-lg": "48px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Fraunces"],
+                      "body-md": ["Inter Tight"],
+                      "headline-lg": ["Fraunces"],
+                      "headline-sm": ["Fraunces"],
+                      "label-caps": ["Inter Tight"],
+                      "label-md": ["Inter Tight"],
+                      "body-lg": ["Inter Tight"]
+              },
+              "fontSize": {
+                      "headline-md": ["32px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-lg": ["42px", {"lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                      "headline-sm": ["24px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background film-grain font-body-md selection:bg-secondary selection:text-background overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface h-16 flex justify-between items-center px-margin-mobile border-b border-outline-variant/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center bg-primary text-background rounded-full overflow-hidden">
+<span class="font-headline-sm font-bold text-xs">A.</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">ARCHV.</h1>
+</div>
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity" data-icon="search">search</button>
+</header>
+<!-- Content Canvas -->
+<main class="pt-24 pb-32 px-margin-mobile max-w-xl mx-auto">
+<!-- Section Header -->
+<div class="mb-stack-lg">
+<span class="font-label-caps text-label-caps text-secondary tracking-[0.2em] mb-unit block">COLLECTION N° 124</span>
+<div class="flex items-baseline justify-between border-b border-outline-variant/30 pb-stack-sm">
+<h2 class="font-headline-lg text-headline-lg text-primary">Transfer Desk.</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant italic opacity-60">Updated daily.</span>
+</div>
+</div>
+<!-- Vertical Feed -->
+<div class="space-y-stack-lg">
+<!-- Day Card 1 (Done) -->
+<article class="relative bg-surface-container-low border border-outline-variant/10 p-6 group transition-all duration-300">
+<div class="flex justify-between items-start mb-stack-md">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-widest">12 AUG 2024</span>
+<div class="inline-flex items-center px-2 py-0.5 bg-pitch-green text-primary text-[10px] font-bold tracking-tighter rounded-sm">
+                            DONE DEAL
+                        </div>
+</div>
+<div class="relative">
+<div class="w-16 h-16 rounded-full border border-parchment-text/15 p-0.5">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover brightness-110" data-alt="A cinematic, high-contrast black and white studio portrait of a professional football player with a focused expression. The lighting is dramatic, highlighting the contours of the face against a deep navy background. The style is premium archival sports photography, evoking a sense of prestige and history, consistent with a luxury sports journal." src="../assets/heads/jimenez.webp"/>
+</div>
+</div>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary gold-period mb-2">The King returns to Highbury</h3>
+<p class="font-body-md text-secondary leading-relaxed mb-stack-md">
+                    A sensational homecoming secured as the French talisman signs a three-year contract extension under the North London lights.
+                </p>
+<div class="flex items-center justify-between pt-stack-sm border-t border-outline-variant/20">
+<span class="font-label-caps text-label-caps text-on-surface-variant">FEE: UNDISCLOSED</span>
+<button class="flex items-center gap-1 font-label-caps text-label-caps text-secondary hover:underline">
+                        READ BRIEF <span class="material-symbols-outlined text-[14px]" data-icon="arrow_right_alt">arrow_right_alt</span>
+</button>
+</div>
+</article>
+<!-- Day Card 2 (Rumour) -->
+<article class="relative bg-surface-container-low border border-outline-variant/10 p-6 group transition-all duration-300">
+<div class="flex justify-between items-start mb-stack-md">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-widest">11 AUG 2024</span>
+<div class="inline-flex items-center px-2 py-0.5 border border-secondary text-secondary text-[10px] font-bold tracking-tighter rounded-sm">
+                            RUMOUR
+                        </div>
+</div>
+<div class="relative">
+<div class="w-16 h-16 rounded-full border border-parchment-text/15 p-0.5">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover brightness-90" data-alt="A moody, atmospheric action shot of a midfielder during a rainy night match, captured with a shallow depth of field. The player is seen from behind, wearing a generic dark training kit, with stadium floodlights creating a hazy, ethereal glow. The color palette is dominated by deep blues and golden light leaks, maintaining an exclusive editorial aesthetic." src="../assets/heads/balogun.webp"/>
+</div>
+</div>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary gold-period mb-2">Stuttgart prodigy sighted in London</h3>
+<p class="font-body-md text-secondary leading-relaxed mb-stack-md">
+                    Speculation intensifies as the 19-year-old midfielder was spotted at Heathrow this morning, amidst heavy interest from the capital's giants.
+                </p>
+<div class="flex items-center justify-between pt-stack-sm border-t border-outline-variant/20">
+<span class="font-label-caps text-label-caps text-on-surface-variant">PROBABILITY: 74%</span>
+<button class="flex items-center gap-1 font-label-caps text-label-caps text-secondary hover:underline">
+                        VIEW THREAD <span class="material-symbols-outlined text-[14px]" data-icon="arrow_right_alt">arrow_right_alt</span>
+</button>
+</div>
+</article>
+<!-- Day Card 3 (Done) -->
+<article class="relative bg-surface-container-low border border-outline-variant/10 p-6 group transition-all duration-300">
+<div class="flex justify-between items-start mb-stack-md">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-widest">10 AUG 2024</span>
+<div class="inline-flex items-center px-2 py-0.5 bg-pitch-green text-primary text-[10px] font-bold tracking-tighter rounded-sm">
+                            DONE DEAL
+                        </div>
+</div>
+<div class="relative">
+<div class="w-16 h-16 rounded-full border border-parchment-text/15 p-0.5">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover sepia-[0.3]" data-alt="A close-up photograph of a vintage leather football and a signed contract resting on a dark mahogany desk. The lighting is warm and cinematic, highlighting the texture of the leather and the gold fountain pen. The mood is one of old-world sports tradition and executive gravity, reflecting an archival premium aesthetic." src="../assets/heads/rashford.webp"/>
+</div>
+</div>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary gold-period mb-2">Merseyside's defence finds its anchor</h3>
+<p class="font-body-md text-secondary leading-relaxed mb-stack-md">
+                    The Dutch wall completes his medical in the early hours, finalising a record-breaking switch to bolster the Reds' backline.
+                </p>
+<div class="flex items-center justify-between pt-stack-sm border-t border-outline-variant/20">
+<span class="font-label-caps text-label-caps text-on-surface-variant">FEE: £75M</span>
+<button class="flex items-center gap-1 font-label-caps text-label-caps text-secondary hover:underline">
+                        ARCHIVE LOG <span class="material-symbols-outlined text-[14px]" data-icon="arrow_right_alt">arrow_right_alt</span>
+</button>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe bg-surface-container-lowest h-20 border-t border-outline-variant/20">
+<a class="flex flex-col items-center justify-center text-primary-fixed dark:text-primary-fixed-dim opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="today">today</span>
+<span class="font-label-caps text-[10px]">Today</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary font-bold scale-110 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="newspaper" style="font-variation-settings: 'FILL' 1;">newspaper</span>
+<span class="font-label-caps text-[10px]">Desk</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary-fixed dark:text-primary-fixed-dim opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="trophy">trophy</span>
+<span class="font-label-caps text-[10px]">World Cup</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary-fixed dark:text-primary-fixed-dim opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-caps text-[10px]">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary-fixed dark:text-primary-fixed-dim opacity-70 hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="bookmark">bookmark</span>
+<span class="font-label-caps text-[10px]">Saved</span>
+</a>
+</nav>
+<script>
+        // Subtle micro-interaction for periods on tap
+        document.querySelectorAll('article').forEach(card => {
+            card.addEventListener('click', () => {
+                const period = card.querySelector('.gold-period');
+                if (period) {
+                    period.style.color = '#F2EAD3';
+                    setTimeout(() => {
+                        period.style.color = '#ecc166';
+                    }, 300);
+                }
+            });
+        });
+
+        // Grain animation simulation
+        let grainOpacity = 0.04;
+        function flickerGrain() {
+            grainOpacity = 0.035 + Math.random() * 0.015;
+            document.querySelector('.film-grain').style.setProperty('--grain-opacity', grainOpacity);
+            requestAnimationFrame(flickerGrain);
+        }
+        // Actually the CSS handles the base, this is for extra flair if needed.
+    </script>
+</body></html>

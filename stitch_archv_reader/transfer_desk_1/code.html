@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | Transfer Desk</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&amp;family=Inter+Tight:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .film-grain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 99;
+            opacity: 0.03;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+        }
+        .corner-bracket {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: #C9A14A;
+        }
+        .bracket-tl { top: 0; left: 0; border-top: 1px solid; border-left: 1px solid; }
+        .bracket-tr { top: 0; right: 0; border-top: 1px solid; border-right: 1px solid; }
+        .bracket-bl { bottom: 0; left: 0; border-bottom: 1px solid; border-left: 1px solid; }
+        .bracket-br { bottom: 0; right: 0; border-bottom: 1px solid; border-right: 1px solid; }
+        
+        .gold-hairline { height: 1px; background: linear-gradient(90deg, transparent, rgba(201, 161, 74, 0.3), transparent); }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0C2A3E; }
+        ::-webkit-scrollbar-thumb { background: #C9A14A33; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#364959",
+                      "primary": "#C9A14A",
+                      "primary-fixed-dim": "#aecae3",
+                      "on-surface-variant": "#B3AB92",
+                      "primary-fixed": "#cbe6ff",
+                      "outline": "#8d9197",
+                      "surface-variant": "#393525",
+                      "surface-tint": "#aecae3",
+                      "tertiary-fixed-dim": "#ecc166",
+                      "secondary": "#b5c9dd",
+                      "surface-container-low": "#1f1c0e",
+                      "gold-accent": "#C9A14A",
+                      "inverse-on-surface": "#343021",
+                      "tertiary-fixed": "#ffdea0",
+                      "surface-dim": "#071C2B",
+                      "on-error-container": "#ffdad6",
+                      "error-container": "#93000a",
+                      "surface-container-high": "#2d2a1b",
+                      "error": "#ffb4ab",
+                      "on-tertiary": "#402d00",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-secondary": "#1f3242",
+                      "surface-bright": "#3d3929",
+                      "secondary-container": "#384b5c",
+                      "parchment-text": "#F2EAD3",
+                      "surface-container-highest": "#393525",
+                      "surface-container": "#232011",
+                      "on-secondary-fixed": "#081d2c",
+                      "on-secondary-container": "#a7bbcf",
+                      "inverse-primary": "#476177",
+                      "surface": "#071C2B",
+                      "tertiary": "#ecc166",
+                      "on-error": "#690005",
+                      "background": "#0C2A3E",
+                      "inverse-surface": "#eae2cb",
+                      "on-surface": "#eae2cb",
+                      "tertiary-container": "#352500",
+                      "on-tertiary-container": "#af8935",
+                      "primary-container": "#0c2a3e",
+                      "secondary-fixed-dim": "#b5c9dd",
+                      "outline-variant": "#43474c",
+                      "surface-container-lowest": "#110e03",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "on-primary-container": "#7792aa",
+                      "on-primary-fixed-variant": "#2f495f",
+                      "secondary-fixed": "#d1e5fa",
+                      "pitch-green": "#2E6B3A",
+                      "on-background": "#eae2cb",
+                      "on-primary": "#173347",
+                      "on-primary-fixed": "#001e30"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "container-max": "800px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "40px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Fraunces"],
+                      "headline-md": ["Fraunces"],
+                      "eyebrow": ["Inter Tight"],
+                      "body-lg": ["Inter Tight"],
+                      "headline-lg-mobile": ["Fraunces"],
+                      "body-md": ["Inter Tight"],
+                      "label-sm": ["Inter Tight"]
+              },
+              "fontSize": {
+                      "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                      "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                      "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background selection:bg-gold-accent selection:text-background overflow-x-hidden">
+<div class="film-grain"></div>
+<!-- Top AppBar (From JSON) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-background border-b border-gold-accent/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro close-up of a vintage brass seal featuring a stylized football crest, set against a dark navy textured background. The lighting is cinematic, highlighting the gold metallic sheen and the intricate archival details of the badge. The overall aesthetic is premium, moody, and historically grounded in a high-end editorial style." src="../assets/logo-badge.png"/>
+</div>
+<span class="text-headline-md font-headline-md text-gold-accent tracking-tighter">THE ARCHV</span>
+</div>
+<button class="text-gold-accent hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<main class="pt-24 pb-32 max-w-container-max mx-auto px-margin-mobile">
+<!-- Header Section -->
+<section class="mb-12 text-center">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-parchment-text mb-2 italic">Transfer Desk</h1>
+<div class="flex justify-center items-center gap-4">
+<div class="h-[1px] w-12 bg-gold-accent/30"></div>
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase tracking-widest flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-gold-accent rounded-full animate-pulse"></span>
+                    Updated daily
+                </span>
+<div class="h-[1px] w-12 bg-gold-accent/30"></div>
+</div>
+</section>
+<!-- Feed of Day Cards -->
+<div class="space-y-10">
+<!-- Day Card 1: Today -->
+<article class="relative bg-surface/30 border border-gold-accent/10 p-6 group transition-all hover:bg-surface/40">
+<div class="flex justify-between items-start mb-6">
+<div class="px-3 py-1 border border-gold-accent/40 rounded-sm">
+<span class="font-eyebrow text-eyebrow text-gold-accent">JULY 14, 2024</span>
+</div>
+<span class="bg-pitch-green text-parchment-text px-3 py-1 font-eyebrow text-[10px] tracking-widest rounded-sm">DONE</span>
+</div>
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="relative flex-shrink-0">
+<div class="w-32 h-32 rounded-full border border-parchment-text/15 p-1 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full filter-[30%]" data-alt="A professional studio portrait of a star midfielder looking focused and determined, desaturated with a slight archival film grain texture. The lighting is dramatic, casting soft shadows across one side of the face. The background is a solid deep navy blue, maintaining the dark and premium editorial aesthetic of a football history publication." src="../assets/heads/jimenez.webp"/>
+</div>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h2 class="font-headline-md text-headline-md text-parchment-text mb-3">Rice chooses north</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 leading-relaxed">
+                            The tug-of-war for the England international has concluded. ARCHV sources confirm the registration documents were filed at midnight. A record-breaking move that reshapes the capital's hierarchy.
+                        </p>
+<div class="flex flex-wrap gap-2 justify-center md:justify-start">
+<span class="text-label-sm font-label-sm text-gold-accent border border-gold-accent/20 px-2 py-0.5 rounded">£105M</span>
+<span class="text-label-sm font-label-sm text-gold-accent border border-gold-accent/20 px-2 py-0.5 rounded">6-YEAR DEAL</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Day Card 2: Yesterday -->
+<article class="relative bg-surface/20 border border-gold-accent/10 p-6 group">
+<div class="flex justify-between items-start mb-6">
+<div class="px-3 py-1 border border-gold-accent/20 rounded-sm">
+<span class="font-eyebrow text-eyebrow text-gold-accent opacity-70">JULY 13, 2024</span>
+</div>
+<span class="border border-gold-accent text-gold-accent px-3 py-1 font-eyebrow text-[10px] tracking-widest rounded-sm">RUMOUR</span>
+</div>
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="flex-grow text-center md:text-left">
+<h2 class="font-headline-md text-headline-md text-parchment-text mb-3">The Catalan Conundrum</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 leading-relaxed">
+                            Reports from the Mediterranean suggest a legendary figure is considering a return to the roots. Negotiations are described as "fluid but fragile."
+                        </p>
+</div>
+<div class="relative flex-shrink-0">
+<div class="w-24 h-24 rounded-full border border-gold-accent p-1 overflow-hidden opacity-80">
+<img class="w-full h-full object-cover rounded-full" data-alt="A moody, high-contrast portrait of an experienced football manager in a dark suit, captured in a moment of deep contemplation. The image is treated with a sepia-toned archival finish and subtle film grain. The background is a textured deep navy wall, fitting the library-inspired, minimalist-editorial aesthetic of a luxury sports journal." src="../assets/heads/balogun.webp"/>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-gold-accent/10">
+<div class="flex items-center gap-2 text-gold-accent">
+<span class="material-symbols-outlined text-sm">history_edu</span>
+<span class="font-eyebrow text-[10px] uppercase tracking-tighter">Verified by Archive Records</span>
+</div>
+</div>
+</article>
+<!-- Day Card 3: Two days ago -->
+<article class="relative bg-surface/20 border border-gold-accent/10 p-6 group">
+<div class="flex justify-between items-start mb-6">
+<div class="px-3 py-1 border border-gold-accent/20 rounded-sm">
+<span class="font-eyebrow text-eyebrow text-gold-accent opacity-70">JULY 12, 2024</span>
+</div>
+<span class="bg-pitch-green text-parchment-text px-3 py-1 font-eyebrow text-[10px] tracking-widest rounded-sm">DONE</span>
+</div>
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="relative flex-shrink-0">
+<div class="w-24 h-24 rounded-full border border-gold-accent p-1 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full" data-alt="A portrait of a young, talented forward smiling confidently, wearing a crisp white training shirt. The lighting is soft and high-key, yet the background remains a deep, archival navy blue. The image has a sharp, modern digital feel mixed with a slight vintage paper texture overlay, characteristic of a premium sports publication." src="../assets/heads/rashford.webp"/>
+</div>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h2 class="font-headline-md text-headline-md text-parchment-text mb-2">Pau Torres to the Midlands</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-0 leading-relaxed">
+                            The Spanish wall arrives in Birmingham. Emery gets his man in a deal worth approximately £31.5m plus add-ons. 
+                        </p>
+</div>
+</div>
+</article>
+</div>
+<!-- Load More / Pagination -->
+<div class="mt-16 text-center">
+<button class="px-8 py-3 border border-gold-accent/30 text-gold-accent font-eyebrow text-eyebrow tracking-widest hover:bg-gold-accent/10 transition-all uppercase">
+                Access Older Files
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (From JSON) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 bg-surface border-t border-gold-accent/20">
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-sm text-label-sm">Daily</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-sm text-label-sm">Library</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gold-accent scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="font-label-sm text-label-sm">Transfers</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-label-sm text-label-sm">Legacy</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-sm text-label-sm">Saved</span>
+</a>
+</nav>
+
+</body></html>

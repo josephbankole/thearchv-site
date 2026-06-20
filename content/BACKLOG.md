@@ -41,7 +41,7 @@ Peg to live storylines via /Users/josephbankole/Claude/fifa.archv/wc2026-storyli
 - [drafted] explainers/biggest-world-cup-upsets — the upsets canon (hand-built 2026-06-16, homepage-linked)
 - [todo] explainers/most-world-cup-titles — every winner
 - [todo] explainers/world-cup-hosts-history — hosts + 2026 three-nation first
-- [todo] explainers/usa-at-the-world-cup — host-nation history (tier-1)
+- [drafted] explainers/usa-at-the-world-cup — host-nation history (tier-1) (drafted 2026-06-20, rides the 19 Jun USA-Australia knockout storyline)
 - [todo] explainers/canada-at-the-world-cup — host-nation history (home market)
 - [todo] explainers/oldest-world-cup-goalscorers — links the Milla legend page
 

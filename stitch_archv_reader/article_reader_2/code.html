@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | London calls.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&amp;family=Inter+Tight:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        body {
+            background-color: #0C2A3E;
+            color: #F2EAD3;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .article-canvas {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#0c2a3e",
+                      "on-primary": "#173347",
+                      "background": "#0C2A3E",
+                      "parchment-text": "#F2EAD3",
+                      "gold-accent": "#C9A14A",
+                      "surface": "#071C2B",
+                      "on-surface": "#F2EAD3",
+                      "on-surface-variant": "#B3AB92",
+                      "pitch-green": "#2E6B3A",
+                      "tertiary-container": "#352500",
+                      "on-tertiary-container": "#af8935",
+                      "secondary-container": "#384b5c"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "container-max": "800px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Fraunces"],
+                      "headline-lg-mobile": ["Fraunces"],
+                      "headline-md": ["Fraunces"],
+                      "eyebrow": ["Inter Tight"],
+                      "body-lg": ["Inter Tight"],
+                      "body-md": ["Inter Tight"],
+                      "label-sm": ["Inter Tight"]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="overflow-x-hidden font-['Inter_Tight']">
+<div class="grain-overlay"></div>
+<!-- Minimal Header -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-background/95 backdrop-blur-sm border-b border-gold-accent/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<img alt="ARCHV logo" class="w-full h-full object-cover" src="../assets/logo-badge.png"/>
+</div>
+<span class="text-xl font-['Fraunces'] font-semibold text-gold-accent tracking-tighter">THE ARCHV</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-gold-accent cursor-pointer">search</span>
+<span class="material-symbols-outlined text-gold-accent cursor-pointer">menu</span>
+</div>
+</header>
+<!-- Reader Main Content -->
+<main class="pt-28 pb-32 px-margin-mobile article-canvas">
+<!-- Header Section -->
+<section class="mb-12">
+<div class="flex items-center justify-between gap-3 mb-6">
+<span class="font-bold text-[11px] tracking-[0.15em] text-gold-accent uppercase">TRANSFER ARCHIVES</span>
+<span class="font-bold text-[11px] tracking-[0.15em] text-on-surface-variant/70 uppercase">JULY 14, 1996</span>
+</div>
+<h1 class="font-['Fraunces'] text-4xl md:text-5xl leading-tight text-parchment-text mb-10">
+                London calls<span class="text-gold-accent">.</span>
+</h1>
+<div class="flex justify-center mb-12">
+<div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-gold-accent/20 p-2">
+<img alt="Manager portrait" class="w-full h-full object-cover rounded-full" src="../assets/heads/jimenez.webp"/>
+</div>
+</div>
+</section>
+<!-- Article Body -->
+<article class="space-y-8 text-[17px] md:text-lg leading-relaxed text-parchment-text/90 font-['Inter_Tight']">
+<p class="first-letter:text-6xl first-letter:font-['Fraunces'] first-letter:text-gold-accent first-letter:float-left first-letter:mr-4 first-letter:mt-2">
+                The fog over the Thames was thick as the black cab pulled up to the Highbury gates. This wasn't just another signing; it was a shift in the tectonic plates of English football. For years, the continental style was whispered about in hushed tones in North London pubs, but today, the <span class="bg-pitch-green/20 text-pitch-green px-2 py-0.5 rounded-sm text-[10px] font-bold uppercase tracking-wider align-middle mx-1">DONE</span> deal felt like a manifesto.
+            </p>
+<p>
+                Critics argued that the "Professor" was taking a gamble on an aging squad, but the internal documents retrieved from the <span class="text-gold-accent italic">THE ARCHV</span> vault suggest otherwise. The vision was clear from the first scouting report. He wasn't just looking for players; he was looking for architects.
+            </p>
+<div class="py-10 border-y border-gold-accent/10 my-12">
+<p class="font-['Fraunces'] text-2xl italic text-gold-accent text-center px-6 leading-snug">
+                    "I didn't come here to win a game. I came here to change the way the game is won."
+                </p>
+</div>
+<p>
+                Rumours began to circulate in the tabloid press late Tuesday night about a secondary arrival from the Dutch league. While most dismissed it as a <span class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-sm text-[10px] font-bold uppercase tracking-wider align-middle mx-1">RUMOUR</span>, the data points to a secret meeting held at a discreet hotel in Knightsbridge. The resulting signature would change the history of the Premier League forever.
+            </p>
+<p>
+                In the modern era of instant gratification, we often lose sight of the patience required to build a dynasty. Looking back through these physical files—the ink slightly faded, the paper yellowed—one can almost feel the weight of expectation that rested on those French shoulders that rainy July afternoon.
+            </p>
+</article>
+<!-- Social Follow -->
+<section class="mt-24 py-12 border-t border-gold-accent/10 flex flex-col items-center">
+<button class="px-10 py-4 bg-gold-accent text-primary-container font-bold text-[12px] uppercase tracking-[0.2em] hover:bg-parchment-text transition-colors duration-300">
+                Follow @thearchv_ca
+            </button>
+<p class="mt-8 text-[10px] font-medium tracking-[0.1em] text-on-surface-variant/50 uppercase">Curated Football History Delivered Daily</p>
+</section>
+<!-- Related Stories -->
+<section class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
+<h3 class="col-span-full font-bold text-[11px] tracking-[0.15em] text-gold-accent uppercase mb-4">Related Files</h3>
+<!-- Card 1 -->
+<div class="bg-surface/20 p-8 border border-gold-accent/10 relative group cursor-pointer transition-all hover:bg-surface/30">
+<span class="text-[10px] font-bold text-gold-accent/60 uppercase tracking-widest block mb-2">May 1998</span>
+<h4 class="font-['Fraunces'] text-2xl text-parchment-text group-hover:text-gold-accent transition-colors">The Double: A French Revolution.</h4>
+<div class="mt-6 flex items-center text-gold-accent text-[11px] font-bold uppercase tracking-widest">
+<span>Open File</span>
+<span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface/20 p-8 border border-gold-accent/10 relative group cursor-pointer transition-all hover:bg-surface/30">
+<span class="text-[10px] font-bold text-gold-accent/60 uppercase tracking-widest block mb-2">August 2003</span>
+<h4 class="font-['Fraunces'] text-2xl text-parchment-text group-hover:text-gold-accent transition-colors">Invincibility: The Unbroken Run.</h4>
+<div class="mt-6 flex items-center text-gold-accent text-[11px] font-bold uppercase tracking-widest">
+<span>Open File</span>
+<span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Buttons -->
+<div class="fixed bottom-24 right-6 flex flex-col gap-4 z-50">
+<button class="w-14 h-14 rounded-full bg-gold-accent text-primary-container flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined font-bold">bookmark</span>
+</button>
+<button class="w-14 h-14 rounded-full bg-gold-accent text-primary-container flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined font-bold">share</span>
+</button>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 bg-background border-t border-gold-accent/10">
+<div class="flex flex-col items-center gap-1 cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gold-accent">calendar_today</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-parchment-text">Archive</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer text-gold-accent">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Reading</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gold-accent">sports_soccer</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-parchment-text">Scores</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gold-accent">history_edu</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-parchment-text">Stories</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gold-accent">bookmark</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-parchment-text">Saved</span>
+</div>
+</nav>
+</body></html>

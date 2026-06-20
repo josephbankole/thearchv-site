@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV | The Archive</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;700&amp;family=Inter+Tight:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+        }
+        .corner-bracket {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: #C9A14A;
+        }
+        .bracket-tl { top: 8px; left: 8px; border-top-width: 1px; border-left-width: 1px; }
+        .bracket-tr { top: 8px; right: 8px; border-top-width: 1px; border-right-width: 1px; }
+        .bracket-bl { bottom: 8px; left: 8px; border-bottom-width: 1px; border-left-width: 1px; }
+        .bracket-br { bottom: 8px; right: 8px; border-bottom-width: 1px; border-right-width: 1px; }
+        
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0C2A3E; }
+        ::-webkit-scrollbar-thumb { background: #C9A14A; border-radius: 10px; }
+    </style>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#364959",
+                    "primary": "#C9A14A",
+                    "primary-fixed-dim": "#aecae3",
+                    "on-surface-variant": "#B3AB92",
+                    "primary-fixed": "#cbe6ff",
+                    "outline": "#8d9197",
+                    "surface-variant": "#393525",
+                    "surface-tint": "#aecae3",
+                    "tertiary-fixed-dim": "#ecc166",
+                    "secondary": "#b5c9dd",
+                    "surface-container-low": "#1f1c0e",
+                    "gold-accent": "#C9A14A",
+                    "inverse-on-surface": "#343021",
+                    "tertiary-fixed": "#ffdea0",
+                    "surface-dim": "#071C2B",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#2d2a1b",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#402d00",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-secondary": "#1f3242",
+                    "surface-bright": "#3d3929",
+                    "secondary-container": "#384b5c",
+                    "parchment-text": "#F2EAD3",
+                    "surface-container-highest": "#393525",
+                    "surface-container": "#232011",
+                    "on-secondary-fixed": "#081d2c",
+                    "on-secondary-container": "#a7bbcf",
+                    "inverse-primary": "#476177",
+                    "surface": "#071C2B",
+                    "tertiary": "#ecc166",
+                    "on-error": "#690005",
+                    "background": "#0C2A3E",
+                    "inverse-surface": "#eae2cb",
+                    "on-surface": "#eae2cb",
+                    "tertiary-container": "#352500",
+                    "on-tertiary-container": "#af8935",
+                    "primary-container": "#0c2a3e",
+                    "secondary-fixed-dim": "#b5c9dd",
+                    "outline-variant": "#43474c",
+                    "surface-container-lowest": "#110e03",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-primary-container": "#7792aa",
+                    "on-primary-fixed-variant": "#2f495f",
+                    "secondary-fixed": "#d1e5fa",
+                    "pitch-green": "#2E6B3A",
+                    "on-background": "#eae2cb",
+                    "on-primary": "#173347",
+                    "on-primary-fixed": "#001e30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-max": "800px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "40px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Fraunces"],
+                    "headline-md": ["Fraunces"],
+                    "eyebrow": ["Inter Tight"],
+                    "body-lg": ["Inter Tight"],
+                    "headline-lg-mobile": ["Fraunces"],
+                    "body-md": ["Inter Tight"],
+                    "label-sm": ["Inter Tight"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-gold-accent/30 selection:text-parchment-text overflow-x-hidden">
+<div class="grain-overlay"></div>
+<!-- TopAppBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 border-b border-gold-accent/10 bg-background">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist vector logo of a golden crest featuring a stylized laurel wreath and a classic vintage leather football in the center, set against a deep navy background. The design is elegant, archival, and premium, evoking the feeling of a prestigious historical sports institution. Fine gold lines and cinematic lighting characterize the aesthetic." src="../assets/logo-badge.png"/>
+</div>
+<span class="text-headline-md font-headline-md text-gold-accent">THE ARCHV</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-gold-accent hover:opacity-80 transition-opacity">search</button>
+<div class="w-8 h-8 rounded-full border border-gold-accent/20 bg-surface"></div>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-margin-mobile max-w-container-max mx-auto space-y-12">
+<!-- Archive Header -->
+<section>
+<p class="font-eyebrow text-eyebrow text-gold-accent uppercase mb-2">THE VAULT</p>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface mb-6">World Cup Archives</h1>
+<div class="w-full h-px bg-gold-accent/20"></div>
+</section>
+<!-- Gallery: Final Posters (2:3 Aspect) -->
+<section>
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">The Finalists</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Original tournament lithographs</p>
+</div>
+<button class="font-eyebrow text-eyebrow text-gold-accent border-b border-gold-accent/30 pb-1">VIEW ALL</button>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<!-- Poster 1 -->
+<div class="relative group cursor-pointer overflow-hidden aspect-[2/3] bg-surface-container border border-gold-accent/10">
+<div class="corner-bracket bracket-tl"></div>
+<div class="corner-bracket bracket-tr"></div>
+<div class="corner-bracket bracket-bl"></div>
+<div class="corner-bracket bracket-br"></div>
+<img class="w-full h-full object-cover transition-all duration-700" data-alt="A vintage 1970 World Cup poster illustration featuring a stylized modernist design with bold geometric patterns and a classic yellow and blue color scheme. The art style is mid-century graphic design, showing a soccer ball in flight with motion trails. The atmosphere is nostalgic and historical, framed within a cinematic archival presentation." src="../assets/posters/azteca-1986.webp"/>
+<div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-background to-transparent">
+<p class="font-eyebrow text-eyebrow text-gold-accent">MEXICO '70</p>
+</div>
+</div>
+<!-- Poster 2 -->
+<div class="relative group cursor-pointer overflow-hidden aspect-[2/3] bg-surface-container border border-gold-accent/10">
+<div class="corner-bracket bracket-tl"></div>
+<div class="corner-bracket bracket-tr"></div>
+<div class="corner-bracket bracket-bl"></div>
+<div class="corner-bracket bracket-br"></div>
+<img class="w-full h-full object-cover transition-all duration-700" data-alt="An authentic vintage poster for the 1982 World Cup in Spain, featuring an abstract surrealist illustration by Joan Miró. The colors are vibrant primary reds, yellows, and blacks. The paper has a slight yellowed parchment texture, appearing like a preserved historical document in a high-end museum. The mood is artistic and legendary." src="../assets/posters/italia-1990.webp"/>
+<div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-background to-transparent">
+<p class="font-eyebrow text-eyebrow text-gold-accent">ESPAÑA '82</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Horizontal Carousel: Giant Killers -->
+<section class="overflow-hidden -mx-margin-mobile px-margin-mobile">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">The Giant-Killers</h2>
+<div class="flex overflow-x-auto gap-6 pb-6 no-scrollbar snap-x">
+<!-- Story Card 1 -->
+<div class="min-w-[280px] snap-start bg-surface p-6 border border-gold-accent/10 relative">
+<span class="absolute top-4 right-4 text-gold-accent/20 font-headline-lg">01</span>
+<p class="font-eyebrow text-eyebrow text-gold-accent mb-4">1966 ARCHIVE</p>
+<h3 class="font-headline-md text-headline-md text-parchment-text mb-4">The DPRK Shock</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 mb-6">How a group of unknown players from North Korea stunned Italy and changed the World Cup forever.</p>
+<div class="flex items-center gap-2 text-gold-accent font-eyebrow">
+<span>READ FILE</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+<!-- Story Card 2 -->
+<div class="min-w-[280px] snap-start bg-surface p-6 border border-gold-accent/10 relative">
+<span class="absolute top-4 right-4 text-gold-accent/20 font-headline-lg">02</span>
+<p class="font-eyebrow text-eyebrow text-gold-accent mb-4">1990 ARCHIVE</p>
+<h3 class="font-headline-md text-headline-md text-parchment-text mb-4">Milla's Magic</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 mb-6">The Indomitable Lions of Cameroon and the dance that defined a generation of African football.</p>
+<div class="flex items-center gap-2 text-gold-accent font-eyebrow">
+<span>READ FILE</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+<!-- Story Card 3 -->
+<div class="min-w-[280px] snap-start bg-surface p-6 border border-gold-accent/10 relative">
+<span class="absolute top-4 right-4 text-gold-accent/20 font-headline-lg">03</span>
+<p class="font-eyebrow text-eyebrow text-gold-accent mb-4">2002 ARCHIVE</p>
+<h3 class="font-headline-md text-headline-md text-parchment-text mb-4">Seoul Stunner</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 mb-6">Senegal's opening day victory over the defending world champions, France.</p>
+<div class="flex items-center gap-2 text-gold-accent font-eyebrow">
+<span>READ FILE</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Legends Row -->
+<section>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-8">Architects of Glory</h2>
+<div class="flex justify-between items-center overflow-x-auto no-scrollbar gap-8">
+<!-- Legend 1 -->
+<div class="flex flex-col items-center gap-3 min-w-[80px]">
+<div class="w-20 h-20 rounded-full border border-parchment-text/15 p-1">
+<div class="w-full h-full rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A highly detailed archival black and white headshot of Pelé in his youth, wearing the iconic Brazilian national jersey. The lighting is dramatic, high-contrast film style, with deep shadows and soft highlights. The background is a dark, cinematic blur, focusing entirely on the legendary athlete's expression of focused intensity." src="../assets/heads/balogun.webp"/>
+</div>
+</div>
+<span class="font-eyebrow text-[10px] text-center tracking-widest text-on-surface uppercase">Pelé</span>
+</div>
+<!-- Legend 2 -->
+<div class="flex flex-col items-center gap-3 min-w-[80px]">
+<div class="w-20 h-20 rounded-full border border-parchment-text/15 p-1">
+<div class="w-full h-full rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An archival monochrome portrait of Diego Maradona, capturing his passionate expression. The photograph has a slight film grain texture and a vintage sepia tone. He is depicted in a moment of triumph, with soft studio lighting emphasizing the textures of his hair and jersey. The aesthetic is premium historical sports photography." src="../assets/heads/rashford.webp"/>
+</div>
+</div>
+<span class="font-eyebrow text-[10px] text-center tracking-widest text-on-surface uppercase">Maradona</span>
+</div>
+<!-- Legend 3 -->
+<div class="flex flex-col items-center gap-3 min-w-[80px]">
+<div class="w-20 h-20 rounded-full border border-parchment-text/15 p-1">
+<div class="w-full h-full rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A vintage archival headshot of Franz Beckenbauer, the Kaiser. The image is a sharp, black and white photograph with high editorial fidelity. He is looking off-camera with a composed, authoritative look. The lighting is soft and natural, typical of 1970s premium sports journalism. The portrait is framed in a minimalist cinematic style." src="../assets/heads/fernandes.webp"/>
+</div>
+</div>
+<span class="font-eyebrow text-[10px] text-center tracking-widest text-on-surface uppercase">Beckenbauer</span>
+</div>
+<!-- Legend 4 -->
+<div class="flex flex-col items-center gap-3 min-w-[80px]">
+<div class="w-20 h-20 rounded-full border border-parchment-text/15 p-1">
+<div class="w-full h-full rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A classic archival monochrome portrait of Zinedine Zidane during his prime. The lighting creates a strong silhouette, highlighting his iconic profile. The photograph has the high-fidelity clarity of a professional sports agency archive, with rich blacks and pristine whites. The mood is legendary and timeless." src="../assets/heads/baleba.webp"/>
+</div>
+</div>
+<span class="font-eyebrow text-[10px] text-center tracking-widest text-on-surface uppercase">Zidane</span>
+</div>
+</div>
+</section>
+<!-- Feature Grid: Tactical Evolutions -->
+<section class="pb-12">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Tactical Dossiers</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="group relative h-48 bg-surface-container overflow-hidden border border-gold-accent/10">
+
+<div class="absolute inset-0 p-6 flex flex-col justify-end bg-gradient-to-t from-background to-transparent">
+<p class="font-eyebrow text-eyebrow text-gold-accent mb-1">FORMATION ANALYSIS</p>
+<h4 class="font-headline-md text-headline-md text-parchment-text">The Dutch Total Football</h4>
+</div>
+</div>
+<div class="group relative h-48 bg-surface-container overflow-hidden border border-gold-accent/10">
+<div class="absolute inset-0 w-full h-full bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity" data-alt="A high-contrast architectural shot of the empty Azteca Stadium at dusk. The long shadows and golden hour lighting create a cinematic, lonely atmosphere. The grass is perfectly manicured, and the massive stands loom in the background like a cathedral of sport. The overall color palette is deep gold and navy, matching the ARCHV brand." style="background-image: url('../assets/posters/mexico-1970.webp')"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end bg-gradient-to-t from-background to-transparent">
+<p class="font-eyebrow text-eyebrow text-gold-accent mb-1">VENUE HISTORY</p>
+<h4 class="font-headline-md text-headline-md text-parchment-text">Temples of the Game</h4>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 border-t border-gold-accent/20 bg-surface">
+<button class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">calendar_today</span>
+</button>
+<button class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">folder_open</span>
+</button>
+<button class="text-gold-accent scale-110 transition-transform flex flex-col items-center gap-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+</button>
+<button class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">history_edu</span>
+</button>
+<button class="text-parchment-text opacity-60 hover:opacity-100 transition-opacity flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for horizontal scrolling
+        const scrollContainers = document.querySelectorAll('.no-scrollbar');
+        scrollContainers.forEach(container => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            container.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            });
+            container.addEventListener('mouseleave', () => {
+                isDown = false;
+            });
+            container.</script></body></html>

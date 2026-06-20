@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHV — Saved Documents</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;700&amp;family=Inter+Tight:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&amp;family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#364959",
+                    "primary": "#C9A14A",
+                    "primary-fixed-dim": "#aecae3",
+                    "on-surface-variant": "#B3AB92",
+                    "primary-fixed": "#cbe6ff",
+                    "outline": "#8d9197",
+                    "surface-variant": "#393525",
+                    "surface-tint": "#aecae3",
+                    "tertiary-fixed-dim": "#ecc166",
+                    "secondary": "#b5c9dd",
+                    "surface-container-low": "#1f1c0e",
+                    "gold-accent": "#C9A14A",
+                    "inverse-on-surface": "#343021",
+                    "tertiary-fixed": "#ffdea0",
+                    "surface-dim": "#071C2B",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#2d2a1b",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#402d00",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-secondary": "#1f3242",
+                    "surface-bright": "#3d3929",
+                    "secondary-container": "#384b5c",
+                    "parchment-text": "#F2EAD3",
+                    "surface-container-highest": "#393525",
+                    "surface-container": "#232011",
+                    "on-secondary-fixed": "#081d2c",
+                    "on-secondary-container": "#a7bbcf",
+                    "inverse-primary": "#476177",
+                    "surface": "#071C2B",
+                    "tertiary": "#ecc166",
+                    "on-error": "#690005",
+                    "background": "#0C2A3E",
+                    "inverse-surface": "#eae2cb",
+                    "on-surface": "#eae2cb",
+                    "tertiary-container": "#352500",
+                    "on-tertiary-container": "#af8935",
+                    "primary-container": "#0c2a3e",
+                    "secondary-fixed-dim": "#b5c9dd",
+                    "outline-variant": "#43474c",
+                    "surface-container-lowest": "#110e03",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-primary-container": "#7792aa",
+                    "on-primary-fixed-variant": "#2f495f",
+                    "secondary-fixed": "#d1e5fa",
+                    "pitch-green": "#2E6B3A",
+                    "on-background": "#eae2cb",
+                    "on-primary": "#173347",
+                    "on-primary-fixed": "#001e30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-max": "800px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "40px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Fraunces"],
+                    "headline-md": ["Fraunces"],
+                    "eyebrow": ["Inter Tight"],
+                    "body-lg": ["Inter Tight"],
+                    "headline-lg-mobile": ["Fraunces"],
+                    "body-md": ["Inter Tight"],
+                    "label-sm": ["Inter Tight"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "eyebrow": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }
+.film-grain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99;
+    opacity: 0.035;
+    background-image: url(../assets/posters/mexico-1970.webp)
+    }
+.corner-bracket {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: #C9A14A
+    }
+.bracket-tl {
+    top: 0;
+    left: 0;
+    border-top: 1px solid;
+    border-left: 1px solid
+    }
+.bracket-tr {
+    top: 0;
+    right: 0;
+    border-top: 1px solid;
+    border-right: 1px solid
+    }
+.bracket-bl {
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid;
+    border-left: 1px solid
+    }
+.bracket-br {
+    bottom: 0;
+    right: 0;
+    border-bottom: 1px solid;
+    border-right: 1px solid
+    }
+.hide-scrollbar::-webkit-scrollbar {
+    display: none
+    }
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-parchment-text font-body-md antialiased selection:bg-gold-accent selection:text-background">
+<div class="film-grain"></div>
+<!-- Top AppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-background border-b border-gold-accent/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border border-gold-accent flex items-center justify-center overflow-hidden">
+<span class="text-[10px] font-eyebrow text-gold-accent">THE ARCHV</span>
+</div>
+<h1 class="text-headline-md font-headline-md text-gold-accent tracking-tight">Saved</h1>
+</div>
+<button class="text-gold-accent hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile max-w-container-max mx-auto min-h-screen">
+<!-- Recently Saved Section -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<span class="font-eyebrow text-eyebrow text-gold-accent uppercase tracking-widest">Recently Saved</span>
+<span class="text-label-sm font-label-sm opacity-40">Local Only</span>
+</div>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-margin-mobile px-margin-mobile">
+<!-- Recent Card 1 -->
+<div class="relative flex-shrink-0 w-64 group cursor-pointer">
+<div class="aspect-[4/5] bg-surface relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="A vintage, grainy black and white photograph of a legendary 1960s football stadium during a heavy sunset. The image is framed by thin gold cinematic brackets, matching an archival library aesthetic. Deep navy shadows and high-contrast light create a sense of historical gravitas and quiet authority." src="../assets/posters/mexico-1970.webp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<span class="font-eyebrow text-[10px] text-gold-accent block mb-1">ARCHIVE</span>
+<h3 class="font-headline-md text-body-lg text-parchment-text leading-tight">The Cruyff Turn: 1974 Documented</h3>
+</div>
+</div>
+</div>
+<!-- Recent Card 2 -->
+<div class="relative flex-shrink-0 w-64 group cursor-pointer">
+<div class="aspect-[4/5] bg-surface relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="A high-contrast cinematic portrait of a classic 1980s football manager wearing a heavy wool coat, looking intensely across a misty training ground. The color palette is dominated by deep navy and warm gold tones. The lighting is dramatic and moody, reflecting an editorial sports publication style with a fine film grain texture." src="../assets/posters/azteca-1986.webp"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<span class="font-eyebrow text-[10px] text-gold-accent block mb-1">TRANSFERS</span>
+<h3 class="font-headline-md text-body-lg text-parchment-text leading-tight">The Summer of 1996 Rumors</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Grouped List -->
+<div class="space-y-12">
+<!-- Category: Archive -->
+<section>
+<div class="border-b border-gold-accent/20 pb-2 mb-6">
+<h2 class="font-headline-md text-headline-md text-parchment-text">Archive</h2>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4 items-start py-2 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors p-2 -mx-2">
+<div class="w-16 h-16 bg-surface relative flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An archival detail shot of a distressed vintage football leather ball on a dark wooden library table. Soft gold lighting hits the texture of the old leather. Minimalist-editorial style with cinematic depth of field and deep navy background." src="../assets/posters/italia-1990.webp"/>
+</div>
+<div class="flex-grow">
+<span class="font-eyebrow text-[10px] text-gold-accent opacity-60">OCT 14, 2023</span>
+<h4 class="font-headline-md text-body-md text-parchment-text mt-1 leading-snug">Pelé's Final Letter to New York</h4>
+<p class="text-label-sm font-label-sm opacity-40 mt-1 uppercase tracking-tighter">4 MIN READ • ARCHIVE</p>
+</div>
+<button class="text-gold-accent opacity-40 hover:opacity-100">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+<div class="flex gap-4 items-start py-2 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors p-2 -mx-2">
+<div class="w-16 h-16 bg-surface relative flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close up of a retro typewriter on a dark desk with a sheet of paper that has 'TEAM SHEET 1966' written on it. Archival film aesthetic, deep shadows, gold hairline accents, and high-quality editorial lighting." src="../assets/posters/paris-1998.webp"/>
+</div>
+<div class="flex-grow">
+<span class="font-eyebrow text-[10px] text-gold-accent opacity-60">SEP 29, 2023</span>
+<h4 class="font-headline-md text-body-md text-parchment-text mt-1 leading-snug">The Architecture of Total Football</h4>
+<p class="text-label-sm font-label-sm opacity-40 mt-1 uppercase tracking-tighter">12 MIN READ • TACTICS</p>
+</div>
+<button class="text-gold-accent opacity-40 hover:opacity-100">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Category: Transfers -->
+<section>
+<div class="border-b border-gold-accent/20 pb-2 mb-6">
+<h2 class="font-headline-md text-headline-md text-parchment-text">Transfers</h2>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4 items-start py-2 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors p-2 -mx-2">
+<div class="w-16 h-16 bg-surface relative flex-shrink-0 overflow-hidden flex items-center justify-center">
+<div class="w-12 h-12 rounded-full border border-gold-accent/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized desaturated portrait of a modern elite football player in a black suit, looking contemplatively out a window. Archival editorial style with film grain and a muted gold halo light. Minimalist and premium atmosphere." src="../assets/heads/jimenez.webp"/>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2">
+<span class="bg-pitch-green text-[9px] px-1.5 py-0.5 font-eyebrow text-parchment-text rounded-sm uppercase">DONE</span>
+<span class="font-eyebrow text-[10px] text-gold-accent opacity-60">TRANSFERS</span>
+</div>
+<h4 class="font-headline-md text-body-md text-parchment-text mt-1 leading-snug">Midfield Anchor: The London Pivot</h4>
+<p class="text-label-sm font-label-sm opacity-40 mt-1 uppercase tracking-tighter">UPDATED 2H AGO</p>
+</div>
+<button class="text-gold-accent opacity-40 hover:opacity-100">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Optional Empty State (Hidden when content exists) -->
+<div class="hidden flex flex-col items-center justify-center py-20 text-center" id="empty-state">
+<div class="w-48 h-48 mb-8 relative">
+
+</div>
+<h2 class="font-headline-md text-headline-md text-gold-accent mb-4">Your Library is Empty</h2>
+<p class="text-body-md font-body-md opacity-60 max-w-xs mx-auto">Documents you bookmark will be archived locally on this device for offline reading.</p>
+<button class="mt-8 px-8 py-3 border border-gold-accent text-gold-accent font-eyebrow text-eyebrow tracking-widest hover:bg-gold-accent hover:text-background transition-all">
+                EXPLORE ARCHIVES
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-8 pt-4 border-t border-gold-accent/20 bg-surface">
+<!-- Calendar -->
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-sm font-label-sm">Calendar</span>
+</a>
+<!-- Archive (Folder) -->
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-label-sm font-label-sm">Explore</span>
+</a>
+<!-- Matches -->
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">sports_soccer</span>
+<span class="text-label-sm font-label-sm">World Cup</span>
+</a>
+<!-- Stories -->
+<a class="flex flex-col items-center gap-1 text-parchment-text opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="text-label-sm font-label-sm">Stories</span>
+</a>
+<!-- Saved (Active) -->
+<a class="flex flex-col items-center gap-1 text-gold-accent scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+<span class="text-label-sm font-label-sm">Saved</span>
+</a>
+</nav>
+<script>
+        // Simple logic to toggle empty state for demo if needed
+        function checkContent() {
+            const mainContent = document.querySelector('main > section');
+            const emptyState = document.getElementById('empty-state');
+            // For now, keep content visible. If data were empty, we'd toggle classes.
+        }
+
+        // Micro-interaction for bookmark buttons
+        document.querySelectorAll('button .material-symbols-outlined').forEach(icon => {
+            if (icon.innerText === 'bookmark') {
+                icon.parentElement.addEventListener('click', function() {
+                    const isFilled = this.querySelector('span').style.fontVariationSettings.includes("'FILL' 1");
+                    this.querySelector('span').style.fontVariationSettings = isFilled ? "'FILL' 0" : "'FILL' 1";
+                    this.style.opacity = isFilled ? "0.4" : "1";
+                });
+            }
+        });
+    </script>
+</body></html>

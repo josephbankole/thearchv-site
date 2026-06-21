@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-20",
+    day: "Saturday",
+    headline: "A quiet window, by design. United plan around the World Cup.",
+    dek: "With squads at the tournament, the real business waits.",
+    body: "Saturday showed the rhythm of a World Cup window. With most targets and most sellable players still at the tournament, deal flow across Europe has slowed to early positioning and the odd free transfer. Manchester United are the clearest case. Their incomings, a midfielder and perhaps a striker, are widely expected to wait on outgoings, with Marcus Rashford and others needing to move first. Per reports, United have an agreement for Atalanta's Éderson to complete in July, which fits the pattern of business lined up now and finished later. Nothing big landed today. The window is loading rather than firing, and the noise will come once the groups are settled.",
+    status: "verified",
+  },
+  {
     date: "2026-06-19",
     day: "Friday",
     headline: "United land the first one. Now the next.",

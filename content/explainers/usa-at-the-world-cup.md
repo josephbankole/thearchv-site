@@ -76,8 +76,6 @@ Qatar 2022 was the return. A young United States squad came out of a group with 
 
 In 2026 the United States co-host the World Cup alongside Canada and Mexico, the first time three nations have shared the tournament and the first 48-team edition. As hosts they qualified automatically, the final is in New Jersey, and the team carries home advantage into a knockout draw for the first time since 1994. For a programme whose ceiling has been a single quarter-final in nearly a century, a home World Cup is the clearest shot it has ever had at a new high-water mark.
 
-[FOUNDER: your take here. The human/opinion layer is yours to write. Suggested angle, pegged to the live window: with the United States through to the knockout rounds as hosts in 2026, is this finally the team that beats the 2002 quarter-final, and what would it take? You could weigh the home crowd and automatic qualification against the reality that they have only once gone past the last sixteen in the modern game. This is the part readers come for and the part only you should write.]
-
 ---
 
 *Sources for this piece: FIFA, ESPN, BBC, US Soccer, Goal and FOX Sports. The ARCHV verifies every factual claim against at least two reputable sources before publishing. Illustrations are original and likeness-based, never photographic.*

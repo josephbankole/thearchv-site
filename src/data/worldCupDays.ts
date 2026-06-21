@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-20",
+    day: "Day 10",
+    headline: "Germany dig deep. The Dutch send a message.",
+    dek: "Undav's late winner books Germany's place; the Netherlands hit five.",
+    body: "Germany are through, but they made hard work of it. Deniz Undav scored twice against Ivory Coast in Toronto, his winner landing in stoppage time to settle a two one game that asked far more of them than the opening rout did. The Netherlands had no such trouble, pulling Sweden apart five one in Houston to lay down a marker. Japan kept their strong tournament going, beating Tunisia four nil with Daichi Kamada scoring inside four minutes. Ecuador and Curaçao played out a goalless draw in Kansas City. Two European heavyweights showed their range on the same afternoon, one by grinding it out, one in style. The knockout picture is hardening.",
+    status: "verified",
+  },
+  {
     date: "2026-06-19",
     day: "Day 9",
     headline: "The hosts are through. The casualties pile up.",

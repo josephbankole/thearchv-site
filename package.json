@@ -6,9 +6,10 @@
   "description": "The ARCHV — Football history, illustrated. The owned site for @thearchv_ca.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-feed.mjs",
+    "build": "tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-feed.mjs && node scripts/build-day-pages.mjs",
     "feed": "node scripts/build-feed.mjs",
     "faq": "node scripts/build-faq.mjs",
+    "pages": "node scripts/build-day-pages.mjs",
     "preview": "vite preview --port 4173",
     "assets": "node scripts/optimize-posters.mjs",
     "og": "node scripts/make-og.mjs"

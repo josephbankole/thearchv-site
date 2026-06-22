@@ -135,7 +135,7 @@ function render(p, allPages) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(p.title)} — The ARCHV</title>
+  <title>${esc(p.title)} · The ARCHV</title>
   <meta name="description" content="${escAttr(p.description)}" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />

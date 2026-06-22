@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-21",
+    day: "Sunday",
+    headline: "United weigh their next move. Madrid keep Rudiger.",
+    dek: "Sunday's market: United patient, a Madrid renewal done.",
+    body: "A quiet Sunday for Manchester United, louder elsewhere. United's position is unchanged, two midfielders wanted with Mateus Fernandes the lead name, Casemiro and Ugarte set to go, and Marcus Rashford still to be sold, with Bayern Munich interested but unconvinced on wages. All of it LINKED, none of it done. The cleaner story belonged to Real Madrid, who have handed Antonio Rudiger a one-year contract extension, per ESPN, keeping the Germany defender at the Bernabeu. United will hope their own week brings a first signature rather than another round of names. The window is young. The pressure at Old Trafford is not.",
+    status: "verified",
+  },
+  {
     date: "2026-06-20",
     day: "Saturday",
     headline: "A quiet window, by design. United plan around the World Cup.",

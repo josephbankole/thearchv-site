@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-21",
+    day: "Day 11",
+    headline: "Spain roar back. Egypt break their duck.",
+    dek: "Four for Spain, a first World Cup win for Egypt, more magic from Cape Verde.",
+    body: "Stung by their opening draw, Spain answered on day eleven. Four nil against Saudi Arabia in Atlanta, Lamine Yamal at the heart of it, the favourites looking far more like themselves. Egypt found a result that mattered more. Three one against New Zealand handed them a World Cup win at last, the kind a generation of their fans had waited for. Cape Verde were at it again too, twice pegging back Uruguay for a two two draw that keeps the smallest nation in the field very much alive. Belgium and Iran could not be separated, goalless. The underdogs keep writing, and the giants keep waking up.",
+    status: "verified",
+  },
+  {
     date: "2026-06-20",
     day: "Day 10",
     headline: "Germany dig deep. The Dutch send a message.",

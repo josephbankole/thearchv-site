@@ -60,6 +60,16 @@ export async function initAnalytics(): Promise<void> {
   setupSectionViews();
   setupOutboundTracking();
   setupArticleLinkTracking();
+  setupNewsletterTracking();
+}
+
+// Track clicks to the Dispatch newsletter (Substack subscribe links).
+function setupNewsletterTracking(): void {
+  document.querySelectorAll<HTMLAnchorElement>('a[href*="substack.com"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      track('newsletter_click', { href: el.href, location: el.closest('section')?.id || el.className });
+    });
+  });
 }
 
 // Track clicks on finals and United long-form article deep-links.
@@ -85,7 +95,9 @@ function setupOutboundTracking(): void {
 }
 
 function setupFollowTracking(): void {
-  document.querySelectorAll<HTMLElement>('[data-follow]').forEach((el) => {
+  // Every Instagram link is a follow intent, not only [data-follow] elements. The masthead Follow
+  // and the sticky follow bar had no data-follow attribute, so follow_click was badly undercounted.
+  document.querySelectorAll<HTMLElement>('a[href*="instagram.com"], [data-follow]').forEach((el) => {
     el.addEventListener('click', () => {
       track('follow_click', { location: el.closest('section')?.id || el.className });
     });
@@ -97,9 +109,11 @@ function setupScrollDepth(): void {
   const marks = [25, 50, 75, 100];
   const hit = new Set<number>();
   const onScroll = () => {
-    const doc = document.documentElement;
-    const denom = doc.scrollHeight - doc.clientHeight;
-    const pct = denom > 0 ? (doc.scrollTop / denom) * 100 : 0;
+    // window.scrollY is reliable everywhere; documentElement.scrollTop reads 0 in the iOS in-app
+    // browsers (Instagram, Facebook) that make up much of the audience, which silently killed this event.
+    const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+    const denom = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = denom > 0 ? (scrollTop / denom) * 100 : 0;
     for (const m of marks) {
       if (pct >= m && !hit.has(m)) {
         hit.add(m);

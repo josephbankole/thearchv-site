@@ -14,6 +14,12 @@
   <meta property="og:url" content="https://thearchv.ca/start" />
   <meta property="og:image" content="https://thearchv.ca/og.jpg" />
 
+  <!-- PostHog: pageview + which button readers tap. Same project as the website. -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true});
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -100,5 +106,14 @@
       <a class="btn" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop the store</a>
     </nav>
   </main>
+  <script>
+    document.querySelectorAll('.links .btn').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var target = a.href.indexOf('substack') > -1 ? 'dispatch'
+          : a.href.indexOf('etsy') > -1 ? 'store' : 'archive';
+        if (window.posthog) posthog.capture('start_cta_click', { target: target, href: a.href });
+      });
+    });
+  </script>
 </body>
 </html>

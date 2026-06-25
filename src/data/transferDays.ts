@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-22",
+    day: "Monday",
+    headline: "United circle the middle of the pitch.",
+    dek: "Ederson talks advance; Rashford waits on a door.",
+    body: "Monday was about the middle of the pitch. United are pushing to agree a deal with Atalanta for Ederson, the Brazil midfielder, with talks reported to be advancing. RUMOUR for now, nothing signed. The other long-running thread is Marcus Rashford, who is said to favour a move to Bayern Munich, with Juventus also watching and his wages the sticking point. Also RUMOUR. United want at least two midfielders and are weighing names while sorting out who leaves. The futures of Casemiro and Manuel Ugarte stay unsettled. Quiet on paper, busy underneath. The window is doing its work in the background.",
+    status: "verified",
+    image: "/heads/rashford.webp",
+    imageAlt: "Marcus Rashford, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-21",
     day: "Sunday",
     headline: "United weigh their next move. Madrid keep Rudiger.",

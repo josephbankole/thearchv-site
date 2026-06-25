@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-24",
+    day: "Wednesday",
+    headline: "United land their first. Ederson is agreed.",
+    dek: "A midfield rebuild starts in the middle.",
+    body: "United have their first piece. A deal is agreed with Atalanta for Ederson, the Brazil midfielder, for a fee ESPN puts at about thirty four million pounds plus add-ons, with Sky reporting closer to thirty eight. Four years, with an option for a fifth. AGREED, medical to come, not yet a club announcement. He is billed as the first of at least two midfielders, with Casemiro and Manuel Ugarte expected to leave to make room. The second piece is a West Ham double: Mateus Fernandes and Crysencio Summerville, both LINKED, both chased by other clubs, per Romano. The middle of the pitch is where this rebuild lives.",
+    status: "verified",
+    image: "/heads/fernandes.webp",
+    imageAlt: "Mateus Fernandes, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-23",
     day: "Tuesday",
     headline: "Ederson nears the line.",

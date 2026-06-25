@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-22",
+    day: "Day 12",
+    headline: "France and Argentina hold firm.",
+    dek: "Norway edge a five-goal tie; Algeria fight back.",
+    body: "Group I and J took the floor and the favourites held firm. France brushed Iraq aside three nil, ruthless once they found the opener. Argentina did it the hard way, a single goal enough to see off a stubborn Austria. The day belonged to the underdogs in the other two ties. Norway and Senegal traded blows in a five-goal game, Norway winning it three two. And Algeria came from behind to beat Jordan two one, a result that keeps their group alive into the final round. No giants fell, but two of them were made to sweat. The picture at the top is taking shape.",
+    status: "verified",
+  },
+  {
     date: "2026-06-21",
     day: "Day 11",
     headline: "Spain roar back. Egypt break their duck.",

@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-23",
+    day: "Tuesday",
+    headline: "Ederson nears the line.",
+    dek: "Chase turns to close; Rashford still waiting.",
+    body: "The Ederson move moved closer. Reports put United and Atalanta near an agreement in the region of forty eight million euros for the Brazil midfielder, with an announcement still to come. RUMOUR until a club confirms it, but the tone shifted from chase to close. Marcus Rashford remains the other open question, linked again with Bayern Munich as his exit route, his salary the main obstacle in any talks. Also RUMOUR. United keep scanning the midfield market for a second arrival, with Casemiro and Manuel Ugarte still expected to go. One deal nearing the line. One still waiting on a buyer.",
+    status: "verified",
+    image: "/heads/rashford.webp",
+    imageAlt: "Marcus Rashford, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-22",
     day: "Monday",
     headline: "United circle the middle of the pitch.",

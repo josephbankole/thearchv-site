@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-23",
+    day: "Day 13",
+    headline: "Ronaldo makes history. England stall again.",
+    dek: "A record sixth World Cup on the scoresheet.",
+    body: "The night had a headline act. Cristiano Ronaldo scored twice as Portugal hammered Uzbekistan five nil, becoming the first man to score at six different World Cups. At forty one, he is not done arguing his case. England had no such joy. They piled up nineteen shots against Ghana and could not score, a goalless draw that became their thirteenth at a World Cup, more than any nation has managed. Croatia edged Panama one nil through Ante Budimir, and Colombia saw off DR Congo by the same scoreline. One man rewrote the record books. One team kept running into its own history.",
+    status: "verified",
+  },
+  {
     date: "2026-06-22",
     day: "Day 12",
     headline: "France and Argentina hold firm.",

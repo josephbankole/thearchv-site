@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-24",
+    day: "Day 14",
+    headline: "The groups close. Brazil and Mexico march.",
+    dek: "Morocco win a six-goal thriller; Canada hold on.",
+    body: "The group stage closed with its cards on the table. Brazil dismantled Scotland three nil to win their group, the gulf in class plain from the first whistle. Mexico did the same to Czechia, a three nil win in front of a roaring home crowd that sent them through as group winners. Morocco and Haiti served up the chaos, six goals shared, Morocco edging it four two. South Africa found a one nil against South Korea, and in Seattle Canada saw off Qatar three one to keep the host nations moving. Fourteen days in, the knockout picture is nearly set. The round of thirty two starts this weekend.",
+    status: "verified",
+  },
+  {
     date: "2026-06-23",
     day: "Day 13",
     headline: "Ronaldo makes history. England stall again.",

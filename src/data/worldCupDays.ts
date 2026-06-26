@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-25",
+    day: "Day 15",
+    headline: "Ecuador stun Germany as the group stage bites.",
+    dek: "The tournament's biggest jolt yet, plus a host-nation win and two sides edging through on a draw.",
+    body: "Day 15 belonged to Ecuador. They beat Germany 2-1 in the final group game, the sort of result that rewires a bracket and ends a fancied side's afternoon early. Mexico kept the host nation smiling with a 2-0 win over Czechia. The Netherlands saw off Tunisia 3-1. South Africa edged Korea Republic 1-0. And Japan and Sweden played out a 1-1 draw that suited both, sending the pair into the knockouts together. The pattern of the day was simple. The names on the shirt counted for less than the legs on the pitch, and the group stage is now doing what it does best, sorting the brave from the comfortable.",
+    status: "verified",
+  },
+  {
     date: "2026-06-24",
     day: "Day 14",
     headline: "The groups close. Brazil and Mexico march.",

@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-25",
+    day: "Thursday",
+    headline: "United circle a World Cup midfielder as the Fernandes race tilts to Spurs.",
+    dek: "Old Trafford's midfield hunt has two live names, and only one is getting closer.",
+    body: "United's midfield search has a clear shape now. Recruitment chief Christopher Vivell is in contact with Felix Nmecha's camp, with the Dortmund and Germany midfielder one of the standouts of the World Cup so far. He is rated around £52m, though reports frame it as closer to an £86m fight once rivals join in. LINKED, not agreed, per TeamTalk and Gooner Daily. The other name is slipping. Mateus Fernandes, the young West Ham midfielder United have long chased, looks Tottenham-bound on a package worth up to £85m, per Romano and Goal. Same surname as the captain, different player. United are hunting, but the cheaper, fresher option may be the one in Germany.",
+    status: "verified",
+  },
+  {
     date: "2026-06-24",
     day: "Wednesday",
     headline: "United land their first. Ederson is agreed.",

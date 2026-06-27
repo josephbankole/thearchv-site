@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-26",
+    day: "Day 16",
+    headline: "A heavyweight goes home on the final group day.",
+    dek: "Spain edge Uruguay. Belgium roll. Cape Verde sneak through.",
+    body: "Group H closed with a giant heading out. Spain beat Uruguay one nil in Guadalajara to win the group, and the result sent Uruguay, twice world champions, out at the first stage. Belgium answered any doubts with a five one win over New Zealand to march on. The day's quieter story carried the most weight. Cape Verde held Saudi Arabia to a goalless draw and reached the knockout rounds, a first in their history. One former winner out, one debutant through. The group stage saved some of its sharpest turns for the very end.",
+    status: "verified",
+  },
+  {
     date: "2026-06-25",
     day: "Day 15",
     headline: "Ecuador stun Germany as the group stage bites.",

@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-26",
+    day: "Friday",
+    headline: "United land their first midfielder. The list isn't done.",
+    dek: "Ederson in. Casemiro and Ugarte head for the door.",
+    body: "United have their first midfield signing of the window. Ederson is in, confirmed, and the club have made clear he is the start, not the finish. Casemiro and Ugarte are set to leave, which clears both the wage bill and the path for a second midfielder. The left-back hunt runs alongside it. Lewis Hall is the name, with United in active talks, though that stays RUMOUR for now and Newcastle are holding firm at sixty five to seventy million pounds. Aurelien Tchouameni is the longer shot, also RUMOUR, with his salary the obvious wall. The rebuild has its first brick.",
+    status: "verified",
+  },
+  {
     date: "2026-06-25",
     day: "Thursday",
     headline: "United circle a World Cup midfielder as the Fernandes race tilts to Spurs.",

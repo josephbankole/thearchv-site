@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-27",
+    day: "Saturday",
+    headline: "Ederson agrees. United's rebuild gets its anchor.",
+    dek: "A deal at the line, with a second midfielder next.",
+    body: "United's midfield rebuild has its first near-certainty. Ederson Silva, the Atalanta and Brazil defensive midfielder, has agreed a move to Old Trafford in a package around forty five million euros, on a four year deal with the option of a fifth. ESPN report the agreement and Fabrizio Romano calls it done bar the medical. AGREED, not yet announced by the club, so the desk holds the white smoke. Romano adds that a second midfielder is the plan once Ederson lands. Mateus Fernandes stays live too, with Tottenham trying to gatecrash United's talks with West Ham. RUMOUR there. Aurelien Tchouameni remains the dream, and the wages remain the problem.",
+    status: "verified",
+  },
+  {
     date: "2026-06-26",
     day: "Friday",
     headline: "United land their first midfielder. The list isn't done.",

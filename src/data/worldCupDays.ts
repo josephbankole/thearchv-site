@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-27",
+    day: "Day 17",
+    headline: "The group stage closes. Thirty two remain.",
+    dek: "England top their group, Austria and Algeria survive a thriller.",
+    body: "The group stage closed on Saturday and the round of 32 is set. England finished top of Group L, a two nil win over Panama doing the job without fuss. The day's madness was in Group J, where Austria and Algeria drew three all and both went through, while Argentina beat Jordan three one with Lionel Messi scoring again. Portugal and Colombia played out a goalless draw that suited both. DR Congo saw off Uzbekistan three one, and Croatia edged Ghana two one. Thirty two teams remain. The knockouts begin on Sunday, and from here a single bad night ends it.",
+    status: "verified",
+  },
+  {
     date: "2026-06-26",
     day: "Day 16",
     headline: "A heavyweight goes home on the final group day.",

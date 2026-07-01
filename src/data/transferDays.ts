@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-29",
+    day: "Monday",
+    headline: "United get their first Carrick signing over the line.",
+    dek: "Éderson agreed. The midfield hunt is not finished.",
+    body: "United have moved first and moved fast. Éderson, the Atalanta midfielder, has agreed a switch to Old Trafford for a reported thirty eight million pounds, a four year deal with the option of a fifth, medical to follow. Reported by Sky Sports and ESPN, so this one is close to done. He is the first signing of the Michael Carrick era. The work is not over. United want a second midfielder, though the Mateus Fernandes trail now points to Tottenham, per reports, not Old Trafford. A subplot too: Marcus Rashford is said to be in talks about staying and forcing his way back into the side. RUMOUR on both of those, Éderson aside. Monday belonged to United.",
+    status: "verified",
+  },
+  {
     date: "2026-06-27",
     day: "Saturday",
     headline: "Ederson agrees. United's rebuild gets its anchor.",

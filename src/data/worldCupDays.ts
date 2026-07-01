@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-30",
+    day: "Day 20",
+    headline: "France cruise, the hosts advance, and Norway keep dreaming.",
+    dek: "A Mbappe brace, an Azteca win, and 28 years undone.",
+    body: "Round of 32 delivered its calmer night after two shock exits. France beat Sweden three nil at MetLife Stadium, Kylian Mbappe scoring twice to send the world champions through with barely a scare. Mexico kept the host run alive, beating Ecuador two nil in front of their own crowd at the Azteca, the stadium that opened this tournament back on day one. Norway, back at a World Cup after twenty eight years away, beat Ivory Coast two one to reach the knockout rounds they last saw in 1998. Three wins, no surprises this time, and the bracket edges toward the business end.",
+    status: "verified",
+  },
+  {
     date: "2026-06-28",
     day: "Day 18",
     headline: "Canada's first knockout win arrives in stoppage time.",

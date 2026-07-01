@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-29",
+    day: "Day 19",
+    headline: "Germany and the Netherlands are both out, on penalties.",
+    dek: "Paraguay and Morocco win the shootouts.",
+    body: "The Round of 32 took two big names down on the same night, and both went the distance. Germany drew one all with Paraguay and lost the shootout four three, their tournament over at the first knockout hurdle. Netherlands drew one all with Morocco and lost their shootout three two, so Morocco march on and back up the run they made in 2022. Brazil had the calmer evening, a two one win over Japan that never looked in doubt. Two heavyweights gone, two decided from twelve yards. The bracket already looks nothing like the seedings said it would.",
+    status: "verified",
+  },
+  {
     date: "2026-06-27",
     day: "Day 17",
     headline: "The group stage closes. Thirty two remain.",

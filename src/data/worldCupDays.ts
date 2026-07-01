@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-06-28",
+    day: "Day 18",
+    headline: "Canada's first knockout win arrives in stoppage time.",
+    dek: "Eustaquio settles it. South Africa's dream ends 1-0.",
+    body: "The knockout rounds opened with a first for both sides. Canada, hosting a World Cup for the first time, had never won a match at this stage before kickoff in Los Angeles. Stephen Eustaquio settled it in the second minute of stoppage time, a clipped finish from the edge of the box that sent the stadium into disbelief. South Africa, appearing in their first ever World Cup knockout match, pushed hard for an equaliser that never came. For the co-hosts it is a first Round of 16 appearance in the men's tournament's history. For Bafana Bafana, elimination arrived with the kind of pride a team can build a future on.",
+    status: "verified",
+  },
+  {
     date: "2026-06-29",
     day: "Day 19",
     headline: "Germany and the Netherlands are both out, on penalties.",

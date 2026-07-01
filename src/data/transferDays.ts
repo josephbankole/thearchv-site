@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-30",
+    day: "Tuesday",
+    headline: "United's rebuild finds its buyer, and loses one battle.",
+    dek: "Ederson agreed. Fernandes goes to Tottenham instead.",
+    body: "United's midfield rebuild took shape on two fronts. Manchester United have agreed a deal with Atalanta for Ederson, a package worth around forty five million euros on a four year contract with the option of a fifth, per Fabrizio Romano. HERE WE GO, though the formal medical and unveiling wait until he is back from holiday. The midfielder United could not land is Mateus Fernandes. Tottenham beat them to West Ham's man with a club record eighty five million pound bid, sources telling Sky Sports and ESPN the deal is done and a medical is booked. One name in, one that got away. The rebuild continues elsewhere.",
+    status: "verified",
+  },
+  {
     date: "2026-06-28",
     day: "Sunday",
     headline: "United widen the net beyond one headline name.",

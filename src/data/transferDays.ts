@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-06-28",
+    day: "Sunday",
+    headline: "United widen the net beyond one headline name.",
+    dek: "Hall cools, Berge emerges. Fernandes race rolls on.",
+    body: "With Ederson's arrival taking shape, United's other business is spreading wider than a single name. Their interest in Newcastle's Lewis Hall has reportedly cooled, even as Chelsea make contact of their own, leaving that race unclear. More notably, Fulham's Sander Berge, currently at the World Cup with Norway, has emerged as a fresh central midfield option. Both are LINKED only, with no bid confirmed by either club. Meanwhile the Mateus Fernandes race with Tottenham remains open, per reports, with no side pulling decisively clear yet. United's summer, one deal in, is proving to be about depth as much as a single marquee arrival.",
+    status: "verified",
+  },
+  {
     date: "2026-06-29",
     day: "Monday",
     headline: "United get their first Carrick signing over the line.",

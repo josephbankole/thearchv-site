@@ -315,7 +315,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 /* ---------- footer ---------- */
 .footer { border-top: 1px solid var(--cream-faint); padding-block: 4rem 6rem; }
 .footer__top { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem; }
-.footer__links { display: flex; flex-wrap: wrap; gap: 0.9rem 1.5rem; font-size: 0.9rem; }
+.footer__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; }
+.footer__links { display: flex; flex-wrap: wrap; gap: 0.9rem 1.5rem; font-size: 0.9rem; margin-top: 1.75rem; }
 .footer__links a { color: var(--cream-dim); transition: color 0.3s; }
 .footer__links a:hover { color: var(--gold); }
 .footer__tag { margin-top: 2rem; color: var(--cream-dim); font-family: var(--serif); font-weight: 300; font-size: 1.1rem; }

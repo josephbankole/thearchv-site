@@ -28,13 +28,11 @@ Croatia responded and won the game 4-1. Canada lost their other two matches as w
 
 Co-hosting the 2026 tournament alongside the United States and Mexico gave Canada automatic qualification and home advantage, with group games played in Toronto and Vancouver. The group stage was uneven, a 1-1 draw with Bosnia and Herzegovina, a 6-0 win over Qatar, then a 2-1 loss to Switzerland, but it was enough to send Canada into the knockout rounds for the first time.
 
-The Round of 32 tie against South Africa carried extra weight: both sides were playing their first-ever World Cup knockout match. Davies, still working back from a hamstring injury, came on in the 75th minute and changed the tempo straight away, one driving run alone forcing a save from South Africa's goalkeeper. The breakthrough came in the fifth minute of stoppage time, when Stephen Eustaquio scored to send the co-hosts through 1-0 and into the Round of 16.
+The Round of 32 tie against South Africa carried extra weight: both sides were playing their first-ever World Cup knockout match. Davies, still working back from a hamstring injury, came on in the 75th minute and changed the tempo straight away, one driving run alone forcing a save from South Africa's goalkeeper. The breakthrough came in second-half stoppage time, when Stephen Eustaquio scored to send the co-hosts through 1-0 and into the Round of 16. South Africa's own first-ever knockout appearance ended there, right at the wire, in a match neither side deserved to lose.
 
 ## Why this breakthrough matters
 
 Two appearances and thirty-six years of silence is not much of a World Cup history to build on. A first knockout win, at home, with the sport's biggest global audience watching, is the kind of result a federation can actually build a generation around.
-
-[FOUNDER: your take here]
 
 ---
 

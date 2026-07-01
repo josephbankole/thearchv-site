@@ -42,7 +42,7 @@ Peg to live storylines via /Users/josephbankole/Claude/fifa.archv/wc2026-storyli
 - [todo] explainers/most-world-cup-titles — every winner
 - [todo] explainers/world-cup-hosts-history — hosts + 2026 three-nation first
 - [drafted] explainers/usa-at-the-world-cup — host-nation history (tier-1) (drafted 2026-06-20, rides the 19 Jun USA-Australia knockout storyline)
-- [todo] explainers/canada-at-the-world-cup — host-nation history (home market)
+- [drafted] explainers/canada-at-the-world-cup — host-nation history (home market) (drafted 2026-07-01, rides Canada's 1-0 Round of 32 win over South Africa on 2026-06-28, their first-ever WC knockout win)
 - [todo] explainers/oldest-world-cup-goalscorers — links the Milla legend page
 
 ## SEQUENCING (D92) — priority order for the agent

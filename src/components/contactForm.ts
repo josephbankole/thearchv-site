@@ -34,7 +34,7 @@ export function initContactForm(): void {
     if (key === FALLBACK_KEY) {
       // Form intentionally dormant: route enquiries to Instagram DMs for now.
       status.className = 'form__status is-ok';
-      status.textContent = 'Thank you. For partnerships, message us on Instagram @thearchv_ca and we will pick it up.';
+      status.textContent = 'Thank you. For partnerships, message us on Instagram @thearchvfc and we will pick it up.';
       track('partnership_intent', {});
       return;
     }

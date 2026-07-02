@@ -55,12 +55,17 @@ Deno.serve(async (req) => {
     return json({ ok: false, reason: "APNs not configured yet" }, 200);
   }
 
-  // 3. Notification copy from the lead story.
+  // 3. Notification copy + deep-link route from the lead story. The app routes the tap
+  //    straight to this entry; a payload with no route falls back to the Today tab.
   let title = "The ARCHV";
   let body = "A new story has landed.";
+  let route: { section?: string; date?: string } = {};
   try {
     const today = await (await fetch(FEED_TODAY, { cache: "no-store" })).json();
     if (today?.lead?.headline) body = String(today.lead.headline);
+    if (today?.lead?.section && today?.lead?.date) {
+      route = { section: String(today.lead.section), date: String(today.lead.date) };
+    }
   } catch { /* fall back to the generic line */ }
 
   // 4. Send to every opted-in token.
@@ -72,7 +77,7 @@ Deno.serve(async (req) => {
   }
 
   const jwt = await makeAPNsJWT(p8, keyId, teamId);
-  const payload = JSON.stringify({ aps: { alert: { title, body }, sound: "default" } });
+  const payload = JSON.stringify({ aps: { alert: { title, body }, sound: "default" }, archv: route });
 
   let sent = 0;
   const dead: string[] = [];

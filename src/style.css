@@ -393,6 +393,31 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .reduced-motion #webgl { display: none; }
 .reduced-motion * { scroll-behavior: auto; }
 
+/* ---------- mobile hero atmosphere ----------
+   The WebGL layer never mounts on touch devices, so the fixed #webgl div doubles
+   as a pure-CSS fallback there: a slow-breathing light field plus two gold specks
+   drifting up. Transform/opacity only, cheap on low-end phones. Reduced motion
+   hides the whole layer via the rule above. */
+.is-mobile #webgl {
+  background: radial-gradient(120% 90% at 70% -10%, #14405d 0%, var(--navy) 48%, var(--navy-deep) 100%);
+  animation: heroBreathe 14s ease-in-out infinite alternate;
+}
+@keyframes heroBreathe { from { opacity: 1; } to { opacity: 0.82; } }
+.is-mobile #webgl::before,
+.is-mobile #webgl::after {
+  content: ''; position: absolute; border-radius: 50%;
+  background: var(--gold); opacity: 0;
+  animation: dustRise 11s linear infinite;
+}
+.is-mobile #webgl::before { width: 3px; height: 3px; left: 22%; bottom: -3px; }
+.is-mobile #webgl::after  { width: 2px; height: 2px; left: 68%; bottom: -3px; animation-delay: 5.5s; animation-duration: 13s; }
+@keyframes dustRise {
+  0%   { transform: translateY(0); opacity: 0; }
+  12%  { opacity: 0.55; }
+  85%  { opacity: 0.25; }
+  100% { transform: translateY(-92vh); opacity: 0; }
+}
+
 /* ---- Legends wall (section 04) ---- */
 .legends__list {
   list-style: none;

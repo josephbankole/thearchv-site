@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-01",
+    day: "Wednesday",
+    headline: "Ederson clears the last hurdle. United's window has its first name through the door.",
+    dek: "Registration cleared, midfielder in, striker out.",
+    body: "The deal agreed weeks ago finally cleared its last piece of paperwork on Wednesday. Ederson's move from Atalanta was held up only by the international clearing process required for a transfer from overseas, and that cleared on the first of July, completing a package worth around forty five million euros on a four year deal with an option year. He becomes United's first midfield arrival of the summer, with Casemiro and Ugarte both expected to leave. The other half of the ledger is already settled. Rasmus Hojlund's move to Napoli was made permanent for roughly forty three million pounds, closing a loan that produced seventeen goals. One in, one gone. The rebuild has its shape.",
+    status: "verified",
+    image: "/heads/ederson.webp",
+    imageAlt: "Ederson, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-06-30",
     day: "Tuesday",
     headline: "United's rebuild finds its buyer, and loses one battle.",

@@ -110,20 +110,37 @@ Deno.serve(async (req) => {
   return json({ ok: true, action: decision.action, ...next }, 200);
 });
 
+// Sends via Zoho Mail (Canadian DC). The refresh token is exchanged for a short-lived
+// access token on each call; escalations are rare enough that caching isn't worth it.
 async function notifyFounder(ticket: Record<string, unknown>, internalNote: string, userReply: string) {
-  const apiKey = Deno.env.get("RESEND_API_KEY");
+  const clientId = Deno.env.get("ZOHO_CLIENT_ID");
+  const clientSecret = Deno.env.get("ZOHO_CLIENT_SECRET");
+  const refreshToken = Deno.env.get("ZOHO_REFRESH_TOKEN");
+  const accountId = Deno.env.get("ZOHO_ACCOUNT_ID");
   const to = Deno.env.get("FOUNDER_EMAIL");
-  const from = Deno.env.get("SUPPORT_FROM_EMAIL") ?? "The ARCHV <support@mail.thearchv.ca>";
-  if (!apiKey || !to) return; // not configured yet
+  if (!clientId || !clientSecret || !refreshToken || !accountId || !to) return; // not configured yet
   try {
-    await fetch("https://api.resend.com/emails", {
+    const tokenRes = await fetch("https://accounts.zohocloud.ca/oauth/v2/token", {
       method: "POST",
-      headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" },
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        client_id: clientId,
+        client_secret: clientSecret,
+      }),
+    });
+    const { access_token } = await tokenRes.json();
+    if (!access_token) return;
+    await fetch(`https://zmail.zohocloud.ca/api/accounts/${accountId}/messages`, {
+      method: "POST",
+      headers: { authorization: `Zoho-oauthtoken ${access_token}`, "content-type": "application/json" },
       body: JSON.stringify({
-        from,
-        to,
+        fromAddress: to,
+        toAddress: to,
         subject: `L3 escalation: ${ticket.category ?? "ticket"}`,
-        text:
+        mailFormat: "plaintext",
+        content:
           `A support ticket has been escalated to you (L3).\n\n` +
           `Category: ${ticket.category ?? "other"}\n` +
           `App version: ${ticket.app_version ?? "unknown"}\n\n` +

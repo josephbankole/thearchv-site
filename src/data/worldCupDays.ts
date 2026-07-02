@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-01",
+    day: "Day 21",
+    headline: "Ten men, one comeback, one statement. Round of 32 delivers all three.",
+    dek: "England, Belgium and the USA all survive a heavy night.",
+    body: "England beat DR Congo two one to continue the chase of a first World Cup since 1966. Belgium supplied the theatre. Down two nil to Senegal with the clock running out, they scored twice in the final five minutes to force extra time, then Youri Tielemans won it from the penalty spot in the 125th minute. The hosts had the hardest route of the three. The United States played over half an hour a man down against Bosnia and Herzegovina and still won two nil, Malik Tillman among the scorers with a free kick. Three different ways to survive a knockout night. Only one way through to the next round.",
+    status: "verified",
+  },
+  {
     date: "2026-06-30",
     day: "Day 20",
     headline: "France cruise, the hosts advance, and Norway keep dreaming.",

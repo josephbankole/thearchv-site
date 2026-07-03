@@ -13,7 +13,7 @@ import { createHash } from "node:crypto";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
 const OUT = process.env.FEED_OUT || join(ROOT, "dist", "feed");
-const SCHEMA = "archv-feed/1";
+const SCHEMA = "archv-feed/2"; // v2: every lane's entries carry `section`, so provenance renders identically on every app surface
 
 /* ---------- load the typed data via a bundled temp module ---------- */
 const entry = [
@@ -42,17 +42,16 @@ const { transferDays, worldCupDays, posters, legends, longReads, upsets, giantKi
 /* ---------- compose the feeds ---------- */
 // Today = newest dated wrap across Transfer Desk + World Cup, lead + the next four cards.
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
-const daily = [
-  ...transferDays.map((d) => ({ ...d, section: "transfer" })),
-  ...worldCupDays.map((d) => ({ ...d, section: "worldcup" })),
-].sort(byDateDesc);
+const transferTagged = transferDays.map((d) => ({ ...d, section: "transfer" }));
+const worldCupTagged = worldCupDays.map((d) => ({ ...d, section: "worldcup" }));
+const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);
 
 const lastUpdated = daily.length ? daily[0].date : null;
 
 const feeds = {
   today: { lead: daily[0] ?? null, wrap: daily.slice(1, 5) },
-  transfer: { days: transferDays },
-  worldcup: { days: worldCupDays },
+  transfer: { days: transferTagged },
+  worldcup: { days: worldCupTagged },
   posters: { posters },
   archive: {
     legends,

@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-02",
+    day: "Thursday",
+    headline: "Ederson's move to United clears its final hurdle.",
+    dek: "Registration cleared. Hojlund's exit made permanent.",
+    body: "Two pieces of United business moved from agreed to actually done. Ederson's transfer from Atalanta, a package worth around forty five million euros on a four year deal plus an option, had been held up since it was first agreed weeks ago, not by United or Atalanta but by the paperwork: signing from an overseas club means the international clearing system has to process the registration, and that could not happen until the first of July. It has now cleared. Manchester United have their first completed midfield arrival of the summer, with Casemiro and Ugarte both still expected to leave before the window shuts. Rasmus Hojlund's departure the other way is also final. Napoli have completed the permanent signing of the striker, their obligation to buy triggered by finishing second in Serie A last season, for a package including last year's loan fee worth roughly forty three million pounds. One in, one gone, both confirmed.",
+    status: "verified",
+    image: "/heads/ederson.webp",
+    imageAlt: "Ederson, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-01",
     day: "Wednesday",
     headline: "Ederson clears the last hurdle. United's window has its first name through the door.",

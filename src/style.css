@@ -298,19 +298,42 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 @media (max-width: 560px) { .form__row { grid-template-columns: 1fr; } }
 .field { display: grid; gap: 0.5rem; }
-.field span { font-size: var(--t-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-dim); }
-.field input, .field textarea {
-  background: rgba(242, 234, 211, 0.04); border: 1px solid var(--cream-faint); border-radius: 2px;
-  color: var(--cream); font-family: var(--grotesque); font-size: 1rem; padding: 0.85rem 1rem;
-  transition: border-color 0.4s, background 0.4s; resize: vertical;
+.field span {
+  font-size: var(--t-label); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--cream-dim); transition: color 0.3s;
 }
-.field input:focus, .field textarea:focus { outline: none; border-color: var(--gold); background: rgba(242, 234, 211, 0.06); }
+.field:focus-within span { color: var(--gold); }
+.field input, .field textarea {
+  background: var(--navy-deep); border: 1px solid var(--cream-faint); border-radius: 2px;
+  color: var(--cream); font-family: var(--grotesque); font-size: 1rem; padding: 0.85rem 1rem;
+  transition: border-color 0.4s, box-shadow 0.4s; resize: vertical;
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--cream-faint); }
+.field input:focus, .field textarea:focus {
+  outline: none; border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 161, 74, 0.16);
+}
 .field input:user-invalid, .field textarea:user-invalid { border-color: #b5563f; }
+.field input:-webkit-autofill, .field textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--navy-deep) inset;
+  -webkit-text-fill-color: var(--cream);
+  caret-color: var(--cream);
+}
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .form__submit { justify-self: start; margin-top: 0.5rem; }
-.form__status { font-size: 0.9rem; min-height: 1.2em; }
-.form__status.is-ok { color: var(--pitch); }
-.form__status.is-err { color: #d9785f; }
+.form__status { font-size: 0.9rem; min-height: 1.2em; color: var(--cream-dim); }
+.form__status.is-ok, .form__status.is-err {
+  display: flex; align-items: baseline; gap: 0.6rem;
+  padding-top: 0.85rem; margin-top: 0.25rem;
+  animation: status-in 0.4s ease-out both;
+}
+.form__status.is-ok { color: var(--cream); border-top: 1px solid var(--gold-soft); }
+.form__status.is-ok::before { content: '\2713'; color: var(--gold); font-weight: 600; }
+.form__status.is-err { color: #d9785f; border-top: 1px solid rgba(217, 120, 95, 0.4); }
+.form__status.is-err::before { content: '\00d7'; font-weight: 600; }
+@keyframes status-in { from { opacity: 0; } to { opacity: 1; } }
+.reduced-motion .form__status.is-ok, .reduced-motion .form__status.is-err { animation: none; }
+.reduced-motion .field span, .reduced-motion .field input, .reduced-motion .field textarea { transition: none; }
 
 /* ---------- footer ---------- */
 .footer { border-top: 1px solid var(--cream-faint); padding-block: 4rem 6rem; }
@@ -386,6 +409,12 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 /* ---------- reveal states ----------
    Content is visible by default. GSAP uses gsap.from() to animate it in, so if the
    motion layer ever fails to load, nothing is ever left hidden (no JS-gated content). */
+
+/* kinetic headline reveals: word masks injected at runtime by anim/scroll.ts.
+   Without JS (or under reduced motion) these spans never exist, so the h2s
+   render as plain, fully visible text. */
+.kin-w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+.kin-w__i { display: inline-block; will-change: transform; }
 
 /* reduced motion: show everything, no transforms, no webgl, no decorative loops */
 .reduced-motion [data-reveal], .reduced-motion [data-reveal-line] { opacity: 1 !important; transform: none !important; }

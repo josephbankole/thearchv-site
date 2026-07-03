@@ -3,6 +3,45 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Section titles that get the kinetic split-word reveal instead of the generic fade.
+const KINETIC_TITLES =
+  '.manifesto__title, .killers__title, .archive__title, .desk__title, .craft__title, .partner__title';
+
+// Split an element's text into word masks (.kin-w > .kin-w__i) so the inner spans can
+// rise into view. Existing child elements (e.g. the gold .dot span) are kept intact
+// inside their own mask. Runs only when the motion layer loads, so no-JS renders the
+// plain heading. Returns the inner spans to animate.
+function splitWords(el: HTMLElement): HTMLElement[] {
+  const label = el.textContent?.trim() ?? '';
+  if (label) el.setAttribute('aria-label', label);
+  const inners: HTMLElement[] = [];
+  const frag = document.createDocumentFragment();
+  const mask = (content: Node): void => {
+    const outer = document.createElement('span');
+    outer.className = 'kin-w';
+    outer.setAttribute('aria-hidden', 'true');
+    const inner = document.createElement('span');
+    inner.className = 'kin-w__i';
+    inner.appendChild(content);
+    outer.appendChild(inner);
+    frag.appendChild(outer);
+    inners.push(inner);
+  };
+  Array.from(el.childNodes).forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      (node.textContent ?? '').split(/(\s+)/).forEach((chunk) => {
+        if (!chunk) return;
+        if (/^\s+$/.test(chunk)) frag.appendChild(document.createTextNode(' '));
+        else mask(document.createTextNode(chunk));
+      });
+    } else {
+      mask(node);
+    }
+  });
+  el.replaceChildren(frag);
+  return inners;
+}
+
 // All scroll motion. Never called under prefers-reduced-motion (CSS shows everything).
 export function initScroll(): void {
   // Hero is intentionally NOT hidden by JS. This module is dynamically imported, so
@@ -10,9 +49,25 @@ export function initScroll(): void {
   // tween finished. The hero entrance is now a pure-CSS fade (.hero__inner in
   // style.css) that paints immediately and is disabled under prefers-reduced-motion.
 
+  // kinetic headline reveals: section titles split into words that rise out of a mask.
+  // Sub-0.9s total, no bounce, fires once on scroll into view.
+  gsap.utils.toArray<HTMLElement>(KINETIC_TITLES).forEach((title) => {
+    const words = splitWords(title);
+    if (!words.length) return;
+    const each = Math.min(0.04, words.length > 1 ? 0.32 / (words.length - 1) : 0.04);
+    gsap.from(words, {
+      yPercent: 120,
+      duration: 0.5,
+      ease: 'power3.out',
+      stagger: each,
+      scrollTrigger: { trigger: title, start: 'top 85%', once: true },
+    });
+  });
+
   // generic scroll reveals for everything below the fold
   gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
     if (el.closest('.hero')) return; // hero handled above
+    if (el.matches(KINETIC_TITLES)) return; // kinetic titles handled above
     gsap.from(el, {
       opacity: 0,
       y: 24,

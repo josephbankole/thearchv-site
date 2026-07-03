@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-02",
+    day: "Day 22",
+    headline: "Ronaldo, at 41, becomes the oldest scorer in World Cup knockout history.",
+    dek: "A stoppage-time header sent Portugal past Croatia.",
+    body: "Round of 32 day produced two results with weight behind them. Spain opened the evening with a clean three nil win over Austria at SoFi Stadium, never troubled. Portugal against Croatia in Toronto was a different match entirely. Ivan Perisic put Croatia ahead just after the hour with a low strike across goal, and it held until Cristiano Ronaldo levelled from the penalty spot in the sixty eighth minute, a goal that made him the oldest scorer in World Cup knockout history. Croatia kept pushing, kept Portugal honest, and it looked set for extra time until Goncalo Ramos rose to head in a Rafael Leao cross in the ninety fourth minute. Portugal move on to face Spain in the last sixteen, a genuine heavyweight tie. Croatia go home.",
+    status: "verified",
+    image: "/heads/ronaldo.webp",
+    imageAlt: "Cristiano Ronaldo, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-01",
     day: "Day 21",
     headline: "Ten men, one comeback, one statement. Round of 32 delivers all three.",

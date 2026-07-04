@@ -19,6 +19,7 @@ const SCHEMA = "archv-feed/2"; // v2: every lane's entries carry `section`, so p
 const entry = [
   `export { transferDays } from "./data/transferDays.ts";`,
   `export { worldCupDays } from "./data/worldCupDays.ts";`,
+  `export { leaguesDays } from "./data/leaguesDays.ts";`,
   `export { posters } from "./data/posters.ts";`,
   `export { legends } from "./data/legends.ts";`,
   `export { longReads } from "./data/longReads.ts";`,
@@ -37,13 +38,16 @@ try {
   try { rmSync(tmp); } catch {}
 }
 
-const { transferDays, worldCupDays, posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro } = data;
+const { transferDays, worldCupDays, leaguesDays, posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro } = data;
 
 /* ---------- compose the feeds ---------- */
 // Today = newest dated wrap across Transfer Desk + World Cup, lead + the next four cards.
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
 const transferTagged = transferDays.map((d) => ({ ...d, section: "transfer" }));
 const worldCupTagged = worldCupDays.map((d) => ({ ...d, section: "worldcup" }));
+const leaguesTagged = leaguesDays.map((d) => ({ ...d, section: "leagues" }));
+// leagues entries are deliberately NOT in the daily today-pool yet: the Today lead is
+// "newest dated wrap" and a leagues launch batch must not displace the day's transfer/WC lead.
 const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);
 
 const lastUpdated = daily.length ? daily[0].date : null;
@@ -52,6 +56,7 @@ const feeds = {
   today: { lead: daily[0] ?? null, wrap: daily.slice(1, 5) },
   transfer: { days: transferTagged },
   worldcup: { days: worldCupTagged },
+  leagues: { days: leaguesTagged },
   posters: { posters },
   archive: {
     legends,

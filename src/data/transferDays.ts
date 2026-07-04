@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-03",
+    day: "Friday",
+    headline: "The Transfer Desk widens its lens beyond Old Trafford.",
+    dek: "United still leads. The rest of the market gets its own column.",
+    body: "From Friday, the desk covers the market wide, not just Manchester United, though United still leads when there is real news. The widest early story sits at City, where Elliot Anderson has a medical booked in New York ahead of a reported one hundred and sixteen million pound move from Nottingham Forest. REPORTED, not yet confirmed by either club. Elsewhere, Chelsea have personal terms agreed with Sunderland captain Granit Xhaka and are now negotiating a fee, while Liverpool have added Andy Robertson on a free transfer. Real Madrid had a one hundred and fifty million euro Julian Alvarez bid knocked back by Atletico, who are pointing at his release clause instead. United's own business, the completed Ederson signing, holds as the settled story of the window so far.",
+    status: "verified",
+    image: "/heads/anderson.webp",
+    imageAlt: "Elliot Anderson, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-02",
     day: "Thursday",
     headline: "Ederson's move to United clears its final hurdle.",

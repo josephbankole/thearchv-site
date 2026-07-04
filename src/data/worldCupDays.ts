@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-03",
+    day: "Day 23",
+    headline: "Round of 32 closes with a penalty shootout and a near-miracle.",
+    dek: "Egypt survive on spot kicks. Cape Verde push Argentina to extra time.",
+    body: "The last day of the round belonged to the underdogs, even in defeat. Egypt drew one all with Australia in Arlington and won it four two on penalties, the earlier kick-off of the night. Colombia were the tidiest side on view, Jhon Arias converting a low Luis Suarez cross after fourteen minutes for a one nil win over Ghana at Arrowhead. The story of the night was Miami. Cape Verde, playing their first ever World Cup knockout match, twice pulled level against Argentina, and it took extra time before Lionel Messi and the holders finally won it three two. A World Cup debutant had the reigning champions rattled for two hours. Round of 32 is done. The bracket now sharpens into the last sixteen.",
+    status: "verified",
+    image: "/heads/messi.webp",
+    imageAlt: "Lionel Messi, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-02",
     day: "Day 22",
     headline: "Ronaldo, at 41, becomes the oldest scorer in World Cup knockout history.",

@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-04",
+    day: "Day 24",
+    headline: "Morocco go through. Canada's World Cup ends.",
+    dek: "France win it late with Mbappe's penalty.",
+    body: "Morocco beat co-hosts Canada three nil in Houston to reach the quarter-finals, exactly where they finished in 2022, and proof Walid Regragui's side are building a real habit of winning knockout football. Canada's first men's World Cup knockout appearance ends there, a fair result on the balance of the ninety minutes. In Philadelphia, France needed one moment to get past Paraguay. Kylian Mbappe scored the only goal from the penalty spot, sending Les Bleus into the last eight for a fourth straight tournament. Morocco now face France in Boston on the ninth of July, a heavyweight draw nobody wanted this early. Two different countries, two different routes, one shared theme: consistency finally has a name.",
+    status: "verified",
+    image: "/heads/mbappe.webp",
+    imageAlt: "Kylian Mbappe, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-03",
     day: "Day 23",
     headline: "Round of 32 closes with a penalty shootout and a near-miracle.",

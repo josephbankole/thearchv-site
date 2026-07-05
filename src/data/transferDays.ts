@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-04",
+    day: "Saturday",
+    headline: "United's midfield math still does not add up.",
+    dek: "Scott and Tchouameni, same two problems.",
+    body: "Saturday brought no fresh movement on United's two live midfield targets, just more detail on why both are hard. Bournemouth have told United, more than once, that Alex Scott is not for sale at any price this summer, valuing him near eighty million pounds against a rejected fifty nine million bid. Aurelien Tchouameni is even more complicated. Real Madrid are open to selling for around seventy seven million, but new manager Jose Mourinho reportedly wants to keep him, and Tchouameni himself is waiting to see how Mourinho's rebuild shapes up before deciding anything. United's own problem sits underneath both stories. Casemiro's departure is the precondition for the budget this rebuild needs, and until that clears, neither deal moves. RUMOUR/LINKED on both, no club confirmation on either.",
+    status: "verified",
+    image: "/heads/tchouameni.webp",
+    imageAlt: "Aurelien Tchouameni, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-03",
     day: "Friday",
     headline: "The Transfer Desk widens its lens beyond Old Trafford.",

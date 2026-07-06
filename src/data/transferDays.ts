@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-05",
+    day: "Sunday",
+    headline: "Bournemouth draw a hard line on Alex Scott.",
+    dek: "United's bid is rejected. Tchouameni waits on Mourinho.",
+    body: "United had a fifty nine million pound offer for Alex Scott turned down, and Bournemouth have gone further, telling United, Arsenal and Man City directly that the midfielder is not for sale this summer at any price. They value him nearer eighty million and would rather tie him to a new contract with a release clause. Aurelien Tchouameni remains United's other midfield target, but Real Madrid's Jose Mourinho is reportedly reluctant to sell, and the France international wants to see his own club's rebuild first. Both moves are RUMOUR, not CONFIRMED. Real Madrid, meanwhile, have already landed Marc Cucurella, Bernardo Silva and Ibrahima Konate this window.",
+    status: "verified",
+    image: "/heads/tchouameni.webp",
+    imageAlt: "Aurelien Tchouameni, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-04",
     day: "Saturday",
     headline: "United's midfield math still does not add up.",

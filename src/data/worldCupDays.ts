@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-05",
+    day: "Day 25",
+    headline: "Haaland ends Brazil's run. Neymar walks away.",
+    dek: "Bellingham doubles up. England and Norway reach the last eight.",
+    body: "The last of the marquee round of 16 ties delivered on both counts. In Mexico City, Jude Bellingham scored twice inside two minutes at the Azteca, the first player to manage that in a World Cup there since Maradona in 1986, and Harry Kane's penalty saw off Mexico three two. In New Jersey, Erling Haaland scored both in Norway's two one win over Brazil, taking his tournament total to seven, more than Messi, Mbappe and Ronaldo have managed between them this summer. Brazil's exit carried extra weight. Neymar confirmed afterwards that his international career is over. England now face Norway in the quarter-finals on 11 July.",
+    status: "verified",
+    image: "/heads/haaland.webp",
+    imageAlt: "Erling Haaland, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-04",
     day: "Day 24",
     headline: "Morocco go through. Canada's World Cup ends.",

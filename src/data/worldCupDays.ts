@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-06",
+    day: "Day 26",
+    headline: "Ronaldo's last World Cup ends in stoppage time.",
+    dek: "Spain edge Portugal. Belgium send the USA home.",
+    body: "Monday closed out four days of Round of 16 football with two results that reshaped the tournament. Spain beat Portugal one nil at the death, Mikel Merino converting a Ferran Torres cutback deep into stoppage time to end, in all likelihood, Cristiano Ronaldo's international career. In Seattle, Belgium were ruthless. Charles De Ketelaere scored twice inside the first half, Hans Vanaken added a third, and Romelu Lukaku's stoppage time finish put four unanswered past co-host USA, who become the last of the three hosts to exit the competition. Spain now play Belgium in the quarter-finals on 10 July. Two Round of 16 ties remain, both on Tuesday: Argentina against Egypt, then Switzerland against Colombia.",
+    status: "verified",
+    image: "/heads/ronaldo.webp",
+    imageAlt: "Cristiano Ronaldo, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-05",
     day: "Day 25",
     headline: "Haaland ends Brazil's run. Neymar walks away.",

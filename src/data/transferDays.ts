@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-07",
+    day: "Tuesday",
+    headline: "United open talks for a third midfielder.",
+    dek: "Chelsea's Andrey Santos. Scott stays off. Tchouameni's price climbs.",
+    body: "United have entered talks with Chelsea over Andrey Santos, with the Brazilian midfielder said to be open to the move to Old Trafford. It's a fresh name alongside two familiar problems. Bournemouth have told United, Arsenal and Manchester City directly that Alex Scott is not for sale this summer at any price, valuing him near eighty million pounds and preferring a new contract with a release clause. United's seventy million pound bid for Aurelien Tchouameni is expected to be rejected, with Real Madrid holding out for closer to a hundred million and Jose Mourinho prioritising a centre back over a midfield sale. All three moves are RUMOUR, not CONFIRMED, sourced to Fabrizio Romano. Elsewhere, Atletico Madrid completed Alejandro Grimaldo's move from Bayer Leverkusen and agreed a deal with PSG for Lee Kang-in, while Barcelona tabled a bid north of a hundred million euros for Julian Alvarez to replace Robert Lewandowski.",
+    status: "verified",
+    image: "/heads/tchouameni.webp",
+    imageAlt: "Aurelien Tchouameni, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-06",
     day: "Monday",
     headline: "United's midfield math still doesn't move.",

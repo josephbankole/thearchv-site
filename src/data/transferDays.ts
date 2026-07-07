@@ -58,12 +58,12 @@ export const transferDays: DayEntry[] = [
   {
     date: "2026-07-02",
     day: "Thursday",
-    headline: "Ederson's move to United clears its final hurdle.",
-    dek: "Registration cleared. Hojlund's exit made permanent.",
-    body: "Two pieces of United business moved from agreed to actually done. Ederson's transfer from Atalanta, a package worth around forty five million euros on a four year deal plus an option, had been held up since it was first agreed weeks ago, not by United or Atalanta but by the paperwork: signing from an overseas club means the international clearing system has to process the registration, and that could not happen until the first of July. It has now cleared. Manchester United have their first completed midfield arrival of the summer, with Casemiro and Ugarte both still expected to leave before the window shuts. Rasmus Hojlund's departure the other way is also final. Napoli have completed the permanent signing of the striker, their obligation to buy triggered by finishing second in Serie A last season, for a package including last year's loan fee worth roughly forty three million pounds. One in, one gone, both confirmed.\n\nUpdate, 4 Jul: elsewhere that day, Manchester City announced Elliot Anderson from Nottingham Forest for one hundred and sixteen million pounds, the most expensive British player ever, CONFIRMED, and Fabrizio Romano reported Newcastle agreeing a deal for Hoffenheim's Bazoumana Toure, REPORTED.",
+    headline: "Anderson to City breaks the British record.",
+    dek: "A hundred and sixteen million pounds. Newcastle agree for Toure.",
+    body: "Manchester City announced the signing of Elliot Anderson from Nottingham Forest for one hundred and sixteen million pounds, making him the most expensive British player ever, CONFIRMED by the club and double-sourced. Newcastle moved for Hoffenheim's Bazoumana Toure, with Fabrizio Romano reporting a fifty million euro package agreed ahead of Liverpool; that one is REPORTED, single source. AC Milan are reported to be weighing a move for Virgil van Dijk as he enters his final contract year at Liverpool. United's window was quiet, a day after Ederson's registration cleared and Rasmus Hojlund's move to Napoli was made permanent.\n\nUpdate, 7 Jul: this entry originally repeated the previous day's Ederson lead. It has been refiled around the day's own stories, which had been carried here as a footnote.",
     status: "verified",
-    image: "/heads/ederson.webp",
-    imageAlt: "Ederson, illustrated by The ARCHV.",
+    image: "/heads/anderson.webp",
+    imageAlt: "Elliot Anderson, illustrated by The ARCHV.",
   },
   {
     date: "2026-07-01",

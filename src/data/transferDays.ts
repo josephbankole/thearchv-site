@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-06",
+    day: "Monday",
+    headline: "United's midfield math still doesn't move.",
+    dek: "No fresh action on Scott or Tchouameni. Elsewhere, deals stack up.",
+    body: "Monday brought no material change to United's two live midfield targets. Alex Scott stays a firm no from Bournemouth, who value him near eighty million pounds and are working on a new contract with a release clause rather than a sale. Aurelien Tchouameni remains available in theory, but Real Madrid want closer to a hundred million and new manager Jose Mourinho is building his midfield around signings, not sales. Elsewhere the market kept moving. Tottenham confirmed Sandro Tonali's arrival, the deal that put Arsenal back on the hunt for a Rice partner. Real Madrid completed four signings of their own this window, Marc Cucurella, Ibrahima Konate, Bernardo Silva and Denzel Dumfries, while still chasing a centre back and a central midfielder. RUMOUR, not CONFIRMED, on both United names.",
+    status: "verified",
+    image: "/heads/tchouameni.webp",
+    imageAlt: "Aurelien Tchouameni, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-05",
     day: "Sunday",
     headline: "Bournemouth draw a hard line on Alex Scott.",

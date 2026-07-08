@@ -10,6 +10,7 @@ import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
 import { initChrome } from './ui/chrome';
 import { initAnalytics } from './analytics';
+import { leaguesDays } from './data/leaguesDays';
 import { transferDays } from './data/transferDays';
 import { worldCupDays } from './data/worldCupDays';
 
@@ -20,6 +21,7 @@ const animate = !reducedMotion;
 
 function boot(): void {
   // Content + conversion paths (must work with zero motion)
+  initDailyDigest('leagues-days', leaguesDays, 'leagues');
   initDailyDigest('transfer-days', transferDays, 'transfer');
   initDailyDigest('worldcup-days', worldCupDays, 'worldcup');
   initLongReads(animate);

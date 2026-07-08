@@ -10,6 +10,7 @@ type Section = { id: string; label: string; el: HTMLElement; link: HTMLAnchorEle
 // markup and this list can drift apart without breaking.
 const NAV: Array<{ id: string; label: string }> = [
   { id: 'hero', label: 'Top' },
+  { id: 'football-leagues', label: 'Football leagues' },
   { id: 'transfer-desk', label: 'Transfer desk' },
   { id: 'world-cup', label: 'World Cup' },
   { id: 'archive', label: 'Archive' },

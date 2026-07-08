@@ -100,7 +100,7 @@ function schema(p, url) {
       "location": { "@type": "Place", "name": p.venue, "address": [p.city, p.country].filter(Boolean).join(", ") },
       "competitor": p.teams.map((t) => ({ "@type": "SportsTeam", "name": t })) });
   }
-  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
 }
 
 /* ---------- page template ---------- */

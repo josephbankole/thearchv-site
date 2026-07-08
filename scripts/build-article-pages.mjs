@@ -83,7 +83,7 @@ function schema(entry, url, label) {
         ],
       },
     ],
-  });
+  }).replace(/</g, "\\u003c");
 }
 
 function render(entry, laneKey) {

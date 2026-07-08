@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-07",
+    day: "Day 27",
+    headline: "Messi drags Argentina back from the brink.",
+    dek: "Down two, up three. The holders survive.",
+    body: "Egypt led twice in the last sixteen and had Argentina staring at an early flight home. Then Messi took over. He set up Cristian Romero's header to make it two one, then finished the equaliser himself for his eighth goal of the tournament, level at the top of the scoring chart. Enzo Fernandez won it in stoppage time, heading in off a Lautaro Martinez cross to make it three two. It is the biggest scare the champions have survived all summer, and it sends them through to face Switzerland, who beat Colombia on penalties after a goalless one hundred and twenty minutes, in the quarter-finals on Saturday in Kansas City.",
+    status: "verified",
+    image: "/heads/messi.webp",
+    imageAlt: "Lionel Messi, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-06",
     day: "Day 26",
     headline: "Ronaldo's last World Cup ends in stoppage time.",

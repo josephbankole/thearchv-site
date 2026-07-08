@@ -1,9 +1,13 @@
-/* build-day-pages.mjs — emits a crawlable HTML page per Transfer Desk and World Cup day, so the
-   daily wraps become indexable search surface (one page per day, growing as the engine files more).
-   Runs AFTER build-content.mjs (which writes sitemap.xml); this appends the new day URLs to it.
+/* build-day-pages.mjs — emits a crawlable-but-superseded HTML page per Transfer Desk and World Cup
+   day at the legacy /desk/<date>/ and /world-cup/<date>/ URLs. These are LEGACY pages: the canonical
+   article surface is build-article-pages.mjs's /desk/<lane>/<date>/ pages. Each legacy page here
+   cross-canonicals to its lane URL and is marked noindex,follow so it stops splitting SEO signal
+   with its canonical counterpart, but still passes link equity and stays reachable for any inbound
+   links. Runs AFTER build-content.mjs (which writes sitemap.xml) and BEFORE build-article-pages.mjs
+   (which runs last and owns the final sitemap — this script does NOT touch sitemap.xml).
    Pages reuse /content.css and the same masthead/footer as the article pages. */
 import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -33,8 +37,8 @@ try {
 } finally { try { rmSync(tmp); } catch {} }
 
 const SECTIONS = {
-  transfer: { base: "desk", label: "Transfer Desk", days: data.transferDays },
-  worldcup: { base: "world-cup", label: "World Cup", days: data.worldCupDays },
+  transfer: { base: "desk", lane: "transfer", label: "Transfer Desk", days: data.transferDays },
+  worldcup: { base: "world-cup", lane: "world-cup", label: "World Cup", days: data.worldCupDays },
 };
 
 function body(text) {
@@ -56,12 +60,13 @@ function schema(entry, url, label) {
         { "@type": "ListItem", "position": 2, "name": label, "item": `${SITE}/` },
         { "@type": "ListItem", "position": 3, "name": entry.headline, "item": url } ] },
     ],
-  });
+  }).replace(/</g, "\\u003c");
 }
 
 function render(entry, sectionKey) {
   const s = SECTIONS[sectionKey];
   const url = `${SITE}/${s.base}/${entry.date}/`;
+  const canonicalUrl = `${SITE}/desk/${s.lane}/${entry.date}/`;
   const others = s.days.filter((d) => d.date !== entry.date).slice(0, 6);
   const rel = others.length ? `
         <nav class="related" aria-label="More ${esc(s.label)}">
@@ -75,7 +80,8 @@ function render(entry, sectionKey) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(entry.headline)} · The ARCHV</title>
   <meta name="description" content="${escAttr(entry.dek)}" />
-  <link rel="canonical" href="${url}" />
+  <meta name="robots" content="noindex,follow" />
+  <link rel="canonical" href="${canonicalUrl}" />
   <meta name="theme-color" content="#0C2A3E" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />
@@ -131,23 +137,17 @@ function render(entry, sectionKey) {
 }
 
 /* ---------- write pages ---------- */
+/* Legacy pages only: noindex + cross-canonical to the lane URL, never added to the sitemap.
+   build-article-pages.mjs owns dist/sitemap.xml and appends the canonical <lane>/<date> set last
+   in the build chain; this script must not touch it. */
 let count = 0;
-const urls = [];
 for (const [key, s] of Object.entries(SECTIONS)) {
   for (const entry of s.days) {
     const dir = join(OUT, s.base, entry.date);
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, "index.html"), render(entry, key));
-    urls.push(`  <url><loc>${SITE}/${s.base}/${entry.date}/</loc><lastmod>${entry.date}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
     count++;
   }
 }
 
-/* ---------- append to the sitemap build-content.mjs wrote ---------- */
-const sitemap = join(OUT, "sitemap.xml");
-if (existsSync(sitemap) && urls.length) {
-  const xml = readFileSync(sitemap, "utf8");
-  writeFileSync(sitemap, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
-}
-
-console.log(`[build-day-pages] wrote ${count} day page(s) to ${OUT} (desk + world-cup), appended to sitemap`);
+console.log(`[build-day-pages] wrote ${count} legacy day page(s) to ${OUT} (desk + world-cup), noindex + cross-canonical to lane URLs, not added to sitemap`);

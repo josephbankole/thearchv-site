@@ -60,9 +60,15 @@ chain already carries the static routes plus the day pages from `build-day-pages
 Note: `scripts/build-day-pages.mjs` still separately emits legacy URLs at
 `/desk/<date>/` (transfer only) and `/world-cup/<date>/` (World Cup only, no
 `leagues` support). Those pages were not removed in Build 11 to avoid an
-unreviewed URL cut; they now coexist with the canonical `/desk/<lane>/<date>/`
-pages above. If SEO auditing shows this duplicate-content risk actually matters,
-retire `build-day-pages.mjs` and its sitemap entries in a follow-up.
+unreviewed URL cut, and stay unremoved (inbound links may exist). As of the
+2026-07-08 review fix, they are demoted rather than coexisting as equals:
+each legacy page's `<link rel="canonical">` points at its corresponding
+`/desk/<lane>/<date>/` page (transfer -> `/desk/transfer/<date>/`, world-cup ->
+`/desk/world-cup/<date>/`) and carries `<meta name="robots" content="noindex,follow">`,
+and `build-day-pages.mjs` no longer appends its URLs to `dist/sitemap.xml` — only
+`build-article-pages.mjs`'s canonical lane URLs are in the sitemap. This stops the
+duplicate-content SEO split while keeping the legacy URLs live and crawlable
+(just not indexed, and always pointing search engines at the canonical page).
 
 ## Editorial and rights lines (site side)
 

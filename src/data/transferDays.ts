@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-08",
+    day: "Wednesday",
+    headline: "Bournemouth hold the line on Alex Scott.",
+    dek: "United push. The answer is still no.",
+    body: "United's search for a Premier League midfielder now runs through Alex Scott, and Bournemouth are not making it easy. Told directly to United, Arsenal and Man City this week: Scott is not for sale, not at any price, not this summer. Bournemouth would rather build a new contract around him, release clause included, with talks picking up again once the World Cup ends. United are pushing anyway, having already missed out on Elliot Anderson to City and Mateus Fernandes to Spurs. Elsewhere, a reported seventy million pound bid for Real Madrid's Aurelien Tchouameni is expected to be turned down, and Cristian Orozco, United's second summer signing at seventeen, is due in Manchester this weekend for his medical.",
+    status: "verified",
+    image: "/heads/scott.webp",
+    imageAlt: "Alex Scott, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-07",
     day: "Tuesday",
     headline: "United open talks for a third midfielder.",

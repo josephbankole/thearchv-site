@@ -32,10 +32,37 @@ content readable if JS never runs).
 
 `scripts/build-feed.mjs` runs after `vite build` and emits `dist/feed/*.json`,
 schema `archv-feed/2`: every lane's entries carry `section`; the app renders shelves
-feed-driven (an empty or missing lane simply does not render). Do not rename fields,
-do not remove `section`, and version any breaking change (`archv-feed/3`) in
-lockstep with `thearchv-app/Models.swift`. The app's working rules live in
+feed-driven (an empty or missing lane simply does not render). As of Build 11, every
+entry in the transfer, worldcup and leagues lanes (including the today lead/wrap,
+which reuses the same objects) also carries `url`: the absolute canonical article URL,
+`https://thearchv.ca/desk/<lane>/<date>/`, lane one of `transfer`, `world-cup`,
+`leagues` (note World Cup's URL lane is hyphenated even though its `section` key is
+`worldcup`). This was an additive-only change; `url` is optional and unknown to any
+app build before it started reading it. Do not rename fields, do not remove
+`section`, and version any breaking change (`archv-feed/3`) in lockstep with
+`thearchv-app/Models.swift`. The app's working rules live in
 `../thearchv-app/CLAUDE.md`.
+
+## Per-article pages
+
+`scripts/build-article-pages.mjs` runs after `vite build`, `build-content.mjs`,
+`build-feed.mjs` and `build-day-pages.mjs` (last in the chain, see `package.json`
+"build") and emits one static page per daily entry across all three lanes at
+`dist/desk/<lane>/<date>/index.html` — this is the canonical URL the feed's `url`
+field points at and what the app's canonical shares use. Pages are self-contained
+(inline brand styles, PostHog snippet, Google Fonts), following the
+`public/start/index.html` pattern rather than `content.css` (deliberate: these pages
+do not depend on the hashed app bundle or the long-read article template). The script
+also appends every article URL to `dist/sitemap.xml`, which by that point in the
+chain already carries the static routes plus the day pages from `build-day-pages.mjs`
+— run order matters here, this script must run last.
+
+Note: `scripts/build-day-pages.mjs` still separately emits legacy URLs at
+`/desk/<date>/` (transfer only) and `/world-cup/<date>/` (World Cup only, no
+`leagues` support). Those pages were not removed in Build 11 to avoid an
+unreviewed URL cut; they now coexist with the canonical `/desk/<lane>/<date>/`
+pages above. If SEO auditing shows this duplicate-content risk actually matters,
+retire `build-day-pages.mjs` and its sitemap entries in a follow-up.
 
 ## Editorial and rights lines (site side)
 
@@ -46,10 +73,13 @@ headshots in `public/heads/` (240px webp, committed via the `head` mode of
 archv-site-commit.mjs, never overwrite an existing face); no club crests, kits,
 photos or FIFA marks anywhere.
 
-## Open site work (as of 2026-07-04)
+## Open site work (as of 2026-07-08)
 
 - Football Leagues SECTION UI: the feed lane and app shelf are live, the website has
   no visible Leagues section yet.
-- Per-article pages for daily entries: needed so app shares get canonical URLs
-  (currently section anchors); also SEO surface. Follow the existing long-read page
-  pattern.
+- Per-article pages for daily entries: DONE (Build 11, W1). Every transfer, World Cup
+  and leagues entry now has a canonical page at `/desk/<lane>/<date>/`, wired into
+  the feed's `url` field and linked from the homepage day-rail cards. See "Per-article
+  pages" above. Remaining follow-up: decide whether to retire the older
+  `build-day-pages.mjs` URLs (`/desk/<date>/`, `/world-cup/<date>/`) now that the
+  canonical lane-scoped pages exist.

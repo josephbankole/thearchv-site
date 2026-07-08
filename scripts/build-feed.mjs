@@ -41,11 +41,18 @@ try {
 const { transferDays, worldCupDays, leaguesDays, posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro } = data;
 
 /* ---------- compose the feeds ---------- */
+const SITE = "https://thearchv.ca";
+// Lane segment in the article URL differs from the internal `section` key for World Cup
+// (section "worldcup", URL lane "world-cup") to match the founder-approved URL shape
+// thearchv.ca/desk/<lane>/<date>/ built by scripts/build-article-pages.mjs.
+const LANES = { transfer: "transfer", worldcup: "world-cup", leagues: "leagues" };
+const articleUrl = (section, date) => `${SITE}/desk/${LANES[section]}/${date}/`;
+
 // Today = newest dated wrap across Transfer Desk + World Cup, lead + the next four cards.
 const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
-const transferTagged = transferDays.map((d) => ({ ...d, section: "transfer" }));
-const worldCupTagged = worldCupDays.map((d) => ({ ...d, section: "worldcup" }));
-const leaguesTagged = leaguesDays.map((d) => ({ ...d, section: "leagues" }));
+const transferTagged = transferDays.map((d) => ({ ...d, section: "transfer", url: articleUrl("transfer", d.date) }));
+const worldCupTagged = worldCupDays.map((d) => ({ ...d, section: "worldcup", url: articleUrl("worldcup", d.date) }));
+const leaguesTagged = leaguesDays.map((d) => ({ ...d, section: "leagues", url: articleUrl("leagues", d.date) }));
 // leagues entries are deliberately NOT in the daily today-pool yet: the Today lead is
 // "newest dated wrap" and a leagues launch batch must not displace the day's transfer/WC lead.
 const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);

@@ -1,6 +1,6 @@
 # thearchv.ca
 
-The owned website for **The ARCHV** (`@thearchv_ca`). Football history, illustrated.
+The owned website for **The ARCHV** (`@thearchvfc`). Football history, illustrated.
 An immersive single-page experience: the IG link-in-bio destination and the brand-deal
 credibility surface.
 
@@ -116,7 +116,7 @@ Do not point DNS / go public until every box is true:
 - [ ] Every poster confirmed free of crests, kit logos, competition marks, trophy shapes
 - [ ] Footer affiliation disclaimer present
 - [ ] Partnerships section shows **no follower/reach numbers** (avoid over-claiming)
-- [ ] All social links point to `@thearchv_ca` only
+- [ ] All social links point to `@thearchvfc` only
 - [ ] Web3Forms key set, or the form intentionally left dormant
 - [ ] Rebuilt and re-scrubbed after any content change
 

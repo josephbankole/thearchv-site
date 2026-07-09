@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "The ARCHV — Football history, illustrated. The owned site for @thearchv_ca.",
+  "description": "The ARCHV — Football history, illustrated. The owned site for @thearchvfc.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-feed.mjs && node scripts/build-day-pages.mjs && node scripts/build-article-pages.mjs",

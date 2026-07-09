@@ -215,7 +215,7 @@ function render(entry, laneKey) {
     <div class="wrap">
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <a href="https://x.com/thearchv_ca" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
         <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>

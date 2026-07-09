@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-09",
+    day: "Thursday",
+    headline: "Barcelona reclaim the Women's Champions League, beating Lyon 4-0 in Oslo.",
+    dek: "Pajor and Paralluelo scored two goals each, and Barcelona never let Lyon back in.",
+    body: "Barcelona beat OL Lyonnes 4-0 at Ullevaal Stadion in Oslo on 23 May to win back the Women's Champions League, a year after Arsenal beat them in the 2025 final. Ewa Pajor scored twice early in the second half, then Salma Paralluelo added two more in the closing minutes. Pajor was named player of the match and finished the season as top scorer with 11 goals, two clear of Arsenal's Alessia Russo. The rout of Real Madrid in the quarter-finals, 12-2 on aggregate, set an early marker. Barcelona then beat Bayern Munich in the semi-finals, while Lyon needed extra effort to get past holders Arsenal in theirs. It is Barcelona's fourth title in six seasons, with Arsenal's 2025 win the only gap. In Oslo, Lyon never got a foothold.",
+    status: "verified",
+  },
+  {
     date: '2026-07-04', day: 'Saturday',
     headline: 'The way-too-early 2026-27 Premier League projection.',
     dek: 'Built on last season. Blind to the window.',

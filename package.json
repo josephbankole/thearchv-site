@@ -16,7 +16,9 @@
     "og": "node scripts/make-og.mjs"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/three": "^0.169.0",
+    "satori": "^0.26.0",
     "sharp": "^0.33.5",
     "typescript": "^5.6.3",
     "vite": "^7.3.5"

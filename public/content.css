@@ -20,13 +20,13 @@ img{max-width:100%;height:auto;display:block}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem}
 
 /* masthead */
-.masthead{display:flex;align-items:center;justify-content:space-between;max-width:72rem;margin:0 auto;padding:1.1rem 1.25rem}
-.wordmark{display:inline-flex;align-items:center;gap:.5rem;color:var(--cream);font-weight:700;letter-spacing:.02em}
+.masthead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem .9rem;max-width:72rem;margin:0 auto;padding:1.1rem 1.25rem}
+.wordmark{display:inline-flex;align-items:center;gap:.5rem;color:var(--cream);font-weight:700;letter-spacing:.02em;flex-shrink:0;white-space:nowrap}
 .wordmark img{width:34px;height:34px}
 .wordmark__the{opacity:.7;font-size:.8rem;letter-spacing:.18em}
 .wordmark__archv{font-size:1.15rem}
 .masthead__actions{display:inline-flex;gap:.75rem}
-.btn{display:inline-block;padding:.5rem .9rem;border-radius:.5rem;font-size:.85rem;font-weight:600}
+.btn{display:inline-block;padding:.5rem .9rem;border-radius:.5rem;font-size:.85rem;font-weight:600;white-space:nowrap}
 .btn--ghost{border:1px solid var(--gold-soft);color:var(--cream)}
 .btn--gold{background:var(--gold);color:var(--navy-deep)}
 

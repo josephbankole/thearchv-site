@@ -14,6 +14,9 @@ import { build } from "esbuild";
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import satori from "satori";
+import { Resvg } from "@resvg/resvg-js";
+import sharp from "sharp";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -86,10 +89,117 @@ function schema(entry, url, label) {
   }).replace(/</g, "\\u003c");
 }
 
-function render(entry, laneKey) {
+/* ---------- per-article OG share cards (1200x630 PNG via satori + resvg) ----------
+   One unique card per canonical article at dist/desk/<lane>/<date>/og.png, referenced by that
+   page's og:image / twitter:image. If generation fails for an entry the page falls back to the
+   static /og.jpg and the build carries on. Fonts are static TTF instances committed at
+   scripts/fonts/ (Google Fonts API static builds; satori does not take variable fonts well). */
+const FONTS_DIR = join(ROOT, "scripts", "fonts");
+const CARD_FONTS = [
+  { name: "Fraunces", data: readFileSync(join(FONTS_DIR, "Fraunces-SemiBold.ttf")), weight: 600, style: "normal" },
+  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-Regular.ttf")), weight: 400, style: "normal" },
+  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-SemiBold.ttf")), weight: 600, style: "normal" },
+];
+
+// Shrink-to-fit headline sizing: three lines maximum, ellipsized by satori's lineClamp as a
+// last resort so text can never overflow the card.
+function headlineSize(text) {
+  const len = String(text).length;
+  if (len <= 42) return 68;
+  if (len <= 64) return 58;
+  if (len <= 90) return 50;
+  return 44;
+}
+
+async function ogCard(entry, laneLabel) {
+  const kicker = `${laneLabel} · ${longDate(entry.date)}`.toUpperCase();
+
+  // satori/resvg cannot read webp; the brand headshots in public/heads/ are 240px webp, so
+  // convert to a PNG data URI with sharp (already a build dependency).
+  let portrait = null;
+  if (entry.image) {
+    const imgPath = join(ROOT, "public", entry.image.replace(/^\//, ""));
+    if (existsSync(imgPath)) {
+      const png = await sharp(imgPath).resize(600, 600, { fit: "cover" }).png().toBuffer();
+      portrait = `data:image/png;base64,${png.toString("base64")}`;
+    }
+  }
+
+  const left = {
+    type: "div",
+    props: {
+      style: { display: "flex", flexDirection: "column", justifyContent: "space-between", flexGrow: 1, flexShrink: 1, height: "100%", minWidth: 0 },
+      children: [
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", flexDirection: "column" },
+            children: [
+              { type: "div", props: { style: { color: "#C9A14A", fontFamily: "Inter Tight", fontWeight: 600, fontSize: 26, letterSpacing: 4.5, lineClamp: 1, marginBottom: 34 }, children: kicker } },
+              { type: "div", props: { style: { color: "#F2EAD3", fontFamily: "Fraunces", fontWeight: 600, fontSize: headlineSize(entry.headline), lineHeight: 1.12, letterSpacing: -0.5, lineClamp: 3 }, children: entry.headline } },
+            ],
+          },
+        },
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", alignItems: "baseline" },
+            children: [
+              { type: "div", props: { style: { color: "rgba(242,234,211,.7)", fontFamily: "Inter Tight", fontWeight: 600, fontSize: 22, letterSpacing: 5, marginRight: 12 }, children: "THE" } },
+              { type: "div", props: { style: { color: "#F2EAD3", fontFamily: "Fraunces", fontWeight: 600, fontSize: 34 }, children: "ARCHV" } },
+              { type: "div", props: { style: { color: "#C9A14A", fontFamily: "Fraunces", fontWeight: 600, fontSize: 34 }, children: "." } },
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  const children = [left];
+  if (portrait) {
+    children.push({
+      type: "div",
+      props: {
+        style: { display: "flex", alignItems: "center", marginLeft: 56, flexShrink: 0 },
+        children: [
+          {
+            type: "img",
+            props: {
+              src: portrait,
+              width: 300,
+              height: 300,
+              style: { borderRadius: 300, border: "3px solid rgba(201,161,74,.55)", boxShadow: "0 0 0 10px rgba(7,28,43,.6)" },
+            },
+          },
+        ],
+      },
+    });
+  }
+
+  const svg = await satori(
+    {
+      type: "div",
+      props: {
+        style: {
+          width: 1200, height: 630, display: "flex", alignItems: "center",
+          backgroundColor: "#071C2B",
+          backgroundImage: "radial-gradient(at 50% -20%, #133A52 0%, #071C2B 68%)",
+          padding: "64px 72px",
+        },
+        children,
+      },
+    },
+    { width: 1200, height: 630, fonts: CARD_FONTS },
+  );
+
+  return new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
+}
+
+function render(entry, laneKey, hasCard) {
   const lane = LANES[laneKey];
   const url = `${SITE}/desk/${laneKey}/${entry.date}/`;
-  const ogImage = entry.image ? `${SITE}${entry.image}` : `${SITE}/og.jpg`;
+  const ogImage = hasCard ? `${SITE}/desk/${laneKey}/${entry.date}/og.png` : `${SITE}/og.jpg`;
+  const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
 
   const figure = entry.image
     ? `
@@ -113,7 +223,10 @@ function render(entry, laneKey) {
   <meta property="og:description" content="${escAttr(entry.dek)}" />
   <meta property="og:url" content="${url}" />
   <meta property="og:image" content="${ogImage}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@thearchvfc" />
   <meta name="twitter:title" content="${escAttr(entry.headline)}" />
   <meta name="twitter:description" content="${escAttr(entry.dek)}" />
   <meta name="twitter:image" content="${ogImage}" />
@@ -151,15 +264,21 @@ function render(entry, laneKey) {
     img { max-width: 100%; height: auto; display: block; }
     .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 1.25rem; }
 
-    .masthead { display: flex; align-items: center; justify-content: space-between; max-width: 72rem; margin: 0 auto; padding: 1.1rem 1.25rem; }
-    .wordmark { display: inline-flex; align-items: center; gap: .5rem; color: var(--cream); font-weight: 700; letter-spacing: .02em; }
+    .masthead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem .9rem; max-width: 72rem; margin: 0 auto; padding: 1.1rem 1.25rem; }
+    .wordmark { display: inline-flex; align-items: center; gap: .5rem; color: var(--cream); font-weight: 700; letter-spacing: .02em; flex-shrink: 0; white-space: nowrap; }
     .wordmark img { width: 34px; height: 34px; }
     .wordmark__the { opacity: .7; font-size: .8rem; letter-spacing: .18em; }
     .wordmark__archv { font-size: 1.15rem; font-family: "Fraunces", Georgia, serif; }
-    .masthead__actions { display: inline-flex; gap: .75rem; }
-    .btn { display: inline-block; padding: .5rem .9rem; border-radius: .5rem; font-size: .85rem; font-weight: 600; }
+    .masthead__actions { display: inline-flex; flex-wrap: wrap; gap: .6rem .75rem; }
+    .btn { display: inline-block; padding: .5rem .9rem; border-radius: .5rem; font-size: .85rem; font-weight: 600; white-space: nowrap; }
     .btn--ghost { border: 1px solid var(--gold-soft); color: var(--cream); }
     .btn--gold { background: var(--gold); color: var(--navy-deep); }
+
+    .share { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 1.75rem; }
+    .share .btn { font-size: .78rem; padding: .4rem .8rem; cursor: pointer; background: none; font-family: inherit; line-height: inherit; }
+    .share button.btn { appearance: none; -webkit-appearance: none; }
+    .share .btn:hover { border-color: var(--gold); text-decoration: none; }
+    .share [hidden] { display: none; }
 
     .article { padding: 2rem 0 1rem; }
     .breadcrumb { font-size: .8rem; letter-spacing: .04em; color: var(--cream-faint); text-transform: uppercase; margin: 0 0 1rem; }
@@ -189,7 +308,6 @@ function render(entry, laneKey) {
   <header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <nav class="masthead__actions" aria-label="Primary">
-      <a class="btn btn--ghost" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
       <a class="btn btn--ghost" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
       <a class="btn btn--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe</a>
     </nav>
@@ -199,7 +317,12 @@ function render(entry, laneKey) {
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${lane.anchor}">${esc(lane.label)}</a></p>
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
-      <p class="article__meta">${esc(longDate(entry.date))}</p>${figure}
+      <p class="article__meta">${esc(longDate(entry.date))}</p>
+      <div class="share" aria-label="Share this article">
+        <button class="btn btn--ghost" id="share-native" type="button" hidden>Share</button>
+        <a class="btn btn--ghost" id="share-x" href="${escAttr(xIntent)}" target="_blank" rel="noopener noreferrer">Share on X</a>
+        <button class="btn btn--ghost" id="share-copy" type="button">Copy link</button>
+      </div>${figure}
       <div class="article__body">
         <p><strong>${esc(entry.dek)}</strong></p>
         ${bodyHtml(entry.body)}
@@ -224,6 +347,32 @@ function render(entry, laneKey) {
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>
   </footer>
+  <script>
+    (function () {
+      var url = ${JSON.stringify(url).replace(/</g, "\\u003c")};
+      var title = ${JSON.stringify(entry.headline).replace(/</g, "\\u003c")};
+      var ph = function (ev) { if (window.posthog) posthog.capture(ev, { url: url }); };
+      var native = document.getElementById('share-native');
+      if (native && navigator.share) {
+        native.hidden = false;
+        native.addEventListener('click', function () {
+          ph('share_native');
+          navigator.share({ title: title, url: url }).catch(function () {});
+        });
+      }
+      var x = document.getElementById('share-x');
+      if (x) x.addEventListener('click', function () { ph('share_x'); });
+      var copy = document.getElementById('share-copy');
+      if (copy) copy.addEventListener('click', function () {
+        if (!(navigator.clipboard && navigator.clipboard.writeText)) return;
+        navigator.clipboard.writeText(url).then(function () {
+          ph('share_copy');
+          copy.textContent = 'Copied';
+          setTimeout(function () { copy.textContent = 'Copy link'; }, 1500);
+        }, function () {});
+      });
+    })();
+  </script>
 </body>
 </html>
 `;
@@ -231,12 +380,25 @@ function render(entry, laneKey) {
 
 /* ---------- write pages ---------- */
 let count = 0;
+let cards = 0;
 const urls = [];
 for (const [laneKey, lane] of Object.entries(LANES)) {
   for (const entry of lane.days) {
     const dir = join(OUT, "desk", laneKey, entry.date);
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, "index.html"), render(entry, laneKey));
+
+    // Per-article OG card; a failure never breaks the build, the page just keeps /og.jpg.
+    let hasCard = false;
+    try {
+      const png = await ogCard(entry, lane.label);
+      writeFileSync(join(dir, "og.png"), png);
+      hasCard = true;
+      cards++;
+    } catch (err) {
+      console.warn(`[build-article-pages] og card failed for ${laneKey}/${entry.date} (${entry.headline}): ${err && err.message ? err.message : err}`);
+    }
+
+    writeFileSync(join(dir, "index.html"), render(entry, laneKey, hasCard));
     urls.push(`  <url><loc>${SITE}/desk/${laneKey}/${entry.date}/</loc><lastmod>${entry.date}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
     count++;
   }
@@ -254,4 +416,4 @@ if (sitemapSrc && urls.length) {
   writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
 }
 
-console.log(`[build-article-pages] wrote ${count} article page(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);
+console.log(`[build-article-pages] wrote ${count} article page(s) and ${cards} og card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);

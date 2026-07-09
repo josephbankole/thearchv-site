@@ -57,6 +57,20 @@ also appends every article URL to `dist/sitemap.xml`, which by that point in the
 chain already carries the static routes plus the day pages from `build-day-pages.mjs`
 — run order matters here, this script must run last.
 
+Each canonical article page also gets a unique 1200x630 OG share card, generated at
+build time by the same script at `dist/desk/<lane>/<date>/og.png` (satori +
+@resvg/resvg-js, both devDependencies; headshots are converted webp -> png via sharp
+because satori/resvg cannot read webp). The page's `og:image` / `twitter:image` point
+at that PNG; if card generation fails for an entry the build logs it and that page
+falls back to the static `/og.jpg` — a card failure never fails the build. Card fonts
+are static TTF instances committed at `scripts/fonts/` (Fraunces SemiBold, Inter Tight
+Regular and SemiBold, pulled from the Google Fonts API; satori does not handle
+variable fonts well, so keep these static). Legacy day pages keep `/og.jpg` — they
+are noindex and not worth the render time. Article pages also carry a share row
+(native share, X intent, copy link) with PostHog events `share_native` / `share_x` /
+`share_copy`; the masthead on article sub pages has no Shop button (founder call,
+2026-07-09) and wraps instead of overlapping at narrow viewports.
+
 Note: `scripts/build-day-pages.mjs` still separately emits legacy URLs at
 `/desk/<date>/` (transfer only) and `/world-cup/<date>/` (World Cup only, no
 `leagues` support). Those pages were not removed in Build 11 to avoid an

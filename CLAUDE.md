@@ -43,12 +43,46 @@ app build before it started reading it. Do not rename fields, do not remove
 `thearchv-app/Models.swift`. The app's working rules live in
 `../thearchv-app/CLAUDE.md`.
 
+## Site structure: the page graph (site depth pass, 2026-07-09)
+
+The site is a navigable graph, not one long homepage: home -> lane index -> article ->
+onward. Three static page families sit under `/desk/`:
+
+- **Home** (`/`) — the brand statement. Each lane's section header (the `section-index`
+  line, e.g. "02 / The transfer desk") is now a link out to that lane's index page,
+  while the section's own anchor id (`#transfer-desk`, `#world-cup`, `#football-leagues`)
+  is unchanged in the DOM — the app's fallback share links still resolve. The day-rail
+  cards (`src/components/dailyDigest.ts`) are whole-card links: the entire `<a class="day">`
+  navigates to the article, guarded against the rail's drag-to-scroll by an ~8px
+  pointerdown-to-pointerup movement threshold (`DRAG_THRESHOLD_PX` in that file) that
+  cancels the click when the pointer moved more than that. This is homepage bundle code:
+  CSP-clean, no inline handlers, no client-side router.
+- **Lane index pages** (`/desk/transfer/`, `/desk/world-cup/`, `/desk/leagues/`) —
+  `scripts/build-lane-pages.mjs`, the section fronts. Every entry in the lane, newest
+  first, as a full-width whole-card link to its article page. Runs in the build chain
+  between `build-day-pages.mjs` and `build-article-pages.mjs` (see `package.json`
+  "build"); the three lane URLs are in `dist/sitemap.xml`.
+- **Article pages** (`/desk/<lane>/<date>/`) — `scripts/build-article-pages.mjs`, see
+  below. Now also carry a "More from the lane" block (previous 3 entries, whole-card
+  links, plus an "All <lane> stories" link to the lane index) and a prev/next
+  chronological nav row.
+
+Both lane and article pages share `scripts/shared/page-shell.mjs`: brand CSS, masthead,
+footer, escaping helpers, the lane registry (`LANE_META`), and the three-desk text nav
+(`deskNav()` — plain wrapping links to the three lane pages, present on both page types,
+verified collision-proof at 320px). Keep both generator scripts pulling from this shared
+module rather than re-inlining the CSS/masthead, so the two page types don't drift.
+
+This pass deliberately added no CMS, no client-side router, and did not touch the
+homepage hero/experience section, the nav's in-page scroll behaviour, or any
+`src/data/*.ts` file.
+
 ## Per-article pages
 
 `scripts/build-article-pages.mjs` runs after `vite build`, `build-content.mjs`,
-`build-feed.mjs` and `build-day-pages.mjs` (last in the chain, see `package.json`
-"build") and emits one static page per daily entry across all three lanes at
-`dist/desk/<lane>/<date>/index.html` — this is the canonical URL the feed's `url`
+`build-feed.mjs`, `build-day-pages.mjs` and `build-lane-pages.mjs` (last in the chain,
+see `package.json` "build") and emits one static page per daily entry across all three
+lanes at `dist/desk/<lane>/<date>/index.html` — this is the canonical URL the feed's `url`
 field points at and what the app's canonical shares use. Pages are self-contained
 (inline brand styles, PostHog snippet, Google Fonts), following the
 `public/start/index.html` pattern rather than `content.css` (deliberate: these pages
@@ -93,7 +127,7 @@ headshots in `public/heads/` (240px webp, committed via the `head` mode of
 archv-site-commit.mjs, never overwrite an existing face); no club crests, kits,
 photos or FIFA marks anywhere.
 
-## Open site work (as of 2026-07-08)
+## Open site work (as of 2026-07-09)
 
 - Football Leagues SECTION UI: the feed lane and app shelf are live, the website has
   no visible Leagues section yet.
@@ -103,3 +137,10 @@ photos or FIFA marks anywhere.
   pages" above. Remaining follow-up: decide whether to retire the older
   `build-day-pages.mjs` URLs (`/desk/<date>/`, `/world-cup/<date>/`) now that the
   canonical lane-scoped pages exist.
+- Site depth pass (SITE-DEPTH-PLAN.md, founder approved 2026-07-09): DONE. Lane index
+  pages (`/desk/transfer/`, `/desk/world-cup/`, `/desk/leagues/`), whole-card homepage
+  day-rail links with drag-vs-click discrimination, homepage section headers linking to
+  their lane pages (anchors unchanged), and article-page "more from the lane" +
+  prev/next + three-desk nav. See "Site structure: the page graph" above. Not done in
+  this pass, deliberately: no CMS, no client-side router, no nav redesign beyond the
+  header links, no search.

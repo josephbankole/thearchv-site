@@ -24,9 +24,15 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
   const dragState = { dragged: false };
 
   days.forEach((entry, i) => {
-    const card = document.createElement('article');
+    // The whole card is one <a> (SITE-DEPTH-PLAN.md W2.2): single accessible link per card,
+    // keyboard/screen-reader focusable, no nested links pretending to be the "real" one. The
+    // rail is drag-to-scroll, so enableDrag() below suppresses the click when the pointer moved
+    // past the threshold between pointerdown and pointerup.
+    const card = document.createElement('a');
     card.className = 'day';
     card.setAttribute('role', 'listitem');
+    card.href = `/desk/${lane}/${entry.date}/`;
+    card.setAttribute('aria-label', entry.headline);
 
     const status =
       entry.status === 'pending'
@@ -38,8 +44,6 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
       ? `<img class="day__avatar" src="${entry.image}" alt="${entry.imageAlt ?? ''}" loading="lazy" decoding="async" width="52" height="52" />`
       : '';
 
-    const href = `/desk/${lane}/${entry.date}/`;
-
     card.innerHTML = `
       <div class="day__top">
         ${avatar}
@@ -47,14 +51,13 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
         <span class="day__label">${entry.day}</span>
         ${status}
       </div>
-      <h3 class="day__headline"><a class="day__link" href="${href}">${entry.headline}</a></h3>
+      <h3 class="day__headline">${entry.headline}</h3>
       <p class="day__dek">${entry.dek}</p>
       <p class="day__body">${entry.body}</p>
     `;
 
-    // guard the read-through link against a click that ends a drag
-    const link = card.querySelector<HTMLAnchorElement>('.day__link');
-    link?.addEventListener('click', (e) => {
+    // guard whole-card navigation against a click that ends a drag
+    card.addEventListener('click', (e) => {
       if (dragState.dragged) { e.preventDefault(); return; }
       track('digest_day_open', { source, day: entry.day, date: entry.date, index: i });
     });
@@ -76,7 +79,10 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
 
 // pointer drag-to-scroll, shared behaviour with the poster rail. Mutates the shared
 // `dragState` object so the click guards above (attached before this runs) see live
-// updates through the same reference.
+// updates through the same reference. Threshold is ~8px (SITE-DEPTH-PLAN.md W2.2): past that,
+// a pointerdown-to-pointerup sequence is treated as a drag, not a card click.
+const DRAG_THRESHOLD_PX = 8;
+
 function enableDrag(rail: HTMLElement, dragState: { dragged: boolean }): void {
   let down = false, startX = 0, startScroll = 0;
   rail.addEventListener('pointerdown', (e) => {
@@ -86,7 +92,7 @@ function enableDrag(rail: HTMLElement, dragState: { dragged: boolean }): void {
   rail.addEventListener('pointermove', (e) => {
     if (!down) return;
     const dx = e.clientX - startX;
-    if (Math.abs(dx) > 6) dragState.dragged = true;
+    if (Math.abs(dx) > DRAG_THRESHOLD_PX) dragState.dragged = true;
     rail.scrollLeft = startScroll - dx;
   });
   const end = () => { down = false; rail.classList.remove('is-dragging'); setTimeout(() => (dragState.dragged = false), 0); };

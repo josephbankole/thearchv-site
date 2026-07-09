@@ -165,6 +165,8 @@ export function pageStyles() {
 
     /* lane index page: full-width whole-card list */
     .lane { padding: 1.5rem 0 1rem; }
+    .lane h1 { margin-bottom: 1.1rem; }
+    .lane__lede { margin-bottom: 2.4rem; }
     .lane__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     .lane__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 2rem; }
     .lane-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }

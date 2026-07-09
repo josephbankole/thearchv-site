@@ -10,10 +10,8 @@ export const transferDays: DayEntry[] = [
     day: "Wednesday",
     headline: "Bournemouth hold the line on Alex Scott.",
     dek: "United push. The answer is still no.",
-    body: "United's search for a Premier League midfielder now runs through Alex Scott, and Bournemouth are not making it easy. Told directly to United, Arsenal and Man City this week: Scott is not for sale, not at any price, not this summer. Bournemouth would rather build a new contract around him, release clause included, with talks picking up again once the World Cup ends. United are pushing anyway, having already missed out on Elliot Anderson to City and Mateus Fernandes to Spurs. Elsewhere, a reported seventy million pound bid for Real Madrid's Aurelien Tchouameni is expected to be turned down, and Cristian Orozco, United's second summer signing at seventeen, is due in Manchester this weekend for his medical.",
+    body: "United's search for a Premier League midfielder now runs through Alex Scott, and Bournemouth are not making it easy. Told directly to United, Arsenal and Man City this week: Scott is not for sale, not at any price, not this summer. Bournemouth would rather build a new contract around him, release clause included, with talks picking up again once the World Cup ends. United are pushing anyway, having already missed out on Elliot Anderson to City and Mateus Fernandes to Spurs. Elsewhere, a reported seventy million pound bid for Real Madrid's Aurelien Tchouameni is expected to be turned down, and Cristian Orozco, United's second summer signing at seventeen, is due in Manchester this weekend for his medical.\n\nUpdate, 8 Jul: the midfield search found its answer elsewhere. United agreed a fifty million pound deal with Chelsea for Andrey Santos, forty eight million up front plus add-ons, with personal terms in place and a medical to follow, per ESPN and multiple outlets. AGREED, not yet confirmed by either club. He would be the second midfield arrival of the summer after Ederson.",
     status: "verified",
-    image: "/heads/scott.webp",
-    imageAlt: "Alex Scott, illustrated by The ARCHV.",
   },
   {
     date: "2026-07-07",

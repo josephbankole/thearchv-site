@@ -87,6 +87,12 @@ main, .masthead, .footer { position: relative; z-index: 2; }
 }
 .section-index { color: var(--cream-faint); margin-bottom: 2.5rem; display: inline-flex; align-items: center; gap: 0.85rem; }
 .index-tick { display: inline-block; width: 2.5rem; height: 1px; background: var(--gold); transform-origin: left center; }
+/* section header -> lane page link (SITE-DEPTH-PLAN.md W2.1). In-page anchors on the sections
+   themselves are unchanged; this link only carries readers out to the lane's own page. */
+.section-index__link { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s var(--ease); }
+.section-index__link:hover { border-color: var(--gold); }
+.section-index__link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.reduced-motion .section-index__link { transition: none; }
 
 .dot { color: var(--gold); }
 
@@ -384,7 +390,11 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
   background: linear-gradient(180deg, rgba(19, 58, 82, 0.5), rgba(7, 28, 43, 0.5));
   border: 1px solid var(--cream-faint); border-radius: 3px; padding: clamp(1.5rem, 3vw, 2.25rem);
   display: flex; flex-direction: column; min-height: 320px;
+  /* whole-card link (SITE-DEPTH-PLAN.md W2.2): .day is now the <a> itself */
+  color: inherit; text-decoration: none;
 }
+.day:hover { text-decoration: none; }
+.day:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 .day__top { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
 .day__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: center 20%; flex: 0 0 auto; border: 1px solid var(--gold-soft); background: var(--navy-deep); box-shadow: 0 0 0 4px rgba(7, 28, 43, 0.6); }
 .day__date { font-family: var(--serif); font-weight: 360; font-size: 1.5rem; letter-spacing: -0.01em; }
@@ -393,9 +403,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .day__status--live { color: var(--gold); border: 1px solid var(--gold-soft); }
 .day__status--done { background: var(--pitch); color: var(--cream); }
 .day__headline { font-family: var(--serif); font-weight: 360; font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 0.6rem; }
-.day__link { color: inherit; text-decoration: none; }
-.day__link:hover { text-decoration: underline; }
-.day__link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 .day__dek { font-size: var(--t-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.1rem; }
 .day__body { color: var(--cream-dim); font-size: 0.95rem; line-height: 1.6; }
 

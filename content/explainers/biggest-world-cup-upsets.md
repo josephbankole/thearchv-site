@@ -78,4 +78,4 @@ For 2026 the maths tilts further towards chaos. The tournament expands to 48 tea
 
 *Written by The ARCHV. Results and details verified against contemporary match reports and FIFA tournament records (FIFA.com, BBC, ESPN). Player illustrations across the site are original stylised artwork, not photographs.*
 
-*The ARCHV documents football history, illustrated. If you want the next upset the night it happens, follow [@thearchv_ca](https://instagram.com/thearchv_ca).*
+*The ARCHV documents football history, illustrated. If you want the next upset the night it happens, follow [@thearchvfc](https://instagram.com/thearchvfc).*

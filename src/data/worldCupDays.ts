@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-08",
+    day: "Day 28",
+    headline: "The round of sixteen is complete. Four quarter finals are set.",
+    dek: "Switzerland beat Colombia on penalties to close out the last-sixteen round.",
+    body: "Switzerland beat Colombia on penalties, four three, after a scoreless draw, the final match of the round of sixteen and the result that completes the quarter final draw. All four ties are now set: France face Morocco, Spain face Belgium, Norway face England, and Argentina face Switzerland, matches spread across 9 to 11 July. It closes out a knockout round that has already produced Ronaldo's career-closing exit, Neymar's international retirement, and Cape Verde's near-miss against the holders. The World Cup now moves into its final stretch, eight nations left, four matches standing between any of them and a place in the last four.",
+    status: "verified",
+  },
+  {
     date: "2026-07-09",
     day: "Day 29",
     headline: "France do it again to Morocco.",

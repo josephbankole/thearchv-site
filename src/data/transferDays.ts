@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-09",
+    day: "Thursday",
+    headline: "Santos moves to the medical stage.",
+    dek: "United's fifty million pound midfielder edges closer.",
+    body: "United's summer midfield rebuild took its next real step. Andrey Santos, the twenty two year old Brazil international, was given the green light for a medical and flew to Manchester to finalise personal terms on a deal worth around fifty million pounds, add ons included. Chelsea keep a ten percent sell on clause. The contract on offer runs to 2031. It is not signed yet, so the desk keeps it at agreed rather than done, but every step this week has pointed the same way. Elsewhere, the Alex Scott pursuit sits where it has sat for a fortnight. Bournemouth still will not sell, United still will not walk away, and Aurelien Tchouameni is gone, a fresh Real Madrid contract closing that door for good.",
+    status: "verified",
+  },
+  {
     date: "2026-07-08",
     day: "Wednesday",
     headline: "Bournemouth hold the line on Alex Scott.",

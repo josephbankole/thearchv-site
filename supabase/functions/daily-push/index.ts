@@ -22,20 +22,30 @@ Deno.serve(async (req) => {
 
   const supabase = adminClient();
 
-  // 1. Has the feed changed since we last pushed?
-  let buildHash = "";
+  // 1. Has the LEAD STORY changed since we last pushed? We key on the today feed's own hash,
+  //    not the combined buildHash: a poster tweak or a leagues entry must not consume the day's
+  //    single push slot with a stale lead. push_state.last_build_hash now stores the today-feed
+  //    hash (migrated 2026-07-10; column name kept for compatibility).
+  let todayHash = "";
   try {
     const index = await (await fetch(FEED_INDEX, { cache: "no-store" })).json();
-    buildHash = String(index.buildHash ?? "");
+    const todayFeed = Array.isArray(index.feeds)
+      ? index.feeds.find((f: { name?: string }) => f?.name === "today")
+      : undefined;
+    todayHash = String(todayFeed?.hash ?? "");
+    // Fallback for an older manifest without per-feed hashes: fail toward NOT sending by
+    // reusing the combined hash only if it is present (never send on an empty key).
+    if (!todayHash) todayHash = String(index.buildHash ?? "");
   } catch (e) {
     return json({ ok: false, error: `feed unreachable: ${String(e).slice(0, 120)}` }, 200);
   }
+  if (!todayHash) return json({ ok: false, error: "feed manifest carried no hash" }, 200);
 
   const { data: state } = await supabase
     .from("push_state").select("last_build_hash, last_sent_at").eq("id", 1).maybeSingle();
 
-  if (state?.last_build_hash && state.last_build_hash === buildHash) {
-    return json({ ok: true, skipped: "no new build" }, 200);
+  if (state?.last_build_hash && state.last_build_hash === todayHash) {
+    return json({ ok: true, skipped: "lead story unchanged" }, 200);
   }
   if (state?.last_sent_at) {
     const lastDay = new Date(state.last_sent_at).toISOString().slice(0, 10);
@@ -72,15 +82,24 @@ Deno.serve(async (req) => {
   const { data: rows } = await supabase.from("push_tokens").select("token").eq("opt_in", true);
   const tokens = (rows ?? []).map((r) => r.token as string);
   if (tokens.length === 0) {
-    await recordSent(supabase, buildHash);
+    await recordSent(supabase, todayHash);
     return json({ ok: true, sent: 0, note: "no opted-in tokens" }, 200);
   }
 
   const jwt = await makeAPNsJWT(p8, keyId, teamId);
   const payload = JSON.stringify({ aps: { alert: { title, body }, sound: "default" }, archv: route });
 
+  // Record the send BEFORE the fan-out, deliberately. Tradeoff: if this function crashes or times
+  // out partway through the loop below, the sent-record already exists, so the next cron tick will
+  // NOT re-send — some devices may miss that day's push. The old order (record after) meant a
+  // mid-loop crash re-ran the whole loop on the next tick and double-pushed everyone who already
+  // got it. For a one-push-a-day promise, at-most-once beats at-least-twice.
+  await recordSent(supabase, todayHash);
+
   let sent = 0;
+  let failed = 0;
   const dead: string[] = [];
+  const failureReasons: Record<string, number> = {};
   for (const token of tokens) {
     const res = await fetch(`https://${host}/3/device/${token}`, {
       method: "POST",
@@ -93,19 +112,37 @@ Deno.serve(async (req) => {
       },
       body: payload,
     });
-    if (res.status === 200) sent++;
-    else if (res.status === 410 || res.status === 400) dead.push(token); // unregistered or bad token
+    if (res.status === 200) { sent++; continue; }
+    failed++;
+    // Reason-gated deletion: only BadDeviceToken / Unregistered mean the token itself is dead.
+    // A systemic 400 (BadTopic from a bundle-id slip, TooManyRequests, auth errors) must never
+    // delete tokens.
+    let reason = "";
+    try { reason = String((await res.json())?.reason ?? ""); } catch { /* non-JSON body */ }
+    failureReasons[reason || `http_${res.status}`] = (failureReasons[reason || `http_${res.status}`] ?? 0) + 1;
+    if (reason === "BadDeviceToken" || reason === "Unregistered") dead.push(token);
   }
-  if (dead.length) await supabase.from("push_tokens").delete().in("token", dead);
 
-  await recordSent(supabase, buildHash);
-  return json({ ok: true, sent, removed: dead.length }, 200);
+  // Deletion cap: a single run may not delete more than 25 tokens or more than 20% of the table.
+  // Past the cap it deletes NONE and surfaces the anomaly — a systemic APNs error must not wipe
+  // the token table.
+  let removed = 0;
+  let deletionAnomaly: Record<string, unknown> | undefined;
+  if (dead.length > 25 || dead.length > tokens.length * 0.2) {
+    deletionAnomaly = { tokenDeletionAnomaly: true, wouldHaveDeleted: dead.length, totalTokens: tokens.length };
+  } else if (dead.length) {
+    await supabase.from("push_tokens").delete().in("token", dead);
+    removed = dead.length;
+  }
+
+  return json({ ok: true, sent, failed, removed, failureReasons, ...deletionAnomaly }, 200);
 });
 
-async function recordSent(supabase: ReturnType<typeof adminClient>, buildHash: string) {
+// last_build_hash stores the TODAY feed's hash as of 2026-07-10 (column name kept).
+async function recordSent(supabase: ReturnType<typeof adminClient>, todayHash: string) {
   await supabase.from("push_state").upsert({
     id: 1,
-    last_build_hash: buildHash,
+    last_build_hash: todayHash,
     last_sent_at: new Date().toISOString(),
   });
 }

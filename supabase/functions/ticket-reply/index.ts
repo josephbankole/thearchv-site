@@ -3,6 +3,7 @@
 // Verifies ownership, appends the message, and reopens a resolved ticket so an agent picks it up
 // again at the tier that last handled it.
 import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
+import { checkAppSecret } from "../_shared/appGuard.ts";
 
 // Reopening: map the ticket's tier to the "working" status the right agent watches.
 const REOPEN_STATUS: Record<string, string> = {
@@ -15,6 +16,11 @@ const RESOLVED = new Set(["resolved_l1", "resolved_l2", "resolved", "closed"]);
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
+
+  // Soft app-secret guard (build 19+ sends x-archv-app). See _shared/appGuard.ts for the
+  // soft-vs-hard rollout note; device_id ownership checks below remain the real backstop either way.
+  const guardResp = checkAppSecret(req, "ticket-reply");
+  if (guardResp) return guardResp;
 
   let payload: Record<string, unknown>;
   try {

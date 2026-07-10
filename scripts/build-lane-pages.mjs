@@ -1,7 +1,7 @@
 /* scripts/build-lane-pages.mjs — emits the three lane index pages (the "section fronts"),
    SITE-DEPTH-PLAN.md W1:
      dist/desk/transfer/index.html      "Transfer Desk"
-     dist/desk/world-cup/index.html     "World Cup"
+     dist/desk/world-cup/index.html     "International Football"
      dist/desk/leagues/index.html       "Football Leagues"
    Same data source and page shell as scripts/build-article-pages.mjs (see scripts/shared/
    page-shell.mjs): masthead, three-desk nav, brand styles, footer. Every entry in a lane is
@@ -41,7 +41,7 @@ try {
 
 const LANES = {
   transfer: { ...LANE_META.transfer, days: data.transferDays, intro: "Every move on Manchester United, checked against two sources and drawn the same day. If it is done, we say done. If it is a rumour, we say rumour." },
-  "world-cup": { ...LANE_META["world-cup"], days: data.worldCupDays, intro: "A one-minute read on the tournament, every day it is on. Checked against two sources before anything goes up." },
+  "world-cup": { ...LANE_META["world-cup"], days: data.worldCupDays, intro: "Men's and women's international football, every competition, every day it is on. Checked against two sources before anything goes up." },
   leagues: { ...LANE_META.leagues, days: data.leaguesDays, intro: "Title races, promotions, sackings and the tables behind them, tracked day by day." },
 };
 

@@ -18,7 +18,7 @@ export const longDate = (iso) => {
 // lane = URL segment under /desk/, anchor = the homepage section this lane links back to.
 export const LANE_META = {
   transfer: { label: "Transfer Desk", anchor: "#transfer-desk" },
-  "world-cup": { label: "World Cup", anchor: "#world-cup" },
+  "world-cup": { label: "International Football", anchor: "#world-cup" },
   leagues: { label: "Football Leagues", anchor: "#football-leagues" },
 };
 

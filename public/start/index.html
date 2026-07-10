@@ -93,6 +93,21 @@
       outline: 2px solid var(--gold);
       outline-offset: 3px;
     }
+    /* App Store badge: Apple's standard "Download on the App Store" treatment,
+       drawn inline (no external asset load, CSP-clean). Shipped hidden until
+       flip day — see FLIP-DAY.md at the repo root. */
+    .appstore-badge {
+      display: block;
+      width: 100%;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+    .appstore-badge svg { display: block; width: 100%; height: auto; }
+    .appstore-badge:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -101,16 +116,29 @@
     <p class="tagline">Football's archive, told properly.</p>
 
     <nav class="links">
+      <a class="appstore-badge" id="app-store-badge" href="https://apps.apple.com/app/idPLACEHOLDER" hidden><!-- APP_STORE_URL_PLACEHOLDER -->
+        <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store">
+          <rect x="0.5" y="0.5" width="199" height="59" rx="10" fill="#000000" stroke="#A6A6A6" stroke-width="1"/>
+          <g fill="#FFFFFF">
+            <!-- Apple mark -->
+            <path d="M32.9 20.9c-.9 1.1-2.4 2-3.9 1.9-.2-1.5.5-3.1 1.4-4.1.9-1.1 2.5-1.9 3.8-2 .2 1.6-.5 3.1-1.3 4.2zm1.3 2.1c-2.2-.1-4 1.2-5.1 1.2-1.1 0-2.6-1.2-4.3-1.1-2.2 0-4.2 1.3-5.4 3.2-2.3 4-.6 9.9 1.6 13.2 1.1 1.6 2.4 3.4 4.1 3.3 1.6-.1 2.3-1 4.2-1s2.5 1 4.3 1c1.8 0 2.9-1.6 4-3.2 1.2-1.8 1.8-3.6 1.8-3.7-.1 0-3.4-1.3-3.4-5.1 0-3.2 2.6-4.7 2.7-4.8-1.5-2.2-3.8-2.4-4.5-2.5z"/>
+            <!-- Wordmark: two-line "Download on the / App Store" -->
+            <text x="47" y="26" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="9" letter-spacing="0.3">DOWNLOAD ON THE</text>
+            <text x="46" y="42" font-family="Georgia,'Times New Roman',serif" font-size="18">App Store</text>
+          </g>
+        </svg>
+      </a>
       <a class="btn" href="https://thearchv.ca/">Read the archive</a>
       <a class="btn" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">The ARCHV Dispatch</a>
       <a class="btn" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop the store</a>
     </nav>
   </main>
   <script>
-    document.querySelectorAll('.links .btn').forEach(function (a) {
+    document.querySelectorAll('.links .btn, .links .appstore-badge').forEach(function (a) {
       a.addEventListener('click', function () {
         var target = a.href.indexOf('substack') > -1 ? 'dispatch'
-          : a.href.indexOf('etsy') > -1 ? 'store' : 'archive';
+          : a.href.indexOf('etsy') > -1 ? 'store'
+          : a.href.indexOf('apps.apple.com') > -1 ? 'appstore' : 'archive';
         if (window.posthog) posthog.capture('start_cta_click', { target: target, href: a.href });
       });
     });

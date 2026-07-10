@@ -8,6 +8,11 @@
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 
+// GO-LIVE DAY placeholder (LAUNCH-RUNWAY.md "ready-to-flip"). Every masthead's "App" button
+// and the /start badge point here, all shipped `hidden` until flip day. See FLIP-DAY.md at
+// the repo root for the exact lines to change. <!-- APP_STORE_URL_PLACEHOLDER -->
+export const APP_STORE_URL = "https://apps.apple.com/app/idPLACEHOLDER";
+
 export const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 export const longDate = (iso) => {
@@ -41,6 +46,7 @@ export function masthead() {
   return `<header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <nav class="masthead__actions" aria-label="Primary">
+      <a class="btn btn--ghost" href="${APP_STORE_URL}" hidden><!-- APP_STORE_URL_PLACEHOLDER -->App</a>
       <a class="btn btn--ghost" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
       <a class="btn btn--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe</a>
     </nav>

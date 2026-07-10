@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-09",
+    day: "Day 29",
+    headline: "France do it again to Morocco.",
+    dek: "Same score, same stage, same story.",
+    body: "The quarter finals opened with a rematch. France beat Morocco two nil at Gillette Stadium, the exact scoreline from their 2022 semi final, and once again it was Kylian Mbappe at the centre of it. He missed a first half penalty, then made up for it in the sixtieth minute, with Ousmane Dembele adding the second six minutes later. France have won all six matches so far without needing extra time and are through to a third straight World Cup semi final. Morocco remain the only African nation ever to reach one, a mark France have now denied them twice running. Mbappe leads the race for the Golden Boot heading into the weekend's remaining quarter finals.",
+    status: "verified",
+    image: "/heads/mbappe.webp",
+    imageAlt: "Kylian Mbappe, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-07",
     day: "Day 27",
     headline: "Messi drags Argentina back from the brink.",

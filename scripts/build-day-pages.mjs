@@ -38,7 +38,7 @@ try {
 
 const SECTIONS = {
   transfer: { base: "desk", lane: "transfer", label: "Transfer Desk", days: data.transferDays },
-  worldcup: { base: "world-cup", lane: "world-cup", label: "World Cup", days: data.worldCupDays },
+  worldcup: { base: "world-cup", lane: "world-cup", label: "International Football", days: data.worldCupDays },
 };
 
 function body(text) {

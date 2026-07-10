@@ -12,7 +12,7 @@ const NAV: Array<{ id: string; label: string }> = [
   { id: 'hero', label: 'Top' },
   { id: 'football-leagues', label: 'Football leagues' },
   { id: 'transfer-desk', label: 'Transfer desk' },
-  { id: 'world-cup', label: 'World Cup' },
+  { id: 'world-cup', label: 'International Football' },
   { id: 'archive', label: 'Archive' },
   { id: 'legends', label: 'Legends' },
   { id: 'long-reads', label: 'Long reads' },

@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-11",
+    day: "Day 31",
+    headline: "Spain edge Belgium late. The semi-final draws itself.",
+    dek: "Merino's 88th-minute winner, and a United goalkeeper thrown into the fire.",
+    body: "Spain needed until the 88th minute to see off Belgium two one at SoFi Stadium, Mikel Merino scoring the winner after Fabian Ruiz and Charles De Ketelaere had cancelled each other out. Belgium lost more than the game. Thibaut Courtois went off injured in the second half, replaced by Manchester United's own Senne Lammens, and captain Youri Tielemans had already missed the match after a warm-up injury. Spain now face France in the semi-final, a rematch neither side chose but both have earned. Today brings the other two quarter-finals, Norway against England and Argentina against Switzerland.",
+    status: "verified",
+  },
+  {
     date: "2026-07-08",
     day: "Day 28",
     headline: "The round of sixteen is complete. Four quarter finals are set.",

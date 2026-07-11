@@ -55,6 +55,42 @@ the top-level button row, same hidden + display:none convention.
      "Get the app".
    - Both marked with an `APP_STORE_URL_PLACEHOLDER` comment directly above.
 
+## Hamburger masthead (founder design, 2026-07-11)
+
+The masthead button row (Follow / Subscribe / Shop / hidden App) was replaced
+site-wide by a hamburger: a three-line toggle button at the masthead's right,
+opening a small navy dropdown panel (cream text, gold hover/Subscribe link)
+listing Follow, Subscribe to the Dispatch, Shop, and App. Same three page
+families as the rest of this doc, same source locations:
+
+- **Homepage** (`index.html`) — markup in the masthead `<header>`, styles in
+  `src/style.css` (`.masthead__menu`, `.masthead__toggle`, `.masthead__panel*`),
+  behaviour in `src/ui/chrome.ts`'s `initMastheadMenu()`, wired in `src/main.ts`.
+  CSP-safe: no inline handlers, the toggle listens via `addEventListener` in the
+  bundled TS.
+- **Lane + article pages** (`scripts/shared/page-shell.mjs`) — `masthead()` emits
+  the button + panel markup and an inline `<script>` with the same open/close
+  logic (these pages carry no CSP, and already use inline `<script>` for the
+  PostHog snippet and the article share row, so this matches the existing
+  convention rather than introducing a new one). Panel styles are in
+  `pageStyles()`.
+- **Older content pages** (`scripts/build-content.mjs`, `public/content.css`) —
+  same markup + inline script pattern as above, styles in the external
+  `content.css` since these pages don't inline their CSS.
+
+Behaviour: `aria-expanded` / `aria-controls` on the button, plain wrapping
+links inside (not a full ARIA `menu`, so normal Tab order works with no
+roving-tabindex needed), Escape closes and returns focus to the button, a
+document click outside the panel closes it. No CSS transition on open/close
+(the `hidden` attribute is toggled directly), so it is reduced-motion safe by
+construction rather than needing a media-query opt-out. Verified working at
+320px on all three page families and at desktop width.
+
+The App link inside the panel keeps the same `hidden` + `style="display:none"`
++ `APP_STORE_URL_PLACEHOLDER` convention as before — flipping it live still
+means removing both, per the file-by-file list above, just inside the panel
+now instead of the old top-level button row.
+
 ## After editing
 
 ```

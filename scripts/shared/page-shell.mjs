@@ -42,15 +42,57 @@ export function deskNav(currentLane) {
     </nav>`;
 }
 
+// Hamburger masthead (founder design, 2026-07-11): a disclosure button revealing a small
+// brand-styled dropdown (Follow / Subscribe / Shop / App, App hidden until flip day, same
+// hidden + display:none convention as before). Shared by lane index and article pages so
+// both stay in lockstep with the homepage's version of the same pattern (src/ui/chrome.ts).
+// No inline event handlers: the toggle behaviour lives in a plain <script> block wired via
+// addEventListener, matching the existing inline-script convention on this page family
+// (posthogSnippet(), the share-row script in build-article-pages.mjs).
 export function masthead() {
   return `<header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
-    <nav class="masthead__actions" aria-label="Primary">
-      <a class="btn btn--ghost" href="${APP_STORE_URL}" hidden style="display:none"><!-- APP_STORE_URL_PLACEHOLDER -->App</a>
-      <a class="btn btn--ghost" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
-      <a class="btn btn--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe</a>
-    </nav>
-  </header>`;
+    <div class="masthead__menu">
+      <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
+        <span class="masthead__toggle-bar"></span>
+        <span class="masthead__toggle-bar"></span>
+        <span class="masthead__toggle-bar"></span>
+      </button>
+      <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+        <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
+        <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
+        <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a class="masthead__panel-link" href="${APP_STORE_URL}" hidden style="display:none"><!-- APP_STORE_URL_PLACEHOLDER -->App</a>
+      </nav>
+    </div>
+  </header>
+  <script>
+    (function () {
+      var toggle = document.getElementById('masthead-toggle');
+      var panel = document.getElementById('masthead-panel');
+      if (!toggle || !panel) return;
+      function onKeydown(e) { if (e.key === 'Escape') close(true); }
+      function onDocClick(e) {
+        if (e.target !== toggle && !toggle.contains(e.target) && !panel.contains(e.target)) close(false);
+      }
+      function open() {
+        panel.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        document.addEventListener('keydown', onKeydown);
+        document.addEventListener('click', onDocClick, true);
+      }
+      function close(returnFocus) {
+        panel.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', onKeydown);
+        document.removeEventListener('click', onDocClick, true);
+        if (returnFocus) toggle.focus();
+      }
+      toggle.addEventListener('click', function () {
+        if (panel.hidden) open(); else close(false);
+      });
+    })();
+  </script>`;
 }
 
 export function footer() {
@@ -114,10 +156,34 @@ export function pageStyles() {
     .wordmark img { width: 34px; height: 34px; }
     .wordmark__the { opacity: .7; font-size: .8rem; letter-spacing: .18em; }
     .wordmark__archv { font-size: 1.15rem; font-family: "Fraunces", Georgia, serif; }
-    .masthead__actions { display: inline-flex; flex-wrap: wrap; gap: .6rem .75rem; }
     .btn { display: inline-block; padding: .5rem .9rem; border-radius: .5rem; font-size: .85rem; font-weight: 600; white-space: nowrap; }
     .btn--ghost { border: 1px solid var(--gold-soft); color: var(--cream); }
     .btn--gold { background: var(--gold); color: var(--navy-deep); }
+
+    /* masthead hamburger menu (founder design, 2026-07-11) */
+    .masthead__menu { position: relative; flex-shrink: 0; }
+    .masthead__toggle {
+      display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; width: 42px; height: 42px; padding: 0; border: 1px solid var(--gold-soft);
+      border-radius: .4rem; background: transparent; cursor: pointer;
+    }
+    .masthead__toggle:hover { border-color: var(--cream); }
+    .masthead__toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .masthead__toggle-bar { display: block; width: 18px; height: 2px; background: var(--cream); }
+    .masthead__panel {
+      position: absolute; top: calc(100% + .5rem); right: 0; z-index: 20; min-width: 13.5rem;
+      max-width: calc(100vw - 2.5rem);
+      background: var(--navy-deep); border: 1px solid var(--cream-faint); border-radius: .5rem;
+      padding: .35rem; display: flex; flex-direction: column; gap: .1rem;
+      box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.55);
+    }
+    .masthead__panel[hidden] { display: none; }
+    .masthead__panel-link {
+      display: block; padding: .65em .8em; border-radius: .35rem; font-size: .85rem; font-weight: 600;
+      color: var(--cream);
+    }
+    .masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(242, 234, 211, .08); color: var(--gold); text-decoration: none; }
+    .masthead__panel-link--gold { color: var(--gold); }
 
     /* three-desk text nav (W3.3): plain, wrapping, never collides at 320px */
     .desknav { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem .9rem; display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }

@@ -128,17 +128,42 @@ main, .masthead, .footer { position: relative; z-index: 2; }
   mix-blend-mode: difference;
 }
 .masthead.is-hidden { transform: translateY(-110%); }
-.masthead__actions { display: inline-flex; align-items: center; gap: 0.75rem; }
-.masthead__shop { mix-blend-mode: difference; }
-.masthead__app { mix-blend-mode: difference; }
 .wordmark { display: inline-flex; align-items: center; gap: 0.5em; letter-spacing: 0.02em; }
 .wordmark__badge { width: 38px; height: 38px; display: block; }
 .wordmark__the { font-family: var(--grotesque); font-size: 0.7rem; letter-spacing: 0.3em; color: var(--cream-dim); }
 .wordmark__archv { font-family: var(--serif); font-weight: 340; font-size: 1.4rem; letter-spacing: 0.04em; }
 .wordmark--lg .wordmark__archv { font-size: clamp(2.2rem, 6vw, 4rem); }
 .wordmark--lg .wordmark__the { font-size: 0.9rem; }
-.masthead__follow { mix-blend-mode: difference; }
-@media (max-width: 600px) { .masthead__follow { display: none; } }
+
+/* ---------- masthead hamburger menu (founder design, 2026-07-11) ---------- */
+.masthead__menu { position: relative; }
+.masthead__toggle {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 5px; width: 44px; height: 44px; padding: 0; border: 1px solid var(--cream-faint);
+  border-radius: 2px; background: transparent; cursor: pointer; mix-blend-mode: difference;
+  transition: border-color 0.4s;
+}
+.masthead__toggle:hover { border-color: var(--cream); }
+.masthead__toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.masthead__toggle-bar { display: block; width: 20px; height: 2px; background: var(--cream); }
+.masthead__panel {
+  position: absolute; top: calc(100% + 0.6rem); right: 0; z-index: 60; min-width: 15rem;
+  max-width: calc(100vw - 2 * var(--gutter));
+  background: var(--navy-deep); border: 1px solid var(--cream-faint); border-radius: 2px;
+  padding: 0.4rem; display: flex; flex-direction: column; gap: 0.1rem;
+  box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.55);
+}
+.masthead__panel[hidden] { display: none; }
+.masthead__panel-link {
+  display: block; padding: 0.7em 0.9em; border-radius: 2px;
+  font-family: var(--grotesque); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.02em;
+  color: var(--cream); transition: background 0.3s, color 0.3s;
+}
+.masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(242, 234, 211, 0.08); color: var(--gold); }
+.masthead__panel-link--gold { color: var(--gold); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .masthead__toggle, .masthead__panel-link { transition: none; }
+}
 
 /* ---------- hero ---------- */
 .hero {

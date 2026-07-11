@@ -157,12 +157,47 @@ function render(p, allPages) {
 <body>
   <header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
-    <nav class="masthead__actions" aria-label="Primary">
-      <a class="btn btn--ghost" href="${APP_STORE_URL}" hidden style="display:none"><!-- APP_STORE_URL_PLACEHOLDER -->App</a>
-      <a class="btn btn--ghost" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
-      <a class="btn btn--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe</a>
-    </nav>
+    <div class="masthead__menu">
+      <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
+        <span class="masthead__toggle-bar"></span>
+        <span class="masthead__toggle-bar"></span>
+        <span class="masthead__toggle-bar"></span>
+      </button>
+      <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+        <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
+        <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
+        <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a class="masthead__panel-link" href="${APP_STORE_URL}" hidden style="display:none"><!-- APP_STORE_URL_PLACEHOLDER -->App</a>
+      </nav>
+    </div>
   </header>
+  <script>
+    (function () {
+      var toggle = document.getElementById('masthead-toggle');
+      var panel = document.getElementById('masthead-panel');
+      if (!toggle || !panel) return;
+      function onKeydown(e) { if (e.key === 'Escape') close(true); }
+      function onDocClick(e) {
+        if (e.target !== toggle && !toggle.contains(e.target) && !panel.contains(e.target)) close(false);
+      }
+      function open() {
+        panel.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        document.addEventListener('keydown', onKeydown);
+        document.addEventListener('click', onDocClick, true);
+      }
+      function close(returnFocus) {
+        panel.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', onKeydown);
+        document.removeEventListener('click', onDocClick, true);
+        if (returnFocus) toggle.focus();
+      }
+      toggle.addEventListener('click', function () {
+        if (panel.hidden) open(); else close(false);
+      });
+    })();
+  </script>
   <main class="wrap">
     <article class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(meta.href)}">${esc(meta.label)}</a></p>

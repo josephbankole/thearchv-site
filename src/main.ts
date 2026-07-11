@@ -8,7 +8,7 @@ import { initArchiveRail } from './components/archiveRail';
 import { initDailyDigest } from './components/dailyDigest';
 import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
-import { initChrome } from './ui/chrome';
+import { initChrome, initMastheadMenu } from './ui/chrome';
 import { initAnalytics } from './analytics';
 import { leaguesDays } from './data/leaguesDays';
 import { transferDays } from './data/transferDays';
@@ -29,6 +29,10 @@ function boot(): void {
   initArchiveRail();
   initContactForm();
   initStickyFollow();
+
+  // Masthead hamburger (Follow / Subscribe / Shop / hidden App). Runs in every
+  // mode: it toggles a `hidden` attribute directly, no CSS transition to gate.
+  initMastheadMenu();
 
   // Page chrome (progress bar + scroll-spy nav). Affordance, not decoration:
   // runs in every mode; its motion is CSS-gated and reduced-motion safe.

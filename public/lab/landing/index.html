@@ -8,6 +8,8 @@
 <!-- Prototype. Hidden and unlinked, not part of the site navigation or sitemap. -->
 <meta name="robots" content="noindex,nofollow" />
 <link rel="icon" href="data:," />
+<link rel="preload" as="image" href="/brand/crest-badge@512.png" />
+<link rel="preload" as="image" href="/brand/crest-badge@192.png" />
 <style>
 /* ===== Fonts: subset, self-hosted, base64. No external CDN. ===== */
 @font-face {
@@ -100,17 +102,31 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
 }
 .a1-glow.is-on { opacity: 1; }
 
-.a1-crest { width: min(46vw, 260px); height: auto; position: relative; }
-.a1-crest path, .a1-crest circle, .a1-crest polygon {
-  fill: none;
-  stroke: var(--cream);
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.a1-crest {
+  width: min(46vw, 260px);
+  height: auto;
+  position: relative;
+  display: block;
+  /* Film-exposure reveal: masked to a point, near-black, slightly oversized. */
+  clip-path: circle(0% at 50% 50%);
+  filter: brightness(.05) contrast(1.35);
+  transform: scale(1.06);
+  transition:
+    clip-path 1.5s cubic-bezier(.4,.05,.2,1),
+    filter 1.5s cubic-bezier(.4,.05,.2,1),
+    transform 1.5s cubic-bezier(.22,.61,.36,1);
 }
-.a1-crest .stroke-gold { stroke: var(--gold); }
-.a1-crest .fill-gold { fill: var(--gold); stroke: none; }
-.a1-crest .fill-cream { fill: var(--cream); stroke: none; }
+.a1-crest.is-revealed {
+  clip-path: circle(52% at 50% 50%);
+  filter: brightness(1) contrast(1);
+  transform: scale(1);
+}
+.a1-crest.is-instant {
+  transition: none;
+  clip-path: circle(52% at 50% 50%);
+  filter: none;
+  transform: none;
+}
 
 .a1-wordmark {
   display: flex;
@@ -154,25 +170,55 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
 }
 #act2.is-in { opacity: 1; }
 
+/* Fixed, centre-weighted warm glow. Static by design: the room reads cinematic
+   with no interaction required and content is always fully readable. */
 .light-layer {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(circle 46vmax at var(--lx, 50%) var(--ly, 38%),
+  background: radial-gradient(circle 46vmax at 50% 38%,
     rgba(201,161,74,.16) 0%,
     rgba(201,161,74,.07) 22%,
     rgba(12,42,62,0) 52%);
-  will-change: background-position;
 }
 .light-layer::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle 20vmax at var(--lx, 50%) var(--ly, 38%),
+  background: radial-gradient(circle 20vmax at 50% 38%,
     rgba(242,234,211,.10) 0%,
     rgba(242,234,211,0) 60%);
-  opacity: var(--flicker, 1);
+}
+
+/* Drifting gold specks ("the snowing effect"): same gold and softness as the
+   homepage mobile hero's dust, scaled up. Pure CSS animations, transform/opacity
+   only, absolutely positioned behind the text (.room sits above at z-index 1). */
+.specks {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.speck {
+  position: absolute;
+  top: -6px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: speckFall linear infinite;
+}
+@keyframes speckFall {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: .5; }
+  45%  { transform: translate3d(1.6vw, 46vh, 0); }
+  80%  { opacity: .28; }
+  100% { transform: translate3d(-1.2vw, 104vh, 0); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .speck { animation: none; opacity: 0; }
 }
 
 .room {
@@ -188,19 +234,12 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
   margin-bottom: 3.2rem;
 }
 .room__crest {
+  display: block;
   width: 56px;
   height: 56px;
   margin: 0 auto .6rem;
   opacity: .92;
 }
-.room__crest path, .room__crest circle, .room__crest polygon {
-  fill: none;
-  stroke: var(--cream);
-  stroke-width: 1.6;
-}
-.room__crest .stroke-gold { stroke: var(--gold); }
-.room__crest .fill-gold { fill: var(--gold); stroke: none; }
-.room__crest .fill-cream { fill: var(--cream); stroke: none; }
 .room__wordmark {
   font-size: .78rem;
   letter-spacing: .34em;
@@ -289,27 +328,6 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
   opacity: .5;
 }
 
-.tilt-gate {
-  position: fixed;
-  left: 50%;
-  bottom: 1.6rem;
-  transform: translateX(-50%);
-  z-index: 5;
-  background: transparent;
-  border: 1px solid var(--cream-dim);
-  color: var(--gold);
-  font-family: "Inter Tight", sans-serif;
-  font-size: .78rem;
-  letter-spacing: .04em;
-  padding: .62rem 1.15rem;
-  border-radius: 999px;
-  cursor: pointer;
-  opacity: .82;
-  transition: opacity .3s ease, border-color .3s ease;
-}
-.tilt-gate:active { opacity: 1; border-color: var(--gold); }
-.tilt-gate.is-hidden { display: none; }
-
 .room__foot {
   margin-top: 3.4rem;
   padding-top: 1.6rem;
@@ -338,12 +356,11 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
 }
 .replay-link:hover { border-color: var(--cream-faint); }
 
-/* Reduced motion: content fully readable, no flicker, no crest draw animation, light fixed */
+/* Reduced motion: content fully readable, no crest reveal animation, specks removed, glow stays */
 @media (prefers-reduced-motion: reduce) {
-  .a1-stage, .a1-glow, .a1-wordmark span, #act2, .lead__kicker, .lead__headline, .lead__dek, .lead__prov, .more li {
+  .a1-stage, .a1-glow, .a1-crest, .a1-wordmark span, #act2, .lead__kicker, .lead__headline, .lead__dek, .lead__prov, .more li {
     transition: none !important;
   }
-  .light-layer::after { opacity: .5 !important; }
 }
 
 @media (max-width: 380px) {
@@ -356,21 +373,7 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
 <div id="act1" role="button" aria-label="Skip intro">
   <div class="a1-stage" id="a1Stage">
     <div class="a1-glow" id="a1Glow"></div>
-    <svg class="a1-crest" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-    <circle cx="100" cy="100" r="92" />
-    <circle class="stroke-gold" cx="100" cy="100" r="76" />
-    <path class="stroke-gold" d="M55,58 Q100,36 145,58" />
-    <path d="M52,60 L44,52" />
-    <path d="M148,60 L156,52" />
-    <polygon class="fill-gold" points="60.00,77.00 61.65,81.73 66.66,81.84 62.66,84.87 64.11,89.66 60.00,86.80 55.89,89.66 57.34,84.87 53.34,81.84 58.35,81.73" />
-    <polygon class="fill-gold" points="80.00,69.00 81.65,73.73 86.66,73.84 82.66,76.87 84.11,81.66 80.00,78.80 75.89,81.66 77.34,76.87 73.34,73.84 78.35,73.73" />
-    <polygon class="fill-gold" points="100.00,65.00 101.65,69.73 106.66,69.84 102.66,72.87 104.11,77.66 100.00,74.80 95.89,77.66 97.34,72.87 93.34,69.84 98.35,69.73" />
-    <polygon class="fill-gold" points="120.00,69.00 121.65,73.73 126.66,73.84 122.66,76.87 124.11,81.66 120.00,78.80 115.89,81.66 117.34,76.87 113.34,73.84 118.35,73.73" />
-    <polygon class="fill-gold" points="140.00,77.00 141.65,81.73 146.66,81.84 142.66,84.87 144.11,89.66 140.00,86.80 135.89,89.66 137.34,84.87 133.34,81.84 138.35,81.73" />
-    <polygon points="100,100 119.02,113.82 111.76,136.18 88.24,136.18 80.98,113.82" />
-    <path d="M100,100 L111.76,136.18" />
-    <path d="M100,100 L88.24,136.18" />
-  </svg>
+    <img class="a1-crest" id="a1Crest" src="/brand/crest-badge@512.png" alt="The ARCHV crest" decoding="async" />
     <div class="a1-wordmark" id="a1Wordmark" aria-hidden="true"></div>
   </div>
   <p class="a1-skip" id="a1Skip">Tap or scroll to skip</p>
@@ -378,23 +381,10 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
 
 <main id="act2">
   <div class="light-layer" id="lightLayer"></div>
+  <div class="specks" id="specks" aria-hidden="true"></div>
   <div class="room">
     <div class="room__mast">
-      <svg class="room__crest" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-    <circle cx="100" cy="100" r="92" />
-    <circle class="stroke-gold" cx="100" cy="100" r="76" />
-    <path class="stroke-gold" d="M55,58 Q100,36 145,58" />
-    <path d="M52,60 L44,52" />
-    <path d="M148,60 L156,52" />
-    <polygon class="fill-gold" points="60.00,77.00 61.65,81.73 66.66,81.84 62.66,84.87 64.11,89.66 60.00,86.80 55.89,89.66 57.34,84.87 53.34,81.84 58.35,81.73" />
-    <polygon class="fill-gold" points="80.00,69.00 81.65,73.73 86.66,73.84 82.66,76.87 84.11,81.66 80.00,78.80 75.89,81.66 77.34,76.87 73.34,73.84 78.35,73.73" />
-    <polygon class="fill-gold" points="100.00,65.00 101.65,69.73 106.66,69.84 102.66,72.87 104.11,77.66 100.00,74.80 95.89,77.66 97.34,72.87 93.34,69.84 98.35,69.73" />
-    <polygon class="fill-gold" points="120.00,69.00 121.65,73.73 126.66,73.84 122.66,76.87 124.11,81.66 120.00,78.80 115.89,81.66 117.34,76.87 113.34,73.84 118.35,73.73" />
-    <polygon class="fill-gold" points="140.00,77.00 141.65,81.73 146.66,81.84 142.66,84.87 144.11,89.66 140.00,86.80 135.89,89.66 137.34,84.87 133.34,81.84 138.35,81.73" />
-    <polygon points="100,100 119.02,113.82 111.76,136.18 88.24,136.18 80.98,113.82" />
-    <path d="M100,100 L111.76,136.18" />
-    <path d="M100,100 L88.24,136.18" />
-  </svg>
+      <img class="room__crest" src="/brand/crest-badge@192.png" alt="" aria-hidden="true" decoding="async" />
       <p class="room__wordmark">The ARCHV</p>
     </div>
 
@@ -410,8 +400,6 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
     </div>
   </div>
 </main>
-
-<button class="tilt-gate is-hidden" id="tiltGate" type="button">Hold your phone up</button>
 
 <script>
 (function () {
@@ -471,6 +459,8 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
     act1Timers.push(t);
   }
 
+  var crestImg = document.getElementById("a1Crest");
+
   function playAct1() {
     act1Done = false;
     act1.classList.remove("is-hidden", "is-leaving");
@@ -478,10 +468,12 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
     stage.classList.remove("is-settled");
     glow.classList.remove("is-on");
     skipEl.classList.remove("is-in");
+    crestImg.classList.remove("is-revealed", "is-instant");
     buildWordmark();
 
     if (reduceMotion) {
-      // Reduced motion: no draw animation, crest appears already settled, straight to Act 2.
+      // Reduced motion: real crest appears settled immediately, straight to Act 2.
+      crestImg.classList.add("is-instant");
       stage.classList.add("is-settled");
       glow.classList.add("is-on");
       revealWordmark();
@@ -489,18 +481,12 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
       return;
     }
 
-    var crestPaths = act1.querySelectorAll(".a1-crest path, .a1-crest circle, .a1-crest polygon");
-    crestPaths.forEach(function (el) {
-      var len = 220;
-      try { len = el.getTotalLength ? el.getTotalLength() : 220; } catch (e) {}
-      el.style.strokeDasharray = len;
-      el.style.strokeDashoffset = len;
-      el.style.transition = "stroke-dashoffset 1.15s cubic-bezier(.4,.05,.2,1)";
-    });
-
+    // Film-exposure reveal of the real crest: the projector bloom warms up, then the
+    // raster emerges via an expanding radial clip, brightness/contrast easing up from
+    // near-black, and a subtle 1.06 -> 1.0 scale settle. All ~1.5s, CSS-transitioned.
     var t0 = setTimeout(function () { glow.classList.add("is-on"); }, 60);
     var t1 = setTimeout(function () {
-      crestPaths.forEach(function (el) { el.style.strokeDashoffset = 0; });
+      crestImg.classList.add("is-revealed");
     }, 120);
     var t2 = setTimeout(function () {
       stage.classList.add("is-settled");
@@ -540,10 +526,8 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
 
   /* ---------- ACT 2 ---------- */
   var act2Started = false;
-  var lightLayer = document.getElementById("lightLayer");
   var leadArticleEl = document.getElementById("leadArticle");
   var moreListEl = document.getElementById("moreList");
-  var tiltGate = document.getElementById("tiltGate");
 
   var LANE_LABEL = {
     transfer: "Transfer Desk",
@@ -612,116 +596,36 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
       .catch(renderFeedError);
   }
 
-  /* Light follow: desktop = cursor, eased/lagged. Mobile = device tilt, or idle drift. */
-  var lx = 50, ly = 38; // current, percent
-  var tx = 50, ty = 38; // target, percent
-  var rafId = null;
-
-  function setVar(name, val) {
-    document.documentElement.style.setProperty(name, val);
-  }
-
-  function tick() {
-    lx += (tx - lx) * 0.055;
-    ly += (ty - ly) * 0.055;
-    setVar("--lx", lx.toFixed(2) + "%");
-    setVar("--ly", ly.toFixed(2) + "%");
-    rafId = requestAnimationFrame(tick);
-  }
-
-  function startLightLoop() {
-    if (rafId) return;
-    if (reduceMotion) {
-      setVar("--lx", "50%");
-      setVar("--ly", "38%");
-      setVar("--flicker", "1");
-      return;
+  /* Gold specks, "the snowing effect": DOM built once here, then pure CSS
+     animations do all the motion (transform/opacity only, no per-frame JS).
+     Sizes, positions and timings are varied per speck; reduced motion hides
+     them entirely via the stylesheet. */
+  var specksBuilt = false;
+  function buildSpecks() {
+    if (specksBuilt || reduceMotion) return;
+    specksBuilt = true;
+    var layer = document.getElementById("specks");
+    var count = 15;
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement("span");
+      s.className = "speck";
+      var size = 2 + Math.random() * 3; // 2-5px
+      s.style.width = size.toFixed(1) + "px";
+      s.style.height = size.toFixed(1) + "px";
+      s.style.left = (Math.random() * 100).toFixed(1) + "%";
+      s.style.animationDuration = (16 + Math.random() * 14).toFixed(1) + "s"; // very slow fall
+      s.style.animationDelay = (-Math.random() * 30).toFixed(1) + "s"; // already mid-fall on load
+      frag.appendChild(s);
     }
-    tick();
-    startFlicker();
-  }
-
-  function startFlicker() {
-    var start = performance.now();
-    function flick(now) {
-      var t = (now - start) / 1000;
-      var v = 1 - (Math.sin(t * 0.35) * 0.02 + 0.02); // breathe within ~2%
-      setVar("--flicker", v.toFixed(3));
-      requestAnimationFrame(flick);
-    }
-    requestAnimationFrame(flick);
-  }
-
-  var isCoarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-
-  function bindCursor() {
-    window.addEventListener("pointermove", function (e) {
-      tx = (e.clientX / window.innerWidth) * 100;
-      ty = (e.clientY / window.innerHeight) * 100;
-    }, { passive: true });
-  }
-
-  var idleAngle = Math.random() * Math.PI * 2;
-  function bindIdleDrift() {
-    setInterval(function () {
-      idleAngle += 0.35;
-      tx = 50 + Math.cos(idleAngle) * 14;
-      ty = 38 + Math.sin(idleAngle * 0.8) * 10;
-    }, 2600);
-  }
-
-  function bindTilt() {
-    window.addEventListener("deviceorientation", function (e) {
-      if (e.gamma == null || e.beta == null) return;
-      var gx = Math.max(-30, Math.min(30, e.gamma));
-      var by = Math.max(-20, Math.min(35, e.beta - 35));
-      tx = 50 + (gx / 30) * 26;
-      ty = 38 + (by / 35) * 20;
-    }, true);
-  }
-
-  function needsIOSPermission() {
-    return typeof DeviceOrientationEvent !== "undefined" &&
-      typeof DeviceOrientationEvent.requestPermission === "function";
-  }
-
-  function setupMotion() {
-    if (!isCoarsePointer) {
-      bindCursor();
-      startLightLoop();
-      return;
-    }
-    // Mobile: try tilt, gated behind a permission gesture on iOS.
-    if (needsIOSPermission()) {
-      tiltGate.classList.remove("is-hidden");
-      tiltGate.addEventListener("click", function () {
-        DeviceOrientationEvent.requestPermission().then(function (state) {
-          tiltGate.classList.add("is-hidden");
-          if (state === "granted") {
-            bindTilt();
-          } else {
-            bindIdleDrift();
-          }
-        }).catch(function () {
-          tiltGate.classList.add("is-hidden");
-          bindIdleDrift();
-        });
-      });
-      bindIdleDrift(); // alive on its own until/unless permission is granted
-    } else if ("DeviceOrientationEvent" in window) {
-      bindTilt();
-      bindIdleDrift(); // fallback layer keeps it alive if events never arrive
-    } else {
-      bindIdleDrift();
-    }
-    startLightLoop();
+    layer.appendChild(frag);
   }
 
   function startAct2() {
     if (act2Started) return;
     act2Started = true;
     loadFeed();
-    setupMotion();
+    buildSpecks();
   }
 
   if (seen) { /* already called above */ }

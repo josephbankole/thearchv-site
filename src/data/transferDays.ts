@@ -14,6 +14,14 @@ export const transferDays: DayEntry[] = [
     status: "verified",
   },
   {
+    date: "2026-07-10",
+    day: "Friday",
+    headline: "Santos signs. The paperwork finally matches the agreement.",
+    dek: "Five years, fifty million, and a United announcement still to come.",
+    body: "Andrey Santos put pen to paper on his Manchester United contract this Friday, wrapping up a week of medicals and personal-terms talks. Five years, through to 2031, forty eight million pounds guaranteed plus two million in add-ons, and Chelsea kept a ten percent sell-on. United haven't put the announcement out yet, that's coming on their own schedule, but the deal is done. Second name off United's midfield shopping list to go from agreement to signature this week.",
+    status: "verified",
+  },
+  {
     date: "2026-07-09",
     day: "Thursday",
     headline: "Santos moves to the medical stage.",

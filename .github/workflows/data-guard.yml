@@ -1,0 +1,30 @@
+name: Data feed guard
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  guard-data-feeds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Fail if daily data feeds shrank
+        run: |
+          set -e
+          for f in src/data/transferDays.ts src/data/worldCupDays.ts; do
+            if ! git show HEAD~1:"$f" > /tmp/prev_"$(basename "$f")" 2>/dev/null; then
+              echo "No previous version of $f (new file) — skipping guard for it."
+              continue
+            fi
+            prev_count=$(grep -oE "date: [\"'][0-9-]+[\"']" /tmp/prev_"$(basename "$f")" | wc -l)
+            curr_count=$(grep -oE "date: [\"'][0-9-]+[\"']" "$f" | wc -l)
+            echo "$f: previous=$prev_count current=$curr_count"
+            if [ "$curr_count" -lt "$prev_count" ]; then
+              echo "::error::$f has fewer date entries ($curr_count) than the previous commit ($prev_count). This looks like a clobbering merge (e.g. an outdated 'preview' branch overwriting main). Refusing to allow this push."
+              exit 1
+            fi
+          done

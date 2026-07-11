@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-11",
+    day: "Saturday",
+    headline: "Santos signs. Ederson's does not, depending who you ask.",
+    dek: "One midfield deal done, one goalkeeper deal contested.",
+    body: "Andrey Santos has signed his Manchester United contract, a fifty million pound deal for the Chelsea and Brazil midfielder with the club announcement still to come. It is the clean half of United's week. The other half is messier. Fabrizio Romano reported Ederson has failed his medical and that the move is off, pointing to a long-term knee issue. United's own sources deny it, insisting Ederson remains a live process alongside Santos and Darlow. Nobody is settling that one yet. Elsewhere Alex Scott stays stuck, Bournemouth refusing to sell, and Cristian Orozco edges toward a thirteenth of July unveiling on his eighteenth birthday.",
+    status: "verified",
+  },
+  {
     date: "2026-07-09",
     day: "Thursday",
     headline: "Santos moves to the medical stage.",

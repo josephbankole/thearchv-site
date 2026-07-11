@@ -130,13 +130,17 @@ photos or FIFA marks anywhere.
 ## Open site work (as of 2026-07-09)
 
 - Football Leagues SECTION UI: the feed lane and app shelf are live, the website has
-  no visible Leagues section yet.
+  no visible Leagues section yet. POST-LAUNCH BACKLOG (recorded 2026-07-11, dev
+  closeout sweep): not required for the app submission and not started; see
+  `../SITE-AND-APP-TODO.md`, "Post-launch backlog" section.
 - Per-article pages for daily entries: DONE (Build 11, W1). Every transfer, World Cup
   and leagues entry now has a canonical page at `/desk/<lane>/<date>/`, wired into
   the feed's `url` field and linked from the homepage day-rail cards. See "Per-article
-  pages" above. Remaining follow-up: decide whether to retire the older
-  `build-day-pages.mjs` URLs (`/desk/<date>/`, `/world-cup/<date>/`) now that the
-  canonical lane-scoped pages exist.
+  pages" above. Legacy `/desk/<date>/` and `/world-cup/<date>/` retire-or-keep
+  decision: CLOSED-BY-DECISION — KEEP permanently. They are noindexed and
+  cross-canonical to the lane-scoped URLs (see "Per-article pages" above), so
+  they carry no SEO cost; retiring them would 404 old shares for zero benefit.
+  Founder-ratified via `../DEV-CLOSEOUT-2026-07-11.md` (2026-07-11).
 - Site depth pass (SITE-DEPTH-PLAN.md, founder approved 2026-07-09): DONE. Lane index
   pages (`/desk/transfer/`, `/desk/world-cup/`, `/desk/leagues/`), whole-card homepage
   day-rail links with drag-vs-click discrimination, homepage section headers linking to

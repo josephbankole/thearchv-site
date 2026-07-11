@@ -5,10 +5,16 @@
 // Ownership is enforced by matching device_id, since there is no login. Internal notes are never
 // returned. device_id is stripped from anything sent back to the app.
 import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
+import { checkAppSecret } from "../_shared/appGuard.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
+
+  // Soft app-secret guard (build 19+ sends x-archv-app). See _shared/appGuard.ts for the
+  // soft-vs-hard rollout note; device_id ownership checks below remain the real backstop either way.
+  const guardResp = checkAppSecret(req, "ticket-thread");
+  if (guardResp) return guardResp;
 
   let payload: Record<string, unknown>;
   try {

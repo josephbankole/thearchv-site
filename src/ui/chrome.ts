@@ -114,3 +114,39 @@ export function initChrome(): void {
   window.addEventListener('resize', onScroll, { passive: true });
   measure();
 }
+
+// Masthead hamburger menu: a disclosure button that reveals a small dropdown
+// (Follow / Subscribe / Shop / App, App hidden until flip day). No CSS transition
+// (the `hidden` attribute is toggled directly), which keeps it reduced-motion
+// safe by construction rather than needing a media-query opt-out.
+export function initMastheadMenu(): void {
+  const toggle = document.getElementById('masthead-toggle') as HTMLButtonElement | null;
+  const panel = document.getElementById('masthead-panel') as HTMLElement | null;
+  if (!toggle || !panel) return;
+
+  function onKeydown(e: KeyboardEvent): void {
+    if (e.key === 'Escape') close(true);
+  }
+  function onDocClick(e: MouseEvent): void {
+    const target = e.target as Node;
+    if (target !== toggle && !toggle!.contains(target) && !panel!.contains(target)) close(false);
+  }
+  function open(): void {
+    panel!.hidden = false;
+    toggle!.setAttribute('aria-expanded', 'true');
+    document.addEventListener('keydown', onKeydown);
+    document.addEventListener('click', onDocClick, true);
+  }
+  function close(returnFocus: boolean): void {
+    panel!.hidden = true;
+    toggle!.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('click', onDocClick, true);
+    if (returnFocus) toggle!.focus();
+  }
+
+  toggle.addEventListener('click', () => {
+    if (panel.hidden) open();
+    else close(false);
+  });
+}

@@ -25,10 +25,21 @@ img{max-width:100%;height:auto;display:block}
 .wordmark img{width:34px;height:34px}
 .wordmark__the{opacity:.7;font-size:.8rem;letter-spacing:.18em}
 .wordmark__archv{font-size:1.15rem}
-.masthead__actions{display:inline-flex;gap:.75rem}
 .btn{display:inline-block;padding:.5rem .9rem;border-radius:.5rem;font-size:.85rem;font-weight:600;white-space:nowrap}
 .btn--ghost{border:1px solid var(--gold-soft);color:var(--cream)}
 .btn--gold{background:var(--gold);color:var(--navy-deep)}
+
+/* masthead hamburger menu (founder design, 2026-07-11) */
+.masthead__menu{position:relative;flex-shrink:0}
+.masthead__toggle{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:42px;height:42px;padding:0;border:1px solid var(--gold-soft);border-radius:.4rem;background:transparent;cursor:pointer}
+.masthead__toggle:hover{border-color:var(--cream)}
+.masthead__toggle:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.masthead__toggle-bar{display:block;width:18px;height:2px;background:var(--cream)}
+.masthead__panel{position:absolute;top:calc(100% + .5rem);right:0;z-index:20;min-width:13.5rem;max-width:calc(100vw - 2.5rem);background:var(--navy-deep);border:1px solid var(--cream-faint);border-radius:.5rem;padding:.35rem;display:flex;flex-direction:column;gap:.1rem;box-shadow:0 18px 40px -14px rgba(0,0,0,.55)}
+.masthead__panel[hidden]{display:none}
+.masthead__panel-link{display:block;padding:.65em .8em;border-radius:.35rem;font-size:.85rem;font-weight:600;color:var(--cream)}
+.masthead__panel-link:hover,.masthead__panel-link:focus-visible{background:rgba(242,234,211,.08);color:var(--gold);text-decoration:none}
+.masthead__panel-link--gold{color:var(--gold)}
 
 /* article */
 .article{padding:2rem 0 1rem}

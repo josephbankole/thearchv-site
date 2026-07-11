@@ -1,0 +1,30 @@
+[
+  {
+    "id": "tshirt",
+    "name": "The ARCHV Logo Tee",
+    "price": "CA$47.00",
+    "image": "tshirt.webp",
+    "url": "https://www.etsy.com/listing/4517419194/the-archv-logo-tee-minimalist-football"
+  },
+  {
+    "id": "tote",
+    "name": "The ARCHV Tote Bag",
+    "price": "CA$40.00",
+    "image": "tote.webp",
+    "url": "https://www.etsy.com/listing/4517424545/the-archv-tote-bag-organic-cotton-canvas"
+  },
+  {
+    "id": "mug",
+    "name": "The ARCHV White Glossy Mug",
+    "price": "CA$13.50",
+    "image": "mug.webp",
+    "url": "https://www.etsy.com/listing/4521104801/the-archv-white-glossy-mug"
+  },
+  {
+    "id": "stickers",
+    "name": "ARCHV Football Sticker Sheet",
+    "price": "CA$18.00",
+    "image": "stickers.webp",
+    "url": "https://www.etsy.com/listing/4527674843/archv-football-sticker-sheet-7-die-cut"
+  }
+]

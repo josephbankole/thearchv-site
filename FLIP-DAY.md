@@ -103,3 +103,14 @@ bash scripts/deploy-site.sh
 
 Verify live with a cache-busted curl against the homepage, `/start`, and (if
 flipped) `/quiz`, grepping for the real App Store URL to confirm it shipped.
+
+## Go-live morning, additional step (audit 2026-07-12): ticket guard to HARD mode
+
+The x-archv-app guard on ticket-intake/thread/reply runs in SOFT mode (headerless
+requests pass, logged as legacyClient). Every public user will be on build 19+
+(all send the header), so on go-live morning flip the guard to hard-required:
+edit supabase/functions/_shared/appGuard.ts per its TODO(post-1.0) comment,
+deploy the three ticket functions, then verify: wrong header -> 401, NO header ->
+401, and one real ticket from the founder's device flows through. This stops a
+headerless curl script from burning the global 30/hour cap that App Review and
+legitimate users share.

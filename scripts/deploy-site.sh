@@ -9,7 +9,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."   # repo root
 
-DATA_FILES="src/data/transferDays.ts src/data/worldCupDays.ts src/data/longReads.ts"
+DATA_FILES="src/data/transferDays.ts src/data/worldCupDays.ts src/data/leaguesDays.ts src/data/longReads.ts"
 
 [ -f .git/index.lock ] && rm -f .git/index.lock && echo "Removed stale .git/index.lock"
 

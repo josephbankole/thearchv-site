@@ -5,7 +5,7 @@
    ETag handling cheap polling and index.json's buildHash giving an app-level "did anything change".
    esbuild (already present via vite) bundles the TS data into a temp ESM module we import. */
 import { build } from "esbuild";
-import { writeFileSync, mkdirSync, rmSync, statSync } from "node:fs";
+import { writeFileSync, mkdirSync, rmSync, statSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
@@ -99,3 +99,28 @@ writeFileSync(join(OUT, "index.json"), JSON.stringify(manifest, null, 2));
 console.log(
   `[build-feed] ${manifestFeeds.length} feeds → ${OUT}  (lastUpdated ${lastUpdated}, build ${manifest.buildHash})`
 );
+
+/* ---------- storefront feed (Etsy merch, additive-only, standalone file) ----------
+   Sourced from scripts/storefront-items.json (NOT src/data/*.ts — that dir is engine-owned
+   and committed by the daily desk job; this is hand-curated shop merch, a different lifecycle).
+   Deliberately NOT folded into the `feeds` loop above so the existing feed files and
+   index.json manifest/buildHash stay byte-identical to before this feed existed. */
+const SHOP_URL = "https://www.etsy.com/shop/TheARCHVCA";
+const storefrontItemsRaw = JSON.parse(
+  readFileSync(join(ROOT, "scripts", "storefront-items.json"), "utf8")
+);
+const storefrontItems = storefrontItemsRaw.map((item) => ({
+  id: item.id,
+  name: item.name,
+  price: item.price,
+  image: `${SITE}/shop/${item.image.replace(/\.[^.]+$/, "")}.webp`,
+  url: item.url,
+}));
+const storefront = {
+  schema: SCHEMA,
+  lastUpdated,
+  shopUrl: SHOP_URL,
+  items: storefrontItems,
+};
+writeFileSync(join(OUT, "storefront.json"), JSON.stringify(storefront, null, 2));
+console.log(`[build-feed] storefront feed → ${OUT}/storefront.json (${storefrontItems.length} items)`);

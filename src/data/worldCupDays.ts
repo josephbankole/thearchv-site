@@ -22,6 +22,14 @@ export const worldCupDays: DayEntry[] = [
     status: "verified",
   },
   {
+    date: "2026-07-10",
+    day: "Day 30",
+    headline: "Merino strikes late again. Spain survive Belgium at SoFi.",
+    dek: "A makeshift Belgium goalkeeper could not hold out to the final whistle.",
+    body: "Spain didn't get there until the eighty eighth minute. Two one over Belgium at SoFi Stadium, in a quarter final that swung twice. Fabian Ruiz put them ahead just past the half hour, Belgium answered almost straight away through Charles De Ketelaere, and it was 1-1 at the break. Belgium's night got worse from there: Thibaut Courtois went off injured, Manchester United's Senne Lammens came on for him, and captain Youri Tielemans had already been ruled out with a warm-up injury. Mikel Merino made it count late, scoring off a rebound Lammens couldn't hold. Spain go through to face France, already through on the other side, in Tuesday's semi final.",
+    status: "verified",
+  },
+  {
     date: "2026-07-08",
     day: "Day 28",
     headline: "The round of sixteen is complete. Four quarter finals are set.",

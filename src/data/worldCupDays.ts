@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-12",
+    day: "Day 32",
+    headline: "England and Argentina book a rematch nobody needed to ask for.",
+    dek: "Bellingham's brace, Alvarez's extra-time strike, and 1986 hangs in the air.",
+    body: "The quarter-finals finished with two matches that both needed extra time. England beat Norway two one in Miami, Jude Bellingham scoring twice to send Gareth Southgate's side through. Across the country in Kansas City, Argentina needed one hundred and twelve minutes to break down ten-man Switzerland, Julian Alvarez scoring the goal that settled it three one. The draw does not care about history, but it handed it to us anyway. England face Argentina in the semi-final on the fifteenth of July, the first meeting between the two at a World Cup since 2002. France play Spain the day before. Two semis, four sides that all believe they can win it.",
+    status: "verified",
+    image: "/heads/bellingham.webp",
+    imageAlt: "Jude Bellingham, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-11",
     day: "Day 31",
     headline: "Spain edge Belgium late. The semi-final draws itself.",

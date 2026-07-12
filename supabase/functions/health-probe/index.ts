@@ -70,6 +70,29 @@ Deno.serve(async (req) => {
     failures.push({ check: "feed", detail: `unreachable: ${String(e).slice(0, 120)}` });
   }
 
+  // (b2) lead-image: the feed's lead image must actually resolve. This is what would have
+  // caught the santos.webp incident — an entry pointing at a head asset before it was
+  // uploaded left the feed pointing at a 404. Independent fetch from (b) so a failure here
+  // never masks (or is masked by) the core feed-freshness check.
+  try {
+    const res = await fetch(FEED_URL, { cache: "no-store" });
+    if (res.status === 200) {
+      const data = await res.json();
+      const image = data?.lead?.image;
+      if (image) {
+        const imageUrl = `https://thearchv.ca${image}`;
+        const imgRes = await fetch(imageUrl, { method: "HEAD", cache: "no-store" });
+        if (imgRes.status !== 200) {
+          failures.push({ check: "lead-image", detail: `status ${imgRes.status} for ${imageUrl}` });
+        }
+      }
+    }
+    // A non-200 on the feed fetch itself is already surfaced by check (b) above; nothing
+    // extra to add here in that case, so stay silent rather than double-alerting.
+  } catch (e) {
+    failures.push({ check: "lead-image", detail: `unreachable: ${String(e).slice(0, 120)}` });
+  }
+
   // (c) push_state, gated to 11:00-23:59 UTC — before that, the day's push legitimately has not
   // fired yet and this must not alert.
   if (now.getUTCHours() >= 11) {
@@ -88,6 +111,36 @@ Deno.serve(async (req) => {
         failures.push({ check: "push_state", detail: `stale: last_sent_at ${last.toISOString()}` });
       }
     }
+  }
+
+  // (e) pages-deploy: confirm the most recent COMPLETED "Deploy to GitHub Pages" run
+  // succeeded. Public repo, unauthenticated GET, one call per 30-min probe tick — well
+  // within GitHub's rate limits. This is what would have caught the silent-build-failure
+  // incident (a TypeScript error in a content commit failed the Pages build with no
+  // alert; the site stayed stale and nothing here or elsewhere caught it). A GitHub API
+  // hiccup (network error, non-200, unexpected response shape) logs and is SKIPPED, not
+  // alerted — this check must never cry wolf over GitHub API flakiness.
+  try {
+    const res = await fetch(
+      "https://api.github.com/repos/josephbankole/thearchv-site/actions/runs?per_page=5",
+      { headers: { "User-Agent": "archv-health-probe", Accept: "application/vnd.github+json" }, cache: "no-store" },
+    );
+    if (res.status !== 200) {
+      console.error(`health-probe: pages-deploy check skipped — GitHub API status ${res.status}`);
+    } else {
+      const data = await res.json();
+      const runs = Array.isArray(data?.workflow_runs) ? data.workflow_runs : [];
+      const deployRun = runs.find(
+        (r: { name?: string; status?: string }) => r?.name === "Deploy to GitHub Pages" && r?.status === "completed",
+      );
+      if (!deployRun) {
+        console.error("health-probe: pages-deploy check skipped — no completed 'Deploy to GitHub Pages' run in the last 5");
+      } else if (deployRun.conclusion === "failure") {
+        failures.push({ check: "pages-deploy", detail: `latest completed run ${deployRun.id} concluded "failure"` });
+      }
+    }
+  } catch (e) {
+    console.error(`health-probe: pages-deploy check skipped — fetch error: ${String(e).slice(0, 120)}`);
   }
 
   // (d) alert, debounced per check — 6h between alerts for the same failing check.

@@ -38,3 +38,31 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify live
+        run: |
+          set -e
+          ready=""
+          for i in $(seq 1 6); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "https://thearchv.ca/feed/index.json?cb=$(date +%s)")
+            echo "Attempt $i: feed/index.json -> $code"
+            if [ "$code" = "200" ]; then ready=1; break; fi
+            echo "Not live yet, sleeping 20s..."
+            sleep 20
+          done
+          if [ -z "$ready" ]; then
+            echo "::error::feed/index.json never returned 200 after 6 attempts (site may not have deployed)"
+            exit 1
+          fi
+          today_json=$(curl -fsS "https://thearchv.ca/feed/today.json?cb=$(date +%s)")
+          image=$(echo "$today_json" | jq -r '.lead.image // empty')
+          if [ -n "$image" ]; then
+            img_code=$(curl -s -o /dev/null -w "%{http_code}" "https://thearchv.ca${image}")
+            echo "Lead image https://thearchv.ca${image} -> ${img_code}"
+            if [ "$img_code" != "200" ]; then
+              echo "::error::live lead image https://thearchv.ca${image} returned ${img_code} — failing deploy"
+              exit 1
+            fi
+          else
+            echo "No lead image on live today.json; nothing to verify."
+          fi
+          echo "Verify live: passed."

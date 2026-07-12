@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-12",
+    day: "Sunday",
+    headline: "Ederson to United tips toward collapse.",
+    dek: "Santos gets his number. Scott now a three-way chase.",
+    body: "The Ederson deal moved the wrong way for United. Fabrizio Romano reports the club have pulled out and the Brazilian midfielder is on his way back to Atalanta, a second straight day of reporting pointing the same direction, though no club has said the last word yet. Elsewhere the news is better. Andrey Santos has his squad number, seventeen, with only the formal unveiling of the fifty million pound Chelsea signing left to come. Alex Scott's stand-off with Bournemouth is now a three-way fight, Manchester City joining United and Arsenal in the chase for the twenty two year old, with the Cherries still holding out for around eighty million pounds. Cristian Orozco has had his medical, unveiling still targeted for his eighteenth birthday on Monday.",
+    status: "verified",
+    image: "/heads/santos.webp",
+    imageAlt: "Andrey Santos, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-11",
     day: "Saturday",
     headline: "Santos signs. Ederson does not, depending who you ask.",

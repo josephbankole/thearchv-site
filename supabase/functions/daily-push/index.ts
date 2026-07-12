@@ -70,13 +70,35 @@ Deno.serve(async (req) => {
   let title = "The ARCHV";
   let body = "A new story has landed.";
   let route: { section?: string; date?: string } = {};
+  let lead: { headline?: string; section?: string; date?: string; image?: string; url?: string } = {};
   try {
     const today = await (await fetch(FEED_TODAY, { cache: "no-store" })).json();
-    if (today?.lead?.headline) body = String(today.lead.headline);
-    if (today?.lead?.section && today?.lead?.date) {
-      route = { section: String(today.lead.section), date: String(today.lead.date) };
+    lead = (today?.lead ?? {}) as typeof lead;
+    if (lead.headline) body = String(lead.headline);
+    if (lead.section && lead.date) {
+      route = { section: String(lead.section), date: String(lead.date) };
     }
   } catch { /* fall back to the generic line */ }
+
+  // 3b. Asset readiness guard: verify the lead's image and article url actually resolve
+  // BEFORE we're allowed to send. This is what would have caught the santos.webp incident
+  // — the desk committed an entry pointing at an asset before uploading it, and the daily
+  // push announced a 404 in the ~10 minute gap. On any non-200 we bail WITHOUT recording
+  // the hash as sent, so the next cron tick (every 30 min) retries once assets are live.
+  if (lead.image) {
+    const imageUrl = `https://thearchv.ca${lead.image}`;
+    if (!(await urlIs200(imageUrl))) {
+      console.error(`daily-push: lead image not ready (HEAD non-200): ${imageUrl}`);
+      return json({ ok: false, skipped: "asset-not-ready", asset: "image", url: imageUrl }, 200);
+    }
+  }
+  if (lead.url) {
+    // lead.url is already the absolute canonical article URL (archv-feed/2 contract).
+    if (!(await urlIs200(lead.url))) {
+      console.error(`daily-push: lead url not ready (HEAD non-200): ${lead.url}`);
+      return json({ ok: false, skipped: "asset-not-ready", asset: "url", url: lead.url }, 200);
+    }
+  }
 
   // 4. Send to every opted-in token.
   const { data: rows } = await supabase.from("push_tokens").select("token").eq("opt_in", true);
@@ -137,6 +159,17 @@ Deno.serve(async (req) => {
 
   return json({ ok: true, sent, failed, removed, failureReasons, ...deletionAnomaly }, 200);
 });
+
+// Asset readiness check: a plain HEAD, treating any network failure as not-ready (fail
+// closed — never send on an asset we couldn't confirm).
+async function urlIs200(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, { method: "HEAD", cache: "no-store" });
+    return res.status === 200;
+  } catch {
+    return false;
+  }
+}
 
 // last_build_hash stores the TODAY feed's hash as of 2026-07-10 (column name kept).
 async function recordSent(supabase: ReturnType<typeof adminClient>, todayHash: string) {

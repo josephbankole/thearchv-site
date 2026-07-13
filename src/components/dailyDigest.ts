@@ -70,9 +70,11 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
         ? '<span class="day__status day__status--live">Updated daily</span>'
         : '<span class="day__status day__status--done">Verified</span>';
 
-    // Optional brand-illustrated headshot (editorial; never a club photo/crest).
+    // Optional brand-illustrated headshot (editorial; never a club photo/crest). A missing
+    // imageAlt on a desk-committed entry used to render an empty alt on a real content image
+    // (as opposed to a decorative one) - fall back to a sensible description instead of silence.
     const avatar = entry.image
-      ? `<img class="day__avatar" src="${esc(entry.image)}" alt="${esc(entry.imageAlt ?? '')}" loading="lazy" decoding="async" width="52" height="52" />`
+      ? `<img class="day__avatar" src="${esc(entry.image)}" alt="${esc(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="52" height="52" />`
       : '';
 
     card.innerHTML = `

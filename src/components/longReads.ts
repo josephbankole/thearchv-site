@@ -1,4 +1,3 @@
-import { gsap } from 'gsap';
 import { longReads } from '../data/longReads';
 import { track } from '../analytics';
 
@@ -18,6 +17,16 @@ const esc = (s: unknown): string =>
 export function initLongReads(animate: boolean): void {
   const list = document.getElementById('long-reads-list');
   if (!list) return;
+
+  // gsap was a static top-level import here, which put it in the homepage's eagerly-preloaded
+  // dependency graph for every visitor - including under reduced motion, where it's never used
+  // (the branch below falls back to plain style.height). Load it dynamically instead, and only
+  // start the fetch at all when animation is actually going to run; a reduced-motion visitor's
+  // page never requests gsap.js. Kicked off here (not lazily on first click) so it's warm by
+  // the time a reader opens a panel, matching the old static-import timing for animate === true.
+  let gsapPromise: Promise<typeof import('gsap')> | null = null;
+  const loadGsap = () => (gsapPromise ??= import('gsap'));
+  if (animate) loadGsap();
 
   longReads.forEach((r, i) => {
     const li = document.createElement('li');
@@ -53,7 +62,9 @@ export function initLongReads(animate: boolean): void {
       head.setAttribute('aria-expanded', String(open));
       const target = open ? inner.offsetHeight : 0;
       if (animate) {
-        gsap.to(panel, { height: target, duration: 0.6, ease: 'power3.inOut' });
+        loadGsap().then(({ gsap }) => {
+          gsap.to(panel, { height: target, duration: 0.6, ease: 'power3.inOut' });
+        });
       } else {
         panel.style.height = open ? 'auto' : '0';
       }

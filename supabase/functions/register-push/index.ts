@@ -4,10 +4,17 @@
 // Upserts on the token, so re-registering the same device is idempotent. A user turning the daily
 // push off sends opt_in:false, which the daily dispatch job respects.
 import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
+import { checkAppSecret } from "../_shared/appGuard.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
+
+  // Soft app-secret guard (build 19+ sends x-archv-app). See _shared/appGuard.ts for the
+  // soft-vs-hard rollout note; the DB-side hourly/per-device caps below remain the real
+  // backstop either way.
+  const guardResp = checkAppSecret(req, "register-push");
+  if (guardResp) return guardResp;
 
   let payload: Record<string, unknown>;
   try {
@@ -32,7 +39,14 @@ Deno.serve(async (req) => {
       { device_id, token, opt_in, app_version, last_seen: new Date().toISOString() },
       { onConflict: "token" },
     );
-  if (error) return json({ error: error.message }, 500);
+  if (error) {
+    // The DB-side rate caps (push_tokens_rate_cap trigger) abort the insert with this marker.
+    // Surface it as a clean 429 rather than a 500 so the app can back off quietly.
+    if (/push_token_rate_limited/.test(error.message)) {
+      return json({ error: "rate limited, please try again later" }, 429);
+    }
+    return json({ error: error.message }, 500);
+  }
 
   return json({ ok: true }, 200);
 });

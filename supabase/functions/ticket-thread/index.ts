@@ -29,6 +29,18 @@ Deno.serve(async (req) => {
 
   const supabase = adminClient();
 
+  // Rate limit: device_id alone is enough to list a device's ticket history, so with no cap
+  // enumeration is free. Log this lookup attempt first; the DB-side trigger
+  // (ticket_thread_requests_cap) caps it at 30/device/hour and fails closed before any real
+  // query runs.
+  const { error: rateErr } = await supabase.from("ticket_thread_requests").insert({ device_id });
+  if (rateErr) {
+    if (/ticket_thread_rate_limited/.test(rateErr.message)) {
+      return json({ error: "rate limited, please try again later" }, 429);
+    }
+    return json({ error: rateErr.message }, 500);
+  }
+
   // List mode: every ticket this device opened.
   if (!ticket_id) {
     const { data, error } = await supabase

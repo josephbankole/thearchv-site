@@ -203,7 +203,7 @@ function render(p, allPages) {
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(meta.href)}">${esc(meta.label)}</a></p>
       <p class="article__eyebrow">${esc(p.eyebrow || "")}</p>
       <h1>${esc(p.title)}</h1>
-      <p class="article__meta">${[p.score, p.venue, p.eventDate ? new Date(p.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : ""].filter(Boolean).join(" · ")}</p>${fig}${qa}
+      <p class="article__meta">${[esc(p.score), esc(p.venue), p.eventDate ? new Date(p.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : ""].filter(Boolean).join(" · ")}</p>${fig}${qa}
       <div class="article__body">
         ${md(p.body)}
       </div>${shop}${rel}

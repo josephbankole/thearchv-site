@@ -6,6 +6,17 @@ import { track } from '../analytics';
 // scripts/build-article-pages.mjs and the `url` field build-feed.mjs now emits.
 const LANES: Record<string, string> = { transfer: 'transfer', worldcup: 'world-cup', leagues: 'leagues' };
 
+// This card is built with innerHTML for template convenience, so every interpolated data
+// field (headline, dek, body, image src/alt) must be escaped — this content ultimately comes
+// from src/data/*.ts, committed by the daily desk job, not hand-typed literals in this file.
+const esc = (s: unknown): string =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 // Builds a horizontal "scroll through the days" rail of sub-1-minute wrap-up cards.
 // Reused by the Transfer Desk, World Cup and Football Leagues sections.
 export function initDailyDigest(mountId: string, days: DayEntry[], source: string): void {
@@ -17,7 +28,12 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
     // 2026-06-12 -> "12 JUN" without pulling in a date lib or Date.now()
     const [, m, d] = iso.split('-');
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    return `${parseInt(d, 10)} ${months[parseInt(m, 10) - 1]}`;
+    const day = parseInt(d, 10);
+    const month = months[parseInt(m, 10) - 1];
+    // Malformed date (bad desk-committed entry): fall back to the raw ISO string rather than
+    // rendering "NaN"/"undefined" on the card.
+    if (!Number.isFinite(day) || !month) return iso;
+    return `${day} ${month}`;
   };
 
   // shared with enableDrag below: a click that ends a drag must not follow the link
@@ -41,19 +57,19 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
 
     // Optional brand-illustrated headshot (editorial; never a club photo/crest).
     const avatar = entry.image
-      ? `<img class="day__avatar" src="${entry.image}" alt="${entry.imageAlt ?? ''}" loading="lazy" decoding="async" width="52" height="52" />`
+      ? `<img class="day__avatar" src="${esc(entry.image)}" alt="${esc(entry.imageAlt ?? '')}" loading="lazy" decoding="async" width="52" height="52" />`
       : '';
 
     card.innerHTML = `
       <div class="day__top">
         ${avatar}
-        <span class="day__date">${fmt(entry.date)}</span>
-        <span class="day__label">${entry.day}</span>
+        <span class="day__date">${esc(fmt(entry.date))}</span>
+        <span class="day__label">${esc(entry.day)}</span>
         ${status}
       </div>
-      <h3 class="day__headline">${entry.headline}</h3>
-      <p class="day__dek">${entry.dek}</p>
-      <p class="day__body">${entry.body}</p>
+      <h3 class="day__headline">${esc(entry.headline)}</h3>
+      <p class="day__dek">${esc(entry.dek)}</p>
+      <p class="day__body">${esc(entry.body)}</p>
     `;
 
     // guard whole-card navigation against a click that ends a drag

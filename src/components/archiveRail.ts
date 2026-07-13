@@ -4,6 +4,16 @@ import { track } from '../analytics';
 
 const LQIP = lqip as Record<string, string>;
 
+// The caption and lightbox markup below are built with innerHTML, so every interpolated
+// poster field must be escaped (poster copy is committed data, not a hand-typed literal here).
+const esc = (s: unknown): string =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 // Builds the draggable poster rail + lightbox, with LQIP placeholders and lazy full images.
 export function initArchiveRail(): void {
   const rail = document.getElementById('rail');
@@ -32,7 +42,7 @@ export function initArchiveRail(): void {
 
     const cap = document.createElement('div');
     cap.className = 'poster__cap';
-    cap.innerHTML = `<span class="poster__year">${p.year}</span><span class="poster__host">${p.host}</span>`;
+    cap.innerHTML = `<span class="poster__year">${esc(p.year)}</span><span class="poster__host">${esc(p.host)}</span>`;
 
     const title = document.createElement('div');
     title.className = 'poster__title';
@@ -100,7 +110,7 @@ function openLightbox(slug: string): void {
   lastFocus = document.activeElement as HTMLElement;
   lbImg.src = `/posters/${slug}@2x.webp`;
   lbImg.alt = `${p.title}. The ${p.year} final at ${p.host}. Original ARCHV illustration.`;
-  lbCap.innerHTML = `<strong>${p.title}</strong>${p.host} · ${p.stamp}. ${p.moment}`;
+  lbCap.innerHTML = `<strong>${esc(p.title)}</strong>${esc(p.host)} · ${esc(p.stamp)}. ${esc(p.moment)}`;
   // "Shop this print" appears only once an Etsy listing URL is set on the poster.
   if (lbShop) {
     if (p.etsyUrl) {

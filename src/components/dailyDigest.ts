@@ -19,10 +19,17 @@ const esc = (s: unknown): string =>
 
 // Builds a horizontal "scroll through the days" rail of sub-1-minute wrap-up cards.
 // Reused by the Transfer Desk, World Cup and Football Leagues sections.
+// The homepage rail is a taste of the lane, not its full history: the /desk/<lane>/ index
+// page already carries every entry (build-lane-pages.mjs), and each day here creates a whole
+// card plus its own IntersectionObserver. Cap it so the rail's DOM and listener count never
+// grows unbounded as the daily desk job keeps committing new entries.
+const RAIL_CAP = 14;
+
 export function initDailyDigest(mountId: string, days: DayEntry[], source: string): void {
   const rail = document.getElementById(mountId);
   if (!rail) return;
   const lane = LANES[source] ?? source;
+  const visibleDays = days.slice(0, RAIL_CAP);
 
   const fmt = (iso: string) => {
     // 2026-06-12 -> "12 JUN" without pulling in a date lib or Date.now()
@@ -39,7 +46,7 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
   // shared with enableDrag below: a click that ends a drag must not follow the link
   const dragState = { dragged: false };
 
-  days.forEach((entry, i) => {
+  visibleDays.forEach((entry, i) => {
     // The whole card is one <a> (SITE-DEPTH-PLAN.md W2.2): single accessible link per card,
     // keyboard/screen-reader focusable, no nested links pretending to be the "real" one. The
     // rail is drag-to-scroll, so enableDrag() below suppresses the click when the pointer moved

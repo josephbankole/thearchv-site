@@ -18,7 +18,12 @@ import { existsSync } from "node:fs";
 import {
   SITE, esc, escAttr, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
+
+// Both inline scripts on this page family (masthead toggle + PostHog loader) are static, no
+// per-page interpolation, so one CSP works for every lane page.
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -72,6 +77,7 @@ function render(laneKey, lane) {
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
+  ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
   <meta property="og:title" content="${escAttr(title)}" />

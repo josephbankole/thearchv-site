@@ -4,6 +4,7 @@
    import from here so the two page types stay visually and structurally in lockstep (same
    masthead, same CSP-exempt inline-style pattern per thearchv-site/CLAUDE.md "Per-article
    pages"). Not used by the homepage bundle (src/), which stays CSP-clean and router-free. */
+import { createHash } from "node:crypto";
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -126,6 +127,64 @@ export function posthogSnippet() {
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true});
   </script>`;
+}
+
+/* ---------- CSP (2026-07-13 review, finding #9: "only the homepage has a CSP") ----------
+   GitHub Pages can't send headers, so a <meta http-equiv="Content-Security-Policy"> tag is
+   the ceiling on every page family, same as index.html. Inline scripts are only allowed via
+   an exact sha256 hash (never 'unsafe-inline' for script-src), so the hash must always be
+   computed from the EXACT text that ends up between <script> and </script> on the page - the
+   helpers below compute it by extracting that substring from the already-built markup, the
+   same rule scripts/check-csp-hash.mjs enforces for index.html's own inline bootstrap script.
+   That makes the hash self-verifying: whatever we hash is provably what's on the page. */
+
+// sha256 CSP token for an inline <script> body (base64, 'sha256-...' form script-src expects).
+export function scriptHash(body) {
+  return `sha256-${createHash("sha256").update(body, "utf8").digest("base64")}`;
+}
+
+// Pull the exact body of the (single) inline <script>...</script> out of an HTML fragment,
+// e.g. the string masthead() or posthogSnippet() returns. Throws if there isn't exactly one -
+// ambiguous input is a bug here, not something to silently hash the wrong thing for.
+export function extractScriptBody(html) {
+  const matches = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+  if (matches.length !== 1) {
+    throw new Error(`extractScriptBody: expected exactly 1 inline <script>, found ${matches.length}`);
+  }
+  return matches[0][1];
+}
+
+// masthead() and posthogSnippet() are static (no per-page interpolation), so their hashes are
+// constant across every page that includes them - computed once here, reused everywhere.
+export const MASTHEAD_SCRIPT_HASH = scriptHash(extractScriptBody(masthead()));
+export const POSTHOG_SCRIPT_HASH = scriptHash(extractScriptBody(posthogSnippet()));
+
+// Builds the CSP meta tag for a page in this family. `scripts` is every inline <script>
+// body's hash on THAT page (masthead + PostHog are shared; build-article-pages.mjs also
+// passes a per-page hash for its share-row script, which embeds that page's own url/title
+// and so is NOT identical across pages - verified: it must be computed per page, not once).
+export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null } = {}) {
+  const scriptSrc = ["'self'", ...scripts.map((h) => `'${h}'`)];
+  if (posthog) scriptSrc.push("https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com");
+  const styleSrc = ["'self'", "'unsafe-inline'"]; // inline style="" attrs (e.g. the hidden App Store link)
+  if (googleFonts) styleSrc.push("https://fonts.googleapis.com");
+  const fontSrc = ["'self'"];
+  if (googleFonts) fontSrc.push("https://fonts.gstatic.com");
+  const connectSrc = ["'self'"];
+  if (posthog) connectSrc.push("https://us.i.posthog.com", "https://us-assets.i.posthog.com", "https://eu.i.posthog.com", "https://eu-assets.i.posthog.com");
+  const frameSrc = frame ? ["'self'", frame] : ["'none'"];
+  const content = [
+    `default-src 'self'`,
+    `script-src ${scriptSrc.join(" ")}`,
+    `style-src ${styleSrc.join(" ")}`,
+    `img-src 'self' data:`,
+    `font-src ${fontSrc.join(" ")}`,
+    `connect-src ${connectSrc.join(" ")}`,
+    `base-uri 'self'`,
+    `object-src 'none'`,
+    `frame-src ${frameSrc.join(" ")}`,
+  ].join("; ");
+  return `<meta http-equiv="Content-Security-Policy" content="${content}" />`;
 }
 
 export function fontLinks() {

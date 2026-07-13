@@ -10,6 +10,13 @@ import { build } from "esbuild";
 import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { cspMeta } from "./shared/page-shell.mjs";
+
+// These legacy pages have no inline <script> at all (their masthead is two plain links, no
+// hamburger JS) and no PostHog/Google Fonts CDN (/content.css is self-hosted, no remote font
+// load) - so the CSP just needs to close everything but same-origin. Computed once: static,
+// no per-page content affects it.
+const PAGE_CSP = cspMeta();
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -83,6 +90,7 @@ function render(entry, sectionKey) {
   <meta name="robots" content="noindex,follow" />
   <link rel="canonical" href="${canonicalUrl}" />
   <meta name="theme-color" content="#0C2A3E" />
+  ${PAGE_CSP}
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />
   <meta property="og:title" content="${escAttr(entry.headline)}" />

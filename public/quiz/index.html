@@ -13,6 +13,12 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="canonical" href="https://thearchv.ca/quiz" />
   <link rel="icon" href="/favicon.svg" />
+  <!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, mirroring index.html.
+       Both inline scripts below are allowed only via an exact sha256 hash - if you edit either
+       one (including the QUESTIONS/VERDICTS data or the quiz logic further down), recompute
+       its hash (sha256, base64-encoded, of its exact inline body) and update it here, or the
+       browser will silently drop that script at runtime. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-C2dLM9J5LAUr51kRw8IbbantQNk3tpDzTn3f4RFXn3I=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="What's your football IQ?" />
   <meta property="og:description" content="Eight questions from the archive. Sixty seconds." />

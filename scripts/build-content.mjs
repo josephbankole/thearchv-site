@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = join(ROOT, "content");
@@ -20,6 +20,41 @@ const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More
 
 const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
+
+/* ---------- CSP (2026-07-13 review, finding #9: "only the homepage has a CSP") ----------
+   These pages build their own masthead markup rather than importing scripts/shared/page-shell.mjs's
+   masthead() (they predate that shared module and use /content.css, not the page-shell's inline
+   brand styles), so the toggle script is defined once here as a single string - used both in the
+   rendered page AND as the exact text the CSP hash below is computed from, so the two can never
+   drift apart. No PostHog and no Google Fonts CDN on this page family (content.css is a static
+   asset with no remote font load), so the CSP only needs to allow this one inline script. */
+const MASTHEAD_SCRIPT = `(function () {
+      var toggle = document.getElementById('masthead-toggle');
+      var panel = document.getElementById('masthead-panel');
+      if (!toggle || !panel) return;
+      function onKeydown(e) { if (e.key === 'Escape') close(true); }
+      function onDocClick(e) {
+        if (e.target !== toggle && !toggle.contains(e.target) && !panel.contains(e.target)) close(false);
+      }
+      function open() {
+        panel.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        document.addEventListener('keydown', onKeydown);
+        document.addEventListener('click', onDocClick, true);
+      }
+      function close(returnFocus) {
+        panel.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', onKeydown);
+        document.removeEventListener('click', onDocClick, true);
+        if (returnFocus) toggle.focus();
+      }
+      toggle.addEventListener('click', function () {
+        if (panel.hidden) open(); else close(false);
+      });
+    })();`;
+const MASTHEAD_SCRIPT_TAG = `<script>\n    ${MASTHEAD_SCRIPT}\n  </script>`;
+const PAGE_CSP = cspMeta({ scripts: [scriptHash(extractScriptBody(MASTHEAD_SCRIPT_TAG))] });
 
 /* ---------- frontmatter ---------- */
 function parse(raw) {
@@ -140,6 +175,7 @@ function render(p, allPages) {
   <meta name="description" content="${escAttr(p.description)}" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
+  ${PAGE_CSP}
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />
   <meta property="og:title" content="${escAttr(p.title)}" />
@@ -171,33 +207,7 @@ function render(p, allPages) {
       </nav>
     </div>
   </header>
-  <script>
-    (function () {
-      var toggle = document.getElementById('masthead-toggle');
-      var panel = document.getElementById('masthead-panel');
-      if (!toggle || !panel) return;
-      function onKeydown(e) { if (e.key === 'Escape') close(true); }
-      function onDocClick(e) {
-        if (e.target !== toggle && !toggle.contains(e.target) && !panel.contains(e.target)) close(false);
-      }
-      function open() {
-        panel.hidden = false;
-        toggle.setAttribute('aria-expanded', 'true');
-        document.addEventListener('keydown', onKeydown);
-        document.addEventListener('click', onDocClick, true);
-      }
-      function close(returnFocus) {
-        panel.hidden = true;
-        toggle.setAttribute('aria-expanded', 'false');
-        document.removeEventListener('keydown', onKeydown);
-        document.removeEventListener('click', onDocClick, true);
-        if (returnFocus) toggle.focus();
-      }
-      toggle.addEventListener('click', function () {
-        if (panel.hidden) open(); else close(false);
-      });
-    })();
-  </script>
+  ${MASTHEAD_SCRIPT_TAG}
   <main class="wrap">
     <article class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(meta.href)}">${esc(meta.label)}</a></p>

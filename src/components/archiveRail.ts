@@ -1,6 +1,7 @@
 import { posters } from '../data/posters';
 import lqip from '../../public/posters/lqip.json';
 import { track } from '../analytics';
+import { trapFocus } from '../ui/focusTrap';
 
 const LQIP = lqip as Record<string, string>;
 
@@ -92,6 +93,7 @@ let lbImg: HTMLImageElement | null = null;
 let lbCap: HTMLElement | null = null;
 let lbShop: HTMLAnchorElement | null = null;
 let lastFocus: HTMLElement | null = null;
+let releaseTrap: (() => void) | null = null;
 
 function initLightbox(): void {
   lb = document.getElementById('lightbox');
@@ -128,11 +130,16 @@ function openLightbox(slug: string): void {
   requestAnimationFrame(() => lb?.classList.add('is-open'));
   document.body.style.overflow = 'hidden';
   (document.getElementById('lightbox-close') as HTMLElement | null)?.focus();
+  // Keep Tab/Shift+Tab inside the dialog (close button + the "Buy Now" link when shown)
+  // while it is open, so keyboard focus can never wander into the rail behind it.
+  releaseTrap = trapFocus(lb);
 }
 
 function closeLightbox(): void {
   if (!lb) return;
   lb.classList.remove('is-open');
   document.body.style.overflow = '';
+  releaseTrap?.();
+  releaseTrap = null;
   setTimeout(() => { if (lb) lb.hidden = true; lastFocus?.focus(); }, 380);
 }

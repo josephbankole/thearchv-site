@@ -13,6 +13,15 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // the repo root for the exact lines to change. <!-- APP_STORE_URL_PLACEHOLDER -->
 export const APP_STORE_URL = "https://apps.apple.com/app/idPLACEHOLDER";
 
+// Defensive sort: every lane's day-entry array is committed newest-first by convention
+// (the daily desk job), but nothing in the type enforces that order. A single
+// out-of-order commit would silently scramble lane pages, prev/next nav, the homepage
+// day-rail and the article feed all at once. Array.prototype.sort is stable in every
+// runtime this build chain touches (Node, evergreen browsers), so entries sharing a
+// date keep their existing relative order. Shared by build-lane-pages.mjs,
+// build-article-pages.mjs and build-feed.mjs so the three generators can't drift.
+export const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
+
 export const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 export const longDate = (iso) => {

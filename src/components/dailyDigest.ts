@@ -25,11 +25,19 @@ const esc = (s: unknown): string =>
 // grows unbounded as the daily desk job keeps committing new entries.
 const RAIL_CAP = 14;
 
+// Defensive sort: `days` here is the raw array straight from src/data/*.ts, committed
+// newest-first by convention (the daily desk job) but not enforced by the type. Sort
+// before slicing to the cap above so one out-of-order commit can't scramble the rail
+// or silently drop recent entries off the visible slice. Array.prototype.sort is
+// stable, so entries sharing a date keep their existing relative order. Same
+// comparator as the build-time scripts (scripts/shared/page-shell.mjs byDateDesc).
+const byDateDesc = (a: DayEntry, b: DayEntry): number => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
+
 export function initDailyDigest(mountId: string, days: DayEntry[], source: string): void {
   const rail = document.getElementById(mountId);
   if (!rail) return;
   const lane = LANES[source] ?? source;
-  const visibleDays = days.slice(0, RAIL_CAP);
+  const visibleDays = [...days].sort(byDateDesc).slice(0, RAIL_CAP);
 
   const fmt = (iso: string) => {
     // 2026-06-12 -> "12 JUN" without pulling in a date lib or Date.now()

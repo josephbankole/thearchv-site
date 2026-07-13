@@ -18,7 +18,7 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import {
-  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META,
+  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
 } from "./shared/page-shell.mjs";
 
@@ -40,13 +40,20 @@ try {
   data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
 } finally { try { rmSync(tmp); } catch {} }
 
+// Defensive sort immediately after loading, before any use (see byDateDesc in
+// scripts/shared/page-shell.mjs): prev/next nav and "more from the lane" below both
+// assume newest-first, and a single out-of-order commit would otherwise scramble both.
+const transferDays = [...data.transferDays].sort(byDateDesc);
+const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
+const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
+
 // lane = URL segment under /desk/, anchor = the homepage section this lane links back to.
 // label/anchor come from the shared LANE_META (also used by build-lane-pages.mjs) so the two
-// page types never drift; `days` (newest-first, see src/data/*.ts) is attached per lane here.
+// page types never drift; `days` (newest-first, enforced above) is attached per lane here.
 const LANES = {
-  transfer: { ...LANE_META.transfer, days: data.transferDays },
-  "world-cup": { ...LANE_META["world-cup"], days: data.worldCupDays },
-  leagues: { ...LANE_META.leagues, days: data.leaguesDays },
+  transfer: { ...LANE_META.transfer, days: transferDays },
+  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays },
+  leagues: { ...LANE_META.leagues, days: leaguesDays },
 };
 
 /* ---------- body: \n\n paragraph breaks, dated "Update, N Jul:" additions stay visible paragraphs ---------- */

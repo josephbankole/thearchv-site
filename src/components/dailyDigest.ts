@@ -28,7 +28,12 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
     // 2026-06-12 -> "12 JUN" without pulling in a date lib or Date.now()
     const [, m, d] = iso.split('-');
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    return `${parseInt(d, 10)} ${months[parseInt(m, 10) - 1]}`;
+    const day = parseInt(d, 10);
+    const month = months[parseInt(m, 10) - 1];
+    // Malformed date (bad desk-committed entry): fall back to the raw ISO string rather than
+    // rendering "NaN"/"undefined" on the card.
+    if (!Number.isFinite(day) || !month) return iso;
+    return `${day} ${month}`;
   };
 
   // shared with enableDrag below: a click that ends a drag must not follow the link

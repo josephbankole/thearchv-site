@@ -109,13 +109,34 @@ const SHOP_URL = "https://www.etsy.com/shop/TheARCHVCA";
 const storefrontItemsRaw = JSON.parse(
   readFileSync(join(ROOT, "scripts", "storefront-items.json"), "utf8")
 );
-const storefrontItems = storefrontItemsRaw.map((item) => ({
-  id: item.id,
-  name: item.name,
-  price: item.price,
-  image: `${SITE}/shop/${item.image.replace(/\.[^.]+$/, "")}.webp`,
-  url: item.url,
-}));
+// Hand-curated (not desk-committed like src/data/*.ts), so a bad manual edit here should not
+// fail the whole build — validate each item's required string fields and skip anything broken,
+// logging which one and why so it gets fixed instead of silently disappearing.
+const REQUIRED_STRING_FIELDS = ["id", "name", "price", "image", "url"];
+const storefrontItems = storefrontItemsRaw
+  .filter((item, i) => {
+    if (typeof item !== "object" || item === null) {
+      console.error(`[build-feed] storefront item ${i} is not an object, skipping.`);
+      return false;
+    }
+    const missing = REQUIRED_STRING_FIELDS.filter(
+      (field) => typeof item[field] !== "string" || item[field].trim() === ""
+    );
+    if (missing.length > 0) {
+      console.error(
+        `[build-feed] storefront item ${i} (id: ${item.id ?? "unknown"}) missing/invalid field(s) ${missing.join(", ")}, skipping.`
+      );
+      return false;
+    }
+    return true;
+  })
+  .map((item) => ({
+    id: item.id,
+    name: item.name,
+    price: item.price,
+    image: `${SITE}/shop/${item.image.replace(/\.[^.]+$/, "")}.webp`,
+    url: item.url,
+  }));
 const storefront = {
   schema: SCHEMA,
   lastUpdated,

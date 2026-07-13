@@ -237,10 +237,35 @@ for (const p of pages) {
   n++;
 }
 
-/* ---------- sitemap (homepage + all article pages) ---------- */
+/* ---------- sitemap (homepage + all article pages + static indexable pages) ----------
+   This is the FIRST script in the build chain to touch dist/sitemap.xml (build-lane-pages.mjs
+   and build-article-pages.mjs append to it later), so anything not listed here is silently
+   dropped on every build. EXTRA_URLS is the static allowlist of hand-built public/ pages that
+   are indexable but have no frontmatter of their own — verified against public/<slug>/index.html's
+   own <meta name="robots"> before being added here. Quiz stays OUT: it ships noindex,nofollow
+   until FLIP-DAY.md flips it (see public/quiz/index.html). Deduped by loc in case a future page
+   ends up in both lists. */
+const EXTRA_URLS = [
+  { loc: "/start", changefreq: "monthly", priority: "0.5" },
+  { loc: "/dispatch", changefreq: "monthly", priority: "0.5" },
+  { loc: "/privacy", changefreq: "yearly", priority: "0.2" },
+  { loc: "/support", changefreq: "yearly", priority: "0.2" },
+];
 const today = new Date().toISOString().slice(0, 10);
-const urls = [`  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`]
-  .concat(pages.map((p) => `  <url><loc>${SITE}/${p.section}/${p.slug}/</loc><lastmod>${p.datePublished || today}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`));
+const seen = new Set([`${SITE}/`]);
+const urls = [`  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`];
+for (const p of pages) {
+  const loc = `${SITE}/${p.section}/${p.slug}/`;
+  if (seen.has(loc)) continue;
+  seen.add(loc);
+  urls.push(`  <url><loc>${loc}</loc><lastmod>${p.datePublished || today}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`);
+}
+for (const e of EXTRA_URLS) {
+  const loc = `${SITE}${e.loc}`;
+  if (seen.has(loc)) continue;
+  seen.add(loc);
+  urls.push(`  <url><loc>${loc}</loc><lastmod>${today}</lastmod><changefreq>${e.changefreq}</changefreq><priority>${e.priority}</priority></url>`);
+}
 writeFileSync(join(OUT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
 
-console.log(`build-content: wrote ${n} page(s) + sitemap (${pages.length + 1} urls) to ${OUT}`);
+console.log(`build-content: wrote ${n} page(s) + sitemap (${urls.length} urls) to ${OUT}`);

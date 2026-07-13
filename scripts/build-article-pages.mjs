@@ -18,8 +18,9 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import {
-  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META,
+  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -40,13 +41,20 @@ try {
   data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
 } finally { try { rmSync(tmp); } catch {} }
 
+// Defensive sort immediately after loading, before any use (see byDateDesc in
+// scripts/shared/page-shell.mjs): prev/next nav and "more from the lane" below both
+// assume newest-first, and a single out-of-order commit would otherwise scramble both.
+const transferDays = [...data.transferDays].sort(byDateDesc);
+const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
+const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
+
 // lane = URL segment under /desk/, anchor = the homepage section this lane links back to.
 // label/anchor come from the shared LANE_META (also used by build-lane-pages.mjs) so the two
-// page types never drift; `days` (newest-first, see src/data/*.ts) is attached per lane here.
+// page types never drift; `days` (newest-first, enforced above) is attached per lane here.
 const LANES = {
-  transfer: { ...LANE_META.transfer, days: data.transferDays },
-  "world-cup": { ...LANE_META["world-cup"], days: data.worldCupDays },
-  leagues: { ...LANE_META.leagues, days: data.leaguesDays },
+  transfer: { ...LANE_META.transfer, days: transferDays },
+  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays },
+  leagues: { ...LANE_META.leagues, days: leaguesDays },
 };
 
 /* ---------- body: \n\n paragraph breaks, dated "Update, N Jul:" additions stay visible paragraphs ---------- */
@@ -192,11 +200,49 @@ async function ogCard(entry, laneLabel) {
   return new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
 }
 
+// The share-row script embeds this page's own url/title, so - unlike masthead()/posthogSnippet()
+// - it is NOT identical across pages: its CSP hash must be computed per page, at generation time,
+// from this exact string (verified: two entries with different headlines produce different hashes).
+function shareScriptTag(url, headline) {
+  return `<script>
+    (function () {
+      var url = ${JSON.stringify(url).replace(/</g, "\\u003c")};
+      var title = ${JSON.stringify(headline).replace(/</g, "\\u003c")};
+      var ph = function (ev) { if (window.posthog) posthog.capture(ev, { url: url }); };
+      var native = document.getElementById('share-native');
+      if (native && navigator.share) {
+        native.hidden = false;
+        native.addEventListener('click', function () {
+          ph('share_native');
+          navigator.share({ title: title, url: url }).catch(function () {});
+        });
+      }
+      var x = document.getElementById('share-x');
+      if (x) x.addEventListener('click', function () { ph('share_x'); });
+      var copy = document.getElementById('share-copy');
+      if (copy) copy.addEventListener('click', function () {
+        if (!(navigator.clipboard && navigator.clipboard.writeText)) return;
+        navigator.clipboard.writeText(url).then(function () {
+          ph('share_copy');
+          copy.textContent = 'Copied';
+          setTimeout(function () { copy.textContent = 'Copy link'; }, 1500);
+        }, function () {});
+      });
+    })();
+  </script>`;
+}
+
 function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
   const lane = LANES[laneKey];
   const url = `${SITE}/desk/${laneKey}/${entry.date}/`;
   const ogImage = hasCard ? `${SITE}/desk/${laneKey}/${entry.date}/og.png` : `${SITE}/og.jpg`;
   const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
+  const shareScript = shareScriptTag(url, entry.headline);
+  const pageCsp = cspMeta({
+    scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript))],
+    posthog: true,
+    googleFonts: true,
+  });
 
   const figure = entry.image
     ? `
@@ -241,6 +287,7 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
+  ${pageCsp}
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />
   <meta property="og:title" content="${escAttr(entry.headline)}" />
@@ -291,32 +338,7 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
     </article>
   </main>
   ${footer()}
-  <script>
-    (function () {
-      var url = ${JSON.stringify(url).replace(/</g, "\\u003c")};
-      var title = ${JSON.stringify(entry.headline).replace(/</g, "\\u003c")};
-      var ph = function (ev) { if (window.posthog) posthog.capture(ev, { url: url }); };
-      var native = document.getElementById('share-native');
-      if (native && navigator.share) {
-        native.hidden = false;
-        native.addEventListener('click', function () {
-          ph('share_native');
-          navigator.share({ title: title, url: url }).catch(function () {});
-        });
-      }
-      var x = document.getElementById('share-x');
-      if (x) x.addEventListener('click', function () { ph('share_x'); });
-      var copy = document.getElementById('share-copy');
-      if (copy) copy.addEventListener('click', function () {
-        if (!(navigator.clipboard && navigator.clipboard.writeText)) return;
-        navigator.clipboard.writeText(url).then(function () {
-          ph('share_copy');
-          copy.textContent = 'Copied';
-          setTimeout(function () { copy.textContent = 'Copy link'; }, 1500);
-        }, function () {});
-      });
-    })();
-  </script>
+  ${shareScript}
 </body>
 </html>
 `;

@@ -19,10 +19,25 @@ const esc = (s: unknown): string =>
 
 // Builds a horizontal "scroll through the days" rail of sub-1-minute wrap-up cards.
 // Reused by the Transfer Desk, World Cup and Football Leagues sections.
+// The homepage rail is a taste of the lane, not its full history: the /desk/<lane>/ index
+// page already carries every entry (build-lane-pages.mjs), and each day here creates a whole
+// card plus its own IntersectionObserver. Cap it so the rail's DOM and listener count never
+// grows unbounded as the daily desk job keeps committing new entries.
+const RAIL_CAP = 14;
+
+// Defensive sort: `days` here is the raw array straight from src/data/*.ts, committed
+// newest-first by convention (the daily desk job) but not enforced by the type. Sort
+// before slicing to the cap above so one out-of-order commit can't scramble the rail
+// or silently drop recent entries off the visible slice. Array.prototype.sort is
+// stable, so entries sharing a date keep their existing relative order. Same
+// comparator as the build-time scripts (scripts/shared/page-shell.mjs byDateDesc).
+const byDateDesc = (a: DayEntry, b: DayEntry): number => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
+
 export function initDailyDigest(mountId: string, days: DayEntry[], source: string): void {
   const rail = document.getElementById(mountId);
   if (!rail) return;
   const lane = LANES[source] ?? source;
+  const visibleDays = [...days].sort(byDateDesc).slice(0, RAIL_CAP);
 
   const fmt = (iso: string) => {
     // 2026-06-12 -> "12 JUN" without pulling in a date lib or Date.now()
@@ -39,7 +54,7 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
   // shared with enableDrag below: a click that ends a drag must not follow the link
   const dragState = { dragged: false };
 
-  days.forEach((entry, i) => {
+  visibleDays.forEach((entry, i) => {
     // The whole card is one <a> (SITE-DEPTH-PLAN.md W2.2): single accessible link per card,
     // keyboard/screen-reader focusable, no nested links pretending to be the "real" one. The
     // rail is drag-to-scroll, so enableDrag() below suppresses the click when the pointer moved
@@ -55,9 +70,11 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
         ? '<span class="day__status day__status--live">Updated daily</span>'
         : '<span class="day__status day__status--done">Verified</span>';
 
-    // Optional brand-illustrated headshot (editorial; never a club photo/crest).
+    // Optional brand-illustrated headshot (editorial; never a club photo/crest). A missing
+    // imageAlt on a desk-committed entry used to render an empty alt on a real content image
+    // (as opposed to a decorative one) - fall back to a sensible description instead of silence.
     const avatar = entry.image
-      ? `<img class="day__avatar" src="${esc(entry.image)}" alt="${esc(entry.imageAlt ?? '')}" loading="lazy" decoding="async" width="52" height="52" />`
+      ? `<img class="day__avatar" src="${esc(entry.image)}" alt="${esc(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="52" height="52" />`
       : '';
 
     card.innerHTML = `

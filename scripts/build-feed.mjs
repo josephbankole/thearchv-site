@@ -9,6 +9,7 @@ import { writeFileSync, mkdirSync, rmSync, statSync, readFileSync } from "node:f
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
+import { byDateDesc } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -40,6 +41,13 @@ try {
 
 const { transferDays, worldCupDays, leaguesDays, posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro } = data;
 
+// Defensive sort immediately after loading, before any use (byDateDesc from
+// scripts/shared/page-shell.mjs, shared with build-lane-pages.mjs/build-article-pages.mjs):
+// every downstream feed and the "today" lead-story pick below assume newest-first.
+transferDays.sort(byDateDesc);
+worldCupDays.sort(byDateDesc);
+leaguesDays.sort(byDateDesc);
+
 /* ---------- compose the feeds ---------- */
 const SITE = "https://thearchv.ca";
 // Lane segment in the article URL differs from the internal `section` key for World Cup
@@ -49,7 +57,6 @@ const LANES = { transfer: "transfer", worldcup: "world-cup", leagues: "leagues" 
 const articleUrl = (section, date) => `${SITE}/desk/${LANES[section]}/${date}/`;
 
 // Today = newest dated wrap across Transfer Desk + World Cup, lead + the next four cards.
-const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
 const transferTagged = transferDays.map((d) => ({ ...d, section: "transfer", url: articleUrl("transfer", d.date) }));
 const worldCupTagged = worldCupDays.map((d) => ({ ...d, section: "worldcup", url: articleUrl("worldcup", d.date) }));
 const leaguesTagged = leaguesDays.map((d) => ({ ...d, section: "leagues", url: articleUrl("leagues", d.date) }));

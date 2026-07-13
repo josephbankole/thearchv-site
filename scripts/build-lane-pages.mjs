@@ -16,9 +16,14 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { existsSync } from "node:fs";
 import {
-  SITE, esc, escAttr, longDate, LANE_META,
+  SITE, esc, escAttr, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
+
+// Both inline scripts on this page family (masthead toggle + PostHog loader) are static, no
+// per-page interpolation, so one CSP works for every lane page.
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -39,10 +44,16 @@ try {
   data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
 } finally { try { rmSync(tmp); } catch {} }
 
+// Defensive sort immediately after loading, before any use (see byDateDesc in
+// scripts/shared/page-shell.mjs): the rest of this script assumes newest-first.
+const transferDays = [...data.transferDays].sort(byDateDesc);
+const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
+const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
+
 const LANES = {
-  transfer: { ...LANE_META.transfer, days: data.transferDays, intro: "Every move on Manchester United, checked against two sources and drawn the same day. If it is done, we say done. If it is a rumour, we say rumour." },
-  "world-cup": { ...LANE_META["world-cup"], days: data.worldCupDays, intro: "Men's and women's international football, every competition, every day it is on. Checked against two sources before anything goes up." },
-  leagues: { ...LANE_META.leagues, days: data.leaguesDays, intro: "Title races, promotions, sackings and the tables behind them, tracked day by day." },
+  transfer: { ...LANE_META.transfer, days: transferDays, intro: "Every move on Manchester United, checked against two sources and drawn the same day. If it is done, we say done. If it is a rumour, we say rumour." },
+  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays, intro: "Men's and women's international football, every competition, every day it is on. Checked against two sources before anything goes up." },
+  leagues: { ...LANE_META.leagues, days: leaguesDays, intro: "Title races, promotions, sackings and the tables behind them, tracked day by day." },
 };
 
 function laneCard(entry, laneKey) {
@@ -66,6 +77,7 @@ function render(laneKey, lane) {
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
+  ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
   <meta property="og:title" content="${escAttr(title)}" />

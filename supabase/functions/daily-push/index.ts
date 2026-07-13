@@ -14,6 +14,15 @@ import { adminClient, json } from "../_shared/cors.ts";
 const FEED_INDEX = "https://thearchv.ca/feed/index.json";
 const FEED_TODAY = "https://thearchv.ca/feed/today.json";
 
+// The "already sent today" check must use the ARCHV editorial day, not the UTC day: the
+// desk operates out of America/Edmonton, and a UTC-based check would flip to a new "day"
+// hours before (winter, UTC-7) or after (summer, UTC-6) the desk's own midnight, letting
+// a second push slip through - or blocking a legitimate one - right at the boundary.
+// Benign today given the current 11:00-23:59 UTC send window, but latent. en-CA formats
+// as YYYY-MM-DD, matching the ISO slice this replaces.
+const edmontonDay = (d: Date): string =>
+  new Intl.DateTimeFormat("en-CA", { timeZone: "America/Edmonton" }).format(d);
+
 Deno.serve(async (req) => {
   const guard = Deno.env.get("PUSH_SECRET");
   if (guard && req.headers.get("x-push-secret") !== guard) {
@@ -48,8 +57,8 @@ Deno.serve(async (req) => {
     return json({ ok: true, skipped: "lead story unchanged" }, 200);
   }
   if (state?.last_sent_at) {
-    const lastDay = new Date(state.last_sent_at).toISOString().slice(0, 10);
-    const today = new Date().toISOString().slice(0, 10);
+    const lastDay = edmontonDay(new Date(state.last_sent_at));
+    const today = edmontonDay(new Date());
     if (lastDay === today) return json({ ok: true, skipped: "already sent today" }, 200);
   }
 

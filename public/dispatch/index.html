@@ -8,6 +8,12 @@
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://thearchv.ca/dispatch" />
   <link rel="icon" href="/favicon.svg" />
+  <!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, mirroring index.html.
+       Both inline scripts below are allowed only via an exact sha256 hash - if you edit either
+       one, recompute its hash (sha256, base64-encoded, of its exact inline body) and update it
+       here, or the browser will silently drop that script at runtime. frame-src allows the
+       Substack subscribe embed below, nothing else. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-QMaH5f6QxR7J0Z+LgwvNWu6DJnI79VVl07aSj+iERMY=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'self' https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV Dispatch" />
   <meta property="og:description" content="Football history and the stories behind the game, in your inbox." />

@@ -11,6 +11,12 @@
   --cream: #f2ead3;
   --cream-dim: rgba(242, 234, 211, 0.6);
   --cream-faint: rgba(242, 234, 211, 0.28);
+  /* Text-only variant: --cream-faint at .28 fails AA when used as body-copy colour
+     (2026-07-13 review, src/style.css:13). .6 clears 4.5:1 against every background
+     this token's text usages sit on, including the lightest one (--navy-soft, used
+     by .legend cards) - verified by hand against WCAG relative-luminance contrast.
+     Borders/rules/decorative lines keep --cream-faint unchanged. */
+  --cream-faint-text: rgba(242, 234, 211, 0.6);
   --gold: #c9a14a;
   --gold-soft: rgba(201, 161, 74, 0.5);
   --pitch: #2e6b3a;
@@ -85,7 +91,7 @@ main, .masthead, .footer { position: relative; z-index: 2; }
   color: var(--cream-dim);
   font-weight: 500;
 }
-.section-index { color: var(--cream-faint); margin-bottom: 2.5rem; display: inline-flex; align-items: center; gap: 0.85rem; }
+.section-index { color: var(--cream-faint-text); margin-bottom: 2.5rem; display: inline-flex; align-items: center; gap: 0.85rem; }
 .index-tick { display: inline-block; width: 2.5rem; height: 1px; background: var(--gold); transform-origin: left center; }
 /* section header -> lane page link (SITE-DEPTH-PLAN.md W2.1). In-page anchors on the sections
    themselves are unchanged; this link only carries readers out to the lane's own page. */
@@ -253,7 +259,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
   transition: padding-left 0.5s var(--ease);
 }
 .killer__head:hover { padding-left: 0.75rem; }
-.killer__n { font-family: var(--grotesque); font-size: 0.85rem; color: var(--cream-faint); letter-spacing: 0.1em; }
+.killer__n { font-family: var(--grotesque); font-size: 0.85rem; color: var(--cream-faint-text); letter-spacing: 0.1em; }
 .killer__match { font-family: var(--serif); font-weight: 340; font-size: clamp(1.35rem, 3vw, 2.1rem); letter-spacing: -0.015em; }
 .killer__meta { font-size: var(--t-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-dim); white-space: nowrap; }
 .killer__plus { color: var(--gold); transition: transform 0.5s var(--ease); font-size: 1.2rem; }
@@ -310,7 +316,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .desk__lede { max-width: 50ch; color: var(--cream-dim); }
 .ticker { margin-top: 3rem; border-top: 1px solid var(--cream-faint); border-bottom: 1px solid var(--cream-faint); padding-block: 1.5rem; display: grid; gap: 0.9rem; font-family: var(--grotesque); }
 .ticker__row { display: grid; grid-template-columns: auto auto 1fr; gap: 1rem; align-items: baseline; font-size: 0.95rem; }
-.ticker__time { color: var(--cream-faint); font-variant-numeric: tabular-nums; font-size: 0.8rem; letter-spacing: 0.08em; }
+.ticker__time { color: var(--cream-faint-text); font-variant-numeric: tabular-nums; font-size: 0.8rem; letter-spacing: 0.08em; }
 .ticker__tag { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.2em 0.6em; border-radius: 2px; align-self: center; }
 .ticker__tag--done { background: var(--pitch); color: var(--cream); }
 .ticker__tag--rumour { border: 1px solid var(--cream-faint); color: var(--cream-dim); }
@@ -340,7 +346,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
   color: var(--cream); font-family: var(--grotesque); font-size: 1rem; padding: 0.85rem 1rem;
   transition: border-color 0.4s, box-shadow 0.4s; resize: vertical;
 }
-.field input::placeholder, .field textarea::placeholder { color: var(--cream-faint); }
+.field input::placeholder, .field textarea::placeholder { color: var(--cream-faint-text); }
 .field input:focus, .field textarea:focus {
   outline: none; border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(201, 161, 74, 0.16);
@@ -375,7 +381,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .footer__links a { color: var(--cream-dim); transition: color 0.3s; }
 .footer__links a:hover { color: var(--gold); }
 .footer__tag { margin-top: 2rem; color: var(--cream-dim); font-family: var(--serif); font-weight: 300; font-size: 1.1rem; }
-.footer__legal { margin-top: 2rem; max-width: 80ch; font-size: 0.78rem; line-height: 1.7; color: var(--cream-faint); }
+.footer__legal { margin-top: 2rem; max-width: 80ch; font-size: 0.78rem; line-height: 1.7; color: var(--cream-faint-text); }
 
 /* ---------- lightbox ---------- */
 .lightbox {
@@ -513,7 +519,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .legend__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .legend__no { color: var(--gold); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; margin: 0 0 0.35rem; }
 .legend__name { color: var(--cream); font-size: 1.12rem; line-height: 1.2; margin: 0 0 0.3rem; }
-.legend__meta { color: var(--cream-faint); font-size: 0.82rem; margin: 0 0 0.85rem; }
+.legend__meta { color: var(--cream-faint-text); font-size: 0.82rem; margin: 0 0 0.85rem; }
 .legend__bio { color: var(--cream-dim); font-size: 0.92rem; line-height: 1.5; margin: 0; }
 
 /* FAQ — answer blocks (SEO/AEO) */
@@ -560,7 +566,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .spynav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.1rem; }
 .spynav__link {
   display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem;
-  padding: 0.32rem 0; color: var(--cream-faint);
+  padding: 0.32rem 0; color: var(--cream-faint-text);
   font-family: var(--grotesque); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
 }
 .spynav__tick {

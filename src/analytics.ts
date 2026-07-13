@@ -104,11 +104,16 @@ function setupFollowTracking(): void {
   });
 }
 
-// Fire 25 / 50 / 75 / 100 percent scroll-depth milestones once each.
+// Fire 25 / 50 / 75 / 100 percent scroll-depth milestones once each. Gated behind the same
+// requestAnimationFrame ticking pattern src/ui/chrome.ts uses for its scroll-progress bar:
+// the 'scroll' event can fire many times per frame, and the measurement below forces a
+// layout read (scrollHeight); rAF-gating it caps that to once per frame without changing
+// which events fire or when a threshold is considered crossed.
 function setupScrollDepth(): void {
   const marks = [25, 50, 75, 100];
   const hit = new Set<number>();
-  const onScroll = () => {
+
+  function measure(): void {
     // window.scrollY is reliable everywhere; documentElement.scrollTop reads 0 in the iOS in-app
     // browsers (Instagram, Facebook) that make up much of the audience, which silently killed this event.
     const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
@@ -121,7 +126,18 @@ function setupScrollDepth(): void {
       }
     }
     if (hit.size === marks.length) window.removeEventListener('scroll', onScroll);
-  };
+  }
+
+  let ticking = false;
+  function onScroll(): void {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      measure();
+      ticking = false;
+    });
+  }
+
   window.addEventListener('scroll', onScroll, { passive: true });
 }
 

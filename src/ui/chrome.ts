@@ -4,6 +4,8 @@
 // is already disabled by the .reduced-motion class and scroll-behavior: auto. The JS
 // here only reflects scroll position and toggles an active state, both instant and safe.
 
+import { trapFocus } from './focusTrap';
+
 type Section = { id: string; label: string; el: HTMLElement; link: HTMLAnchorElement };
 
 // Curated nav labels. Only sections actually present in the DOM are used, so the
@@ -124,6 +126,8 @@ export function initMastheadMenu(): void {
   const panel = document.getElementById('masthead-panel') as HTMLElement | null;
   if (!toggle || !panel) return;
 
+  let releaseTrap: (() => void) | null = null;
+
   function onKeydown(e: KeyboardEvent): void {
     if (e.key === 'Escape') close(true);
   }
@@ -136,12 +140,18 @@ export function initMastheadMenu(): void {
     toggle!.setAttribute('aria-expanded', 'true');
     document.addEventListener('keydown', onKeydown);
     document.addEventListener('click', onDocClick, true);
+    // Keep Tab/Shift+Tab cycling inside the panel while it is open, and hand focus
+    // straight to its first link (standard disclosure-menu behaviour).
+    releaseTrap = trapFocus(panel!);
+    panel!.querySelector<HTMLElement>('.masthead__panel-link:not([hidden])')?.focus();
   }
   function close(returnFocus: boolean): void {
     panel!.hidden = true;
     toggle!.setAttribute('aria-expanded', 'false');
     document.removeEventListener('keydown', onKeydown);
     document.removeEventListener('click', onDocClick, true);
+    releaseTrap?.();
+    releaseTrap = null;
     if (returnFocus) toggle!.focus();
   }
 

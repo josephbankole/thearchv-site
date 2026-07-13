@@ -2,6 +2,16 @@ import { gsap } from 'gsap';
 import { longReads } from '../data/longReads';
 import { track } from '../analytics';
 
+// The accordion head/body are built with innerHTML, so every interpolated essay field must be
+// escaped (essay copy is committed data, not a hand-typed literal here).
+const esc = (s: unknown): string =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 // Builds the Long Reads accordion (origin: ARCHV LinkedIn essays).
 // Full essay text is rendered into the DOM so it is crawlable for SEO.
 // Reuses the .killers/.killer styles for a consistent archive look.
@@ -20,9 +30,9 @@ export function initLongReads(animate: boolean): void {
     head.setAttribute('aria-expanded', 'false');
     head.setAttribute('aria-controls', panelId);
     head.innerHTML = `
-      <span class="killer__n">${r.kicker}</span>
-      <span class="killer__match">${r.title}</span>
-      <span class="killer__meta">${r.meta}</span>
+      <span class="killer__n">${esc(r.kicker)}</span>
+      <span class="killer__match">${esc(r.title)}</span>
+      <span class="killer__meta">${esc(r.meta)}</span>
       <span class="killer__plus" aria-hidden="true">+</span>
     `;
 
@@ -34,7 +44,7 @@ export function initLongReads(animate: boolean): void {
     inner.className = 'killer__panel-inner';
     inner.innerHTML = r.body
       .split(/\n\s*\n/)
-      .map((p) => `<p>${p.trim()}</p>`)
+      .map((p) => `<p>${esc(p.trim())}</p>`)
       .join('');
     panel.appendChild(inner);
 

@@ -1,6 +1,16 @@
 import { gsap } from 'gsap';
 import { upsets, giantKillersIntro, giantKillersOutro } from '../data/giantKillers';
 
+// The accordion head/body are built with innerHTML, so every interpolated upset field must be
+// escaped (upset copy is committed data, not a hand-typed literal here).
+const esc = (s: unknown): string =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 // Builds the featured-article accordion. Full text is in the DOM (crawlable).
 export function initGiantKillers(animate: boolean): void {
   const intro = document.getElementById('killers-intro');
@@ -21,9 +31,9 @@ export function initGiantKillers(animate: boolean): void {
     head.setAttribute('aria-expanded', 'false');
     head.setAttribute('aria-controls', panelId);
     head.innerHTML = `
-      <span class="killer__n">${u.n}</span>
-      <span class="killer__match">${u.match}</span>
-      <span class="killer__meta">${u.meta}</span>
+      <span class="killer__n">${esc(u.n)}</span>
+      <span class="killer__match">${esc(u.match)}</span>
+      <span class="killer__meta">${esc(u.meta)}</span>
       <span class="killer__plus" aria-hidden="true">+</span>
     `;
 
@@ -33,7 +43,7 @@ export function initGiantKillers(animate: boolean): void {
     panel.setAttribute('role', 'region');
     const inner = document.createElement('div');
     inner.className = 'killer__panel-inner';
-    inner.innerHTML = `<p>${u.body}</p>`;
+    inner.innerHTML = `<p>${esc(u.body)}</p>`;
     panel.appendChild(inner);
 
     head.addEventListener('click', () => {

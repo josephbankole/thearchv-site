@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-13",
+    day: "Monday",
+    headline: "United finally get a signing over the line, and lose another chase.",
+    dek: "Orozco turns eighteen and gets announced. Tchouameni signs on at Madrid.",
+    body: "Cristian Orozco turns eighteen today, which is the whole point. International rules would not let United register the Colombian midfielder before it. The medical is done, he is in Manchester, and the club are set to confirm the move from Fortaleza, their first official signing of the summer. He goes into the Under-21s rather than out on loan. The other news is worse. Aurelien Tchouameni has agreed a new Real Madrid deal to 2031, ending a pursuit United were willing to spend over a hundred million euros on, with a conversation with Jose Mourinho reported as the thing that settled it. Ederson is off too, collapsed after extra medical checks. Andrey Santos still waits on his unveiling, number seventeen already his.",
+    status: "verified",
+  },
+  {
     date: "2026-07-12",
     day: "Sunday",
     headline: "Ederson to United tips toward collapse.",

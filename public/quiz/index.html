@@ -100,6 +100,21 @@
       color: var(--cream);
       text-decoration: none;
     }
+    .feedback {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cream);
+      min-height: 1.2em;
+    }
+    /* Same accessible colours the main site uses for its own status text
+       (src/style.css .form__status.is-ok/.is-err): gold check for correct,
+       the same muted red for incorrect. Text label is the real a11y fix;
+       these icons are a bonus, not a substitute for it. */
+    .feedback.right::before { content: '\2713  '; color: var(--gold); }
+    .feedback.wrong::before { content: '\00d7  '; color: #d9785f; }
     .verdict {
       font-family: "Fraunces", Georgia, serif;
       font-size: clamp(1.6rem, 6.5vw, 2.1rem);
@@ -130,14 +145,15 @@
 
     <!-- Quiz -->
     <section id="quiz" class="hidden">
-      <p class="progress" id="progress"></p>
+      <p class="progress" id="progress" aria-live="polite"></p>
       <p class="question" id="question"></p>
       <div class="options" id="options"></div>
+      <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
     </section>
 
     <!-- Result -->
     <section id="result" class="hidden">
-      <p class="verdict" id="verdict"></p>
+      <p class="verdict" id="verdict" aria-live="polite"></p>
       <p class="score" id="score"></p>
       <p class="verdict-line" id="verdict-line"></p>
       <div class="cta-block">
@@ -195,6 +211,9 @@
         b.addEventListener('click', () => pick(b, idx, q.right));
         box.appendChild(b);
       });
+      const feedback = $('feedback');
+      feedback.textContent = '';
+      feedback.className = 'feedback';
       locked = false;
     }
 
@@ -203,7 +222,18 @@
       locked = true;
       const buttons = $('options').children;
       buttons[right].classList.add('right');
-      if (idx === right) { score++; } else { btn.classList.add('wrong'); }
+      const feedback = $('feedback');
+      // Colour alone never carries the result: a visible text label backs up
+      // the right/wrong border-and-background treatment on the buttons.
+      if (idx === right) {
+        score++;
+        feedback.textContent = 'Correct.';
+        feedback.className = 'feedback right';
+      } else {
+        btn.classList.add('wrong');
+        feedback.textContent = 'Not quite.';
+        feedback.className = 'feedback wrong';
+      }
       setTimeout(() => {
         i++;
         if (i < QUESTIONS.length) { show(QUESTIONS[i]); }

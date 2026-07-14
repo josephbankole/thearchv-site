@@ -74,6 +74,11 @@ const targets = [
   ["lane: /desk/transfer/", join(DIST, "desk", "transfer", "index.html")],
   ["lane: /desk/world-cup/", join(DIST, "desk", "world-cup", "index.html")],
   ["lane: /desk/leagues/", join(DIST, "desk", "leagues", "index.html")],
+  // Evergreen surfaces (build-glossary-pages.mjs, build-standards-page.mjs): both carry the
+  // shared masthead + PostHog inline scripts, so their static hashes must be in each page's CSP.
+  ["glossary hub: /glossary/", join(DIST, "glossary", "index.html")],
+  ["glossary: /glossary/xg/", join(DIST, "glossary", "xg", "index.html")],
+  ["standards: /standards/", join(DIST, "standards", "index.html")],
 ];
 
 const contentDir = readdirSync(DIST).includes("finals") ? join(DIST, "finals") : null;

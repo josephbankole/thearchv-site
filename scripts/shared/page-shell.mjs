@@ -148,6 +148,7 @@ export function footer() {
         <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
+        <a href="/glossary/">Glossary</a>
       </nav>
       <p class="footer__tag">Football history, illustrated. Daily.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
@@ -360,8 +361,26 @@ export function pageStyles() {
     .footer__tag { color: var(--cream); margin: .5rem 0; }
     .footer__legal { color: var(--cream-faint); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
 
+    /* glossary (UNIT 1) + standards (UNIT 2): evergreen static surfaces */
+    .glossary { padding: 1.5rem 0 1rem; }
+    .glossary .lane__lede { margin-bottom: 2.4rem; }
+    .glossary__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 1.2rem; line-height: 1.3; margin: 1.6rem 0 .5rem; }
+    .glossary__answer { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.6rem; }
+    .glossary__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+    .glossary-card { display: block; padding: 1.3rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; color: inherit;
+      background: linear-gradient(180deg, rgba(19, 58, 82, 0.35), rgba(7, 28, 43, 0.35)); transition: border-color .2s ease, transform .2s ease; }
+    .glossary-card:hover { border-color: var(--gold-soft); text-decoration: none; transform: translateY(-2px); }
+    .glossary-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .glossary-card__term { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; line-height: 1.24; margin: 0 0 .4rem; }
+    .glossary-card__one { display: block; color: var(--cream-dim); font-size: .95rem; }
+
+    .standards { padding: 1.5rem 0 1rem; }
+    .standards .lead { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.8rem; }
+    .standards h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.35rem; line-height: 1.2; margin: 2rem 0 .5rem; }
+    .standards p { margin: 0 0 1rem; }
+
     @media (prefers-reduced-motion: reduce) {
-      .lane-card, .more-card { transition: none; }
+      .lane-card, .more-card, .glossary-card { transition: none; }
     }
   </style>`;
 }

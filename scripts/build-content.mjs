@@ -260,6 +260,15 @@ const EXTRA_URLS = [
   { loc: "/dispatch", changefreq: "monthly", priority: "0.5" },
   { loc: "/privacy", changefreq: "yearly", priority: "0.2" },
   { loc: "/support", changefreq: "yearly", priority: "0.2" },
+  // Evergreen surfaces generated later in the chain (build-glossary-pages.mjs,
+  // build-standards-page.mjs). Listed here so they enter the sitemap through this one
+  // assembly point; the trailing slash matches each page's own <link rel="canonical">.
+  { loc: "/glossary/", changefreq: "monthly", priority: "0.6" },
+  { loc: "/glossary/xg/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/false-9/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/offside/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/var/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
 ];
 const today = new Date().toISOString().slice(0, 10);
 const seen = new Set([`${SITE}/`]);

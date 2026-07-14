@@ -35,10 +35,28 @@ export const longDate = (iso) => {
 };
 
 // lane = URL segment under /desk/, anchor = the homepage section this lane links back to.
+// seoSuffix = the entity phrase appended after an article headline in its <title> (search-only,
+// never shown on the page). indexTitle = the full <title> for that lane's index page. Visible
+// copy (h1, og:/twitter: titles) stays brand-clean; only <title> and meta description use these.
 export const LANE_META = {
-  transfer: { label: "Transfer Desk", anchor: "#transfer-desk" },
-  "world-cup": { label: "International Football", anchor: "#world-cup" },
-  leagues: { label: "Football Leagues", anchor: "#football-leagues" },
+  transfer: {
+    label: "Transfer Desk",
+    anchor: "#transfer-desk",
+    seoSuffix: "Manchester United transfer news",
+    indexTitle: "Manchester United Transfer News, Verified Daily · The ARCHV",
+  },
+  "world-cup": {
+    label: "International Football",
+    anchor: "#world-cup",
+    seoSuffix: "World Cup 2026",
+    indexTitle: "World Cup 2026 & International Football · The ARCHV",
+  },
+  leagues: {
+    label: "Football Leagues",
+    anchor: "#football-leagues",
+    seoSuffix: "Football Leagues",
+    indexTitle: "Football Leagues: Premier League, Champions League & More · The ARCHV",
+  },
 };
 
 // Simple three-desk text nav, on article AND lane pages (SITE-DEPTH-PLAN.md W3.3). Kept as

@@ -65,14 +65,16 @@ function laneCard(entry, laneKey) {
 
 function render(laneKey, lane) {
   const url = `${SITE}/desk/${laneKey}/`;
-  const title = `${lane.label} · The ARCHV`;
+  // <title> carries the entity-rich, search-only title; og/twitter keep the brand-clean form.
+  const pageTitle = lane.indexTitle;
+  const socialTitle = `${lane.label} · The ARCHV`;
 
   return `<!doctype html>
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(title)}</title>
+  <title>${esc(pageTitle)}</title>
   <meta name="description" content="${escAttr(lane.intro)}" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
@@ -80,7 +82,7 @@ function render(laneKey, lane) {
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(title)}" />
+  <meta property="og:title" content="${escAttr(socialTitle)}" />
   <meta property="og:description" content="${escAttr(lane.intro)}" />
   <meta property="og:url" content="${url}" />
   <meta property="og:image" content="${SITE}/og.jpg" />
@@ -88,7 +90,7 @@ function render(laneKey, lane) {
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(title)}" />
+  <meta name="twitter:title" content="${escAttr(socialTitle)}" />
   <meta name="twitter:description" content="${escAttr(lane.intro)}" />
   <meta name="twitter:image" content="${SITE}/og.jpg" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

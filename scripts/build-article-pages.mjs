@@ -67,6 +67,42 @@ function bodyHtml(text) {
     .join("\n        ");
 }
 
+/* ---------- meta description: "<dek> <first sentence of body>", trimmed at a word boundary so
+   the whole string stays <=155 chars. Search-only; the visible page and og/twitter copy are
+   untouched. Throws if the result ever exceeds 160, so a bad edit fails the build loudly. */
+const DESC_TARGET = 155;
+function firstSentence(text) {
+  const s = String(text).trim();
+  const m = s.match(/^.*?[.!?](?=\s|$)/);
+  return (m ? m[0] : s).trim();
+}
+function truncateAtWord(str, maxLen) {
+  if (str.length <= maxLen) return str;
+  const cut = str.slice(0, maxLen);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?]+$/, "");
+}
+function metaDescription(dek, body) {
+  const d = String(dek).trim();
+  const sentence = firstSentence(body);
+  const full = sentence ? `${d} ${sentence}` : d;
+  const out = full.length > DESC_TARGET ? `${truncateAtWord(full, DESC_TARGET - 1)}…` : full;
+  if (out.length > 160) throw new Error(`meta description exceeds 160 chars (${out.length}): ${out}`);
+  return out;
+}
+
+// tests-by-assertion: exercise the helper at module load so a regression fails the build.
+(function selfTestMetaDescription() {
+  const long = "word ".repeat(80).trim(); // 400+ chars, all word boundaries
+  const truncated = metaDescription("A short standfirst.", long);
+  if (truncated.length > DESC_TARGET) throw new Error(`metaDescription self-test: long input produced ${truncated.length} chars`);
+  if (!truncated.endsWith("…")) throw new Error("metaDescription self-test: expected an ellipsis on truncation");
+  const shortDek = "Fernandes the name. Not the only one.";
+  const shortBody = "The move building steam is Mateus Fernandes. And more.";
+  const kept = metaDescription(shortDek, shortBody);
+  if (kept !== `${shortDek} The move building steam is Mateus Fernandes.`) throw new Error("metaDescription self-test: short input should pass through untruncated");
+})();
+
 function schema(entry, url, label) {
   return JSON.stringify({
     "@context": "https://schema.org",
@@ -288,8 +324,8 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(entry.headline)} · The ARCHV</title>
-  <meta name="description" content="${escAttr(entry.dek)}" />
+  <title>${esc(entry.headline)} · ${esc(lane.seoSuffix)} · The ARCHV</title>
+  <meta name="description" content="${escAttr(metaDescription(entry.dek, entry.body))}" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />

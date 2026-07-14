@@ -14,6 +14,17 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // the repo root for the exact lines to change. <!-- APP_STORE_URL_PLACEHOLDER -->
 export const APP_STORE_URL = "https://apps.apple.com/app/idPLACEHOLDER";
 
+// The ARCHV's official profiles, for the Organization sameAs entity graph. Kept in one place so
+// the homepage Organization JSON-LD (index.html) and every generated article page's publisher
+// block point at the same set, consolidating the entity for search and answer engines.
+export const ORG_SAMEAS = [
+  "https://www.instagram.com/thearchvfc/",
+  "https://www.threads.net/@thearchvfc",
+  "https://thearchvdispatch.substack.com",
+  "https://www.linkedin.com/company/thearchvfc/",
+  "https://x.com/thearchv_ca",
+];
+
 // Defensive sort: every lane's day-entry array is committed newest-first by convention
 // (the daily desk job), but nothing in the type enforces that order. A single
 // out-of-order commit would silently scramble lane pages, prev/next nav, the homepage

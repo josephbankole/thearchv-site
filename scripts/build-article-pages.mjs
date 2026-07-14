@@ -20,7 +20,7 @@ import sharp from "sharp";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -120,7 +120,9 @@ function schema(entry, url, label) {
         isAccessibleForFree: true,
         inLanguage: "en-GB",
         author: { "@type": "Organization", name: "The ARCHV" },
-        publisher: { "@type": "Organization", name: "The ARCHV", logo: `${SITE}/brand/logo-badge@192.png` },
+        // Compact Organization carrying the sameAs entity graph, so every article page reinforces
+        // the same brand entity (matches the homepage Organization JSON-LD in index.html).
+        publisher: { "@type": "Organization", name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
         image: entry.image ? `${SITE}${entry.image}` : `${SITE}/og.jpg`,
         mainEntityOfPage: url,
       },

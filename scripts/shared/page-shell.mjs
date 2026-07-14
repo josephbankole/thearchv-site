@@ -22,7 +22,8 @@ export const ORG_SAMEAS = [
   "https://www.threads.net/@thearchvfc",
   "https://thearchvdispatch.substack.com",
   "https://www.linkedin.com/company/thearchvfc/",
-  "https://x.com/thearchv_ca",
+  "https://x.com/thearchvfc",
+  "https://www.etsy.com/shop/TheARCHVCA",
 ];
 
 // Defensive sort: every lane's day-entry array is committed newest-first by convention

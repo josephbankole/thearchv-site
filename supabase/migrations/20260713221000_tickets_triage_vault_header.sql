@@ -9,13 +9,18 @@
 -- 2026-06-19 version, re-opening support-triage (a paid Claude call) to anyone holding the
 -- publishable key.
 --
--- This migration recreates tg_tickets_triage() to match the CURRENT production definition
--- exactly, read live via `pg_get_functiondef` on 2026-07-13 (not modifying the historical
--- 20260619010000 file, which stays as a record of what was actually run that day). It reads
--- triage_secret from Vault and sends it as the x-triage-secret header support-triage's guard
--- expects; the two 'sb_publishable_...' values are the project's public, client-safe
--- publishable key (used as the standard 'apikey' + bearer auth needed to invoke any Edge
--- Function through the Supabase gateway), not a secret, so no Vault lookup is needed for those.
+-- This migration recreates tg_tickets_triage() to match the CURRENT production definition,
+-- re-applied live on 2026-07-14. It reads triage_secret from Vault and sends it as the
+-- x-triage-secret header support-triage's guard expects.
+--
+-- HYGIENE 2026-07-14: the client-safe publishable/anon key (apikey + bearer needed to invoke
+-- the Edge Function through the Supabase gateway) is now read from Vault ('publishable_key')
+-- rather than written as a literal here. The key is not a secret (it ships in the iOS app
+-- binary), but keeping literals out of the repo stops false-positive secret scans (GitGuardian
+-- flagged the earlier literal) and matches how triage_secret/push_secret are already handled.
+-- All three Vault secrets are set out-of-band (CLI/dashboard/`vault.create_secret`), not by a
+-- migration, so a fresh replay onto a new environment must set publishable_key, triage_secret
+-- and push_secret in Vault first — same operational step that already exists for the other two.
 
 create extension if not exists pg_net;
 
@@ -25,13 +30,15 @@ language plpgsql
 security definer
 set search_path = public, net, vault
 as $$
+declare
+  pub text := (select decrypted_secret from vault.decrypted_secrets where name = 'publishable_key');
 begin
   perform net.http_post(
     url := 'https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/support-triage',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
-      'apikey', 'sb_publishable_v3538BmUgl9pn-KPzD7g4g_aLZeuSjA',
-      'Authorization', 'Bearer sb_publishable_v3538BmUgl9pn-KPzD7g4g_aLZeuSjA',
+      'apikey', pub,
+      'Authorization', 'Bearer ' || pub,
       'x-triage-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'triage_secret')
     ),
     body := jsonb_build_object('record', to_jsonb(NEW))

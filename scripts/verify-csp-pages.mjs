@@ -78,6 +78,7 @@ const targets = [
   // shared masthead + PostHog inline scripts, so their static hashes must be in each page's CSP.
   ["glossary hub: /glossary/", join(DIST, "glossary", "index.html")],
   ["glossary: /glossary/xg/", join(DIST, "glossary", "xg", "index.html")],
+  ["standards: /standards/", join(DIST, "standards", "index.html")],
 ];
 
 const contentDir = readdirSync(DIST).includes("finals") ? join(DIST, "finals") : null;

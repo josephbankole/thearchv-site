@@ -361,7 +361,7 @@ export function pageStyles() {
     .footer__tag { color: var(--cream); margin: .5rem 0; }
     .footer__legal { color: var(--cream-faint); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
 
-    /* glossary (UNIT 1): evergreen static surface */
+    /* glossary (UNIT 1) + standards (UNIT 2): evergreen static surfaces */
     .glossary { padding: 1.5rem 0 1rem; }
     .glossary .lane__lede { margin-bottom: 2.4rem; }
     .glossary__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 1.2rem; line-height: 1.3; margin: 1.6rem 0 .5rem; }
@@ -373,6 +373,11 @@ export function pageStyles() {
     .glossary-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .glossary-card__term { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; line-height: 1.24; margin: 0 0 .4rem; }
     .glossary-card__one { display: block; color: var(--cream-dim); font-size: .95rem; }
+
+    .standards { padding: 1.5rem 0 1rem; }
+    .standards .lead { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.8rem; }
+    .standards h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.35rem; line-height: 1.2; margin: 2rem 0 .5rem; }
+    .standards p { margin: 0 0 1rem; }
 
     @media (prefers-reduced-motion: reduce) {
       .lane-card, .more-card, .glossary-card { transition: none; }

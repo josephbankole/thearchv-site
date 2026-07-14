@@ -268,6 +268,7 @@ const EXTRA_URLS = [
   { loc: "/glossary/false-9/", changefreq: "monthly", priority: "0.5" },
   { loc: "/glossary/offside/", changefreq: "monthly", priority: "0.5" },
   { loc: "/glossary/var/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
 ];
 const today = new Date().toISOString().slice(0, 10);
 const seen = new Set([`${SITE}/`]);

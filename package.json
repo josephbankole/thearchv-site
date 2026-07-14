@@ -6,7 +6,7 @@
   "description": "The ARCHV — Football history, illustrated. The owned site for @thearchvfc.",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/check-csp-hash.mjs && tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-feed.mjs && node scripts/build-rss.mjs && node scripts/build-day-pages.mjs && node scripts/build-lane-pages.mjs && node scripts/build-article-pages.mjs && node scripts/verify-csp-pages.mjs",
+    "build": "node scripts/check-csp-hash.mjs && tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-feed.mjs && node scripts/build-rss.mjs && node scripts/build-day-pages.mjs && node scripts/build-lane-pages.mjs && node scripts/build-article-pages.mjs && node scripts/build-glossary-pages.mjs && node scripts/verify-csp-pages.mjs",
     "check-csp": "node scripts/check-csp-hash.mjs",
     "verify-csp": "node scripts/verify-csp-pages.mjs",
     "feed": "node scripts/build-feed.mjs",
@@ -15,6 +15,7 @@
     "pages": "node scripts/build-day-pages.mjs",
     "lanes": "node scripts/build-lane-pages.mjs",
     "articles": "node scripts/build-article-pages.mjs",
+    "glossary": "node scripts/build-glossary-pages.mjs",
     "preview": "vite preview --port 4173",
     "assets": "node scripts/optimize-posters.mjs",
     "og": "node scripts/make-og.mjs"

@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-14",
+    day: "Tuesday",
+    headline: "United get their first one over the line. Andrey Santos is a Manchester United player.",
+    dek: "Fifty million pounds, five years, and the first permanent signing of the Carrick era.",
+    body: "It is done and it is official. Manchester United have announced Andrey Santos from Chelsea, subject to registration. Fifty million pounds, forty eight of it guaranteed and two in add-ons, a five year deal, a ten per cent sell-on left with Chelsea. The twenty two year old Brazil midfielder is the first permanent signing Michael Carrick has made as head coach. The next one is already in the building. Youri Tielemans is in for his medical today after United triggered the release clause in his Aston Villa contract, reported at thirty five million. Cristian Orozco turns eighteen today, which is the only reason the Fortaleza deal can now be registered. Elsewhere, Jurgen Klopp has agreed the principles of a four year contract to manage Germany.",
+    status: "verified",
+    image: "/heads/andrey-santos.webp",
+    imageAlt: "Andrey Santos, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-13",
     day: "Monday",
     headline: "United finally get a signing over the line, and lose another chase.",

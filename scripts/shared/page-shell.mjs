@@ -14,6 +14,18 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // the repo root for the exact lines to change. <!-- APP_STORE_URL_PLACEHOLDER -->
 export const APP_STORE_URL = "https://apps.apple.com/app/idPLACEHOLDER";
 
+// The ARCHV's official profiles, for the Organization sameAs entity graph. Kept in one place so
+// the homepage Organization JSON-LD (index.html) and every generated article page's publisher
+// block point at the same set, consolidating the entity for search and answer engines.
+export const ORG_SAMEAS = [
+  "https://www.instagram.com/thearchvfc/",
+  "https://www.threads.net/@thearchvfc",
+  "https://thearchvdispatch.substack.com",
+  "https://www.linkedin.com/company/thearchvfc/",
+  "https://x.com/thearchvfc",
+  "https://www.etsy.com/shop/TheARCHVCA",
+];
+
 // Defensive sort: every lane's day-entry array is committed newest-first by convention
 // (the daily desk job), but nothing in the type enforces that order. A single
 // out-of-order commit would silently scramble lane pages, prev/next nav, the homepage
@@ -23,6 +35,10 @@ export const APP_STORE_URL = "https://apps.apple.com/app/idPLACEHOLDER";
 // build-article-pages.mjs and build-feed.mjs so the three generators can't drift.
 export const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
 
+// RSS autodiscovery link, shared so every page in this family (and index.html) points feed
+// readers and crawlers at the same /feed.xml built by scripts/build-rss.mjs.
+export const RSS_LINK = `<link rel="alternate" type="application/rss+xml" title="The ARCHV" href="/feed.xml" />`;
+
 export const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 export const longDate = (iso) => {
@@ -31,10 +47,28 @@ export const longDate = (iso) => {
 };
 
 // lane = URL segment under /desk/, anchor = the homepage section this lane links back to.
+// seoSuffix = the entity phrase appended after an article headline in its <title> (search-only,
+// never shown on the page). indexTitle = the full <title> for that lane's index page. Visible
+// copy (h1, og:/twitter: titles) stays brand-clean; only <title> and meta description use these.
 export const LANE_META = {
-  transfer: { label: "Transfer Desk", anchor: "#transfer-desk" },
-  "world-cup": { label: "International Football", anchor: "#world-cup" },
-  leagues: { label: "Football Leagues", anchor: "#football-leagues" },
+  transfer: {
+    label: "Transfer Desk",
+    anchor: "#transfer-desk",
+    seoSuffix: "Manchester United transfer news",
+    indexTitle: "Manchester United Transfer News, Verified Daily · The ARCHV",
+  },
+  "world-cup": {
+    label: "International Football",
+    anchor: "#world-cup",
+    seoSuffix: "World Cup 2026",
+    indexTitle: "World Cup 2026 & International Football · The ARCHV",
+  },
+  leagues: {
+    label: "Football Leagues",
+    anchor: "#football-leagues",
+    seoSuffix: "Football Leagues",
+    indexTitle: "Football Leagues: Premier League, Champions League & More · The ARCHV",
+  },
 };
 
 // Simple three-desk text nav, on article AND lane pages (SITE-DEPTH-PLAN.md W3.3). Kept as

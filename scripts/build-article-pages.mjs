@@ -20,7 +20,7 @@ import sharp from "sharp";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
+  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -302,6 +302,7 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
   <meta name="twitter:description" content="${escAttr(entry.dek)}" />
   <meta name="twitter:image" content="${ogImage}" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  ${RSS_LINK}
   <script type="application/ld+json">${schema(entry, url, lane.label)}</script>
 
   <!-- PostHog: pageview only on this static surface. Same project as the website. -->

@@ -23,6 +23,10 @@ export const APP_STORE_URL = "https://apps.apple.com/app/idPLACEHOLDER";
 // build-article-pages.mjs and build-feed.mjs so the three generators can't drift.
 export const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
 
+// RSS autodiscovery link, shared so every page in this family (and index.html) points feed
+// readers and crawlers at the same /feed.xml built by scripts/build-rss.mjs.
+export const RSS_LINK = `<link rel="alternate" type="application/rss+xml" title="The ARCHV" href="/feed.xml" />`;
+
 export const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 export const longDate = (iso) => {

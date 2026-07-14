@@ -18,7 +18,7 @@ import { existsSync } from "node:fs";
 import {
   SITE, esc, escAttr, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
 // Both inline scripts on this page family (masthead toggle + PostHog loader) are static, no
@@ -92,6 +92,7 @@ function render(laneKey, lane) {
   <meta name="twitter:description" content="${escAttr(lane.intro)}" />
   <meta name="twitter:image" content="${SITE}/og.jpg" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  ${RSS_LINK}
   <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [

@@ -72,10 +72,16 @@ function schema(entry, url, label) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Article",
+        // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
+        // stay Article). dateModified is kept equal to datePublished: the data is date-only and
+        // carries no separate revised date, so claiming a later modification would be dishonest;
+        // appended, dated "Update, ..." lines stay visible in the body without inflating this.
+        "@type": "NewsArticle",
         headline: entry.headline,
         description: entry.dek,
         datePublished: entry.date,
+        dateModified: entry.date,
+        isAccessibleForFree: true,
         inLanguage: "en-GB",
         author: { "@type": "Organization", name: "The ARCHV" },
         publisher: { "@type": "Organization", name: "The ARCHV", logo: `${SITE}/brand/logo-badge@192.png` },

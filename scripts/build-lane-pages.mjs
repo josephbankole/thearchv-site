@@ -20,6 +20,12 @@ import {
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
+import { glossaryEntries } from "./glossary-data.mjs";
+
+// slug -> glossary entry, so the "From the glossary" strip (below) can resolve a lane's chosen
+// terms to their titles and pages. A typo is a build-time error, not a silent broken link —
+// same discipline as build-glossary-pages.mjs relatedList().
+const GLOSSARY_BY_SLUG = new Map(glossaryEntries.map((e) => [e.slug, e]));
 
 // Both inline scripts on this page family (masthead toggle + PostHog loader) are static, no
 // per-page interpolation, so one CSP works for every lane page.
@@ -55,10 +61,13 @@ const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
 // matching that lane's indexTitle in LANE_META), the two-source verification promise, and the
 // cadence, in that order. Doubles as this page's meta description (see render() below), so it
 // stays a self-contained paragraph rather than a fragment.
+// `glossary` = 2-3 slugs from scripts/glossary-data.mjs relevant to that lane, surfaced in a
+// compact "From the glossary" strip above the footer (glossaryStrip below). Lanes link articles
+// but did not link the glossary; these give a reader the terms that lane leans on.
 const LANES = {
-  transfer: { ...LANE_META.transfer, days: transferDays, intro: "Manchester United transfer news, every move checked against two independent sources before it goes up. A deal marked VERIFIED is done and confirmed; one marked RUMOUR is a reported link, not yet a certainty, however loudly it is being talked about. New entries are drawn the same day the story breaks." },
-  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays, intro: "World Cup 2026 and international football, men's and women's, every competition covered while it is being played. Every result and headline is checked against two independent sources before it goes up. A fresh entry is drawn for each day there is football on." },
-  leagues: { ...LANE_META.leagues, days: leaguesDays, intro: "The club season across the Premier League, the Champions League and the rest of Europe's top divisions: title races, promotions, relegation fights and the sackings behind them. Every entry is checked against two sources before it goes up, the same standard as the rest of the desk. New wraps are tracked day by day through the season, not just on match days." },
+  transfer: { ...LANE_META.transfer, days: transferDays, glossary: ["loan-with-obligation", "xg"], intro: "Manchester United transfer news, every move checked against two independent sources before it goes up. A deal marked VERIFIED is done and confirmed; one marked RUMOUR is a reported link, not yet a certainty, however loudly it is being talked about. New entries are drawn the same day the story breaks." },
+  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays, glossary: ["var", "offside"], intro: "World Cup 2026 and international football, men's and women's, every competition covered while it is being played. Every result and headline is checked against two independent sources before it goes up. A fresh entry is drawn for each day there is football on." },
+  leagues: { ...LANE_META.leagues, days: leaguesDays, glossary: ["pressing", "half-space"], intro: "The club season across the Premier League, the Champions League and the rest of Europe's top divisions: title races, promotions, relegation fights and the sackings behind them. Every entry is checked against two sources before it goes up, the same standard as the rest of the desk. New wraps are tracked day by day through the season, not just on match days." },
 };
 
 function laneCard(entry, laneKey) {
@@ -69,6 +78,28 @@ function laneCard(entry, laneKey) {
     ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
     : "";
   return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
+}
+
+// Compact "From the glossary" strip: the lane's 2-3 relevant terms, linked to their glossary
+// pages. Resolves each slug through GLOSSARY_BY_SLUG and throws on an unknown one (a broken
+// cross-link should fail the build, not ship). Returns "" for a lane with no terms configured.
+function glossaryStrip(lane) {
+  const slugs = lane.glossary || [];
+  if (!slugs.length) return "";
+  const links = slugs
+    .map((slug) => {
+      const entry = GLOSSARY_BY_SLUG.get(slug);
+      if (!entry) throw new Error(`glossaryStrip: "${lane.label}" lists unknown glossary slug "${slug}"`);
+      return `<li><a href="/glossary/${entry.slug}/">${esc(entry.title)}</a></li>`;
+    })
+    .join("\n        ");
+  return `<aside class="lane-glossary" aria-label="From the glossary">
+      <h2 class="lane-glossary__title">From the glossary</h2>
+      <ul class="lane-glossary__list">
+        ${links}
+      </ul>
+      <a class="lane-glossary__all" href="/glossary/">The full glossary</a>
+    </aside>`;
 }
 
 function render(laneKey, lane) {
@@ -144,6 +175,7 @@ function render(laneKey, lane) {
         ${lane.days.map((entry) => laneCard(entry, laneKey)).join("\n        ")}
       </ul>
     </section>
+    ${glossaryStrip(lane)}
   </main>
   ${footer()}
 </body>

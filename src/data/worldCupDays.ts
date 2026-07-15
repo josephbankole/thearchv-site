@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-14",
+    day: "Day 34",
+    headline: "Spain reach the final. France fall in Texas.",
+    dek: "Mikel Oyarzabal and Pedro Porro send Spain past France 2-0.",
+    body: "Spain are through to the World Cup final. They beat France two nil at AT&T Stadium in Arlington, a controlled semi-final settled early by Mikel Oyarzabal's penalty, awarded when Lucas Digne fouled Lamine Yamal in the box. Pedro Porro added the second on fifty eight minutes, a give-and-go with Dani Olmo finished past Mike Maignan. It is Spain's first final since 2010 and it extends a long unbeaten run. France go home, and Kylian Mbappe's tournament ends on eight goals, level at the top of the Golden Boot. Spain now wait on England or Argentina, who meet in Atlanta on Wednesday for the other place in Sunday's final.",
+    status: "verified",
+  },
+  {
     date: "2026-07-12",
     day: "Day 32",
     headline: "England and Argentina book a rematch nobody needed to ask for.",

@@ -78,6 +78,10 @@ const targets = [
   // shared masthead + PostHog inline scripts, so their static hashes must be in each page's CSP.
   ["glossary hub: /glossary/", join(DIST, "glossary", "index.html")],
   ["glossary: /glossary/xg/", join(DIST, "glossary", "xg", "index.html")],
+  // Glossary expansion (SEO/AEO pass, 2026-07-14): one of the six new entries, same page family
+  // and shared masthead/PostHog CSP as every other glossary page — added so a slug-set change
+  // to scripts/glossary-data.mjs is covered by this check, not just the four original terms.
+  ["glossary: /glossary/pressing/", join(DIST, "glossary", "pressing", "index.html")],
   ["standards: /standards/", join(DIST, "standards", "index.html")],
 ];
 

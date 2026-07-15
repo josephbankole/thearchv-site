@@ -268,6 +268,13 @@ const EXTRA_URLS = [
   { loc: "/glossary/false-9/", changefreq: "monthly", priority: "0.5" },
   { loc: "/glossary/offside/", changefreq: "monthly", priority: "0.5" },
   { loc: "/glossary/var/", changefreq: "monthly", priority: "0.5" },
+  // Glossary expansion (SEO/AEO pass, 2026-07-14): +6 entries, scripts/glossary-data.mjs.
+  { loc: "/glossary/pressing/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/low-block/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/inverted-full-back/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/half-space/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/xa/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/glossary/loan-with-obligation/", changefreq: "monthly", priority: "0.5" },
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
 ];
 const today = new Date().toISOString().slice(0, 10);

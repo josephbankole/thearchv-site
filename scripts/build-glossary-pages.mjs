@@ -38,9 +38,19 @@ function firstSentence(text) {
   return (m ? m[0] : s).trim();
 }
 
+// Looks up each entry's own curated `related` slugs (scripts/glossary-data.mjs) rather than
+// listing every other entry — with ten terms now in the set, "every other entry" would put nine
+// loosely-related links on every page. Throws on a typo'd slug: a broken related link should
+// fail the build, not ship silently.
 function relatedList(currentSlug) {
-  const others = glossaryEntries.filter((e) => e.slug !== currentSlug);
-  const items = others
+  const bySlug = new Map(glossaryEntries.map((e) => [e.slug, e]));
+  const current = bySlug.get(currentSlug);
+  const related = (current.related || []).map((slug) => {
+    const e = bySlug.get(slug);
+    if (!e) throw new Error(`relatedList: "${currentSlug}" lists unknown related slug "${slug}"`);
+    return e;
+  });
+  const items = related
     .map((e) => `<li><a href="/glossary/${e.slug}/">${esc(e.title)}</a></li>`)
     .join("\n            ");
   return `<nav class="related" aria-label="Related terms">

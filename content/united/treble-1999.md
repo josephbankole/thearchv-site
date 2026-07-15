@@ -4,7 +4,7 @@ slug: "treble-1999"
 section: "united"
 eyebrow: "Manchester United · History"
 datePublished: "2026-06-15"
-description: "The only English men's treble: how Manchester United won the Premier League, FA Cup and Champions League in 1998-99, sealed by two stoppage-time goals at Camp Nou."
+description: "The only English men's treble: how Manchester United won the league, FA Cup and Champions League in 1998-99, sealed by two late goals at Camp Nou."
 quickAnswer: "Manchester United won the Premier League, FA Cup and Champions League in 1998-99, the only English men's club to complete the treble. They sealed it on 26 May 1999, beating Bayern Munich 2-1 in the Champions League final at Camp Nou with stoppage-time goals from Teddy Sheringham and Ole Gunnar Solskjær."
 ogImage: "/og.jpg"
 related: []

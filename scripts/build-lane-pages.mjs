@@ -50,15 +50,23 @@ const transferDays = [...data.transferDays].sort(byDateDesc);
 const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
 const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
 
+// Intro copy (SEO/AEO pass, UNIT 2, 2026-07-14): each lane's cards carried little or no
+// crawlable prose above them, so every intro now states what the lane covers (keyword-bearing,
+// matching that lane's indexTitle in LANE_META), the two-source verification promise, and the
+// cadence, in that order. Doubles as this page's meta description (see render() below), so it
+// stays a self-contained paragraph rather than a fragment.
 const LANES = {
-  transfer: { ...LANE_META.transfer, days: transferDays, intro: "Every move on Manchester United, checked against two sources and drawn the same day. If it is done, we say done. If it is a rumour, we say rumour." },
-  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays, intro: "Men's and women's international football, every competition, every day it is on. Checked against two sources before anything goes up." },
-  leagues: { ...LANE_META.leagues, days: leaguesDays, intro: "Title races, promotions, sackings and the tables behind them, tracked day by day." },
+  transfer: { ...LANE_META.transfer, days: transferDays, intro: "Manchester United transfer news, every move checked against two independent sources before it goes up. A deal marked VERIFIED is done and confirmed; one marked RUMOUR is a reported link, not yet a certainty, however loudly it is being talked about. New entries are drawn the same day the story breaks." },
+  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays, intro: "World Cup 2026 and international football, men's and women's, every competition covered while it is being played. Every result and headline is checked against two independent sources before it goes up. A fresh entry is drawn for each day there is football on." },
+  leagues: { ...LANE_META.leagues, days: leaguesDays, intro: "The club season across the Premier League, the Champions League and the rest of Europe's top divisions: title races, promotions, relegation fights and the sackings behind them. Every entry is checked against two sources before it goes up, the same standard as the rest of the desk. New wraps are tracked day by day through the season, not just on match days." },
 };
 
 function laneCard(entry, laneKey) {
+  // Non-empty fallback (img alt audit, UNIT 4): matches the convention in dailyDigest.ts and
+  // build-article-pages.mjs's main figure — every lane card avatar gets a real description even
+  // when the day's data has no explicit imageAlt.
   const avatar = entry.image
-    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? "")}" loading="lazy" decoding="async" width="64" height="64" />`
+    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
     : "";
   return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
 }

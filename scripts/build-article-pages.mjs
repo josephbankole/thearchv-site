@@ -302,8 +302,10 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
         <ul class="more-cards">
           ${moreFrom
             .map((e) => {
+              // Non-empty alt (img alt audit, UNIT 4): these are content headshots inside a link,
+              // not decorative chrome, so they get the same fallback as the article's main figure.
               const avatar = e.image
-                ? `<img class="more-card__avatar" src="${escAttr(e.image)}" alt="" loading="lazy" decoding="async" width="44" height="44" />`
+                ? `<img class="more-card__avatar" src="${escAttr(e.image)}" alt="${escAttr(e.imageAlt ?? e.headline)}" loading="lazy" decoding="async" width="44" height="44" />`
                 : "";
               return `<li><a class="more-card" href="/desk/${laneKey}/${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
             })

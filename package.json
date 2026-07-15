@@ -17,6 +17,7 @@
     "articles": "node scripts/build-article-pages.mjs",
     "glossary": "node scripts/build-glossary-pages.mjs",
     "standards": "node scripts/build-standards-page.mjs",
+    "check-img-alt": "node scripts/check-img-alt.mjs",
     "preview": "vite preview --port 4173",
     "assets": "node scripts/optimize-posters.mjs",
     "og": "node scripts/make-og.mjs"

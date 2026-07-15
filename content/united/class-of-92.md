@@ -4,7 +4,7 @@ slug: "class-of-92"
 section: "united"
 eyebrow: "Manchester United · History"
 datePublished: "2026-06-15"
-description: "Beckham, Giggs, Scholes, Butt and the Neville brothers: how Manchester United's academy generation answered 'you can't win anything with kids' by winning the lot."
+description: "Beckham, Giggs, Scholes, Butt and the Nevilles: how Manchester United's academy generation answered 'you can't win anything with kids' by winning it all."
 quickAnswer: "The Class of '92 were Manchester United's golden generation of academy graduates: David Beckham, Ryan Giggs, Paul Scholes, Nicky Butt, and Gary and Phil Neville. They won the FA Youth Cup in 1992 and became the spine of the side that won the Premier League and FA Cup double in 1995-96, the season after Alan Hansen said 'you can't win anything with kids.'"
 ogImage: "/og.jpg"
 related: []

@@ -6,9 +6,10 @@
   "description": "The ARCHV — Football history, illustrated. The owned site for @thearchvfc.",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/check-csp-hash.mjs && tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-feed.mjs && node scripts/build-rss.mjs && node scripts/build-day-pages.mjs && node scripts/build-lane-pages.mjs && node scripts/build-article-pages.mjs && node scripts/build-glossary-pages.mjs && node scripts/build-standards-page.mjs && node scripts/verify-csp-pages.mjs",
+    "build": "node scripts/check-csp-hash.mjs && tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-infograms.mjs && node scripts/build-feed.mjs && node scripts/build-rss.mjs && node scripts/build-day-pages.mjs && node scripts/build-lane-pages.mjs && node scripts/build-article-pages.mjs && node scripts/build-glossary-pages.mjs && node scripts/build-standards-page.mjs && node scripts/verify-csp-pages.mjs",
     "check-csp": "node scripts/check-csp-hash.mjs",
     "verify-csp": "node scripts/verify-csp-pages.mjs",
+    "infograms": "node scripts/build-infograms.mjs",
     "feed": "node scripts/build-feed.mjs",
     "rss": "node scripts/build-rss.mjs",
     "faq": "node scripts/build-faq.mjs",

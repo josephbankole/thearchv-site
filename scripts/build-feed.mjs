@@ -5,15 +5,20 @@
    ETag handling cheap polling and index.json's buildHash giving an app-level "did anything change".
    esbuild (already present via vite) bundles the TS data into a temp ESM module we import. */
 import { build } from "esbuild";
-import { writeFileSync, mkdirSync, rmSync, statSync, readFileSync } from "node:fs";
+import { writeFileSync, mkdirSync, rmSync, statSync, readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
-import { byDateDesc } from "./shared/page-shell.mjs";
+import { byDateDesc, LANE_META } from "./shared/page-shell.mjs";
+import { infogramEligible, infogramAlt, infogramRelPath } from "./shared/infogram.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
 const OUT = process.env.FEED_OUT || join(ROOT, "dist", "feed");
+// The dist root where build-infograms.mjs wrote dist/desk/<lane>/<date>/infogram.png (matches
+// build-article-pages.mjs's OUT). Independent of FEED_OUT so the existence check below still
+// finds the PNGs when the feed output dir is overridden.
+const DIST = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SCHEMA = "archv-feed/2"; // v2: every lane's entries carry `section`, so provenance renders identically on every app surface
 
 /* ---------- load the typed data via a bundled temp module ---------- */
@@ -56,10 +61,30 @@ const SITE = "https://thearchv.ca";
 const LANES = { transfer: "transfer", worldcup: "world-cup", leagues: "leagues" };
 const articleUrl = (section, date) => `${SITE}/desk/${LANES[section]}/${date}/`;
 
+// Additive infogram fields (INFOGRAM-PLAN.md P3, schema unchanged at archv-feed/2): attach
+// `infogram` (site-relative PNG path) + `infogramAlt` (one plain sentence) to an entry ONLY when
+// build-infograms.mjs actually wrote the PNG for it. Checking the file on disk — not just
+// eligibility — is the OG-card discipline: the feed never advertises an image that was not
+// generated (a render that failed and was skipped simply carries no field). Any entry a build
+// before this started reading the field, or an offline cache, decodes fine — the fields are
+// optional and unknown to older app builds.
+function withInfogram(entry, section) {
+  const urlLane = LANES[section];
+  if (!infogramEligible(entry)) return entry;
+  if (!existsSync(join(DIST, "desk", urlLane, entry.date, "infogram.png"))) return entry;
+  const label = LANE_META[urlLane]?.label ?? section;
+  return {
+    ...entry,
+    infogram: infogramRelPath(urlLane, entry.date),
+    infogramAlt: infogramAlt(entry, label),
+  };
+}
+
 // Today = newest dated wrap across Transfer Desk + World Cup, lead + the next four cards.
-const transferTagged = transferDays.map((d) => ({ ...d, section: "transfer", url: articleUrl("transfer", d.date) }));
-const worldCupTagged = worldCupDays.map((d) => ({ ...d, section: "worldcup", url: articleUrl("worldcup", d.date) }));
-const leaguesTagged = leaguesDays.map((d) => ({ ...d, section: "leagues", url: articleUrl("leagues", d.date) }));
+// (today.lead/wrap reuse these same tagged objects, so the infogram fields propagate there too.)
+const transferTagged = transferDays.map((d) => withInfogram({ ...d, section: "transfer", url: articleUrl("transfer", d.date) }, "transfer"));
+const worldCupTagged = worldCupDays.map((d) => withInfogram({ ...d, section: "worldcup", url: articleUrl("worldcup", d.date) }, "worldcup"));
+const leaguesTagged = leaguesDays.map((d) => withInfogram({ ...d, section: "leagues", url: articleUrl("leagues", d.date) }, "leagues"));
 // leagues entries are deliberately NOT in the daily today-pool yet: the Today lead is
 // "newest dated wrap" and a leagues launch batch must not displace the day's transfer/WC lead.
 const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);

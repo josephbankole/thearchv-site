@@ -39,7 +39,7 @@ When drafting a finals page, also add a crawlable homepage link: insert `<li><a 
 ## C5 — World Cup evergreen cluster (D92, ride the live window with durable pages, NOT fixtures)
 Peg to live storylines via /Users/josephbankole/Claude/fifa.archv/wc2026-storyline-tracker.md. Illustrated, verify-first, 2,250-3,000 words. These re-spike every 4 years.
 - [drafted] explainers/biggest-world-cup-upsets — the upsets canon (hand-built 2026-06-16, homepage-linked)
-- [todo] explainers/most-world-cup-titles — every winner
+- [drafted] explainers/most-world-cup-titles — every winner (drafted 2026-07-15, rides the 13 Jul "all four semi-finalists are past champions + top-four ranked" storyline; Spain 2-0 France 14 Jul, Argentina v England 15 Jul)
 - [todo] explainers/world-cup-hosts-history — hosts + 2026 three-nation first
 - [drafted] explainers/usa-at-the-world-cup — host-nation history (tier-1) (drafted 2026-06-20, rides the 19 Jun USA-Australia knockout storyline)
 - [drafted] explainers/canada-at-the-world-cup — host-nation history (home market) (drafted 2026-07-01, rides Canada's 1-0 Round of 32 win over South Africa on 2026-06-28, their first-ever WC knockout win)

@@ -10,6 +10,7 @@
 //   APNS_ENV        "sandbox" (default) for dev/TestFlight tokens, "production" for App Store
 //   PUSH_SECRET     optional guard, matched against the x-push-secret header from the cron call
 import { adminClient, json } from "../_shared/cors.ts";
+import { classifyApnsResult, runPool } from "./fanout.ts";
 
 const FEED_INDEX = "https://thearchv.ca/feed/index.json";
 const FEED_TODAY = "https://thearchv.ca/feed/today.json";
@@ -127,32 +128,61 @@ Deno.serve(async (req) => {
   // got it. For a one-push-a-day promise, at-most-once beats at-least-twice.
   await recordSent(supabase, todayHash);
 
+  // Fan-out in bounded concurrent batches, not one-at-a-time. The old sequential loop awaited
+  // each APNs POST in turn, so ~1,500-3,000 tokens could not clear inside the function's ~150s
+  // wall clock and the tail silently missed that day's push. A worker pool holds ~50 sends in
+  // flight at once (see runPool in fanout.ts — a real pool, not Promise.all over every token),
+  // which cuts wall time ~50x while capping open sockets to APNs. Every invariant below is
+  // unchanged from the sequential version: reason-gated deletion (only BadDeviceToken /
+  // Unregistered mark a token dead; a systemic BadTopic / TooManyRequests / auth error never
+  // deletes), failureReasons aggregation, and the deletion cap that follows.
+  const CONCURRENCY = 50;
+  const fanoutStart = Date.now();
   let sent = 0;
   let failed = 0;
   const dead: string[] = [];
   const failureReasons: Record<string, number> = {};
-  for (const token of tokens) {
-    const res = await fetch(`https://${host}/3/device/${token}`, {
-      method: "POST",
-      headers: {
-        authorization: `bearer ${jwt}`,
-        "apns-topic": bundleId,
-        "apns-push-type": "alert",
-        "apns-priority": "5",
-        "content-type": "application/json",
-      },
-      body: payload,
-    });
-    if (res.status === 200) { sent++; continue; }
-    failed++;
-    // Reason-gated deletion: only BadDeviceToken / Unregistered mean the token itself is dead.
-    // A systemic 400 (BadTopic from a bundle-id slip, TooManyRequests, auth errors) must never
-    // delete tokens.
-    let reason = "";
-    try { reason = String((await res.json())?.reason ?? ""); } catch { /* non-JSON body */ }
-    failureReasons[reason || `http_${res.status}`] = (failureReasons[reason || `http_${res.status}`] ?? 0) + 1;
-    if (reason === "BadDeviceToken" || reason === "Unregistered") dead.push(token);
-  }
+
+  await runPool(
+    tokens,
+    CONCURRENCY,
+    async (token) => {
+      const res = await fetch(`https://${host}/3/device/${token}`, {
+        method: "POST",
+        headers: {
+          authorization: `bearer ${jwt}`,
+          "apns-topic": bundleId,
+          "apns-push-type": "alert",
+          "apns-priority": "5",
+          "content-type": "application/json",
+        },
+        body: payload,
+      });
+      // Only read the (JSON) body on failure, matching the old loop: a 200 carries no reason.
+      let reason = "";
+      if (res.status !== 200) {
+        try { reason = String((await res.json())?.reason ?? ""); } catch { /* non-JSON body */ }
+      }
+      const c = classifyApnsResult(res.status, reason);
+      // Tally synchronously (no await between here and the classify): single-threaded, so two
+      // workers never interleave a read-modify-write on these counters.
+      if (c.ok) {
+        sent++;
+      } else {
+        failed++;
+        failureReasons[c.reasonKey] = (failureReasons[c.reasonKey] ?? 0) + 1;
+        if (c.dead) dead.push(token);
+      }
+      return c;
+    },
+    // One elapsed-time + sent-count line per batch of CONCURRENCY completions.
+    (doneCount) => {
+      if (doneCount % CONCURRENCY === 0) {
+        console.log(`daily-push: batch ${doneCount}/${tokens.length} — ${Date.now() - fanoutStart}ms, sent=${sent}, failed=${failed}`);
+      }
+    },
+  );
+  console.log(`daily-push: fan-out done — ${tokens.length} tokens in ${Date.now() - fanoutStart}ms, sent=${sent}, failed=${failed}`);
 
   // Deletion cap: a single run may not delete more than 25 tokens or more than 20% of the table.
   // Past the cap it deletes NONE and surfaces the anomaly — a systemic APNs error must not wipe

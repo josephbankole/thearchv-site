@@ -355,6 +355,15 @@ export function pageStyles() {
     .lane-card__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.24; margin: 0 0 .4rem; }
     .lane-card__dek { font-size: .9rem; color: var(--cream-dim); margin: 0; }
 
+    /* "From the glossary" strip on lane index pages: a compact row of the lane's key terms,
+       sitting above the footer. Inherits the enclosing main's width; no button styling. */
+    .lane-glossary { margin: 2.75rem 0 0; padding-top: 1.6rem; border-top: 1px solid var(--cream-faint); }
+    .lane-glossary__title { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; margin: 0 0 .75rem; }
+    .lane-glossary__list { list-style: none; padding: 0; margin: 0 0 .85rem; display: flex; flex-wrap: wrap; gap: .5rem .9rem; font-size: .95rem; }
+    .lane-glossary__list a { color: var(--gold); }
+    .lane-glossary__all { font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--cream-faint); }
+    .lane-glossary__all:hover { color: var(--gold); }
+
     .footer { margin-top: 3rem; border-top: 1px solid var(--cream-faint); background: var(--navy-deep); }
     .footer .wrap { max-width: 72rem; padding-top: 2rem; padding-bottom: 2.5rem; }
     .footer__links { display: flex; flex-wrap: wrap; gap: .9rem 1.5rem; font-size: .9rem; margin: 0 0 1rem; }

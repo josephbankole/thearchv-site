@@ -4,7 +4,7 @@ slug: "fergie-greatest-xi"
 section: "united"
 eyebrow: "Manchester United · Debate"
 datePublished: "2026-06-15"
-description: "Across 26 years and 13 league titles, who makes Sir Alex Ferguson's greatest Manchester United XI? The spine that picks itself, and the arguments that never end."
+description: "Across 26 years and 13 league titles, who makes Sir Alex Ferguson's greatest Manchester United XI? The spine picks itself; the rest is argued forever."
 quickAnswer: "Across 26 years and 13 Premier League titles, Sir Alex Ferguson's strongest Manchester United XI is usually built around Peter Schmeichel in goal, Roy Keane and Paul Scholes in midfield, Ryan Giggs and Cristiano Ronaldo on the flanks, and Eric Cantona up front. Every other place is argued over."
 ogImage: "/og.jpg"
 related: []

@@ -6,6 +6,7 @@ import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, statSy
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta } from "./shared/page-shell.mjs";
+import { glossaryEntries } from "./glossary-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = join(ROOT, "content");
@@ -17,6 +18,44 @@ const SECTION = {
   explainers: { label: "Explained", href: "/#faq", more: "More explainers" },
 };
 const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More from the archive" };
+
+// "From the glossary" (SEO/AEO pass, UNIT 3, 2026-07-14): 2-3 hand-picked glossary entries per
+// United long read, keyed by slug. Only the five United pages carry this block; every other
+// content page (finals, explainers) simply has no entry here and renders nothing extra.
+// Picks are read-specific, not the same three everywhere:
+//   treble-1999            the '99 side's high-tempo, closing-down football; Bayern sitting on
+//                          their lead late on; the Sheringham/Solskjaer forward pairing.
+//   class-of-92            Ferguson's academy-not-market approach, set against how squads are
+//                          more often built today.
+//   fergie-greatest-xi     the piece is itself a centre-forward debate and a wide-player debate.
+//   united-european-nights Moscow 2008 was won from a low block; marginal calls across fifty
+//                          years of European nights are exactly what VAR and offside review now.
+//   united-record-signings the whole piece is transfer-market mechanics and whether the fees paid
+//                          off, which is what the underlying numbers are for.
+const GLOSSARY_LINKS = {
+  "treble-1999": ["pressing", "low-block", "false-9"],
+  "class-of-92": ["pressing", "loan-with-obligation"],
+  "fergie-greatest-xi": ["false-9", "half-space", "inverted-full-back"],
+  "united-european-nights": ["low-block", "var", "offside"],
+  "united-record-signings": ["loan-with-obligation", "xg", "xa"],
+};
+const glossaryBySlug = new Map(glossaryEntries.map((e) => [e.slug, e]));
+function glossaryBlock(slug) {
+  const picks = GLOSSARY_LINKS[slug];
+  if (!picks || !picks.length) return "";
+  const items = picks
+    .map((s) => {
+      const e = glossaryBySlug.get(s);
+      if (!e) throw new Error(`glossaryBlock: "${slug}" references unknown glossary slug "${s}"`);
+      return `<li><a href="/glossary/${e.slug}/">${esc(e.title)}</a></li>`;
+    })
+    .join("");
+  return `
+        <nav class="related" aria-label="From the glossary">
+          <h2>From the glossary<span class="dot">.</span></h2>
+          <ul>${items}</ul>
+        </nav>`;
+}
 
 const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
@@ -119,10 +158,16 @@ const pages = walk(CONTENT_DIR).map((f) => { const { data, body } = parse(readFi
   .filter((p) => p.slug && p.section);
 
 /* ---------- schema ---------- */
+// author/publisher reference the site's Organization entity by @id (SEO/AEO pass, UNIT 3,
+// 2026-07-14) rather than restating a bare, unlinked Organization object: index.html's own
+// Organization JSON-LD carries this same "https://thearchv.ca/#org" @id, so every long read now
+// points back at the one entity Google/answer engines already resolve for the site, instead of
+// each page describing an org-shaped but disconnected duplicate.
+const ORG_REF = { "@id": `${SITE}/#org` };
 function schema(p, url) {
   const graph = [
     { "@type": "Article", "headline": p.title, "description": p.description, "datePublished": p.datePublished,
-      "author": { "@type": "Organization", "name": "The ARCHV" }, "publisher": { "@type": "Organization", "name": "The ARCHV", "logo": `${SITE}/brand/logo-badge@192.png` },
+      "author": ORG_REF, "publisher": ORG_REF,
       "image": `${SITE}${p.ogImage || "/og.jpg"}`, "mainEntityOfPage": url, "inLanguage": "en-GB" },
     { "@type": "BreadcrumbList", "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": `${SITE}/` },
@@ -166,6 +211,9 @@ function render(p, allPages) {
           <h2>${esc(meta.more)}<span class="dot">.</span></h2>
           <ul>${related.map((r) => `<li><a href="/${r.section}/${r.slug}/">${esc(r.title)}</a></li>`).join("")}</ul>
         </nav>` : "";
+  // "From the glossary" (UNIT 3): only the five United long reads have an entry in
+  // GLOSSARY_LINKS, so this is "" for every finals/explainers page.
+  const glossaryNav = glossaryBlock(p.slug);
   return `<!doctype html>
 <html lang="en-GB">
 <head>
@@ -216,7 +264,7 @@ function render(p, allPages) {
       <p class="article__meta">${[esc(p.score), esc(p.venue), p.eventDate ? new Date(p.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : ""].filter(Boolean).join(" · ")}</p>${fig}${qa}
       <div class="article__body">
         ${md(p.body)}
-      </div>${shop}${rel}
+      </div>${shop}${glossaryNav}${rel}
     </article>
   </main>
   <footer class="footer">

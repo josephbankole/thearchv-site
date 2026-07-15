@@ -4,7 +4,7 @@ slug: "united-record-signings"
 section: "united"
 eyebrow: "Manchester United · History"
 datePublished: "2026-06-15"
-description: "From Denis Law in 1962 to a world-record Paul Pogba in 2016, the story of Manchester United as the club that has set the British transfer market more than any other."
+description: "From Denis Law in 1962 to a world-record Paul Pogba in 2016: the story of Manchester United as English football's biggest transfer-record breaker."
 quickAnswer: "Manchester United have broken the British transfer record several times: Denis Law (£115,000, 1962), Bryan Robson (£1.5m, 1981), Roy Keane (£3.75m, 1993), Juan Sebastián Verón (around £28m, 2001) and Rio Ferdinand (£29.1m, 2002). Their club record is Paul Pogba at £89m in 2016, then a world record."
 ogImage: "/og.jpg"
 related: []

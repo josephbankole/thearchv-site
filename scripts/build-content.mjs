@@ -240,7 +240,7 @@ function render(p, allPages) {
 </head>
 <body>
   <header class="masthead">
-    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
+    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <div class="masthead__menu">
       <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
         <span class="masthead__toggle-bar"></span>

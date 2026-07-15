@@ -62,8 +62,11 @@ const LANES = {
 };
 
 function laneCard(entry, laneKey) {
+  // Non-empty fallback (img alt audit, UNIT 4): matches the convention in dailyDigest.ts and
+  // build-article-pages.mjs's main figure — every lane card avatar gets a real description even
+  // when the day's data has no explicit imageAlt.
   const avatar = entry.image
-    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? "")}" loading="lazy" decoding="async" width="64" height="64" />`
+    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
     : "";
   return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
 }

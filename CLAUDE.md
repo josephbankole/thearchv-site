@@ -129,10 +129,15 @@ photos or FIFA marks anywhere.
 
 ## Open site work (as of 2026-07-09)
 
-- Football Leagues SECTION UI: the feed lane and app shelf are live, the website has
-  no visible Leagues section yet. POST-LAUNCH BACKLOG (recorded 2026-07-11, dev
-  closeout sweep): not required for the app submission and not started; see
-  `../SITE-AND-APP-TODO.md`, "Post-launch backlog" section.
+- Football Leagues SECTION UI: DONE (commit `54ebe0c`). The homepage carries a
+  `#football-leagues` section with its section-index header linking to `/desk/leagues/`
+  and a `#leagues-days` day-rail wired through the shared `initDailyDigest(...,'leagues')`
+  path (src/main.ts), same component, cap and drag behaviour as the transfer and
+  world-cup rails; the section is registered in the scroll-spy nav (src/ui/chrome.ts).
+  Ordered FIRST (Leagues, Transfer Desk, International Football) per founder decision
+  D-2026-07-07, which set the shelf/section order and which CANONICAL-CONTEXT.md carries;
+  the site order mirrors the app on purpose. (This line previously read "no visible
+  Leagues section yet" from a stale 2026-07-11 backlog note; corrected 2026-07-15.)
 - Per-article pages for daily entries: DONE (Build 11, W1). Every transfer, World Cup
   and leagues entry now has a canonical page at `/desk/<lane>/<date>/`, wired into
   the feed's `url` field and linked from the homepage day-rail cards. See "Per-article

@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-16",
+    day: "Day 36",
+    headline: "Argentina break England late, and reach the final.",
+    dek: "England 1-2 Argentina. Messi makes both as the holders go again.",
+    body: "England led this one and lost it anyway. Anthony Gordon put them in front just before the hour at the Mercedes-Benz Stadium in Atlanta, and for half an hour it held. Then Argentina did the thing the holders keep doing. Enzo Fernandez levelled with five minutes left, and Lautaro Martinez headed the winner in the 92nd minute, Lionel Messi the maker of both. Argentina reach a second straight final and meet Spain on Sunday. England, so close again, go home with nothing. The final is set: the champions against a Spain side back at this stage for the first time since 2010.",
+    status: "verified",
+    image: "/heads/messi.webp",
+    imageAlt: "Lionel Messi, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-14",
     day: "Day 34",
     headline: "Spain reach the final. France fall in Texas.",

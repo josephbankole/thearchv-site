@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-15",
+    day: "Wednesday",
+    headline: "Two more through the door. Tielemans and Darlow are United players.",
+    dek: "Youri Tielemans signs to 2031. Karl Darlow arrives on a free.",
+    body: "United's midfield rebuild moved again, and quickly. Youri Tielemans is official, announced subject to registration after United triggered the forty one million euro release clause in his Aston Villa contract, signed to June 2031. Jason Wilcox called the pull composure, creativity and leadership. Karl Darlow arrived the same day on a free from Leeds, a thirty five year old Wales goalkeeper on a deal to June 2028 with an option year, experienced cover rather than a headline. Andrey Santos, announced Monday, has taken the number seventeen shirt. The live threads move too: United have reached out over Roma's Manu Kone, REPORTED by Fabrizio Romano and early, and formal talks for Bournemouth's Alex Scott are described as imminent against an eighty million pound valuation, still RUMOUR. Elsewhere, the DFB has agreed core terms with Jurgen Klopp to take the Germany job, nothing signed yet, and Bruno Guimaraes has told Newcastle he wants Arsenal, REPORTED by David Ornstein.",
+    status: "verified",
+    image: "/heads/youri-tielemans.webp",
+    imageAlt: "Youri Tielemans, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-14",
     day: "Tuesday",
     headline: "United get their first one over the line. Andrey Santos is a Manchester United player.",

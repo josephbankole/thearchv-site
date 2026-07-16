@@ -81,13 +81,10 @@
       box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
     }
     .today-card img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-    .today-card .chip {
-      position: absolute; top: 14px; left: 14px;
-      background: rgba(7, 28, 43, 0.82);
-      border: 1px solid rgba(201, 161, 74, 0.5);
+    .kicker {
       color: var(--gold);
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em;
-      padding: 7px 12px; border-radius: 8px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.26em;
+      text-align: left; margin-bottom: -6px;
     }
     .today-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
@@ -155,9 +152,9 @@
           </g>
         </svg>
       </a>
+      <p class="kicker">TODAY</p>
       <a class="today-card" id="today-card" href="https://thearchv.ca/">
         <img id="today-img" src="/posters/lusail-2022.webp" alt="Lusail 2022 World Cup final poster, illustrated by The ARCHV." />
-        <span class="chip">TODAY</span>
       </a>
       <a class="cta-gold" id="today-cta" href="https://thearchv.ca/">Read today’s story</a>
       <nav class="linkrow" aria-label="More from The ARCHV">

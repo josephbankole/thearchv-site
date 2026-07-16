@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-16",
+    day: "Thursday",
+    headline: "United's midfield hunt shifts to Kone.",
+    dek: "Alex Scott cools as Roma's Manu Kone leads the list.",
+    body: "With Andrey Santos and Youri Tielemans signed and settled, Manchester United's midfield search has moved to its next name. Fabrizio Romano and David Ornstein both point to Roma's Manu Kone, a defensive midfielder United have sounded out through his agents, though no bid has reached Roma yet. Real Madrid's Eduardo Camavinga is weighed as an alternative for the holding role. Both are RUMOUR for now. Alex Scott has cooled: Bournemouth have told United they will not sell before the window shuts, and United will not meet the 80 million pound valuation. Cristian Orozco's announcement is still expected next week. The two big deals are done. The next one is only starting.",
+    status: "verified",
+  },
+  {
     date: "2026-07-15",
     day: "Wednesday",
     headline: "Two more through the door. Tielemans and Darlow are United players.",

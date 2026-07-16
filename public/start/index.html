@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The ARCHV. Start here.</title>
-  <meta name="description" content="Football's archive, told properly. Read the archive, subscribe to the Dispatch, or shop the store." />
+  <meta name="description" content="Every final since 1970, drawn. Today's verified story, the poster archive, the Dispatch and the store." />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://thearchv.ca/start" />
   <link rel="icon" href="/favicon.svg" />
@@ -12,10 +12,10 @@
        Both inline scripts below are allowed only via an exact sha256 hash - if you edit either
        one, recompute its hash (sha256, base64-encoded, of its exact inline body) and update it
        here, or the browser will silently drop that script at runtime. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-4mDFiHIzNYZul4iLdX0T9YyPdbxNOxUkcin/YTgB2qI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-dVLN8Oe5riDe3P+dRNjQz0oz06rhLPPuzUCDd+5GkP0=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
-  <meta property="og:description" content="Football's archive, told properly." />
+  <meta property="og:description" content="Every final since 1970, drawn." />
   <meta property="og:url" content="https://thearchv.ca/start" />
   <meta property="og:image" content="https://thearchv.ca/og.jpg" />
 
@@ -70,34 +70,56 @@
       color: var(--cream-dim);
     }
 
-    .links {
-      margin-top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    .actions { margin-top: 28px; display: flex; flex-direction: column; gap: 16px; }
+
+    .today-card {
+      display: block;
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 161, 74, 0.4);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
     }
-    .btn {
+    .today-card img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+    .today-card .chip {
+      position: absolute; top: 14px; left: 14px;
+      background: rgba(7, 28, 43, 0.82);
+      border: 1px solid rgba(201, 161, 74, 0.5);
+      color: var(--gold);
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em;
+      padding: 7px 12px; border-radius: 8px;
+    }
+    .today-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    .cta-gold {
       display: block;
       padding: 17px 22px;
-      border: 1px solid rgba(242, 234, 211, 0.28);
       border-radius: 12px;
-      background: rgba(7, 28, 43, 0.55);
-      color: var(--cream);
+      background: var(--gold);
+      color: var(--navy-deep);
       text-decoration: none;
-      font-size: 1.02rem;
-      font-weight: 500;
+      font-size: 1.05rem;
+      font-weight: 600;
       letter-spacing: 0.02em;
-      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      transition: transform 0.15s ease, filter 0.15s ease;
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      border-color: var(--gold);
-      background: var(--navy-deep);
+    .cta-gold:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .cta-gold:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
+
+    .linkrow {
+      display: flex; justify-content: center; gap: 8px;
+      font-size: 0.92rem; letter-spacing: 0.03em;
     }
-    .btn:focus-visible {
-      outline: 2px solid var(--gold);
-      outline-offset: 3px;
-    }
+    .linkrow .quiet { color: var(--cream-dim); text-decoration: none; padding: 8px 6px; }
+    .linkrow .quiet:hover { color: var(--cream); }
+    .linkrow .sep { color: rgba(179, 171, 146, 0.5); padding: 8px 0; }
+    .linkrow .quiet:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+    .strip { margin-top: 26px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .strip a { display: block; border-radius: 10px; overflow: hidden; border: 1px solid rgba(242, 234, 211, 0.16); }
+    .strip img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+    .strip a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
     /* App Store badge: Apple's standard "Download on the App Store" treatment,
        drawn inline (no external asset load, CSP-clean). Shipped hidden until
        flip day — see FLIP-DAY.md at the repo root. */
@@ -118,9 +140,9 @@
 <body>
   <main class="hub">
     <div class="wordmark">The ARCHV<span class="dot">.</span></div>
-    <p class="tagline">Football's archive, told properly.</p>
+    <p class="tagline">Every final since 1970, drawn.</p>
 
-    <nav class="links">
+    <div class="actions">
       <a class="appstore-badge" id="app-store-badge" href="https://apps.apple.com/app/idPLACEHOLDER" hidden style="display:none"><!-- APP_STORE_URL_PLACEHOLDER -->
         <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store">
           <rect x="0.5" y="0.5" width="199" height="59" rx="10" fill="#000000" stroke="#A6A6A6" stroke-width="1"/>
@@ -133,20 +155,49 @@
           </g>
         </svg>
       </a>
-      <a class="btn" href="https://thearchv.ca/">Read the archive</a>
-      <a class="btn" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">The ARCHV Dispatch</a>
-      <a class="btn" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop the store</a>
-    </nav>
+      <a class="today-card" id="today-card" href="https://thearchv.ca/">
+        <img id="today-img" src="/posters/lusail-2022.webp" alt="Lusail 2022 World Cup final poster, illustrated by The ARCHV." />
+        <span class="chip">TODAY</span>
+      </a>
+      <a class="cta-gold" id="today-cta" href="https://thearchv.ca/">Read today’s story</a>
+      <nav class="linkrow" aria-label="More from The ARCHV">
+        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a><span class="sep">·</span><a class="quiet" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Store</a>
+      </nav>
+      <div class="strip" aria-label="From the poster archive">
+        <a href="https://thearchv.ca/#archive"><img src="/posters/mexico-1970.webp" alt="México 1970 final poster, illustrated." loading="lazy" /></a>
+        <a href="https://thearchv.ca/#archive"><img src="/posters/azteca-1986.webp" alt="Azteca 1986 final poster, illustrated." loading="lazy" /></a>
+        <a href="https://thearchv.ca/#archive"><img src="/posters/paris-1998.webp" alt="Paris 1998 final poster, illustrated." loading="lazy" /></a>
+      </div>
+    </div>
   </main>
   <script>
-    document.querySelectorAll('.links .btn, .links .appstore-badge').forEach(function (a) {
-      a.addEventListener('click', function () {
-        var target = a.href.indexOf('substack') > -1 ? 'dispatch'
-          : a.href.indexOf('etsy') > -1 ? 'store'
-          : a.href.indexOf('apps.apple.com') > -1 ? 'appstore' : 'archive';
-        if (window.posthog) posthog.capture('start_cta_click', { target: target, href: a.href });
+    (function () {
+      function track(target, href) { if (window.posthog) posthog.capture('start_cta_click', { target: target, href: href }); }
+      function bind(el, target) { if (el) el.addEventListener('click', function () { track(target, el.href); }); }
+      bind(document.getElementById('app-store-badge'), 'appstore');
+      bind(document.getElementById('today-card'), 'today_card');
+      bind(document.getElementById('today-cta'), 'today_cta');
+      document.querySelectorAll('.linkrow .quiet').forEach(function (a) {
+        bind(a, a.href.indexOf('substack') > -1 ? 'dispatch' : a.href.indexOf('etsy') > -1 ? 'store' : 'archive');
       });
-    });
+      fetch('/feed/today.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
+        var lead = d && d.lead;
+        if (!lead || !lead.url) return;
+        var card = document.getElementById('today-card');
+        var cta = document.getElementById('today-cta');
+        var img = document.getElementById('today-img');
+        card.href = lead.url;
+        cta.href = lead.url;
+        if (img && lead.infogram) {
+          var probe = new Image();
+          probe.onload = function () {
+            img.src = lead.infogram;
+            img.alt = lead.infogramAlt || lead.headline || img.alt;
+          };
+          probe.src = lead.infogram;
+        }
+      }).catch(function () {});
+    })();
   </script>
 </body>
 </html>

@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-17",
+    day: "Friday",
+    headline: "Camavinga moves to the front of United's midfield race.",
+    dek: "Eduardo Camavinga leads United's third-midfielder hunt as Marcus Rashford's exit clause expires.",
+    body: "United's search for a third midfielder has a new front name. Real Madrid's Eduardo Camavinga now leads the shortlist, with Real reported open to a sale near fifty million euros and Manchester City having moved elsewhere. The snag is the player, who wants to stay, so no club-to-club talks have started. Roma's Manu Kone is the parallel track: United are lining up a bid around thirty-five million pounds, though Roma value him higher. All RUMOUR for now. The day's hard news sits elsewhere. Marcus Rashford's forty million pound exit clause has expired, and the read is he stays, back for pre-season with no interest in a Turkey move. Alex Scott stays contested, Cristian Orozco's announcement is close, and Lewis Hall is a fresh left-back target.",
+    status: "verified",
+    image: "/heads/camavinga.webp",
+    imageAlt: "Eduardo Camavinga, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-16",
     day: "Thursday",
     headline: "United's midfield hunt shifts to Kone.",

@@ -305,6 +305,7 @@ for (const p of pages) {
    ends up in both lists. */
 const EXTRA_URLS = [
   { loc: "/start", changefreq: "monthly", priority: "0.5" },
+  { loc: "/quiz", changefreq: "monthly", priority: "0.5" },
   { loc: "/dispatch", changefreq: "monthly", priority: "0.5" },
   { loc: "/privacy", changefreq: "yearly", priority: "0.2" },
   { loc: "/support", changefreq: "yearly", priority: "0.2" },

@@ -11,8 +11,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
 
-  // Soft app-secret guard (build 19+ sends x-archv-app). See _shared/appGuard.ts for the
-  // soft-vs-hard rollout note; device_id ownership checks below remain the real backstop either way.
+  // Hard app-secret guard (go-live 2026-07-16): missing or wrong x-archv-app -> 401.
   const guardResp = checkAppSecret(req, "ticket-thread");
   if (guardResp) return guardResp;
 

@@ -9,10 +9,9 @@ import { createHash } from "node:crypto";
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 
-// GO-LIVE DAY placeholder (LAUNCH-RUNWAY.md "ready-to-flip"). Every masthead's "App" button
-// and the /start badge point here, all shipped `hidden` until flip day. See FLIP-DAY.md at
-// the repo root for the exact lines to change. <!-- APP_STORE_URL_PLACEHOLDER -->
-export const APP_STORE_URL = "https://apps.apple.com/app/idPLACEHOLDER";
+// LIVE 2026-07-16. Country-neutral URL: Apple geo-redirects each visitor to their
+// own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
+export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 
 // The ARCHV's official profiles, for the Organization sameAs entity graph. Kept in one place so
 // the homepage Organization JSON-LD (index.html) and every generated article page's publisher
@@ -106,7 +105,7 @@ export function masthead() {
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
-        <a class="masthead__panel-link" href="${APP_STORE_URL}" hidden style="display:none"><!-- APP_STORE_URL_PLACEHOLDER -->App</a>
+        <a class="masthead__panel-link" href="${APP_STORE_URL}">App</a>
       </nav>
     </div>
   </header>

@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-17",
+    day: "Day 37",
+    headline: "Two matches left, and the Golden Boot is still level.",
+    dek: "Lionel Messi and Kylian Mbappe share the lead on eight as the tournament runs to Sunday's Argentina-Spain final.",
+    body: "The World Cup pauses before its finish, and the individual race is as tight as the trophy one. Lionel Messi and Kylian Mbappe sit level at the top on eight goals each, but their run-ins differ. Mbappe plays first, in Saturday's third-place game against England in Miami, his last chance to move ahead. Messi plays last, in Sunday's final against Spain at MetLife, where he can settle it outright and cap a sixth and final World Cup. Argentina, the holders, meet a Spain side that has conceded once all tournament and reached a first final since 2010. Two games left. One boot and one trophy, both still open.",
+    status: "verified",
+    image: "/heads/messi.webp",
+    imageAlt: "Lionel Messi, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-16",
     day: "Day 36",
     headline: "Argentina break England late, and reach the final.",

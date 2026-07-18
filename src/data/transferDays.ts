@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-18",
+    day: "Saturday",
+    headline: "United move to the front for Kone, and a bid is coming.",
+    dek: "Manchester United are in pole position for Roma's Manu Kone, with a formal bid expected once the World Cup ends.",
+    body: "United's midfield search has a clearer front-runner. Manchester United are now reported in pole position for Roma's Manu Kone, with the French midfielder's camp warm on the move and a formal bid expected once the World Cup finishes. No offer has reached Roma yet. The Italian club want about sixty million euros and have already turned down a thirty-four million pound approach from Atletico. Kone is said to favour Paris Saint-Germain if that door opens, and Chelsea are watching, but United believe they can win the race. All RUMOUR, reported by Romano, Ornstein and La Gazzetta. Real Madrid's Eduardo Camavinga stays the parallel option, still blocked by a player who wants to stay. Marcus Rashford's expired exit clause, Alex Scott's contested talks and Cristian Orozco's imminent unveiling fill out the desk.",
+    status: "verified",
+    image: "/heads/kone.webp",
+    imageAlt: "Manu Kone, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-17",
     day: "Friday",
     headline: "Camavinga moves to the front of United's midfield race.",

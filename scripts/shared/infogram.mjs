@@ -118,7 +118,6 @@ function metaRow(label, value) {
 // rules, Fraunces hero headline, mono facts row, thearchv.ca footer).
 export function infogramTree({ entry, laneLabel }) {
   const eyebrow = `${entry.day} · ${longDate(entry.date)}`.toUpperCase();
-  const status = infogramStatusLabel(entry.status);
 
   const header = el(
     { display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 8 },
@@ -193,10 +192,9 @@ export function infogramTree({ entry, laneLabel }) {
       ),
     ]),
     el({ display: "flex", flexGrow: 1 }, []),
-    el({ display: "flex", flexDirection: "column" }, [
-      el({ display: "flex", height: 1, backgroundColor: "rgba(201,161,74,.28)", marginBottom: 30 }, []),
-      metaRow("Status", status),
-    ]),
+    // Status row retired 2026-07-18 (founder ruling, EDITOR_STANDARDS "Labels
+    // retired from reader-facing copy"): verification stays backend discipline;
+    // the card no longer prints it.
   ]);
 
   const footer = [

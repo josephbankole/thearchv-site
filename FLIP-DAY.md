@@ -1,5 +1,12 @@
 # Flip day — App Store go-live
 
+> **EXECUTED 2026-07-16/17. Everything below is DONE and live** (real URL
+> https://apps.apple.com/app/id6786508653 in all 5 locations, quiz indexed with
+> "Get the app" CTA, ticket guard HARD and verified). One post-flip correction:
+> the /start badge had been frozen in its pre-rebuild DOM slot, so unhiding it
+> put it at the top of the column — it now lives BELOW the gold story CTA.
+> This file stays as the record of the mechanism; nothing left to flip.
+
 The go-live-day changes (App Store badge on `/start`, "App" item in every
 masthead, quiz CTA prep) are built and committed on `preview` but every new
 button ships `hidden` and points at the placeholder:

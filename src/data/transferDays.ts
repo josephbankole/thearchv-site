@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-19",
+    day: "Sunday",
+    headline: "United tell Amad Diallo's camp he is not for sale.",
+    dek: "Milan, Newcastle and Brighton have all looked. United's answer has not moved since June.",
+    body: "Manchester United have made their position on Amad Diallo plain. Fabrizio Romano reports that the winger's representatives were told in June that United have no intention of selling this summer, and that the answer has not changed since. AC Milan are keen. Newcastle and Brighton have both looked. United see Amad as a starter rather than a player to cash in on while they rebuild the midfield. He is under contract until 2030, and the club hold an option for a further year. Elsewhere the desk is quiet before the final. There is still no formal bid at Roma for Manu Kone. Lewis Hall wants the move to Old Trafford, and Newcastle are resisting. Cristian Orozco waits to be announced.",
+    status: "verified",
+  },
+  {
     date: "2026-07-18",
     day: "Saturday",
     headline: "United move to the front for Kone, and a bid is coming.",

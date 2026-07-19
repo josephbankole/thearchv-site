@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-18",
+    day: "Day 38",
+    headline: "Ten goals in Miami, and England take third.",
+    dek: "England 6-4 France. Bukayo Saka scored three, Kylian Mbappe scored two, and the record books moved.",
+    body: "England led 4-0 at half time and still needed six. Declan Rice and Ezri Konsa scored, Bukayo Saka scored twice before the break, and the third-place match looked settled. France did not accept that. Bradley Barcola pulled one back, then Kylian Mbappe scored in the 48th minute and the 66th, and 4-0 became 4-3. England found two more. Saka completed his hat-trick. Ten goals is the most a World Cup third-place match has ever produced, and the most in any World Cup game since Hungary beat El Salvador 10-1 in 1982. Mbappe's two took him past Lionel Messi as the tournament's all-time leading scorer. A dead rubber, on paper.",
+    status: "verified",
+  },
+  {
     date: "2026-07-19",
     day: "Day 39",
     headline: "The record changed hands in Miami, hours before the final.",

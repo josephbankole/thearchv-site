@@ -14,6 +14,16 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-19",
+    day: "Day 39",
+    headline: "The record changed hands in Miami, hours before the final.",
+    dek: "Kylian Mbappe passed Lionel Messi as the World Cup's all-time leading scorer, and leads the Golden Boot going into Argentina against Spain.",
+    body: "Kylian Mbappe scored twice against England on Saturday night and left the tournament's oldest individual record behind him. He has 22 World Cup goals from 22 matches. Lionel Messi has 21 from 33. Mbappe also leads the Golden Boot on ten goals to Messi's eight, and his tournament is finished. Messi's is not. Argentina meet Spain at MetLife Stadium at three o'clock eastern time, the holders against a side who have conceded once in seven matches and are in a first final since 2010. Argentina can become the first nation to win four major tournaments in a row. Messi can still take the Golden Boot. He plays last, which is the whole point.",
+    status: "verified",
+    image: "/heads/mbappe.webp",
+    imageAlt: "Kylian Mbappe, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-17",
     day: "Day 37",
     headline: "Two matches left, and the Golden Boot is still level.",

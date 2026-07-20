@@ -18,7 +18,7 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import {
-  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc,
+  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc, clampTitle,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
 } from "./shared/page-shell.mjs";
@@ -328,7 +328,7 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(entry.headline)} · ${esc(lane.seoSuffix)} · The ARCHV</title>
+  <title>${esc(clampTitle([entry.headline, lane.seoSuffix, "The ARCHV"]))}</title>
   <meta name="description" content="${escAttr(metaDescription(entry.dek, entry.body))}" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />

@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -219,8 +219,8 @@ function render(p, allPages) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(p.title)} · The ARCHV</title>
-  <meta name="description" content="${escAttr(p.description)}" />
+  <title>${esc(clampTitle([p.title, "The ARCHV"]))}</title>
+  <meta name="description" content="${escAttr(clampDescription(p.description))}" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}

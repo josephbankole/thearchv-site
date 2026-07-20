@@ -10,7 +10,7 @@ import { build } from "esbuild";
 import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { cspMeta } from "./shared/page-shell.mjs";
+import { cspMeta, clampTitle, clampDescription } from "./shared/page-shell.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
 // hamburger JS) and no PostHog/Google Fonts CDN (/content.css is self-hosted, no remote font
@@ -85,8 +85,8 @@ function render(entry, sectionKey) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(entry.headline)} · The ARCHV</title>
-  <meta name="description" content="${escAttr(entry.dek)}" />
+  <title>${esc(clampTitle([entry.headline, "The ARCHV"]))}</title>
+  <meta name="description" content="${escAttr(clampDescription(entry.dek))}" />
   <meta name="robots" content="noindex,follow" />
   <link rel="canonical" href="${canonicalUrl}" />
   <meta name="theme-color" content="#0C2A3E" />

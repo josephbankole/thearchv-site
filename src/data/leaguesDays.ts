@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-20",
+    day: "Monday",
+    headline: "Chelsea break the British transfer record for Morgan Rogers.",
+    dek: "Aston Villa accepted 117 million pounds. Arsenal wanted him and never bid.",
+    body: "Chelsea have had a 117 million pound bid accepted by Aston Villa for Morgan Rogers. It is a British record. Chelsea went to a direct meeting with Villa intending to close the deal rather than open a negotiation, and they got it done. Arsenal had Rogers as their first-choice target and held at 90 to 100 million pounds. They never made a formal offer. Rogers scored 14 goals and made 11 assists in 55 appearances last season. Sky Sports report the fee is agreed. The new Premier League season starts on 21 August, most clubs returned for pre-season on 13 July, and the Champions League league-phase draw is on 27 August.",
+    status: "verified",
+  },
+  {
     date: "2026-07-09",
     day: "Thursday",
     headline: "Barcelona reclaim the Women's Champions League, beating Lyon 4-0 in Oslo.",

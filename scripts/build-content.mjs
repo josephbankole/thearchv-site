@@ -16,6 +16,7 @@ const SECTION = {
   finals: { label: "Finals", href: "/#archive", more: "More finals" },
   united: { label: "Manchester United", href: "/#transfer-desk", more: "More United history" },
   explainers: { label: "Explained", href: "/#faq", more: "More explainers" },
+  notes: { label: "Notes", href: "/", more: "More from the archive" },
 };
 const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More from the archive" };
 

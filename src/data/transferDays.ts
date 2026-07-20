@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-20",
+    day: "Monday",
+    headline: "Roma prepare to accept an offer for Manu Kone.",
+    dek: "United are expected to bid this week, and the player wants the move.",
+    body: "Roma have shifted. The Italian club are preparing to accept offers for Manu Kone, and Manchester United are expected to lodge a bid this week. Kone is keen on Old Trafford after reaching the World Cup semi-finals with France. Roma want more than 42.5 million pounds, and one report puts their number at 60 million euros. They paid 15.3 million for him from Borussia Monchengladbach two years ago. He has three years left on his contract. Chelsea are the competition. Fabrizio Romano says there is still no bid and no club-to-club talks. Elsewhere on the desk: Real Madrid would sanction a Camavinga sale at about 60 million euros, Lewis Hall is prioritising United over Chelsea, and Marcus Rashford is back in first-team training.",
+    status: "verified",
+    image: "/heads/kone.webp",
+    imageAlt: "Manu Kone, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-19",
     day: "Sunday",
     headline: "United tell Amad Diallo's camp he is not for sale.",

@@ -16,7 +16,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { existsSync } from "node:fs";
 import {
-  SITE, esc, escAttr, longDate, LANE_META, byDateDesc,
+  SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
@@ -113,8 +113,8 @@ function render(laneKey, lane) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(pageTitle)}</title>
-  <meta name="description" content="${escAttr(lane.intro)}" />
+  <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
+  <meta name="description" content="${escAttr(clampDescription(lane.intro))}" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />

@@ -40,6 +40,46 @@ export const RSS_LINK = `<link rel="alternate" type="application/rss+xml" title=
 
 export const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
+
+// SEO length guards. Applied to RAW strings before esc()/escAttr() so the length
+// count reflects what a search engine sees, not the HTML-entity-encoded markup.
+//
+// clampTitle: joins title segments with " · ", keeping the lead segment always and
+// appending each following segment only while the whole stays within `max`. This
+// preserves the entity-rich pattern (headline · seoSuffix · The ARCHV) when it
+// fits and drops the least-important trailing pieces (brand first) when it does
+// not, rather than letting Google truncate the tail. Falls back to a word-boundary
+// truncation of the lead segment only if that alone overflows.
+export function clampTitle(segments, max = 60) {
+  const parts = (Array.isArray(segments) ? segments : [segments])
+    .map((s) => String(s ?? "").trim())
+    .filter(Boolean);
+  if (!parts.length) return "";
+  const SEP = " · ";
+  let title = parts[0];
+  for (let i = 1; i < parts.length; i++) {
+    const candidate = `${title}${SEP}${parts[i]}`;
+    if (candidate.length <= max) title = candidate;
+  }
+  if (title.length > max) {
+    const cut = parts[0].slice(0, max - 1);
+    const sp = cut.lastIndexOf(" ");
+    title = (sp > max * 0.5 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?·-]+$/, "") + "…";
+  }
+  return title;
+}
+
+// clampDescription: collapse whitespace, then truncate to `max` at a word boundary
+// with a trailing ellipsis. Meta descriptions over ~160 chars get cut off in search
+// results, so this keeps the whole sentence visible or a clean truncation.
+export function clampDescription(s, max = 160) {
+  const str = String(s ?? "").trim().replace(/\s+/g, " ");
+  if (str.length <= max) return str;
+  const cut = str.slice(0, max - 1);
+  const sp = cut.lastIndexOf(" ");
+  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?-]+$/, "") + "…";
+}
+
 export const longDate = (iso) => {
   try { return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); }
   catch { return iso; }

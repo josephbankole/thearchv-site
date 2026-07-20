@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, esc, escAttr, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  SITE, esc, escAttr, clampTitle, clampDescription, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -96,7 +96,7 @@ function entrySchema(entry, url) {
 
 function renderEntry(entry) {
   const url = `${SITE}/glossary/${entry.slug}/`;
-  const description = firstSentence(entry.answer);
+  const description = clampDescription(firstSentence(entry.answer));
   const socialTitle = `${entry.title} · The ARCHV`;
   const depth = entry.depth.map((p) => `<p>${esc(p)}</p>`).join("\n        ");
 
@@ -105,7 +105,7 @@ function renderEntry(entry) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(entry.question)} · The ARCHV glossary</title>
+  <title>${esc(clampTitle([entry.question, "The ARCHV glossary"]))}</title>
   <meta name="description" content="${escAttr(description)}" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />

@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-20",
+    day: "Day 40",
+    headline: "Spain win the World Cup, and Argentina never had a shot.",
+    dek: "Ferran Torres scored in the 106th minute at MetLife Stadium. Argentina did not put a single shot on target.",
+    body: "Spain are world champions for the second time. Ferran Torres scored in the 106th minute of extra time at MetLife Stadium, and Argentina finished with ten men after Enzo Fernandez was sent off for a second yellow card. The numbers are strange. Spain had 20 shots and 12 on target. Argentina did not put one on target all night. Emiliano Martinez made 11 saves, more than any goalkeeper has made in a World Cup final, and still lost. Spain conceded one goal in the whole tournament. Lionel Messi finished his last World Cup match with 15 touches. Kylian Mbappe took the Golden Boot with ten goals.",
+    status: "verified",
+  },
+  {
     date: "2026-07-18",
     day: "Day 38",
     headline: "Ten goals in Miami, and England take third.",

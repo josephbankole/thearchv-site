@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-21",
+    day: "Tuesday",
+    headline: "United and Roma open talks for Manu Kone.",
+    dek: "Roma want 60 million euros. United are preparing 47 million pounds.",
+    body: "Manchester United have begun formal talks with Roma over Manu Kone. A day earlier there was contact with the player's agents and nothing more, so this is a real step. Roma have set an asking price of 60 million euros. United are preparing a bid worth about 47 million pounds. Roma need to sell to meet financial rules and view Kone as their most valuable asset. He is 25, has made 92 appearances for the club, and reached the World Cup semi-finals with France. Chelsea and Arsenal are also in the race. Kone would be United's third midfielder of the window after Andrey Santos and Youri Tielemans. David Ornstein reports that a third signing was always the plan. Nothing is agreed yet.",
+    status: "verified",
+    image: "/heads/kone.webp",
+    imageAlt: "Manu Kone, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-20",
     day: "Monday",
     headline: "Roma prepare to accept an offer for Manu Kone.",

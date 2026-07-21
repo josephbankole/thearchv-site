@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-21",
+    day: "Tuesday",
+    headline: "Chelsea break the British record for Morgan Rogers.",
+    dek: "117 million pounds, a medical done, six years signed.",
+    body: "Morgan Rogers completed a medical in London on the morning of 20 July before joining Chelsea from Aston Villa for 117 million pounds. It is the largest fee a British club has ever paid, and it passes the 107 million pounds Chelsea spent on Enzo Fernandez in 2023. Rogers has agreed six years with the option of a further twelve months. He is 23. Last season he scored 14 goals and made 11 assists in 55 appearances. Arsenal had him as their first choice, held their valuation between 90 and 100 million pounds, and never made a formal offer. Chelsea went to Villa to close rather than to negotiate. Villa now rebuild an attack around the money.",
+    status: "verified",
+  },
+  {
     date: "2026-07-20",
     day: "Monday",
     headline: "Chelsea break the British transfer record for Morgan Rogers.",

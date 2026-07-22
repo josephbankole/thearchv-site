@@ -118,14 +118,98 @@ export const LANE_META = {
   },
 };
 
-// Simple three-desk text nav, on article AND lane pages (SITE-DEPTH-PLAN.md W3.3). Kept as
-// plain wrapping text links (not the masthead's button styling) so it stays collision-proof
-// down to 320px — verified in the build's interactive check.
-export function deskNav(currentLane) {
-  const links = Object.entries(LANE_META)
-    .map(([key, meta]) => {
+// ---------- multi-sport registry (2026-07-22) ----------
+// Build-side mirror of src/data/sports.ts. TWO SOURCES OF TRUTH, kept in step by hand: this
+// .mjs module is imported directly by the build scripts (they cannot import a .ts at run time
+// without bundling), while src/data/sports.ts serves the homepage bundle and the app-facing
+// side. The shapes are identical on purpose — change a value in one, change it in the other.
+export const SPORTS = [
+  { key: "football", label: "Football", shortLabel: "Football", urlBase: "", order: 0, live: true, lanes: ["transfer", "world-cup", "leagues"] },
+  { key: "nfl", label: "NFL", shortLabel: "NFL", urlBase: "nfl", order: 1, live: true, lanes: ["questions"] },
+  { key: "f1", label: "Formula 1", shortLabel: "F1", urlBase: "f1", order: 2, live: true, lanes: ["questions"] },
+  { key: "tennis", label: "Tennis", shortLabel: "Tennis", urlBase: "tennis", order: 3, live: true, lanes: ["questions"] },
+  { key: "golf", label: "Golf", shortLabel: "Golf", urlBase: "golf", order: 4, live: true, lanes: ["questions"] },
+];
+export const DEFAULT_SPORT = "football";
+export const sportByKey = (key) => SPORTS.find((s) => s.key === key) || SPORTS[0];
+// URL root for a sport: "/" for football (it lives at the site root), "/<urlBase>/" otherwise.
+export const sportRoot = (sport) => (sport.urlBase ? `/${sport.urlBase}/` : "/");
+
+// Lane metadata for the new sports' single Question Desk lane. Football keeps LANE_META above
+// (untouched, so its deskNav output stays byte-identical). One shared definition, mapped to
+// every new sport, because an NFL question desk and a Golf question desk read the same way.
+export const QUESTION_LANE_META = {
+  questions: { label: "Question Desk", seoSuffix: "answered", indexTitleSuffix: "Question Desk" },
+};
+
+// Editorial copy per new sport, one source shared by the section pages (build-sport-pages.mjs)
+// and the lane fronts (build-lane-pages.mjs): `lede` states what the desk covers and the
+// standard it meets (and doubles as the meta description); `holding` is the honest empty-state
+// paragraph shown until the first entry lands. British English, house voice, no hype, no em
+// dashes. Football is not here: it keeps its own long-standing homepage and lane copy.
+export const SPORT_DESK_COPY = {
+  nfl: {
+    lede: "The NFL desk, one answered question a day. The biggest thing fans are asking that week, checked against two independent sources before it goes up.",
+    holding: "The NFL desk is opening. Each day it takes the question fans are actually asking and answers it, checked against two independent sources. When a day has no honest answer, the desk files nothing and says so.",
+  },
+  f1: {
+    lede: "The Formula 1 desk, one answered question a day. The question the paddock and the fans keep coming back to, checked against two independent sources before it goes up.",
+    holding: "The Formula 1 desk is opening. One question a day, the one the grid keeps circling, answered and checked against two independent sources. A day without a real answer ships nothing, and the run says so.",
+  },
+  tennis: {
+    lede: "The tennis desk, one answered question a day. The question fans are asking about the tour, checked against two independent sources before it goes up.",
+    holding: "The tennis desk is opening. Each day it answers the question fans are asking across the tour, checked against two independent sources. Quiet on the days that do not warrant a word.",
+  },
+  golf: {
+    lede: "The golf desk, one answered question a day. The question fans keep asking through the season, checked against two independent sources before it goes up.",
+    holding: "The golf desk is opening. One question a day from the ones fans keep asking, answered and checked against two independent sources. Nothing is filed on a day without a real answer.",
+  },
+};
+
+// Sport-aware lane list: {key,label,href} per lane, in the order the sport declares them.
+// Football resolves through LANE_META and keeps /desk/<lane>/; new sports get /<urlBase>/<lane>/.
+export function lanesForSport(sportKey) {
+  if (sportKey === "football") {
+    return Object.entries(LANE_META).map(([key, meta]) => ({ key, label: meta.label, href: `/desk/${key}/` }));
+  }
+  const sport = sportByKey(sportKey);
+  return sport.lanes.map((laneKey) => ({
+    key: laneKey,
+    label: QUESTION_LANE_META[laneKey]?.label ?? laneKey,
+    href: `/${sport.urlBase}/${laneKey}/`,
+  }));
+}
+
+// The sport tab row (row 2 of the masthead), modelled on deskNav: a link per sport, aria-current
+// on the active one, href from urlBase so football emits "/". `home:true` swaps the wrapper class
+// for the homepage's fixed-bar variant (src/style.css); the static page family uses the sticky
+// variant styled in pageStyles() below. No inline script here — the active-tab scroll-into-view
+// lives in a bundled module (src/ui/sportTabs.ts) for the homepage; the static pages rely on
+// Football sitting leftmost, which is the regression-critical case.
+export function sportNav(currentSportKey = DEFAULT_SPORT, { home = false } = {}) {
+  const links = SPORTS.map((s) => {
+    const current = s.key === currentSportKey ? ' aria-current="page"' : "";
+    return `<a class="sportnav__link" href="${sportRoot(s)}"${current}>${esc(s.shortLabel)}</a>`;
+  }).join("\n          ");
+  const wrapClass = home ? "sportnav-wrap sportnav-wrap--home" : "sportnav-wrap sportnav-wrap--page";
+  return `<div class="${wrapClass}">
+      <nav class="sportnav" aria-label="Sports">
+        <div class="sportnav__row">
+          ${links}
+        </div>
+      </nav>
+    </div>`;
+}
+
+// Simple desk text nav, on article AND lane pages (SITE-DEPTH-PLAN.md W3.3). Kept as plain
+// wrapping text links (not the masthead's button styling) so it stays collision-proof down to
+// 320px — verified in the build's interactive check. Now sport-aware: football keeps
+// /desk/<lane>/ (byte-identical to before); new sports emit /<urlBase>/<lane>/.
+export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
+  const links = lanesForSport(sportKey)
+    .map(({ key, label, href }) => {
       const current = key === currentLane ? ' aria-current="page"' : "";
-      return `<a class="desknav__link" href="/desk/${key}/"${current}>${esc(meta.label)}</a>`;
+      return `<a class="desknav__link" href="${href}"${current}>${esc(label)}</a>`;
     })
     .join("\n      ");
   return `<nav class="desknav" aria-label="The desks">
@@ -140,7 +224,12 @@ export function deskNav(currentLane) {
 // No inline event handlers: the toggle behaviour lives in a plain <script> block wired via
 // addEventListener, matching the existing inline-script convention on this page family
 // (posthogSnippet(), the share-row script in build-article-pages.mjs).
-export function masthead() {
+// masthead(currentSportKey) — brand row (row 1) plus the sport tab row (row 2). The tab row is
+// the only change to the football page family and is the diff the football-regression check
+// expects. currentSportKey defaults to football so existing football callers (masthead()) get
+// the tab row with Football current and every other byte unchanged; the single inline toggle
+// script is untouched, so MASTHEAD_SCRIPT_HASH and every football page's CSP stay identical.
+export function masthead(currentSportKey = DEFAULT_SPORT) {
   return `<header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <div class="masthead__menu">
@@ -157,6 +246,7 @@ export function masthead() {
       </nav>
     </div>
   </header>
+  ${sportNav(currentSportKey)}
   <script>
     (function () {
       var toggle = document.getElementById('masthead-toggle');
@@ -343,6 +433,34 @@ export function pageStyles() {
     .desknav__link { color: var(--cream-faint); }
     .desknav__link:hover { color: var(--gold); }
     .desknav__link[aria-current="page"] { color: var(--gold); }
+
+    /* ---------- sport tab bar (multi-sport, 2026-07-22) ----------
+       Styles the static page family (article / lane / sport section pages). MIRROR of the homepage
+       rules in src/style.css (.sportnav*): keep the two in step, neither file imports the other.
+       Register matches .desknav__link (uppercase, .8rem, .04em) but cream at rest for a touch more
+       presence, gold on hover and when current, a 2px gold underline on the active tab. Sticky at
+       the top of the page family; horizontally scrollable with an edge fade once it overflows. */
+    .sportnav-wrap { position: sticky; top: 0; z-index: 30; background: var(--navy-deep); border-bottom: 1px solid var(--gold-soft); }
+    .sportnav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; }
+    .sportnav::-webkit-scrollbar { display: none; }
+    .sportnav__row { display: flex; gap: 1.4rem; align-items: center; max-width: 72rem; margin: 0 auto; padding: .7rem 1.25rem; width: max-content; min-width: 100%; justify-content: center; }
+    .sportnav__link { flex: 0 0 auto; scroll-snap-align: start; color: var(--cream-dim); font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; padding: .2rem 0; border-bottom: 2px solid transparent; }
+    .sportnav__link:hover { color: var(--gold); text-decoration: none; }
+    .sportnav__link[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
+    @media (max-width: 640px) {
+      .sportnav__row { justify-content: flex-start; gap: 1.1rem; }
+      .sportnav-wrap::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 26px; background: linear-gradient(to right, rgba(7,28,43,0), var(--navy-deep)); pointer-events: none; }
+    }
+
+    /* sport section header + Question Desk empty-state holding block (multi-sport, 2026-07-22).
+       Shared by the sport section pages (build-sport-pages.mjs) and the new-sport lane fronts
+       (build-lane-pages.mjs). */
+    .sport-head { padding: 2.2rem 0 1rem; }
+    .sport-head__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
+    .sport-head h1 { margin: 0 0 .6rem; }
+    .sport-head__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 1.6rem; }
+    .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: linear-gradient(180deg, rgba(19,58,82,.35), rgba(7,28,43,.35)); }
+    .sport-holding p { margin: 0; color: var(--cream-dim); font-size: 1rem; }
 
     .share { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 1.75rem; }
     .share .btn { font-size: .78rem; padding: .4rem .8rem; cursor: pointer; background: none; font-family: inherit; line-height: inherit; }

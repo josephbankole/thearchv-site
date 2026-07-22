@@ -19,6 +19,7 @@ import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, byDateDesc,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 
@@ -41,6 +42,10 @@ const entrySrc = [
   `export { transferDays } from "./data/transferDays.ts";`,
   `export { worldCupDays } from "./data/worldCupDays.ts";`,
   `export { leaguesDays } from "./data/leaguesDays.ts";`,
+  `export { nflDays } from "./data/nflDays.ts";`,
+  `export { f1Days } from "./data/f1Days.ts";`,
+  `export { tennisDays } from "./data/tennisDays.ts";`,
+  `export { golfDays } from "./data/golfDays.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".lane-bundle.mjs");
 let data;
@@ -55,6 +60,15 @@ try {
 const transferDays = [...data.transferDays].sort(byDateDesc);
 const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
 const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
+
+// New-sport day data (empty today; the desks open one entry at a time), keyed by sport for the
+// lane-front loop below. Football keeps its own bespoke LANES rendering above, untouched.
+const SPORT_DAYS = {
+  nfl: [...data.nflDays].sort(byDateDesc),
+  f1: [...data.f1Days].sort(byDateDesc),
+  tennis: [...data.tennisDays].sort(byDateDesc),
+  golf: [...data.golfDays].sort(byDateDesc),
+};
 
 // Intro copy (SEO/AEO pass, UNIT 2, 2026-07-14): each lane's cards carried little or no
 // crawlable prose above them, so every intro now states what the lane covers (keyword-bearing,
@@ -183,6 +197,88 @@ function render(laneKey, lane) {
 `;
 }
 
+/* ---------- new-sport lane fronts (multi-sport, 2026-07-22) ----------
+   Football's three lane fronts are rendered by render() above and are unchanged bar the masthead
+   sport tab row. Each new sport carries a single Question Desk lane; its front lists that lane's
+   entries newest-first (or the honest holding paragraph while empty), using the same page shell,
+   the same lane-card markup, and a sport-scoped deskNav. */
+function renderSportLane(sport, laneKey) {
+  const laneLabel = QUESTION_LANE_META[laneKey]?.label ?? laneKey;
+  const copy = SPORT_DESK_COPY[sport.key];
+  const days = SPORT_DAYS[sport.key] || [];
+  const url = `${SITE}/${sport.urlBase}/${laneKey}/`;
+  const pageTitle = `${sport.label} ${laneLabel} · The ARCHV`;
+  const socialTitle = `${sport.label} ${laneLabel} · The ARCHV`;
+
+  const rail = days.length
+    ? `<ul class="lane-list" aria-label="${escAttr(`${sport.label} ${laneLabel}`)}, newest first">
+        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${entry.image ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />` : ""}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
+      </ul>`
+    : `<div class="sport-holding"><p>${esc(copy.holding)}</p></div>`;
+
+  return `<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
+  <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="${url}" />
+  <meta name="theme-color" content="#0C2A3E" />
+  ${PAGE_CSP}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="The ARCHV" />
+  <meta property="og:title" content="${escAttr(socialTitle)}" />
+  <meta property="og:description" content="${escAttr(copy.lede)}" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:image" content="${SITE}/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@thearchvfc" />
+  <meta name="twitter:title" content="${escAttr(socialTitle)}" />
+  <meta name="twitter:description" content="${escAttr(copy.lede)}" />
+  <meta name="twitter:image" content="${SITE}/og.jpg" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  ${RSS_LINK}
+  <script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "CollectionPage", name: `${sport.label} ${laneLabel}`, description: copy.lede, url, inLanguage: "en-GB", isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` } },
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: sport.label, item: `${SITE}/${sport.urlBase}/` },
+        { "@type": "ListItem", position: 3, name: laneLabel, item: url },
+      ] },
+    ],
+  }).replace(/</g, "\\u003c")}</script>
+
+  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
+  ${posthogSnippet()}
+
+  ${fontLinks()}
+
+  ${pageStyles()}
+</head>
+<body>
+  ${masthead(sport.key)}
+  ${deskNav(laneKey, sport.key)}
+  <main class="wrap wrap--wide">
+    <section class="sport-head">
+      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${sport.urlBase}/">${esc(sport.label)}</a> / ${esc(laneLabel)}</p>
+      <p class="sport-head__eyebrow">${esc(sport.label)} · ${esc(laneLabel)}</p>
+      <h1>${esc(laneLabel)}</h1>
+      <p class="sport-head__lede">${esc(copy.lede)}</p>
+      ${rail}
+    </section>
+  </main>
+  ${footer()}
+</body>
+</html>
+`;
+}
+
 /* ---------- write pages ---------- */
 let count = 0;
 const urls = [];
@@ -192,6 +288,18 @@ for (const [laneKey, lane] of Object.entries(LANES)) {
   writeFileSync(join(dir, "index.html"), render(laneKey, lane));
   urls.push(`  <url><loc>${SITE}/desk/${laneKey}/</loc><changefreq>daily</changefreq><priority>0.7</priority></url>`);
   count++;
+}
+
+// New-sport lane fronts: /<urlBase>/<lane>/ for every non-football sport and each of its lanes.
+for (const sport of SPORTS) {
+  if (sport.key === "football") continue;
+  for (const laneKey of sport.lanes) {
+    const dir = join(OUT, sport.urlBase, laneKey);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, "index.html"), renderSportLane(sport, laneKey));
+    urls.push(`  <url><loc>${SITE}/${sport.urlBase}/${laneKey}/</loc><changefreq>daily</changefreq><priority>0.6</priority></url>`);
+    count++;
+  }
 }
 
 /* ---------- sitemap: same append pattern as build-article-pages.mjs — append to whatever

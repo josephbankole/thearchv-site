@@ -69,7 +69,7 @@ const SITE = "https://thearchv.ca";
 const LANES = { transfer: "transfer", worldcup: "world-cup", leagues: "leagues" };
 const articleUrl = (section, date) => `${SITE}/desk/${LANES[section]}/${date}/`;
 
-// Additive infogram fields (INFOGRAM-PLAN.md P3, schema unchanged at archv-feed/2): attach
+// Additive infogram fields (INFOGRAM-PLAN.md P3, schema archv-feed/3): attach
 // `infogram` (site-relative PNG path) + `infogramAlt` (one plain sentence) to an entry ONLY when
 // build-infograms.mjs actually wrote the PNG for it. Checking the file on disk — not just
 // eligibility — is the OG-card discipline: the feed never advertises an image that was not

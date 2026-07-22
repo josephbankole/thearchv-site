@@ -18,7 +18,7 @@
        here, or the browser will silently drop that script at runtime.
        connect-src carries the Supabase project (Android waitlist post); frame-src carries
        Substack (the Dispatch embed). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-tA7BaK8MMVuOPEnhaBHzchff+Nvr5gEA5Zs32WaD5J8=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-vhS6GB67cLw06AAHtAAp4f7S0aYVrtEnWMp5SLjkdMI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
@@ -311,6 +311,7 @@
           var h = document.getElementById("story-headline");
           var dek = document.getElementById("story-dek");
           var kick = document.getElementById("story-kicker");
+          var usingInfogram = !!lead.infogram;
           if (lead.headline && h) h.textContent = lead.headline;
           if (lead.dek && dek) dek.textContent = lead.dek;
           if (kick) kick.textContent = lead.provenance || "Today";
@@ -322,6 +323,13 @@
               if (!img) return;
               img.src = src;
               img.alt = lead.infogramAlt || lead.headline || img.alt;
+              // The infogram renders the headline and dek INTO the image, so repeating
+              // them underneath prints the story twice. Only the plain headshot fallback,
+              // which carries no text, needs them.
+              if (usingInfogram) {
+                if (h) h.style.display = "none";
+                if (dek) dek.style.display = "none";
+              }
             };
             probe.src = src;
           }

@@ -14,15 +14,28 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, mirroring index.html.
-       Both inline scripts below are allowed only via an exact sha256 hash - if you edit either
-       one, recompute its hash (sha256, base64-encoded, of its exact inline body) and update it
+       Every inline script below is allowed only via an exact sha256 hash - if you edit any of
+       them, recompute the hash (sha256, base64-encoded, of the exact inline body) and update it
        here, or the browser will silently drop that script at runtime. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-ulFHDlqS5ODN+6CMnpT3wAQGc7xBH9b3lG4W6xrXQ6M=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-GHyTpxVw+ElmZwXvGnmnJvnRL9od7CKJN/fJhD75Gis=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
   <meta property="og:url" content="https://thearchv.ca/app" />
   <meta property="og:image" content="https://thearchv.ca/og.jpg" />
+
+  <!-- Platform gate. Runs before paint so there is no flash of the wrong layout.
+       Measured 2026-07-21: 44% of this page's inbound traffic is Android and physically
+       cannot install an iOS-only app. Those visitors are offered the Dispatch instead of
+       a button they cannot use. The iOS layout is the default, so no-JS and unknown
+       platforms still see the App Store badge. -->
+  <script>
+    (function () {
+      var u = navigator.userAgent || "";
+      var ios = /iPhone|iPad|iPod/i.test(u) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      document.documentElement.className = ios ? "ios" : "other";
+    })();
+  </script>
 
   <!-- PostHog: pageview + the one tap that matters. Same project as the website. -->
   <script>
@@ -57,6 +70,11 @@
       -webkit-font-smoothing: antialiased;
     }
     .page { width: 100%; max-width: 420px; text-align: center; }
+
+    /* Platform swap. iOS is the default so a no-JS visitor still gets the App Store badge. */
+    .other-only { display: none; }
+    html.other .other-only { display: block; }
+    html.other .ios-only { display: none; }
 
     .wordmark {
       font-family: "Fraunces", Georgia, serif;
@@ -110,8 +128,25 @@
       color: var(--gold);
     }
 
-    /* Deliberately quiet: a non-iPhone visitor should not hit a dead end, but this
-       must never compete with the badge above it. */
+    /* Non-iOS primary action: the Dispatch. Same weight the badge carries on iOS. */
+    .cta-gold {
+      display: block;
+      margin-top: 30px;
+      padding: 17px 22px;
+      border-radius: 12px;
+      background: var(--gold);
+      color: var(--navy-deep);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .cta-gold:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .cta-gold:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
+
+    /* Deliberately quiet: a visitor should not hit a dead end, but this must never
+       compete with the primary action above it. */
     .fallback {
       margin-top: 34px;
       font-size: 0.85rem;
@@ -130,34 +165,52 @@
     <h1 class="headline">Football with a memory.</h1>
     <p class="blurb">A daily archive of the game in original illustration. No ads, no account, no betting, and one quiet notification a day.</p>
 
-    <div class="badge-wrap">
-      <a class="appstore-badge" id="app-store-badge" href="https://apps.apple.com/app/id6786508653">
-        <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download The ARCHV on the App Store">
-          <rect x="0.5" y="0.5" width="199" height="59" rx="10" fill="#000000" stroke="#A6A6A6" stroke-width="1"/>
-          <g fill="#FFFFFF">
-            <!-- Apple mark -->
-            <path d="M32.9 20.9c-.9 1.1-2.4 2-3.9 1.9-.2-1.5.5-3.1 1.4-4.1.9-1.1 2.5-1.9 3.8-2 .2 1.6-.5 3.1-1.3 4.2zm1.3 2.1c-2.2-.1-4 1.2-5.1 1.2-1.1 0-2.6-1.2-4.3-1.1-2.2 0-4.2 1.3-5.4 3.2-2.3 4-.6 9.9 1.6 13.2 1.1 1.6 2.4 3.4 4.1 3.3 1.6-.1 2.3-1 4.2-1s2.5 1 4.3 1c1.8 0 2.9-1.6 4-3.2 1.2-1.8 1.8-3.6 1.8-3.7-.1 0-3.4-1.3-3.4-5.1 0-3.2 2.6-4.7 2.7-4.8-1.5-2.2-3.8-2.4-4.5-2.5z"/>
-            <!-- Wordmark: two-line "Download on the / App Store" -->
-            <text x="47" y="26" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="9" letter-spacing="0.3">DOWNLOAD ON THE</text>
-            <text x="46" y="42" font-family="Georgia,'Times New Roman',serif" font-size="18">App Store</text>
-          </g>
-        </svg>
-      </a>
-      <p class="freeline">Free on iPhone</p>
+    <!-- iOS: the App Store is the whole point of the page. -->
+    <div class="ios-only">
+      <div class="badge-wrap">
+        <a class="appstore-badge" id="app-store-badge" href="https://apps.apple.com/app/id6786508653">
+          <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download The ARCHV on the App Store">
+            <rect x="0.5" y="0.5" width="199" height="59" rx="10" fill="#000000" stroke="#A6A6A6" stroke-width="1"/>
+            <g fill="#FFFFFF">
+              <!-- Apple mark -->
+              <path d="M32.9 20.9c-.9 1.1-2.4 2-3.9 1.9-.2-1.5.5-3.1 1.4-4.1.9-1.1 2.5-1.9 3.8-2 .2 1.6-.5 3.1-1.3 4.2zm1.3 2.1c-2.2-.1-4 1.2-5.1 1.2-1.1 0-2.6-1.2-4.3-1.1-2.2 0-4.2 1.3-5.4 3.2-2.3 4-.6 9.9 1.6 13.2 1.1 1.6 2.4 3.4 4.1 3.3 1.6-.1 2.3-1 4.2-1s2.5 1 4.3 1c1.8 0 2.9-1.6 4-3.2 1.2-1.8 1.8-3.6 1.8-3.7-.1 0-3.4-1.3-3.4-5.1 0-3.2 2.6-4.7 2.7-4.8-1.5-2.2-3.8-2.4-4.5-2.5z"/>
+              <!-- Wordmark: two-line "Download on the / App Store" -->
+              <text x="47" y="26" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="9" letter-spacing="0.3">DOWNLOAD ON THE</text>
+              <text x="46" y="42" font-family="Georgia,'Times New Roman',serif" font-size="18">App Store</text>
+            </g>
+          </svg>
+        </a>
+        <p class="freeline">Free on iPhone</p>
+      </div>
+      <p class="fallback">Not on an iPhone? The archive reads on the web at <a id="web-fallback" href="https://thearchv.ca/">thearchv.ca</a>.</p>
     </div>
 
-    <p class="fallback">Not on an iPhone? The archive reads on the web at <a id="web-fallback" href="https://thearchv.ca/">thearchv.ca</a>.</p>
+    <!-- Everyone else: the app is iOS only, so the useful thing is the Dispatch. -->
+    <div class="other-only">
+      <a class="cta-gold" id="dispatch-cta" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Get the Dispatch</a>
+      <p class="freeline">The archive by email. Free.</p>
+      <p class="fallback">
+        The app is on iPhone for now. You can read everything on the web at
+        <a id="archive-link" href="https://thearchv.ca/">thearchv.ca</a>,
+        or <a id="appstore-quiet" href="https://apps.apple.com/app/id6786508653">get the app</a> if you are on an iPhone.
+      </p>
+    </div>
   </main>
   <script>
     (function () {
-      function bind(el, target) {
+      var platform = document.documentElement.className || "unknown";
+      function bind(id, target) {
+        var el = document.getElementById(id);
         if (!el) return;
         el.addEventListener('click', function () {
-          if (window.posthog) posthog.capture('app_cta_click', { target: target, href: el.href });
+          if (window.posthog) posthog.capture('app_cta_click', { target: target, platform: platform, href: el.href });
         });
       }
-      bind(document.getElementById('app-store-badge'), 'appstore');
-      bind(document.getElementById('web-fallback'), 'web_fallback');
+      bind('app-store-badge', 'appstore');
+      bind('web-fallback', 'web_fallback');
+      bind('dispatch-cta', 'dispatch');
+      bind('archive-link', 'archive');
+      bind('appstore-quiet', 'appstore_quiet');
     })();
   </script>
 </body>

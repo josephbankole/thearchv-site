@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-22",
+    day: "Wednesday",
+    headline: "United's move for Lewis Hall hardens.",
+    dek: "Manchester United push for Newcastle's Lewis Hall. Chelsea step back.",
+    body: "Manchester United's interest in Lewis Hall has firmed up. David Ornstein reports United are determined to sign the Newcastle left-back and value the deal at around 60m pounds, though newer reporting has Newcastle rating him closer to 70m. The player's preference is clear. Hall wants Old Trafford, where he would sit behind Luke Shaw and work under Michael Carrick before taking the shirt himself. That pull has cooled Chelsea, who are now looking elsewhere, and it hands United leverage. Two complications remain. Chelsea kept a sell-on clause when they sold him to Newcastle, so a deal at this price pays them a cut, and Hall has not asked to leave. He is 21, contracted to 2029.",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Lewis Hall, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-21",
     day: "Tuesday",
     headline: "United and Roma open talks for Manu Kone.",

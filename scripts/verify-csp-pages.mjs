@@ -74,6 +74,8 @@ const targets = [
   // Paid-traffic landing page for the Meta ad (2026-07-21). Self-contained like /start, with
   // its own PostHog + click-tracking inline scripts, so its CSP hashes need the same guard.
   ["static: /app/", join(DIST, "app", "index.html")],
+  ["static: /about/", join(DIST, "about", "index.html")],
+  ["static: /corrections/", join(DIST, "corrections", "index.html")],
   ["lane: /desk/transfer/", join(DIST, "desk", "transfer", "index.html")],
   ["lane: /desk/world-cup/", join(DIST, "desk", "world-cup", "index.html")],
   ["lane: /desk/leagues/", join(DIST, "desk", "leagues", "index.html")],

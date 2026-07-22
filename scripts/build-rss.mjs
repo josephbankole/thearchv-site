@@ -3,18 +3,31 @@
    `vite build` and build-feed.mjs (see package.json "build"). Same data source as the website
    and the JSON app feed (src/data/*.ts, bundled via esbuild), so the three cannot drift: one
    deploy updates all of them. Output dir defaults to ./dist, override with CONTENT_OUT to match
-   the other page generators. */
+   the other page generators.
+
+   Each item carries BOTH <description> (the short standfirst, a teaser) and <content:encoded>
+   (the full article body as HTML in CDATA, plus the illustration and the rights notice). That
+   split is the syndication convention: platforms that republish, Microsoft Start among them,
+   read the body from content:encoded and ignore a dek-only feed. */
 import { build } from "esbuild";
-import { writeFileSync, rmSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { writeFileSync, rmSync, statSync } from "node:fs";
+import { join, dirname, extname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { byDateDesc } from "./shared/page-shell.mjs";
+import { byDateDesc, esc, escAttr } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SITE = "https://thearchv.ca";
 const MAX_ITEMS = 30;
+// Named author and editor of the publication (founder decision, 2026-07-21). Emitted per item
+// as dc:creator, which is the field syndication platforms read for a byline.
+const AUTHOR = "Joseph Bankole";
+// The standing rights notice every canonical article page carries (see the article__rights
+// paragraph in build-article-pages.mjs). Syndicated full text travels away from the site, so
+// it carries the same notice with it. Kept byte-identical to the page copy.
+const RIGHTS =
+  "The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.";
 
 /* ---------- load the typed day data via a bundled temp module (same pattern as build-feed.mjs) ---------- */
 const entrySrc = [
@@ -66,24 +79,94 @@ function rfc822(dateOnly) {
   return `${weekday}, ${dd} ${MONTHS[m - 1]} ${y} 12:00:00 -0600`;
 }
 
+/* ---------- full article body for <content:encoded> ----------
+   description stays the short standfirst (the teaser); content:encoded carries the article, which
+   is the convention every syndication platform reads. Microsoft Start and similar ingest the body
+   from this element, so a feed that only carried the dek gave them nothing to publish.
+
+   Paragraph splitting and image access reuse build-article-pages.mjs exactly (body is one string
+   with blank-line paragraph breaks; image is an OPTIONAL site-relative path with imageAlt beside
+   it), so the feed body and the canonical page can never disagree about what an article says. */
+function bodyHtml(text) {
+  return String(text)
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => `<p>${esc(p)}</p>`)
+    .join("\n");
+}
+
+// CDATA is taken verbatim by the parser, so the one sequence that can break the section is "]]>".
+// Splitting it across two sections leaves the bytes the consumer reconstructs unchanged.
+const cdata = (html) => `<![CDATA[${String(html).replace(/\]\]>/g, "]]]]><![CDATA[>")}]]>`;
+
+// Brand-illustrated headshots only (public/heads/*.webp today). The type map is explicit rather
+// than guessed, so an unrecognised extension degrades to "no enclosure" instead of a wrong MIME.
+const IMAGE_TYPES = {
+  ".webp": "image/webp",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+};
+function imageAsset(entry) {
+  if (!entry.image) return null;
+  const rel = String(entry.image);
+  // Same public/ resolution build-article-pages.mjs uses when it reads the headshot for the OG card.
+  let bytes = null;
+  try {
+    bytes = statSync(join(ROOT, "public", rel.replace(/^\//, ""))).size;
+  } catch {
+    bytes = null;
+  }
+  return {
+    url: `${SITE}${rel}`,
+    alt: entry.imageAlt ?? entry.headline,
+    type: IMAGE_TYPES[extname(rel).toLowerCase()] ?? null,
+    bytes,
+  };
+}
+
+// The article as a self-contained HTML fragment: standfirst, illustration, body, rights notice.
+// Absolute image URL because the fragment is read far away from thearchv.ca. No width/height:
+// the real pixel size is not read here, and a wrong dimension is worse than none.
+function contentHtml(entry, img) {
+  const parts = [`<p><strong>${esc(entry.dek)}</strong></p>`];
+  if (img) parts.push(`<figure><img src="${escAttr(img.url)}" alt="${escAttr(img.alt)}" /></figure>`);
+  parts.push(bodyHtml(entry.body));
+  parts.push(`<p>${esc(RIGHTS)}</p>`);
+  return parts.filter(Boolean).join("\n");
+}
+
 /* ---------- compose the RSS 2.0 document ---------- */
 const lastBuild = items.length ? rfc822(items[0].date) : rfc822(new Date().toISOString().slice(0, 10));
 
 const itemXml = items
   .map((it) => {
     const url = articleUrl(it);
+    const img = imageAsset(it);
+    // enclosure needs an honest byte length and a known MIME type, so it is emitted only when the
+    // file was actually found on disk. Same discipline as build-feed.mjs's infogram fields: the
+    // feed never advertises an asset it could not confirm. The <img> inside content:encoded is
+    // unconditional, so a missing local file still syndicates the picture.
+    const enclosure =
+      img && img.type && img.bytes
+        ? `\n      <enclosure url="${xmlEsc(img.url)}" length="${img.bytes}" type="${img.type}" />`
+        : "";
     return `    <item>
       <title>${xmlEsc(it.headline)}</title>
       <link>${xmlEsc(url)}</link>
       <guid isPermaLink="true">${xmlEsc(url)}</guid>
       <description>${xmlEsc(it.dek)}</description>
+      <content:encoded>${cdata(contentHtml(it, img))}</content:encoded>
       <pubDate>${rfc822(it.date)}</pubDate>
+      <dc:creator>${xmlEsc(AUTHOR)}</dc:creator>${enclosure}
     </item>`;
   })
   .join("\n");
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>The ARCHV</title>
     <link>${SITE}/</link>

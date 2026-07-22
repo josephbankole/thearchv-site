@@ -305,6 +305,8 @@ for (const p of pages) {
    until FLIP-DAY.md flips it (see public/quiz/index.html). Deduped by loc in case a future page
    ends up in both lists. */
 const EXTRA_URLS = [
+  { loc: "/about/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/corrections/", changefreq: "monthly", priority: "0.4" },
   { loc: "/start", changefreq: "monthly", priority: "0.5" },
   { loc: "/quiz", changefreq: "monthly", priority: "0.5" },
   { loc: "/dispatch", changefreq: "monthly", priority: "0.5" },

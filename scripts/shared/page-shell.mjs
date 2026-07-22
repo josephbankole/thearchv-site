@@ -13,6 +13,14 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 
+// The named author and editor of The ARCHV (founder decision, 2026-07-21). Single source of truth
+// for both halves of the byline: the visible "By ..." line on every article page and the Person
+// object in that page's NewsArticle JSON-LD. Google News and news aggregators want a named person
+// rather than a masthead, and josephbankole.ca already carries a Person entity, so the same URL
+// serves as the author's sameAs. Change the name or the URL here and every generated page follows.
+export const AUTHOR_NAME = "Joseph Bankole";
+export const AUTHOR_URL = "https://josephbankole.ca";
+
 // The ARCHV's official profiles, for the Organization sameAs entity graph. Kept in one place so
 // the homepage Organization JSON-LD (index.html) and every generated article page's publisher
 // block point at the same set, consolidating the entity for search and answer engines.
@@ -188,6 +196,9 @@ export function footer() {
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/glossary/">Glossary</a>
+        <a href="/standards/">Standards</a>
+        <a href="/about/">About</a>
+        <a href="/corrections/">Corrections</a>
       </nav>
       <p class="footer__tag">Football history, illustrated. Daily.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
@@ -344,6 +355,12 @@ export function pageStyles() {
     .breadcrumb a { color: var(--cream-faint); }
     .article__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     h1 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; letter-spacing: -.01em; margin: 0 0 .5rem; }
+    /* named byline, sitting between the headline and the date. Deliberately quiet: same
+       register as .article__meta below, with the author's name a touch brighter so the link
+       reads as a link without becoming the loudest thing under the headline. */
+    .article__byline { color: var(--cream-faint); font-size: .85rem; margin: 0 0 .25rem; }
+    .article__byline a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
+    .article__byline a:hover { color: var(--gold); }
     .article__meta { color: var(--cream-faint); font-size: .9rem; margin: 0 0 1.5rem; }
     .article__fig { margin: 1.5rem 0 2rem; }
     .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }

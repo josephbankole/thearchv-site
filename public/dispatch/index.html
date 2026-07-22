@@ -39,7 +39,9 @@
       --gold: #C9A14A;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    /* html only: a fixed body height plus flex centring clips tall content above the
+       scroll origin (same defect as /start, fixed 2026-07-22). min-height lets it grow. */
+    html { height: 100%; }
     body {
       min-height: 100svh;
       display: flex;

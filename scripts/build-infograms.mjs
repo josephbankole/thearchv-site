@@ -16,10 +16,11 @@
    not written). A generation failure for one entry is logged and skipped; it never fails the
    build. */
 import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import satori from "satori";
+import sharp from "sharp";
 import { Resvg } from "@resvg/resvg-js";
 import { LANE_META, byDateDesc } from "./shared/page-shell.mjs";
 import { infogramTree, infogramEligible, INFOGRAM_W, INFOGRAM_H } from "./shared/infogram.mjs";
@@ -65,8 +66,44 @@ const CARD_FONTS = [
   { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-SemiBold.ttf")), weight: 600, style: "normal" },
 ];
 
-async function renderInfogram(entry, laneLabel) {
-  const svg = await satori(infogramTree({ entry, laneLabel }), {
+
+/* ---------- portraits: every card gets a face ----------
+   satori/resvg cannot read webp, so the heads bank (public/heads/*.webp) is converted to PNG
+   with sharp and inlined as a data URI. Falls back to our own crest so a card is never
+   faceless, which is the whole point of making it mandatory. Cached because the crest is
+   reused across most entries and re-encoding it every time would slow the build for nothing.
+   A conversion failure returns null and the card simply renders as it did before: this must
+   never break the build. */
+const PUBLIC = join(ROOT, "public");
+const CREST = join(PUBLIC, "brand", "crest-badge@512.png");
+const portraitCache = new Map();
+
+async function toDataUri(absPath) {
+  if (portraitCache.has(absPath)) return portraitCache.get(absPath);
+  let uri = null;
+  try {
+    if (existsSync(absPath)) {
+      const png = await sharp(absPath).resize(480, 480, { fit: "cover" }).png().toBuffer();
+      uri = `data:image/png;base64,${png.toString("base64")}`;
+    }
+  } catch {
+    uri = null;
+  }
+  portraitCache.set(absPath, uri);
+  return uri;
+}
+
+async function portraitFor(entry) {
+  const rel = String(entry.image ?? "").trim();
+  if (rel.startsWith("/")) {
+    const head = await toDataUri(join(PUBLIC, rel.replace(/^\//, "")));
+    if (head) return head;
+  }
+  return toDataUri(CREST);
+}
+
+async function renderInfogram(entry, laneLabel, portrait) {
+  const svg = await satori(infogramTree({ entry, laneLabel, portrait }), {
     width: INFOGRAM_W,
     height: INFOGRAM_H,
     fonts: CARD_FONTS,
@@ -84,7 +121,7 @@ for (const [laneKey, lane] of Object.entries(LANES)) {
       continue;
     }
     try {
-      const png = await renderInfogram(entry, lane.label);
+      const png = await renderInfogram(entry, lane.label, await portraitFor(entry));
       const dir = join(OUT, "desk", laneKey, entry.date);
       mkdirSync(dir, { recursive: true });
       writeFileSync(join(dir, "infogram.png"), png);

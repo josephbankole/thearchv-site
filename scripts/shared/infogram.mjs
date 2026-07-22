@@ -116,7 +116,7 @@ function metaRow(label, value) {
 // The satori JSX-object tree for one story card. Pure: given an entry + lane, returns the tree;
 // the caller renders it to SVG→PNG. Reproduces the mock chrome (wordmark + kicker header, gold
 // rules, Fraunces hero headline, mono facts row, thearchv.ca footer).
-export function infogramTree({ entry, laneLabel }) {
+export function infogramTree({ entry, laneLabel, portrait }) {
   const eyebrow = `${entry.day} · ${longDate(entry.date)}`.toUpperCase();
 
   const header = el(
@@ -153,6 +153,30 @@ export function infogramTree({ entry, laneLabel }) {
   // Eyebrow pinned top, facts pinned bottom, the headline+dek floating in the centre band
   // between equal spacers — the same hero-centred balance the mocks use for their big number,
   // so a card with no hero figure reads as deliberate composition rather than top-loaded text.
+  // Mandatory portrait (founder call 2026-07-21). Every card carries a face: the entry's own
+  // illustrated headshot when the desk attached one, otherwise our OWN crest. Never a photo,
+  // never a club mark - the same imagery rule the iOS app follows. The caller prepares the data
+  // URI (satori cannot read webp, and this module stays pure so build-feed can import it without
+  // pulling in sharp).
+  const portraitEl = portrait
+    ? {
+        type: "img",
+        props: {
+          src: portrait,
+          width: 240,
+          height: 240,
+          style: {
+            width: 240,
+            height: 240,
+            borderRadius: 120,
+            objectFit: "cover",
+            border: `3px solid ${INFOGRAM_GOLD}`,
+            marginBottom: 44,
+          },
+        },
+      }
+    : null;
+
   const body = el({ display: "flex", flexDirection: "column", flexGrow: 1 }, [
     el(
       {
@@ -166,6 +190,7 @@ export function infogramTree({ entry, laneLabel }) {
     ),
     el({ display: "flex", flexGrow: 1 }, []),
     el({ display: "flex", flexDirection: "column" }, [
+      ...(portraitEl ? [portraitEl] : []),
       el(
         {
           color: INFOGRAM_CREAM,

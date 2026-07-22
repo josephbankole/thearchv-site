@@ -150,19 +150,19 @@ export const QUESTION_LANE_META = {
 export const SPORT_DESK_COPY = {
   nfl: {
     lede: "The NFL desk, one answered question a day. The biggest thing fans are asking that week, checked against two independent sources before it goes up.",
-    holding: "The NFL desk opens this week. Each day it takes the question fans are actually asking and answers it, checked against two independent sources. When a day has no honest answer, the desk files nothing and says so.",
+    holding: "The NFL desk is opening. Each day it takes the question fans are actually asking and answers it, checked against two independent sources. When a day has no honest answer, the desk files nothing and says so.",
   },
   f1: {
     lede: "The Formula 1 desk, one answered question a day. The question the paddock and the fans keep coming back to, checked against two independent sources before it goes up.",
-    holding: "The Formula 1 desk opens this week. One question a day, the one the grid keeps circling, answered and checked against two independent sources. A day without a real answer ships nothing, and the run says so.",
+    holding: "The Formula 1 desk is opening. One question a day, the one the grid keeps circling, answered and checked against two independent sources. A day without a real answer ships nothing, and the run says so.",
   },
   tennis: {
     lede: "The tennis desk, one answered question a day. The question fans are asking about the tour, checked against two independent sources before it goes up.",
-    holding: "The tennis desk opens this week. Each day it answers the question fans are asking across the tour, checked against two independent sources. Quiet on the days that do not warrant a word.",
+    holding: "The tennis desk is opening. Each day it answers the question fans are asking across the tour, checked against two independent sources. Quiet on the days that do not warrant a word.",
   },
   golf: {
     lede: "The golf desk, one answered question a day. The question fans keep asking through the season, checked against two independent sources before it goes up.",
-    holding: "The golf desk opens this week. One question a day from the ones fans keep asking, answered and checked against two independent sources. Nothing is filed on a day without a real answer.",
+    holding: "The golf desk is opening. One question a day from the ones fans keep asking, answered and checked against two independent sources. Nothing is filed on a day without a real answer.",
   },
 };
 

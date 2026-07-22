@@ -109,7 +109,7 @@ function renderSection(sport) {
     "@graph": [
       {
         "@type": "CollectionPage",
-        name: `${sport.label} — The ARCHV`,
+        name: `${sport.label} · The ARCHV`,
         description: copy.lede,
         url,
         inLanguage: "en-GB",

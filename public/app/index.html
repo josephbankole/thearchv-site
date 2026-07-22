@@ -6,8 +6,8 @@
   <title>The ARCHV. Football with a memory.</title>
   <meta name="description" content="A daily archive of the game in original illustration. No ads, no account, no betting, and one quiet notification a day. Free on iPhone." />
   <!-- Paid-traffic landing page: noindex so it does not compete with the homepage or /start
-       in search, and deliberately NOT added to sitemap.xml. Its only job is to convert an ad
-       click into an App Store visit, which is why there is exactly one primary action here. -->
+       in search, and deliberately NOT added to sitemap.xml. Its only job is to convert an
+       arrival into an install, or, on Android, into a countable signal that one is wanted. -->
   <meta name="robots" content="noindex,follow" />
   <link rel="canonical" href="https://thearchv.ca/app" />
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -16,8 +16,9 @@
   <!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, mirroring index.html.
        Every inline script below is allowed only via an exact sha256 hash - if you edit any of
        them, recompute the hash (sha256, base64-encoded, of the exact inline body) and update it
-       here, or the browser will silently drop that script at runtime. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-GHyTpxVw+ElmZwXvGnmnJvnRL9od7CKJN/fJhD75Gis=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+       here, or the browser will silently drop that script at runtime.
+       connect-src also carries the Supabase project: the Android waitlist form posts there. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-V9N9WL3OgySVtQky+/8yUKmjqzZP9pnjd/pH1RA6zuk=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
@@ -26,9 +27,9 @@
 
   <!-- Platform gate. Runs before paint so there is no flash of the wrong layout.
        Measured 2026-07-21: 44% of this page's inbound traffic is Android and physically
-       cannot install an iOS-only app. Those visitors are offered the Dispatch instead of
-       a button they cannot use. The iOS layout is the default, so no-JS and unknown
-       platforms still see the App Store badge. -->
+       cannot install an iOS-only app. Those visitors get the Android waitlist instead of
+       a button they cannot use. The iOS layout is the default, so no-JS and unrecognised
+       platforms still see the App Store badge rather than nothing. -->
   <script>
     (function () {
       var u = navigator.userAgent || "";
@@ -128,29 +129,52 @@
       color: var(--gold);
     }
 
-    /* Non-iOS primary action: the Dispatch. Same weight the badge carries on iOS. */
     .cta-gold {
       display: block;
-      margin-top: 30px;
-      padding: 17px 22px;
+      width: 100%;
+      padding: 16px 22px;
+      border: 0;
       border-radius: 12px;
       background: var(--gold);
       color: var(--navy-deep);
       text-decoration: none;
-      font-size: 1.05rem;
+      font-family: inherit;
+      font-size: 1.02rem;
       font-weight: 600;
       letter-spacing: 0.02em;
+      cursor: pointer;
       transition: transform 0.15s ease, filter 0.15s ease;
     }
     .cta-gold:hover { transform: translateY(-2px); filter: brightness(1.06); }
     .cta-gold:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
+    .cta-gold[disabled] { opacity: 0.6; cursor: default; transform: none; filter: none; }
+
+    /* Android waitlist. One field, one button, nothing else competing with it. */
+    .waitlist { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+    .waitlist input {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(242, 234, 211, 0.28);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--cream);
+      font-family: inherit;
+      font-size: 1rem;
+      text-align: center;
+    }
+    .waitlist input::placeholder { color: rgba(179, 171, 146, 0.7); }
+    .waitlist input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+    .formnote { margin-top: 12px; font-size: 0.88rem; line-height: 1.5; min-height: 1.3em; }
+    .formnote.ok { color: var(--gold); }
+    .formnote.bad { color: #E8A0A0; }
 
     /* Deliberately quiet: a visitor should not hit a dead end, but this must never
        compete with the primary action above it. */
     .fallback {
-      margin-top: 34px;
+      margin-top: 30px;
       font-size: 0.85rem;
-      line-height: 1.5;
+      line-height: 1.6;
       color: rgba(179, 171, 146, 0.75);
     }
     .fallback a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
@@ -185,32 +209,74 @@
       <p class="fallback">Not on an iPhone? The archive reads on the web at <a id="web-fallback" href="https://thearchv.ca/">thearchv.ca</a>.</p>
     </div>
 
-    <!-- Everyone else: the app is iOS only, so the useful thing is the Dispatch. -->
+    <!-- Everyone else. The app is iOS only today, so the useful thing is to take the
+         interest and be able to count it later. -->
     <div class="other-only">
-      <a class="cta-gold" id="dispatch-cta" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Get the Dispatch</a>
-      <p class="freeline">The archive by email. Free.</p>
+      <form class="waitlist" id="wait-form" novalidate>
+        <input id="wait-email" type="email" name="email" autocomplete="email" inputmode="email"
+               spellcheck="false" placeholder="you@example.com" aria-label="Your email address" required />
+        <button class="cta-gold" type="submit" id="wait-submit">Tell me when Android is ready</button>
+      </form>
+      <p class="formnote" id="wait-note" role="status" aria-live="polite"></p>
       <p class="fallback">
-        The app is on iPhone for now. You can read everything on the web at
+        The app is on iPhone today. Everything reads on the web at
         <a id="archive-link" href="https://thearchv.ca/">thearchv.ca</a>,
-        or <a id="appstore-quiet" href="https://apps.apple.com/app/id6786508653">get the app</a> if you are on an iPhone.
+        and the <a id="dispatch-link" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a>
+        arrives by email.
       </p>
     </div>
   </main>
   <script>
     (function () {
       var platform = document.documentElement.className || "unknown";
+      var ENDPOINT = "https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/android-waitlist";
+      var KEY = "sb_publishable_v3538BmUgl9pn-KPzD7g4g_aLZeuSjA";
+
+      function track(name, props) { if (window.posthog) posthog.capture(name, props); }
       function bind(id, target) {
         var el = document.getElementById(id);
         if (!el) return;
-        el.addEventListener('click', function () {
-          if (window.posthog) posthog.capture('app_cta_click', { target: target, platform: platform, href: el.href });
+        el.addEventListener("click", function () {
+          track("app_cta_click", { target: target, platform: platform, href: el.href });
         });
       }
-      bind('app-store-badge', 'appstore');
-      bind('web-fallback', 'web_fallback');
-      bind('dispatch-cta', 'dispatch');
-      bind('archive-link', 'archive');
-      bind('appstore-quiet', 'appstore_quiet');
+      bind("app-store-badge", "appstore");
+      bind("web-fallback", "web_fallback");
+      bind("archive-link", "archive");
+      bind("dispatch-link", "dispatch");
+
+      var form = document.getElementById("wait-form");
+      if (!form) return;
+      var input = document.getElementById("wait-email");
+      var button = document.getElementById("wait-submit");
+      var note = document.getElementById("wait-note");
+
+      function say(msg, cls) { note.textContent = msg; note.className = "formnote " + cls; }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = (input.value || "").trim();
+        if (!email || email.indexOf("@") < 1 || email.indexOf(".") < 0) {
+          say("That does not look like an email address.", "bad");
+          input.focus();
+          return;
+        }
+        button.disabled = true;
+        say("Adding you...", "");
+        fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", apikey: KEY, Authorization: "Bearer " + KEY },
+          body: JSON.stringify({ email: email, source: "app_page" })
+        }).then(function (r) {
+          if (!r.ok) throw new Error("http " + r.status);
+          form.style.display = "none";
+          say("You are on the list. We will email you when Android is ready.", "ok");
+          track("android_waitlist_signup", { platform: platform, source: "app_page" });
+        }).catch(function () {
+          button.disabled = false;
+          say("That did not save. Try again in a moment.", "bad");
+        });
+      });
     })();
   </script>
 </body>

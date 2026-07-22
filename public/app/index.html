@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="ios">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,7 +18,7 @@
        here, or the browser will silently drop that script at runtime.
        connect-src carries the Supabase project (Android waitlist post); frame-src carries
        Substack (the Dispatch embed). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-uSfxmZljaBhhnvNC1y6FXhQEM99Q2NuTm211tpv3sDw=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rJuB+Kqp9gdahxoCqDx7tpFEQI5eENyEwJnVuFTlZm8=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-uSfxmZljaBhhnvNC1y6FXhQEM99Q2NuTm211tpv3sDw=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
@@ -28,13 +28,16 @@
   <!-- Platform gate. Runs before paint so there is no flash of the wrong layout.
        Measured 2026-07-21: 44% of this page's inbound traffic is Android and physically
        cannot install an iOS-only app. Those visitors get the Android waitlist instead of
-       a button they cannot use. iOS is the default class, so no-JS and unrecognised
-       platforms still see the App Store badge rather than nothing. -->
+       a button they cannot use. ONLY Android gets the waitlist branch; iOS, every
+       desktop, no-JS and anything unrecognised defaults to ios and sees the App Store
+       badge (fixed 2026-07-22: the old test classed desktops as Android-side, which
+       removed the download button on laptops). class="ios" on the html tag is the
+       no-JS default the comment always promised. -->
   <script>
     (function () {
       var u = navigator.userAgent || "";
-      var ios = /iPhone|iPad|iPod/i.test(u) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-      document.documentElement.className = ios ? "ios" : "other";
+      var android = /Android/i.test(u);
+      document.documentElement.className = android ? "other" : "ios";
     })();
   </script>
 

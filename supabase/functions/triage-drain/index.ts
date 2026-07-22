@@ -13,8 +13,9 @@ import { triageTicket } from "../_shared/triage.ts";
 const BATCH_SIZE = 10;
 
 Deno.serve(async (req) => {
+  // Fail CLOSED (security sweep 2026-07-22): an unset TRIAGE_SECRET must refuse, not run open.
   const guard = Deno.env.get("TRIAGE_SECRET");
-  if (guard && req.headers.get("x-triage-secret") !== guard) {
+  if (!guard || req.headers.get("x-triage-secret") !== guard) {
     return json({ error: "unauthorized" }, 401);
   }
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
@@ -27,7 +28,7 @@ Deno.serve(async (req) => {
     .eq("status", "pending_triage")
     .order("created_at", { ascending: true })
     .limit(BATCH_SIZE);
-  if (error) return json({ error: error.message }, 500);
+  if (error) { console.error("triage-drain: queue db error", error.message); return json({ error: "server_error" }, 500); }
 
   const results: Array<{ ticket_id: string; outcome: Record<string, unknown> }> = [];
   let stoppedOnCeiling = false;

@@ -25,8 +25,9 @@ const DEBOUNCE_MS = 6 * 60 * 60 * 1000;
 type Failure = { check: string; detail: string };
 
 Deno.serve(async (req) => {
+  // Fail CLOSED (security sweep 2026-07-22): an unset PUSH_SECRET must refuse, not run open.
   const guard = Deno.env.get("PUSH_SECRET");
-  if (guard && req.headers.get("x-push-secret") !== guard) {
+  if (!guard || req.headers.get("x-push-secret") !== guard) {
     return json({ error: "unauthorized" }, 401);
   }
 

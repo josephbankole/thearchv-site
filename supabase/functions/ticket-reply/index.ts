@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
     .select("id, device_id, status, tier")
     .eq("id", ticket_id)
     .maybeSingle();
-  if (tErr) return json({ error: tErr.message }, 500);
+  if (tErr) { console.error("ticket-reply: ticket db error", tErr.message); return json({ error: "server_error" }, 500); }
   if (!ticket || ticket.device_id !== device_id) return json({ error: "not found" }, 404);
 
   const { error: mErr } = await supabase.from("ticket_messages").insert({
@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
     author: "user",
     body,
   });
-  if (mErr) return json({ error: mErr.message }, 500);
+  if (mErr) { console.error("ticket-reply: message db error", mErr.message); return json({ error: "server_error" }, 500); }
 
   // If the ticket had been closed off, reopen it for the tier that last owned it.
   if (RESOLVED.has(ticket.status)) {

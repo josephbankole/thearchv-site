@@ -44,6 +44,7 @@ Peg to live storylines via /Users/josephbankole/Claude/fifa.archv/wc2026-storyli
 - [drafted] explainers/usa-at-the-world-cup — host-nation history (tier-1) (drafted 2026-06-20, rides the 19 Jun USA-Australia knockout storyline)
 - [drafted] explainers/canada-at-the-world-cup — host-nation history (home market) (drafted 2026-07-01, rides Canada's 1-0 Round of 32 win over South Africa on 2026-06-28, their first-ever WC knockout win)
 - [drafted] explainers/oldest-world-cup-goalscorers — links the Milla legend page (drafted 2026-07-08, rides Ronaldo's 25 Jun Croatia penalty overtaking Pepe as oldest knockout scorer, plus Messi's Algeria hat-trick/Austria brace)
+- [drafted] explainers/world-cup-golden-boot-history — the award's full history (drafted 2026-07-22, rides the 18-19 Jul finish: Mbappe wins the Boot on 10 goals without playing the final, first two-time winner, passes Messi 22-21 as all-time top scorer; Fontaine's 13 the untouched single-tournament record; homepage-linked)
 
 ## SEQUENCING (D92) — priority order for the agent
 1. NOW–Jul 19: WC evergreen cluster (C5) + storyline-pegged pages (ride the live window).

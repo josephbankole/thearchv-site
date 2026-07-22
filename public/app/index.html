@@ -60,7 +60,11 @@
       --gold: #C9A14A;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    /* No fixed heights anywhere (2026-07-22): body's min-height is viewport-relative
+       (100svh) so it needs no parent height chain, and a fixed-height ancestor is the
+       same defect family that clipped /start on laptops. html carries the base colour
+       so overscroll and any paint gap render navy, never the UA canvas. */
+    html { background: var(--navy-deep); }
     body {
       min-height: 100svh;
       display: flex;

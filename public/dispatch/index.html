@@ -39,9 +39,10 @@
       --gold: #C9A14A;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    /* html only: a fixed body height plus flex centring clips tall content above the
-       scroll origin (same defect as /start, fixed 2026-07-22). min-height lets it grow. */
-    html { height: 100%; }
+    /* No fixed heights anywhere (2026-07-22): same defect family as the /start laptop
+       cut-off. min-height:100svh lets the body grow; html carries the base colour so
+       overscroll never flashes the UA canvas. */
+    html { background: var(--navy-deep); }
     body {
       min-height: 100svh;
       display: flex;

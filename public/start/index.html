@@ -40,10 +40,11 @@
       --gold: #C9A14A;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    /* html only: a fixed body height plus flex centring clips the top of content taller
-       than the viewport above the scroll origin (the laptop cut-off, 2026-07-22). The
-       body keeps min-height below so it can GROW with the hub. */
-    html { height: 100%; }
+    /* No fixed heights anywhere (2026-07-22): body{height:100%} plus flex centring
+       clipped the top of content taller than the viewport above the scroll origin
+       (the laptop cut-off). min-height:100svh below lets the body grow with the hub;
+       html carries the base colour so overscroll never flashes the UA canvas. */
+    html { background: var(--navy-deep); }
     body {
       min-height: 100svh;
       display: flex;

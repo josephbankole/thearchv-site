@@ -31,7 +31,10 @@ content readable if JS never runs).
 ## The feed contract (the iOS app depends on this)
 
 `scripts/build-feed.mjs` runs after `vite build` and emits `dist/feed/*.json`,
-schema `archv-feed/2`: every lane's entries carry `section`; the app renders shelves
+schema `archv-feed/3` (bumped 2026-07-22 with the multi-sport expansion; additive over v2,
+adding `sport` on every entry, per-sport feed files and a `sports` array in index.json —
+`section` remains THE FEED KEY: transfer/worldcup/leagues for football, the sport key
+nfl/f1/tennis/golf for new sports, never the lane key): every lane's entries carry `section`; the app renders shelves
 feed-driven (an empty or missing lane simply does not render). As of Build 11, every
 entry in the transfer, worldcup and leagues lanes (including the today lead/wrap,
 which reuses the same objects) also carries `url`: the absolute canonical article URL,

@@ -7,6 +7,30 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-21",
+    day: "Tuesday",
+    headline: "Chelsea break the British record for Morgan Rogers.",
+    dek: "117 million pounds, a medical done, six years signed.",
+    body: "Morgan Rogers completed a medical in London on the morning of 20 July before joining Chelsea from Aston Villa for 117 million pounds. It is the largest fee a British club has ever paid, and it passes the 107 million pounds Chelsea spent on Enzo Fernandez in 2023. Rogers has agreed six years with the option of a further twelve months. He is 23. Last season he scored 14 goals and made 11 assists in 55 appearances. Arsenal had him as their first choice, held their valuation between 90 and 100 million pounds, and never made a formal offer. Chelsea went to Villa to close rather than to negotiate. Villa now rebuild an attack around the money.",
+    status: "verified",
+  },
+  {
+    date: "2026-07-20",
+    day: "Monday",
+    headline: "Chelsea break the British transfer record for Morgan Rogers.",
+    dek: "Aston Villa accepted 117 million pounds. Arsenal wanted him and never bid.",
+    body: "Chelsea have had a 117 million pound bid accepted by Aston Villa for Morgan Rogers. It is a British record. Chelsea went to a direct meeting with Villa intending to close the deal rather than open a negotiation, and they got it done. Arsenal had Rogers as their first-choice target and held at 90 to 100 million pounds. They never made a formal offer. Rogers scored 14 goals and made 11 assists in 55 appearances last season. Sky Sports report the fee is agreed. The new Premier League season starts on 21 August, most clubs returned for pre-season on 13 July, and the Champions League league-phase draw is on 27 August.",
+    status: "verified",
+  },
+  {
+    date: "2026-07-09",
+    day: "Thursday",
+    headline: "Barcelona reclaim the Women's Champions League, beating Lyon 4-0 in Oslo.",
+    dek: "Pajor and Paralluelo scored two goals each, and Barcelona never let Lyon back in.",
+    body: "Barcelona beat OL Lyonnes 4-0 at Ullevaal Stadion in Oslo on 23 May to win back the Women's Champions League, a year after Arsenal beat them in the 2025 final. Ewa Pajor scored twice early in the second half, then Salma Paralluelo added two more in the closing minutes. Pajor was named player of the match and finished the season as top scorer with 11 goals, two clear of Arsenal's Alessia Russo. The rout of Real Madrid in the quarter-finals, 12-2 on aggregate, set an early marker. Barcelona then beat Bayern Munich in the semi-finals, while Lyon needed extra effort to get past holders Arsenal in theirs. It is Barcelona's fourth title in six seasons, with Arsenal's 2025 win the only gap. In Oslo, Lyon never got a foothold.",
+    status: "verified",
+  },
+  {
     date: '2026-07-04', day: 'Saturday',
     headline: 'The way-too-early 2026-27 Premier League projection.',
     dek: 'Built on last season. Blind to the window.',
@@ -24,7 +48,7 @@ export const leaguesDays: DayEntry[] = [
     date: '2026-07-02', day: 'Thursday',
     headline: 'The Champions League map for 2026-27.',
     dek: 'New dugouts, a returning giant, a debutant.',
-    body: 'Paris Saint-Germain start as holders for the second summer running, chasing a third straight Champions League. England sends five: Arsenal, Manchester City, Manchester United, Aston Villa and Liverpool. United are the returners, in the competition for the first time since 2023-24 under Michael Carrick, whose appointment was made permanent by the club in May. Liverpool arrive changed too. Arne Slot was sacked after a fifth-place finish and Andoni Iraola, confirmed by the club on a two-year deal, takes over. Real Madrid come in under Alvaro Arbeloa, appointed in January when Xabi Alonso left. The newest face is Como, into the league phase after finishing fourth in Serie A, their first European qualification of any kind. Who missed out: Chelsea, Newcastle and Tottenham from England, while in Italy the four places went to Inter, Napoli, Roma and Como, which leaves Juventus and Milan outside the league phase.',
+    body: 'Paris Saint-Germain start as holders for the second summer running, chasing a third straight Champions League. England sends five: Arsenal, Manchester City, Manchester United, Aston Villa and Liverpool. United are the returners, in the competition for the first time since 2023-24 under Michael Carrick, whose appointment was made permanent by the club in May. Liverpool arrive changed too. Arne Slot was sacked after a fifth-place finish and Andoni Iraola, confirmed by the club on a two-year deal, takes over. Real Madrid come in under Alvaro Arbeloa, appointed in January when Xabi Alonso left. The newest face is Como, into the league phase after finishing fourth in Serie A, their first European qualification of any kind. Who missed out: Chelsea, Newcastle and Tottenham from England, while in Italy the four places went to Inter, Napoli, Roma and Como, which leaves Juventus and Milan outside the league phase. Update, 7 Jul: this piece got the Real Madrid dugout wrong. The club confirmed Jose Mourinho as head coach in June, ending the spell under Alvaro Arbeloa, and it is Mourinho who leads them into this campaign.',
     status: 'verified',
   },
 ];

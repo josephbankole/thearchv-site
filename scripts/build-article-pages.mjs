@@ -21,6 +21,7 @@ import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc, clampTitle,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
+  AUTHOR_NAME, AUTHOR_URL,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -119,7 +120,11 @@ function schema(entry, url, label) {
         dateModified: entry.date,
         isAccessibleForFree: true,
         inLanguage: "en-GB",
-        author: { "@type": "Organization", name: "The ARCHV" },
+        // A named Person, not the masthead: Google News and the news aggregators want a human
+        // author, and the visible byline on the page says the same thing (see render() below).
+        // Name and URL come from AUTHOR_NAME / AUTHOR_URL in scripts/shared/page-shell.mjs.
+        // publisher stays the Organization, unchanged.
+        author: { "@type": "Person", name: AUTHOR_NAME, url: AUTHOR_URL, sameAs: [AUTHOR_URL] },
         // Compact Organization carrying the sameAs entity graph, so every article page reinforces
         // the same brand entity (matches the homepage Organization JSON-LD in index.html).
         publisher: { "@type": "Organization", name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
@@ -436,6 +441,7 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${lane.anchor}">${esc(lane.label)}</a></p>
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
+      <p class="article__byline">By <a href="${escAttr(AUTHOR_URL)}" rel="author">${esc(AUTHOR_NAME)}</a></p>
       <p class="article__meta">${esc(longDate(entry.date))}</p>
       <div class="share" aria-label="Share this article">
         <button class="btn btn--ghost" id="share-native" type="button" hidden>Share</button>

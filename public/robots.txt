@@ -1,4 +1,38 @@
+# The ARCHV (thearchv.ca). The whole site is open to crawlers, search and AI alike.
+# Machine-readable summary of the publication: https://thearchv.ca/llms.txt
+# How the reporting is verified: https://thearchv.ca/standards/
+
 User-agent: *
+Allow: /
+
+# Search crawlers, named so the permission above stays explicit if the wildcard is
+# ever narrowed. A named group replaces the wildcard for that crawler, and each of
+# these is allowed everything, so behaviour is unchanged either way.
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Googlebot-News
+User-agent: Bingbot
+User-agent: Slurp
+User-agent: DuckDuckBot
+User-agent: Applebot
+Allow: /
+
+# AI crawlers and assistant fetchers. Indexing and citation are wanted here (see the
+# citation line in llms.txt), so these are allowed on purpose, not by oversight.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Amazonbot
+User-agent: meta-externalagent
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://thearchv.ca/sitemap.xml

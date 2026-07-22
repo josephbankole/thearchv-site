@@ -328,6 +328,14 @@ const EXTRA_URLS = [
   { loc: "/glossary/xa/", changefreq: "monthly", priority: "0.5" },
   { loc: "/glossary/loan-with-obligation/", changefreq: "monthly", priority: "0.5" },
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
+  // Multi-sport section roots (build-sport-pages.mjs). Objects, not bare strings — a string
+  // entry is silently skipped by the loop below. The /football/ alias is deliberately NOT here:
+  // it is noindex and canonical to /, so it must stay out of the sitemap. The new sports' lane
+  // fronts (/nfl/questions/ etc.) are appended later by build-lane-pages.mjs, same as football's.
+  { loc: "/nfl/", changefreq: "daily", priority: "0.7" },
+  { loc: "/f1/", changefreq: "daily", priority: "0.7" },
+  { loc: "/tennis/", changefreq: "daily", priority: "0.7" },
+  { loc: "/golf/", changefreq: "daily", priority: "0.7" },
 ];
 const today = new Date().toISOString().slice(0, 10);
 const seen = new Set([`${SITE}/`]);

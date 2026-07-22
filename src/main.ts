@@ -9,6 +9,7 @@ import { initDailyDigest } from './components/dailyDigest';
 import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
 import { initChrome, initMastheadMenu } from './ui/chrome';
+import { initSportTabs } from './ui/sportTabs';
 import { initAnalytics } from './analytics';
 import { leaguesDays } from './data/leaguesDays';
 import { transferDays } from './data/transferDays';
@@ -33,6 +34,9 @@ function boot(): void {
   // Masthead hamburger (Follow / Subscribe / Shop / hidden App). Runs in every
   // mode: it toggles a `hidden` attribute directly, no CSS transition to gate.
   initMastheadMenu();
+
+  // Sport tab bar: scroll the active tab into view. Runs in every mode (instant, no motion).
+  initSportTabs();
 
   // Page chrome (progress bar + scroll-spy nav). Affordance, not decoration:
   // runs in every mode; its motion is CSS-gated and reduced-motion safe.

@@ -13,7 +13,7 @@ import { build } from "esbuild";
 import { writeFileSync, rmSync, statSync } from "node:fs";
 import { join, dirname, extname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { byDateDesc, esc, escAttr } from "./shared/page-shell.mjs";
+import { byDateDesc, esc, escAttr, SPORTS } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -34,6 +34,10 @@ const entrySrc = [
   `export { transferDays } from "./data/transferDays.ts";`,
   `export { worldCupDays } from "./data/worldCupDays.ts";`,
   `export { leaguesDays } from "./data/leaguesDays.ts";`,
+  `export { nflDays } from "./data/nflDays.ts";`,
+  `export { f1Days } from "./data/f1Days.ts";`,
+  `export { tennisDays } from "./data/tennisDays.ts";`,
+  `export { golfDays } from "./data/golfDays.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".rss-bundle.mjs");
 let data;
@@ -46,17 +50,28 @@ try {
 // URL lane per data source: World Cup's internal `section` key is "worldcup" but its URL lane is
 // hyphenated "world-cup" (same mapping build-article-pages.mjs / build-feed.mjs use for the
 // canonical /desk/<lane>/<date>/ URL). Tag each entry with its lane, merge, sort newest-first.
+// `base` is the article path prefix per lane (leading + trailing slash). Football keeps
+// /desk/<lane>/ so its items are byte-identical; new sports (multi-sport, 2026-07-22) syndicate
+// from /<urlBase>/questions/. New sports are empty today, so feed.xml is unchanged until they
+// publish. The SPORT_DATA map ties each new sport's exported array to its base.
+const SPORT_DATA = { nfl: data.nflDays, f1: data.f1Days, tennis: data.tennisDays, golf: data.golfDays };
 const lanes = [
-  { urlLane: "transfer", days: data.transferDays },
-  { urlLane: "world-cup", days: data.worldCupDays },
-  { urlLane: "leagues", days: data.leaguesDays },
+  { base: "/desk/transfer/", days: data.transferDays },
+  { base: "/desk/world-cup/", days: data.worldCupDays },
+  { base: "/desk/leagues/", days: data.leaguesDays },
 ];
+for (const sport of SPORTS) {
+  if (sport.key === "football") continue;
+  for (const laneKey of sport.lanes) {
+    lanes.push({ base: `/${sport.urlBase}/${laneKey}/`, days: SPORT_DATA[sport.key] || [] });
+  }
+}
 const items = lanes
-  .flatMap(({ urlLane, days }) => days.map((d) => ({ ...d, urlLane })))
+  .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
   .sort(byDateDesc)
   .slice(0, MAX_ITEMS);
 
-const articleUrl = (it) => `${SITE}/desk/${it.urlLane}/${it.date}/`;
+const articleUrl = (it) => `${SITE}${it.base}${it.date}/`;
 
 /* ---------- XML helpers ---------- */
 const xmlEsc = (s = "") =>

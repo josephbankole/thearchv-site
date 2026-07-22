@@ -171,6 +171,30 @@ main, .masthead, .footer { position: relative; z-index: 2; }
   .masthead__toggle, .masthead__panel-link { transition: none; }
 }
 
+/* ---------- sport tab bar (multi-sport, 2026-07-22) ----------
+   Homepage copy of the tab row. MIRROR of the pageStyles() rules in scripts/shared/page-shell.mjs
+   (.sportnav*), which style the static article / lane / sport page family. Keep the two in step:
+   neither file imports the other. On the homepage the tab bar is pinned to the very top and the
+   floating brand masthead sits just beneath it (see .masthead top offset below), so the tabs stay
+   one tap away while the brand row scrolls off. Register matches .desknav__link (uppercase, .8rem,
+   .04em); cream at rest, gold on hover and when current, a 2px gold underline on the active tab.
+   The active-tab scroll-into-view is bundled (src/ui/sportTabs.ts), never inline. */
+.sportnav-wrap--home {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 55;
+  height: 2.75rem; display: flex; align-items: center;
+  background: var(--navy-deep); border-bottom: 1px solid var(--gold-soft);
+}
+.masthead { top: 2.75rem; } /* clear the pinned tab bar pinned above it */
+.sportnav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; width: 100%; }
+.sportnav::-webkit-scrollbar { display: none; }
+.sportnav__row { display: flex; gap: 1.4rem; align-items: center; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); width: max-content; min-width: 100%; justify-content: center; }
+.sportnav__link { flex: 0 0 auto; scroll-snap-align: start; font-family: var(--grotesque); color: var(--cream-dim); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; padding: 0.2rem 0; border-bottom: 2px solid transparent; transition: color 0.3s, border-color 0.3s; }
+.sportnav__link:hover { color: var(--gold); }
+.sportnav__link[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
+.sportnav-wrap--home::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 26px; background: linear-gradient(to right, rgba(7, 28, 43, 0), var(--navy-deep)); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .sportnav__link { transition: none; } }
+@media (max-width: 640px) { .sportnav__row { justify-content: flex-start; gap: 1.1rem; } }
+
 /* ---------- hero ---------- */
 .hero {
   min-height: 100svh; display: flex; flex-direction: column; justify-content: center;

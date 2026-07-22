@@ -88,6 +88,13 @@ const targets = [
   // to scripts/glossary-data.mjs is covered by this check, not just the four original terms.
   ["glossary: /glossary/pressing/", join(DIST, "glossary", "pressing", "index.html")],
   ["standards: /standards/", join(DIST, "standards", "index.html")],
+  // Multi-sport page family (build-sport-pages.mjs + build-lane-pages.mjs, 2026-07-22): a sport
+  // section page and a sport lane front both carry the shared masthead + PostHog inline scripts,
+  // so their static hashes must be in each page's CSP. The /football/ alias carries a CSP meta but
+  // no inline script, so it verifies as zero-script clean (proves the meta is present and correct).
+  ["sport section: /nfl/", join(DIST, "nfl", "index.html")],
+  ["sport lane: /nfl/questions/", join(DIST, "nfl", "questions", "index.html")],
+  ["football alias: /football/", join(DIST, "football", "index.html")],
 ];
 
 const contentDir = readdirSync(DIST).includes("finals") ? join(DIST, "finals") : null;

@@ -21,7 +21,7 @@ import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc, clampTitle,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
-  AUTHOR_NAME, AUTHOR_URL,
+  AUTHOR_NAME, AUTHOR_URL, SPORTS, QUESTION_LANE_META,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -33,6 +33,10 @@ const entrySrc = [
   `export { transferDays } from "./data/transferDays.ts";`,
   `export { worldCupDays } from "./data/worldCupDays.ts";`,
   `export { leaguesDays } from "./data/leaguesDays.ts";`,
+  `export { nflDays } from "./data/nflDays.ts";`,
+  `export { f1Days } from "./data/f1Days.ts";`,
+  `export { tennisDays } from "./data/tennisDays.ts";`,
+  `export { golfDays } from "./data/golfDays.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".article-bundle.mjs");
 let data;
@@ -48,15 +52,40 @@ try {
 const transferDays = [...data.transferDays].sort(byDateDesc);
 const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
 const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
-
-// lane = URL segment under /desk/, anchor = the homepage section this lane links back to.
-// label/anchor come from the shared LANE_META (also used by build-lane-pages.mjs) so the two
-// page types never drift; `days` (newest-first, enforced above) is attached per lane here.
-const LANES = {
-  transfer: { ...LANE_META.transfer, days: transferDays },
-  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays },
-  leagues: { ...LANE_META.leagues, days: leaguesDays },
+const SPORT_DAYS = {
+  nfl: [...data.nflDays].sort(byDateDesc),
+  f1: [...data.f1Days].sort(byDateDesc),
+  tennis: [...data.tennisDays].sort(byDateDesc),
+  golf: [...data.golfDays].sort(byDateDesc),
 };
+
+// A "section" is one sport+lane's article surface. `base` is the path prefix under which its
+// articles live (leading and trailing slash), `anchor` is what the breadcrumb and "more" link
+// point back at, `sportKey` scopes the masthead tab row and the deskNav. Football sections keep
+// base "/desk/<lane>/" and the homepage anchors, so their emitted pages are byte-identical to
+// before bar the masthead sport tab row. New sports get "/<urlBase>/<lane>/" and their section
+// root as the anchor. Every downstream string in render() is built from these fields, so nothing
+// football-shaped changed value.
+const sections = [
+  { sportKey: "football", laneKey: "transfer", label: LANE_META.transfer.label, seoSuffix: LANE_META.transfer.seoSuffix, anchor: LANE_META.transfer.anchor, base: "/desk/transfer/", days: transferDays },
+  { sportKey: "football", laneKey: "world-cup", label: LANE_META["world-cup"].label, seoSuffix: LANE_META["world-cup"].seoSuffix, anchor: LANE_META["world-cup"].anchor, base: "/desk/world-cup/", days: worldCupDays },
+  { sportKey: "football", laneKey: "leagues", label: LANE_META.leagues.label, seoSuffix: LANE_META.leagues.seoSuffix, anchor: LANE_META.leagues.anchor, base: "/desk/leagues/", days: leaguesDays },
+];
+for (const sport of SPORTS) {
+  if (sport.key === "football") continue;
+  for (const laneKey of sport.lanes) {
+    const laneMeta = QUESTION_LANE_META[laneKey] || { label: laneKey, seoSuffix: "" };
+    sections.push({
+      sportKey: sport.key,
+      laneKey,
+      label: `${sport.label} ${laneMeta.label}`,
+      seoSuffix: `${sport.label} ${laneMeta.seoSuffix}`.trim(),
+      anchor: `${sport.urlBase}/`,
+      base: `/${sport.urlBase}/${laneKey}/`,
+      days: SPORT_DAYS[sport.key] || [],
+    });
+  }
+}
 
 /* ---------- body: \n\n paragraph breaks, dated "Update, N Jul:" additions stay visible paragraphs ---------- */
 function bodyHtml(text) {
@@ -285,11 +314,11 @@ function shareScriptTag(url, headline) {
 // people) but dedupes by article url, so "three reads" means three different pieces rather
 // than three refreshes of one. Like the share row this embeds page-specific values, so its
 // CSP hash is computed per page at generation time.
-function ladderScriptTag(url, laneKey) {
+function ladderScriptTag(url, lanePath) {
   return `<script>
     (function () {
       var url = ${JSON.stringify(url).replace(/</g, "\\u003c")};
-      var lane = ${JSON.stringify("/desk/" + laneKey + "/").replace(/</g, "\\u003c")};
+      var lane = ${JSON.stringify(lanePath).replace(/</g, "\\u003c")};
       var KEY = 'archv.read';
       var read = [];
       try { read = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { read = []; }
@@ -335,13 +364,13 @@ function ladderScriptTag(url, laneKey) {
   </script>`;
 }
 
-function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
-  const lane = LANES[laneKey];
-  const url = `${SITE}/desk/${laneKey}/${entry.date}/`;
-  const ogImage = hasCard ? `${SITE}/desk/${laneKey}/${entry.date}/og.png` : `${SITE}/og.jpg`;
+function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
+  const lane = section; // section carries label/seoSuffix/anchor/base/sportKey/laneKey
+  const url = `${SITE}${section.base}${entry.date}/`;
+  const ogImage = hasCard ? `${SITE}${section.base}${entry.date}/og.png` : `${SITE}/og.jpg`;
   const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
   const shareScript = shareScriptTag(url, entry.headline);
-  const ladderScript = ladderScriptTag(url, laneKey);
+  const ladderScript = ladderScriptTag(url, section.base);
   const pageCsp = cspMeta({
     scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript)), scriptHash(extractScriptBody(ladderScript))],
     posthog: true,
@@ -382,11 +411,11 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
               const avatar = e.image
                 ? `<img class="more-card__avatar" src="${escAttr(e.image)}" alt="${escAttr(e.imageAlt ?? e.headline)}" loading="lazy" decoding="async" width="44" height="44" />`
                 : "";
-              return `<li><a class="more-card" href="/desk/${laneKey}/${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
+              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
             })
             .join("\n          ")}
         </ul>
-        <a class="related__all" href="/desk/${laneKey}/">All ${esc(lane.label)} stories &rarr;</a>
+        <a class="related__all" href="${section.base}">All ${esc(lane.label)} stories &rarr;</a>
       </section>` : "";
 
   // W3.2 — prev/next chronological links within the lane.
@@ -394,8 +423,8 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
     prevEntry || nextEntry
       ? `
       <nav class="adjacent" aria-label="More entries">
-        ${prevEntry ? `<a class="adjacent__link adjacent__link--prev" href="/desk/${laneKey}/${prevEntry.date}/"><span class="adjacent__dir">&larr; Previous</span><span class="adjacent__headline">${esc(prevEntry.headline)}</span></a>` : "<span></span>"}
-        ${nextEntry ? `<a class="adjacent__link adjacent__link--next" href="/desk/${laneKey}/${nextEntry.date}/"><span class="adjacent__dir">Next &rarr;</span><span class="adjacent__headline">${esc(nextEntry.headline)}</span></a>` : ""}
+        ${prevEntry ? `<a class="adjacent__link adjacent__link--prev" href="${section.base}${prevEntry.date}/"><span class="adjacent__dir">&larr; Previous</span><span class="adjacent__headline">${esc(prevEntry.headline)}</span></a>` : "<span></span>"}
+        ${nextEntry ? `<a class="adjacent__link adjacent__link--next" href="${section.base}${nextEntry.date}/"><span class="adjacent__dir">Next &rarr;</span><span class="adjacent__headline">${esc(nextEntry.headline)}</span></a>` : ""}
       </nav>` : "";
 
   return `<!doctype html>
@@ -434,8 +463,8 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
   ${pageStyles()}
 </head>
 <body>
-  ${masthead()}
-  ${deskNav(laneKey)}
+  ${masthead(section.sportKey)}
+  ${deskNav(section.laneKey, section.sportKey)}
   <main class="wrap">
     <article class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${lane.anchor}">${esc(lane.label)}</a></p>
@@ -473,10 +502,14 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
 let count = 0;
 let cards = 0;
 const urls = [];
-for (const [laneKey, lane] of Object.entries(LANES)) {
+for (const section of sections) {
+  // dist path segments from the section base: "/desk/transfer/" -> ["desk","transfer"];
+  // "/nfl/questions/" -> ["nfl","questions"]. Football is byte-identical to the old join.
+  const relParts = section.base.split("/").filter(Boolean);
+  const lane = section;
   for (let i = 0; i < lane.days.length; i++) {
     const entry = lane.days[i];
-    const dir = join(OUT, "desk", laneKey, entry.date);
+    const dir = join(OUT, ...relParts, entry.date);
     mkdirSync(dir, { recursive: true });
 
     // Per-article OG card; a failure never breaks the build, the page just keeps /og.jpg.
@@ -487,7 +520,7 @@ for (const [laneKey, lane] of Object.entries(LANES)) {
       hasCard = true;
       cards++;
     } catch (err) {
-      console.warn(`[build-article-pages] og card failed for ${laneKey}/${entry.date} (${entry.headline}): ${err && err.message ? err.message : err}`);
+      console.warn(`[build-article-pages] og card failed for ${section.sportKey}/${section.laneKey}/${entry.date} (${entry.headline}): ${err && err.message ? err.message : err}`);
     }
 
     // W3.1 — "more from the lane": lane.days is newest-first (see src/data/*.ts), so entries at
@@ -499,8 +532,8 @@ for (const [laneKey, lane] of Object.entries(LANES)) {
     const prevEntry = lane.days[i + 1] ?? null; // older
     const nextEntry = lane.days[i - 1] ?? null; // newer
 
-    writeFileSync(join(dir, "index.html"), render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry));
-    urls.push(`  <url><loc>${SITE}/desk/${laneKey}/${entry.date}/</loc><lastmod>${entry.date}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
+    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, moreFrom, prevEntry, nextEntry));
+    urls.push(`  <url><loc>${SITE}${section.base}${entry.date}/</loc><lastmod>${entry.date}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
     count++;
   }
 }

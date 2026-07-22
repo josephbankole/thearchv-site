@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The ARCHV. Football with a memory.</title>
   <meta name="description" content="A daily archive of the game in original illustration. No ads, no account, no betting, and one quiet notification a day. Free on iPhone." />
-  <!-- Paid-traffic landing page: noindex so it does not compete with the homepage or /start
-       in search, and deliberately NOT added to sitemap.xml. Its only job is to convert an
-       arrival into an install, or, on Android, into a countable signal that one is wanted. -->
+  <!-- Paid and social landing page: noindex so it does not compete with the homepage or
+       /start in search, and deliberately NOT in sitemap.xml. -->
   <meta name="robots" content="noindex,follow" />
   <link rel="canonical" href="https://thearchv.ca/app" />
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -17,8 +16,9 @@
        Every inline script below is allowed only via an exact sha256 hash - if you edit any of
        them, recompute the hash (sha256, base64-encoded, of the exact inline body) and update it
        here, or the browser will silently drop that script at runtime.
-       connect-src also carries the Supabase project: the Android waitlist form posts there. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-V9N9WL3OgySVtQky+/8yUKmjqzZP9pnjd/pH1RA6zuk=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+       connect-src carries the Supabase project (Android waitlist post); frame-src carries
+       Substack (the Dispatch embed). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-tA7BaK8MMVuOPEnhaBHzchff+Nvr5gEA5Zs32WaD5J8=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
@@ -28,7 +28,7 @@
   <!-- Platform gate. Runs before paint so there is no flash of the wrong layout.
        Measured 2026-07-21: 44% of this page's inbound traffic is Android and physically
        cannot install an iOS-only app. Those visitors get the Android waitlist instead of
-       a button they cannot use. The iOS layout is the default, so no-JS and unrecognised
+       a button they cannot use. iOS is the default class, so no-JS and unrecognised
        platforms still see the App Store badge rather than nothing. -->
   <script>
     (function () {
@@ -38,7 +38,7 @@
     })();
   </script>
 
-  <!-- PostHog: pageview + the one tap that matters. Same project as the website. -->
+  <!-- PostHog: pageview + the taps that matter. Same project as the website. -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true});
@@ -61,9 +61,9 @@
     body {
       min-height: 100svh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 32px 24px;
+      padding: 28px 24px 48px;
       background:
         radial-gradient(120% 80% at 50% 0%, #0e3047 0%, var(--navy) 45%, var(--navy-deep) 100%);
       color: var(--cream);
@@ -80,32 +80,63 @@
     .wordmark {
       font-family: "Fraunces", Georgia, serif;
       font-weight: 400;
-      font-size: clamp(1.6rem, 7vw, 2rem);
-      letter-spacing: 0.01em;
-      color: var(--cream);
+      font-size: 1.15rem;
+      letter-spacing: 0.02em;
+      color: var(--cream-dim);
       line-height: 1;
     }
     .wordmark .dot { color: var(--gold); }
 
-    .headline {
+    /* The story leads. Measured 2026-07-21: on /start the illustrated story card took 108
+       of 149 clicks and the App Store badge took 13. People tap the work, not the ask, so
+       the work goes first and the ask comes after it has earned a few seconds. The image
+       is content here rather than a link out: a visitor who leaves for the web article is
+       a visitor who never sees the install prompt. */
+    .story { margin-top: 20px; }
+    .story img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(201, 161, 74, 0.35);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      background: var(--navy-deep);
+    }
+    .kicker {
+      margin-top: 16px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .story-headline {
       font-family: "Fraunces", Georgia, serif;
       font-weight: 400;
-      font-size: clamp(1.9rem, 8.5vw, 2.5rem);
-      line-height: 1.12;
-      margin-top: 22px;
+      font-size: clamp(1.55rem, 6.6vw, 1.95rem);
+      line-height: 1.18;
+      margin-top: 10px;
       color: var(--cream);
     }
-
-    .blurb {
-      margin-top: 16px;
-      font-size: 1rem;
+    .story-dek {
+      margin-top: 10px;
+      font-size: 0.98rem;
       line-height: 1.55;
       color: var(--cream-dim);
     }
 
-    /* The single action. Everything above exists to get the reader here, so nothing
-       else on this page is allowed to look like a button. */
-    .badge-wrap { margin-top: 30px; }
+    /* The ask, once the work has been seen. */
+    .pitch {
+      margin-top: 30px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(242, 234, 211, 0.14);
+      font-size: 0.98rem;
+      line-height: 1.55;
+      color: var(--cream);
+    }
+
+    .badge-wrap { margin-top: 22px; }
     .appstore-badge {
       display: block;
       width: 100%;
@@ -115,15 +146,11 @@
     }
     .appstore-badge:hover { transform: translateY(-2px); }
     .appstore-badge svg { display: block; width: 100%; height: auto; }
-    .appstore-badge:focus-visible {
-      outline: 2px solid var(--gold);
-      outline-offset: 3px;
-      border-radius: 10px;
-    }
+    .appstore-badge:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 10px; }
 
     .freeline {
-      margin-top: 14px;
-      font-size: 0.85rem;
+      margin-top: 12px;
+      font-size: 0.82rem;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--gold);
@@ -149,8 +176,7 @@
     .cta-gold:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
     .cta-gold[disabled] { opacity: 0.6; cursor: default; transform: none; filter: none; }
 
-    /* Android waitlist. One field, one button, nothing else competing with it. */
-    .waitlist { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+    .waitlist { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
     .waitlist input {
       width: 100%;
       padding: 15px 16px;
@@ -170,8 +196,7 @@
     .formnote.bad { color: #E8A0A0; }
 
     /* Substack subscribe, embedded. Cross-origin iframe, so we cannot restyle its
-       inside; we only frame it to sit tidily in the column. Substack serves it with
-       frame-ancestors *, which is what makes this possible at all. */
+       inside; we only frame it to sit tidily in the column. */
     .dispatch-embed { margin-top: 26px; }
     .embed-label {
       font-size: 0.78rem;
@@ -188,10 +213,8 @@
       background: #ffffff;
     }
 
-    /* Deliberately quiet: a visitor should not hit a dead end, but this must never
-       compete with the primary action above it. */
     .fallback {
-      margin-top: 30px;
+      margin-top: 26px;
       font-size: 0.85rem;
       line-height: 1.6;
       color: rgba(179, 171, 146, 0.75);
@@ -205,10 +228,19 @@
   <main class="page">
     <div class="wordmark">The ARCHV<span class="dot">.</span></div>
 
-    <h1 class="headline">Football with a memory.</h1>
-    <p class="blurb">A daily archive of the game in original illustration. No ads, no account, no betting, and one quiet notification a day.</p>
+    <!-- Today's story. Populated from the live feed; the static poster and brand line
+         below are the pre-JS state, so the page is never empty or imageless. -->
+    <article class="story">
+      <img id="story-img" src="/posters/lusail-2022.webp"
+           alt="Lusail 2022 World Cup final poster, illustrated by The ARCHV." />
+      <p class="kicker" id="story-kicker">From the archive</p>
+      <h1 class="story-headline" id="story-headline">Football with a memory.</h1>
+      <p class="story-dek" id="story-dek">Every final since 1970, drawn. The game written plainly and reported honestly.</p>
+    </article>
 
-    <!-- iOS: the App Store is the whole point of the page. -->
+    <p class="pitch">A story like this every day. No ads, no account, no betting, and one quiet notification.</p>
+
+    <!-- iOS: the App Store is the point of the page. -->
     <div class="ios-only">
       <div class="badge-wrap">
         <a class="appstore-badge" id="app-store-badge" href="https://apps.apple.com/app/id6786508653">
@@ -225,11 +257,10 @@
         </a>
         <p class="freeline">Free on iPhone</p>
       </div>
-      <p class="fallback">Not on an iPhone? The archive reads on the web at <a id="web-fallback" href="https://thearchv.ca/">thearchv.ca</a>.</p>
+      <p class="fallback">Or read it on the web at <a id="web-fallback" href="https://thearchv.ca/">thearchv.ca</a>.</p>
     </div>
 
-    <!-- Everyone else. The app is iOS only today, so the useful thing is to take the
-         interest and be able to count it later. -->
+    <!-- Everyone else. The app is iOS only today, so take the interest and count it. -->
     <div class="other-only">
       <form class="waitlist" id="wait-form" novalidate>
         <input id="wait-email" type="email" name="email" autocomplete="email" inputmode="email"
@@ -247,9 +278,7 @@
 
       <p class="fallback">
         The app is on iPhone today. Everything reads on the web at
-        <a id="archive-link" href="https://thearchv.ca/">thearchv.ca</a>,
-        and the <a id="dispatch-link" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a>
-        arrives by email.
+        <a id="archive-link" href="https://thearchv.ca/">thearchv.ca</a>.
       </p>
     </div>
   </main>
@@ -270,7 +299,34 @@
       bind("app-store-badge", "appstore");
       bind("web-fallback", "web_fallback");
       bind("archive-link", "archive");
-      bind("dispatch-link", "dispatch");
+
+      // Today's lead, from the same feed the iOS app reads. Swapped in only once the
+      // image has actually loaded, so a slow or missing asset leaves the poster in place
+      // rather than blanking the top of the page.
+      fetch("/feed/today.json", { cache: "no-store" })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var lead = d && d.lead;
+          if (!lead) return;
+          var h = document.getElementById("story-headline");
+          var dek = document.getElementById("story-dek");
+          var kick = document.getElementById("story-kicker");
+          if (lead.headline && h) h.textContent = lead.headline;
+          if (lead.dek && dek) dek.textContent = lead.dek;
+          if (kick) kick.textContent = lead.provenance || "Today";
+          var src = lead.infogram || lead.image;
+          if (src) {
+            var probe = new Image();
+            probe.onload = function () {
+              var img = document.getElementById("story-img");
+              if (!img) return;
+              img.src = src;
+              img.alt = lead.infogramAlt || lead.headline || img.alt;
+            };
+            probe.src = src;
+          }
+        })
+        .catch(function () {});
 
       var form = document.getElementById("wait-form");
       if (!form) return;

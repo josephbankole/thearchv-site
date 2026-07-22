@@ -10,7 +10,7 @@
 - [Football leagues](https://thearchv.ca/desk/leagues/): title races, promotions, sackings and the tables behind them.
 - [Start here](https://thearchv.ca/start/): a short introduction to what The ARCHV is and how to follow it.
 - [Glossary](https://thearchv.ca/glossary/): plain, verified definitions of common football terms (xG, the false 9, the offside rule, VAR).
-- [Content feed](https://thearchv.ca/feed/): the machine-readable JSON feed, schema archv-feed/2, that also powers the iOS app.
+- [Content feed](https://thearchv.ca/feed/): the machine-readable JSON feed, schema archv-feed/3, that also powers the iOS app.
 
 ## Editorial standards
 

@@ -276,14 +276,69 @@ function shareScriptTag(url, headline) {
   </script>`;
 }
 
+// The read ladder. Counts on OPEN (founder call 2026-07-21: whatever gets seen by the most
+// people) but dedupes by article url, so "three reads" means three different pieces rather
+// than three refreshes of one. Like the share row this embeds page-specific values, so its
+// CSP hash is computed per page at generation time.
+function ladderScriptTag(url, laneKey) {
+  return `<script>
+    (function () {
+      var url = ${JSON.stringify(url).replace(/</g, "\\u003c")};
+      var lane = ${JSON.stringify("/desk/" + laneKey + "/").replace(/</g, "\\u003c")};
+      var KEY = 'archv.read';
+      var read = [];
+      try { read = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { read = []; }
+      if (!Array.isArray(read)) read = [];
+      if (read.indexOf(url) === -1) {
+        read.push(url);
+        try { localStorage.setItem(KEY, JSON.stringify(read.slice(-50))); } catch (e) {}
+      }
+      var count = read.length;
+      var box = document.getElementById('read-ladder');
+      var note = document.getElementById('ladder-note');
+      var cta = document.getElementById('ladder-cta');
+      var alt = document.getElementById('ladder-alt');
+      if (!box || !note || !cta || !alt) return;
+      var variant;
+      if (count >= 3) {
+        variant = 'dispatch';
+        note.textContent = 'That is three you have read. The Dispatch brings the archive to you.';
+        cta.textContent = 'Join the Dispatch';
+        cta.href = 'https://thearchvdispatch.substack.com';
+        cta.setAttribute('target', '_blank');
+        cta.setAttribute('rel', 'noopener noreferrer');
+        alt.textContent = 'Or get the app';
+        alt.href = '/app/';
+      } else {
+        variant = 'app';
+        note.textContent = 'A story like this every day, and one quiet notification when it lands.';
+        cta.textContent = 'Get the app';
+        cta.href = '/app/';
+        alt.textContent = 'Read another';
+        alt.href = lane;
+      }
+      box.hidden = false;
+      if (window.posthog) posthog.capture('read_ladder_shown', { variant: variant, reads: count });
+      function tap(el, target) {
+        el.addEventListener('click', function () {
+          if (window.posthog) posthog.capture('read_ladder_click', { target: target, variant: variant, reads: count });
+        });
+      }
+      tap(cta, 'primary');
+      tap(alt, 'secondary');
+    })();
+  </script>`;
+}
+
 function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
   const lane = LANES[laneKey];
   const url = `${SITE}/desk/${laneKey}/${entry.date}/`;
   const ogImage = hasCard ? `${SITE}/desk/${laneKey}/${entry.date}/og.png` : `${SITE}/og.jpg`;
   const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
   const shareScript = shareScriptTag(url, entry.headline);
+  const ladderScript = ladderScriptTag(url, laneKey);
   const pageCsp = cspMeta({
-    scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript))],
+    scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript)), scriptHash(extractScriptBody(ladderScript))],
     posthog: true,
     googleFonts: true,
   });
@@ -293,6 +348,21 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
       <figure class="article__fig">
         <img src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? entry.headline)}" width="240" height="240" loading="eager" decoding="async" />
       </figure>` : "";
+
+  const ladder = `
+      <aside class="ladder" id="read-ladder" hidden>
+        <p class="ladder__note" id="ladder-note"></p>
+        <a class="ladder__cta" id="ladder-cta" href="/app/"></a>
+        <a class="ladder__alt" id="ladder-alt" href="/"></a>
+      </aside>
+      <style>
+        .ladder{margin:44px 0 8px;padding:28px 24px;border:1px solid rgba(201,161,74,.32);border-radius:16px;background:rgba(255,255,255,.03);text-align:center}
+        .ladder__note{margin:0 0 18px;font-size:1rem;line-height:1.55;color:#F2EAD3}
+        .ladder__cta{display:inline-block;padding:14px 26px;border-radius:12px;background:#C9A14A;color:#071C2B;text-decoration:none;font-weight:600}
+        .ladder__cta:hover{filter:brightness(1.06)}
+        .ladder__alt{display:block;margin-top:14px;font-size:.9rem;color:#B3AB92;text-decoration:underline;text-underline-offset:3px}
+        .ladder__alt:hover{color:#F2EAD3}
+      </style>`;
 
   // W3.1 — "More from the <lane>": whole-card links to the previous 3 entries in this lane.
   const moreCards = moreFrom.length
@@ -382,10 +452,12 @@ function render(entry, laneKey, hasCard, moreFrom, prevEntry, nextEntry) {
         <a href="/">Home</a>
         <a href="/${lane.anchor}">More ${esc(lane.label)}</a>
       </nav>${moreCards}
+      ${ladder}
     </article>
   </main>
   ${footer()}
   ${shareScript}
+  ${ladderScript}
 </body>
 </html>
 `;

@@ -436,7 +436,7 @@ export function pageStyles() {
 
     /* ---------- sport tab bar (multi-sport, 2026-07-22) ----------
        Styles the static page family (article / lane / sport section pages). MIRROR of the homepage
-       rules in src/style.css (.sportnav*) — keep the two in step, neither file imports the other.
+       rules in src/style.css (.sportnav*): keep the two in step, neither file imports the other.
        Register matches .desknav__link (uppercase, .8rem, .04em) but cream at rest for a touch more
        presence, gold on hover and when current, a 2px gold underline on the active tab. Sticky at
        the top of the page family; horizontally scrollable with an edge fade once it overflows. */

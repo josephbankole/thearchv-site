@@ -112,9 +112,13 @@ const sportFeeds = {};
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
   const laneKey = sport.lanes[0];
+  // CONTRACT: `section` is the FEED KEY, matching football's convention (transfer/worldcup/leagues
+  // are simultaneously the lane AND the .json file name). The app routes push payloads by
+  // section -> <section>.json (SportRouting.lookup / TodayView.resolve), so for new sports this
+  // must be the SPORT key (nfl.json exists, questions.json does not). The lane key stays in the URL.
   const days = [...(SPORT_RAW[sport.key] || [])]
     .sort(byDateDesc)
-    .map((d) => ({ ...d, section: laneKey, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
+    .map((d) => ({ ...d, section: sport.key, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
   sportFeeds[sport.key] = { days, lastUpdated: days.length ? days[0].date : null };
 }
 

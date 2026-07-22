@@ -18,7 +18,7 @@
        them, recompute the hash (sha256, base64-encoded, of the exact inline body) and update it
        here, or the browser will silently drop that script at runtime.
        connect-src also carries the Supabase project: the Android waitlist form posts there. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-V9N9WL3OgySVtQky+/8yUKmjqzZP9pnjd/pH1RA6zuk=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8KVQEwiZYToqqUcKcWhz0WrZjbB2GqYmbk/Bk2en848=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-V9N9WL3OgySVtQky+/8yUKmjqzZP9pnjd/pH1RA6zuk=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
@@ -169,6 +169,25 @@
     .formnote.ok { color: var(--gold); }
     .formnote.bad { color: #E8A0A0; }
 
+    /* Substack subscribe, embedded. Cross-origin iframe, so we cannot restyle its
+       inside; we only frame it to sit tidily in the column. Substack serves it with
+       frame-ancestors *, which is what makes this possible at all. */
+    .dispatch-embed { margin-top: 26px; }
+    .embed-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-bottom: 10px;
+    }
+    .dispatch-embed iframe {
+      display: block;
+      width: 100%;
+      border: 1px solid rgba(242, 234, 211, 0.18);
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
     /* Deliberately quiet: a visitor should not hit a dead end, but this must never
        compete with the primary action above it. */
     .fallback {
@@ -218,6 +237,14 @@
         <button class="cta-gold" type="submit" id="wait-submit">Tell me when Android is ready</button>
       </form>
       <p class="formnote" id="wait-note" role="status" aria-live="polite"></p>
+
+      <div class="dispatch-embed">
+        <p class="embed-label">And the Dispatch, by email</p>
+        <iframe src="https://thearchvdispatch.substack.com/embed"
+                title="Subscribe to The ARCHV Dispatch"
+                height="320" frameborder="0" scrolling="no" loading="lazy"></iframe>
+      </div>
+
       <p class="fallback">
         The app is on iPhone today. Everything reads on the web at
         <a id="archive-link" href="https://thearchv.ca/">thearchv.ca</a>,

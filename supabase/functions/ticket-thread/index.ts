@@ -37,7 +37,8 @@ Deno.serve(async (req) => {
     if (/ticket_thread_rate_limited/.test(rateErr.message)) {
       return json({ error: "rate limited, please try again later" }, 429);
     }
-    return json({ error: rateErr.message }, 500);
+    console.error("ticket-thread: rate-log db error", rateErr.message);
+    return json({ error: "server_error" }, 500);
   }
 
   // List mode: every ticket this device opened.
@@ -47,7 +48,7 @@ Deno.serve(async (req) => {
       .select("id, category, subject, status, created_at, updated_at")
       .eq("device_id", device_id)
       .order("created_at", { ascending: false });
-    if (error) return json({ error: error.message }, 500);
+    if (error) { console.error("ticket-thread: list db error", error.message); return json({ error: "server_error" }, 500); }
     return json({ tickets: data ?? [] }, 200);
   }
 
@@ -57,7 +58,7 @@ Deno.serve(async (req) => {
     .select("id, category, subject, status, created_at, updated_at, device_id")
     .eq("id", ticket_id)
     .maybeSingle();
-  if (tErr) return json({ error: tErr.message }, 500);
+  if (tErr) { console.error("ticket-thread: ticket db error", tErr.message); return json({ error: "server_error" }, 500); }
   if (!ticket || ticket.device_id !== device_id) return json({ error: "not found" }, 404);
 
   const { data: messages, error: mErr } = await supabase
@@ -66,7 +67,7 @@ Deno.serve(async (req) => {
     .eq("ticket_id", ticket_id)
     .eq("internal", false)
     .order("created_at", { ascending: true });
-  if (mErr) return json({ error: mErr.message }, 500);
+  if (mErr) { console.error("ticket-thread: messages db error", mErr.message); return json({ error: "server_error" }, 500); }
 
   const { device_id: _omit, ...safeTicket } = ticket;
   return json({ ticket: safeTicket, messages: messages ?? [] }, 200);

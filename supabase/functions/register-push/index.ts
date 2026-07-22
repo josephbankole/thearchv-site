@@ -45,7 +45,8 @@ Deno.serve(async (req) => {
     if (/push_token_rate_limited/.test(error.message)) {
       return json({ error: "rate limited, please try again later" }, 429);
     }
-    return json({ error: error.message }, 500);
+    console.error("register-push: db error", error.message);
+    return json({ error: "server_error" }, 500);
   }
 
   return json({ ok: true }, 200);

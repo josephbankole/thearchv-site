@@ -57,19 +57,13 @@ Deno.serve(async (req) => {
   }
   const source = String(body.source ?? "").slice(0, 40) || "unknown";
 
-  // Global hourly ceiling. Cheap HEAD with an exact count. If the probe itself fails we
-  // fail OPEN, because losing a real signup is worse than letting one extra through.
-  try {
-    const since = new Date(Date.now() - 3600000).toISOString();
-    const probe = await fetch(`${rest}?select=id&created_at=gte.${since}`, {
-      method: "HEAD",
-      headers: { ...auth, Prefer: "count=exact" },
-    });
-    const total = Number((probe.headers.get("content-range") || "").split("/")[1] || "0");
-    if (total >= MAX_PER_HOUR) return json({ error: "rate_limited" }, 429, origin);
-  } catch {
-    // fail open
-  }
+  // The hourly ceiling is enforced by an ATOMIC DB trigger (waitlist_hourly_cap), not by a
+  // read-then-write probe here (security sweep 2026-07-22). The old probe was a TOCTOU race
+  // (concurrent bursts each read < MAX and all inserted) AND failed OPEN if the probe threw.
+  // The trigger fails CLOSED: on the 301st insert in a rolling hour it aborts with a marker,
+  // which we translate to 429 below. MAX_PER_HOUR here is kept only as documentation of the
+  // ceiling the migration sets.
+  void MAX_PER_HOUR;
 
   const res = await fetch(rest, {
     method: "POST",
@@ -87,7 +81,10 @@ Deno.serve(async (req) => {
   });
 
   if (!res.ok && res.status !== 409) {
-    console.error("insert failed", res.status, await res.text());
+    const detail = await res.text();
+    // The atomic cap aborts with this marker; surface a clean 429 rather than store_failed.
+    if (/waitlist_rate_limited/.test(detail)) return json({ error: "rate_limited" }, 429, origin);
+    console.error("insert failed", res.status, detail);
     return json({ error: "store_failed" }, 500, origin);
   }
   return json({ ok: true }, 200, origin);

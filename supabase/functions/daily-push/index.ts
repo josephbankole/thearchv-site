@@ -25,8 +25,9 @@ const edmontonDay = (d: Date): string =>
   new Intl.DateTimeFormat("en-CA", { timeZone: "America/Edmonton" }).format(d);
 
 Deno.serve(async (req) => {
+  // Fail CLOSED (security sweep 2026-07-22): an unset PUSH_SECRET must refuse, not run open.
   const guard = Deno.env.get("PUSH_SECRET");
-  if (guard && req.headers.get("x-push-secret") !== guard) {
+  if (!guard || req.headers.get("x-push-secret") !== guard) {
     return json({ error: "unauthorized" }, 401);
   }
 

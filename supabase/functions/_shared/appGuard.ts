@@ -9,7 +9,12 @@ import { json } from "./cors.ts";
 
 export function checkAppSecret(req: Request, fnName: string): Response | null {
   const expected = Deno.env.get("ARCHV_APP_SECRET");
-  if (!expected) return null; // secret not configured yet: guard is a no-op
+  if (!expected) {
+    // Fail CLOSED (security sweep 2026-07-22). An unset secret is an operator error, not an
+    // open door: previously this returned null (no-op), which silently disabled the guard.
+    console.error(JSON.stringify({ fn: fnName, error: "ARCHV_APP_SECRET unset — refusing" }));
+    return json({ error: "unauthorized" }, 401);
+  }
 
   const provided = req.headers.get("x-archv-app");
   if (provided !== expected) {

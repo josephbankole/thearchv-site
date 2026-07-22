@@ -15,9 +15,11 @@ import { triageTicket } from "../_shared/triage.ts";
 Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
 
-  // Guard the endpoint: if TRIAGE_SECRET is set, the webhook must send it back.
+  // Guard the endpoint: the webhook must send x-triage-secret back. Fail CLOSED on an unset
+  // secret (security sweep 2026-07-22) — this paid endpoint stayed open once already when
+  // TRIAGE_SECRET was unset 2026-06-19..07-03; an absent secret now refuses instead of no-ops.
   const guard = Deno.env.get("TRIAGE_SECRET");
-  if (guard && req.headers.get("x-triage-secret") !== guard) {
+  if (!guard || req.headers.get("x-triage-secret") !== guard) {
     return json({ error: "unauthorized" }, 401);
   }
 

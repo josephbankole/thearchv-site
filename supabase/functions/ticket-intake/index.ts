@@ -47,7 +47,10 @@ Deno.serve(async (req) => {
     if (/ticket_rate_limited/.test(error.message)) {
       return json({ error: "rate limited, please try again later" }, 429);
     }
-    return json({ error: error.message }, 500);
+    // Log the raw DB detail server-side only; return a generic message so schema internals
+    // (column names, types, constraints) are not disclosed to the client (security sweep 2026-07-22).
+    console.error("ticket-intake: db error", error.message);
+    return json({ error: "server_error" }, 500);
   }
 
   // First thread message mirrors the body, so the in-app inbox reads as a conversation from line one.

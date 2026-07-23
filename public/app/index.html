@@ -18,7 +18,7 @@
        here, or the browser will silently drop that script at runtime.
        connect-src carries the Supabase project (Android waitlist post); frame-src carries
        Substack (the Dispatch embed). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rJuB+Kqp9gdahxoCqDx7tpFEQI5eENyEwJnVuFTlZm8=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-uSfxmZljaBhhnvNC1y6FXhQEM99Q2NuTm211tpv3sDw=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rJuB+Kqp9gdahxoCqDx7tpFEQI5eENyEwJnVuFTlZm8=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-uQL9Zf9KXWTdiV0qFXDKVq9Z+t3jR7l3jxOI698v6tI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
@@ -184,7 +184,29 @@
     .cta-gold:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
     .cta-gold[disabled] { opacity: 0.6; cursor: default; transform: none; filter: none; }
 
-    .waitlist { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
+    /* Android honest path: the ~44% who cannot install still leave a follow and an email.
+       Ghost button so it sits beside, not on top of, the gold waitlist submit. */
+    .android-follow { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
+    .android-lead { font-size: 0.95rem; line-height: 1.5; color: var(--cream); }
+    .follow-ghost {
+      display: block;
+      width: 100%;
+      padding: 15px 22px;
+      border-radius: 12px;
+      border: 1px solid rgba(242, 234, 211, 0.4);
+      background: transparent;
+      color: var(--cream);
+      text-decoration: none;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .follow-ghost:hover { transform: translateY(-2px); border-color: var(--gold); }
+    .follow-ghost:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    .waitlist { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
     .waitlist input {
       width: 100%;
       padding: 15px 16px;
@@ -270,8 +292,14 @@
       <p class="fallback">Or read it on the web at <a id="web-fallback" href="https://thearchv.ca/">thearchv.ca</a>.</p>
     </div>
 
-    <!-- Everyone else. The app is iOS only today, so take the interest and count it. -->
+    <!-- Everyone else. The app is iOS only today, so take the interest and count it.
+         The honest path: a follow they can act on now, plus the email for launch. -->
     <div class="other-only">
+      <div class="android-follow">
+        <p class="android-lead">No Android app yet. Follow the daily story now, and leave your email for launch.</p>
+        <a class="follow-ghost" id="follow-nudge" href="https://www.instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow @thearchvfc</a>
+      </div>
+
       <form class="waitlist" id="wait-form" novalidate>
         <input id="wait-email" type="email" name="email" autocomplete="email" inputmode="email"
                spellcheck="false" placeholder="you@example.com" aria-label="Your email address" required />
@@ -294,7 +322,9 @@
   </main>
   <script>
     (function () {
-      var platform = document.documentElement.className || "unknown";
+      // Report the real platform, not the CSS class: the gate sets "other" for Android
+      // and "ios" for everything else, so relabel "other" -> "android" for readable analytics.
+      var platform = document.documentElement.className === "other" ? "android" : "ios";
       var ENDPOINT = "https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/android-waitlist";
       var KEY = "sb_publishable_v3538BmUgl9pn-KPzD7g4g_aLZeuSjA";
 
@@ -310,6 +340,11 @@
       bind("app-store-badge", "appstore");
       bind("web-fallback", "web_fallback");
       bind("archive-link", "archive");
+
+      var followNudge = document.getElementById("follow-nudge");
+      if (followNudge) followNudge.addEventListener("click", function () {
+        track("follow_click", { platform: platform, source: "app_page" });
+      });
 
       // Today's lead, from the same feed the iOS app reads. Swapped in only once the
       // image has actually loaded, so a slow or missing asset leaves the poster in place

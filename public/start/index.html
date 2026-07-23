@@ -14,7 +14,7 @@
        Both inline scripts below are allowed only via an exact sha256 hash - if you edit either
        one, recompute its hash (sha256, base64-encoded, of its exact inline body) and update it
        here, or the browser will silently drop that script at runtime. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-dVLN8Oe5riDe3P+dRNjQz0oz06rhLPPuzUCDd+5GkP0=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-ACnANGfK6WHxfgFyg3n7mkc0CGBqT2Q+YPrBTWqz3dA=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
   <meta property="og:description" content="Every final since 1970, drawn." />
@@ -142,21 +142,50 @@
       background: #ffffff;
     }
 
-    /* App Store badge: Apple's standard "Download on the App Store" treatment,
-       drawn inline (no external asset load, CSP-clean). Shipped hidden until
-       flip day — see FLIP-DAY.md at the repo root. */
-    .appstore-badge {
-      display: block;
-      width: 100%;
-      max-width: 220px;
-      margin: 6px auto 2px;
+    /* Follow is the primary ask now: the app is iOS only and converts almost no one,
+       so the button that anyone can act on leads. Gold, above the story. */
+    .follow-cta { text-align: center; }
+
+    /* Story headline and dek, populated from the feed. The infogram bakes the same text
+       into the picture, so the script hides these once it loads (see below); they are the
+       state a visitor sees if the infogram never arrives. */
+    .today-copy { padding: 15px 17px 17px; text-align: left; }
+    .today-headline {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 400;
+      font-size: 1.3rem;
+      line-height: 1.2;
+      color: var(--cream);
     }
-    .appstore-badge svg { display: block; width: 100%; height: auto; }
-    .appstore-badge:focus-visible {
-      outline: 2px solid var(--gold);
-      outline-offset: 3px;
-      border-radius: 10px;
+    .today-dek {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--cream-dim);
     }
+
+    /* App Store, demoted from a badge to a quiet secondary line (kept, not removed). */
+    .alsoiphone {
+      display: inline-block;
+      color: var(--cream-dim);
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      padding: 6px 8px;
+    }
+    .alsoiphone:hover { color: var(--cream); }
+    .alsoiphone:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+
+    /* One slim line: the other sports live on the homepage, where the tab bar is. */
+    .multisport {
+      margin-top: 22px;
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+      color: var(--cream-dim);
+    }
+    .multisport a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
+    .multisport a:hover { color: var(--gold); }
+    .multisport a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   </style>
 </head>
 <body>
@@ -165,64 +194,92 @@
     <p class="tagline">Every final since 1970, drawn.</p>
 
     <div class="actions">
+      <!-- Referrer-aware Follow, filled in by the script from document.referrer. iOS-only
+           app + ~0% install means the ask anyone can act on has to lead. -->
+      <a class="cta-gold follow-cta" id="follow-cta" href="https://www.instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow @thearchvfc</a>
+
       <p class="kicker">TODAY</p>
       <a class="today-card" id="today-card" href="https://thearchv.ca/">
         <img id="today-img" src="/posters/lusail-2022.webp" alt="Lusail 2022 World Cup final poster, illustrated by The ARCHV." />
+        <div class="today-copy">
+          <h2 class="today-headline" id="today-headline">Today’s verified story.</h2>
+          <p class="today-dek" id="today-dek">The day’s football, drawn and reported plainly.</p>
+        </div>
       </a>
       <a class="cta-gold" id="today-cta" href="https://thearchv.ca/">Read today’s story</a>
-      <a class="appstore-badge" id="app-store-badge" href="https://apps.apple.com/app/id6786508653">
-        <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store">
-          <rect x="0.5" y="0.5" width="199" height="59" rx="10" fill="#000000" stroke="#A6A6A6" stroke-width="1"/>
-          <g fill="#FFFFFF">
-            <!-- Apple mark -->
-            <path d="M32.9 20.9c-.9 1.1-2.4 2-3.9 1.9-.2-1.5.5-3.1 1.4-4.1.9-1.1 2.5-1.9 3.8-2 .2 1.6-.5 3.1-1.3 4.2zm1.3 2.1c-2.2-.1-4 1.2-5.1 1.2-1.1 0-2.6-1.2-4.3-1.1-2.2 0-4.2 1.3-5.4 3.2-2.3 4-.6 9.9 1.6 13.2 1.1 1.6 2.4 3.4 4.1 3.3 1.6-.1 2.3-1 4.2-1s2.5 1 4.3 1c1.8 0 2.9-1.6 4-3.2 1.2-1.8 1.8-3.6 1.8-3.7-.1 0-3.4-1.3-3.4-5.1 0-3.2 2.6-4.7 2.7-4.8-1.5-2.2-3.8-2.4-4.5-2.5z"/>
-            <!-- Wordmark: two-line "Download on the / App Store" -->
-            <text x="47" y="26" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="9" letter-spacing="0.3">DOWNLOAD ON THE</text>
-            <text x="46" y="42" font-family="Georgia,'Times New Roman',serif" font-size="18">App Store</text>
-          </g>
-        </svg>
-      </a>
-      <nav class="linkrow" aria-label="More from The ARCHV">
-        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a><span class="sep">·</span><a class="quiet" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Store</a>
-      </nav>
 
       <div class="dispatch-embed">
-        <p class="embed-label">And the Dispatch, by email</p>
+        <p class="embed-label">The day’s story by email, free.</p>
         <iframe src="https://thearchvdispatch.substack.com/embed"
                 title="Subscribe to The ARCHV Dispatch"
                 height="320" frameborder="0" scrolling="no" loading="lazy"></iframe>
       </div>
+
+      <a class="alsoiphone" id="app-store-link" href="https://apps.apple.com/app/id6786508653">Also on iPhone</a>
+
+      <nav class="linkrow" aria-label="More from The ARCHV">
+        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a><span class="sep">·</span><a class="quiet" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Store</a>
+      </nav>
 
       <div class="strip" aria-label="From the poster archive">
         <a href="https://thearchv.ca/#archive"><img src="/posters/mexico-1970.webp" alt="México 1970 final poster, illustrated." loading="lazy" /></a>
         <a href="https://thearchv.ca/#archive"><img src="/posters/azteca-1986.webp" alt="Azteca 1986 final poster, illustrated." loading="lazy" /></a>
         <a href="https://thearchv.ca/#archive"><img src="/posters/paris-1998.webp" alt="Paris 1998 final poster, illustrated." loading="lazy" /></a>
       </div>
+
+      <p class="multisport">Now covering <a href="https://thearchv.ca/">NFL, Formula 1, Tennis and Golf</a>.</p>
     </div>
   </main>
   <script>
     (function () {
-      function track(target, href) { if (window.posthog) posthog.capture('start_cta_click', { target: target, href: href }); }
-      function bind(el, target) { if (el) el.addEventListener('click', function () { track(target, el.href); }); }
-      bind(document.getElementById('app-store-badge'), 'appstore');
-      bind(document.getElementById('today-card'), 'today_card');
-      bind(document.getElementById('today-cta'), 'today_cta');
+      function track(name, props) { if (window.posthog) posthog.capture(name, props); }
+      function bindCta(el, target) { if (el) el.addEventListener('click', function () { track('start_cta_click', { target: target, href: el.href }); }); }
+
+      // Referrer-aware Follow. Almost every visitor arrives from one social app, so send
+      // them back to that same profile: the follow is then one tap in an app they already
+      // have open. Unknown or direct traffic defaults to Instagram, the main channel.
+      var ref = document.referrer || '';
+      var follow = { platform: 'instagram', url: 'https://www.instagram.com/thearchvfc', label: 'Follow @thearchvfc' };
+      if (/tiktok\./i.test(ref)) follow = { platform: 'tiktok', url: 'https://www.tiktok.com/@thearchvfc', label: 'Follow on TikTok' };
+      else if (/instagram\./i.test(ref)) follow = { platform: 'instagram', url: 'https://www.instagram.com/thearchvfc', label: 'Follow on Instagram' };
+      else if (/facebook\.|fb\.watch/i.test(ref)) follow = { platform: 'facebook', url: 'https://www.facebook.com/thearchvfc', label: 'Follow on Facebook' };
+      var followBtn = document.getElementById('follow-cta');
+      if (followBtn) {
+        followBtn.href = follow.url;
+        followBtn.textContent = follow.label;
+        followBtn.addEventListener('click', function () { track('follow_click', { platform: follow.platform }); });
+      }
+
+      bindCta(document.getElementById('app-store-link'), 'appstore');
+      bindCta(document.getElementById('today-card'), 'today_card');
+      bindCta(document.getElementById('today-cta'), 'today_cta');
       document.querySelectorAll('.linkrow .quiet').forEach(function (a) {
-        bind(a, a.href.indexOf('substack') > -1 ? 'dispatch' : a.href.indexOf('etsy') > -1 ? 'store' : 'archive');
+        bindCta(a, a.href.indexOf('substack') > -1 ? 'dispatch' : a.href.indexOf('etsy') > -1 ? 'store' : 'archive');
       });
+
+      // Today's lead, from the same feed the iOS app reads. Point the card and the gold
+      // button at the actual article (not the homepage, which converts almost no one), and
+      // write the headline and dek in. If the infogram loads it bakes that text into the
+      // picture, so hide the text versions then; if it never arrives, they stay as the copy.
       fetch('/feed/today.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
         var lead = d && d.lead;
         if (!lead || !lead.url) return;
         var card = document.getElementById('today-card');
         var cta = document.getElementById('today-cta');
         var img = document.getElementById('today-img');
+        var h = document.getElementById('today-headline');
+        var dek = document.getElementById('today-dek');
         card.href = lead.url;
         cta.href = lead.url;
+        if (lead.headline && h) h.textContent = lead.headline;
+        if (lead.dek && dek) dek.textContent = lead.dek;
         if (img && lead.infogram) {
           var probe = new Image();
           probe.onload = function () {
             img.src = lead.infogram;
             img.alt = lead.infogramAlt || lead.headline || img.alt;
+            if (h) h.style.display = 'none';
+            if (dek) dek.style.display = 'none';
           };
           probe.src = lead.infogram;
         }

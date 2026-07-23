@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-23",
+    day: "Thursday",
+    headline: "United open talks for Hugo Larsson.",
+    dek: "Manchester United and Newcastle both approach Eintracht Frankfurt's Hugo Larsson. Frankfurt want 50 million euros.",
+    body: "Manchester United have a new midfield name. United and Newcastle have both opened talks with the representatives of Hugo Larsson, the Sweden midfielder at Eintracht Frankfurt. Frankfurt have set an asking price of about 50 million euros and are relaxed, with Larsson under contract until 2029 and no pressure to sell. United want him as their third midfield signing after Andrey Santos and Youri Tielemans. Newcastle's interest is tied to Bruno Guimaraes, who could leave for Arsenal. Larsson is 22 and joined Frankfurt from Malmo in 2023 for around 9 million euros. He is reported to be open to a move. There is no bid yet.",
+    status: "verified",
+  },
+  {
     date: "2026-07-22",
     day: "Wednesday",
     headline: "United's move for Lewis Hall hardens.",

@@ -18,7 +18,7 @@
        here, or the browser will silently drop that script at runtime.
        connect-src carries the Supabase project (Android waitlist post); frame-src carries
        Substack (the Dispatch embed). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rJuB+Kqp9gdahxoCqDx7tpFEQI5eENyEwJnVuFTlZm8=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-YXAnOBvEVceHbi73tpF9kD2HqmqJtnjX2R8gyKVaWNY=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rJuB+Kqp9gdahxoCqDx7tpFEQI5eENyEwJnVuFTlZm8=' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-uQL9Zf9KXWTdiV0qFXDKVq9Z+t3jR7l3jxOI698v6tI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of the game in original illustration. Free on iPhone." />
@@ -322,7 +322,9 @@
   </main>
   <script>
     (function () {
-      var platform = document.documentElement.className || "unknown";
+      // Report the real platform, not the CSS class: the gate sets "other" for Android
+      // and "ios" for everything else, so relabel "other" -> "android" for readable analytics.
+      var platform = document.documentElement.className === "other" ? "android" : "ios";
       var ENDPOINT = "https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/android-waitlist";
       var KEY = "sb_publishable_v3538BmUgl9pn-KPzD7g4g_aLZeuSjA";
 

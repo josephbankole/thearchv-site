@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-24",
+    day: "Friday",
+    headline: "Manchester United agree personal terms with Manu Kone.",
+    dek: "Manchester United ready a first bid for Roma's Manu Kone as Al-Ahli enter the race.",
+    body: "Manchester United have taken a real step for Manu Kone. United have agreed personal terms with the Roma midfielder and are preparing a first bid worth about 50 million euros. Fabrizio Romano's caution stands: there is no bid and no club-to-club talks with Roma yet, so nothing is done. Roma want about 60 million euros and need to sell to meet financial rules. The new threat is Al-Ahli of Saudi Arabia, who have opened talks with both Roma and Kone's camp. Chelsea and Arsenal are still watching. David Ornstein reports a third midfielder was always the plan, after Andrey Santos and Youri Tielemans. Kone is 25 and reached the World Cup semi-finals with France.",
+    status: "verified",
+    image: "/heads/kone.webp",
+    imageAlt: "Manu Kone, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-07-23",
     day: "Thursday",
     headline: "United open talks for Hugo Larsson.",

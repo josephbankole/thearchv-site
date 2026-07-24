@@ -131,7 +131,12 @@ main, .masthead, .footer { position: relative; z-index: 2; }
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.25rem var(--gutter);
   transition: transform 0.5s var(--ease), background 0.4s;
-  mix-blend-mode: difference;
+  /* Solid navy, never a blend. `mix-blend-mode: difference` inverted the wordmark and
+     the three hamburger bars against the hero, so the menu read as invisible, and with
+     no background behind it the bar sat unreadably on top of the lead article header.
+     Founder report 2026-07-24. An opaque bar lets content pass cleanly underneath. */
+  background: var(--navy-deep);
+  border-bottom: 1px solid var(--gold-soft);
 }
 .masthead.is-hidden { transform: translateY(-110%); }
 .wordmark { display: inline-flex; align-items: center; gap: 0.5em; letter-spacing: 0.02em; }
@@ -146,7 +151,7 @@ main, .masthead, .footer { position: relative; z-index: 2; }
 .masthead__toggle {
   display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 5px; width: 44px; height: 44px; padding: 0; border: 1px solid var(--cream-faint);
-  border-radius: 2px; background: transparent; cursor: pointer; mix-blend-mode: difference;
+  border-radius: 2px; background: transparent; cursor: pointer;
   transition: border-color 0.4s;
 }
 .masthead__toggle:hover { border-color: var(--cream); }
@@ -458,7 +463,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .day__status { margin-left: auto; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3em 0.7em; border-radius: 2px; white-space: nowrap; }
 .day__status--live { color: var(--gold); border: 1px solid var(--gold-soft); }
 .day__status--done { background: var(--pitch); color: var(--cream); }
-.day__headline { font-family: var(--serif); font-weight: 360; font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 0.6rem; }
+.day__headline { font-family: var(--serif); font-weight: 360; font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 1rem; } /* single line of air before the dek (founder 2026-07-24) */
 .day__dek { font-size: var(--t-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.1rem; }
 .day__body { color: var(--cream-dim); font-size: 0.95rem; line-height: 1.6; }
 

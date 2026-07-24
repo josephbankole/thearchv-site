@@ -508,7 +508,7 @@ export function pageStyles() {
     .more-card__avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--gold-soft); }
     .more-card__body { min-width: 0; }
     .more-card__kicker { display: block; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: .3rem; }
-    .more-card__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.28; margin: 0 0 .25rem; }
+    .more-card__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.28; margin: 0 0 .6rem; }
     .more-card__dek { font-size: .85rem; color: var(--cream-faint); margin: 0; }
     .related__all { display: inline-block; margin-top: 1.1rem; font-size: .9rem; }
 
@@ -526,7 +526,7 @@ export function pageStyles() {
     .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
     .lane-card__body { min-width: 0; }
     .lane-card__kicker { display: block; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .4rem; }
-    .lane-card__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.24; margin: 0 0 .4rem; }
+    .lane-card__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.24; margin: 0 0 .75rem; }
     .lane-card__dek { font-size: .9rem; color: var(--cream-dim); margin: 0; }
 
     /* "From the glossary" strip on lane index pages: a compact row of the lane's key terms,

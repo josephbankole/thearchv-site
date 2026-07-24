@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-07-24",
+    day: "Friday",
+    headline: "Is this really Aaron Rodgers' last season?",
+    dek: "Yes. He has said so himself, and the Steelers open his 22nd and final camp this week.",
+    body: "Aaron Rodgers has said it plainly. Asked at the Steelers' spring workouts whether 2026 would be his last season in the NFL, he answered, \"Yes. This is it.\" After 22 years, 4 MVP awards and a Super Bowl win, the oldest player in the league is going into his final year.\n\nPittsburgh report to St Vincent College in Latrobe, Pennsylvania on 28 July, with the first practice the day after. Rodgers turns 43 in December. He signed on again to finish his career under Mike McCarthy, who was his head coach for 13 seasons at Green Bay. That reunion is the reason he came back rather than walking away, and it is why this camp carries a weight the last few have not.\n\nSo the question fans keep asking as camp opens is settled on one level and open on another. Is it really his last season? He has told us it is, and he left less room this time than a year ago, when he said he was only \"pretty sure\" 2025 would be the end and then kept playing. \"This is it\" is a firmer line than that.\n\nWhat is not settled is how it ends. Rodgers is joining a side in a hard division, with Baltimore and Cincinnati to get past just to reach January. His arm still works. His movement is not what it once was, and a 43-year-old quarterback is a gamble Pittsburgh have chosen to take with their eyes open.\n\nSo the honest answer is yes. This is the last time Rodgers reports to a camp, the last opening week of a career that began in 2005. Whether it ends with a deep run or a quiet December is the part nobody can call yet. What we do know is that the clock is now running, and it starts this week in Latrobe.",
+    status: "verified",
+  },
+  {
     date: "2026-07-22",
     day: "Wednesday",
     headline: "Will Patrick Mahomes be ready for Week 1?",

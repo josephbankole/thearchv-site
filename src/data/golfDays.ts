@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-07-25",
+    day: "Saturday",
+    headline: "How did Ryan Fox win The Open at 39?",
+    dek: "Ryan Fox was ranked 56th in the world when he won the 2026 Open Championship at Royal Birkdale. It is his first major.",
+    body: "Ryan Fox was 56th in the world rankings when the 154th Open began at Royal Birkdale, and for three days he was not the story. Sam Burns led after 54 holes. Cameron Young signed for 64 on Sunday and set a target nobody had beaten. Fox then took four birdies from his last six holes, the last of them a 12-foot putt on the 18th green, and won by one shot at 10 under par. It is his first major championship, at 39. ESPN and CNN both note that over the past decade only Phil Mickelson at the 2021 PGA Championship and Tiger Woods at the 2019 Masters have won a major at a greater age, and that Fox is the third New Zealander to win a men's major. Burns finished third, two back. Scottie Scheffler, who arrived at Birkdale defending the title, tied for fourth with Tommy Fleetwood. Fox won it by holing putts at the point in the week when they are hardest to hole, which is usually the whole answer at an Open, and it is why a world ranking tells you very little about Royal Birkdale on a Sunday afternoon.",
+    status: "verified",
+  },
+  {
     date: "2026-07-24",
     day: "Friday",
     headline: "What did losing the Asian Tour cost LIV Golf?",

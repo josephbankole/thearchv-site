@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-07-25",
+    day: "Saturday",
+    headline: "How did a wildcard ranked 114 reach the Wimbledon semi-finals?",
+    dek: "Arthur Fery went from 114 in the world to a Wimbledon semi-final and a career-high ranking of 36. He grew up in Wimbledon.",
+    body: "Arthur Fery entered Wimbledon ranked 114 in the world on a wildcard and left it ranked 36, a career high when the new list was published on 13 July. He beat Damir Dzumhur, Otto Virtanen and Zizou Bergs to reach the second week, then knocked out Grigor Dimitrov and the ninth seed Flavio Cobolli before Alexander Zverev stopped him in the semi-finals. That is five wins, the last two against opponents ranked well above him. Sky Sports and the ATP both place the run in its proper company: only Goran Ivanisevic in 2001 had previously reached a Wimbledon men's singles semi-final as a wildcard, and Fery is the fifth British man to reach the last four in the Open era, after Roger Taylor, Tim Henman, Andy Murray and Cameron Norrie. He is also, in the most literal sense, a local. Fery was born in France to French parents and has lived in Wimbledon since he was a few months old, per the Lawn Tennis Association, and he plays for Great Britain. The tournament he reached the last four of is the one down the road.",
+    status: "verified",
+  },
+  {
     date: "2026-07-24",
     day: "Friday",
     headline: "Will Alcaraz be fit to defend his US Open title?",

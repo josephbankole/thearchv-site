@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-25",
+    day: "Saturday",
+    headline: "Bournemouth price Manchester United out of Alex Scott.",
+    dek: "Scott turned down a new contract. The fee moved the wrong way anyway.",
+    body: "Alex Scott rejected a second Bournemouth contract offer, which looked like the opening United needed. It has not worked out that way. Bournemouth now want at least 70 million pounds, with one report putting their message closer to 93 million euros, and United are said to be willing to go to about 40 million. Reporting has shifted from United leading the race to United being priced out of it. Bournemouth reached Europe for the first time in the club's history last season and expect to keep him whether he signs or runs down his current deal. David Ornstein has said INEOS love the player, which is not the same as being able to buy him. Scott is 22 and cost 25 million pounds from Bristol City in 2023. Arsenal and Chelsea are still circling.",
+    status: "verified",
+  },
+  {
     date: "2026-07-24",
     day: "Friday",
     headline: "Manchester United agree personal terms with Manu Kone.",

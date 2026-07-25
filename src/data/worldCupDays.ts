@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-25",
+    day: "Saturday",
+    headline: "Germany appoint Jurgen Klopp, and settle the fee with a donation.",
+    dek: "Jurgen Klopp will coach Germany until 2030. His first match is away to the Netherlands in Amsterdam on 24 September.",
+    body: "Germany have appointed Jurgen Klopp as head coach on a contract running to 2030, confirmed by the German Football Association on 24 July and reported the same way by Sky Sports, CNN and Bundesliga.com. He takes up the job on 15 August. Peter Krawietz, Pep Lijnders and Sven Bender join his staff. The first fixture could hardly ask more of him: Germany away to the Netherlands in Amsterdam on 24 September, the opening match of the 2026/27 Nations League. The release was the unusual part. Klopp was Red Bull's head of global soccer, and rather than pay a compensation fee the DFB agreed to donate 1 million euros to Wings for Life, the Red Bull foundation that funds spinal cord research. Kicker and sport.de report that three Germany home matches will be staged in Leipzig over the length of the contract as part of the same arrangement. Klopp replaces Julian Nagelsmann, who left after Germany went out of the World Cup to Paraguay in the last 32. Klopp has four years to work with, and a rebuild rather than a rescue, which is the easier brief of the two. It still opens in Amsterdam.",
+    status: "verified",
+  },
+  {
     date: "2026-07-20",
     day: "Day 40",
     headline: "Spain win the World Cup, and Argentina never had a shot.",

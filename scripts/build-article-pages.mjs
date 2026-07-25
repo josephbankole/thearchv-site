@@ -312,7 +312,10 @@ function shareScriptTag(url, headline) {
 
 // The read ladder. Counts on OPEN (founder call 2026-07-21: whatever gets seen by the most
 // people) but dedupes by article url, so "three reads" means three different pieces rather
-// than three refreshes of one. Like the share row this embeds page-specific values, so its
+// than three refreshes of one. Offers swapped 2026-07-25 (see inside): first ask is a FOLLOW,
+// escalating to the Dispatch at three reads. The iOS app is deliberately no longer in the
+// ladder at all; it stays on /app for people who go looking, because the measured audience is
+// mostly Android in markets where an App Store link is a dead end. Like the share row this embeds page-specific values, so its
 // CSP hash is computed per page at generation time.
 function ladderScriptTag(url, lanePath) {
   return `<script>
@@ -333,29 +336,49 @@ function ladderScriptTag(url, lanePath) {
       var cta = document.getElementById('ladder-cta');
       var alt = document.getElementById('ladder-alt');
       if (!box || !note || !cta || !alt) return;
+
+      // Offer swap, 2026-07-25. The ladder used to lead with the iOS app and got 1 click
+      // from 194 impressions. PostHog says why: 57% of this traffic is India, Indonesia and
+      // Nigeria arriving from TikTok, largely on Android, so the app was an ask most of them
+      // could not physically take. Both asks are now free, instant and device-agnostic.
+      // Referrer-aware, because asking a TikTok visitor to follow on TikTok is a wasted ask.
+      var from = document.referrer || '';
+      var viaTikTok = from.indexOf('tiktok.') !== -1;
+      var social = viaTikTok
+        ? { name: 'Instagram', url: 'https://instagram.com/thearchvfc', key: 'instagram' }
+        : { name: 'TikTok', url: 'https://www.tiktok.com/@thearchvfc', key: 'tiktok' };
+
+      function external(el, href) {
+        el.href = href;
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener noreferrer');
+      }
+
       var variant;
       if (count >= 3) {
+        // Three pieces in means real intent, so escalate to the owned channel. Email, not
+        // the app: a Substack subscription works on any device in any country.
         variant = 'dispatch';
         note.textContent = 'That is three you have read. The Dispatch brings the archive to you.';
         cta.textContent = 'Join the Dispatch';
-        cta.href = 'https://thearchvdispatch.substack.com';
-        cta.setAttribute('target', '_blank');
-        cta.setAttribute('rel', 'noopener noreferrer');
-        alt.textContent = 'Or get the app';
-        alt.href = '/app/';
+        external(cta, 'https://thearchvdispatch.substack.com');
+        alt.textContent = 'Or follow on ' + social.name;
+        external(alt, social.url);
       } else {
-        variant = 'app';
-        note.textContent = 'A story like this every day, and one quiet notification when it lands.';
-        cta.textContent = 'Get the app';
-        cta.href = '/app/';
+        variant = 'follow';
+        note.textContent = 'One football story a day, drawn and checked. Follow so tomorrow finds you.';
+        cta.textContent = 'Follow on ' + social.name;
+        external(cta, social.url);
         alt.textContent = 'Read another';
         alt.href = lane;
+        alt.removeAttribute('target');
+        alt.removeAttribute('rel');
       }
       box.hidden = false;
-      if (window.posthog) posthog.capture('read_ladder_shown', { variant: variant, reads: count });
+      if (window.posthog) posthog.capture('read_ladder_shown', { variant: variant, reads: count, platform: social.key, via_tiktok: viaTikTok });
       function tap(el, target) {
         el.addEventListener('click', function () {
-          if (window.posthog) posthog.capture('read_ladder_click', { target: target, variant: variant, reads: count });
+          if (window.posthog) posthog.capture('read_ladder_click', { target: target, variant: variant, reads: count, platform: social.key, via_tiktok: viaTikTok });
         });
       }
       tap(cta, 'primary');

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-07-25",
+    day: "Saturday",
+    headline: "Why has Max Verstappen not won a race in 2026?",
+    dek: "Max Verstappen is seventh in the 2026 drivers' championship after 10 rounds. Red Bull's RB22 is the reason, and his contract is the consequence.",
+    body: "Ten of the 22 rounds are gone and Max Verstappen has won none of them. Formula 1's own standings have him seventh on 91 points, behind both McLaren drivers and 113 behind Kimi Antonelli, who has six wins and leads on 204. The car is the answer everyone gives. Red Bull admitted significant shortcomings with the RB22 as early as the Chinese Grand Prix, per Sky Sports, and the complaints have not changed since. The rear end is unstable on corner entry, which forces Verstappen into constant steering corrections and costs him most in the fast corners, and the power unit's energy management falls away at circuits that lean on it. Motorsport.com has traced a separate run of poor race starts to the same package, and The Race puts Red Bull around the fourth quickest team on the grid, trading with McLaren while Mercedes and Ferrari run at the front. Verstappen has been openly critical of the new regulations and, with his contract running to 2028, has still not committed to the team beyond this season. That is the part Red Bull will worry about. A slow car costs them a season, and a car can be fixed. Losing Verstappen over it would take a great deal longer to recover from.",
+    status: "verified",
+  },
+  {
     date: "2026-07-24",
     day: "Friday",
     headline: "Can anyone still catch Kimi Antonelli?",

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-07-25",
+    day: "Saturday",
+    headline: "What did the Rams give up for Myles Garrett and Trent McDuffie?",
+    dek: "The Los Angeles Rams traded seven draft picks and Jared Verse to land Myles Garrett and Trent McDuffie. Here is the full bill.",
+    body: "Training camp is open and the Los Angeles Rams have been the most aggressive team of the offseason, so the fair question is what it cost. Two trades did most of the work. Cleveland sent Myles Garrett, the reigning Defensive Player of the Year, to Los Angeles for the edge rusher Jared Verse plus a 2027 first-round pick, a 2028 second and a 2029 third. The Browns set that package out on their own website and ESPN and NFL.com reported it identically. Kansas City then sent the cornerback Trent McDuffie west for four picks, the Rams' 2026 first-rounder among them, which the Chiefs also confirmed themselves, and the Rams agreed a four-year extension with McDuffie worth more than 30 million dollars a season. Add the two together and the price is seven draft picks, both of the Rams' next two first-rounders, a starting edge rusher who was a first-round pick himself, and a very large guarantee. Whether that is reckless depends on the calendar as much as the roster. Super Bowl LXI is scheduled for 14 February 2027 at SoFi Stadium, which is where the Rams play. Los Angeles have decided the next two seasons matter more than the next four drafts, and they have not been quiet about it.",
+    status: "verified",
+  },
+  {
     date: "2026-07-24",
     day: "Friday",
     headline: "Is this really Aaron Rodgers' last season?",

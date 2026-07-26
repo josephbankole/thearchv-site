@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-07-26",
+    day: "Sunday",
+    headline: "Why has Venus Williams been given a wild card in Toronto?",
+    dek: "Venus Williams is 46, ranked outside the top 400, and has not won a match in 2026. The National Bank Open has put her in the main draw anyway.",
+    body: "The National Bank Open has handed Venus Williams a main-draw wild card for the Toronto tournament, which runs from 1 to 13 August. It will be her 13th appearance there. She is 46, her ranking is outside the top 400, and she has not won a match this season, a run that made her the first former world number one to lose 10 in a row since the WTA rankings started in 1975.\n\nSo the sporting case is thin, and the tournament is not pretending otherwise. Tournament director Karl Hale called her \"the legendary Venus Williams\" in the announcement. Williams said Toronto is \"a city and a tournament that have always meant so much to me\". A wild card is a discretionary invitation and always has been. Organisers spend them on players who sell seats and on players they feel they owe something. Williams is both, and the draw does not have to justify itself beyond that.\n\nThere is history under it. Her best run in Canada came in 2014, when she reached the final by beating her sister Serena. She came back to the tour in Washington last year after a 16-month absence and won her opening match. She is not the only wild card either: Bianca Andreescu, the Canadian who won this title in 2019, has also been given one. Main-draw play begins on 2 August, with the draw made on 31 July.",
+    status: "verified",
+  },
+  {
     date: "2026-07-25",
     day: "Saturday",
     headline: "How did a wildcard ranked 114 reach the Wimbledon semi-finals?",

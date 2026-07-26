@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-07-26",
+    day: "Sunday",
+    headline: "Who is Jackson Koivun, and why is he leading the 3M Open?",
+    dek: "Jackson Koivun shot 61 at TPC Twin Cities with a back nine of 28. The 21-year-old rookie leads by three going into the final round, with Scottie Scheffler chasing.",
+    body: "Koivun is 21, about a month into life as a professional, and he has just played the best nine holes anyone has managed at this tournament. His third-round 61 at TPC Twin Cities took him to 20 under par and gave him the first 54-hole lead of his PGA Tour career. The back nine was a 28, a tournament record, and he finished it birdie, birdie, eagle.\n\nHe got here by an unusual route. Koivun spent four years at Auburn as the top-ranked amateur in the American college game and earned his tour card through PGA Tour University Accelerated, which hands membership to elite college players before their eligibility runs out. He took it up in June and made his professional debut at the John Deere Classic at the start of July. Tour winners were talking about his game before he had played a round as one of them.\n\nHe leads Emiliano Grillo and Ben Kohles by three shots. The name further down the board is the one that complicates his Sunday. Scottie Scheffler started Saturday seven behind, shot 64 with an eagle and five birdies coming home, and sits six back in a share of ninth. Michael Brennan and Chandler Phillips are at 16 under. The final round finishes on Sunday afternoon, with coverage from 1pm Eastern.",
+    status: "verified",
+  },
+  {
     date: "2026-07-25",
     day: "Saturday",
     headline: "How did Ryan Fox win The Open at 39?",

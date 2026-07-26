@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-26",
+    day: "Sunday",
+    headline: "The Community Shield goes to Cardiff because Wembley is booked.",
+    dek: "Arsenal play Manchester City at the Principality Stadium on 16 August. The Premier League starts five days later with Arsenal against Coventry City.",
+    body: "The 2026-27 season has its shape, and the curtain-raiser has moved country. Arsenal play Manchester City for the FA Community Shield at the Principality Stadium in Cardiff on Sunday 16 August, kicking off at 3pm. Wembley is unavailable that weekend because The Weeknd is playing there on both the Saturday and the Sunday. The FA confirmed the switch in March and the stadium confirmed the kick-off time in June. Cardiff has not staged the fixture for 20 years, though it held it six times between 2001 and 2006 while Wembley was being rebuilt, so this is a return rather than a novelty.\n\nThe league follows on Friday 21 August, when champions Arsenal host Coventry City at the Emirates at 8pm. Coventry are back in the top flight after 25 years away, promoted alongside Hull City and Ipswich Town. Hull's reward for coming up is Manchester United at home on the Saturday lunchtime. Newcastle play Liverpool on the Sunday afternoon and Fulham play Chelsea on the Monday night.\n\nThe Premier League pushed the whole season back a week on player-welfare grounds, which leaves 33 days between the World Cup final and the opening match and 89 days since the last campaign ended. Fixtures were released on 19 June. The final round is on Sunday 30 May 2027, with every match kicking off at the same time.",
+    status: "verified",
+  },
+  {
     date: "2026-07-21",
     day: "Tuesday",
     headline: "Chelsea break the British record for Morgan Rogers.",

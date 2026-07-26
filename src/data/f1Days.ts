@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-07-26",
+    day: "Sunday",
+    headline: "Why is Lewis Hamilton starting fifth in Hungary?",
+    dek: "Lewis Hamilton qualified second at the Hungaroring, 0.012 seconds behind Lando Norris. A three-place penalty for impeding dropped him to fifth.",
+    body: "Hamilton put the Ferrari on the front row and then lost it in the stewards' room. He was 0.012 seconds behind Lando Norris, who took pole with a 1:17.207 in the closing seconds of Q3. After the session the stewards gave Hamilton a three-place grid penalty for impeding Oscar Piastri, which moves him back to fifth.\n\nHe is not the only one who went backwards. Kimi Antonelli qualified fourth and was given the same three-place drop for a yellow-flag infringement, so he starts seventh. That matters more than it sounds. Antonelli leads the drivers' championship on 204 points, 45 clear of Hamilton in second, and the Hungaroring is one of the hardest circuits on the calendar to overtake on. Both title contenders have to come through traffic on a track that does not allow much of it.\n\nThe grid now reads Norris, Charles Leclerc, Piastri, Max Verstappen, Hamilton, George Russell, Antonelli, Isack Hadjar. Norris got his lap in just before two late yellow flags ended everyone else's session. Verstappen spun at the final corner and Russell stopped on track, and the drivers still running lost their last attempt. The race is 70 laps and starts at 14:00 UK time.",
+    status: "verified",
+  },
+  {
     date: "2026-07-25",
     day: "Saturday",
     headline: "Why has Max Verstappen not won a race in 2026?",

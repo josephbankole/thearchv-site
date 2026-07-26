@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-26",
+    day: "Sunday",
+    headline: "The Women's Africa Cup of Nations opens in Morocco, four months late.",
+    dek: "Morocco play Kenya on the opening day. Nigeria arrive as holders with 10 titles, and the winners' cheque has doubled to 2 million dollars.",
+    body: "The Women's Africa Cup of Nations starts today, which is not when it was meant to start. The tournament was scheduled for 17 March to 3 April. CAF moved it back by roughly four months, citing unforeseen circumstances, with Morocco reported to have asked for the change. Morocco are hosting for the third time in succession, which no country has done before.\n\nThe field has grown from 12 teams to 16. The prize pot has gone from about 3.48 million dollars to 5.8 million, and the winners now take 2 million, double what the last champions received, with 750,000 for the runners-up. Set against the men's tournament it is still small, but it is the largest this competition has ever been.\n\nNigeria arrive as holders and have won this 10 times. They open against Malawi and also face Zambia and Egypt. The hosts play Kenya at the Moulay El Hassan Stadium on the opening day, in a group that also holds Algeria and Senegal. Sixteen nations qualified, among them Cape Verde, Tanzania and Burkina Faso. The final is on 16 August in Rabat.",
+    status: "verified",
+  },
+  {
     date: "2026-07-25",
     day: "Saturday",
     headline: "Germany appoint Jurgen Klopp, and settle the fee with a donation.",

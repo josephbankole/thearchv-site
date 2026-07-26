@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-07-26",
+    day: "Sunday",
+    headline: "Who is running the 49ers while Kyle Shanahan recovers?",
+    dek: "Kyle Shanahan broke three ribs, his nose and a hand in a car crash on 14 July. Chris Foerster and three coordinators take over as San Francisco open training camp.",
+    body: "Kyle Shanahan was in a car crash near his home in Palo Alto on the evening of 14 July. He broke his nose, three ribs and a hand, needed more than 40 stitches in his face, and sustained a concussion he is still feeling. He will be at training camp. He will not be running it in the way he normally would.\n\nAssistant head coach Chris Foerster picks up most of the day-to-day work, with the three coordinators taking on more: Raheem Morris on defence, Klay Kubiak on offence and Brant Boyer on special teams. Foerster is 64 and in his second spell in San Francisco, hired in 2019 and promoted to assistant head coach later, so the man holding the clipboard is not a stranger to the building.\n\nThe broken bones will heal on a schedule. The head injury is the part nobody will put a date on. General manager John Lynch said Shanahan is effectively in the concussion protocol and that the doctors decide when and how he comes back. Asked whether Shanahan might miss the season opener against the Los Angeles Rams in Melbourne on 10 September, Lynch said that was \"not what we're anticipating\", which is reassurance rather than a promise. San Francisco's first practice is on 27 July.",
+    status: "verified",
+  },
+  {
     date: "2026-07-25",
     day: "Saturday",
     headline: "What did the Rams give up for Myles Garrett and Trent McDuffie?",

@@ -119,6 +119,20 @@ for (const lane of ["transfer", "world-cup", "leagues"]) {
   }
 }
 
+// The Answer Desk article pages, /<sport>/questions/<date>/. Same generator and the same per-page
+// share/ladder hashes as the football articles above, so the same failure mode applies. Added
+// 2026-07-28 with the FAQPage + question-H2 change: locally these directories are usually empty,
+// because src/data/<sport>Days.ts is engine-owned and stale in any checkout (see CLAUDE.md), so
+// this loop is a no-op here and a real check wherever the current data is present.
+for (const sport of ["nfl", "f1", "tennis", "golf"]) {
+  const laneDir = join(DIST, sport, "questions");
+  if (!existsSync(laneDir)) continue;
+  for (const entry of readdirSync(laneDir)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(entry)) continue;
+    targets.push([`answer: /${sport}/questions/${entry}/`, join(laneDir, entry, "index.html")]);
+  }
+}
+
 let allOk = true;
 for (const [label, filePath] of targets) {
   if (!check(label, filePath)) allOk = false;

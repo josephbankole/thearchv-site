@@ -207,6 +207,15 @@ function renderSportLane(sport, laneKey) {
   const copy = SPORT_DESK_COPY[sport.key];
   const days = SPORT_DAYS[sport.key] || [];
   const url = `${SITE}/${sport.urlBase}/${laneKey}/`;
+  /* SEO/AEO audit fix 5 (2026-07-28): /<sport>/questions/ and /<sport>/ were 98% textually
+     identical, both self-canonical, both in the sitemap and both carrying CollectionPage, which
+     left Google four near-duplicate pairs to pick a winner from. The lane front now names the
+     sport root as its canonical and is left out of the sitemap (see the write loop below), while
+     the page itself stays live and crawlable so no inbound link 404s. Deliberately NOT noindexed:
+     a noindex plus a canonical pointing elsewhere are conflicting instructions, and the canonical
+     on its own is what consolidates the pair. og:url follows the canonical for the same reason, so
+     a share of either URL credits one page. */
+  const canonical = `${SITE}/${sport.urlBase}/`;
   const pageTitle = `${sport.label} ${laneLabel} · The ARCHV`;
   const socialTitle = `${sport.label} ${laneLabel} · The ARCHV`;
 
@@ -224,14 +233,14 @@ function renderSportLane(sport, laneKey) {
   <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
   <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
   <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="${url}" />
+  <link rel="canonical" href="${canonical}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
   <meta property="og:title" content="${escAttr(socialTitle)}" />
   <meta property="og:description" content="${escAttr(copy.lede)}" />
-  <meta property="og:url" content="${url}" />
+  <meta property="og:url" content="${canonical}" />
   <meta property="og:image" content="${SITE}/og.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -291,13 +300,17 @@ for (const [laneKey, lane] of Object.entries(LANES)) {
 }
 
 // New-sport lane fronts: /<urlBase>/<lane>/ for every non-football sport and each of its lanes.
+// No sitemap row on purpose (SEO/AEO audit fix 5, 2026-07-28): each of these is canonical to its
+// sport root (see renderSportLane above), and a sitemap should only list URLs you want indexed in
+// their own right. The pages stay live, crawlable and linked from the sport tab row, so nothing
+// 404s and the sport root inherits the pair's signals. The three football lane fronts above keep
+// their rows — they are self-canonical and have no duplicate.
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
   for (const laneKey of sport.lanes) {
     const dir = join(OUT, sport.urlBase, laneKey);
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, "index.html"), renderSportLane(sport, laneKey));
-    urls.push(`  <url><loc>${SITE}/${sport.urlBase}/${laneKey}/</loc><changefreq>daily</changefreq><priority>0.6</priority></url>`);
     count++;
   }
 }

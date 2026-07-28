@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The ARCHV. Football with a memory.</title>
   <meta name="description" content="A daily archive of sport in original illustration. Football, NFL, F1, tennis and golf. No ads, no account, no betting, and one quiet notification a day. Free on iPhone." />
-  <!-- Paid and social landing page: noindex so it does not compete with the homepage or
-       /start in search, and deliberately NOT in sitemap.xml. -->
-  <meta name="robots" content="noindex,follow" />
-  <link rel="canonical" href="https://thearchv.ca/app" />
+  <!-- Indexable since 2026-07-28 (founder call): carries SoftwareApplication schema for app search. -->
+  <link rel="canonical" href="https://thearchv.ca/app/" />
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -22,7 +20,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of sport in original illustration. Football, NFL, F1, tennis and golf. Free on iPhone." />
-  <meta property="og:url" content="https://thearchv.ca/app" />
+  <meta property="og:url" content="https://thearchv.ca/app/" />
   <meta property="og:image" content="https://thearchv.ca/og.jpg" />
 
   <!-- Platform gate. Runs before paint so there is no flash of the wrong layout.
@@ -253,6 +251,19 @@
     .fallback a:hover { color: var(--cream); }
     .fallback a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "The ARCHV",
+    "operatingSystem": "iOS",
+    "applicationCategory": "SportsApplication",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+    "url": "https://thearchv.ca/app/",
+    "installUrl": "https://apps.apple.com/app/id6786508653",
+    "description": "A daily archive of sport in original illustration. Football, NFL, F1, tennis and golf. No ads, no account, no betting, and one quiet notification a day. Free on iPhone."
+  }
+  </script>
 </head>
 <body>
   <main class="page">

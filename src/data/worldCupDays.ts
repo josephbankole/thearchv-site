@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-28",
+    day: "Tuesday",
+    headline: "Tanzania beat South Africa in Morocco, and Group B turns over.",
+    dek: "Tanzania beat South Africa 2-1 at the Women's Africa Cup of Nations. Ivory Coast marked a first appearance in 12 years by putting four past Burkina Faso.",
+    body: "Tanzania beat South Africa 2-1 on 27 July in the opening round of Group B at the Women's Africa Cup of Nations in Morocco. South Africa won this tournament in 2022 and arrived as one of the sides expected to reach the last four. They start with nothing.\n\nIvory Coast were the other result of the day. They had not played at a Women's Africa Cup of Nations for 12 years, and they beat Burkina Faso 4-1 in their first match back. Tanzania and Ivory Coast lead the group on three points each, and South Africa and Burkina Faso have a fortnight to fix it.\n\nThe hosts had set the tone the day before. Morocco beat Kenya 4-0 in the opening match, Ibtissam Jraidi scoring twice with Sakina Ouzraoui and Meriem Atiq adding the others. Algeria had beaten Senegal 2-0 earlier that day, so Morocco top Group A on goal difference. Nigeria arrive as holders with 10 titles. The tournament runs to 16 August.",
+    status: "verified",
+  },
+  {
     date: "2026-07-26",
     day: "Sunday",
     headline: "The Women's Africa Cup of Nations opens in Morocco, four months late.",

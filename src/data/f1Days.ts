@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-07-28",
+    day: "Tuesday",
+    headline: "How did Oscar Piastri lose the Hungarian Grand Prix from the front?",
+    dek: "Oscar Piastri took the lead at the first corner in Hungary and led half the race. A collision while lapping Carlos Sainz and then a gearbox failure ended it, and Lando Norris won instead.",
+    body: "Lando Norris started the Hungarian Grand Prix on pole on 26 July and lost the lead almost at once. Oscar Piastri got the better of him into Turn 2 with a cutback after Norris ran wide, and from there Piastri led the first half of the race.\n\nIt came apart in two stages. McLaren pitted Piastri first and he rejoined in traffic. Trying to lap Carlos Sainz, he was hit by him. That cost the time and the lead went back to Norris. Then the gearbox failed on lap 56 and Piastri, running second, was out. Autosport and Formula1.com both have it the same way, and Piastri's own description afterwards was of being taken out by a backmarker.\n\nNorris won by 15.080 seconds from Max Verstappen, with Kimi Antonelli third. It is Norris's first win of the season and it changed very little at the top, because Antonelli's championship lead went out to 50 points by finishing behind him. Lewis Hamilton is second on 169 points, George Russell third on 160, Charles Leclerc fourth on 138, Norris fifth on 128 and Verstappen sixth on 109. Mercedes lead the constructors on 379 from Ferrari on 307, with McLaren third on 220.",
+    status: "verified",
+  },
+  {
     date: "2026-07-26",
     day: "Sunday",
     headline: "Why is Lewis Hamilton starting fifth in Hungary?",

@@ -312,6 +312,7 @@ const EXTRA_URLS = [
   { loc: "/about/", changefreq: "monthly", priority: "0.5" },
   { loc: "/corrections/", changefreq: "monthly", priority: "0.4" },
   { loc: "/start/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/app/", changefreq: "monthly", priority: "0.6" }, // founder 2026-07-28: indexable, carries SoftwareApplication schema
   { loc: "/quiz/", changefreq: "monthly", priority: "0.5" },
   { loc: "/dispatch/", changefreq: "monthly", priority: "0.5" },
   { loc: "/privacy/", changefreq: "yearly", priority: "0.2" },
@@ -320,10 +321,9 @@ const EXTRA_URLS = [
   // build-standards-page.mjs). Listed here so they enter the sitemap through this one
   // assembly point; the trailing slash matches each page's own <link rel="canonical">.
   { loc: "/glossary/", changefreq: "monthly", priority: "0.6" },
-  { loc: "/glossary/xg/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/false-9/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/offside/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/var/", changefreq: "monthly", priority: "0.5" },
+  // Entry rows are DERIVED from glossary-data.mjs, never hand-listed. The hand list silently
+  // capped the sitemap at the original ten entries when the glossary grew to sixty (2026-07-28).
+  ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, changefreq: "monthly", priority: "0.5" })),
   // Glossary expansion (SEO/AEO pass, 2026-07-14): +6 entries, scripts/glossary-data.mjs.
   { loc: "/glossary/pressing/", changefreq: "monthly", priority: "0.5" },
   { loc: "/glossary/low-block/", changefreq: "monthly", priority: "0.5" },

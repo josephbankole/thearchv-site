@@ -45,3 +45,23 @@ fi
 git push origin main
 git checkout preview
 echo "DONE: merged preview -> main and pushed. GitHub Actions will build + publish thearchv.ca (~1-3 min)."
+
+# --- IndexNow ping (SEO/AEO audit fix 6, 2026-07-28) --------------------------------------------
+# Tells Bing, and through it MSN and the answer engines that read Bing, what changed within
+# minutes rather than waiting for a crawl. Bounded to the 25 newest URLs: a deploy changes a
+# handful of pages, not the archive. scripts/ping-indexnow.mjs finds its own key file in public/.
+#
+# NON-FATAL BY DESIGN. A deploy has already succeeded by this point; a ping that fails must never
+# turn a published deploy into a failed command, so the exit code is swallowed. Rerun by hand with
+# `node scripts/ping-indexnow.mjs 25` if you want it.
+#
+# It reads the LOCAL dist/sitemap.xml, so it submits what your last `npm run build` produced. Per
+# CLAUDE.md the engine commits its data straight to main, so a local build can lag what is live:
+# to submit exactly what is published, curl https://thearchv.ca/sitemap.xml to a file once Pages
+# has rebuilt and run `SITEMAP_PATH=<that file> node scripts/ping-indexnow.mjs 25`.
+if [ -f dist/sitemap.xml ]; then
+  echo "Pinging IndexNow with the 25 newest URLs..."
+  node scripts/ping-indexnow.mjs 25 || echo "WARNING: IndexNow ping failed. The deploy is unaffected; rerun 'node scripts/ping-indexnow.mjs 25' if you want to retry."
+else
+  echo "Skipping IndexNow: no dist/sitemap.xml (run 'npm run build', then 'node scripts/ping-indexnow.mjs 25')."
+fi

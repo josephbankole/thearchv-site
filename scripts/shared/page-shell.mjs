@@ -484,6 +484,13 @@ export function pageStyles() {
     .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
     .article__body p { margin: 1rem 0; }
     .article__body strong { color: var(--cream); }
+    /* Answer Desk question heading (SEO/AEO audit fix 3, 2026-07-28). The sport question lanes
+       are a question and its answer, so the answer now sits under a real H2 carrying the question
+       verbatim rather than floating in a bare div — the same shape as .glossary__q above the
+       glossary answer. Sized a step up from .glossary__q because it opens an article body rather
+       than following a definition, and given no top margin because it is the body's first child. */
+    .answer__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: clamp(1.2rem, 2.6vw, 1.4rem); line-height: 1.3; margin: 0 0 .35rem; }
+    .article__body .answer__q + p { margin-top: .6rem; }
     .article__rights { margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .85rem; color: var(--cream-faint); }
     .article__nav { margin: 2.2rem 0 1rem; display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; font-size: .95rem; }
 

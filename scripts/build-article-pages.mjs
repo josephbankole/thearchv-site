@@ -133,11 +133,51 @@ function metaDescription(dek, body) {
   if (kept !== `${shortDek} The move building steam is Mateus Fernandes.`) throw new Error("metaDescription self-test: short input should pass through untruncated");
 })();
 
-function schema(entry, url, label) {
-  return JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
+/* ---------- Answer Desk: the direct answer, used verbatim in both the page and the schema ----------
+   The sport question lanes (/nfl/questions/<date>/ and friends) ARE a question and its answer, so
+   they carry FAQPage alongside NewsArticle — the shape scripts/build-glossary-pages.mjs already
+   uses, and the one family Google has rewarded. Same discipline as the glossary: the string used as
+   acceptedAnswer is a string the page shows, in the order it shows it, so an answer engine reads
+   exactly what a reader reads. The answer is the entry's dek followed by the first paragraph of the
+   body; sentences are added whole and the answer stops once the next one would pass
+   ANSWER_MAX_WORDS, so it is never cut mid-sentence (the glossary's winning answers run 40 to 60
+   words, and a direct answer that trails off reads as broken to both a reader and a parser). */
+const ANSWER_MAX_WORDS = 70;
+function sentences(text) {
+  return String(text).match(/[^.!?]+[.!?]+(?=\s|$)|[^.!?]+$/g) || [];
+}
+function questionAnswer(dek, body) {
+  const firstPara = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  const kept = [];
+  let words = 0;
+  for (const part of [String(dek).trim(), firstPara]) {
+    for (const raw of sentences(part)) {
+      const s = raw.trim();
+      if (!s) continue;
+      const n = s.split(/\s+/).length;
+      if (kept.length && words + n > ANSWER_MAX_WORDS) return kept.join(" ");
+      kept.push(s);
+      words += n;
+    }
+  }
+  return kept.join(" ");
+}
+
+// tests-by-assertion, same convention as metaDescription above: a regression fails the build.
+(function selfTestQuestionAnswer() {
+  const short = questionAnswer("The Eagles paid up. Here is why.", "Because the market moved first.\n\nA second paragraph that must not appear.");
+  if (short !== "The Eagles paid up. Here is why. Because the market moved first.") {
+    throw new Error(`questionAnswer self-test: dek + first paragraph expected, got ${JSON.stringify(short)}`);
+  }
+  const oversized = questionAnswer("Short standfirst.", `${"word ".repeat(80).trim()}.`);
+  if (oversized !== "Short standfirst.") {
+    throw new Error("questionAnswer self-test: an oversized sentence should be dropped whole, never cut mid-sentence");
+  }
+})();
+
+function schema(entry, url, label, faq) {
+  const graph = [
+    {
         // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
         // stay Article). dateModified is kept equal to datePublished: the data is date-only and
         // carries no separate revised date, so claiming a later modification would be dishonest;
@@ -160,16 +200,37 @@ function schema(entry, url, label) {
         image: entry.image ? `${SITE}${entry.image}` : `${SITE}/og.jpg`,
         mainEntityOfPage: url,
       },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-          { "@type": "ListItem", position: 2, name: label, item: `${SITE}/` },
-          { "@type": "ListItem", position: 3, name: entry.headline, item: url },
-        ],
-      },
+  ];
+
+  // FAQPage, question lanes only (SEO/AEO audit fix 2, 2026-07-28). Same block the glossary
+  // emits, and placed before BreadcrumbList for the same reason it is there: the question and
+  // its answer are what the page is, the breadcrumb only says where it sits. `faq.question` is
+  // the entry headline verbatim, which is also the page's H1 and its answer H2, so the schema
+  // never claims a question the page does not visibly ask. Football lanes pass no faq and their
+  // emitted JSON is byte-identical to before.
+  if (faq) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        },
+      ],
+    });
+  }
+
+  graph.push({
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: label, item: `${SITE}/` },
+      { "@type": "ListItem", position: 3, name: entry.headline, item: url },
     ],
-  }).replace(/</g, "\\u003c");
+  });
+
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
 }
 
 /* ---------- per-article OG share cards (1200x630 PNG via satori + resvg) ----------
@@ -389,6 +450,12 @@ function ladderScriptTag(url, lanePath) {
 
 function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
   const lane = section; // section carries label/seoSuffix/anchor/base/sportKey/laneKey
+  // The Answer Desk lanes (NFL, F1, tennis, golf) file a question as the headline and its answer
+  // as the body. Those two facts drive both the FAQPage block and the question H2 below; the
+  // three football lanes file news and take neither.
+  const faq = section.laneKey === "questions"
+    ? { question: entry.headline, answer: questionAnswer(entry.dek, entry.body) }
+    : null;
   const url = `${SITE}${section.base}${entry.date}/`;
   const ogImage = hasCard ? `${SITE}${section.base}${entry.date}/og.png` : `${SITE}/og.jpg`;
   const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
@@ -476,7 +543,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
   <meta name="twitter:image" content="${ogImage}" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   ${RSS_LINK}
-  <script type="application/ld+json">${schema(entry, url, lane.label)}</script>
+  <script type="application/ld+json">${schema(entry, url, lane.label, faq)}</script>
 
   <!-- PostHog: pageview only on this static surface. Same project as the website. -->
   ${posthogSnippet()}
@@ -501,7 +568,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
         <button class="btn btn--ghost" id="share-copy" type="button">Copy link</button>
       </div>${figure}
       <div class="article__body">
-        <p><strong>${esc(entry.dek)}</strong></p>
+        ${faq ? `<h2 class="answer__q">${esc(faq.question)}</h2>\n        ` : ""}<p><strong>${esc(entry.dek)}</strong></p>
         ${bodyHtml(entry.body)}
       </div>
       <p class="article__rights">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.</p>

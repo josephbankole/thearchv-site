@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-07-28",
+    day: "Tuesday",
+    headline: "Did winning the 3M Open get Jackson Koivun into the FedExCup playoffs?",
+    dek: "Jackson Koivun's win moved him 124 places to number 70 in the FedExCup standings. That is the last qualifying spot, and there are two tournaments left.",
+    body: "Jackson Koivun won the 3M Open on 26 July in his third start as a professional, three shots clear of Scottie Scheffler on 25 under par, a tournament record. The 500 FedExCup points that came with it moved him 124 places up the standings to number 70.\n\nNumber 70 is the cutoff, which is the whole problem. The top 70 go to the FedEx St Jude Championship at TPC Southwind on 13 to 16 August, and Koivun is sitting on the last seat of the bus with two events still to be played. The Rocket Classic in Detroit runs 30 July to 2 August, the Wyndham Championship in Greensboro follows on 6 to 9 August, and anyone below him who has a good week takes the place off him.\n\nScheffler, for his part, will not be adding to his own total in either. He shot 64 and 63 over the weekend at TPC Twin Cities and still lost by three, and he has indicated the 3M Open was his last start before the playoffs begin.",
+    status: "verified",
+  },
+  {
     date: "2026-07-26",
     day: "Sunday",
     headline: "Who is Jackson Koivun, and why is he leading the 3M Open?",

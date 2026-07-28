@@ -304,14 +304,18 @@ for (const p of pages) {
    own <meta name="robots"> before being added here. Quiz stays OUT: it ships noindex,nofollow
    until FLIP-DAY.md flips it (see public/quiz/index.html). Deduped by loc in case a future page
    ends up in both lists. */
+/* Every loc carries its trailing slash. GitHub Pages 301s the slashless form, and a
+   sitemap URL that redirects is a GSC "redirect error": /start sat unindexed for weeks
+   because of exactly that (founder's GSC email, fixed 2026-07-28). The canonical form
+   is the slashed one; never list the slashless variant here. */
 const EXTRA_URLS = [
   { loc: "/about/", changefreq: "monthly", priority: "0.5" },
   { loc: "/corrections/", changefreq: "monthly", priority: "0.4" },
-  { loc: "/start", changefreq: "monthly", priority: "0.5" },
-  { loc: "/quiz", changefreq: "monthly", priority: "0.5" },
-  { loc: "/dispatch", changefreq: "monthly", priority: "0.5" },
-  { loc: "/privacy", changefreq: "yearly", priority: "0.2" },
-  { loc: "/support", changefreq: "yearly", priority: "0.2" },
+  { loc: "/start/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/quiz/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/dispatch/", changefreq: "monthly", priority: "0.5" },
+  { loc: "/privacy/", changefreq: "yearly", priority: "0.2" },
+  { loc: "/support/", changefreq: "yearly", priority: "0.2" },
   // Evergreen surfaces generated later in the chain (build-glossary-pages.mjs,
   // build-standards-page.mjs). Listed here so they enter the sitemap through this one
   // assembly point; the trailing slash matches each page's own <link rel="canonical">.

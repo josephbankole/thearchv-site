@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-28",
+    day: "Tuesday",
+    headline: "Lionel Messi is on the MLS All-Star roster and will not play.",
+    dek: "Lionel Messi was named in the 29-man MLS All-Star squad for Wednesday's game against Liga MX in Charlotte. He is inside a mandatory post-World Cup rest period, so this time there is no punishment.",
+    body: "The MLS All-Star Game is on 29 July in Charlotte, MLS against a Liga MX select side, and Lionel Messi is in the 29-man squad with no prospect of playing. He played 120 minutes of the World Cup final on 19 July. FIFA and FIFPRO require at least 21 days of rest after a tournament of that length, and his window runs from 20 July into August. Rodrigo De Paul sits out on the same grounds.\n\nThe difference from last year is the paperwork. In 2025 Messi and Jordi Alba skipped the All-Star Game without league approval and MLS applied its standing one-match suspension. This absence is covered, so there is no sanction to argue about.\n\nInter Miami have ruled him out of the league matches against Chicago Fire, CF Montreal and Columbus Crew. Head coach Angel Guillermo Hoyos is aiming at the Leagues Cup opener against Atletico de San Luis on 5 August for the return. That tournament puts 18 MLS clubs against 18 from Liga MX.",
+    status: "verified",
+  },
+  {
     date: "2026-07-26",
     day: "Sunday",
     headline: "The Community Shield goes to Cardiff because Wembley is booked.",

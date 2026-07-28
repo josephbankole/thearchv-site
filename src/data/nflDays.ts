@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-07-28",
+    day: "Tuesday",
+    headline: "Why have the Eagles made Jalen Carter the best-paid defensive tackle in NFL history?",
+    dek: "Jalen Carter has agreed a four-year extension with the Philadelphia Eagles worth 152 million dollars, running through 2031. It is the most any defensive tackle has been paid, on both the guarantee and the annual average.",
+    body: "The Philadelphia Eagles and Jalen Carter agreed a four-year extension on 28 July worth 152 million dollars, 106 million of it guaranteed, rising to 160 million if he hits the incentives. It runs through 2031. ESPN, NFL.com and the Philadelphia Inquirer all report the same terms. The average of 38 million a year is the highest any defensive tackle has been paid, and so is the guarantee.\n\nThe case for it is three seasons old. Since Philadelphia drafted him ninth in 2023, Carter has 13.5 sacks, 37 quarterback hits, 108 tackles, 13 pass deflections and four forced fumbles, and he has been to two Pro Bowls. Interior linemen who collapse a pocket from the middle rather than around the edge of it are the rarest thing on a defensive line, and the Eagles have spent three years building a front that assumes they have one.\n\nThe number does something else too. Every defensive tackle who negotiates after this has 38 million a year sitting on the table as the reference point, and Philadelphia have taken their own player off that market through his prime rather than bidding for him again at whatever the position costs in 2031. Carter is 25.",
+    status: "verified",
+  },
+  {
     date: "2026-07-26",
     day: "Sunday",
     headline: "Who is running the 49ers while Kyle Shanahan recovers?",

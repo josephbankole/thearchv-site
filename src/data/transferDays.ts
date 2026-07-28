@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-28",
+    day: "Tuesday",
+    headline: "Jose Mourinho tells Eduardo Camavinga his minutes are going.",
+    dek: "Eduardo Camavinga has been told he will struggle for playing time at Real Madrid. Manchester United spoke to his representatives three days before that message landed, and the player still wants to stay.",
+    body: "Sergio Valentin reported on 26 July that Jose Mourinho has told Eduardo Camavinga he will have a very hard time getting minutes at Real Madrid next season. That is one reporter's line, carried since by Get Spanish Football News and Radio Marca, and Real Madrid have said nothing publicly. What sits underneath it is less disputed. Camavinga had a poor 2025-26 and Real Madrid want to cut the squad before they buy anyone, which Marca has reported for weeks. Defensa Central put the asking price at about 60 million euros.\n\nManchester United got there first. Fabrizio Romano reported on 23 July that they had spoken to Camavinga's representatives to understand where he stood, which is contact with the player's side rather than an approach to Real Madrid. Camavinga's own position has not moved. He is contracted to 2029, he does not want to leave, and he means to fight for the place. A club that wants to sell and a player who will not go is a slow summer, not a deal.\n\nJoshua Zirkzee's exit has a shape now, and two versions of how close it is. Juventus want him on loan with an option to buy at about 35 million euros. Sun Sport report the talks are advanced. Sky Sport Italia call the process difficult and complex and say it is nowhere near done. Juventus have no Champions League money this season, Zirkzee's wages are a separate obstacle, and Randal Kolo Muani is still their first choice. They cannot carry both.\n\nRoma's deadline is Friday. They want Manu Kone sold by 31 July to satisfy a UEFA settlement agreement, and Manchester United have still not put an offer to them. Corriere dello Sport reported an agreement in principle on personal terms with Kone's representatives. Roma want about 60 million euros, Manchester United are ready at about 50 million. Romano's line has not shifted in a fortnight: contacts with the agents, nothing club to club. Three days left.",
+    status: "verified",
+  },
+  {
     date: "2026-07-26",
     day: "Sunday",
     headline: "Roma put a 31 July deadline on the Manu Kone sale.",

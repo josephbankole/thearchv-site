@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-07-28",
+    day: "Tuesday",
+    headline: "How did Frances Tiafoe lose in the first round of his home tournament?",
+    dek: "Frances Tiafoe was beaten in three sets by Terence Atmane at the DC Open in Washington. It is his earliest exit there since 2021.",
+    body: "Frances Tiafoe lost 4-6, 6-3, 6-4 to Terence Atmane in the first round of the DC Open on 27 July. Tiafoe was the sixth seed and grew up in Maryland, half an hour from the courts. He took the first set and then lost two in a row.\n\nHis own explanation, given afterwards, was that he simply felt off. It is Atmane's first win over him in their careers and Tiafoe's earliest loss in Washington since 2021, a tournament where he has usually gone deep.\n\nThe DC Open is an ATP 500 and runs to 2 August. Taylor Fritz, seeded third, came through his opening match on the same day, beating Zizou Bergs 6-3, 6-4. The field also holds the defending champion Alex de Minaur, Ben Shelton, Daniil Medvedev and Felix Auger-Aliassime.",
+    status: "verified",
+  },
+  {
     date: "2026-07-26",
     day: "Sunday",
     headline: "Why has Venus Williams been given a wild card in Toronto?",

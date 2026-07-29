@@ -10,8 +10,6 @@ ogImage: "/og.jpg"
 related: []
 ---
 
-*[FOUNDER: your take here]*
-
 Roger Milla was 38 when he scored twice against Colombia at Italia '90 and turned himself into a folk hero on the spot, dancing at the corner flag in a way nobody at that World Cup had seen a 38-year-old move. Four years later he did it again, older, slower on paper, and somehow still standing over a chance no one expected him to get. That second goal, against Russia at USA '94, is why his name still tops this list more than three decades on.
 
 ## The record

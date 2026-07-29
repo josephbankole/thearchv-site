@@ -10,8 +10,6 @@ ogImage: "/og.jpg"
 related: ["oldest-world-cup-goalscorers", "most-world-cup-titles", "biggest-world-cup-upsets"]
 ---
 
-*[FOUNDER: your take here]*
-
 For one weekend in July 2026 the most watched individual race in football was settled by a man sitting on the substitutes' bench. Kylian Mbappe scored twice against England in the third-place playoff on the Saturday, moved to ten goals for the tournament, and then watched Lionel Messi fail to score in Sunday's final. That was that. Mbappe took the Golden Boot without kicking a ball on the last day, and became the first player in history to win it at two World Cups.
 
 ## What the Golden Boot actually is

@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-29",
+    day: "Wednesday",
+    headline: "Arsenal say they have made three offers for Bruno Guimaraes. Newcastle United say none arrived.",
+    dek: "Arsenal sources tell talkSPORT that three verbal offers have gone in for Bruno Guimaraes, with a verbal agreement north of 75m pounds. Newcastle United deny any formal contact. Both camps may be telling the truth.",
+    body: "Two clubs are describing the same fortnight and they do not agree on whether anything has actually happened.\n\ntalkSPORT, through Ben Jacobs and Alex Crook, reported on 28 July that Arsenal are advanced with Newcastle United over Bruno Guimaraes, and that a verbal agreement north of 75m pounds has been reached. Arsenal sources set out the sequence for them: 55m verbally, then 65m through intermediaries and agents, then the current one.\n\nNewcastle United's position is that no formal bid has been lodged. They have said they are surprised by that, given the volume of speculation.\n\nThe gap between those two accounts is not necessarily a lie on either side. It is a disagreement about what counts. A number passed through an intermediary to a club's representatives is, to the club making it, an offer. To the club receiving it, an offer is a document that arrives from the selling club's counterpart and can be accepted or refused. Both readings are common in the game and both are defensible. They just produce opposite public statements.\n\nThe direction of travel is not really in dispute. David Ornstein reported on 8 July that Bruno Guimaraes had told Newcastle United he wanted to join Arsenal, and had Arsenal ready at about 60m pounds at that stage, with intermediaries involved and no official club contact. Three weeks later the figure being discussed has moved up by more than 15m pounds. Numbers do not move like that in a vacuum.\n\nBruno Guimaraes has reportedly asked his representatives to get the matter settled inside a week, which puts the deadline he wants roughly where AS Roma's UEFA deadline sits, though the two situations are unconnected.\n\nNewcastle United have already been sellers this summer. Sandro Tonali left for Tottenham Hotspur at 92.5m pounds. They have reinvested, bringing in Bazoumana Toure from Hoffenheim at 40.25m and Aladji Bamba from Monaco at 30m. A club that has sold one midfielder for over 90m pounds is not obliged to sell another at 75m, and their public denial reads more like leverage than confusion.\n\nThe honest position for a reader today is that a deal is being negotiated and has not been agreed, that the fee has climbed, and that the two clubs are briefing different definitions of the same word. It gets settled by a document, not by a statement.",
+    status: "verified",
+  },
+  {
     date: "2026-07-28",
     day: "Tuesday",
     headline: "Lionel Messi is on the MLS All-Star roster and will not play.",

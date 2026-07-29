@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-07-29",
+    day: "Wednesday",
+    headline: "Why are the Green Bay Packers starting Micah Parsons on the PUP list?",
+    dek: "The Green Bay Packers placed Micah Parsons on the reserve physically unable to perform list on 28 July as he recovers from a torn ACL and meniscus damage, which would rule him out of the first four games if he stays there.",
+    body: "The Green Bay Packers put Micah Parsons on the reserve physically unable to perform list on 28 July, the day before the official start of training camp. He is one of five Packers who will not begin camp on the field. Tight end Tucker Kraft is another.\n\nThe reason is a knee. Parsons tore an ACL and suffered meniscus damage last December against the Denver Broncos. That is the injury he is still working back from, and the PUP designation is the mechanism the league gives a club to hold a player out without spending a roster spot on him.\n\nThe part that matters for the season is the distinction between two lists that share a name. A player on the training camp PUP list can be activated at any point during camp, the moment he passes a physical. A player who is still on the reserve PUP list when the regular season starts must miss the first four games. He cannot practise and he cannot play until Week 5 at the earliest.\n\nReporting around the club is that Parsons is likely to open the season on the reserve list, which points at a return around Week 6. The Packers play the Dallas Cowboys at Lambeau Field in that window, which is the team Parsons spent the first four years of his career with. That is a coincidence of scheduling rather than a plan, but it is the date everyone has circled.\n\nParsons is a five-year veteran and a five-time Pro Bowler. Losing him for a quarter of the season is a real cost, and the Packers are absorbing it deliberately rather than rushing a knee that is roughly seven months out from surgery.\n\nThe wider context is that the whole league is now at work. All 32 clubs had completed training camp reporting by 28 July, so every roster decision from here is being made in public.\n\nSources: Packers News, Yahoo Sports, Pro Football Rumors.",
+    status: "verified",
+  },
+  {
     date: "2026-07-28",
     day: "Tuesday",
     headline: "Why have the Eagles made Jalen Carter the best-paid defensive tackle in NFL history?",

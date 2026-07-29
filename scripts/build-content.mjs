@@ -39,6 +39,7 @@ const GLOSSARY_LINKS = {
   "fergie-greatest-xi": ["false-9", "half-space", "inverted-full-back"],
   "united-european-nights": ["low-block", "var", "offside"],
   "united-record-signings": ["loan-with-obligation", "xg", "xa"],
+  "loan-with-obligation-to-buy-explained": ["loan-with-obligation", "option-vs-obligation", "loan-with-option"],
 };
 const glossaryBySlug = new Map(glossaryEntries.map((e) => [e.slug, e]));
 function glossaryBlock(slug) {

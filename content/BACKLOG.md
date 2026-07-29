@@ -23,6 +23,12 @@ Status key: todo / drafted / live
 - [todo] explainers/catenaccio-to-gegenpressing — catenaccio to gegenpressing: 70 years of defending
 - [todo] explainers/why-var-takes-so-long — why a VAR check takes so long
 
+## C6 — Transfer mechanics cluster (GSC-driven; the glossary already ranks, the long-forms convert)
+Opened 2026-07-29 off Search Console: `/glossary/loan-with-obligation/` pulled 750 impressions in 28 days (55% of all site impressions) for 1 click at ~page 2. The glossary keeps the definition query; these long-forms take the "explained / examples / how it works" tail and link back to it.
+- [drafted] explainers/loan-with-obligation-to-buy-explained — option vs obligation vs conditional obligation, four United deals as worked examples (drafted 2026-07-29, homepage-linked into the United reads list, glossary cross-links wired in build-content.mjs)
+- [todo] explainers/release-clause-vs-buy-out-clause — the Spanish buy-out clause and why it cannot be refused
+- [todo] explainers/how-transfer-fees-are-actually-paid — amortisation, instalments, add-ons, sell-on clauses
+
 ## C4 — Man United history cluster (Transfer Desk links into these; start with 5)
 - [drafted] united/treble-1999 — the 1999 treble, how it was built (hand-built 2026-06-15)
 - [drafted] united/fergie-greatest-xi — Ferguson's greatest XI, debated (hand-built 2026-06-15)

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-07-29",
+    day: "Wednesday",
+    headline: "Why is this the last Rocket Classic at Detroit Golf Club?",
+    dek: "The 2026 Rocket Classic, played from 30 July to 2 August at Detroit Golf Club, is the final edition of Detroit's only PGA Tour event, which moves to a new venue in 2027 as Rocket Companies ends its title sponsorship.",
+    body: "The Rocket Classic starts on Thursday 30 July at Detroit Golf Club and finishes on Sunday 2 August. It is the last one.\n\nThe tournament has been Detroit's only PGA Tour stop for eight years, and Rocket Companies have been a title sponsor on the Tour for close to thirteen. That arrangement ends with this edition. The event moves to a new venue from 2027, so this is the final time the city itself hosts it.\n\nThere is an awkward detail in the timing. Detroit Golf Club has just come through a 16m dollar restoration led by the architect Tyler Rae, completed ahead of this year's tournament. The course has been rebuilt for a tournament that is leaving it.\n\nThe field is 145 players and it is better than a farewell usually gets. The world number one is not in it: Scottie Scheffler is not entered, and neither is Rory McIlroy. What remains is 21 of the world's top 50, led by world number three Cameron Young. Aldrich Potgieter returns as defending champion. Jordan Spieth, Wyndham Clark, Chris Gotterup, Si Woo Kim and Hideki Matsuyama are playing, and Aaron Rai arrives as the reigning PGA Championship winner. Xander Schauffele and Brooks Koepka are both playing Detroit for the first time.\n\nRickie Fowler, who won here in 2023, has now played every edition of the tournament, which makes him the closest thing the event has to a continuous record of itself.\n\nThe context for the week is that the FedExCup regular season is running out. Last week's 3M Open at TPC Twin Cities was won by Jackson Koivun, who is 21, by three shots from Scheffler, on 25-under 259 for a tournament record and his first PGA Tour title. Detroit is one of the last chances for players outside the playoff places to fix that.\n\nA tournament that gets eight years in a city and then moves on is not unusual on this Tour. It is worth marking anyway, because a course does not often get 16m dollars spent on it and a send-off in the same summer.\n\nSources: PGA Tour, Golf Channel, Golf Monthly, Golf News Net.",
+    status: "verified",
+  },
+  {
     date: "2026-07-28",
     day: "Tuesday",
     headline: "Did winning the 3M Open get Jackson Koivun into the FedExCup playoffs?",

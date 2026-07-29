@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-07-29",
+    day: "Wednesday",
+    headline: "Can anyone still catch Kimi Antonelli in the 2026 Formula 1 championship?",
+    dek: "Kimi Antonelli leads the 2026 Formula 1 drivers championship on 219 points after the Hungarian Grand Prix, 50 clear of Lewis Hamilton, with 12 of the 23 races still to run.",
+    body: "Eleven races into a 23-race season, Kimi Antonelli leads the Formula 1 drivers championship on 219 points. Lewis Hamilton is second on 169. George Russell is third on 160, Lando Norris fifth on 128, Max Verstappen sixth on 109.\n\nSo the honest answer to whether anyone can catch him is yes, mathematically and comfortably. Twelve races is a lot of points. The more useful question is who, and on what evidence.\n\nHamilton is the nearest at 50 points, which is roughly two race wins. That is not a gap, it is a bad weekend. Ferrari are also second in the constructors on 307 to Mercedes' 379, so the machinery is close enough for the argument to be real rather than theoretical.\n\nRussell is the awkward one, because he is Antonelli's team-mate and he is nine points behind Hamilton. Mercedes lead the constructors by 72 points and have two drivers in the top three, which is the position every team says it wants and every team quietly dreads. Russell also retired from the Belgian Grand Prix on 19 July after a first-lap collision with Hamilton, and Antonelli won that race. One incident, one retirement, and a chunk of the current gap was created.\n\nHungary on 26 July was the counterweight. Lando Norris won it by 15.080s from Verstappen, with Antonelli third. It was Norris' first win of the season as reigning world champion, and it moved him almost nowhere. He is still fifth, 91 points off the lead. That is the cleanest illustration of where this championship stands: the fastest car on a given Sunday is no longer the car winning the title.\n\nOscar Piastri is the other story from Budapest. He jumped Norris at the start, led the first half of the race, was hit by a lapped Carlos Sainz on lap 39, then retired with a gearbox problem while running second with thirteen laps left.\n\nAntonelli has six wins this season and six in his career, which tells you the whole of that career has happened this year. The pattern behind the lead is not dominance in any single race. It is that he keeps finishing, and the drivers behind him keep not finishing.\n\nSources: Formula1.com, RaceFans, Forbes, RacingNews365, Crash.net.",
+    status: "verified",
+  },
+  {
     date: "2026-07-28",
     day: "Tuesday",
     headline: "How did Oscar Piastri lose the Hungarian Grand Prix from the front?",

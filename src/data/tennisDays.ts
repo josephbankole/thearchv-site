@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-07-29",
+    day: "Wednesday",
+    headline: "When does the 2026 National Bank Open start, and why are the men and women in different cities?",
+    dek: "The 2026 National Bank Open runs from 1 to 13 August, with the women in Toronto at Sobeys Stadium and the men in Montreal at IGA Stadium. The draws are made on Friday 31 July and main draw play begins on Sunday 2 August.",
+    body: "The 2026 National Bank Open runs from 1 August to 13 August. The women play in Toronto at Sobeys Stadium and the men play in Montreal at IGA Stadium.\n\nThe draw ceremonies for both the ATP and WTA events are on Friday 31 July, with the first order of play published later that evening. Main draw singles begins on Sunday 2 August.\n\nThe two-city split is the oldest thing about the tournament and the part that confuses people most. Canada runs one championship across two host cities, and the men's and women's events swap between Toronto and Montreal each year. So a player who won in Toronto last summer defends the title in Montreal this summer. The trophy travels; the city does not follow it.\n\nThe entry list is the strongest part of this year's Toronto edition. The tournament has announced that 72 of the WTA Tour's top 75 players will take part, which is close to the full ranked field and unusual for an event sitting between two hard-court majors.\n\nThe timing is what makes that number notable. This sits in the middle of the North American hard-court swing, a stretch players routinely trim to protect themselves for the last major of the year. A field this complete suggests the schedule has landed better than usual, or that the ranking points on offer are worth more than the rest.\n\nAnyone looking for live tennis this week is looking at Washington instead. The Mubadala DC Open is in progress, and it has already produced the week's upset. Terence Atmane, ranked 56 in the world, knocked out the sixth seed Frances Tiafoe 4-6, 6-3, 6-4, which is Tiafoe's earliest exit in Washington since 2021. Atmane plays Alejandro Tabilo next. Taylor Fritz, the third seed, went through 6-3, 6-4 against Zizou Bergs.\n\nSources: National Bank Open, ATP Tour.",
+    status: "verified",
+  },
+  {
     date: "2026-07-28",
     day: "Tuesday",
     headline: "How did Frances Tiafoe lose in the first round of his home tournament?",

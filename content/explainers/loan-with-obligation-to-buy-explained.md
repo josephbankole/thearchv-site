@@ -11,8 +11,6 @@ ogImage: "/og.jpg"
 related: []
 ---
 
-*[FOUNDER: your take here]*
-
 In May 2026, Napoli qualified for the Champions League and, in the same moment, bought a striker. Nobody negotiated anything that night. Rasmus Hojlund had been on loan from Manchester United since the previous August, and the loan carried a condition: finish high enough, play enough games, and the temporary move converts into a permanent one automatically. Napoli finished high enough. The transfer completed itself.
 
 That is what a loan with an obligation to buy does. It takes a decision that used to be made by two directors of football in a room, and hands it to a league table.
@@ -92,5 +90,3 @@ The clause exists because clubs want the certainty of a sale and the flexibility
 **Why do so many loans now come with these clauses?** Partly to test the player over a full season, mostly to split the cost across two financial years. A club close to a spending limit can take the player now and start paying for him properly next summer.
 
 **Does the loan fee count towards the transfer fee?** Not by default. A loan fee and a permanent fee are usually separate payments, which is why the true cost of a deal like Hojlund's is the loan fee and the obligation added together, not the headline figure on its own.
-
-*[FOUNDER: the tactical and editorial layer belongs here. Suggested angle: whether the conditional obligation has quietly become a mechanism for clubs to offload wage bills rather than sell players, and what that does to the mid-table selling club that used to rely on clean transfer income. The United sequence above is the evidence base.]*

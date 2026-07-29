@@ -14,6 +14,14 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-07-29",
+    day: "Wednesday",
+    headline: "Malawi beat Nigeria 3-1 on their Women's Africa Cup of Nations debut.",
+    dek: "Malawi were playing their first ever match at the Women's Africa Cup of Nations and beat the defending champions Nigeria 3-1 in Group C in Morocco, with Temwa Chawinga scoring twice.",
+    body: "Malawi had never played a match at the Women's Africa Cup of Nations before Tuesday night. Their first one was against Nigeria, the defending champions and the most successful national team on the continent. Malawi won it 3-1.\n\nTemwa Chawinga scored the country's first goal at the competition, set up by Ireen Khumalo. Six minutes later Tabitha Chawinga made it two, from an assist by Sabina Thom. Rasheedat Ajibade pulled one back from the penalty spot and gave the Super Falcons about forty minutes of hope. In the 95th minute Temwa Chawinga scored again to finish her brace and the match.\n\nTwo of the three goals came from sisters. Temwa and Tabitha Chawinga have both spent their careers making this argument in other people's leagues. On Tuesday they made it in a Malawi shirt, at a tournament their country had never reached, against the holders.\n\nIt was Malawi's first win at the Women's Africa Cup of Nations and their first goal in it. Both arrived in the same ninety minutes.\n\nFor Nigeria the problem is the calendar rather than the scoreline alone. Group C also contains Zambia and Egypt, so the margin for error a favourite usually carries into a group has gone in one match.\n\nThe wider tournament is in Morocco. Group A is the hosts with Algeria, Senegal and Kenya. Group B is South Africa, Ivory Coast, Burkina Faso and Tanzania, and that group has already produced its own upset, with Tanzania beating South Africa 2-1 and Ivory Coast marking a first appearance in twelve years by putting four past Burkina Faso. Group D is Ghana, Cameroon, Mali and Cape Verde.\n\nTwo groups, two results that were not supposed to happen, inside the opening round of fixtures. The growth of African women's football usually gets described in terms of investment and infrastructure, which is true and which is dull. This is what it looks like on a scoreboard.",
+    status: "verified",
+  },
+  {
     date: "2026-07-28",
     day: "Tuesday",
     headline: "Tanzania beat South Africa in Morocco, and Group B turns over.",

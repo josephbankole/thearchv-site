@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-07-30",
+    day: "Thursday",
+    headline: "Who needs a result at the Wyndham Championship to reach the FedExCup playoffs?",
+    dek: "The Wyndham Championship at Sedgefield Country Club from 5 to 9 August 2026 is the last event of the PGA Tour regular season, and only the top 70 in the FedExCup standings go through.",
+    body: "The PGA Tour regular season ends at the Wyndham Championship, played at Sedgefield Country Club in Greensboro, North Carolina from 5 to 9 August 2026. After it, the FedExCup standings close and the top 70 go to the playoffs. Everyone else stops.\n\nThe cut then keeps narrowing. The top 70 reach the FedEx St Jude Championship, that field reduces to 50 for the BMW Championship, and 30 reach the Tour Championship. So a week that looks like an ordinary tournament is the only remaining chance for a large group of players to stay in the season at all.\n\nAmong the names still needing something are Jason Day and Brooks Koepka, both in the field and both fighting for a place. Lucas Glover sits 86th in the standings, which is the sort of position that history says is not hopeless here: Glover won this event three years ago and then the FedEx St Jude Championship the following week, going from outside the playoffs to the Tour Championship in a fortnight.\n\nThe field also carries players who are already safe and are here anyway. Jordan Spieth, a three-time major winner and a past FedExCup champion, has entered, as have Si Woo Kim at seventh in the standings and Alex Fitzpatrick at nineteenth.\n\nThe format is 72 holes of stroke play with the low 70 and ties making the 36-hole cut. Eight sponsor exemptions are available, and the last four places go to the leading finishers in the Monday qualifier on 3 August. For anyone on the wrong side of the line, that is the whole season compressed into four rounds.",
+    status: "verified",
+  },
+  {
     date: "2026-07-29",
     day: "Wednesday",
     headline: "Why is this the last Rocket Classic at Detroit Golf Club?",

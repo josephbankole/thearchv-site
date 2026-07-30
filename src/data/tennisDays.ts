@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-07-30",
+    day: "Thursday",
+    headline: "Why is Jannik Sinner the man to beat at the 2026 National Bank Open?",
+    dek: "World number one Jannik Sinner heads to Montreal for the 2026 National Bank Open unbeaten in ATP Masters 1000 events this season, in a field containing 71 of the ATP Tour's top 72 players.",
+    body: "The 2026 National Bank Open runs from 1 to 13 August, with the men in Montreal at IGA Stadium and the women in Toronto at Sobeys Stadium. Draw ceremonies are on Friday 31 July and main-draw play begins on Sunday 2 August.\n\nIn Montreal the answer to who is favourite is uncomplicated. Jannik Sinner arrives as world number one and, on the tournament's own account of his season, unbeaten in ATP Masters 1000 events in 2026. A player who has not lost at this level all year is the form line, and the hard courts of the North American summer swing are where that form has historically held.\n\nThe field gives him no shortage of ways to lose. It contains 71 of the ATP Tour's top 72 players, plus two entrants on protected rankings, which is close to the strongest possible turnout for a tournament of this tier. Alexander Zverev is seeded third, won this title in 2017, and claimed his first Grand Slam at Roland-Garros earlier this year. Alex de Minaur, Taylor Fritz and Andrey Rublev are all entered.\n\nToronto has its own draw. The women's event has 72 of the top 75 in the WTA rankings, and two of the more resonant names in the main draw are there on wild cards: Bianca Andreescu, who won the title in 2019, and Venus Williams.\n\nThe structural point about this event is that it is the last substantial hard-court examination before the US Open, and it is played over nearly two weeks rather than one. Depth of field plus length of tournament is what makes it a genuine test rather than a warm-up, and it is why an unbeaten Masters 1000 record arriving here is worth stating and worth watching.",
+    status: "verified",
+  },
+  {
     date: "2026-07-29",
     day: "Wednesday",
     headline: "When does the 2026 National Bank Open start, and why are the men and women in different cities?",

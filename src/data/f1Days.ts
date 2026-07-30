@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-07-30",
+    day: "Thursday",
+    headline: "How did Lando Norris end Mercedes' run of ten straight pole positions?",
+    dek: "Lando Norris took pole at the 2026 Hungarian Grand Prix and won the race, McLaren's first victory of the season and the first pole of the year for any constructor other than Mercedes.",
+    body: "Mercedes had taken every pole position of the 2026 Formula 1 season until the eleventh round. At the Hungarian Grand Prix on 26 July, Lando Norris took it away from them.\n\nNorris put his McLaren on pole at the Hungaroring, ending a run of ten consecutive poles for Mercedes and claiming the first pole of the season for any other constructor. He then converted it, winning his first race of the year. Max Verstappen finished second for Red Bull and Kimi Antonelli third for Mercedes.\n\nThe grid behind him was reshaped by the stewards. Lewis Hamilton had qualified second for Ferrari and Antonelli fourth for Mercedes, and both were given three-place penalties: Hamilton for impeding Oscar Piastri, Antonelli for failing to slow sufficiently under yellow flags. That dropped them to fifth and seventh. Antonelli recovered to the podium from seventh on a long opening stint and strong tyres late.\n\nSo the pole streak ended on merit rather than by accident, and it matters because of what it says about the season's balance. Mercedes have been able to put a car at the front on Saturday whenever they needed to. Losing that at a circuit where overtaking is famously hard, and then losing the race from it, is the first evidence that the advantage is not structural.\n\nIt has not changed the championship picture much yet. Antonelli still leads the drivers' standings on 219 points, 50 clear of Hamilton on 169, with George Russell third on 160. Mercedes lead the constructors' championship on 379, 72 ahead of Ferrari. The lead is Antonelli's and it is comfortable. The monopoly on Saturdays is gone.",
+    status: "verified",
+  },
+  {
     date: "2026-07-29",
     day: "Wednesday",
     headline: "Can anyone still catch Kimi Antonelli in the 2026 Formula 1 championship?",

@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-30",
+    day: "Thursday",
+    headline: "Manchester United's winger move is stuck behind Marcus Rashford",
+    dek: "Fabrizio Romano says Manchester United rate Iliman Ndiaye but will not progress while Marcus Rashford's future is unresolved. Everton value the Senegal forward at about 70m pounds.",
+    body: "Manchester United are not being outbid for Iliman Ndiaye. They have not bid at all, and the reason sits inside their own squad.\n\nFabrizio Romano reports that Manchester United appreciate the Everton forward but are not moving, because of the situation of Marcus Rashford. The order matters: one signing is waiting on one sale, and until Rashford's future is settled the club will not sanction a marquee winger.\n\nRashford is back at Old Trafford because Barcelona chose not to keep him. They held a permanent option worth roughly 30m euro and let it lapse, having agreed a deal for Anthony Gordon instead. ESPN report that Manchester United will not agree a second loan and would only entertain a permanent sale. A 40m pound clause that once applied to every club bar Manchester City and Liverpool expired on 15 July, so there is no longer a fixed price on him.\n\nNdiaye is 26, a Senegal international, and Everton's best attacking player. He scored six and assisted three in 34 Premier League appearances last season, mostly from the right after Jack Grealish arrived on loan, and won Everton's Goal of the Season for a solo run at Sunderland. He joined from Olympique Marseille in July 2024 and is contracted until June 2029.\n\nEverton would rather extend that contract than sell. Romano's read on the fee is that Ndiaye will be really expensive, and that for Everton he is a crucial player. The figure being discussed is around 70m pounds.\n\nManchester United are also not alone. Aston Villa spoke to Everton a few weeks ago, per Romano, and Al-Hilal are reported to have opened talks this week, although no named reporter has attached themselves to that one yet.\n\nSo the position is awkward rather than hopeless. Manchester United have spent 83m pounds on midfielders this window, on Youri Tielemans at 35m and Andrey Santos at 48m. The winger is the job still open, and the man blocking it is already on the wage bill.",
+    status: "verified",
+  },
+  {
     date: "2026-07-29",
     day: "Wednesday",
     headline: "AS Roma have two days to sell Manu Kone. Manchester United still have not bid.",

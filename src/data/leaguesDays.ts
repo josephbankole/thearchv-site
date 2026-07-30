@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-30",
+    day: "Thursday",
+    headline: "Manchester United start the 2026-27 Premier League season at Hull City",
+    dek: "The 2026-27 Premier League season opens on Friday 21 August with Arsenal against Coventry City. Manchester United travel to Hull City for the first Saturday lunchtime game.",
+    body: "The 2026-27 Premier League season starts on Friday 21 August, and it starts with the champions. Arsenal host newly promoted Coventry City at the Emirates Stadium at 20:00 BST.\n\nManchester United are on the road the following lunchtime. They travel to Hull City on Saturday 22 August for the 12:30 kick-off, which is the first Saturday fixture of the campaign and an early test of how much of the summer rebuild has actually landed.\n\nThe rest of the opening weekend fills in around them. Nottingham Forest host Leeds United, Crystal Palace visit Everton, and Ipswich Town mark their return to the division against Sunderland. Brentford play Tottenham Hotspur at 17:30 on the Saturday. Sunday brings Manchester City against AFC Bournemouth at the Etihad Stadium at 14:00, Brighton and Hove Albion against Aston Villa, and Newcastle United against Liverpool at 16:30. Fulham and Chelsea close the weekend on Monday 24 August at 20:00.\n\nThe season begins a week later than usual, and the reason is the calendar behind it. The Premier League has built in 89 clear days from the end of last season and 33 days from the World Cup final on 19 July, which gives the players who went deep into the tournament something closer to a genuine break.\n\nFor Manchester United the practical consequence is three weeks. Michael Carrick has that long to turn a squad carrying two new midfielders and one unresolved forward into a team, and the first thing it faces is a promoted side at home in front of a full house.",
+    status: "verified",
+  },
+  {
     date: "2026-07-29",
     day: "Wednesday",
     headline: "Arsenal say they have made three offers for Bruno Guimaraes. Newcastle United say none arrived.",

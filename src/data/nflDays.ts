@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-07-30",
+    day: "Thursday",
+    headline: "Why are Bijan Robinson and Jahmyr Gibbs sitting out training camp?",
+    dek: "Atlanta Falcons running back Bijan Robinson and Detroit Lions running back Jahmyr Gibbs are both withholding participation at 2026 NFL training camp while they wait on new contracts.",
+    body: "Two of the most productive running backs in the NFL are at training camp and not practising. Bijan Robinson of the Atlanta Falcons and Jahmyr Gibbs of the Detroit Lions are both sitting out sessions while they wait on new contracts.\n\nWhat they are doing is a hold-in rather than a hold-out, and the distinction is financial. A player who stays away from camp entirely accrues daily fines under the collective bargaining agreement. A player who reports and then declines to practise avoids most of that while still taking himself off the field. It has become the standard method for a player under contract who wants a better one, because it applies pressure without handing the club a ready-made penalty.\n\nThe position is the reason it is happening to these two at once. Running backs carry a heavy workload, have short peaks, and have historically been paid less than their output, so the years when a back can command a large guaranteed deal are few. Both of these players are in that window now.\n\nNeither club is under a deadline that forces a resolution, which is usually when these situations resolve rather than early. Camps are open across all 32 teams after reporting was completed league-wide on 28 July, and the pressure builds through the preseason schedule towards the roster cuts.\n\nElsewhere around the league the same week: Mike McCarthy took his first practice as head coach of the Pittsburgh Steelers, moving the session to late morning from the 2pm starts of the Mike Tomlin era, and new Cleveland Browns head coach Todd Monken confirmed all four of his quarterbacks will get reps, with Shedeur Sanders and Deshaun Watson splitting first-team duties.",
+    status: "verified",
+  },
+  {
     date: "2026-07-29",
     day: "Wednesday",
     headline: "Why are the Green Bay Packers starting Micah Parsons on the PUP list?",

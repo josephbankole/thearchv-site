@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-07-31",
+    day: "Friday",
+    headline: "Why is there no Formula 1 race for the next three weeks?",
+    dek: "Formula 1 is in its summer break. The Hungarian Grand Prix on 26 July was round 11, and the season resumes at Zandvoort on 21 to 23 August with the Dutch Grand Prix.",
+    body: "There is no Formula 1 this weekend, or next, or the one after. The sport is in its summer break, and the season does not resume until the Dutch Grand Prix at Zandvoort on 21 to 23 August, which is round 12.\n\nThe break is not simply a gap in the calendar. Formula 1 teams operate a mandatory shutdown period during it, in which factories close and work on the cars stops. It exists to give staff a guaranteed holiday in a sport that otherwise runs almost continuously, and because it is enforced rather than voluntary, no team can gain an advantage by working through it.\n\nThe last race was the Hungarian Grand Prix at the Hungaroring on 26 July, round 11, and it was won by Lando Norris of McLaren. It was his first victory of the season and it did not arrive the way the grid sheet suggests. Norris took pole and ended a run of ten consecutive pole positions for Mercedes, then lost the lead at Turn 2 on the opening lap to his own team-mate Oscar Piastri. Piastri led most of the afternoon. McLaren declined Norris' requests to be let through. Piastri made contact with Carlos Sainz while lapping traffic and retired with an apparent gearbox problem 14 laps from the end, and Norris inherited a win he took by about 15 seconds. Max Verstappen finished second for Red Bull and Kimi Antonelli third for Mercedes.\n\nThe championship goes into the break with Antonelli leading on 219 points, 50 clear of Lewis Hamilton on 169, with George Russell third on 160. Mercedes lead the constructors' standings on 379, 72 ahead of Ferrari.\n\nOne footnote for Zandvoort: it is a sprint weekend, the fifth of six this season, and it is scheduled to be the last Dutch Grand Prix under the promoter's current agreement with Formula 1.\n\nSources: Formula1.com race report and calendar; Motorsport.com; Autosport; RacingNews365; Crash.net for the standings.",
+    status: "verified",
+  },
+  {
     date: "2026-07-30",
     day: "Thursday",
     headline: "How did Lando Norris end Mercedes' run of ten straight pole positions?",

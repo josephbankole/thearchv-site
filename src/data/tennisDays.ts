@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-07-31",
+    day: "Friday",
+    headline: "Jannik Sinner, Novak Djokovic and Carlos Alcaraz have all pulled out of Montreal",
+    dek: "The 2026 National Bank Open draw was made on 31 July with three of the biggest names in the men's game absent. Alexander Zverev is the top seed and Felix Auger-Aliassime is seeded second, the highest a Canadian has ever been seeded at the tournament.",
+    body: "The men's draw for the 2026 National Bank Open was made on 31 July, a day before play begins at IGA Stadium in Montreal, and it was made without three of the biggest names in the sport. Jannik Sinner, Novak Djokovic and Carlos Alcaraz have all withdrawn. Alcaraz is out with a wrist injury. For Sinner it is a second consecutive withdrawal from this tournament.\n\nThey are not the only ones. Tomas Machac, Sebastian Korda, Jesper de Jong and Alejandro Davidovich have also come out of the draw.\n\nThe effect on the seedings is substantial. Alexander Zverev is the tournament's top seed. Felix Auger-Aliassime, who is from Montreal, is seeded second, which is the highest any Canadian has been seeded in the history of the event.\n\nThe reason so many withdraw here is structural rather than coincidental. The North American hard-court swing runs Montreal into Cincinnati and then into the US Open, which begins in late August, and a Masters 1000 event three weeks before a Grand Slam is the one a player can most afford to skip. The tournament is mandatory in name, and the penalty for missing it is a ranking-points cost rather than a ban.\n\nThe event runs from 1 to 13 August, with the men in Montreal and the women in Toronto at Sobeys Stadium. It is the 136th edition of the men's tournament and the 124th of the women's. The women's field is led by Aryna Sabalenka, Elena Rybakina, Jessica Pegula, Coco Gauff and Mirra Andreeva.\n\nSources: TSN; Yahoo Sports; Last Word on Sports; National Bank Open official entry lists.",
+    status: "verified",
+  },
+  {
     date: "2026-07-30",
     day: "Thursday",
     headline: "Why is Jannik Sinner the man to beat at the 2026 National Bank Open?",

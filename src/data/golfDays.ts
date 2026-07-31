@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-07-31",
+    day: "Friday",
+    headline: "Peter Malnati shot 61 in the first round of the last Rocket Classic",
+    dek: "Peter Malnati opened the 2026 Rocket Classic at Detroit Golf Club with a career-best 9-under 61 on 30 July, tying the tournament record and leading by two. It is the eighth and final edition of the event.",
+    body: "Peter Malnati shot a 9-under 61 in the first round of the Rocket Classic at Detroit Golf Club on 30 July. It is the lowest round of his career, it ties the tournament record, and it gave him a two-shot lead.\n\nHe made most of it early, going out in 7-under 28 on the front nine. Rickie Fowler and Ryan Gerard are the closest challengers on 63, a stroke ahead of Patrick Cantlay and Patrick Fishburn.\n\nThe round of the day by another measure belonged to Michael Brennan, who was 2 over through four holes and then made eight consecutive birdies, one short of the PGA Tour record. He signed for a 65 and sits four back.\n\nThe timing gives all of this more weight than a normal first round. This is the eighth and final Rocket Classic at Detroit Golf Club, and it is the second-last event of the PGA Tour regular season. The Wyndham Championship at Sedgefield Country Club from 3 to 9 August is the last chance to qualify for the FedExCup Playoffs, and only the top 70 in the standings when it finishes will get in.\n\nFrom there the field cuts down at every stage: 70 players at the FedEx St Jude Championship at TPC Southwind in Memphis, 50 at the BMW Championship at Bellerive in St Louis, and 30 at the Tour Championship at East Lake in Atlanta. 2026 is the 20th year of the FedExCup.\n\nSources: PGA Tour official round-one report; Associated Press via WRAL and the Jefferson City News-Tribune; Yahoo Sports; Detroit News; wyndhamchampionship.com and PGA Tour for the playoff structure.",
+    status: "verified",
+  },
+  {
     date: "2026-07-30",
     day: "Thursday",
     headline: "Who needs a result at the Wyndham Championship to reach the FedExCup playoffs?",

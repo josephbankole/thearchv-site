@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-07-31",
+    day: "Friday",
+    headline: "Why have the New Orleans Saints given Chris Olave a 132 million dollar extension?",
+    dek: "Chris Olave agreed a four-year extension with the New Orleans Saints on 30 July worth up to 132 million dollars, with 90 million guaranteed, running through 2030. It follows the best season of his career.",
+    body: "The New Orleans Saints and wide receiver Chris Olave agreed a four-year extension on 30 July. It is worth up to 132 million dollars, 90 million of it guaranteed, and runs through 2030. ESPN, the Washington Post and the Saints themselves all report the same terms.\n\nThe average of 33 million dollars a year ties Olave with DK Metcalf of the Pittsburgh Steelers as the joint sixth-highest-paid receiver in the NFL. That is a deliberate landing spot rather than a headline-chasing one: New Orleans have paid the market rate for a first-choice receiver without resetting the market.\n\nThe case for it is the season just gone. Olave set career bests across the board in 2025 with 100 receptions, 1,163 receiving yards and nine touchdowns. He was drafted 11th overall in 2022 and has been the Saints' primary target for most of the time since.\n\nThe negotiation took almost a year. Talks began at the start of last season and only closed with training camp already open, which is a common pattern: leverage tends to concentrate in the weeks when a player can withhold participation without forfeiting much. Olave did not do that. Elsewhere in the league this week two players have, with Bijan Robinson of the Atlanta Falcons and Jahmyr Gibbs of the Detroit Lions both sitting out practices while awaiting new deals, and Vita Vea of the Tampa Bay Buccaneers reporting but not practising amid a trade request.\n\nAll 32 clubs have now reported and logged a full practice session ahead of the 2026 season.\n\nSources: ESPN; The Washington Post; New Orleans Saints official; Sports Illustrated camp tracker.",
+    status: "verified",
+  },
+  {
     date: "2026-07-30",
     day: "Thursday",
     headline: "Why are Bijan Robinson and Jahmyr Gibbs sitting out training camp?",

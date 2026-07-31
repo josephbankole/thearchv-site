@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-07-31",
+    day: "Friday",
+    headline: "Manchester United want Lewis Hall. Eddie Howe just walked out of Newcastle United.",
+    dek: "Manchester United have been linked with Newcastle United left-back Lewis Hall for weeks in the 2026 summer transfer window without making a bid. Eddie Howe left on 30 July, and Chelsea are reported to have re-entered the race.",
+    body: "Manchester United have wanted Lewis Hall for several weeks and have not made a bid. On Thursday the situation around him changed twice over.\n\nEddie Howe left Newcastle United on 30 July, after nearly five years. Sky Sports report it was his own decision rather than a sacking, and that the club tried to talk him out of it. The reasons given point at the squad: Alexander Isak, Anthony Gordon and Sandro Tonali have all been sold, and the futures of Bruno Guimaraes and Hall himself were unresolved. Howe concluded he was not the man to run the rebuild that follows.\n\nHall is 21 and a Chelsea academy graduate. He joined Newcastle United on loan in August 2023 and permanently in July 2024 for 28m pounds plus 7m in add-ons. He has since played 84 Premier League games at left-back, scoring twice and assisting five.\n\nTwo reporters have attached their names to the Manchester United interest, independently of each other. Ben Jacobs said he stands by his information that Hall is a target, despite suggestions to the contrary. Andy Mitten reported the same on 27 July. The figure being discussed is 50m to 60m pounds; TEAMtalk put the asking price nearer 50m to 55m on 30 July and report that technical director Jason Wilcox is pushing the deal internally. That last detail is one outlet's, and is carried here as theirs.\n\nThe complication is Chelsea. They sold Hall and kept a sell-on clause in the deal, and they are now reported to be back in for him, with Manchester United's lack of progress the reason the door reopened. That report is single-source and is treated as such.\n\nHall is contracted to Newcastle United until 2029, so nobody has to sell. Whether a club that has already lost three senior players and its head coach inside one summer digs in or cashes in is the question this deal now turns on. Newcastle United have meanwhile activated the release clause of Al Ahli head coach Matthias Jaissle, on a deal reported to run to 2030.\n\nSources: Sky Sports; TEAMtalk; Ben Jacobs; Andy Mitten via utdreport; BBC Sport and Chelsea FC official on the 2024 transfer; ESPN and Football365 on the Newcastle succession.",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Illustrated portrait of Newcastle United and England left-back Lewis Hall in the ARCHV navy and gold house style.",
+  },
+  {
     date: "2026-07-30",
     day: "Thursday",
     headline: "Manchester United's winger move is stuck behind Marcus Rashford",

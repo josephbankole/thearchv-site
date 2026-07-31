@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-07-31",
+    day: "Friday",
+    headline: "Eddie Howe has left Newcastle United, five years after ending a 70-year wait",
+    dek: "Eddie Howe stepped down as Newcastle United head coach on 30 July 2026 after almost five years, having won the 2025 League Cup. Al Ahli head coach Matthias Jaissle is set to replace him.",
+    body: "Eddie Howe left Newcastle United on 30 July, with immediate effect, after nearly five years in charge. Sky Sports report the decision was his, that it followed talks with the hierarchy over the preceding 48 hours, and that the club wanted him to stay.\n\nWhat he leaves behind is the most successful spell the club has had in living memory. Newcastle United beat Liverpool 2-1 in the League Cup final at Wembley on 16 March 2025, through goals from Dan Burn and Alexander Isak. That was their first major domestic trophy since the 1955 FA Cup, a gap of 70 years, and their first major trophy of any kind since the 1969 Inter-Cities Fairs Cup, a gap of 56. Both numbers get quoted and they mean different things.\n\nHe also took over a side that had won none of its first 14 games of the 2021-22 season and kept it up, then qualified for the Champions League twice and went further in that competition in 2025-26 than the club ever had.\n\nThe reasons for going are about what happens next rather than what has happened. Isak, Anthony Gordon and Sandro Tonali have all been sold. Bruno Guimaraes and left-back Lewis Hall have unresolved futures, with Manchester United and Chelsea both linked to Hall. Howe had raised the idea of leaving weeks earlier and concluded he did not have the energy for a rebuild on that scale.\n\nThe succession is already well advanced. Newcastle United have activated the release clause of Matthias Jaissle, the 38-year-old German who has won back-to-back AFC Champions League titles with Al Ahli, and have notified the Saudi club. Reports from David Ornstein and Fabrizio Romano put the deal at terms running to 2030. Jaissle would be the first German to manage Newcastle United. He arrives from a club owned, like Newcastle United, in majority by Saudi Arabia's Public Investment Fund. The appointment has not been announced.\n\nSources: Sky Sports; ESPN; Football365 citing David Ornstein and Fabrizio Romano; Forbes; Wikipedia and ESPN match records for the 2025 EFL Cup final.",
+    status: "verified",
+  },
+  {
     date: "2026-07-30",
     day: "Thursday",
     headline: "Manchester United start the 2026-27 Premier League season at Hull City",

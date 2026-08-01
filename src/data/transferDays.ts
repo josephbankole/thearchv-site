@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-01",
+    day: "Saturday",
+    headline: "Manchester United approve Lewis Hall internally, and still have not bid.",
+    dek: "Fabrizio Romano says Manchester United have internally approved a move for Lewis Hall. Newcastle United say the left-back is not for sale.",
+    body: "Fabrizio Romano said on Friday that Lewis Hall is \"a player internally approved\" at Manchester United and sits on their list. He was equally clear about what has not happened. No formal bid has gone to Newcastle United, and Manchester United still have to establish where the selling club stands. Romano's other line was that Newcastle United will make their life complicated, because Newcastle United do not want to sell. David Ornstein valued the move at around 60m pounds in July and reported that Michael Carrick wanted a left-back to compete with Luke Shaw. Ben Jacobs reports there has been no club-to-club contact. Hall is 21. Newcastle United paid Chelsea 28m pounds plus 7m in add-ons for him in July 2024, and his contract runs to 2029, so nobody is under pressure to sell. Newcastle United have already agreed to let Bruno Guimaraes join Arsenal for a reported 90m euro plus add-ons, according to L'Equipe, which is the argument for testing them and the argument against trusting the answer.",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Brand-illustrated portrait of Lewis Hall, the Newcastle United left-back linked with Manchester United.",
+  },
+  {
     date: "2026-07-31",
     day: "Friday",
     headline: "Manchester United want Lewis Hall. Eddie Howe just walked out of Newcastle United.",

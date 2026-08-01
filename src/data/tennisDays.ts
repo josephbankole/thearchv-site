@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-01",
+    day: "Saturday",
+    headline: "Ben Shelton defends a Masters 1000 title in a draw missing the world's top three.",
+    dek: "Ben Shelton returns to the 2026 National Bank Open in Montreal as defending champion and fifth seed, with Jannik Sinner, Carlos Alcaraz and Novak Djokovic all absent.",
+    body: "The 2026 National Bank Open runs to 13 August, the men in Montreal at IGA Stadium and the women in Toronto at Sobeys Stadium. Draws were made on 31 July and main-draw play in Montreal begins on 2 August. Ben Shelton comes back as defending champion, having beaten Karen Khachanov for the title in 2025, and is seeded fifth. The names above him matter less than the names missing. Jannik Sinner, Carlos Alcaraz and Novak Djokovic have all withdrawn from Montreal, which leaves Alexander Zverev as the highest seed and the bookmakers' favourite, alongside Taylor Fritz and the Canadian Felix Auger-Aliassime. This is a mandatory ATP Masters 1000 and the 136th edition of the men's event. In Toronto the women's field is close to complete, with 72 of the WTA's top 75 entered, led by Aryna Sabalenka, Elena Rybakina, Jessica Pegula, Coco Gauff and Mirra Andreeva. Bianca Andreescu, champion in 2019, holds a main-draw wild card.",
+    status: "verified",
+  },
+  {
     date: "2026-07-31",
     day: "Friday",
     headline: "Jannik Sinner, Novak Djokovic and Carlos Alcaraz have all pulled out of Montreal",

@@ -40,6 +40,7 @@ const GLOSSARY_LINKS = {
   "united-european-nights": ["low-block", "var", "offside"],
   "united-record-signings": ["loan-with-obligation", "xg", "xa"],
   "loan-with-obligation-to-buy-explained": ["loan-with-obligation", "option-vs-obligation", "loan-with-option"],
+  "why-var-takes-so-long": ["var", "offside"],
 };
 const glossaryBySlug = new Map(glossaryEntries.map((e) => [e.slug, e]));
 function glossaryBlock(slug) {

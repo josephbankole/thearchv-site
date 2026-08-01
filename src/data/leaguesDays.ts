@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-08-01",
+    day: "Saturday",
+    headline: "Newcastle United are rebuilding, not reshuffling.",
+    dek: "Newcastle United have lost Alexander Isak, Anthony Gordon and Sandro Tonali, and Eddie Howe has left. Bruno Guimaraes is reported to have agreed a move to Arsenal.",
+    body: "Count what has gone from Newcastle United in the 2026 summer transfer window. Alexander Isak, Anthony Gordon and Sandro Tonali have all been sold, Tonali to Tottenham Hotspur for 92.5m pounds and Gordon to Barcelona for a reported 80m euro. Eddie Howe left on 30 July after almost five years. Sky Sports report the decision was his own and that the club wanted him to stay. Matthias Jaissle of Al Ahli is reported to be his successor on a deal to 2030, though nothing has been announced. Now L'Equipe report that captain Bruno Guimaraes has agreed to join Arsenal for 90m euro plus add-ons, with personal terms settled to 2031. Newcastle United have spent too, on Bazoumana Toure and Aladji Bamba. But a club that sells its top scorer, its winger, its midfielder and its captain inside one window, and changes head coach in the middle of it, is not adjusting a squad. It is starting a different one. Which is the context for every answer they give about Lewis Hall.",
+    status: "verified",
+  },
+  {
     date: "2026-07-31",
     day: "Friday",
     headline: "Eddie Howe has left Newcastle United, five years after ending a 70-year wait",

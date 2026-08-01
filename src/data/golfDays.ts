@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-01",
+    day: "Saturday",
+    headline: "Detroit Golf Club has given up two rounds of 61 in two days.",
+    dek: "Cameron Young shot 61 in round two of the 2026 Rocket Classic, matching Peter Malnati's opening round and tying the Detroit Golf Club course record.",
+    body: "Peter Malnati opened the 2026 Rocket Classic with a 61 on Thursday. On Friday Cameron Young, third in the world ranking and the highest-ranked player in the field, shot the same number to tie the course record and move to the top of the leaderboard. Young reached 10 under at halfway, level with Patrick Cantlay and Patrick Fishburn, with Rickie Fowler, the 2023 champion here, still in range. Two 61s in two days at the same course tells you what the week is: a soft, scoreable golf course where a good round is not good enough. That matters more than usual, because this is the last Rocket Classic at Detroit Golf Club and the tournament finishes on 2 August. After it, only the Wyndham Championship at Sedgefield Country Club, from 6 to 9 August, remains before the FedExCup Playoffs. The top 70 make the FedEx St. Jude Championship at TPC Southwind, and the field then cuts to 50 at the BMW Championship and 30 at the Tour Championship.",
+    status: "verified",
+  },
+  {
     date: "2026-07-31",
     day: "Friday",
     headline: "Peter Malnati shot 61 in the first round of the last Rocket Classic",

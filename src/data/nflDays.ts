@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-02",
+    day: "Sunday",
+    headline: "When does the 2026 NFL season actually start?",
+    dek: "The 2026 NFL season opens with the New England Patriots at the Seattle Seahawks on 9 September, a rematch of Super Bowl LX. The Hall of Fame Game between the Arizona Cardinals and the Carolina Panthers comes first, on 6 August.",
+    body: "There are three different answers to this, which is why the question keeps getting asked.\n\nThe football you can watch right now is training camp. All 32 teams are open, and the league ran Back Together Weekend across Saturday 1 and Sunday 2 August, with NFL Network coverage from noon ET on the Saturday and 10am ET on the Sunday. These are practices, not games.\n\nThe first actual game is the Hall of Fame Game on 6 August, 8pm ET, in Canton, Ohio, between the Arizona Cardinals and the Carolina Panthers. It opens the preseason and is played in the same week as the Pro Football Hall of Fame enshrinement. Starters barely feature, so treat it as a look at roster depth rather than a read on either team.\n\nThe real answer, for anyone asking when the season starts, is 9 September. The New England Patriots travel to the Seattle Seahawks at 8.20pm ET on NBC. Seattle are the defending champions, and this is a rematch of Super Bowl LX. The NFL has given the opening night to the two teams who finished last season against each other, which is the sort of scheduling that writes its own storyline.\n\nSo: camp now, preseason from 6 August, and the games that count from 9 September.\n\nSources: NFL.com (training camps open, Back Together Weekend, Hall of Fame Game, opening night); ESPN 32-team training camp tracker; Yahoo Sports 2026 training camp schedule.",
+    status: "verified",
+  },
+  {
     date: "2026-07-31",
     day: "Friday",
     headline: "Why have the New Orleans Saints given Chris Olave a 132 million dollar extension?",

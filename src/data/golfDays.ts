@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-03",
+    day: "Monday",
+    headline: "Who won the last ever Rocket Classic?",
+    dek: "Michael Thorbjornsen won the 2026 Rocket Classic at Detroit Golf Club for his first PGA Tour title, in the tournament's final edition.",
+    body: "Michael Thorbjornsen won the 2026 Rocket Classic at Detroit Golf Club on Sunday 2 August, and it was both his first PGA Tour title and the last time the tournament will be played. He closed with a bogey-free 7-under 63 to reach 18 under and win by two shots, holing a 26-foot birdie putt on his final hole. Xander Schauffele shot 65 to finish second. It was Thorbjornsen's 65th career start on tour. He is the eighth first-time winner of the season and the second in a row, following Jackson Koivun at the 3M Open the week before, which is a lot of new names for one stretch of a calendar. The win moved him to 69th in the FedExCup standings and secured his place in the playoffs, with the cut-off at 70. The timing is tight, because the regular season ends this week at the Wyndham Championship at Sedgefield Country Club in Greensboro from 5 to 9 August, where Cameron Young defends and the last playoff places are settled. Detroit Golf Club signed off in character. The course gave up rounds of 61 on consecutive days earlier in the week, from Peter Malnati and then Cameron Young, before Thorbjornsen's 63 finished it.",
+    status: "verified",
+  },
+  {
     date: "2026-08-01",
     day: "Saturday",
     headline: "Detroit Golf Club has given up two rounds of 61 in two days.",

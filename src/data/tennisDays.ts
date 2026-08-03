@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-03",
+    day: "Monday",
+    headline: "What happened in Venus Williams' first match at the 2026 National Bank Open?",
+    dek: "Venus Williams lost her opening match in Toronto to Kamila Rakhimova. Katherine Sebov gave Canada its first win of the 2026 National Bank Open.",
+    body: "Venus Williams went out in the first round of the 2026 National Bank Open in Toronto on Sunday 2 August, beaten 6-4, 6-1 by Kamila Rakhimova on Centre Court. Williams was playing on a wild card, granted last month by tournament director Karl Hale after a ten-match run earlier in the season. The seven-time major champion is 46 and has been picking her tournaments rather than playing a full calendar, so the Toronto appearance was always the point of it as much as the result. The better story for the host nation came next on the same court. Katherine Sebov beat Aoi Ito 6-3, 6-4 to become the first Canadian to win a match at this year's tournament. Elsewhere on day two, Moyuka Uchijima beat Cristina Bucsa 6-3, 6-4 and now plays the world number one Aryna Sabalenka in round two. Jessica Bouzas Maneiro beat the Canadian Ariana Arseneault 6-2, 6-4, Viktorija Golubic came through 7-6, 6-4 against Kimberly Birrell, Camila Osorio beat Lucrezia Stefanini 7-6, 6-3, and Sara Bejlek needed three sets to see off Xiyu Wang 6-3, 4-6, 7-5. The women are in Toronto at Sobeys Stadium and the men in Montreal at IGA Stadium, and both draws run to 13 August.",
+    status: "verified",
+  },
+  {
     date: "2026-08-01",
     day: "Saturday",
     headline: "Ben Shelton defends a Masters 1000 title in a draw missing the world's top three.",

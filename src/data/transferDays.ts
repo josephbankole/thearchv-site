@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-03",
+    day: "Monday",
+    headline: "Manchester United are out on Iliman Ndiaye.",
+    dek: "Everton want about 75m pounds for Iliman Ndiaye and Al-Hilal will pay it. Manchester United turn back to Lewis Hall.",
+    body: "Manchester United have stepped back from Iliman Ndiaye in the 2026 summer transfer window. Football Insider report Everton want around 75m pounds and that Al-Hilal are ready to pay it in full, with wages no Premier League club is matching. That reporting has been picked up widely, but it traces back to one outlet, so treat it as one outlet's story. The reason matters, because it has changed. On 30 July Fabrizio Romano put the stall down to the situation of Marcus Rashford rather than the fee, and described the price as really expensive with Everton treating Ndiaye as a crucial player. The price is what has ended it. Ndiaye would prefer to stay in Europe for 2026-27, which is the only thing keeping the move alive. The bigger job was never the winger. Romano said on 1 August that a move for Lewis Hall has been approved inside Old Trafford and an opening proposal of around 60m pounds is being prepared. David Ornstein has Hall as Michael Carrick's first-choice target, signed to compete with Luke Shaw. Ben Jacobs says there has been no club-to-club contact yet, so nothing has been bid. Newcastle United are hard to read. Eddie Howe has gone, Matthias Jaissle is in until 2030 after 9.5m pounds in compensation to Al Ahli, and Anthony Gordon and Sandro Tonali have both left. Manchester United have already spent this window, 50m pounds on Andrey Santos and 35m pounds on the Youri Tielemans release clause, and the Ederson deal from Atalanta collapsed at the medical.",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Lewis Hall, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-08-02",
     day: "Sunday",
     headline: "Manchester United have signed two midfielders and need three. A medical is the reason.",

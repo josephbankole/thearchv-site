@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-03",
+    day: "Monday",
+    headline: "Why has Vita Vea asked the Tampa Bay Buccaneers to trade him?",
+    dek: "Vita Vea has requested a trade from the Tampa Bay Buccaneers in the 2026 NFL pre-season after extension talks stalled.",
+    body: "Vita Vea has asked the Tampa Bay Buccaneers to trade him, and the reason is the contract rather than the football. ESPN and NFL Network both report the two-time Pro Bowl defensive tackle made the request after extension talks failed to get anywhere. Vea is entering the final year of a four-year deal worth 71 million dollars, and none of what he is owed this season is guaranteed. Reported figures for that final-year salary differ between outlets, so the exact number is not settled and is not printed here. What is agreed is the shape of it: a 31-year-old who still draws double teams, on an expiring deal, below what the market now pays his position. He registered 34 tackles including seven for loss, 4.5 sacks, 13 quarterback hits, two passes defensed and a fumble recovery across 17 games last season. Reporting has him preferring a move to a California team or the Las Vegas Raiders. He is expected to report to training camp, though how much he takes part in is not clear. The timing is what makes this awkward for Tampa Bay. Camps opened across the league last week, Back Together Weekend ran on 1 and 2 August, and the Hall of Fame Game between the Arizona Cardinals and the Carolina Panthers kicks the pre-season off on Thursday 6 August. A trade request lands differently once the pads are on.",
+    status: "verified",
+  },
+  {
     date: "2026-08-02",
     day: "Sunday",
     headline: "When does the 2026 NFL season actually start?",

@@ -34,6 +34,22 @@ const PAGE_URL = `${SITE}${URL_PATH}`;
 
 const data = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "football", "archive-players.json"), "utf8"));
 
+// A game needs players and a start date. Without the first, `day % 0` is NaN, `PUZZLES[NaN]` is
+// undefined and the whole IIFE dies on the first clue read; without the second, `Date.parse` is NaN
+// and every day resolves to the same nothing. Either way the build prints a cheerful "wrote /guess/
+// with 0 puzzle(s)", exits 0, passes verify-csp-pages, and ships a dead page with a console error.
+// Fail here instead, the same way build-duel-pages.mjs refuses a one-player roster.
+if (!Array.isArray(data.players) || data.players.length === 0) {
+  throw new Error(
+    `[build-archive-game] archive-players.json has ${data.players?.length ?? 0} player(s); the daily game needs at least one.`,
+  );
+}
+if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data.epoch || ""))) {
+  throw new Error(
+    `[build-archive-game] archive-players.json has epoch ${JSON.stringify(data.epoch)}; it must be a YYYY-MM-DD date, because the day index is counted from it.`,
+  );
+}
+
 /* ---------- puzzle payload ----------
    Only what the game needs, in clue order, with the answer strings encoded. The `note` is the
    line shown once the round is over, so it is encoded too. */
@@ -52,12 +68,19 @@ const puzzles = data.players.map((p) => ({
 const LEDE =
   "One player from the archive, every day. Four clues, five guesses, and a streak that holds until midnight or does not. Every answer is a career that finished long before this season started.";
 
-/* ---------- the game script ---------- */
+/* ---------- the game script ----------
+   `<` is escaped on the way into the script body, exactly as the JSON-LD block further down does
+   and as build-duel-pages.mjs does. Only `n`, `a` and `z` are base64'd; the clue fields are raw
+   Wikidata strings, so a club or era carrying "</script>" would close the tag early and turn the
+   rest of the payload into markup INSIDE the hashed script the CSP allows. Nothing in the current
+   30 rows contains an angle bracket; the data source is external and the file is meant to grow. */
+const jsLiteral = (value) => JSON.stringify(value).replace(/</g, "\\u003c");
+
 function gameScriptTag() {
   return `<script>
     (function () {
-      var PUZZLES = ${JSON.stringify(puzzles)};
-      var EPOCH = ${JSON.stringify(data.epoch)};
+      var PUZZLES = ${jsLiteral(puzzles)};
+      var EPOCH = ${jsLiteral(data.epoch)};
       var MAX_GUESSES = 5;
       var STORE = 'archv-guess-v1';
 
@@ -69,6 +92,10 @@ function gameScriptTag() {
       // arguing about it in different time zones are arguing about the same player.
       function todayKey() {
         var d = new Date();
+        return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
+      }
+      function dayBefore(key) {
+        var d = new Date(Date.parse(key + 'T00:00:00Z') - 86400000);
         return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
       }
       function dayNumber() {
@@ -119,6 +146,10 @@ function gameScriptTag() {
 
       var state = loadState() || { streak: 0, best: 0, played: 0, solved: 0 };
       var today = todayKey();
+      // Records written before mid-round saving existed only ever set day on a finished round, so a
+      // stored win's day IS its streak day. Migrate once, before anything else touches state.
+      if (state.streakDay === undefined && state.day && state.done && state.won) state.streakDay = state.day;
+
       // The round is its own object, never an alias of the stored stats. Aliasing them is how a
       // page refresh quietly counts the same day twice and inflates a streak.
       var resumed = state.day === today;
@@ -128,6 +159,19 @@ function gameScriptTag() {
         done: resumed ? !!state.done : false,
         won: resumed ? !!state.won : false
       };
+
+      // Mid-round save. Without it a refresh handed the player five fresh guesses and clue 1 again,
+      // because state.day was only written when a round ENDED, so resumed could never be true
+      // for a round in progress. Stats stay out of here: played, solved and the streak are only
+      // ever touched in finish(), so a resumed round is never counted twice.
+      function persistRound() {
+        state.day = today;
+        state.guesses = round.guesses;
+        state.clues = round.clues;
+        state.done = false;
+        state.won = false;
+        saveState(state);
+      }
 
       var elEdition = document.getElementById('g-edition');
       var elClues = document.getElementById('g-clues');
@@ -188,10 +232,15 @@ function gameScriptTag() {
           state.played = (state.played || 0) + 1;
           if (won) {
             state.solved = (state.solved || 0) + 1;
-            state.streak = (state.streak || 0) + 1;
+            // A streak is consecutive days or it is not a streak. streakDay is the day of the
+            // last win that counted; anything older than yesterday starts again at 1. It is a
+            // separate field from day, because day now moves the moment a round is opened.
+            state.streak = state.streakDay === dayBefore(today) ? (state.streak || 0) + 1 : 1;
+            state.streakDay = today;
             if (state.streak > (state.best || 0)) state.best = state.streak;
           } else {
             state.streak = 0;
+            state.streakDay = null;
           }
           saveState(state);
         }
@@ -219,7 +268,7 @@ function gameScriptTag() {
       function shareText() {
         return 'The ARCHV · Daily Archive #' + edition + '\\n' +
           (round.won ? 'Solved on clue ' + round.clues + ' of 4.' : 'Missed it. Four clues were not enough.') +
-          '\\n' + ${JSON.stringify(PAGE_URL)};
+          '\\n' + ${jsLiteral(PAGE_URL)};
       }
 
       function submit(guess) {
@@ -238,6 +287,7 @@ function gameScriptTag() {
           return;
         }
         if (round.clues < CLUES.length) round.clues++;
+        persistRound();
         renderClues();
         renderGuesses();
         elInput.value = '';
@@ -403,7 +453,7 @@ const html = `<!doctype html>
         <label class="visually-hidden" for="g-input">Your guess</label>
         <input id="g-input" type="text" placeholder="Name the player" aria-describedby="g-left" />
         <button type="submit" class="game__go" id="g-submit">Guess</button>
-        <button type="button" class="game__skip" id="g-skip">Next clue</button>
+        <button type="button" class="game__skip" id="g-skip">Next clue (uses a guess)</button>
       </form>
       <p class="game__left" id="g-left"></p>
 

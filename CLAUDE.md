@@ -142,11 +142,23 @@ lane pages (shared `page-shell.mjs` masthead, footer, CSP, brand CSS).
 - **The data seam is `scripts/shared/football-data.mjs`.** Nothing else reads a roster file or an
   API. Providers live in `scripts/shared/providers/`: `static-roster.mjs` is the default and
   validates its own JSON (including the two-named-sources-per-stat rule) and `api-football.mjs` is
-  the live one, selected with `ARCHV_FOOTBALL_PROVIDER=api-football`. The API-Football free plan
-  only serves seasons 2022 to 2024, so the current season stays on the hand-checked static roster;
-  the provider throws on an out-of-window season rather than letting the API's 200-with-a-paywall-
-  message reach a card. A build never spends quota: a cache miss is a hard error unless the run
-  sets `ARCHV_FOOTBALL_ALLOW_FETCH=1`. Caches are committed under `scripts/data/football/cache/`.
+  the live one, selected with `ARCHV_FOOTBALL_PROVIDER=api-football`. **The plan went Pro on
+  2026-08-04: 7,500 requests a day, every season, and the paid-only parameters including `last`.**
+  The old 2022-2024 free window is gone and `SEASON_GUARD` is now a typo rail rather than an
+  entitlement check.
+  **The calendar trap survived the upgrade.** API-Football labels a season by its opening year, so
+  season=2025 is the completed 2025/26 campaign and season=2026 is 2026/27, which opens on
+  **21 August 2026**. Ask for a season before its opening day and the API returns a healthy 200
+  carrying internationals and no club rows, which reads as a working request until the card renders
+  empty. `newestPlayedSeason()` in the provider is the guard: it defaults the season to the newest
+  one actually played and warns rather than throws when a caller asks for a future one, since
+  internationals are legitimate during a break. Do NOT default to `SEASON_GUARD.max`, which sits a
+  year ahead on purpose.
+  A build still never spends quota by accident: a cache miss is a hard error unless the run sets
+  `ARCHV_FOOTBALL_ALLOW_FETCH=1`. Caches are committed under `scripts/data/football/cache/`.
+  Hand-verification is no longer the only route to current-season numbers, but it earned its keep:
+  the hand-checked roster had Haaland on 27 goals and 8 assists for 2025/26, and the API returns
+  exactly those figures.
 - **`scripts/shared/percentile-bar.mjs`** is a standalone component (no imports, brand colours
   inlined) so the carousel renderer can use the same two functions. It refuses a rank without a
   named pool, and draws no bar at all when there is no pool to rank against.

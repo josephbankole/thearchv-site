@@ -102,8 +102,101 @@ function normalise(data) {
     });
   }
 
+  assertHeadKitsMatchClubs(players);
+
   const byId = new Map(players.map((p) => [p.id, p]));
   return { ...data, metrics, players, byId };
+}
+
+/* ---------- the kit guard (founder ruling 2026-08-04) ---------- */
+
+// The headshot bank was built for the World Cup lane, so most banked faces wear a NATIONAL kit.
+// Correct there, wrong the moment one sits on a duel card under a CLUB name: Erling Haaland in
+// Norway red beside "Manchester City", Raul Jimenez in Mexico green beside "Fulham". No crest, no
+// mark, no photograph, so nothing in the art doctrine objects. The cost is credibility — a
+// Manchester City card showing red invites the reader to doubt the numbers printed beside it,
+// which is the opposite of what the two-source rule is bought with.
+//
+// The test is colour compatibility, not ownership. Bruno Fernandes stays as banked because
+// Portugal red really is Manchester United red; he clears on the merits rather than as an
+// exception. Registry is match-covers/carousel/head-kits.json, the same file the Python cover
+// renderer and the carousel page read, so all three surfaces cannot disagree.
+//
+// A head with no registry row FAILS. Every one of the defects above was, at the moment it
+// rendered, a head nobody had checked.
+let kitRegistry = null;
+
+function loadKitRegistry() {
+  if (kitRegistry) return kitRegistry;
+  const p = join(ROOT, "..", "match-covers", "carousel", "head-kits.json");
+  kitRegistry = JSON.parse(readFileSync(p, "utf8"));
+  return kitRegistry;
+}
+
+function normLabel(s) {
+  return String(s || "").toUpperCase().replace(/&/g, " AND ")
+    .replace(/[^A-Z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function assertHeadKitsMatchClubs(players) {
+  const reg = loadKitRegistry();
+  const aliases = Object.fromEntries(
+    Object.entries(reg.colour_aliases || {}).map(([k, v]) => [k.toLowerCase(), String(v).toLowerCase()]),
+  );
+  const colour = (c) => {
+    const v = normLabel(c).toLowerCase();
+    return aliases[v] || v;
+  };
+
+  // Registry keys run through the SAME normaliser as the incoming club name. They are written as
+  // a human writes them ("PARIS SAINT-GERMAIN") and the normaliser drops the hyphen, so a raw
+  // lookup misses on exactly the fixture this guard was written for.
+  const clubsNorm = Object.fromEntries(
+    Object.entries(reg.clubs || {}).map(([k, v]) => [normLabel(k), v]),
+  );
+
+  const problems = [];
+  for (const p of players) {
+    if (!p.head || !p.club) continue;
+    const key = String(p.head).split("/").pop().replace(/\.[a-z0-9]+$/i, "");
+    const head = (reg.heads || {})[key];
+    const club = clubsNorm[normLabel(p.club)];
+
+    if (!head) {
+      problems.push(
+        `${p.name}: head "${p.head}" has no row in head-kits.json, so its kit colour is unknown ` +
+        `and it cannot be cleared against "${p.club}". Open it as an image, read the shirt, and ` +
+        `add a "${key}" row.`,
+      );
+      continue;
+    }
+    if (!club) {
+      problems.push(
+        `${p.name}: club "${p.club}" has no row in head-kits.json, so ${head.kit} cannot be ` +
+        `cleared against it. Add a "${normLabel(p.club)}" row listing BODY colours only, never trim.`,
+      );
+      continue;
+    }
+    const allowed = (club.colours || []).map(colour);
+    const hc = colour(head.kit);
+    // A compound kit ("red and blue") clears a club playing in either.
+    const ok = [...hc.split(" and "), hc].some((c) => allowed.includes(c.trim()));
+    if (!ok) {
+      problems.push(
+        `${p.name}: head "${p.head}" is banked in ${String(head.kit).toUpperCase()} ` +
+        `(${head.kit_hex}), the kit of ${head.kit_of || "no club or nation on record"}, but the ` +
+        `card labels him ${p.club}, which plays in ${allowed.join(", ").toUpperCase()}. ` +
+        `Use a head in the club's own colours, or change the label.`,
+      );
+    }
+  }
+
+  if (problems.length) {
+    throw new Error(
+      "[football-data] KIT GUARD FAILED — a headshot contradicts the club label beside it " +
+      "(founder ruling 2026-08-04):\n  - " + problems.join("\n  - "),
+    );
+  }
 }
 
 function computeDerived(metric, stats) {

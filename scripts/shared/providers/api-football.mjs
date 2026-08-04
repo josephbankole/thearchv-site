@@ -1,12 +1,21 @@
 /* api-football.mjs — the live provider, written against the real API and deliberately hard to
    misuse. It is NOT the default: select it with ARCHV_FOOTBALL_PROVIDER=api-football.
 
-   WHAT THE KEY CAN AND CANNOT DO (both verified against the live API, 2026-08-04)
-   - 100 requests a day. That is the entire budget for a day, shared with every other task.
-   - The free plan serves seasons 2022 to 2024 only. Ask for 2025 or 2026 and the response body is
-     {"plan":"Free plans do not have access to this season, try from 2022 to 2024."} with an
-     otherwise healthy 200, which is exactly the shape of failure that ends up on a card if nobody
-     checks. SEASON_GUARD below turns it into a thrown error before a single request goes out.
+   WHAT THE KEY CAN DO (PRO PLAN, verified against the live API 2026-08-04, renews 2026-09-04)
+   - 7,500 requests a day, up from the free plan's 100.
+   - Every season, including the current one. The free plan's 2022-2024 window is gone, and so is
+     the paywall body that used to arrive as a healthy 200.
+   - Paid-only parameters work, `last` among them, so head to head no longer has to be walked
+     season by season.
+
+   THE SEASON TRAP THAT SURVIVED THE UPGRADE
+   API-Football labels a season by its opening year, so season=2025 is the completed 2025/26
+   campaign and season=2026 is 2026/27. **The 2026/27 Premier League starts on 21 August 2026.**
+   Before then, asking for season=2026 returns a healthy 200 carrying international fixtures and no
+   club league rows, because no club games have been played. That is not an error and nothing
+   throws; it is simply an empty card if nobody looks. Until the season opens, club figures come
+   from season=2025 and must be labelled as the 2025/26 season on the surface. SEASON_GUARD below
+   now blocks only a season the API cannot know about at all.
 
    THE RULES THIS FILE ENFORCES
    1. Fetching happens at build time and lands in a committed cache file. Never at render time.
@@ -34,8 +43,28 @@ import { join } from "node:path";
 const BASE = "https://v3.football.api-sports.io";
 const PREMIER_LEAGUE = 39;
 
-// The free plan's window. Kept as data rather than a comment so the guard cannot drift from it.
-const SEASON_GUARD = { min: 2022, max: 2024 };
+// Pro plan (2026-08-04). The old free-plan ceiling of 2024 is lifted. The remaining bounds are
+// sanity rails, not entitlement: below 2010 the coverage thins out, and a season beyond next year
+// is a typo rather than a request. Kept as data so the guard cannot drift from the comment.
+const SEASON_GUARD = { min: 2010, max: new Date().getUTCFullYear() + 1 };
+
+// A season whose club competition has not kicked off answers 200 with internationals only and no
+// league rows. CLUB_SEASON_OPENS carries the confirmed opening date for any year we have checked;
+// Premier League 2026/27 opens 21 August 2026, verified against the leagues endpoint.
+const CLUB_SEASON_OPENS = { 2026: "2026-08-21" };
+
+// For a year with no confirmed date, fall back to 1 August. European club seasons open in August,
+// so anything earlier in the calendar year still belongs to the previous season. Without this
+// fallback the function is only correct for years listed above: a March 2027 build would ask for
+// season 2027 while the 2026/27 season was still being played.
+const DEFAULT_OPENING = "-08-01";
+
+/** The newest season with club data actually behind it, given today's date. */
+export function newestPlayedSeason(today = new Date()) {
+  const year = today.getUTCFullYear();
+  const opens = CLUB_SEASON_OPENS[year] || `${year}${DEFAULT_OPENING}`;
+  return today < new Date(`${opens}T00:00:00Z`) ? year - 1 : year;
+}
 
 const CACHE_DIR = "scripts/data/football/cache";
 const ID_MAP = "scripts/data/football/api-football-ids.json";
@@ -44,7 +73,10 @@ export default {
   name: "api-football",
 
   async load({ root }) {
-    const season = Number(process.env.ARCHV_FOOTBALL_SEASON || SEASON_GUARD.max);
+    // Default to the newest season that has actually been played, NOT SEASON_GUARD.max. The max is
+    // a typo rail sitting a year in the future; defaulting to it would silently request a season
+    // with no club rows in it.
+    const season = Number(process.env.ARCHV_FOOTBALL_SEASON || newestPlayedSeason());
     const league = Number(process.env.ARCHV_FOOTBALL_LEAGUE || PREMIER_LEAGUE);
     assertSeason(season);
 
@@ -74,10 +106,21 @@ export default {
 function assertSeason(season) {
   if (!Number.isInteger(season) || season < SEASON_GUARD.min || season > SEASON_GUARD.max) {
     throw new Error(
-      `[api-football] season ${season} is outside the free plan's window (${SEASON_GUARD.min} to ${SEASON_GUARD.max}).\n` +
-        `  The API answers a paywalled season with a 200 and a {"plan":"..."} body, which is how a\n` +
-        `  scope error reaches a published card. Use ARCHV_FOOTBALL_PROVIDER=static for the current\n` +
-        `  season, or upgrade the plan and widen SEASON_GUARD in this file.`,
+      `[api-football] season ${season} is outside the sanity window (${SEASON_GUARD.min} to ${SEASON_GUARD.max}).\n` +
+        `  The Pro plan serves every season, so this is a typo rail rather than an entitlement check.`,
+    );
+  }
+
+  // The upgrade removed the paywall but not the calendar. A season whose club competition has not
+  // kicked off returns a healthy 200 with internationals and no league rows, which reads as a
+  // working request right up until the card renders empty. Warn loudly rather than throw, because
+  // internationals are a legitimate thing to ask for during a break.
+  const played = newestPlayedSeason();
+  if (season > played) {
+    console.warn(
+      `[api-football] season ${season} has no club data yet; the newest played season is ${played}.\n` +
+        `  Expect internationals only. For club figures use ARCHV_FOOTBALL_SEASON=${played} and label\n` +
+        `  the card ${played}/${String(played + 1).slice(2)}.`,
     );
   }
 }

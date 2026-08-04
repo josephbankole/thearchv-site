@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-04",
+    day: "Tuesday",
+    headline: "Who is on the FedExCup line going into the Wyndham Championship?",
+    dek: "Jackson Koivun holds the last playoff place at 70th in the FedExCup standings. Keegan Bradley is 72nd. The Wyndham Championship at Sedgefield Country Club is the last week to change it.",
+    body: "The PGA Tour regular season ends this week, and the FedExCup playoff line runs straight through the middle of the Wyndham Championship field.\n\nOnly the top 70 go through to the FedEx St. Jude Championship at TPC Southwind, the first of the three playoff events. The field is then cut to 50 at the BMW Championship and to 30 at the Tour Championship.\n\nThe PGA Tour's official standings put Jackson Koivun in the last qualifying place, 70th, on 558 points. Mac Meissner is 71st on 546. Keegan Bradley is 72nd on 540, two places outside. Andrew Putnam is 73rd, and Jason Day, a former world number one, is 75th on 495.\n\nKoivun is the name worth watching on that line. He won the 3M Open in July as a rookie, and that single result is the reason he is holding the last place rather than chasing it. A player who had never won on tour is now the man everybody else has to pass.\n\nBradley is the opposite case. Athlon Sports report he is trying to protect a run of 15 consecutive playoff appearances, and that figure is theirs rather than ours. He moved up after a share of 15th at the Rocket Classic and still came up short of the line.\n\nThe Wyndham Championship is played at Sedgefield Country Club in Greensboro, North Carolina, from Thursday 6 August to Sunday 9 August, for a purse of 8.5m dollars. Aaron Rai, who won the 2026 PGA Championship, heads the field, alongside Brooks Koepka and the former Wyndham champions Brandt Snedeker, Lucas Glover and Webb Simpson.\n\nThe margins are small enough to be decided by one putt. Bradley is 18 points off 70th. That is roughly the difference between finishing 30th and finishing 25th.\n\nSources: PGA Tour official FedExCup standings for the positions and points; Athlon Sports and Yahoo Sports on the bubble and Bradley's position and streak; Golf Channel and golf.com on the field and the dates; wyndhamchampionship.com on tournament information.",
+    status: "verified",
+  },
+  {
     date: "2026-08-03",
     day: "Monday",
     headline: "Who won the last ever Rocket Classic?",

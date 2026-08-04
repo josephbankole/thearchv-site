@@ -298,11 +298,23 @@ export function footer() {
   </footer>`;
 }
 
-// PostHog pageview snippet, unchanged from the existing article-page pattern.
+// PostHog pageview snippet. The `before_send` hook normalises the captured path towards its
+// trailing-slash form so /start and /start/ (and every other directory URL) stop being counted
+// as two pages: 2,506 visits landed on /start/ against 477 on /start in the week to 1 August,
+// with GitHub Pages 301ing between them the whole time. A canonical tag does not merge
+// pageviews; only a rewrite at capture time does. The same rule lives in src/analytics.ts for
+// the bundled homepage and inline in each hand-built public/*/index.html — this family ships no
+// bundled JS, so the three copies cannot import each other. Change one, change all three.
+// This snippet's CSP hash is derived from its own text below (POSTHOG_SCRIPT_HASH), so editing
+// it here re-hashes every generated page automatically.
 export function posthogSnippet() {
   return `<script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true});
+    function archvPath(v) {
+      if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
+      return v.replace(/^([^?#]*[^\\/?#])(?=[?#]|$)/, function (m) { return /\\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
+    }
+    posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>`;
 }
 

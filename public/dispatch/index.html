@@ -13,7 +13,7 @@
        one, recompute its hash (sha256, base64-encoded, of its exact inline body) and update it
        here, or the browser will silently drop that script at runtime. frame-src allows the
        Substack subscribe embed below, nothing else. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RNTKe4Cf6bEYTj21z830l5zgSupLhMPUt/sZqfergw0=' 'sha256-QMaH5f6QxR7J0Z+LgwvNWu6DJnI79VVl07aSj+iERMY=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'self' https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-QMaH5f6QxR7J0Z+LgwvNWu6DJnI79VVl07aSj+iERMY=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'self' https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV Dispatch" />
   <meta property="og:description" content="Football history and the stories behind the game, in your inbox." />
@@ -23,7 +23,17 @@
   <!-- PostHog: pageview + subscribe-link taps. Same project as the website. -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true});
+    // Trailing-slash normalisation, 2026-08-04. GitHub Pages 301s /start to /start/, yet PostHog
+    // logged the two as separate pages: 2,506 visits against 477 in the week to 1 August. A
+    // canonical tag does not merge pageviews, so the path is rewritten at capture time instead,
+    // towards the slash: the form the canonical tags, the sitemap and Pages itself already use.
+    // The site root and any path ending in a file extension are left alone. The same rule lives
+    // in src/analytics.ts and scripts/shared/page-shell.mjs. Change one, change all three.
+    function archvPath(v) {
+      if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
+      return v.replace(/^([^?#]*[^\/?#])(?=[?#]|$)/, function (m) { return /\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
+    }
+    posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />

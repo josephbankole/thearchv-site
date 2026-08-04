@@ -24,6 +24,29 @@ export function isConfigured(): boolean {
   return !!readConfig().key;
 }
 
+/* ---------- trailing-slash path normalisation (2026-08-04) ----------
+   GitHub Pages already 301s the slashless form (/start -> /start/), and every canonical tag
+   on the site ends in a slash, yet PostHog still logged the two as separate pages: 2,506
+   visits on /start/ against 477 on /start in the week to 1 August. A canonical tag does not
+   merge pageviews and a redirect the analytics client never observes cannot either, so the
+   only lever that actually merges them is rewriting the path at capture time.
+
+   Normalise TOWARDS the trailing slash rather than away from it: that is the form the
+   canonical tags, dist/sitemap.xml and GitHub Pages itself all already use, so the PostHog
+   path breakdown lines up 1:1 with the sitemap instead of sitting one character off it.
+   The site root and any path ending in a file extension are left exactly as they are.
+
+   Duplicated, deliberately: the static page family (the hand-built pages under public/ and
+   scripts/shared/page-shell.mjs) ships no bundled JS at all, so it carries its own inline
+   copy of this same rule. Change one, change the others. */
+const TRAILING_SEGMENT = /^([^?#]*[^\/?#])(?=[?#]|$)/;
+const FILE_EXTENSION = /\.[a-z0-9]{1,8}$/i;
+
+function archvPath(value: unknown): unknown {
+  if (typeof value !== 'string' || value.indexOf('/') < 0) return value;
+  return value.replace(TRAILING_SEGMENT, (m) => (FILE_EXTENSION.test(m) ? m : m + '/'));
+}
+
 // Fire an analytics event. Safe before init (buffered) and safe with no key (dropped).
 export function track(event: string, props?: Record<string, unknown>): void {
   if (ready && ph) {
@@ -47,6 +70,15 @@ export async function initAnalytics(): Promise<void> {
     respect_dnt: true,
     persistence: 'localStorage',
     person_profiles: 'identified_only',
+    // Runs on every captured event, pageviews included. `before_send` is the current hook;
+    // `sanitize_properties` is deprecated in this version of posthog-js.
+    before_send: (cr) => {
+      if (cr && cr.properties) {
+        cr.properties.$current_url = archvPath(cr.properties.$current_url);
+        cr.properties.$pathname = archvPath(cr.properties.$pathname);
+      }
+      return cr;
+    },
     loaded: () => {
       ready = true;
       track('site_loaded', { path: location.pathname });

@@ -427,7 +427,7 @@ function renderPair({ a, b, slug }, hasCard) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle([title, `${competition.label} ${competition.season}`, "The ARCHV"]))}</title>
   <meta name="description" content="${escAttr(description)}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${pageCsp}
@@ -607,7 +607,7 @@ function renderIndex(players) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle(["Player duels", `${competition.label} ${competition.season}`, "The ARCHV"]))}</title>
   <meta name="description" content="${escAttr(clampDescription(INDEX_LEDE))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${pageCsp}

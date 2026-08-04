@@ -129,7 +129,7 @@ function render(laneKey, lane) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
   <meta name="description" content="${escAttr(clampDescription(lane.intro))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}
@@ -232,7 +232,7 @@ function renderSportLane(sport, laneKey) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
   <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${canonical}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}

@@ -9,7 +9,6 @@ import { initDailyDigest } from './components/dailyDigest';
 import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
 import { initChrome, initMastheadMenu } from './ui/chrome';
-import { initReveal } from './anim/reveal';
 import { initSportTabs } from './ui/sportTabs';
 import { initAnalytics } from './analytics';
 import { leaguesDays } from './data/leaguesDays';
@@ -38,12 +37,6 @@ function boot(): void {
 
   // Sport tab bar: scroll the active tab into view. Runs in every mode (instant, no motion).
   initSportTabs();
-
-  // Tier 0 scroll reveal for the day-rail cards the digest just injected. Runs in every mode on
-  // purpose: under reduced motion the CSS resolves [data-inview] straight to its finished state,
-  // so this only flips an attribute and nothing animates. Must run AFTER initDailyDigest, which
-  // is what creates the cards it observes.
-  initReveal();
 
   // Page chrome (progress bar + scroll-spy nav). Affordance, not decoration:
   // runs in every mode; its motion is CSS-gated and reduced-motion safe.

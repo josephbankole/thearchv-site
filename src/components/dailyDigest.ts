@@ -62,10 +62,6 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
     const card = document.createElement('a');
     card.className = 'day';
     card.setAttribute('role', 'listitem');
-    // Tier 0 staggered reveal (src/anim/reveal.ts). Safe to set the opacity-0 resting state here
-    // because this card only exists when the bundle runs: there is no no-JS path that leaves a
-    // real entry invisible. The rail itself is marked [data-inview-group] below.
-    card.dataset.inview = 'false';
     card.href = `/desk/${lane}/${entry.date}/`;
     card.setAttribute('aria-label', entry.headline);
 
@@ -110,11 +106,6 @@ export function initDailyDigest(mountId: string, days: DayEntry[], source: strin
 
     rail.appendChild(card);
   });
-
-  // Mark the rail as a reveal group only once it actually holds cards. An empty lane renders no
-  // rail content at all (the feed contract's "an empty lane simply does not render"), and an
-  // empty group would just be an observer with nothing to watch.
-  if (visibleDays.length) rail.setAttribute('data-inview-group', '');
 
   enableDrag(rail, dragState);
 }

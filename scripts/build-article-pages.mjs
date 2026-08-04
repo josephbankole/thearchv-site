@@ -21,7 +21,7 @@ import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc, clampTitle,
   deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
-  AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
+  AUTHOR_NAME, AUTHOR_URL, SPORTS, QUESTION_LANE_META,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -192,10 +192,8 @@ function schema(entry, url, label, faq) {
         // A named Person, not the masthead: Google News and the news aggregators want a human
         // author, and the visible byline on the page says the same thing (see render() below).
         // Name and URL come from AUTHOR_NAME / AUTHOR_URL in scripts/shared/page-shell.mjs.
-        // As of 2026-08-04 author.url resolves to the on-site author page and sameAs carries both
-        // that page and josephbankole.ca, so the two profiles read as one Person entity.
         // publisher stays the Organization, unchanged.
-        author: { "@type": "Person", name: AUTHOR_NAME, url: AUTHOR_URL, sameAs: AUTHOR_SAMEAS },
+        author: { "@type": "Person", name: AUTHOR_NAME, url: AUTHOR_URL, sameAs: [AUTHOR_URL] },
         // Compact Organization carrying the sameAs entity graph, so every article page reinforces
         // the same brand entity (matches the homepage Organization JSON-LD in index.html).
         publisher: { "@type": "Organization", name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
@@ -526,7 +524,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle([entry.headline, lane.seoSuffix, "The ARCHV"]))}</title>
   <meta name="description" content="${escAttr(metaDescription(entry.dek, entry.body))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${pageCsp}

@@ -99,7 +99,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(TITLE)}</title>
   <meta name="description" content="${escAttr(DESCRIPTION)}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="robots" content="index,follow" />
   <link rel="canonical" href="${URL}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}

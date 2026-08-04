@@ -227,7 +227,6 @@ function render(p, allPages) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle([p.title, "The ARCHV"]))}</title>
   <meta name="description" content="${escAttr(clampDescription(p.description))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}
@@ -338,10 +337,6 @@ const EXTRA_URLS = [
   { loc: "/glossary/xa/", changefreq: "monthly", priority: "0.5" },
   { loc: "/glossary/loan-with-obligation/", changefreq: "monthly", priority: "0.5" },
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
-  // The author page (build-author-page.mjs, 2026-08-04). Every article page's byline and its
-  // NewsArticle author.url resolve here, so it has to be crawlable in its own right rather than
-  // only reachable from a byline. Listed at this one assembly point like /duel/ and /guess/.
-  { loc: "/authors/joseph-bankole/", changefreq: "monthly", priority: "0.5" },
   // Multi-sport section roots (build-sport-pages.mjs). Objects, not bare strings — a string
   // entry is silently skipped by the loop below. The /football/ alias is deliberately NOT here:
   // it is noindex and canonical to /, so it must stay out of the sitemap. The new sports' lane

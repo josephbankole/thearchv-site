@@ -1,6 +1,6 @@
 # thearchv.ca site - working rules for any agent in this directory
 
-## The two traps that bite every new session
+## The traps that bite every new session
 
 1. **The local data files are STALE by design.** The daily engine (the morning desk
    job) commits `src/data/transferDays.ts` and `src/data/worldCupDays.ts` (and now
@@ -17,6 +17,85 @@
    (`pages build and deployment` via the API with the PAT; the PAT cannot re-run
    workflows), then retrigger with an empty commit on main. Always verify live with
    a cache-busted curl grepping for something only the new build contains.
+3. **A green build is not "it works". Look at the running site on a real device before you deploy.**
+   On 2026-08-04 a branch shipped that the founder could not scroll, with the logo clipped. It had
+   passed a clean-clone `npm ci && npm run build`, `check-csp-hash`, `verify-csp-pages` across 123
+   pages, a 905-element computed-style census proving the palette unchanged, and browser checks at
+   1280, 375 and 320px. Every one of those is structural. None of them is a person using the page.
+   Roll back first and diagnose after: the rollback took one revert and one Pages build.
+   **Do not trust the in-app Browser pane for anything viewport-dependent.** During that incident it
+   reported `innerHeight: 0`. A zero-height viewport means IntersectionObserver can never fire and
+   GSAP computes nothing, so every reading about reveals, scroll position and element visibility was
+   worthless, and it looked exactly like a real bug. It had already returned blank screenshots on
+   scrolled pages earlier the same day. Use a real browser, or ask the founder.
+
+   **Root cause, found 2026-08-04 by a controlled diagnosis run (no deploy).** The break is one
+   declaration: `transform: translateY(16px)` at `src/style.css:784`, the resting state of the
+   Tier 0 `[data-inview]` reveal.
+
+   `.rail` (`src/style.css:353`) is `overflow-x: auto`. When one axis is not `visible`, CSS sets the
+   used value of the other axis to `auto`, so every rail has always been a vertical scroll container
+   too. It simply never had anything to scroll. The day cards sit 8px clear of the rail's bottom
+   padding edge; translating them down 16px pushes them 8px past it. Each day rail then reports a
+   `scrollHeight` 8px greater than its `clientHeight`, and an element with vertical scroll room owns
+   any vertical gesture that starts inside it. Touch scrolling latches to the nearest scrollable
+   ancestor for the whole gesture and does not hand it back to the page. The three day rails are
+   full bleed and 600 to 780px tall on a phone, so across most of the desk region of the homepage a
+   swipe moves the rail 8px and the page not at all. That is the founder's report, exactly.
+
+   Measured at 500x749 with `.is-mobile` set, walking from `document.elementFromPoint` up to the
+   nearest vertically scrollable ancestor, 296 sample points per screen:
+
+   | scrollY | branch 60fda38 | control 90545d4 |
+   | --- | --- | --- |
+   | 1200 | page 32, leagues rail 264 | page 296 |
+   | 2000 | page 184, transfer rail 112 | page 296 |
+   | 2800 | page 160, transfer rail 136 | page 296 |
+   | 3600 | page 136, worldcup rail 160 | page 296 |
+
+   Rail vertical overflow: 8px on all three day rails on the branch, 0px on all three on the
+   control, and 0px on the archive poster rail (`#rail`, which carries no reveal) in both.
+
+   **Two one-line fixes, each verified on its own.** Applied separately to the running branch build,
+   each returned page ownership to 296 of 296 sample points:
+
+   - Make the reveal opacity-only: drop `transform: translateY(16px)` from `[data-inview]` and
+     transition `opacity` alone. The reveal still reads.
+   - Or add `overflow-y: hidden` to `.rail`. A horizontal scroller should never own a vertical
+     gesture, and this holds even if something else pokes below the rail later.
+
+   Ship both. The second is the guard rail. Note that `.rail` already clips its children's ink at
+   the padding box in both axes, so the `box-shadow` the Tier 0 pass added to `.day` was mostly
+   being clipped anyway; give the rail bottom padding if that shadow is meant to show.
+
+   **The clipped logo is not this branch.** At 500px wide the hero crest's top sits at 112px and the
+   fixed masthead's bottom at 132.5px, an overlap of 20.5px, identical on the branch and on the
+   pre-branch control. `.hero` takes `padding-top: 7rem` under 640px while the fixed chrome is a
+   2.75rem sport tab bar plus an 88.5px masthead. It is an older bug the founder happened to notice
+   on the same pass. Fix it separately, and do not let it hold the re-land.
+
+   **What re-lands untouched:** the author page, the `max-image-preview:large` robots directive, and
+   the whole static half of the Tier 0 pass in `scripts/shared/page-shell.mjs`, including the
+   `.more-card__headline` and `.lane-card__headline` `display: block` fix. The static page family
+   ships no bundled JS, so it has no reveal and no transform. Measured on an article page from the
+   same build: the page owns 296 of 296 sample points at every scroll position and `.sportnav` has
+   no vertical overflow. Only the homepage half of Tier 0 needs the change above.
+
+   **How to re-land it, because a plain merge will not (verified 2026-08-04, evening).** The
+   rollback was `054ff1d`, a revert of the merge `4a38d95`. That merge is still an ancestor of main,
+   so git treats preview's commits as already merged: running `scripts/deploy-site.sh` today reports
+   a clean merge and changes exactly one file, `CLAUDE.md`, leaving zero occurrences of
+   `[data-inview]` in main's `src/style.css`. On the day Tier 0 comes back with the scroll fix, that
+   same merge will report clean, push, go green and ship none of it. Re-land off a branch cut fresh
+   from main, or `git revert 054ff1d` first. Do not diagnose that as a deploy failure.
+
+   **Method note, because this is what made it provable.** Build the pre-change commit into a second
+   worktree, serve both, and measure the same thing on each. One build tells you nothing about
+   whether a number is a regression: the 8px read as noise until the control returned 0. Measure
+   scroll ownership, not screenshots. `window.scrollTo` works perfectly in the broken state, because
+   programmatic scrolling never consults the gesture target, so any check built on it reports a
+   healthy page. And set `scroll-behavior: auto` before measuring, because `html` carries
+   `scroll-behavior: smooth` and any reading taken mid-animation is worthless.
 
 ## What this site is
 

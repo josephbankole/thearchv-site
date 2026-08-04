@@ -1,0 +1,179 @@
+{
+  "_comment": [
+    "KIT REGISTRY — the machine-readable half of the `kit` field in player-headshot-bank.md.",
+    "",
+    "WHY THIS EXISTS (founder ruling 2026-08-04). The headshot bank was built for the World Cup",
+    "lane, so most banked faces wear a NATIONAL kit. The moment one of those heads sits under a",
+    "CLUB label the card contradicts itself: Erling Haaland in Norway red under a Manchester City",
+    "medallion, Raul Jimenez in Mexico green under Fulham, Vitinha in a Portugal collar under Paris",
+    "Saint-Germain. No crest and no photograph is involved, so nothing trips the D90 art gate. It is",
+    "a credibility problem instead: a Manchester City card showing red invites the reader to doubt",
+    "the numbers printed next to it, which is the exact opposite of what the sourcing discipline is",
+    "bought with.",
+    "",
+    "THE CHECK IS COLOUR COMPATIBILITY, NOT OWNERSHIP. A head is not tied to one club. It carries a",
+    "kit COLOUR, and each label carries the body colours its club actually plays in. The guard asks",
+    "whether the head's colour is among the label's colours. That is what makes the two known-good",
+    "pairings pass on their merits rather than by exception: Bruno Fernandes is banked in a Portugal",
+    "red that is also Manchester United red, and Jude Bellingham in an England white that is also",
+    "Real Madrid white. Both survive because red really is United's colour, not because they were",
+    "special-cased.",
+    "",
+    "BODY COLOURS ONLY. `colours` lists what the SHIRT IS, never its trim. Paris Saint-Germain is",
+    "listed blue and navy blue and NOT red, even though a red stripe runs down the chest. Admitting",
+    "trim would let a Portugal-red head pass under a Paris Saint-Germain label, which is one of the",
+    "three defects this file was written to stop.",
+    "",
+    "SKY BLUE IS NOT BLUE. The colour tokens are matched exactly, with only the aliases below",
+    "treated as the same thing. Collapsing 'sky blue' into 'blue' would let a Chelsea head pass",
+    "under Manchester City, and the Haaland case is precisely a light-versus-dark failure.",
+    "",
+    "AN UNREGISTERED HEAD IS A HARD FAILURE, NOT A PASS. A head with no row here has no known kit,",
+    "so the guard cannot clear it and refuses instead. Silence is how the drift returned the first",
+    "time. Adding a row is cheap: open the file as an image, read the shirt, write it down.",
+    "",
+    "Every `kit` below was MEASURED off the artwork on the date shown, not copied from a prompt.",
+    "A prompt records what was asked for; only the pixels record what arrived."
+  ],
+  "schemaVersion": 1,
+  "updated": "2026-08-04",
+
+  "colour_aliases": {
+    "navy": "navy blue",
+    "claret": "dark red",
+    "old gold": "gold"
+  },
+
+  "clubs": {
+    "MANCHESTER CITY": {
+      "colours": ["sky blue"],
+      "note": "Sky blue home shirt. The 2026-27 shirt is a sky-blue-to-white gradient; the body colour is unchanged.",
+      "source": "Footy Headlines, Manchester City 26-27 home kit; ESPN Premier League 2026-27 kit round-up (retrieved 2026-08-04)"
+    },
+    "MANCHESTER UNITED": {
+      "colours": ["red"],
+      "source": "Club colours, unchanged"
+    },
+    "FULHAM": {
+      "colours": ["white"],
+      "note": "White shirt, black shorts. Red and black are trim only.",
+      "source": "ESPN Premier League 2026-27 kit round-up (retrieved 2026-08-04)"
+    },
+    "CRYSTAL PALACE": {
+      "colours": ["red", "blue", "red and blue"],
+      "note": "Red and blue vertical stripes are the club identity. The 2026-27 home shirt is a one-off anniversary design placing a red-and-blue sash on white; the identity colours are unchanged.",
+      "source": "GiveMeSport, every Premier League home kit 26-27 (retrieved 2026-08-04)"
+    },
+    "NOTTINGHAM FOREST": {
+      "colours": ["red"],
+      "source": "Club colours, unchanged"
+    },
+    "BRIGHTON AND HOVE ALBION": {
+      "colours": ["blue", "white", "blue and white"],
+      "source": "Club colours, unchanged"
+    },
+    "PARIS SAINT-GERMAIN": {
+      "colours": ["blue", "navy blue"],
+      "note": "Blue body. The red central stripe and its white edging are TRIM and are deliberately absent from this list.",
+      "source": "Club colours, unchanged"
+    },
+    "WOLVERHAMPTON WANDERERS": {
+      "colours": ["gold", "black"],
+      "source": "Club colours, unchanged"
+    },
+    "NORWAY": { "colours": ["red"] },
+    "PORTUGAL": { "colours": ["red"] },
+    "MEXICO": { "colours": ["green"] },
+    "ENGLAND": { "colours": ["white"] },
+    "CAMEROON": { "colours": ["green"] }
+  },
+
+  "heads": {
+    "haaland-manchester-city": {
+      "player": "Erling Haaland",
+      "kit": "sky blue",
+      "kit_hex": "#87BCDE",
+      "kit_of": "Manchester City",
+      "measured": "2026-08-04"
+    },
+    "jimenez-fulham": {
+      "player": "Raul Jimenez",
+      "kit": "white",
+      "kit_hex": "#F8F8F8",
+      "kit_of": "Fulham",
+      "measured": "2026-08-04"
+    },
+    "wharton-crystal-palace": {
+      "player": "Adam Wharton",
+      "kit": "red and blue",
+      "kit_hex": "#B0323C/#2B4C9B",
+      "kit_of": "Crystal Palace",
+      "measured": "2026-08-04"
+    },
+    "vitinha-paris-saint-germain": {
+      "player": "Vitinha",
+      "kit": "blue",
+      "kit_hex": "#2C57A7",
+      "kit_of": "Paris Saint-Germain",
+      "measured": "2026-08-04"
+    },
+
+    "bruno-fernandes": {
+      "player": "Bruno Fernandes",
+      "kit": "red",
+      "kit_hex": "#943D42",
+      "kit_of": "Portugal",
+      "measured": "2026-08-04",
+      "note": "A NATIONAL kit that legitimately clears a Manchester United label, because Portugal red and Manchester United red are the same colour. Kept as-is rather than regenerated: it passes the check on its merits."
+    },
+    "anderson": {
+      "player": "Elliot Anderson",
+      "kit": "red",
+      "kit_hex": "#50070D",
+      "kit_of": "Nottingham Forest",
+      "measured": "2026-08-04",
+      "note": "Already a club head. England play in white; this one is red and clears Nottingham Forest."
+    },
+    "baleba": {
+      "player": "Carlos Baleba",
+      "kit": "blue",
+      "kit_hex": "#2B4C9B",
+      "kit_of": "Brighton and Hove Albion",
+      "measured": "2026-08-04",
+      "note": "Already a club head. Cameroon play in green; this one is blue and clears Brighton and Hove Albion."
+    },
+
+    "haaland": {
+      "player": "Erling Haaland",
+      "kit": "red",
+      "kit_hex": "#B42124",
+      "kit_of": "Norway",
+      "measured": "2026-08-04",
+      "note": "THE NATIONAL HEAD. Correct under a Norway label and wrong under Manchester City. Superseded for club use by haaland-manchester-city. Retained, never overwritten."
+    },
+    "jimenez": {
+      "player": "Raul Jimenez",
+      "kit": "green",
+      "kit_hex": "#32805D",
+      "kit_of": "Mexico",
+      "measured": "2026-08-04",
+      "note": "THE NATIONAL HEAD. Correct under a Mexico label and wrong under Fulham. Superseded for club use by jimenez-fulham. Retained, never overwritten."
+    },
+    "wharton": {
+      "player": "Adam Wharton",
+      "kit": "charcoal",
+      "kit_hex": "#343D42",
+      "kit_of": null,
+      "measured": "2026-08-04",
+      "note": "Attributable to nothing. Charcoal is neither England white nor Crystal Palace red and blue, so this head clears no label at all and the guard refuses it everywhere. Superseded by wharton-crystal-palace. Retained, never overwritten."
+    },
+    "vitinha": {
+      "player": "Vitinha",
+      "kit": "red",
+      "kit_hex": "#6E2F35",
+      "kit_of": "Portugal",
+      "measured": "2026-08-04",
+      "note": "THE NATIONAL HEAD, red with a green collar trim. Correct under a Portugal label and wrong under Paris Saint-Germain. Superseded for club use by vitinha-paris-saint-germain. Retained, never overwritten."
+    }
+  }
+}

@@ -31,10 +31,23 @@ function inlineScriptBodies(rawHtml) {
   return bodies;
 }
 
+// Hashes come from script-src and from nowhere else. Scanning the whole policy means a hash listed
+// only in style-src would satisfy a check about scripts, which is not the guarantee this file
+// claims to give. The policy is split on ";" and the script-src directive read by name, so the
+// check no longer depends on cspMeta() happening to emit script-src before style-src.
+//
+// NOTE, deliberately not asserting the absence of 'unsafe-inline': style-src legitimately carries
+// it today (page-shell.mjs:cspMeta, for the inline style="" attributes), so the assertion belongs
+// scoped to script-src or not at all, and adding it was out of scope for this pass.
 function cspScriptHashes(html) {
   const m = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/);
   if (!m) return null;
-  return new Set([...m[1].matchAll(/'(sha256-[^']+)'/g)].map((x) => x[1]));
+  const scriptSrc = m[1]
+    .split(";")
+    .map((d) => d.trim())
+    .find((d) => /^script-src(\s|$)/.test(d));
+  if (!scriptSrc) return new Set();
+  return new Set([...scriptSrc.matchAll(/'(sha256-[^']+)'/g)].map((x) => x[1]));
 }
 
 function check(label, filePath) {

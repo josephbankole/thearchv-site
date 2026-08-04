@@ -37,17 +37,29 @@ if (!cspMatch) {
 }
 const cspContent = cspMatch[1];
 
-const shaMatch = cspContent.match(/'sha256-([^']+)'/);
-if (!shaMatch) {
+// Read the hashes out of script-src by name rather than taking the first sha256 anywhere in the
+// policy. Today that happens to be the same value only because cspMeta() emits script-src before
+// style-src; the moment style-src is tightened from 'unsafe-inline' to a hash, or the directives
+// are reordered, the old match compares the bootstrap script against a style hash and fails with a
+// message pointing at the wrong thing.
+const scriptSrc = cspContent
+  .split(";")
+  .map((d) => d.trim())
+  .find((d) => /^script-src(\s|$)/.test(d));
+if (!scriptSrc) {
+  console.error("[check-csp-hash] FAIL: CSP meta tag has no script-src directive.");
+  process.exit(1);
+}
+const cspTokens = [...scriptSrc.matchAll(/'(sha256-[^']+)'/g)].map((m) => m[1]);
+if (cspTokens.length === 0) {
   console.error("[check-csp-hash] FAIL: CSP meta tag has no sha256-... source in script-src.");
   process.exit(1);
 }
-const cspToken = `sha256-${shaMatch[1]}`;
 
-if (computedToken !== cspToken) {
+if (!cspTokens.includes(computedToken)) {
   console.error(
-    `[check-csp-hash] FAIL: inline bootstrap <script> no longer matches the CSP hash.\n` +
-    `  CSP meta tag has:  ${cspToken}\n` +
+    `[check-csp-hash] FAIL: inline bootstrap <script> no longer matches a CSP script-src hash.\n` +
+    `  script-src allows:  ${cspTokens.join(", ")}\n` +
     `  Script computes to: ${computedToken}\n` +
     `  The bootstrap script in index.html was edited without updating the CSP hash. Recompute\n` +
     `  the sha256 base64 digest of the exact script body and update the 'sha256-...' source in\n` +
@@ -56,4 +68,4 @@ if (computedToken !== cspToken) {
   process.exit(1);
 }
 
-console.log(`[check-csp-hash] OK: inline bootstrap script matches CSP hash (${cspToken}).`);
+console.log(`[check-csp-hash] OK: inline bootstrap script matches CSP script-src hash (${computedToken}).`);

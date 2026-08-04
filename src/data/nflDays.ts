@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-04",
+    day: "Tuesday",
+    headline: "Which players have already lost the 2026 NFL season to injury?",
+    dek: "Ricky Pearsall of the San Francisco 49ers and Bryan Bresee of the New Orleans Saints are both out for the whole 2026 NFL season, and the regular season has not started.",
+    body: "Two players have already lost the entire 2026 NFL season, and nobody has played a competitive snap yet.\n\nRicky Pearsall, the San Francisco 49ers receiver taken in the first round in 2024, is going to season-ending injured reserve. General manager John Lynch said Pearsall will have surgery on a posterior cruciate ligament in the next couple of weeks, and put the recovery at six to twelve months, with nine months the realistic target. The problem is not new. It traces back to swelling from the same knee he hurt last season.\n\nBryan Bresee of the New Orleans Saints has torn an anterior cruciate ligament in practice and needs surgery that ends his season as well. He was a first-round defensive tackle in 2023.\n\nThose are the two confirmed season-enders. The wider camp list is longer without being final. Coby Bryant of the Chicago Bears is expected to miss eight to ten weeks with a knee injury picked up in Monday's practice, which is a large piece of a season rather than all of it.\n\nThe timing is what makes camp injuries expensive. Both Pearsall and Bresee are on the stretch of a rookie contract where a club expects the return on what it paid to draft them, and neither will play a snap of this one. There is also no trade market to fix it, because every other team is losing players in the same fortnight.\n\nSources: NBC Sports Pro Football Talk on John Lynch, Pearsall's surgery and the move to injured reserve; Bleacher Report on the Pearsall timeline; NFL.com and NFL Network on Bresee's anterior cruciate ligament; Yahoo Sports live training camp coverage, 3 August 2026; CBS Sports training camp injury tracker; Bleacher Report camp live blog on Coby Bryant.",
+    status: "verified",
+  },
+  {
     date: "2026-08-03",
     day: "Monday",
     headline: "Why has Vita Vea asked the Tampa Bay Buccaneers to trade him?",

@@ -88,6 +88,9 @@ const targets = [
   // to scripts/glossary-data.mjs is covered by this check, not just the four original terms.
   ["glossary: /glossary/pressing/", join(DIST, "glossary", "pressing", "index.html")],
   ["standards: /standards/", join(DIST, "standards", "index.html")],
+  // Author page (build-author-page.mjs, 2026-08-04). Carries the shared masthead + PostHog
+  // inline scripts and no per-page script, so its two hashes must both be in its own CSP.
+  ["author: /authors/joseph-bankole/", join(DIST, "authors", "joseph-bankole", "index.html")],
   // Multi-sport page family (build-sport-pages.mjs + build-lane-pages.mjs, 2026-07-22): a sport
   // section page and a sport lane front both carry the shared masthead + PostHog inline scripts,
   // so their static hashes must be in each page's CSP. The /football/ alias carries a CSP meta but

@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription, longDate } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
@@ -267,7 +267,7 @@ function render(p, allPages) {
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(meta.href)}">${esc(meta.label)}</a></p>
       <p class="article__eyebrow">${esc(p.eyebrow || "")}</p>
       <h1>${esc(p.title)}</h1>
-      <p class="article__meta">${[esc(p.score), esc(p.venue), p.eventDate ? new Date(p.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : ""].filter(Boolean).join(" · ")}</p>${fig}${qa}
+      <p class="article__meta">${[esc(p.score), esc(p.venue), p.eventDate ? longDate(p.eventDate) : ""].filter(Boolean).join(" · ")}</p>${fig}${qa}
       <div class="article__body">
         ${md(p.body)}
       </div>${shop}${glossaryNav}${rel}

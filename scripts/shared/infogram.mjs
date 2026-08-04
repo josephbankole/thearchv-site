@@ -18,7 +18,7 @@
    numbers. Structured infogram blocks (fees, scorelines, stat bars) are P2 desk-authoring work
    that lands later; until an entry carries verified figures worth a card, the story card is the
    approved fallback. */
-import { longDate } from "./page-shell.mjs";
+import { longDate, shortDate } from "./page-shell.mjs";
 
 // ---- brand tokens (locked palette, matches render-mocks.mjs / the OG cards) ----
 export const INFOGRAM_NAVY_DEEP = "#071C2B";
@@ -63,18 +63,9 @@ export function infogramAlt(entry, laneLabel) {
   return `The ARCHV ${laneLabel} card: ${headline}.`;
 }
 
-// Abbreviated date for the footer ("13 Jun 2026"), matching the mocks' footer note style.
-function shortDate(iso) {
-  try {
-    return new Date(iso).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  } catch {
-    return iso;
-  }
-}
+// Abbreviated date for the footer ("13 Jun 2026"), matching the mocks' footer note style. It comes
+// from page-shell.mjs alongside longDate so both are pinned to UTC in one place; the local copy that
+// used to live here printed the previous day on any machine behind UTC.
 
 // Shrink-to-fit headline sizing so a one-word name and a two-sentence headline both sit inside
 // the card; satori's lineClamp is the last-resort backstop so text can never overflow.

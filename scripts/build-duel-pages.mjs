@@ -28,7 +28,7 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import {
-  SITE, esc, escAttr, clampTitle, clampDescription,
+  SITE, esc, escAttr, clampTitle, clampDescription, longDate, jsLiteral,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
@@ -54,11 +54,9 @@ const POOL_LABEL = "the ARCHV roster";
 const POOL_NOTE = `A rank here counts the ${data.players.length} players in this roster and nobody else, not the whole ${competition.label}. Where a placing is league-wide, the row says so and names the source.`;
 const SCOPE_LINE = `${competition.label}, ${competition.season}. ${competition.scopeNote} Figures as of ${longDate(asOf)}.`;
 
-function longDate(iso) {
-  try {
-    return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
-  } catch { return iso; }
-}
+// longDate was defined here, correctly pinned to UTC, while four other generators redefined it
+// without the pin and rendered the previous day west of Greenwich. It now lives in page-shell.mjs
+// as the one implementation everything imports.
 
 /* ---------- sources: one named line per stat, printed under the number it belongs to ---------- */
 function sourceNames(ids = []) {
@@ -358,8 +356,8 @@ function duelStyles() {
 function shareScriptTag(url, title) {
   return `<script>
     (function () {
-      var url = ${JSON.stringify(url).replace(/</g, "\\u003c")};
-      var title = ${JSON.stringify(title).replace(/</g, "\\u003c")};
+      var url = ${jsLiteral(url)};
+      var title = ${jsLiteral(title)};
       var nativeBtn = document.getElementById('duel-share');
       var copyBtn = document.getElementById('duel-copy');
       if (nativeBtn && navigator.share) {
@@ -543,7 +541,7 @@ function renderPair({ a, b, slug }, hasCard) {
 function pickerScriptTag(playerIds) {
   return `<script>
     (function () {
-      var ids = ${JSON.stringify(playerIds)};
+      var ids = ${jsLiteral(playerIds)};
       var one = document.getElementById('duel-p1');
       var two = document.getElementById('duel-p2');
       var go = document.getElementById('duel-go');

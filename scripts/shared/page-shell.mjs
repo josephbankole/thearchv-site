@@ -88,10 +88,40 @@ export function clampDescription(s, max = 160) {
   return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?-]+$/, "") + "…";
 }
 
-export const longDate = (iso) => {
-  try { return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); }
-  catch { return iso; }
+/* THE DATE HELPERS ARE PINNED TO UTC, AND THAT IS THE WHOLE POINT.
+
+   `new Date("2026-08-04")` parses as UTC midnight, and `toLocaleDateString` with no `timeZone`
+   formats in the runner's own zone. On any machine behind UTC — Toronto is UTC-4 — that midnight
+   lands the previous evening and the page prints "3 August 2026" while its own URL, its sitemap
+   row, the feed's `date` field and its schema.org datePublished all still say 2026-08-04. The page
+   contradicts its own structured data, and because Actions runs in UTC the same commit produces
+   different HTML locally and in CI.
+
+   Reading the date at UTC midnight and formatting in UTC fixes both ends. Every generator imports
+   these rather than redefining them, so there is one place to be wrong. */
+// Only an ISO calendar date has a UTC midnight to pin to. Anything else (a hand-typed eventDate in
+// a content file, say) is left to the engine's own parsing and the local zone, exactly as before,
+// because forcing UTC on a locally-parsed date would introduce the same off-by-one in the other
+// direction for anyone ahead of UTC.
+const fmtDate = (iso, opts) => {
+  const s = String(iso ?? "");
+  try {
+    return /^\d{4}-\d{2}-\d{2}/.test(s)
+      ? new Date(`${s.slice(0, 10)}T00:00:00Z`).toLocaleDateString("en-GB", { ...opts, timeZone: "UTC" })
+      : new Date(iso).toLocaleDateString("en-GB", opts);
+  } catch { return iso; }
 };
+
+export const longDate = (iso) => fmtDate(iso, { day: "numeric", month: "long", year: "numeric" });
+
+// "13 Jun 2026" — the infogram footer note and anywhere else the long form is too wide.
+export const shortDate = (iso) => fmtDate(iso, { day: "numeric", month: "short", year: "numeric" });
+
+// Every value interpolated into an inline <script> body goes through this. A raw `<` in a data
+// string closes the element early and lands the rest of the payload in the document as markup,
+// inside the very script the page's CSP hash allows. Expressed once here so a reader can never be
+// left wondering whether a given call site's escaping is required or decorative.
+export const jsLiteral = (value) => JSON.stringify(value).replace(/</g, "\\u003c");
 
 // lane = URL segment under /desk/, anchor = the homepage section this lane links back to.
 // seoSuffix = the entity phrase appended after an article headline in its <title> (search-only,

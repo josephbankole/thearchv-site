@@ -10,7 +10,7 @@ import { build } from "esbuild";
 import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { cspMeta, clampTitle, clampDescription } from "./shared/page-shell.mjs";
+import { cspMeta, clampTitle, clampDescription, longDate } from "./shared/page-shell.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
 // hamburger JS) and no PostHog/Google Fonts CDN (/content.css is self-hosted, no remote font
@@ -25,10 +25,8 @@ const SITE = "https://thearchv.ca";
 
 const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
-const longDate = (iso) => {
-  try { return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); }
-  catch { return iso; }
-};
+// longDate comes from page-shell.mjs, which pins it to UTC. A local redefinition here rendered the
+// previous day on any machine behind UTC while the page's own URL said otherwise.
 
 /* ---------- load the typed day data via a bundled temp module ---------- */
 const entry = [

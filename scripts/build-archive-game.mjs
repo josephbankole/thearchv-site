@@ -24,7 +24,7 @@ import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  cspMeta, scriptHash, extractScriptBody, jsLiteral, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -69,13 +69,12 @@ const LEDE =
   "One player from the archive, every day. Four clues, five guesses, and a streak that holds until midnight or does not. Every answer is a career that finished long before this season started.";
 
 /* ---------- the game script ----------
-   `<` is escaped on the way into the script body, exactly as the JSON-LD block further down does
-   and as build-duel-pages.mjs does. Only `n`, `a` and `z` are base64'd; the clue fields are raw
-   Wikidata strings, so a club or era carrying "</script>" would close the tag early and turn the
-   rest of the payload into markup INSIDE the hashed script the CSP allows. Nothing in the current
-   30 rows contains an angle bracket; the data source is external and the file is meant to grow. */
-const jsLiteral = (value) => JSON.stringify(value).replace(/</g, "\\u003c");
-
+   Everything interpolated into the script body goes through page-shell.mjs's `jsLiteral`, which
+   escapes `<`, exactly as the JSON-LD block further down does and as build-duel-pages.mjs does.
+   Only `n`, `a` and `z` are base64'd; the clue fields are raw Wikidata strings, so a club or era
+   carrying a closing script tag would end the element early and turn the rest of the payload into
+   markup INSIDE the hashed script the CSP allows. Nothing in the current 30 rows contains an angle
+   bracket; the data source is external and the file is meant to grow. */
 function gameScriptTag() {
   return `<script>
     (function () {

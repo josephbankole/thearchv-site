@@ -10,8 +10,22 @@
    files as current, never "fix" them locally, and never edit archive content through
    this repo's branches: content changes go to main via the API, code changes go
    through preview.
+0. **Nothing outside this repo may be read at build time.** Actions checks out `thearchv-site`
+   alone, so any path reaching up past the repo root resolves on a laptop and fails in CI. On
+   2026-08-04 the head-kit registry shipped as `../match-covers/carousel/head-kits.json`, the local
+   build passed, and the Pages deploy died on ENOENT after Vite had already succeeded. Data a build
+   script needs lives in `scripts/data/`. To prove it, clone the repo alone into an empty directory
+   and run `npm ci && npm run build` there; a green local build in the workspace proves nothing.
 2. **Deploy is a script, not a push.** Work on branch `preview`, commit, then run
-   `bash scripts/deploy-site.sh` from the repo root. It merges preview into main with
+   `bash scripts/deploy-site.sh` from the repo root.
+   **KNOWN BUG, 2026-08-04:** the script reliably dies at `Merging preview into main...` with
+   `fatal: stash failed`, on a clean tree with no autostash configured, and then reports "nothing to
+   commit" so it reads like a no-op rather than a failure. Main is left untouched. The same merge
+   run by hand works every time. Until someone fixes the script, deploy with:
+   `git fetch origin && git checkout main && git reset --hard origin/main && git merge --no-edit preview && git push origin main && git checkout preview`
+   Then verify live, and **check the Actions run rather than only curling the page**: a failed build
+   leaves the previous version serving 200s, so the old page answering is not evidence the new one
+   shipped. It merges preview into main with
    the engine's data files winning (--ours) and pushes; GitHub Pages builds main.
    Pages builds flake: if the change is not live in ~4 minutes, check the run
    (`pages build and deployment` via the API with the PAT; the PAT cannot re-run

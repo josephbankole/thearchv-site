@@ -95,7 +95,23 @@ const targets = [
   ["sport section: /nfl/", join(DIST, "nfl", "index.html")],
   ["sport lane: /nfl/questions/", join(DIST, "nfl", "questions", "index.html")],
   ["football alias: /football/", join(DIST, "football", "index.html")],
+  // Player duels (build-duel-pages.mjs) and the daily archive game (build-archive-game.mjs).
+  // Both carry a per-page inline script on top of the shared masthead and PostHog pair: the duel
+  // share row embeds its own URL and the game embeds the whole puzzle set, so neither hash is
+  // constant across the family. Every pair page is checked in the loop further down.
+  ["duel index: /duel/", join(DIST, "duel", "index.html")],
+  ["archive game: /guess/", join(DIST, "guess", "index.html")],
 ];
+
+// Every duel pair page. The share-row script carries that page's own URL, so this is the same
+// per-page-hash failure mode the article loop below guards against.
+const duelDir = join(DIST, "duel");
+if (existsSync(duelDir)) {
+  for (const entry of readdirSync(duelDir)) {
+    if (!entry.includes("-v-")) continue;
+    targets.push([`duel: /duel/${entry}/`, join(duelDir, entry, "index.html")]);
+  }
+}
 
 const contentDir = readdirSync(DIST).includes("finals") ? join(DIST, "finals") : null;
 if (contentDir) {

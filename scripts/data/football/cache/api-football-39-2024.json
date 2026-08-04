@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "competition": {
+    "key": "premier-league",
+    "label": "Premier League",
+    "season": "2024/25",
+    "scopeNote": "Premier League league matches only, 2024/25, as supplied by API-Football."
+  },
+  "asOf": "2026-08-04",
+  "omitted": [],
+  "sources": {
+    "api-football": {
+      "name": "API-Football",
+      "detail": "Premier League 2024/25 player statistics, league 39",
+      "url": "https://www.api-football.com/",
+      "retrieved": "2026-08-04"
+    }
+  },
+  "metrics": [
+    {
+      "key": "goals",
+      "label": "Goals",
+      "short": "G",
+      "higherIsBetter": true,
+      "blurb": "Premier League goals, 2024/25."
+    },
+    {
+      "key": "assists",
+      "label": "Assists",
+      "short": "A",
+      "higherIsBetter": true,
+      "blurb": "Premier League assists, 2024/25."
+    },
+    {
+      "key": "involvements",
+      "label": "Goal involvements",
+      "short": "G+A",
+      "higherIsBetter": true,
+      "derived": "goals + assists",
+      "blurb": "Goals and assists added together, worked out by The ARCHV from the two figures above."
+    }
+  ],
+  "players": [
+    {
+      "id": "haaland",
+      "name": "Erling Haaland",
+      "sortName": "Haaland",
+      "club": "Manchester City",
+      "position": "Attacker",
+      "nationality": "Norway",
+      "head": "/heads/haaland.webp",
+      "headAlt": "Erling Haaland, illustrated by The ARCHV.",
+      "line": "A third Golden Boot in four seasons in England.",
+      "stats": {
+        "goals": {
+          "value": 22,
+          "sources": [
+            "api-football"
+          ]
+        },
+        "assists": {
+          "value": 3,
+          "sources": [
+            "api-football"
+          ]
+        }
+      }
+    }
+  ]
+}

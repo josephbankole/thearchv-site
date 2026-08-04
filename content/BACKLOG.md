@@ -21,7 +21,7 @@ Status key: todo / drafted / live
 - [todo] explainers/what-xg-really-measures — what xG really measures (and what it doesn't)
 - [todo] explainers/offside-rule-history — the offside rule, and why it keeps changing
 - [todo] explainers/catenaccio-to-gegenpressing — catenaccio to gegenpressing: 70 years of defending
-- [drafted] explainers/why-var-takes-so-long — why a VAR check takes so long (drafted 2026-08-01; GSC override: /glossary/var/ pulled 121 impressions and 0 clicks in the 28 days to 29 Jul, second-biggest impression source on the site, same glossary-stub-to-long-form pattern that opened C6; homepage-linked under "The ARCHV explains", glossary cross-links wired in build-content.mjs)
+- [live] explainers/why-var-takes-so-long — why a VAR check takes so long (drafted and DEPLOYED 2026-08-01, verified 200 with the homepage link and sitemap entry live; GSC override: /glossary/var/ pulled 121 impressions and 0 clicks in the 28 days to 29 Jul, second-biggest impression source on the site, same glossary-stub-to-long-form pattern that opened C6; homepage-linked under "The ARCHV explains", glossary cross-links wired in build-content.mjs)
 
 ## C6 — Transfer mechanics cluster (GSC-driven; the glossary already ranks, the long-forms convert)
 Opened 2026-07-29 off Search Console: `/glossary/loan-with-obligation/` pulled 750 impressions in 28 days (55% of all site impressions) for 1 click at ~page 2. The glossary keeps the definition query; these long-forms take the "explained / examples / how it works" tail and link back to it.

@@ -1,0 +1,38 @@
+{
+  "_comment": [
+    "Bridge between ARCHV player slugs and API-Football's own numeric player ids. Only read by",
+    "scripts/shared/providers/api-football.mjs, which is not the shipped provider.",
+    "",
+    "This starts empty on purpose. Resolving a name to an id costs one request out of a daily",
+    "budget of 100, so the ids get looked up once, by hand, and committed. Fill an entry like this:",
+    "",
+    "  \"haaland\": {",
+    "    \"apiId\": 1100,",
+    "    \"name\": \"Erling Haaland\",",
+    "    \"sortName\": \"Haaland\",",
+    "    \"head\": \"/heads/haaland.webp\",",
+    "    \"headAlt\": \"Erling Haaland, illustrated by The ARCHV.\",",
+    "    \"line\": \"A third Golden Boot in four seasons in England.\"",
+    "  }",
+    "",
+    "Haaland's id below was resolved on 2026-08-04 by GET /players/profiles?search=haaland, which",
+    "returned 1100 for E. Haaland (Norway). Look the rest up the same way, one request each, and",
+    "commit what comes back. Five names are still outstanding: bruno-fernandes, jimenez, anderson,",
+    "wharton, baleba.",
+    "",
+    "Remember what the key can see: seasons 2022 to 2024 only. The current season stays on the",
+    "hand-checked static roster, so this map exists for back seasons and for the day the plan is",
+    "upgraded, not to replace scripts/data/football/roster-2025-26.json."
+  ],
+  "league": 39,
+  "players": {
+    "haaland": {
+      "apiId": 1100,
+      "name": "Erling Haaland",
+      "sortName": "Haaland",
+      "head": "/heads/haaland.webp",
+      "headAlt": "Erling Haaland, illustrated by The ARCHV.",
+      "line": "A third Golden Boot in four seasons in England."
+    }
+  }
+}

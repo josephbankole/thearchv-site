@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-04",
+    day: "Tuesday",
+    headline: "Why is Felix Auger-Aliassime seeded second in Montreal?",
+    dek: "Felix Auger-Aliassime is seeded second at the 2026 National Bank Open in Montreal, the first time in his career he has been seeded that high at a Masters 1000 tournament.",
+    body: "Felix Auger-Aliassime is the second seed at the National Bank Open in Montreal, and it is the first time in his career he has been seeded that high at a Masters 1000 tournament.\n\nThe seeding follows a strong run in the majors. He reached the quarter-finals at Roland-Garros and then the quarter-finals at Wimbledon, back to back, which is what carried him far enough up the rankings to sit second at his home event.\n\nAlexander Zverev is the top seed. He arrives as the reigning Roland-Garros champion and a Wimbledon finalist, and he opens against the winner of Tallon Griekspoor and Lorenzo Sonego. Ben Shelton, who won here last year, is seeded third and is in the same half as Daniil Medvedev on paper.\n\nAuger-Aliassime could face Luca Van Assche in the second round. Denis Shapovalov and Gabriel Diallo are also in the singles draw, so the Canadian contingent is not thin this time.\n\nThe tournament runs from 1 to 13 August 2026. The men play at IGA Stadium in Montreal and the women at Sobeys Stadium in Toronto, and the two cities swap hosting duties each year.\n\nOne caution on the seeding: a high seed protects a player from the best opponents early and guarantees nothing after that. Auger-Aliassime has reached a Masters 1000 final before without the ranking to match. This is the first time the draw has been arranged in his favour at this level, which is a different kind of test.\n\nSources: National Bank Open official draw analysis, 31 July 2026, on the seedings, Zverev's opener and the Canadian entries; ATP Tour Montreal draw preview on Auger-Aliassime's seeding and his Roland-Garros and Wimbledon quarter-finals; National Bank Open official tournament information on dates and venues.",
+    status: "verified",
+  },
+  {
     date: "2026-08-03",
     day: "Monday",
     headline: "What happened in Venus Williams' first match at the 2026 National Bank Open?",

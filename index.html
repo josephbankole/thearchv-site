@@ -7,6 +7,10 @@
     <title>The ARCHV: Sports History, Illustrated</title>
     <meta name="description" content="Illustrated sports history. A daily desk across football, NFL, F1, tennis and golf, plus long reads on the systems that actually run the game. From @thearchvfc." />
     <meta name="author" content="The ARCHV" />
+    <!-- max-image-preview:large is what lets Google Discover and Google Images use the full-size
+         illustration rather than a thumbnail; without a robots meta the default is the thumbnail.
+         Every indexable page family on the site carries the same directive (2026-08-04). -->
+    <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://thearchv.ca/" />
     <meta name="theme-color" content="#0C2A3E" />
     <meta name="google-site-verification" content="_B_-X8W_yayn2TBLrrYkiolQcRNHZl93C00ZJts0iT0" />
@@ -180,7 +184,7 @@
       </section>
 
       <!-- 1. FOOTBALL LEAGUES -->
-      <section class="leagues" id="football-leagues">
+      <section class="leagues dot-grid" id="football-leagues">
         <div class="wrap">
           <p class="section-index"><a class="section-index__link" href="/desk/leagues/">01 / Football leagues</a></p>
           <h2 class="desk__title" data-reveal>The club season, documented.</h2>
@@ -190,7 +194,7 @@
       </section>
 
       <!-- 2. THE TRANSFER DESK -->
-      <section class="desk" id="transfer-desk">
+      <section class="desk dot-grid" id="transfer-desk">
         <div class="wrap">
           <p class="section-index"><a class="section-index__link" href="/desk/transfer/">02 / The transfer desk</a></p>
           <h2 class="desk__title" data-reveal>The window, documented.</h2>
@@ -212,7 +216,7 @@
       </section>
 
       <!-- 3. INTERNATIONAL FOOTBALL -->
-      <section class="worldcup" id="world-cup">
+      <section class="worldcup dot-grid" id="world-cup">
         <div class="wrap">
           <p class="section-index"><a class="section-index__link" href="/desk/world-cup/">03 / International Football</a></p>
           <h2 class="desk__title" data-reveal>Every day, documented.</h2>

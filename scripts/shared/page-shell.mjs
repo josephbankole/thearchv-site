@@ -13,13 +13,24 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 
-// The named author and editor of The ARCHV (founder decision, 2026-07-21). Single source of truth
-// for both halves of the byline: the visible "By ..." line on every article page and the Person
-// object in that page's NewsArticle JSON-LD. Google News and news aggregators want a named person
-// rather than a masthead, and josephbankole.ca already carries a Person entity, so the same URL
-// serves as the author's sameAs. Change the name or the URL here and every generated page follows.
+// The named author and editor of The ARCHV (founder decision, 2026-07-21; name FROZEN as
+// "Joseph Bankole" by founder ruling 2026-08-04 - do not vary it, and never introduce a second
+// spelling anywhere on the site). Single source of truth for both halves of the byline: the
+// visible "By ..." line on every article page and the Person object in that page's NewsArticle
+// JSON-LD. Google News and news aggregators want a named person rather than a masthead.
+//
+// AUTHOR_URL was https://josephbankole.ca until 2026-08-04. It now points at the on-site author
+// page (scripts/build-author-page.mjs) so the JSON-LD author.url resolves on ARCHV itself and the
+// authorship signal consolidates here rather than off-domain. josephbankole.ca is NOT dropped: it
+// stays in AUTHOR_SAMEAS below, which is what author.sameAs emits, so the two profiles remain
+// linked as one entity. Change these here and every generated page follows.
 export const AUTHOR_NAME = "Joseph Bankole";
-export const AUTHOR_URL = "https://josephbankole.ca";
+export const AUTHOR_PATH = "/authors/joseph-bankole/";
+export const AUTHOR_URL = `${SITE}${AUTHOR_PATH}`;
+export const AUTHOR_PERSONAL_URL = "https://josephbankole.ca";
+// author.sameAs: the on-site page first (it is the author.url and the canonical entity here),
+// then the personal site it used to point at. Order is stable so the JSON-LD diff stays readable.
+export const AUTHOR_SAMEAS = [AUTHOR_URL, AUTHOR_PERSONAL_URL];
 
 // The ARCHV's official profiles, for the Organization sameAs entity graph. Kept in one place so
 // the homepage Organization JSON-LD (index.html) and every generated article page's publisher
@@ -380,15 +391,59 @@ export function pageStyles() {
       --cream: #F2EAD3; --cream-dim: rgba(242,234,211,.72); --cream-faint: rgba(242,234,211,.3);
       --gold: #C9A14A; --gold-soft: rgba(201,161,74,.5);
       --maxw: 46rem;
+
+      /* ---------- semantic token layer (Tier 0, 2026-08-04) ----------
+         The five brand colours above are LOCKED and none of them changed. This layer only gives
+         them role names, so a rule can say what a colour is FOR instead of which hex it happens
+         to be, and so the dark-surface language has one place to live. Every value here resolves
+         to a brand colour or an alpha of one: --text-primary IS --cream, --bg-main IS --navy.
+         Adding a sixth hue here is a brand break, not a refactor. Mirrors the same block in
+         src/style.css; the two files do not import each other, so keep them in step. */
+      --text-primary: var(--cream);
+      --text-secondary: var(--cream-dim);
+      --text-faint: var(--cream-faint);
+      --bg-main: var(--navy);
+      --bg-elevated: var(--navy-deep);
+      --bg-raised: var(--navy-soft);
+      --border-main: var(--cream-faint);
+      --accent: var(--gold);
+      --accent-soft: var(--gold-soft);
+      /* Elevation. Softened 2026-08-04: the old panel shadow was rgba(0,0,0,.55), which on navy
+         read as a hard slab edge. Quiet ambient depth reads as expensive; a heavy drop shadow
+         reads as a 2014 UI kit. Two steps only, so elevation stays legible. */
+      --shadow-soft: 0 12px 32px -10px rgba(0,0,0,.32);
+      --shadow-lift: 0 18px 40px -14px rgba(0,0,0,.4);
+      /* Micro-label face. System stack on purpose: the brand type lock is Fraunces + Inter Tight,
+         and a third webfont for 10px eyebrows would cost a network round trip for nothing. */
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      /* Dot-grid field colour: cream at a very low alpha, i.e. the locked cream, not a new grey. */
+      --dot: rgba(242,234,211,.06);
     }
     * { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
     body {
-      margin: 0; background: var(--navy); color: var(--cream-dim);
+      position: relative;
+      margin: 0; background: var(--bg-main); color: var(--text-secondary);
       font-family: "Inter Tight", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       font-size: 18px; line-height: 1.65; -webkit-font-smoothing: antialiased;
-      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--navy-soft) 0%, rgba(12,42,62,0) 70%);
+      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-raised) 0%, rgba(12,42,62,0) 70%);
     }
+    /* Dot-grid field (Tier 0). Two offset radial-gradient layers on a 24px lattice, masked so it
+       fades out before the content gets dense. Purely decorative, pointer-events off, and it sits
+       under everything: the page chrome below is explicitly raised to z-index 1 so the field can
+       never intercept a click or paint over text. Hidden from print. */
+    body::before {
+      content: ""; position: absolute; inset: 0 0 auto; height: 72rem; z-index: 0; pointer-events: none;
+      background-image:
+        radial-gradient(circle, var(--dot) .6px, transparent 1.1px),
+        radial-gradient(circle, var(--dot) .6px, transparent 1.1px);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
+      mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
+    }
+    .masthead, .desknav, main, .footer { position: relative; z-index: 1; }
+    @media print { body::before { display: none; } }
     a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
     a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
@@ -420,7 +475,7 @@ export function pageStyles() {
       max-width: calc(100vw - 2.5rem);
       background: var(--navy-deep); border: 1px solid var(--cream-faint); border-radius: .5rem;
       padding: .35rem; display: flex; flex-direction: column; gap: .1rem;
-      box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.55);
+      box-shadow: var(--shadow-lift);
     }
     .masthead__panel[hidden] { display: none; }
     .masthead__panel-link {
@@ -442,7 +497,7 @@ export function pageStyles() {
        Register matches .desknav__link (uppercase, .8rem, .04em) but cream at rest for a touch more
        presence, gold on hover and when current, a 2px gold underline on the active tab. Sticky at
        the top of the page family; horizontally scrollable with an edge fade once it overflows. */
-    .sportnav-wrap { position: sticky; top: 0; z-index: 30; background: var(--navy-deep); border-bottom: 1px solid var(--gold-soft); }
+    .sportnav-wrap { position: sticky; top: 0; z-index: 30; background: var(--bg-elevated); border-bottom: 1px solid var(--accent-soft); }
     .sportnav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; }
     .sportnav::-webkit-scrollbar { display: none; }
     .sportnav__row { display: flex; gap: 1.4rem; align-items: center; max-width: 72rem; margin: 0 auto; padding: .7rem 1.25rem; width: max-content; min-width: 100%; justify-content: center; }
@@ -451,8 +506,17 @@ export function pageStyles() {
     .sportnav__link[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
     @media (max-width: 640px) {
       .sportnav__row { justify-content: flex-start; gap: 1.1rem; }
-      .sportnav-wrap::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 26px; background: linear-gradient(to right, rgba(7,28,43,0), var(--navy-deep)); pointer-events: none; }
     }
+    /* Edge-fade on the horizontal scroller (Tier 0). Replaces the old right-only gradient
+       ::after, which only existed under 640px and only faded one side, so a left-scrolled tab bar
+       cut off hard. A two-sided mask is symmetric, needs no extra element, and moves with the
+       scroll for free. :focus-within drops the mask so a keyboard user tabbing to the first or
+       last tab never sees the focused control faded out. */
+    .sportnav {
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 22px, #000 calc(100% - 22px), transparent);
+      mask-image: linear-gradient(to right, transparent, #000 22px, #000 calc(100% - 22px), transparent);
+    }
+    .sportnav:focus-within { -webkit-mask-image: none; mask-image: none; }
 
     /* sport section header + Question Desk empty-state holding block (multi-sport, 2026-07-22).
        Shared by the sport section pages (build-sport-pages.mjs) and the new-sport lane fronts
@@ -570,6 +634,55 @@ export function pageStyles() {
     .standards .lead { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.8rem; }
     .standards h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.35rem; line-height: 1.2; margin: 2rem 0 .5rem; }
     .standards p { margin: 0 0 1rem; }
+
+    /* ============================================================
+       Tier 0 pass (2026-08-04). Everything below is type, elevation and masking only.
+       No rule here sets a colour, so the rendered palette is byte-identical to before.
+       ============================================================ */
+
+    /* Mono micro-labels. Every eyebrow, kicker, breadcrumb and direction label on this page
+       family shares one face now, which is what separates a "micro-label" from just small text.
+       Deliberately sets no colour and no font-size: each rule above keeps its own, so this is a
+       face-and-tracking change and nothing reflows into a different colour or scale. Tracking
+       comes down from .16em because a monospace face is already wide. */
+    /* .desknav is deliberately NOT in this list. It is navigation, not a label, and a monospace
+       face widened it enough to wrap to three lines at 375px. CLAUDE.md records it as verified
+       collision-proof at 320px in its current form; leave it in Inter Tight. */
+    .article__eyebrow, .lane__eyebrow, .sport-head__eyebrow,
+    .more-card__kicker, .lane-card__kicker, .adjacent__dir, .breadcrumb,
+    .author__role {
+      font-family: var(--font-mono);
+      letter-spacing: .12em;
+      font-weight: 500;
+    }
+
+    /* Quiet elevation on the card surfaces that previously had none. A soft ambient shadow does
+       the work a border alone was doing; the hover state raises it rather than only nudging the
+       card up, so the lift reads as depth instead of a jump. */
+    .lane-card, .glossary-card, .more-card, .sport-holding { box-shadow: var(--shadow-soft); }
+    .lane-card, .glossary-card { transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+    .lane-card:hover, .glossary-card:hover { box-shadow: var(--shadow-lift); }
+
+    /* ---------- author page (build-author-page.mjs) ---------- */
+    .author { padding: 1.5rem 0 .5rem; }
+    .author__head { display: flex; align-items: center; gap: 1.25rem; margin: 0 0 1.6rem; flex-wrap: wrap; }
+    .author__portrait {
+      width: 120px; height: 120px; border-radius: 50%; object-fit: cover; flex: 0 0 auto;
+      border: 1px solid var(--accent-soft); box-shadow: var(--shadow-soft);
+    }
+    /* The crest stand-in is artwork, not a face: it gets padding and a transparent-friendly fit
+       so it never reads as a cropped photograph of a person. */
+    .author__portrait--crest { object-fit: contain; padding: .55rem; background: rgba(7,28,43,.6); }
+    .author__headtext { min-width: 0; }
+    .author__headtext h1 { margin: 0 0 .35rem; }
+    .author__role { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); margin: 0; }
+    .author__bio p:first-child { color: var(--text-primary); font-size: 1.1rem; }
+    .author__elsewhere { margin: 1.8rem 0 0; padding-top: 1.2rem; border-top: 1px solid var(--border-main); font-size: .9rem; }
+    .author .lane__eyebrow { margin-bottom: 1rem; }
+    @media (max-width: 460px) {
+      .author__head { gap: 1rem; }
+      .author__portrait { width: 88px; height: 88px; }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       .lane-card, .more-card, .glossary-card { transition: none; }

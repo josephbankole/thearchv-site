@@ -181,6 +181,62 @@ lane pages (shared `page-shell.mjs` masthead, footer, CSP, brand CSS).
   `/duel/`, `/guess/` and every pair page: the duel share row and the game's puzzle payload are
   per-page inline scripts, so their hashes are not constant across the family.
 
+## The author page and the authorship signal (2026-08-04)
+
+`scripts/build-author-page.mjs` emits one page, `/authors/joseph-bankole/`, in the same
+self-contained family as the lane and article pages (shared `page-shell.mjs` masthead,
+footer, CSP, brand CSS; no new inline CSS and no per-page inline script). It runs after
+`build-article-pages.mjs`; its sitemap row lives in `build-content.mjs`'s `EXTRA_URLS`,
+not in the script itself, and `verify-csp-pages.mjs` checks it.
+
+- **The author name is FROZEN as "Joseph Bankole"** (founder ruling 2026-08-04). Never vary
+  it, and never introduce "Fola Bankole" anywhere on the site.
+- **`AUTHOR_URL` now points at the author page**, not josephbankole.ca. Every article's
+  visible byline and its `NewsArticle` `author.url` resolve on-site, which is what
+  consolidates the authorship entity here. josephbankole.ca was NOT dropped: it is the
+  second entry in `AUTHOR_SAMEAS`, so the two profiles stay linked as one Person.
+- The "recent bylined work" list is derived from the same day data the article pages are
+  built from, and the long reads from `content/`. Nothing on that page is hand-listed, so
+  no link on it can rot into a 404 when the desks move on.
+- **No founder headshot exists in this repo.** The page falls back to the brand crest and
+  says so in the build log. Drop a real one at `public/heads/joseph-bankole.webp` and the
+  script picks it up with no other change. Do not generate a face: the site's imagery rule
+  forbids it.
+
+`max-image-preview:large` rides on every indexable page family's robots meta (article,
+lane, sport, glossary, standards, duel, guess, author, the long-form content pages, the
+hand-built `public/` pages and the homepage). The `noindex` families (legacy day pages,
+`/football/`, `/desk/`, `/world-cup/`, lab) are deliberately untouched.
+
+## Tier 0 design pass (2026-08-04)
+
+Semantic token layer, softened shadows, mono micro-labels, a dot-grid field, edge-fade
+masks on the horizontal scrollers, and one IntersectionObserver reveal. Founder-approved
+Tier 0 only from the deep-dive report. Three things to know before touching it:
+
+- **The palette did not change and must not.** The token layer (`--text-primary`,
+  `--bg-main`, `--border-main`, `--accent`, …) is a rename over the locked five brand
+  colours, nothing more; every token resolves to a brand colour or an alpha of one. Proof
+  at the time: a computed-style census of all 905 rendered homepage elements returned the
+  same 14 distinct colour values with identical counts before and after. **The token layer
+  is duplicated in `src/style.css` and in `pageStyles()` in `scripts/shared/page-shell.mjs`
+  — the two files do not import each other, so a change to one needs the same change to
+  the other.** Adding a sixth hue is a brand break, not a refactor.
+- **The reveal lives in `src/anim/reveal.ts`, bundled, never inline** (CSP is script-src
+  'self' plus one hash). It is pointed only at elements the bundle injects itself: the
+  day-rail cards. Never put `data-inview` on server-rendered markup, because the resting
+  state is `opacity: 0` and a bundle that fails to load would leave real content invisible.
+  The static page family gets the CSS half of Tier 0 and no reveal, by design: it ships no
+  bundled JS at all.
+- **Reduced motion is a designed state, not a disabled one.** `[data-inview]` resolves
+  straight to its finished state under both `prefers-reduced-motion` and the
+  `.reduced-motion` class the early bootstrap sets. The edge-fade masks drop on
+  `:focus-within` so a keyboard user never sees the focused control faded out.
+
+The deep editorial shadows on the poster frames, the lightbox and the banner band were
+deliberately left alone. Those are art direction, not UI chrome; flattening them to the
+quiet ambient shadow would gut the archive gallery.
+
 ## Editorial and rights lines (site side)
 
 Content rules live in `../EDITOR_STANDARDS.md` (including the REPORTED single-source

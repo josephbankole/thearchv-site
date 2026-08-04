@@ -36,6 +36,45 @@
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---------- semantic token layer (Tier 0, 2026-08-04) ----------
+     The palette above is LOCKED and nothing in it changed. This layer gives the same five brand
+     colours role names so a rule can say what a colour is FOR rather than which hex it is, and
+     so there is one place to reach for when a new surface needs a border or an elevated panel.
+     Every value resolves to a brand colour or an alpha of one: --text-primary IS --cream,
+     --bg-main IS --navy. A sixth hue here is a brand break, not a refactor.
+     Mirrored in pageStyles() in scripts/shared/page-shell.mjs for the static page family; the
+     two files do not import each other, so keep them in step. */
+  --text-primary: var(--cream);
+  --text-secondary: var(--cream-dim);
+  --text-faint: var(--cream-faint-text);
+  --bg-main: var(--navy);
+  --bg-elevated: var(--navy-deep);
+  --bg-raised: var(--navy-soft);
+  --border-main: var(--cream-faint);
+  --accent: var(--gold);
+  --accent-soft: var(--gold-soft);
+  --positive: var(--pitch);
+
+  /* Elevation, softened. The old masthead panel shadow was rgba(0,0,0,.55), which on navy read
+     as a hard slab edge. Quiet ambient depth is what the premium dev-tool sites are actually
+     doing. The deep editorial shadows on the poster frames and the lightbox are NOT part of this
+     and keep their own values: those are art direction (a print lying on a dark table), not UI
+     chrome, and flattening them would gut the archive gallery. */
+  --shadow-soft: 0 12px 32px -10px rgba(0, 0, 0, 0.32);
+  --shadow-lift: 0 18px 40px -14px rgba(0, 0, 0, 0.4);
+
+  /* Micro-label face for eyebrows and kickers. System stack on purpose: the brand type lock is
+     Fraunces + Inter Tight, and a third webfont for 11px labels would cost a round trip for
+     nothing. */
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Dot-grid field colour: the locked cream at a very low alpha, not a new grey. */
+  --dot: rgba(242, 234, 211, 0.05);
+
+  /* Reveal timing, shared by the IntersectionObserver layer in src/anim/reveal.ts. */
+  --reveal-dur: 0.6s;
+  --reveal-step: 60ms;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -162,7 +201,7 @@ main, .masthead, .footer { position: relative; z-index: 2; }
   max-width: calc(100vw - 2 * var(--gutter));
   background: var(--navy-deep); border: 1px solid var(--cream-faint); border-radius: 2px;
   padding: 0.4rem; display: flex; flex-direction: column; gap: 0.1rem;
-  box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--shadow-lift);
 }
 .masthead__panel[hidden] { display: none; }
 .masthead__panel-link {
@@ -669,3 +708,85 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .reduced-motion .hero__sub,
 .reduced-motion .hero__cta,
 .reduced-motion .hero__scroll { animation: none; opacity: 1; transform: none; }
+
+/* ============================================================
+   Tier 0 pass (2026-08-04). Type, elevation, masking and one reveal.
+   No rule below sets a colour on an existing element, so the rendered
+   palette is unchanged; the only new colour values are the dot field and
+   the shadows, both derived from the locked cream and from black.
+   ============================================================ */
+
+/* ---------- mono micro-labels ----------
+   Every eyebrow, kicker and small uppercase label now shares one face, which is what makes it
+   read as a label tier rather than just small text. Sets no colour and no font-size: each rule
+   above keeps its own, so this is a face-and-tracking change only. Tracking comes down from
+   .22em/.16em because a monospace face is already wide, and .eyebrow at .22em in mono would
+   have overrun its line at 375px. */
+.eyebrow,
+.section-index,
+.day__label,
+.day__dek,
+.poster__host,
+.killer__meta,
+.hero__scroll,
+.field span {
+  font-family: var(--font-mono);
+  letter-spacing: 0.14em;
+  font-weight: 500;
+}
+.section-index { letter-spacing: 0.16em; }
+
+/* ---------- dot-grid field ----------
+   A 24px lattice of two offset dot layers, masked so it fades out before the section's content
+   gets dense. Applied by class, not globally: the hero has the WebGL layer and the grain over it
+   already, and a third texture there would be noise. The three desk sections were flat navy, and
+   they are where a field reads as paper rather than as decoration. Decorative only, pointer
+   events off, and children are raised so it can never sit over text or intercept a click. */
+.dot-grid { position: relative; }
+.dot-grid::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle, var(--dot) 0.6px, transparent 1.1px),
+    radial-gradient(circle, var(--dot) 0.6px, transparent 1.1px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+}
+.dot-grid > * { position: relative; z-index: 1; }
+@media print { .dot-grid::before { display: none; } }
+
+/* ---------- edge fades on the horizontal scrollers ----------
+   The rails and the sport tab bar both cut off hard at the viewport edge, which reads as a
+   clipped layout rather than as "there is more this way". A mask fades the first and last 24px
+   and costs no extra element. :focus-within drops it so a keyboard user tabbing to the first or
+   last card never sees the focused control faded out. */
+.rail,
+.sportnav {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+.rail:focus-within,
+.sportnav:focus-within { -webkit-mask-image: none; mask-image: none; }
+
+/* ---------- IntersectionObserver staggered reveal ----------
+   Driven by src/anim/reveal.ts (bundled, never inline: script-src is 'self' plus one hash).
+   Applied ONLY to elements this bundle injects itself, never to markup that ships in index.html.
+   That is the safety rule: if the bundle never runs, the elements do not exist either, so there
+   is no path where a failed script leaves real content stuck at opacity 0.
+   --i is set per child by the observer for the stagger. */
+[data-inview] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--reveal-dur) var(--ease), transform var(--reveal-dur) var(--ease);
+  transition-delay: calc(var(--i, 0) * var(--reveal-step));
+}
+[data-inview='true'] { opacity: 1; transform: none; }
+/* Reduced motion is a designed state here, not a disabled one: the content is simply already
+   there, at full opacity, with no transition to interrupt. Both the media query and the
+   .reduced-motion class the early bootstrap sets are covered, because the class is what the rest
+   of this file gates on and the media query is what covers a mid-session OS change. */
+@media (prefers-reduced-motion: reduce) {
+  [data-inview] { opacity: 1; transform: none; transition: none; }
+}
+.reduced-motion [data-inview] { opacity: 1; transform: none; transition: none; }

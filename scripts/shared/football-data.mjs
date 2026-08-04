@@ -119,16 +119,23 @@ function normalise(data) {
 //
 // The test is colour compatibility, not ownership. Bruno Fernandes stays as banked because
 // Portugal red really is Manchester United red; he clears on the merits rather than as an
-// exception. Registry is match-covers/carousel/head-kits.json, the same file the Python cover
-// renderer and the carousel page read, so all three surfaces cannot disagree.
+// exception.
 //
 // A head with no registry row FAILS. Every one of the defects above was, at the moment it
 // rendered, a head nobody had checked.
+//
+// THE REGISTRY LIVES IN THIS REPO, at scripts/data/football/head-kits.json, and it must stay here.
+// It first shipped at match-covers/carousel/head-kits.json, one directory up and outside the repo,
+// which resolved on a laptop where the workspace and the checkout sit side by side and failed the
+// moment CI ran: Actions checks out thearchv-site alone, so the build died on ENOENT after Vite had
+// already succeeded. The carousel reads this same file through a symlink, so all three surfaces
+// still share one copy and cannot disagree. Same lesson as canon D-2026-08-04d: a path that only
+// resolves on one machine is a broken path that has not been caught yet.
 let kitRegistry = null;
 
 function loadKitRegistry() {
   if (kitRegistry) return kitRegistry;
-  const p = join(ROOT, "..", "match-covers", "carousel", "head-kits.json");
+  const p = join(ROOT, "scripts", "data", "football", "head-kits.json");
   kitRegistry = JSON.parse(readFileSync(p, "utf8"));
   return kitRegistry;
 }

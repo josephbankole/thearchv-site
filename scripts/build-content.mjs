@@ -7,6 +7,9 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
+// Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
+// glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
+import { listPairs } from "./shared/football-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = join(ROOT, "content");
@@ -342,6 +345,11 @@ const EXTRA_URLS = [
   { loc: "/f1/", changefreq: "daily", priority: "0.7" },
   { loc: "/tennis/", changefreq: "daily", priority: "0.7" },
   { loc: "/golf/", changefreq: "daily", priority: "0.7" },
+  // Player duels (build-duel-pages.mjs) and the daily archive game (build-archive-game.mjs).
+  // The pair rows come from the data adapter so the sitemap grows with the roster on its own.
+  { loc: "/duel/", changefreq: "weekly", priority: "0.7" },
+  ...(await listPairs()).map((p) => ({ loc: p.href, changefreq: "monthly", priority: "0.6" })),
+  { loc: "/guess/", changefreq: "daily", priority: "0.6" },
 ];
 const today = new Date().toISOString().slice(0, 10);
 const seen = new Set([`${SITE}/`]);

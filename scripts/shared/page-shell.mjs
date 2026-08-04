@@ -285,6 +285,8 @@ export function footer() {
         <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
+        <a href="/duel/">Duels</a>
+        <a href="/guess/">Daily Archive</a>
         <a href="/glossary/">Glossary</a>
         <a href="/standards/">Standards</a>
         <a href="/about/">About</a>

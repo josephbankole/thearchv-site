@@ -1,0 +1,217 @@
+{
+  "_comment": [
+    "STATIC DATA LAYER for the duel system. Read it only through scripts/shared/football-data.mjs.",
+    "Nothing else in the build imports this file, so the day a live provider takes over there is",
+    "exactly one seam to move. The provider contract is documented in that adapter's header.",
+    "",
+    "Every number here was checked by hand against two independent named sources before it was",
+    "written down, per the D-2026-08-04g sourcing ruling and the two-source rule in",
+    "CANONICAL-CONTEXT.md section 0. Sources are named per stat, not per file, and the page prints",
+    "them under the number they belong to.",
+    "",
+    "APPEARANCES ARE DELIBERATELY ABSENT. StatMuse and FootyStats both put Elliot Anderson on 38",
+    "Premier League appearances; Soccerbase says 30. StatMuse says Raul Jimenez played 36; SportBusy",
+    "says 27, which looks like starts rather than appearances but was not resolvable from either",
+    "page. Two sources that disagree kill the number, so the metric came off the card rather than",
+    "shipping a figure the desk cannot stand behind. Minutes played went the same way: 2,958 against",
+    "2,953 for Haaland, 3,334 against 3,331 for Anderson.",
+    "",
+    "Scope is printed on the card as well as recorded here. This is Premier League league play only:",
+    "no cups, no Europe, no internationals. A card that implies a scope it cannot support is the",
+    "Tzolis failure repeating.",
+    "",
+    "The API-Football key in .env cannot replace these figures. Its free plan stops at season 2024,",
+    "so 2025/26 is behind the paywall. See scripts/shared/providers/api-football.mjs."
+  ],
+  "schemaVersion": 1,
+  "competition": {
+    "key": "premier-league",
+    "label": "Premier League",
+    "season": "2025/26",
+    "scopeNote": "Premier League league matches only. No cup, European or international appearances."
+  },
+  "asOf": "2026-08-04",
+  "omitted": [
+    {
+      "metric": "Appearances",
+      "reason": "Sources disagreed on two of the six players, so the number did not ship."
+    },
+    {
+      "metric": "Minutes played",
+      "reason": "Sources disagreed on two of the six players, so the number did not ship."
+    }
+  ],
+  "sources": {
+    "si": {
+      "name": "Sports Illustrated",
+      "detail": "2025-26 Premier League: Top Scorers, Most Assists, Golden Glove Winner",
+      "url": "https://www.si.com/soccer/2025-26-premier-league-top-scorers-most-assists-golden-glove-winner",
+      "published": "2026-05-24",
+      "retrieved": "2026-08-04"
+    },
+    "statmuse": {
+      "name": "StatMuse",
+      "detail": "Premier League 2025-26 player season pages",
+      "url": "https://www.statmuse.com/fc",
+      "retrieved": "2026-08-04"
+    },
+    "espn": {
+      "name": "ESPN",
+      "detail": "Player stats, English Premier League 2025-26",
+      "url": "https://www.espn.com/soccer/",
+      "retrieved": "2026-08-04"
+    },
+    "footystats": {
+      "name": "FootyStats",
+      "detail": "Premier League 2025/26 player page",
+      "url": "https://footystats.org/",
+      "retrieved": "2026-08-04"
+    },
+    "sportbusy": {
+      "name": "SportBusy",
+      "detail": "Premier League 2025-26 player page",
+      "url": "https://www.sportbusy.com/",
+      "retrieved": "2026-08-04"
+    },
+    "wikipedia-mufc": {
+      "name": "Wikipedia",
+      "detail": "2025-26 Manchester United F.C. season, squad statistics table",
+      "url": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Manchester_United_F.C._season",
+      "retrieved": "2026-08-04"
+    },
+    "wikipedia-mcfc": {
+      "name": "Wikipedia",
+      "detail": "2025-26 Manchester City F.C. season",
+      "url": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Manchester_City_F.C._season",
+      "retrieved": "2026-08-04"
+    }
+  },
+  "metrics": [
+    {
+      "key": "goals",
+      "label": "Goals",
+      "short": "G",
+      "higherIsBetter": true,
+      "blurb": "Premier League goals across the 2025/26 season."
+    },
+    {
+      "key": "assists",
+      "label": "Assists",
+      "short": "A",
+      "higherIsBetter": true,
+      "blurb": "Premier League assists across the 2025/26 season."
+    },
+    {
+      "key": "involvements",
+      "label": "Goal involvements",
+      "short": "G+A",
+      "higherIsBetter": true,
+      "derived": "goals + assists",
+      "blurb": "Goals and assists added together. Worked out by The ARCHV from the two sourced figures, not taken from a third source."
+    }
+  ],
+  "players": [
+    {
+      "id": "haaland",
+      "name": "Erling Haaland",
+      "sortName": "Haaland",
+      "club": "Manchester City",
+      "position": "Forward",
+      "nationality": "Norway",
+      "head": "/heads/haaland.webp",
+      "headAlt": "Erling Haaland, illustrated by The ARCHV.",
+      "line": "A third Golden Boot in four seasons in England.",
+      "stats": {
+        "goals": {
+          "value": 27,
+          "sources": ["si", "wikipedia-mcfc"],
+          "leagueRank": 1,
+          "leagueRankNote": "Premier League Golden Boot, 2025/26.",
+          "leagueRankSources": ["si"]
+        },
+        "assists": { "value": 8, "sources": ["si", "statmuse"] }
+      }
+    },
+    {
+      "id": "bruno-fernandes",
+      "name": "Bruno Fernandes",
+      "sortName": "Fernandes",
+      "club": "Manchester United",
+      "position": "Midfielder",
+      "nationality": "Portugal",
+      "head": "/heads/bruno-fernandes.webp",
+      "headAlt": "Bruno Fernandes, illustrated by The ARCHV.",
+      "line": "Twenty-one assists, past Henry and De Bruyne on twenty.",
+      "stats": {
+        "goals": { "value": 9, "sources": ["wikipedia-mufc", "statmuse"] },
+        "assists": {
+          "value": 21,
+          "sources": ["si", "wikipedia-mufc"],
+          "leagueRank": 1,
+          "leagueRankNote": "Premier League single-season assist record, ahead of Thierry Henry and Kevin De Bruyne on 20.",
+          "leagueRankSources": ["si"]
+        }
+      }
+    },
+    {
+      "id": "jimenez",
+      "name": "Raúl Jiménez",
+      "sortName": "Jiménez",
+      "club": "Fulham",
+      "position": "Forward",
+      "nationality": "Mexico",
+      "head": "/heads/jimenez.webp",
+      "headAlt": "Raúl Jiménez, illustrated by The ARCHV.",
+      "line": "Nine league goals in a Fulham season that finished eleventh.",
+      "stats": {
+        "goals": { "value": 9, "sources": ["statmuse", "sportbusy"] },
+        "assists": { "value": 3, "sources": ["statmuse", "sportbusy"] }
+      }
+    },
+    {
+      "id": "anderson",
+      "name": "Elliot Anderson",
+      "sortName": "Anderson",
+      "club": "Nottingham Forest",
+      "position": "Midfielder",
+      "nationality": "England",
+      "head": "/heads/anderson.webp",
+      "headAlt": "Elliot Anderson, illustrated by The ARCHV.",
+      "line": "Four and four from central midfield, and barely a game missed.",
+      "stats": {
+        "goals": { "value": 4, "sources": ["statmuse", "footystats"] },
+        "assists": { "value": 4, "sources": ["statmuse", "footystats"] }
+      }
+    },
+    {
+      "id": "wharton",
+      "name": "Adam Wharton",
+      "sortName": "Wharton",
+      "club": "Crystal Palace",
+      "position": "Midfielder",
+      "nationality": "England",
+      "head": "/heads/wharton.webp",
+      "headAlt": "Adam Wharton, illustrated by The ARCHV.",
+      "line": "Five assists from deep, and one goal of his own.",
+      "stats": {
+        "goals": { "value": 1, "sources": ["statmuse", "espn"] },
+        "assists": { "value": 5, "sources": ["statmuse", "espn"] }
+      }
+    },
+    {
+      "id": "baleba",
+      "name": "Carlos Baleba",
+      "sortName": "Baleba",
+      "club": "Brighton & Hove Albion",
+      "position": "Midfielder",
+      "nationality": "Cameroon",
+      "head": "/heads/baleba.webp",
+      "headAlt": "Carlos Baleba, illustrated by The ARCHV.",
+      "line": "A season of twenty-three starts and nothing on the sheet.",
+      "stats": {
+        "goals": { "value": 0, "sources": ["statmuse", "espn"] },
+        "assists": { "value": 0, "sources": ["statmuse", "espn"] }
+      }
+    }
+  ]
+}

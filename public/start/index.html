@@ -14,7 +14,7 @@
        Both inline scripts below are allowed only via an exact sha256 hash - if you edit either
        one, recompute its hash (sha256, base64-encoded, of its exact inline body) and update it
        here, or the browser will silently drop that script at runtime. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-ACnANGfK6WHxfgFyg3n7mkc0CGBqT2Q+YPrBTWqz3dA=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-d71HN9PmCO8KMOcv0+xOzAZMSzcNyz+Lmj42KrlOZm0=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
   <meta property="og:description" content="Every final since 1970, drawn." />
@@ -156,6 +156,53 @@
        so the button that anyone can act on leads. Gold, above the story. */
     .follow-cta { text-align: center; }
 
+    /* The one door into the site's own reporting, and it opens above everything that leads
+       off the site (2026-08-04). Roughly 97 per cent of the traffic landing here never
+       reached a content page, and the first thing on the page was a link away from it.
+       Deliberately one link and not a menu, and deliberately built from markup and CSS
+       alone: no image, no fetch, no JavaScript, so it still works in every case where the
+       today card below it falls back to the homepage. Follow keeps the only gold button;
+       this reads as the quieter archival panel above it. */
+    .desk-link {
+      display: block;
+      text-align: left;
+      padding: 16px 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--cream);
+      background: rgba(242, 234, 211, 0.06);
+      border: 1px solid rgba(201, 161, 74, 0.45);
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .desk-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      background: rgba(242, 234, 211, 0.1);
+    }
+    .desk-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .desk-link__kicker {
+      display: block;
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+    }
+    .desk-link__title {
+      display: block;
+      margin-top: 9px;
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1.25;
+    }
+    .desk-link__note {
+      display: block;
+      margin-top: 7px;
+      font-size: 0.87rem;
+      line-height: 1.45;
+      color: var(--cream-dim);
+    }
+
     /* Story headline and dek, populated from the feed. The infogram bakes the same text
        into the picture, so the script hides these once it loads (see below); they are the
        state a visitor sees if the infogram never arrives. */
@@ -204,6 +251,15 @@
     <p class="tagline">Every final since 1970, drawn.</p>
 
     <div class="actions">
+      <!-- The transfer desk front, not a dated article: this file is static, so it cannot know
+           today's date, and the lane index puts today's entry at the top of the list anyway.
+           Same-origin, always resolves, and it is in the sitemap. -->
+      <a class="desk-link" id="desk-link" href="/desk/transfer/">
+        <span class="desk-link__kicker">THE DESK</span>
+        <span class="desk-link__title">Today’s Manchester United transfer desk</span>
+        <span class="desk-link__note">Newest first, every entry checked against two independent sources.</span>
+      </a>
+
       <!-- Referrer-aware Follow, filled in by the script from document.referrer. iOS-only
            app + ~0% install means the ask anyone can act on has to lead. -->
       <a class="cta-gold follow-cta" id="follow-cta" href="https://www.instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow @thearchvfc</a>
@@ -260,6 +316,7 @@
         followBtn.addEventListener('click', function () { track('follow_click', { platform: follow.platform }); });
       }
 
+      bindCta(document.getElementById('desk-link'), 'desk');
       bindCta(document.getElementById('app-store-link'), 'appstore');
       bindCta(document.getElementById('today-card'), 'today_card');
       bindCta(document.getElementById('today-cta'), 'today_cta');

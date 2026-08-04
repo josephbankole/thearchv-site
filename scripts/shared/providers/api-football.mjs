@@ -26,6 +26,9 @@
    4. The key is read from the environment only. Load it with `set -a; . ./.env; set +a`. It is
       never logged, never written to the cache, and never given a VITE_ prefix, which would put it
       in the client bundle.
+   5. Requests already spent are never thrown away. The cache is written after every player and
+      carries `partial: true` until the run finishes, so a 429 or a dropped connection halfway
+      through costs the remaining players and not the ones already paid for. A rerun resumes.
 
    FILLING THE CACHE
      cd thearchv-site && set -a && . ./.env && set +a
@@ -33,11 +36,19 @@
        ARCHV_FOOTBALL_SEASON=2024 node scripts/build-duel-pages.mjs
    Commit the resulting scripts/data/football/cache/*.json so later builds and CI need no key.
 
+   WHICH SEASON A KEY-FREE BUILD GETS
+   The committed cache currently covers season 2024 (the 2024/25 campaign) and nothing else, while
+   `newestPlayedSeason()` returns 2025 today. A build that defaulted to the newest played season
+   would therefore miss the cache and hard-error, which made the no-key promise above untrue.
+   `resolveSeason()` fixes that: with no ARCHV_FOOTBALL_SEASON set it picks the newest season that
+   has a COMMITTED CACHE, and warns when that lags the newest played season so the gap is visible
+   rather than silent. Ask for a season explicitly and you always get that season.
+
    MAPPING PLAYERS
    API-Football uses its own numeric ids (Manchester United is 33, Liverpool 40). ARCHV ids are
    slugs. scripts/data/football/api-football-ids.json holds the bridge. Filling it costs one
    /players/profiles request per name, so do it once, by hand, and commit the result. */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const BASE = "https://v3.football.api-sports.io";
@@ -69,25 +80,74 @@ export function newestPlayedSeason(today = new Date()) {
 const CACHE_DIR = "scripts/data/football/cache";
 const ID_MAP = "scripts/data/football/api-football-ids.json";
 
+/** The newest season with a committed cache file for this league, or null if there is none. */
+export function newestCachedSeason(root, league) {
+  const dir = join(root, CACHE_DIR);
+  if (!existsSync(dir)) return null;
+  const prefix = `api-football-${league}-`;
+  const seasons = readdirSync(dir)
+    .map((f) => (f.startsWith(prefix) && f.endsWith(".json") ? Number(f.slice(prefix.length, -5)) : NaN))
+    .filter((n) => Number.isInteger(n));
+  return seasons.length ? Math.max(...seasons) : null;
+}
+
+/** Which season a run gets: the explicit one, else the newest committed cache, else newest played. */
+function resolveSeason(root, league) {
+  if (process.env.ARCHV_FOOTBALL_SEASON) return Number(process.env.ARCHV_FOOTBALL_SEASON);
+
+  // Default to the newest season that has actually been played, NOT SEASON_GUARD.max. The max is
+  // a typo rail sitting a year in the future; defaulting to it would silently request a season
+  // with no club rows in it. Then prefer a committed cache over that, so the documented key-free
+  // path resolves to a file that exists instead of hard-erroring on a season nobody has filled.
+  const played = newestPlayedSeason();
+  const cached = newestCachedSeason(root, league);
+  if (cached === null || cached >= played) return played;
+
+  console.warn(
+    `[api-football] defaulting to season ${cached}, the newest one with a committed cache. The newest\n` +
+      `  played season is ${played}. Fill and commit that cache to move the default forward:\n` +
+      `    ARCHV_FOOTBALL_PROVIDER=api-football ARCHV_FOOTBALL_ALLOW_FETCH=1 ARCHV_FOOTBALL_SEASON=${played} node scripts/build-duel-pages.mjs`,
+  );
+  return cached;
+}
+
 export default {
   name: "api-football",
 
   async load({ root }) {
-    // Default to the newest season that has actually been played, NOT SEASON_GUARD.max. The max is
-    // a typo rail sitting a year in the future; defaulting to it would silently request a season
-    // with no club rows in it.
-    const season = Number(process.env.ARCHV_FOOTBALL_SEASON || newestPlayedSeason());
     const league = Number(process.env.ARCHV_FOOTBALL_LEAGUE || PREMIER_LEAGUE);
+    const season = resolveSeason(root, league);
     assertSeason(season);
 
-    const cachePath = join(root, CACHE_DIR, `api-football-${league}-${season}.json`);
+    const cacheName = `api-football-${league}-${season}.json`;
+    const cachePath = join(root, CACHE_DIR, cacheName);
+    const allowFetch = process.env.ARCHV_FOOTBALL_ALLOW_FETCH === "1";
+
+    let existing = null;
     if (existsSync(cachePath)) {
-      return JSON.parse(readFileSync(cachePath, "utf8"));
+      existing = JSON.parse(readFileSync(cachePath, "utf8"));
+      // A complete cache is the whole answer and costs nothing.
+      if (!existing.partial) return existing;
+      // A partial cache is a run that died halfway. Fail closed rather than render a page missing
+      // players nobody asked to drop, but say exactly what it is and how to finish it.
+      if (!allowFetch) {
+        throw new Error(
+          `[api-football] ${CACHE_DIR}/${cacheName} is a PARTIAL cache: ${(existing.players || []).length} player(s)\n` +
+            `  were fetched before a run failed, and the rest are missing. This is not a dataset to build from.\n` +
+            `  Finish it (only the missing players are fetched, the paid-for ones are reused):\n` +
+            `    set -a; . ./.env; set +a\n` +
+            `    ARCHV_FOOTBALL_PROVIDER=api-football ARCHV_FOOTBALL_ALLOW_FETCH=1 ARCHV_FOOTBALL_SEASON=${season} node scripts/build-duel-pages.mjs`,
+        );
+      }
+      console.warn(
+        `[api-football] resuming a partial cache: ${(existing.players || []).length} player(s) already fetched, ` +
+          `only the missing ones cost a request.`,
+      );
     }
 
-    if (process.env.ARCHV_FOOTBALL_ALLOW_FETCH !== "1") {
+    if (!existing && !allowFetch) {
       throw new Error(
-        `[api-football] no cache at ${CACHE_DIR}/api-football-${league}-${season}.json and fetching is off.\n` +
+        `[api-football] no cache at ${CACHE_DIR}/${cacheName} and fetching is off.\n` +
           `  A build never spends quota by accident. To fill the cache once, deliberately:\n` +
           `    set -a; . ./.env; set +a\n` +
           `    ARCHV_FOOTBALL_PROVIDER=api-football ARCHV_FOOTBALL_ALLOW_FETCH=1 ARCHV_FOOTBALL_SEASON=${season} node scripts/build-duel-pages.mjs\n` +
@@ -95,11 +155,7 @@ export default {
       );
     }
 
-    const dataset = await fetchSeason({ root, league, season });
-    mkdirSync(join(root, CACHE_DIR), { recursive: true });
-    writeFileSync(cachePath, `${JSON.stringify(dataset, null, 2)}\n`);
-    console.log(`[api-football] wrote cache ${CACHE_DIR}/api-football-${league}-${season}.json`);
-    return dataset;
+    return fetchSeason({ root, league, season, cachePath, cacheName, existing });
   },
 };
 
@@ -140,33 +196,107 @@ function apiKey() {
 let spent = 0;
 const maxRequests = Number(process.env.ARCHV_FOOTBALL_MAX_REQUESTS || 20);
 
+// A 429 is the per-minute limit, not the daily one, and a 502/503 is the upstream having a moment.
+// Both clear on their own within seconds, so retrying is the difference between a run finishing and
+// a run throwing away every request it has already paid for. Anything else (401, 404, a refusal in
+// the body) is a real answer and is not retried.
+const RETRY_STATUS = new Set([429, 500, 502, 503, 504]);
+const RETRY_ATTEMPTS = 3;
+const RETRY_BASE_MS = 1500;
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 async function request(path, params) {
-  if (spent >= maxRequests) {
-    throw new Error(
-      `[api-football] per-run request ceiling of ${maxRequests} reached. Raise ARCHV_FOOTBALL_MAX_REQUESTS ` +
-        `only if you have counted the day's remaining quota out of 100.`,
-    );
-  }
-  spent++;
   const url = new URL(`${BASE}${path}`);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, String(v));
 
-  const res = await fetch(url, { headers: { "x-apisports-key": apiKey() } });
-  if (!res.ok) throw new Error(`[api-football] ${path} returned HTTP ${res.status}`);
-  const body = await res.json();
+  let lastError = null;
+  for (let attempt = 1; attempt <= RETRY_ATTEMPTS; attempt++) {
+    // The ceiling counts attempts, not successes: a retry storm spends quota exactly like a loop
+    // bug does, and this is the rail that stops both.
+    if (spent >= maxRequests) {
+      throw new Error(
+        `[api-football] per-run request ceiling of ${maxRequests} reached. Raise ARCHV_FOOTBALL_MAX_REQUESTS ` +
+          `only after reading the day's remaining quota off the response's x-ratelimit-requests-remaining ` +
+          `header (the Pro plan's daily allowance is 7,500, not the free plan's 100).`,
+      );
+    }
+    spent++;
 
-  // A paywalled season, a bad key and a malformed query all arrive as a 200 with the complaint
-  // tucked inside `errors`. Treat any non-empty `errors` as a failure; the alternative is an
-  // empty dataset that renders as a page full of zeroes.
-  const errors = body?.errors;
-  const hasErrors = Array.isArray(errors) ? errors.length > 0 : errors && Object.keys(errors).length > 0;
-  if (hasErrors) {
-    throw new Error(`[api-football] ${path} refused the request: ${JSON.stringify(errors)}`);
+    let res = null;
+    try {
+      res = await fetch(url, { headers: { "x-apisports-key": apiKey() } });
+    } catch (err) {
+      // A dropped connection or a DNS blip. Same treatment as a 5xx.
+      lastError = new Error(`[api-football] ${path} failed to connect: ${err.message}`);
+      if (attempt === RETRY_ATTEMPTS) break;
+      await sleep(RETRY_BASE_MS * 2 ** (attempt - 1));
+      continue;
+    }
+
+    if (!res.ok) {
+      lastError = new Error(`[api-football] ${path} returned HTTP ${res.status}`);
+      if (!RETRY_STATUS.has(res.status) || attempt === RETRY_ATTEMPTS) break;
+      // Retry-After is authoritative when the API sends it; the doubling backoff is the fallback.
+      const after = Number(res.headers.get("retry-after"));
+      const waitMs = Number.isFinite(after) && after > 0 ? after * 1000 : RETRY_BASE_MS * 2 ** (attempt - 1);
+      console.warn(
+        `[api-football] ${path} returned HTTP ${res.status}; retrying in ${Math.round(waitMs / 1000)}s ` +
+          `(attempt ${attempt} of ${RETRY_ATTEMPTS}).`,
+      );
+      await sleep(waitMs);
+      continue;
+    }
+
+    const body = await res.json();
+
+    // A paywalled season, a bad key and a malformed query all arrive as a 200 with the complaint
+    // tucked inside `errors`. Treat any non-empty `errors` as a failure; the alternative is an
+    // empty dataset that renders as a page full of zeroes.
+    const errors = body?.errors;
+    const hasErrors = Array.isArray(errors) ? errors.length > 0 : errors && Object.keys(errors).length > 0;
+    if (hasErrors) {
+      throw new Error(`[api-football] ${path} refused the request: ${JSON.stringify(errors)}`);
+    }
+    return body;
   }
-  return body;
+
+  throw lastError;
 }
 
-async function fetchSeason({ root, league, season }) {
+/* ---------- per-club aggregation ----------
+
+   API-Football returns `statistics` as one entry PER TEAM per league per season, so a player who
+   moved clubs in January has TWO rows for the same competition. Taking the first published half a
+   season's goals under one club's name, on a product whose whole pitch is sourced figures.
+
+   THE PRESENTATION RULE, so the card is never ambiguous:
+   - The NUMBERS are season totals, summed across every club row in the competition. That is the
+     figure every public source prints for a season and the one a reader is checking against.
+   - The CLUB LABEL is a single club, because the surfaces downstream (the duel card, the OG image,
+     the head-kit guard in football-data.mjs) each take one club string and a combined label would
+     have to be parsed by all three. It is the DOMINANT-MINUTES club, which for a mid-season mover
+     is the one he is remembered at for that season, and it is also the club whose kit the head
+     should be wearing.
+   - Any player with more than one row is LOGGED with the split, because a totals-under-one-club
+     card is a legitimate presentation but not one that should ship unlooked-at. */
+const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : 0);
+// API-Football's own field is spelled "appearences". Read both so a fix upstream does not break us.
+const apps = (s) => num(s.games?.appearences ?? s.games?.appearances);
+
+function aggregateLines(lines) {
+  const primary = lines
+    .slice()
+    .sort((a, b) => num(b.games?.minutes) - num(a.games?.minutes) || apps(b) - apps(a))[0];
+  return {
+    club: primary.team?.name,
+    position: primary.games?.position,
+    goals: lines.reduce((sum, s) => sum + num(s.goals?.total), 0),
+    assists: lines.reduce((sum, s) => sum + num(s.goals?.assists), 0),
+  };
+}
+
+async function fetchSeason({ root, league, season, cachePath, cacheName, existing }) {
   const idMapPath = join(root, ID_MAP);
   if (!existsSync(idMapPath)) {
     throw new Error(
@@ -188,42 +318,14 @@ async function fetchSeason({ root, league, season }) {
     },
   };
 
-  const players = [];
-  for (const [id, meta] of entries) {
-    const body = await request("/players", { id: meta.apiId, season, league });
-    const record = body?.response?.[0];
-    if (!record) {
-      console.warn(`[api-football] no record for ${id} (api id ${meta.apiId}) in ${seasonLabel}; skipped`);
-      continue;
-    }
-    const line = record.statistics?.find((s) => s.league?.id === league) || record.statistics?.[0];
-    if (!line) continue;
+  // Resume: anything already in a partial cache was paid for and is not fetched again.
+  const players = (existing?.players || []).slice();
+  const have = new Set(players.map((p) => p.id));
+  if (have.size) console.log(`[api-football] reusing ${have.size} player(s) from the partial cache.`);
 
-    // One provider, so a stat here carries one source. The two-source rule lives in the static
-    // provider's validator because it is an editorial rule about hand-checked figures; a single
-    // licensed feed is a different kind of claim and the card labels it as such.
-    const stat = (value) => ({ value, sources: ["api-football"] });
-    players.push({
-      id,
-      name: meta.name || record.player?.name,
-      sortName: meta.sortName || record.player?.lastname,
-      club: line.team?.name,
-      position: line.games?.position,
-      nationality: record.player?.nationality,
-      head: meta.head,
-      headAlt: meta.headAlt,
-      line: meta.line || "",
-      stats: {
-        goals: stat(line.goals?.total ?? 0),
-        assists: stat(line.goals?.assists ?? 0),
-      },
-    });
-  }
-
-  console.log(`[api-football] ${spent} request(s) spent this run for ${players.length} player(s).`);
-
-  return {
+  const dataset = (partial) => ({
     schemaVersion: 1,
+    ...(partial ? { partial: true } : {}),
     competition: {
       key: "premier-league",
       label: "Premier League",
@@ -233,18 +335,89 @@ async function fetchSeason({ root, league, season }) {
     asOf: new Date().toISOString().slice(0, 10),
     omitted: [],
     sources,
-    metrics: [
-      { key: "goals", label: "Goals", short: "G", higherIsBetter: true, blurb: `Premier League goals, ${seasonLabel}.` },
-      { key: "assists", label: "Assists", short: "A", higherIsBetter: true, blurb: `Premier League assists, ${seasonLabel}.` },
-      {
-        key: "involvements",
-        label: "Goal involvements",
-        short: "G+A",
-        higherIsBetter: true,
-        derived: "goals + assists",
-        blurb: "Goals and assists added together, worked out by The ARCHV from the two figures above.",
-      },
-    ],
+    metrics: METRICS(seasonLabel),
     players,
+  });
+
+  const writeCache = (partial) => {
+    mkdirSync(join(root, CACHE_DIR), { recursive: true });
+    writeFileSync(cachePath, `${JSON.stringify(dataset(partial), null, 2)}\n`);
   };
+
+  for (const [id, meta] of entries) {
+    if (have.has(id)) continue;
+    let body;
+    try {
+      body = await request("/players", { id: meta.apiId, season, league });
+    } catch (err) {
+      // Everything fetched so far is banked before the failure propagates, so a rerun resumes
+      // instead of restarting and spending those requests twice.
+      if (players.length) {
+        writeCache(true);
+        console.error(
+          `[api-football] run failed after ${spent} request(s). ${players.length} player(s) were written to ` +
+            `${CACHE_DIR}/${cacheName} as a PARTIAL cache; rerun the same command to fetch only the rest.`,
+        );
+      }
+      throw err;
+    }
+
+    const record = body?.response?.[0];
+    if (!record) {
+      console.warn(`[api-football] no record for ${id} (api id ${meta.apiId}) in ${seasonLabel}; skipped`);
+      continue;
+    }
+    // Every row for THIS competition, not the first one. See the aggregation note above.
+    const inLeague = (record.statistics || []).filter((s) => s.league?.id === league);
+    const lines = inLeague.length ? inLeague : (record.statistics?.[0] ? [record.statistics[0]] : []);
+    if (!lines.length) continue;
+    const agg = aggregateLines(lines);
+    if (lines.length > 1) {
+      console.warn(
+        `[api-football] ${id} has ${lines.length} club rows in ${seasonLabel}: ` +
+          lines.map((s) => `${s.team?.name} ${num(s.goals?.total)}G/${num(s.goals?.assists)}A/${num(s.games?.minutes)}min`).join(", ") +
+          `.\n  Published as season totals (${agg.goals}G/${agg.assists}A) labelled ${agg.club}, the club with the most ` +
+          `minutes. Check the club label and the head's kit before this card ships.`,
+      );
+    }
+
+    // One provider, so a stat here carries one source. The two-source rule lives in the static
+    // provider's validator because it is an editorial rule about hand-checked figures; a single
+    // licensed feed is a different kind of claim and the card labels it as such.
+    const stat = (value) => ({ value, sources: ["api-football"] });
+    players.push({
+      id,
+      name: meta.name || record.player?.name,
+      sortName: meta.sortName || record.player?.lastname,
+      club: agg.club,
+      position: agg.position,
+      nationality: record.player?.nationality,
+      head: meta.head,
+      headAlt: meta.headAlt,
+      line: meta.line || "",
+      stats: {
+        goals: stat(agg.goals),
+        assists: stat(agg.assists),
+      },
+    });
+    writeCache(true);
+  }
+
+  writeCache(false);
+  console.log(`[api-football] ${spent} request(s) spent this run for ${players.length} player(s).`);
+  console.log(`[api-football] wrote cache ${CACHE_DIR}/${cacheName}`);
+  return dataset(false);
 }
+
+const METRICS = (seasonLabel) => [
+  { key: "goals", label: "Goals", short: "G", higherIsBetter: true, blurb: `Premier League goals, ${seasonLabel}.` },
+  { key: "assists", label: "Assists", short: "A", higherIsBetter: true, blurb: `Premier League assists, ${seasonLabel}.` },
+  {
+    key: "involvements",
+    label: "Goal involvements",
+    short: "G+A",
+    higherIsBetter: true,
+    derived: "goals + assists",
+    blurb: "Goals and assists added together, worked out by The ARCHV from the two figures above.",
+  },
+];

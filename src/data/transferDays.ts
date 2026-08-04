@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-04",
+    day: "Tuesday",
+    headline: "There are two versions of the Marcus Rashford exit story.",
+    dek: "Manchester United are planning as if Marcus Rashford stays. The Sun report Fenerbahce are ready to break the bank, and Turkish Football report there have been no negotiations at all.",
+    body: "Marcus Rashford is a Manchester United player again, and there are now two accounts of where he goes next.\n\nThe Sun reported on 3 August that Fenerbahce have contacted his representatives and are ready to break the bank to sign him. Sky Sports Paper Talk carried it the same day, but that is a rewrite of The Sun rather than separate reporting, so it does not make the claim any firmer.\n\nTurkish Football and the Sunday Guardian report the opposite. Their line is that there have been no negotiations between Rashford and the Istanbul club at all, and that he is back for pre-season under Michael Carrick. Neither version has been settled in public, and this entry does not settle it either.\n\nWhat is not in dispute is how he got here. Barcelona held a purchase option worth about 30m euros and let it expire on 15 June 2026. They had already agreed a deal for Anthony Gordon at around 70m euros, so the left wing was no longer a problem they were willing to spend 30m euros on. ESPN and Fox Sports both reported the expiry, and Football Espana and Sportingpedia carried the return on 16 June.\n\nThe Manchester United side has hardened since. Carrick has been the permanent manager since 22 May 2026 on a contract to 2028, and TEAMtalk report that he and his staff are building plans that make Rashford a first-team figure this season rather than a name to move on. Carrick has spoken to him about staying.\n\nThat leaves a straightforward test. The window closes at 23:00 BST on Tuesday 1 September 2026. Fabrizio Romano's position is that Rashford only reconsiders his place in the squad if a major offer arrives from a leading European club. Four weeks is enough time for one to arrive. Nothing of that size has arrived yet.\n\nSources: The Sun and Sky Sports Paper Talk, 3 August 2026, on the Fenerbahce approach, both tracing to one origin; Turkish Football and Sunday Guardian on the denial; ESPN and Fox Sports on the expired option; Football Espana and Sportingpedia on the return; TEAMtalk on Carrick's plans; ESPN and Al Jazeera on Carrick's appointment and terms; Premier League official, Sky Sports and ESPN on the deadline.",
+    status: "verified",
+    image: "/heads/rashford.webp",
+    imageAlt: "Brand-illustrated portrait of Manchester United forward Marcus Rashford in the ARCHV navy and gold house style.",
+  },
+  {
     date: "2026-08-03",
     day: "Monday",
     headline: "Manchester United are out on Iliman Ndiaye.",

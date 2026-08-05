@@ -37,11 +37,16 @@ export const AUTHOR_SAMEAS = [AUTHOR_URL, AUTHOR_PERSONAL_URL];
 // block point at the same set, consolidating the entity for search and answer engines.
 export const ORG_SAMEAS = [
   "https://www.instagram.com/thearchvfc/",
+  "https://www.instagram.com/thearchv.ca/",
   "https://www.threads.net/@thearchvfc",
+  "https://www.tiktok.com/@thearchvfc",
+  "https://www.youtube.com/@thearchvca",
+  "https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg",
   "https://thearchvdispatch.substack.com",
   "https://www.linkedin.com/company/thearchvfc/",
   "https://x.com/thearchvfc",
   "https://www.etsy.com/shop/TheARCHVCA",
+  "https://apps.apple.com/app/id6786508653",
 ];
 
 // Defensive sort: every lane's day-entry array is committed newest-first by convention

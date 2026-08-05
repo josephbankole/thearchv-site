@@ -40,6 +40,7 @@ export const ORG_SAMEAS = [
   "https://www.instagram.com/thearchv.ca/",
   "https://www.threads.net/@thearchvfc",
   "https://www.tiktok.com/@thearchvfc",
+  "https://www.facebook.com/profile.php?id=61590734246013",
   "https://www.youtube.com/@thearchvca",
   "https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg",
   "https://thearchvdispatch.substack.com",

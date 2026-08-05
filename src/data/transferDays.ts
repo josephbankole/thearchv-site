@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-05",
+    day: "Wednesday",
+    headline: "Newcastle United have answered on Lewis Hall, and the answer is no.",
+    dek: "Newcastle United have put Lewis Hall at 60m pounds and say they are not open to offers. Manchester United approved the signing internally days ago and still have not bid.",
+    body: "Manchester United have a left-back they want and no route to him.\n\nNewcastle United's position hardened this week. Stretty News reported on 4 August, citing multiple sources, that Newcastle United have no intention of selling Lewis Hall and are not open to any offers. Graeme Bailey of TEAMtalk put the valuation at 60m pounds on 30 July. The number and the refusal arriving together is usually a club saying the price is not the point.\n\nInside Old Trafford the move is already agreed. Fabrizio Romano reported on 1 August that a move for Hall has been approved internally and an opening proposal of around 60m pounds is being prepared. David Ornstein has Hall as Michael Carrick's first-choice left-back, brought in to compete with Luke Shaw. Ben Jacobs is the check on both: initial enquiries only, no club-to-club contact. Nothing has been bid.\n\nThe 60m pounds figure carries a second meaning. It would make a 21-year-old the most expensive arrival of Manchester United's window, above the 50m pounds paid to Chelsea for Andrey Santos and the 35m pound release clause triggered at Aston Villa for Youri Tielemans. That is a summer past 145m pounds on three players, one of whom is a left-back.\n\nNewcastle United's reluctance is not really about Hall either. Anthony Gordon and Sandro Tonali have both left this summer, and Bruno Guimaraes is expected at Arsenal. A fourth departure is a different kind of problem, and 60m pounds does not solve that kind.\n\nThis entry does not settle it. Every line above is reported and none of it is signed.\n\nSources: Stretty News, 4 August 2026, citing multiple sources on Newcastle United's stance; Graeme Bailey of TEAMtalk, 30 July 2026, on the 60m pound valuation; Fabrizio Romano, 1 August 2026, on internal approval and the opening proposal; David Ornstein via The Athletic on Carrick's first-choice left-back; Ben Jacobs on the absence of club-to-club contact; Sky Sports on the Andrey Santos and Youri Tielemans fees.",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Lewis Hall, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-08-04",
     day: "Tuesday",
     headline: "There are two versions of the Marcus Rashford exit story.",

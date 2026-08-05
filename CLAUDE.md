@@ -327,8 +327,12 @@ Content rules live in `../EDITOR_STANDARDS.md` (including the REPORTED single-so
 tier and the append-only archive-correction rules, ratified 2026-07-03) and
 decisions of record in `../CANONICAL-CONTEXT.md`. Imagery: brand-illustrated
 headshots in `public/heads/` (240px webp, committed via the `head` mode of
-archv-site-commit.mjs, never overwrite an existing face); no club crests, kits,
-photos or FIFA marks anywhere.
+archv-site-commit.mjs, never overwrite an existing face, the single exception being
+a replacement that has been audited against a confirmed photograph of that player
+and approved by the founder on that audit, which always archives its predecessor to
+`_superseded/` first; carve-out founder-approved 2026-08-05, and the same day's
+Alex Scott case shows why the audit comes first: the candidate failed it); no club
+crests, kits, photos or FIFA marks anywhere.
 
 ## Open site work (as of 2026-07-09)
 

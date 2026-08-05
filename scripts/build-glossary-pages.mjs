@@ -107,7 +107,7 @@ function renderEntry(entry) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle([entry.question, "The ARCHV glossary"]))}</title>
   <meta name="description" content="${escAttr(description)}" />
-  <meta name="robots" content="index,follow" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}
@@ -200,7 +200,7 @@ function renderHub() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(HUB_TITLE)}</title>
   <meta name="description" content="${escAttr(HUB_INTRO)}" />
-  <meta name="robots" content="index,follow" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${HUB_URL}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${PAGE_CSP}

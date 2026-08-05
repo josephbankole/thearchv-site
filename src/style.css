@@ -36,6 +36,47 @@
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---------- semantic token layer (Tier 0, 2026-08-04) ----------
+     The palette above is LOCKED and nothing in it changed. This layer gives the same five brand
+     colours role names so a rule can say what a colour is FOR rather than which hex it is, and
+     so there is one place to reach for when a new surface needs a border or an elevated panel.
+     Every value resolves to a brand colour or an alpha of one: --text-primary IS --cream,
+     --bg-main IS --navy. A sixth hue here is a brand break, not a refactor.
+     Mirrored in pageStyles() in scripts/shared/page-shell.mjs for the static page family; the
+     two files do not import each other, so keep them in step. Both files define the whole
+     vocabulary even where one of them does not yet reference every name, so a rule moved
+     between the homepage bundle and the static family keeps resolving. */
+  --text-primary: var(--cream);
+  --text-secondary: var(--cream-dim);
+  --text-faint: var(--cream-faint-text);
+  --bg-main: var(--navy);
+  --bg-elevated: var(--navy-deep);
+  --bg-raised: var(--navy-soft);
+  --border-main: var(--cream-faint);
+  --accent: var(--gold);
+  --accent-soft: var(--gold-soft);
+  --positive: var(--pitch);
+
+  /* Elevation, softened. The old masthead panel shadow was rgba(0,0,0,.55), which on navy read
+     as a hard slab edge. Quiet ambient depth is what the premium dev-tool sites are actually
+     doing. The deep editorial shadows on the poster frames and the lightbox are NOT part of this
+     and keep their own values: those are art direction (a print lying on a dark table), not UI
+     chrome, and flattening them would gut the archive gallery. */
+  --shadow-soft: 0 12px 32px -10px rgba(0, 0, 0, 0.32);
+  --shadow-lift: 0 18px 40px -14px rgba(0, 0, 0, 0.4);
+
+  /* Micro-label face for eyebrows and kickers. System stack on purpose: the brand type lock is
+     Fraunces + Inter Tight, and a third webfont for 11px labels would cost a round trip for
+     nothing. */
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Dot-grid field colour: the locked cream at a very low alpha, not a new grey. */
+  --dot: rgba(242, 234, 211, 0.05);
+
+  /* Reveal timing, shared by the IntersectionObserver layer in src/anim/reveal.ts. */
+  --reveal-dur: 0.6s;
+  --reveal-step: 60ms;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,8 +85,8 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
-  background: var(--navy);
-  color: var(--cream);
+  background: var(--bg-main);
+  color: var(--text-primary);
   font-family: var(--grotesque);
   font-size: var(--t-body);
   line-height: 1.6;
@@ -64,7 +105,7 @@ em { font-style: italic; }
 
 .skip {
   position: fixed; top: -100px; left: 1rem; z-index: 200;
-  background: var(--cream); color: var(--navy); padding: 0.6rem 1rem; border-radius: 2px;
+  background: var(--text-primary); color: var(--bg-main); padding: 0.6rem 1rem; border-radius: 2px;
 }
 .skip:focus { top: 1rem; }
 
@@ -160,9 +201,9 @@ main, .masthead, .footer { position: relative; z-index: 2; }
 .masthead__panel {
   position: absolute; top: calc(100% + 0.6rem); right: 0; z-index: 60; min-width: 15rem;
   max-width: calc(100vw - 2 * var(--gutter));
-  background: var(--navy-deep); border: 1px solid var(--cream-faint); border-radius: 2px;
+  background: var(--bg-elevated); border: 1px solid var(--border-main); border-radius: 2px;
   padding: 0.4rem; display: flex; flex-direction: column; gap: 0.1rem;
-  box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--shadow-lift);
 }
 .masthead__panel[hidden] { display: none; }
 .masthead__panel-link {
@@ -187,16 +228,20 @@ main, .masthead, .footer { position: relative; z-index: 2; }
 .sportnav-wrap--home {
   position: fixed; top: 0; left: 0; right: 0; z-index: 55;
   height: 2.75rem; display: flex; align-items: center;
-  background: var(--navy-deep); border-bottom: 1px solid var(--gold-soft);
+  background: var(--bg-elevated); border-bottom: 1px solid var(--accent-soft);
 }
 .masthead { top: 2.75rem; } /* clear the pinned tab bar pinned above it */
-.sportnav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; width: 100%; }
+/* overflow-y: hidden for the same reason as .rail: a horizontal scroller must never be able to own
+   a vertical gesture. This one measured clean during the 2026-08-04 diagnosis; the guard is here so
+   it stays that way. */
+.sportnav { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; width: 100%; }
 .sportnav::-webkit-scrollbar { display: none; }
 .sportnav__row { display: flex; gap: 1.4rem; align-items: center; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); width: max-content; min-width: 100%; justify-content: center; }
 .sportnav__link { flex: 0 0 auto; scroll-snap-align: start; font-family: var(--grotesque); color: var(--cream-dim); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; padding: 0.2rem 0; border-bottom: 2px solid transparent; transition: color 0.3s, border-color 0.3s; }
 .sportnav__link:hover { color: var(--gold); }
 .sportnav__link[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
-.sportnav-wrap--home::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 26px; background: linear-gradient(to right, rgba(7, 28, 43, 0), var(--navy-deep)); pointer-events: none; }
+/* The old right-only gradient ::after here was replaced by the two-sided edge-fade mask on
+   .sportnav (Tier 0, below): keeping both would have double-darkened the right edge. */
 @media (prefers-reduced-motion: reduce) { .sportnav__link { transition: none; } }
 @media (max-width: 640px) { .sportnav__row { justify-content: flex-start; gap: 1.1rem; } }
 
@@ -312,6 +357,12 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
   display: flex; gap: clamp(1rem, 3vw, 2.5rem); margin-top: 3.5rem;
   padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x proximity;
   overscroll-behavior-x: contain;
+  /* A horizontal scroller must never own a vertical gesture. Setting overflow-x to auto makes the
+     used value of overflow-y auto too, so every rail has always been a vertical scroll container
+     that simply had nothing to scroll; the moment anything pokes below the padding edge it starts
+     swallowing page swipes (trap 3 in CLAUDE.md, 2026-08-04). This pins that shut regardless of
+     what lands inside the rail later. */
+  overflow-y: hidden;
   scrollbar-width: none; cursor: grab; -webkit-overflow-scrolling: touch;
 }
 .rail::-webkit-scrollbar { display: none; }
@@ -343,11 +394,11 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 /* ---------- transfer desk ---------- */
 .desk__title { margin-bottom: 1.25rem; }
 .desk__lede { max-width: 50ch; color: var(--cream-dim); }
-.ticker { margin-top: 3rem; border-top: 1px solid var(--cream-faint); border-bottom: 1px solid var(--cream-faint); padding-block: 1.5rem; display: grid; gap: 0.9rem; font-family: var(--grotesque); }
+.ticker { margin-top: 3rem; border-top: 1px solid var(--border-main); border-bottom: 1px solid var(--border-main); padding-block: 1.5rem; display: grid; gap: 0.9rem; font-family: var(--grotesque); }
 .ticker__row { display: grid; grid-template-columns: auto auto 1fr; gap: 1rem; align-items: baseline; font-size: 0.95rem; }
 .ticker__time { color: var(--cream-faint-text); font-variant-numeric: tabular-nums; font-size: 0.8rem; letter-spacing: 0.08em; }
 .ticker__tag { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.2em 0.6em; border-radius: 2px; align-self: center; }
-.ticker__tag--done { background: var(--pitch); color: var(--cream); }
+.ticker__tag--done { background: var(--positive); color: var(--text-primary); }
 .ticker__tag--rumour { border: 1px solid var(--cream-faint); color: var(--cream-dim); }
 .ticker__text { color: var(--cream-dim); }
 
@@ -445,12 +496,16 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .manifesto__line { margin-top: 1.75rem; max-width: 40ch; color: var(--cream-dim); font-family: var(--serif); font-weight: 300; font-size: clamp(1.2rem, 2.4vw, 1.7rem); line-height: 1.45; }
 
 /* ---------- daily-digest rails (transfer desk + world cup) ---------- */
-.day-rail { padding-block: 0.5rem 0.5rem; }
+/* The rail clips its children's ink at the padding box in both axes, so the Tier 0 --shadow-soft on
+   .day (12px down, 32px blur, -10px spread: roughly 18px of reach below the card) was being cut off
+   by the old 8px of bottom padding. 1.5rem clears it. Top stays at 8px: nothing casts upward. */
+.day-rail { padding-block: 0.5rem 1.5rem; }
 .day {
   flex: 0 0 auto; width: clamp(280px, 82vw, 440px); scroll-snap-align: start;
   background: linear-gradient(180deg, rgba(19, 58, 82, 0.5), rgba(7, 28, 43, 0.5));
-  border: 1px solid var(--cream-faint); border-radius: 3px; padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--border-main); border-radius: 3px; padding: clamp(1.5rem, 3vw, 2.25rem);
   display: flex; flex-direction: column; min-height: 320px;
+  box-shadow: var(--shadow-soft);
   /* whole-card link (SITE-DEPTH-PLAN.md W2.2): .day is now the <a> itself */
   color: inherit; text-decoration: none;
 }
@@ -462,7 +517,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .day__label { font-size: var(--t-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream-dim); }
 .day__status { margin-left: auto; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3em 0.7em; border-radius: 2px; white-space: nowrap; }
 .day__status--live { color: var(--gold); border: 1px solid var(--gold-soft); }
-.day__status--done { background: var(--pitch); color: var(--cream); }
+.day__status--done { background: var(--positive); color: var(--text-primary); }
 .day__headline { font-family: var(--serif); font-weight: 360; font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 1rem; } /* single line of air before the dek (founder 2026-07-24) */
 .day__dek { font-size: var(--t-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.1rem; }
 .day__body { color: var(--cream-dim); font-size: 0.95rem; line-height: 1.6; }
@@ -669,3 +724,93 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .reduced-motion .hero__sub,
 .reduced-motion .hero__cta,
 .reduced-motion .hero__scroll { animation: none; opacity: 1; transform: none; }
+
+/* ============================================================
+   Tier 0 pass (2026-08-04). Type, elevation, masking and one reveal.
+   No rule below sets a colour on an existing element, so the rendered
+   palette is unchanged; the only new colour values are the dot field and
+   the shadows, both derived from the locked cream and from black.
+   ============================================================ */
+
+/* ---------- mono micro-labels ----------
+   Every eyebrow, kicker and small uppercase label now shares one face, which is what makes it
+   read as a label tier rather than just small text. Sets no colour and no font-size: each rule
+   above keeps its own, so this is a face-and-tracking change only. Tracking comes down from
+   .22em/.16em because a monospace face is already wide, and .eyebrow at .22em in mono would
+   have overrun its line at 375px. */
+.eyebrow,
+.section-index,
+.day__label,
+.day__dek,
+.poster__host,
+.killer__meta,
+.hero__scroll,
+.field span {
+  font-family: var(--font-mono);
+  letter-spacing: 0.14em;
+  font-weight: 500;
+}
+.section-index { letter-spacing: 0.16em; }
+
+/* ---------- dot-grid field ----------
+   A 24px lattice of two offset dot layers, masked so it fades out before the section's content
+   gets dense. Applied by class, not globally: the hero has the WebGL layer and the grain over it
+   already, and a third texture there would be noise. The three desk sections were flat navy, and
+   they are where a field reads as paper rather than as decoration. Decorative only, pointer
+   events off, and children are raised so it can never sit over text or intercept a click. */
+.dot-grid { position: relative; }
+.dot-grid::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle, var(--dot) 0.6px, transparent 1.1px),
+    radial-gradient(circle, var(--dot) 0.6px, transparent 1.1px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+}
+.dot-grid > * { position: relative; z-index: 1; }
+@media print { .dot-grid::before { display: none; } }
+
+/* ---------- edge fades on the horizontal scrollers ----------
+   The rails and the sport tab bar both cut off hard at the viewport edge, which reads as a
+   clipped layout rather than as "there is more this way". A mask fades the first and last 24px
+   and costs no extra element. :focus-within drops it so a keyboard user tabbing to the first or
+   last card never sees the focused control faded out. */
+.rail,
+.sportnav {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+.rail:focus-within,
+.sportnav:focus-within { -webkit-mask-image: none; mask-image: none; }
+
+/* ---------- IntersectionObserver staggered reveal ----------
+   Driven by src/anim/reveal.ts (bundled, never inline: script-src is 'self' plus one hash).
+   Applied ONLY to elements this bundle injects itself, never to markup that ships in index.html.
+   That is the safety rule: if the bundle never runs, the elements do not exist either, so there
+   is no path where a failed script leaves real content stuck at opacity 0.
+   --i is set per child by the observer for the stagger.
+
+   The reveal is opacity-only, and that is load-bearing rather than a style preference. It used to
+   carry transform: translateY(16px). The day cards sit 8px clear of the rail's bottom padding edge,
+   so translating them down 16px pushed them 8px past it; .rail is overflow-x: auto, which makes the
+   used value of overflow-y auto as well, so each rail became a vertical scroll container with 8px
+   of room. An element with vertical scroll room owns any vertical gesture that starts inside it,
+   the rails are full bleed and 600 to 780px tall on a phone, and the founder could not scroll the
+   homepage (2026-08-04, trap 3 in CLAUDE.md). Do not reintroduce a downward transform here. The
+   guard rail is overflow-y: hidden on .rail; this is the root fix. */
+[data-inview] {
+  opacity: 0;
+  transition: opacity var(--reveal-dur) var(--ease);
+  transition-delay: calc(var(--i, 0) * var(--reveal-step));
+}
+[data-inview='true'] { opacity: 1; }
+/* Reduced motion is a designed state here, not a disabled one: the content is simply already
+   there, at full opacity, with no transition to interrupt. Both the media query and the
+   .reduced-motion class the early bootstrap sets are covered, because the class is what the rest
+   of this file gates on and the media query is what covers a mid-session OS change. */
+@media (prefers-reduced-motion: reduce) {
+  [data-inview] { opacity: 1; transform: none; transition: none; }
+}
+.reduced-motion [data-inview] { opacity: 1; transform: none; transition: none; }

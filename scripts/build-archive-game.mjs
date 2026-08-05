@@ -384,7 +384,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>${esc(clampTitle(["The Daily Archive", "guess the player", "The ARCHV"]))}</title>
   <meta name="description" content="${escAttr(clampDescription(LEDE))}" />
-  <meta name="robots" content="index,follow" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${PAGE_URL}" />
   <meta name="theme-color" content="#0C2A3E" />
   ${pageCsp}

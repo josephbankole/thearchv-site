@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-06",
+    day: "Thursday",
+    headline: "Who is Jackson Koivun, the 21-year-old who beat Scottie Scheffler in his third professional start?",
+    dek: "Jackson Koivun won the 2026 3M Open in his third start as a professional, holding off world number one Scottie Scheffler by three shots. He tees off at the Wyndham Championship at Sedgefield Country Club on 6 August.",
+    body: "Jackson Koivun turned professional this summer and won a PGA Tour event in his third start. The player he held off was Scottie Scheffler.\n\nKoivun won the 3M Open at TPC Twin Cities on 26 July, closing with a 5 under 66 to finish 25 under par at 259, a tournament record. That was three shots clear of the world number one. He was 21 years old and collected 1,584,000 dollars, and he is the fourth rookie to win on the PGA Tour this season.\n\nThe amateur record behind it is the part that explains the speed. Koivun broke the NCAA career record for per round stroke average at 68.89 and helped Auburn win the national championship. He had already won the Phil Mickelson Award and the Fred Haskins Award.\n\nHe is in the field at the Wyndham Championship, which starts at Sedgefield Country Club today and runs to 9 August. It is the last event of the PGA Tour regular season and the final chance to reach the top 70 of the FedExCup before the FedEx St. Jude Championship next week. The field runs to 147 players and the purse is 8.5 million dollars.\n\nThe names around him are worth knowing. Defending champion Cameron Young goes out at 7:45 in the morning with Alex Fitzpatrick and Justin Thomas. The afternoon group has Jason Day, Ryan Gerard and Jordan Spieth at 1:05. Keegan Bradley, the 2025 United States Ryder Cup captain, is outside the playoff places a year after finishing seventh in the FedExCup, and this is the week he has left to fix it.\n\nFor Koivun the maths runs the other way. A player who was in college golf a few months ago arrives at the regular season finale having already won, while the established names in the field are playing for the right to keep their season going.",
+    status: "verified",
+  },
+  {
     date: "2026-08-04",
     day: "Tuesday",
     headline: "Who is on the FedExCup line going into the Wyndham Championship?",

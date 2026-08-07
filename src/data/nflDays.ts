@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-07",
+    day: "Friday",
+    headline: "Who won the 2026 Hall of Fame Game, and how did it end?",
+    dek: "The Carolina Panthers beat the Arizona Cardinals 33-30 in Canton, Ohio on 6 August 2026, on the last play of the game. It was the first NFL football of the 2026 preseason.",
+    body: "The Carolina Panthers beat the Arizona Cardinals 33-30 at Tom Benson Hall of Fame Stadium in Canton, Ohio on Thursday 6 August 2026. The Pro Football Hall of Fame's own report and ESPN's box score both give the score, and the NFL's report on the game agrees.\n\nIt finished on the final snap. Rookie quarterback Haynes King ran in a five-yard touchdown with no time remaining on the clock, which is how the Pro Football Hall of Fame and Yahoo Sports both describe the winning play. A preseason opener that nobody was scheduled to remember produced the one thing that makes people remember a preseason opener.\n\nThe game is an exhibition and the result carries no competitive weight. What it does carry is the calendar. This was the first NFL football of the 2026 season, and it exists because of the enshrinement weekend it opens. The 2026 Hall of Fame class goes in on 8 August: Larry Fitzgerald, Luke Kuechly, Drew Brees, Roger Craig and Adam Vinatieri, per NBC and Yahoo Sports.\n\nThe rest of the league starts a week later. Preseason Week 1 runs from 13 to 15 August with all 32 teams playing, and the preseason as a whole runs to 29 August, per the NFL's own schedule release and Fox Sports.\n\nSo if you have been waiting for the season to start: it has, technically, and it ended on a quarterback keeper with the clock on zero.",
+    status: "verified",
+  },
+  {
     date: "2026-08-05",
     day: "Wednesday",
     headline: "Why have the Atlanta Falcons made Bijan Robinson the highest-paid running back in NFL history?",

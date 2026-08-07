@@ -1,9 +1,11 @@
 /* build-rss.mjs — emits an RSS 2.0 feed at dist/feed.xml, the 30 most recent daily entries
    across all three lanes (Transfer Desk, World Cup, Football Leagues), newest first. Runs AFTER
-   `vite build` and build-feed.mjs (see package.json "build"). Same data source as the website
-   and the JSON app feed (src/data/*.ts, bundled via esbuild), so the three cannot drift: one
-   deploy updates all of them. Output dir defaults to ./dist, override with CONTENT_OUT to match
-   the other page generators.
+   `vite build`, build-feed.mjs AND build-article-pages.mjs (see package.json "build"): every
+   item without a headshot enclosure carries the article's generated og.png as its enclosure,
+   and that file must already exist on disk so its byte length can be stat'd honestly. Same
+   data source as the website and the JSON app feed (src/data/*.ts, bundled via esbuild), so
+   the three cannot drift: one deploy updates all of them. Output dir defaults to ./dist,
+   override with CONTENT_OUT to match the other page generators.
 
    Each item carries BOTH <description> (the short standfirst, a teaser) and <content:encoded>
    (the full article body as HTML in CDATA, plus the illustration and the rights notice). That
@@ -142,6 +144,21 @@ function imageAsset(entry) {
   };
 }
 
+// Feed-wide enclosure fallback (2026-08-06): items without a brand headshot use the article's
+// generated OG card (dist/<base>/<date>/og.png, built by build-article-pages.mjs earlier in the
+// chain). Same discipline as the headshot path: the length is the byte size of the file actually
+// on disk, and if the card was never generated the item simply carries no enclosure rather than
+// a fabricated one.
+function ogAsset(it) {
+  const rel = `${it.base}${it.date}/og.png`;
+  try {
+    const bytes = statSync(join(OUT, ...rel.split("/").filter(Boolean))).size;
+    return { url: `${SITE}${rel}`, type: "image/png", bytes };
+  } catch {
+    return null;
+  }
+}
+
 // The article as a self-contained HTML fragment: standfirst, illustration, body, rights notice.
 // Absolute image URL because the fragment is read far away from thearchv.ca. No width/height:
 // the real pixel size is not read here, and a wrong dimension is worse than none.
@@ -163,11 +180,13 @@ const itemXml = items
     // enclosure needs an honest byte length and a known MIME type, so it is emitted only when the
     // file was actually found on disk. Same discipline as build-feed.mjs's infogram fields: the
     // feed never advertises an asset it could not confirm. The <img> inside content:encoded is
-    // unconditional, so a missing local file still syndicates the picture.
-    const enclosure =
-      img && img.type && img.bytes
-        ? `\n      <enclosure url="${xmlEsc(img.url)}" length="${img.bytes}" type="${img.type}" />`
-        : "";
+    // unconditional, so a missing local file still syndicates the picture. Items without a
+    // confirmable headshot fall back to the article's generated OG card (see ogAsset above), so
+    // every item normally ships with an enclosure.
+    const enc = img && img.type && img.bytes ? img : ogAsset(it);
+    const enclosure = enc
+      ? `\n      <enclosure url="${xmlEsc(enc.url)}" length="${enc.bytes}" type="${enc.type}" />`
+      : "";
     return `    <item>
       <title>${xmlEsc(it.headline)}</title>
       <link>${xmlEsc(url)}</link>

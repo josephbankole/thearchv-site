@@ -175,7 +175,7 @@ function questionAnswer(dek, body) {
   }
 })();
 
-function schema(entry, url, label, faq) {
+function schema(entry, url, label, faq, images) {
   const graph = [
     {
         // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
@@ -199,7 +199,12 @@ function schema(entry, url, label, faq) {
         // Compact Organization carrying the sameAs entity graph, so every article page reinforces
         // the same brand entity (matches the homepage Organization JSON-LD in index.html).
         publisher: { "@type": "Organization", name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
-        image: entry.image ? `${SITE}${entry.image}` : `${SITE}/og.jpg`,
+        // The generated share cards, both crops (1.91:1 og.png and 16:9 og-wide.png), as an
+        // array of absolute URLs. NEVER the entry headshot: that file is 240x240, which fails
+        // Google News's large-image minimums and misrepresents the page's share art (defect
+        // fixed 2026-08-06 — image previously pointed at the headshot). Falls back to the
+        // site-wide /og.jpg only when card generation failed for this entry.
+        image: images,
         mainEntityOfPage: url,
       },
   ];
@@ -235,11 +240,14 @@ function schema(entry, url, label, faq) {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
 }
 
-/* ---------- per-article OG share cards (1200x630 PNG via satori + resvg) ----------
-   One unique card per canonical article at dist/desk/<lane>/<date>/og.png, referenced by that
-   page's og:image / twitter:image. If generation fails for an entry the page falls back to the
-   static /og.jpg and the build carries on. Fonts are static TTF instances committed at
-   scripts/fonts/ (Google Fonts API static builds; satori does not take variable fonts well). */
+/* ---------- per-article OG share cards (satori + resvg) ----------
+   TWO unique cards per canonical article: og.png at 1200x630 (1.91:1, the OG standard, and the
+   one og:image / twitter:image reference) and og-wide.png at 1200x675 (16:9, referenced from the
+   NewsArticle JSON-LD image array alongside og.png). Same design at both sizes: the wide card
+   puts its extra 45px into vertical padding, so the inner layout never re-wraps and nothing
+   clips. If generation fails for an entry the page falls back to the static /og.jpg and the
+   build carries on. Fonts are static TTF instances committed at scripts/fonts/ (Google Fonts
+   API static builds; satori does not take variable fonts well). */
 const FONTS_DIR = join(ROOT, "scripts", "fonts");
 const CARD_FONTS = [
   { name: "Fraunces", data: readFileSync(join(FONTS_DIR, "Fraunces-SemiBold.ttf")), weight: 600, style: "normal" },
@@ -257,7 +265,11 @@ function headlineSize(text) {
   return 44;
 }
 
-async function ogCard(entry, laneLabel) {
+async function ogCard(entry, laneLabel, height = 630) {
+  // The card was designed at 1200x630. Any taller render (og-wide at 675) keeps the content
+  // block at its designed height by absorbing the difference into the vertical padding — no
+  // scaling, no letterbox bars, and the headline wraps identically at both sizes.
+  const padY = 64 + Math.round((height - 630) / 2);
   const kicker = `${laneLabel} · ${longDate(entry.date)}`.toUpperCase();
 
   // satori/resvg cannot read webp; the brand headshots in public/heads/ are 240px webp, so
@@ -327,15 +339,15 @@ async function ogCard(entry, laneLabel) {
       type: "div",
       props: {
         style: {
-          width: 1200, height: 630, display: "flex", alignItems: "center",
+          width: 1200, height, display: "flex", alignItems: "center",
           backgroundColor: "#071C2B",
           backgroundImage: "radial-gradient(at 50% -20%, #133A52 0%, #071C2B 68%)",
-          padding: "64px 72px",
+          padding: `${padY}px 72px`,
         },
         children,
       },
     },
-    { width: 1200, height: 630, fonts: CARD_FONTS },
+    { width: 1200, height, fonts: CARD_FONTS },
   );
 
   return new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
@@ -450,7 +462,7 @@ function ladderScriptTag(url, lanePath) {
   </script>`;
 }
 
-function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
+function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry) {
   const lane = section; // section carries label/seoSuffix/anchor/base/sportKey/laneKey
   // The Answer Desk lanes (NFL, F1, tennis, golf) file a question as the headline and its answer
   // as the body. Those two facts drive both the FAQPage block and the question H2 below; the
@@ -460,6 +472,12 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
     : null;
   const url = `${SITE}${section.base}${entry.date}/`;
   const ogImage = hasCard ? `${SITE}${section.base}${entry.date}/og.png` : `${SITE}/og.jpg`;
+  // JSON-LD image array: both generated crops when they exist. og:image above deliberately
+  // stays the single 1200x630 og.png (1.91:1 is the OG standard); the 16:9 variant is offered
+  // to the parsers that read schema.org image arrays, not to the share scrapers.
+  const schemaImages = hasCard
+    ? [ogImage, ...(hasWide ? [`${SITE}${section.base}${entry.date}/og-wide.png`] : [])]
+    : [`${SITE}/og.jpg`];
   const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
   const shareScript = shareScriptTag(url, entry.headline);
   const ladderScript = ladderScriptTag(url, section.base);
@@ -545,7 +563,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
   <meta name="twitter:image" content="${ogImage}" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   ${RSS_LINK}
-  <script type="application/ld+json">${schema(entry, url, lane.label, faq)}</script>
+  <script type="application/ld+json">${schema(entry, url, lane.label, faq, schemaImages)}</script>
 
   <!-- PostHog: pageview only on this static surface. Same project as the website. -->
   ${posthogSnippet()}
@@ -593,6 +611,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
 /* ---------- write pages ---------- */
 let count = 0;
 let cards = 0;
+let wideCards = 0;
 const urls = [];
 for (const section of sections) {
   // dist path segments from the section base: "/desk/transfer/" -> ["desk","transfer"];
@@ -604,8 +623,11 @@ for (const section of sections) {
     const dir = join(OUT, ...relParts, entry.date);
     mkdirSync(dir, { recursive: true });
 
-    // Per-article OG card; a failure never breaks the build, the page just keeps /og.jpg.
+    // Per-article OG cards, both crops; a failure never breaks the build, the page just keeps
+    // /og.jpg. The wide card is tried independently so a one-off failure there still leaves the
+    // standard og.png as og:image and in the JSON-LD image array.
     let hasCard = false;
+    let hasWide = false;
     try {
       const png = await ogCard(entry, lane.label);
       writeFileSync(join(dir, "og.png"), png);
@@ -613,6 +635,16 @@ for (const section of sections) {
       cards++;
     } catch (err) {
       console.warn(`[build-article-pages] og card failed for ${section.sportKey}/${section.laneKey}/${entry.date} (${entry.headline}): ${err && err.message ? err.message : err}`);
+    }
+    if (hasCard) {
+      try {
+        const wide = await ogCard(entry, lane.label, 675);
+        writeFileSync(join(dir, "og-wide.png"), wide);
+        hasWide = true;
+        wideCards++;
+      } catch (err) {
+        console.warn(`[build-article-pages] og-wide card failed for ${section.sportKey}/${section.laneKey}/${entry.date} (${entry.headline}): ${err && err.message ? err.message : err}`);
+      }
     }
 
     // W3.1 — "more from the lane": lane.days is newest-first (see src/data/*.ts), so entries at
@@ -624,7 +656,7 @@ for (const section of sections) {
     const prevEntry = lane.days[i + 1] ?? null; // older
     const nextEntry = lane.days[i - 1] ?? null; // newer
 
-    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, moreFrom, prevEntry, nextEntry));
+    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry));
     urls.push(`  <url><loc>${SITE}${section.base}${entry.date}/</loc><lastmod>${entry.date}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
     count++;
   }
@@ -642,4 +674,4 @@ if (sitemapSrc && urls.length) {
   writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
 }
 
-console.log(`[build-article-pages] wrote ${count} article page(s) and ${cards} og card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);
+console.log(`[build-article-pages] wrote ${count} article page(s), ${cards} og card(s) and ${wideCards} og-wide card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);

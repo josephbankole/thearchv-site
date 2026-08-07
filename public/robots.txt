@@ -36,3 +36,4 @@ User-agent: CCBot
 Allow: /
 
 Sitemap: https://thearchv.ca/sitemap.xml
+Sitemap: https://thearchv.ca/news-sitemap.xml

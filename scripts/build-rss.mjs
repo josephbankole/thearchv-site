@@ -1,7 +1,7 @@
 /* build-rss.mjs — emits an RSS 2.0 feed at dist/feed.xml, the 30 most recent daily entries
    across all three lanes (Transfer Desk, World Cup, Football Leagues), newest first. Runs AFTER
    `vite build`, build-feed.mjs AND build-article-pages.mjs (see package.json "build"): every
-   item without a headshot enclosure carries the article's generated og.png as its enclosure,
+   item's enclosure is the article's own generated og.png (never a headshot — see ogAsset),
    and that file must already exist on disk so its byte length can be stat'd honestly. Same
    data source as the website and the JSON app feed (src/data/*.ts, bundled via esbuild), so
    the three cannot drift: one deploy updates all of them. Output dir defaults to ./dist,
@@ -13,7 +13,7 @@
    read the body from content:encoded and ignore a dek-only feed. */
 import { build } from "esbuild";
 import { writeFileSync, rmSync, statSync } from "node:fs";
-import { join, dirname, extname } from "node:path";
+import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { byDateDesc, esc, escAttr, SPORTS } from "./shared/page-shell.mjs";
 
@@ -117,38 +117,23 @@ function bodyHtml(text) {
 // Splitting it across two sections leaves the bytes the consumer reconstructs unchanged.
 const cdata = (html) => `<![CDATA[${String(html).replace(/\]\]>/g, "]]]]><![CDATA[>")}]]>`;
 
-// Brand-illustrated headshots only (public/heads/*.webp today). The type map is explicit rather
-// than guessed, so an unrecognised extension degrades to "no enclosure" instead of a wrong MIME.
-const IMAGE_TYPES = {
-  ".webp": "image/webp",
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".gif": "image/gif",
-};
+// Brand-illustrated headshot (public/heads/*.webp today), used ONLY as the illustration inside
+// content:encoded — never as the enclosure (see ogAsset below for why).
 function imageAsset(entry) {
   if (!entry.image) return null;
-  const rel = String(entry.image);
-  // Same public/ resolution build-article-pages.mjs uses when it reads the headshot for the OG card.
-  let bytes = null;
-  try {
-    bytes = statSync(join(ROOT, "public", rel.replace(/^\//, ""))).size;
-  } catch {
-    bytes = null;
-  }
   return {
-    url: `${SITE}${rel}`,
+    url: `${SITE}${String(entry.image)}`,
     alt: entry.imageAlt ?? entry.headline,
-    type: IMAGE_TYPES[extname(rel).toLowerCase()] ?? null,
-    bytes,
   };
 }
 
-// Feed-wide enclosure fallback (2026-08-06): items without a brand headshot use the article's
-// generated OG card (dist/<base>/<date>/og.png, built by build-article-pages.mjs earlier in the
-// chain). Same discipline as the headshot path: the length is the byte size of the file actually
-// on disk, and if the card was never generated the item simply carries no enclosure rather than
-// a fabricated one.
+// The enclosure is ALWAYS the article's own generated OG card (dist/<base>/<date>/og.png, built
+// by build-article-pages.mjs earlier in the chain), never a headshot (2026-08-07). Flipboard's
+// RSS guidelines refuse to display an image reused across items (only one article keeps it, the
+// rest go imageless — several headshots were shared by multiple articles) and want the smallest
+// image dimension >= 500px (the headshots are ~240px). Each og.png is unique per article at
+// 1200x630, satisfying both. The length is the byte size of the file actually on disk, and if
+// the card was never generated the item simply carries no enclosure rather than a fabricated one.
 function ogAsset(it) {
   const rel = `${it.base}${it.date}/og.png`;
   try {
@@ -177,13 +162,11 @@ const itemXml = items
   .map((it) => {
     const url = articleUrl(it);
     const img = imageAsset(it);
-    // enclosure needs an honest byte length and a known MIME type, so it is emitted only when the
-    // file was actually found on disk. Same discipline as build-feed.mjs's infogram fields: the
-    // feed never advertises an asset it could not confirm. The <img> inside content:encoded is
-    // unconditional, so a missing local file still syndicates the picture. Items without a
-    // confirmable headshot fall back to the article's generated OG card (see ogAsset above), so
-    // every item normally ships with an enclosure.
-    const enc = img && img.type && img.bytes ? img : ogAsset(it);
+    // enclosure needs an honest byte length, so it is emitted only when the og.png was actually
+    // found on disk. Same discipline as build-feed.mjs's infogram fields: the feed never
+    // advertises an asset it could not confirm. The <img> inside content:encoded is
+    // unconditional, so a missing local file still syndicates the picture.
+    const enc = ogAsset(it);
     const enclosure = enc
       ? `\n      <enclosure url="${xmlEsc(enc.url)}" length="${enc.bytes}" type="${enc.type}" />`
       : "";

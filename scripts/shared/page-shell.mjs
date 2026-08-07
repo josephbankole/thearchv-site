@@ -48,6 +48,7 @@ export const ORG_SAMEAS = [
   "https://x.com/thearchvfc",
   "https://www.etsy.com/shop/TheARCHVCA",
   "https://apps.apple.com/app/id6786508653",
+  "https://flipboard.com/@thearchv",
 ];
 
 // Defensive sort: every lane's day-entry array is committed newest-first by convention

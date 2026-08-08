@@ -27,7 +27,7 @@ Status key: todo / drafted / live
 Opened 2026-07-29 off Search Console: `/glossary/loan-with-obligation/` pulled 750 impressions in 28 days (55% of all site impressions) for 1 click at ~page 2. The glossary keeps the definition query; these long-forms take the "explained / examples / how it works" tail and link back to it.
 - [drafted] explainers/loan-with-obligation-to-buy-explained — option vs obligation vs conditional obligation, four United deals as worked examples (drafted 2026-07-29, homepage-linked into the United reads list, glossary cross-links wired in build-content.mjs)
 - [todo] explainers/release-clause-vs-buy-out-clause — the Spanish buy-out clause and why it cannot be refused
-- [todo] explainers/how-transfer-fees-are-actually-paid — amortisation, instalments, add-ons, sell-on clauses
+- [drafted] explainers/how-transfer-fees-are-actually-paid — amortisation, instalments, add-ons, sell-on clauses (drafted 2026-08-08; GSC OVERRIDE of the D92 late-Jul/Aug United phase, which is exhausted: all five C4 items already read [drafted]. The obligation-to-buy query cluster took ~234 impressions across 7 of the top 10 queries in the 28 days to 6 Aug and /glossary/loan-with-obligation/ alone took 758 impressions for 1 click, so C6 is the bigger opportunity. Pegged to the Bruno Guimaraes deal of 5 Aug 2026. Homepage-linked under "The ARCHV explains", glossary cross-links wired in build-content.mjs to structured-payments, amortisation and sell-on-clause)
 
 ## C4 — Man United history cluster (Transfer Desk links into these; start with 5)
 - [drafted] united/treble-1999 — the 1999 treble, how it was built (hand-built 2026-06-15)

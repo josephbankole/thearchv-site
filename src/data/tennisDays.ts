@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-08",
+    day: "Saturday",
+    headline: "When does the 2026 Cincinnati Open start, and what happens before the main draw?",
+    dek: "The 2026 Cincinnati Open runs from 8 to 23 August. Today is the first day of the event, qualifying begins on 11 August, the main draw follows, and both singles finals are on Sunday 23 August.",
+    body: "The 2026 Cincinnati Open opens today. The tournament's own schedule release puts the event across 8 to 23 August, with qualifying on 11 August and the singles finals on Sunday 23 August. Today is not match day for the main draw: the opening days are given to public events and player practice, which is why a spectator can be on site before a single main-draw point has been played.\n\nIt is a 1000-level event on both tours, an ATP Masters 1000 and a WTA 1000, which makes it one of the largest tournaments in tennis outside the four Grand Slams. It is played on outdoor hard courts at the Lindner Family Tennis Center in Mason, Ohio, a northern suburb of Cincinnati.\n\nThe reason it matters more than a normal fortnight in August is what follows it. Cincinnati is the last significant hard-court test before the US Open, so it is where players adjust to North American conditions and where a large block of ranking points is settled before New York. The initial singles field released by the tournament includes defending champions, Grand Slam winners, current and former world number ones, and 24 American players.\n\nThe sixteen-day shape is deliberate. Tournament director Bob Moran, quoted in the tournament's own schedule announcement, said of the closing weekend: \"We feel strongly that a Sunday final will deliver the best tournament experience.\" The event is also in the middle of a $260 million campus redevelopment run with Mason, Warren County and the state of Ohio.\n\nOne caution on dates, because two figures circulate. The official schedule describes the overall event as 8 to 23 August, while draw-level listings commonly give 13 to 23 August, which is the main draw rather than the whole event. Both are right about different things. Qualifying on 11 August is the line between them.\n\nSources: Cincinnati Open official schedule release (dates, qualifying, Sunday final, Moran quote, campus redevelopment); WTA official tournament page; Wikipedia's 2026 Cincinnati Open entry (venue, classification, main-draw dates).",
+    status: "verified",
+  },
+  {
     date: "2026-08-04",
     day: "Tuesday",
     headline: "Why is Felix Auger-Aliassime seeded second in Montreal?",

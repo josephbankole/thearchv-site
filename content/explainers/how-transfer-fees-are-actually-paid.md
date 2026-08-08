@@ -55,6 +55,8 @@ Add-ons are why two clubs can announce the same transfer at different prices wit
 
 The Guimaraes deal, for once, is reported as a flat £75m with no add-ons attached. That is unusual at this level, and it tells you something about the negotiation. Add-ons are a compromise instrument, used when two clubs cannot agree on what a player is worth. A flat fee means nobody needed the argument deferred.
 
+Manchester United's signing of Andrey Santos from Chelsea in the same window is the other shape. The fee was announced at £50m, and Sky Sports and ESPN both break it down as £48m guaranteed with £2m in add-ons. Two million on a fifty million pound deal is not a negotiating gap, it is a rounding device: it lets the selling club say fifty, lets the buying club book forty-eight, and everybody involved is telling the truth.
+
 ## Sell-on clauses: the tax a former club collects
 
 A sell-on clause entitles a selling club to a share of what the buying club later receives for the same player. It is the mechanism that lets a smaller club keep a stake in a career it can no longer afford to own.
@@ -66,6 +68,8 @@ A fee-based sell-on takes a share of the next transfer fee. A profit-based sell-
 Guimaraes is a clean worked example. Olympique Lyonnais sold him to Newcastle United in January 2022, at a fee Goal reported at around £33m, and kept 20% of any profit Newcastle United later made on him. Newcastle United sold at £75m. Sky Sports puts the resulting sell-on payment at £6m to £7m; the Irish Times puts it at about €8m. Neither figure is a club disclosure, and the two are close enough to be describing the same cheque converted differently.
 
 Now run the other version. Twenty per cent of the fee rather than the profit would be £15m on a £75m sale. Same clause, same percentage, one word different, and roughly double the money. Olympique Lyonnais gave that word away in 2022, and on this deal it cost them more than most transfers do.
+
+Chelsea did the paperwork better. On the Andrey Santos sale they kept a 10% sell-on, reported by Sky Sports and ESPN, so a club that has already banked £48m still owns a slice of wherever he goes after Old Trafford. He is 22. That clause could comfortably outlive the contract he has just signed.
 
 ## The 5% that leaves before anyone gets paid
 
@@ -107,4 +111,4 @@ So the fix, such as it is, sits with the people reading. When the next fee lands
 
 ---
 
-*Reporting and sourcing: fee and agreement per Sky Sports and ESPN, 5 August 2026. Payment structure per Yahoo Sports and The Times, which do not agree. Sell-on share per Sky Sports and the Irish Times. Original January 2022 fee per Goal, single-sourced and flagged for verification. Amortisation cap per Inside World Football and the Guardian. Solidarity mechanism per FIFA's Regulations on the Status and Transfer of Players and ESPN. Agent fees per the Football Association's published figures and Goal.*
+*Reporting and sourcing: Guimaraes fee and agreement per Sky Sports and ESPN, 5 August 2026. Andrey Santos fee, the £48m and £2m split and Chelsea's 10% sell-on per Manchester United's own announcement, Sky Sports and ESPN. Payment structure per Yahoo Sports and The Times, which do not agree. Sell-on share per Sky Sports and the Irish Times. Original January 2022 fee per Goal, single-sourced and flagged for verification. Amortisation cap per Inside World Football and the Guardian. Solidarity mechanism per FIFA's Regulations on the Status and Transfer of Players and ESPN. Agent fees per the Football Association's published figures and Goal.*

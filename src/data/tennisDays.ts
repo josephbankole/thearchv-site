@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-09",
+    day: "Sunday",
+    headline: "How have the Canadians done at the 2026 National Bank Open?",
+    dek: "Bianca Andreescu went out in the first round in Toronto. Katherine Sebov became the first Canadian winner of the 2026 tournament, and Kayla Cross won her first WTA Tour match.",
+    body: "The 2026 National Bank Open is the biggest tennis week of the Canadian year, and the home results have been mixed rather than bad.\n\nBianca Andreescu, the 2019 champion, went out in the first round of the singles in Toronto, beaten 7-5 6-4 by Nikola Bartunkova. It is the earliest possible exit at the tournament she won as a teenager.\n\nOn the same day, Kayla Cross won her first match on the WTA Tour. A first tour-level win and a former champion's first-round exit landed within hours of each other, which is roughly what a home draw looks like when a generation is changing over.\n\nKatherine Sebov was the first Canadian to win a match at the 2026 tournament. Her run ended in the next round against Aoi Ito, who won 6-3 6-4.\n\nAt the top of the women's draw, Iga Swiatek beat Marta Kostyuk to reach the quarter-finals.\n\nThe tournament splits across two cities, as it does every year. The women play at Sobeys Stadium in Toronto and the men in Montreal, and the two swap hosting duties annually. Singles finals are on 13 August 2026.\n\nOne note on the start date. Published listings this week disagree on whether the main draw opened on 1 or 2 August, so no start date is stated here. The finish date is not in dispute.\n\nAndreescu's exit is the headline result, and it is also the least surprising thing on this list. The first WTA win of a career is the one that has not happened before.\n\nSources: CBC Sports, 3 August 2026, on Bianca Andreescu's first-round defeat and Kayla Cross's first WTA Tour win; National Bank Open official day-2 and day-3 reports on Katherine Sebov and the Canadian results; TSN on Iga Swiatek beating Marta Kostyuk to reach the quarter-finals; WTA official tournament pages on venues and the 13 August finals.",
+    status: "verified",
+  },
+  {
     date: "2026-08-08",
     day: "Saturday",
     headline: "When does the 2026 Cincinnati Open start, and what happens before the main draw?",

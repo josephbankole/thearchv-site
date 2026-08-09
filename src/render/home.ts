@@ -18,7 +18,7 @@ import type { DayEntry } from '../data/worldCupDays';
 import { leaguesDays } from '../data/leaguesDays';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
-import { clubInText, PLAYERS } from './illustrated';
+import { entryArt, PLAYERS } from './illustrated';
 
 /* ---------- escaping ---------- */
 // Every interpolated field below comes from src/data/*.ts, committed by the daily desk job
@@ -153,20 +153,21 @@ function chip(entry: DayEntry): string {
 }
 
 /* ---------- card art ----------
-   Two sources, in order: the entry's own banked illustrated headshot (public/heads/, committed
-   by the desk job) and, failing that, the ARCHV badge of a club named in the headline. Both are
-   our own artwork. A miss renders no <img> at all rather than a placeholder, because a face the
-   archive has not drawn is not a face the archive may show. */
+   Three sources, in order, resolved by entryArt() in ./illustrated: the entry's own banked
+   headshot (public/heads/, committed by the desk job), then a banked portrait of a player named
+   in the headline or standfirst, then the ARCHV badge of a club named in the same text. All of
+   it is our own artwork. A miss renders no <img> at all rather than a placeholder, because a
+   face the archive has not drawn is not a face the archive may show.
+
+   A badge is drawn smaller than a face and takes its own class: it is a mark, not a portrait,
+   and at 72px it would sit on the card claiming to be the day's subject. */
 function cardArt(entry: DayEntry): string {
-  if (entry.image) {
-    const alt = entry.imageAlt ?? `Illustration: ${entry.headline}`;
-    return `<img class="fcard__art" src="${esc(entry.image)}" alt="${esc(alt)}" width="72" height="72" loading="lazy" decoding="async" />`;
+  const art = entryArt(entry);
+  if (!art) return '';
+  if (art.kind === 'club') {
+    return `<img class="fcard__badge" src="${esc(art.src)}" alt="${esc(art.alt)}" width="60" height="60" loading="lazy" decoding="async" />`;
   }
-  const club = clubInText(`${entry.headline} ${entry.dek}`);
-  if (club) {
-    return `<img class="fcard__badge" src="${esc(club.src)}" alt="${esc(club.alt)}" width="60" height="60" loading="lazy" decoding="async" />`;
-  }
-  return '';
+  return `<img class="fcard__art" src="${esc(art.src)}" alt="${esc(art.alt)}" width="72" height="72" loading="lazy" decoding="async" />`;
 }
 
 /* ---------- the wire ----------
@@ -190,12 +191,16 @@ export function renderLead(): string {
   const { entry, lane } = top;
   const url = articleUrl(lane, entry);
 
-  const art = entry.image
-    ? `<figure class="lead__art">
-          <img src="${esc(entry.image)}" alt="${esc(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
+  // The lead panel only takes a drawn FACE. A club badge is a mark and belongs on a card, not
+  // under a caption reading "Original ARCHV illustration" beside the day's biggest story.
+  const leadArt = entryArt(entry);
+  const art =
+    leadArt && leadArt.kind !== 'club'
+      ? `<figure class="lead__art">
+          <img src="${esc(leadArt.src)}" alt="${esc(leadArt.alt)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
           <figcaption>Original ARCHV illustration.</figcaption>
         </figure>`
-    : '';
+      : '';
 
   return `<div class="lead__main">
         <span class="kicker">${esc(lane.label)} &middot; ${esc(longDate(entry.date))}</span>

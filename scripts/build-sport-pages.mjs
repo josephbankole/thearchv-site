@@ -11,7 +11,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   SITE, esc, escAttr, longDate, byDateDesc, clampTitle, clampDescription,
-  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY,
+  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
   masthead, deskNav, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
@@ -55,9 +55,7 @@ const COPY = SPORT_DESK_COPY;
 // A lane's entries as whole-card links, reusing the lane-card styling from pageStyles(). Matches
 // build-lane-pages.mjs's laneCard so a sport section and a lane front render identically.
 function laneCard(entry, sportKey, laneKey) {
-  const avatar = entry.image
-    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
-    : "";
+  const avatar = cardArt(entry);
   return `<li><a class="lane-card" href="/${sportKey}/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
 }
 

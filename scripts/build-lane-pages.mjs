@@ -17,7 +17,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { existsSync } from "node:fs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, byDateDesc,
-  deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
@@ -85,12 +85,10 @@ const LANES = {
 };
 
 function laneCard(entry, laneKey) {
-  // Non-empty fallback (img alt audit, UNIT 4): matches the convention in dailyDigest.ts and
-  // build-article-pages.mjs's main figure — every lane card avatar gets a real description even
-  // when the day's data has no explicit imageAlt.
-  const avatar = entry.image
-    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
-    : "";
+  // Art and its alt now come from cardArt() in scripts/shared/page-shell.mjs, which resolves the
+  // filed image first and falls back to a banked portrait or the club badge (phase 2B). Before
+  // that, a lane front was a wall of text on every day the desk filed no image field.
+  const avatar = cardArt(entry);
   return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
 }
 
@@ -221,7 +219,7 @@ function renderSportLane(sport, laneKey) {
 
   const rail = days.length
     ? `<ul class="lane-list" aria-label="${escAttr(`${sport.label} ${laneLabel}`)}, newest first">
-        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${entry.image ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />` : ""}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
+        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${cardArt(entry)}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
       </ul>`
     : `<div class="sport-holding"><p>${esc(copy.holding)}</p></div>`;
 

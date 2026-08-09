@@ -5,6 +5,7 @@
    masthead, same CSP-exempt inline-style pattern per thearchv-site/CLAUDE.md "Per-article
    pages"). Not used by the homepage bundle (src/), which stays CSP-clean and router-free. */
 import { createHash } from "node:crypto";
+import { entryArt } from "./illustrated.mjs";
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -266,6 +267,25 @@ export function sportNav(currentSportKey = DEFAULT_SPORT, { home = false } = {})
         </div>
       </nav>
     </div>`;
+}
+
+/* ---------- card art (phase 2B) ----------
+   The one place this page family turns a desk entry into an <img>. Resolution order lives in
+   entryArt() in scripts/shared/illustrated.mjs (filed image, then a banked player portrait named
+   in the copy, then the club badge, then nothing); this only decides how the tag is written.
+
+   Two rules the call sites used to each own a copy of, now held here. The alt is never empty: a
+   card avatar sits inside a link and is content, not chrome, so it always describes what it
+   shows. And the rendered box is square and fixed, because these come off two shelves at two
+   sizes (320px portraits, 240px head bank) and a card that resized itself per player would make
+   the lane front ripple.
+
+   `art` may be passed pre-resolved when the caller has already computed it (the article page
+   needs the same object for its OG card); otherwise pass the entry and let it resolve. */
+export function cardArt(entry, { className = "lane-card__avatar", size = 64, loading = "lazy", art = undefined } = {}) {
+  const a = art === undefined ? entryArt(entry) : art;
+  if (!a) return "";
+  return `<img class="${className}" src="${escAttr(a.src)}" alt="${escAttr(a.alt)}" loading="${loading}" decoding="async" width="${size}" height="${size}" />`;
 }
 
 // Simple desk text nav, on article AND lane pages (SITE-DEPTH-PLAN.md W3.3). Kept as plain

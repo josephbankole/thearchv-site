@@ -25,7 +25,17 @@ export interface Art {
 export const PLAYERS: Art[] = registry.players;
 export const CLUBS: Art[] = registry.clubs;
 
-const norm = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+// Diacritics are folded before matching, not after. Football names carry them constantly and the
+// desk spells the same player both ways inside one week ("Kone" on Tuesday, "Koné" on Thursday).
+// Without the fold, the old normaliser turned "Koné" into "kon" and quietly failed to match a
+// portrait that was sitting right there. MIRRORED in scripts/shared/illustrated.mjs.
+const norm = (s: string): string =>
+  s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
 
 // Longest name wins, so "Manchester United" is never beaten by a shorter club whose name
 // happens to be a substring of the same headline.
@@ -46,3 +56,41 @@ export const clubInText = (text: string): Art | null => inText(CLUBS, text);
 /** The first banked player named anywhere in a block of text. null when nothing is banked.
     A miss must render no image: inventing a face for an unbanked name is a canon break. */
 export const playerInText = (text: string): Art | null => inText(PLAYERS, text);
+
+export interface EntryArt {
+  kind: 'entry' | 'player' | 'club';
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface ArtEntry {
+  headline?: string;
+  dek?: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+/* The art a desk entry gets: its own filed image first, then a banked portrait of a player named
+   in the headline or standfirst, then the ARCHV badge of a club named in the same text, then
+   nothing. MIRRORED as entryArt() in scripts/shared/illustrated.mjs, which serves the article,
+   lane, sport and author templates. One chain, so the front page and the article page cannot
+   illustrate the same story differently. */
+export function entryArt(entry: ArtEntry): EntryArt | null {
+  if (entry.image) {
+    return {
+      kind: 'entry',
+      src: entry.image,
+      alt: entry.imageAlt ?? `Illustration: ${entry.headline ?? ''}`,
+      width: 240,
+      height: 240,
+    };
+  }
+  const text = `${entry.headline ?? ''} ${entry.dek ?? ''}`;
+  const player = playerInText(text);
+  if (player) return { kind: 'player', src: player.src, alt: player.alt, width: player.width, height: player.height };
+  const club = clubInText(text);
+  if (club) return { kind: 'club', src: club.src, alt: club.alt, width: club.width, height: club.height };
+  return null;
+}

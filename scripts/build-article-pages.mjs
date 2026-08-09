@@ -19,11 +19,12 @@ import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc, clampTitle,
-  deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
 } from "./shared/page-shell.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
+import { entryArt } from "./shared/illustrated.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -494,10 +495,14 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
     googleFonts: true,
   });
 
-  const figure = entry.image
+  // The page's own art. Resolved through entryArt() (phase 2B) rather than reading entry.image
+  // directly, so an entry the desk filed without an image still gets the banked portrait of the
+  // player it is about, or the club badge, or — on a genuine miss — nothing at all.
+  const art = entryArt(entry);
+  const figure = art
     ? `
       <figure class="article__fig">
-        <img src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? entry.headline)}" width="240" height="240" loading="eager" decoding="async" />
+        <img src="${escAttr(art.src)}" alt="${escAttr(art.alt)}" width="${art.width}" height="${art.height}" loading="eager" decoding="async" />
       </figure>` : "";
 
   const ladder = `
@@ -523,11 +528,9 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
         <ul class="more-cards">
           ${moreFrom
             .map((e) => {
-              // Non-empty alt (img alt audit, UNIT 4): these are content headshots inside a link,
-              // not decorative chrome, so they get the same fallback as the article's main figure.
-              const avatar = e.image
-                ? `<img class="more-card__avatar" src="${escAttr(e.image)}" alt="${escAttr(e.imageAlt ?? e.headline)}" loading="lazy" decoding="async" width="44" height="44" />`
-                : "";
+              // Same resolution chain as the article's own figure, at the smaller card size.
+              // The alt is never empty: these are content headshots inside a link, not chrome.
+              const avatar = cardArt(e, { className: "more-card__avatar", size: 44 });
               return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
             })
             .join("\n          ")}

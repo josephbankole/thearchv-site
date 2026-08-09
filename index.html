@@ -97,7 +97,12 @@
             "alternateName": ["THE ARCHV", "ARCHV", "The ARCHV: Sports History, Illustrated"],
             "description": "Illustrated sports history: a daily desk across football, the NFL, Formula 1, tennis and golf, plus long reads on the systems behind the games.",
             "inLanguage": "en-GB",
-            "publisher": { "@id": "https://thearchv.ca/#org" }
+            "publisher": { "@id": "https://thearchv.ca/#org" },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": { "@type": "EntryPoint", "urlTemplate": "https://thearchv.ca/search/?q={search_term_string}" },
+              "query-input": "required name=search_term_string"
+            }
           },
           {
             "@type": "ItemList",
@@ -160,7 +165,15 @@
         <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
       </a>
       <p class="masthead__tagline">Football has a memory. We are the archive.</p>
-      <div class="masthead__menu">
+      <div class="masthead__actions">
+        <!-- Search affordance (phase 3). A visible destination rather than a panel item: the
+             audit's finding was that a site called an archive had no way to search it, and a
+             search buried behind a hamburger is the same finding one click deeper. -->
+        <a class="masthead__search" href="/search/" aria-label="Search the archive">
+          <svg class="masthead__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="6.8" cy="6.8" r="4.9" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="M10.5 10.5 L14.4 14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
+          <span class="masthead__search-label">Search</span>
+        </a>
+        <div class="masthead__menu">
         <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
           <span class="masthead__toggle-bar"></span>
           <span class="masthead__toggle-bar"></span>
@@ -178,6 +191,7 @@
           <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
           <a class="masthead__panel-link masthead__app" href="https://apps.apple.com/app/id6786508653">App</a>
         </nav>
+        </div>
       </div>
     </header>
     <div class="mast-rule" aria-hidden="true"></div>
@@ -212,6 +226,16 @@
       <section class="lead" aria-label="Lead story">
         <div class="wrap lead__grid">
           <!--archv:lead-->
+        </div>
+      </section>
+
+      <!-- TODAY AT THE DESK. Server-rendered from the same day data as everything else, and it
+           only ever lists entries carrying the build's own UTC date. On a day nothing has been
+           filed it says so and points at the last entry instead: see renderToday() in
+           src/render/home.ts for why that state is the whole reason the block exists. -->
+      <section class="today" aria-labelledby="today-title">
+        <div class="wrap today__inner">
+          <!--archv:today-->
         </div>
       </section>
 

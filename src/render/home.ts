@@ -15,11 +15,15 @@
 // NOTHING HERE MAY EMIT A <script> TAG. index.html carries exactly one inline bootstrap script
 // and scripts/check-csp-hash.mjs asserts that; an injected second one would break the CSP gate.
 import type { DayEntry } from '../data/worldCupDays';
+import { f1Days } from '../data/f1Days';
+import { golfDays } from '../data/golfDays';
 import { leaguesDays } from '../data/leaguesDays';
 import { legends } from '../data/legends';
 import { longReads } from '../data/longReads';
+import { nflDays } from '../data/nflDays';
 import { readPath } from '../data/readSlug';
 import { readLabel } from '../lib/readTime';
+import { tennisDays } from '../data/tennisDays';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
 import { entryArt, PLAYERS } from './illustrated';
@@ -373,6 +377,83 @@ export function renderBands(): string {
   return LANES.map((lane) => renderBand(lane, top && top.lane === lane ? top.entry : null))
     .filter(Boolean)
     .join('\n\n        ');
+}
+
+/* ---------- today at the desk ----------
+   A dated strip of what has actually been filed today, across every desk the site runs rather
+   than only the three football ones the bands below cover. It is the answer to the one question
+   a returning reader arrives with, and until this pass the front page never answered it: the
+   lead is the newest entry whenever it was filed, so a page that had not been touched in four
+   days looked exactly like a page filed this morning.
+
+   IT NEVER INVENTS A DAY. "Today" is the build's own UTC date, and an entry qualifies only by
+   carrying that date in the data the desks commit. When nothing has been filed the strip says
+   nothing has been filed and points at the last thing that was, with its date on it. A strip
+   that quietly showed yesterday's work under today's heading would be the one dishonest
+   component on a site whose whole argument is that it says where its facts came from. */
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+// Every desk with an article surface, in the order the strip lists them. `path` is the URL
+// prefix its article pages live under, which is the same shape build-article-pages.mjs writes:
+// /desk/<lane>/<date>/ for football, /<sport>/questions/<date>/ for the rest.
+const DESKS: { label: string; path: string; days: DayEntry[] }[] = [
+  { label: 'Football Leagues', path: '/desk/leagues/', days: leaguesDays },
+  { label: 'Transfer Desk', path: '/desk/transfer/', days: transferDays },
+  { label: 'International Football', path: '/desk/world-cup/', days: worldCupDays },
+  { label: 'NFL', path: '/nfl/questions/', days: nflDays },
+  { label: 'Formula 1', path: '/f1/questions/', days: f1Days },
+  { label: 'Tennis', path: '/tennis/questions/', days: tennisDays },
+  { label: 'Golf', path: '/golf/questions/', days: golfDays },
+];
+
+// The build's own date, in UTC. Actions runs in UTC and every entry's `date` is a UTC calendar
+// date, so reading the clock in any other zone would put the strip a day out of step with the
+// data for part of every day. Same reasoning as the UTC date helpers in page-shell.mjs.
+const buildDate = (): string => new Date().toISOString().slice(0, 10);
+
+function weekdayOf(iso: string): string {
+  const [y, m, d] = iso.split('-').map((n) => parseInt(n, 10));
+  if (!y || !m || !d) return '';
+  return WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()] ?? '';
+}
+
+export function renderToday(): string {
+  const today = buildDate();
+  const head = `<h2 class="today__title" id="today-title">Today at the desk</h2>
+          <p class="today__date"><time datetime="${esc(today)}">${esc(weekdayOf(today))} ${esc(longDate(today))}</time></p>`;
+
+  const filed = DESKS.flatMap(({ label, path, days }) =>
+    days.filter((entry) => entry.date === today).map((entry) => ({ label, path, entry }))
+  );
+
+  if (!filed.length) {
+    // The honest empty state. The last filed entry across every desk, so the strip still hands
+    // a reader somewhere to go rather than only telling them there is nothing here.
+    const latest = DESKS.flatMap(({ label, path, days }) => days.map((entry) => ({ label, path, entry })))
+      .sort((a, b) => byDateDesc(a.entry, b.entry))[0];
+    // The headline carries its own full stop (the desks file period-terminated headlines), so it
+    // goes last and ends the sentence rather than colliding with a comma.
+    const pointer = latest
+      ? ` The last entry up went in on ${esc(longDate(latest.entry.date))}: <a href="${esc(latest.path)}${esc(latest.entry.date)}/">${esc(latest.entry.headline)}</a>`
+      : '';
+    return `${head}
+        <p class="today__none">Nothing filed yet today. A desk files when it has something two sources agree on, and skips the day when it does not.${pointer}</p>`;
+  }
+
+  const items = filed
+    .map(
+      ({ label, path, entry }) => `<li class="today__item"><a href="${esc(path)}${esc(entry.date)}/">
+              <span class="today__desk">${esc(label)}</span>
+              <span class="today__headline">${esc(entry.headline)}</span>
+              <span class="today__time">${esc(readLabel(entry.dek, entry.body))}</span>
+            </a></li>`
+    )
+    .join('\n            ');
+
+  return `${head}
+        <ul class="today__list">
+            ${items}
+        </ul>`;
 }
 
 /* ---------- the dateline ---------- */

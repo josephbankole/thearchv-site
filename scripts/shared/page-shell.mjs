@@ -319,7 +319,12 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 export function masthead(currentSportKey = DEFAULT_SPORT) {
   return `<header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
-    <div class="masthead__menu">
+    <div class="masthead__actions">
+      <a class="masthead__search" href="/search/" aria-label="Search the archive">
+        <svg class="masthead__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="6.8" cy="6.8" r="4.9" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="M10.5 10.5 L14.4 14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
+        <span class="masthead__search-label">Search</span>
+      </a>
+      <div class="masthead__menu">
       <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
         <span class="masthead__toggle-bar"></span>
         <span class="masthead__toggle-bar"></span>
@@ -337,6 +342,7 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a class="masthead__panel-link" href="${APP_STORE_URL}">App</a>
       </nav>
+      </div>
     </div>
   </header>
   <div class="mast-rule" aria-hidden="true"></div>
@@ -601,7 +607,22 @@ export function pageStyles() {
     .btn--ghost { border: 1px solid var(--gold-soft); color: var(--cream); }
     .btn--gold { background: var(--gold); color: #FFFFFF; }  /* 5.13:1 on --accent-ink */
 
-    /* masthead hamburger menu (founder design, 2026-07-11) */
+    /* masthead search + hamburger. The search link is a visible destination beside the menu
+       rather than an item inside it (phase 3). MIRROR of the same rules in src/style.css and in
+       public/content.css; none of the three imports another. Change one, change all three. */
+    .masthead__actions { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+    .masthead__search {
+      display: inline-flex; align-items: center; gap: .4rem; height: 42px; padding: 0 .75rem;
+      border: 1px solid var(--gold-soft); border-radius: .4rem; color: var(--cream);
+      font-size: .8rem; font-weight: 600; letter-spacing: .04em; white-space: nowrap;
+    }
+    .masthead__search:hover { border-color: var(--cream); color: var(--accent-ink); text-decoration: none; }
+    .masthead__search:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .masthead__search-icon { flex: 0 0 auto; display: block; }
+    @media (max-width: 420px) {
+      .masthead__search-label { display: none; }
+      .masthead__search { width: 42px; padding: 0; justify-content: center; }
+    }
     .masthead__menu { position: relative; flex-shrink: 0; }
     .masthead__toggle {
       display: inline-flex; flex-direction: column; align-items: center; justify-content: center;

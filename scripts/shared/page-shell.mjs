@@ -74,9 +74,18 @@ export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 // appending each following segment only while the whole stays within `max`. This
 // preserves the entity-rich pattern (headline · seoSuffix · The ARCHV) when it
 // fits and drops the least-important trailing pieces (brand first) when it does
-// not, rather than letting Google truncate the tail. Falls back to a word-boundary
-// truncation of the lead segment only if that alone overflows.
-export function clampTitle(segments, max = 60) {
+// not, rather than letting Google truncate the tail.
+//
+// THE LEAD SEGMENT IS NEVER CUT (2026-08-09). It used to be truncated to `max` with a
+// baked ellipsis, which shipped titles like "Manchester United have moved Altay Bayindir
+// off the wage…" — a headline visibly broken in the browser tab, in the share preview and
+// in every copy of the page a reader saves, to save nothing. A search engine already
+// truncates a long title in its own results, at its own width, and it does that whether or
+// not we pre-cut it; pre-cutting only destroys the full headline everywhere else. So the
+// lead segment now passes through whole, and `max` governs only which optional trailing
+// segments get appended. Raised to 65 at the same time so a full headline more often keeps
+// its entity suffix.
+export function clampTitle(segments, max = 65) {
   const parts = (Array.isArray(segments) ? segments : [segments])
     .map((s) => String(s ?? "").trim())
     .filter(Boolean);
@@ -87,13 +96,23 @@ export function clampTitle(segments, max = 60) {
     const candidate = `${title}${SEP}${parts[i]}`;
     if (candidate.length <= max) title = candidate;
   }
-  if (title.length > max) {
-    const cut = parts[0].slice(0, max - 1);
-    const sp = cut.lastIndexOf(" ");
-    title = (sp > max * 0.5 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?·-]+$/, "") + "…";
-  }
   return title;
 }
+
+// tests-by-assertion, the convention build-article-pages.mjs uses for its own helpers: a
+// regression fails the build at import time rather than shipping a broken <title>.
+(function selfTestClampTitle() {
+  const longHeadline = "Manchester United have moved Altay Bayindir off the wage bill and into a Championship season";
+  const out = clampTitle([longHeadline, "Manchester United transfer news", "The ARCHV"]);
+  if (out !== longHeadline) throw new Error(`clampTitle: an oversized lead segment must pass through whole, got ${JSON.stringify(out)}`);
+  if (/…/.test(out)) throw new Error("clampTitle: no baked ellipsis may survive in a title");
+  const fits = clampTitle(["Ederson is off, for now", "The ARCHV"]);
+  if (fits !== "Ederson is off, for now · The ARCHV") throw new Error(`clampTitle: a fitting suffix must be appended, got ${JSON.stringify(fits)}`);
+  const drops = clampTitle(["A headline of exactly forty-eight characters here", "Manchester United transfer news", "The ARCHV"]);
+  if (drops !== "A headline of exactly forty-eight characters here · The ARCHV") {
+    throw new Error(`clampTitle: an over-long middle segment should be dropped and the brand kept, got ${JSON.stringify(drops)}`);
+  }
+})();
 
 // clampDescription: collapse whitespace, then truncate to `max` at a word boundary
 // with a trailing ellipsis. Meta descriptions over ~160 chars get cut off in search

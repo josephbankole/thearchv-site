@@ -334,7 +334,7 @@ function gameStyles() {
     .clue--locked { opacity: .45; }
     .clue__label { font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; color: var(--gold); }
     .clue__value { color: var(--cream); font-size: 1.02rem; line-height: 1.4; }
-    .clue--locked .clue__value { color: var(--cream-faint); font-style: italic; }
+    .clue--locked .clue__value { color: var(--cream-faint-text); font-style: italic; }
 
     .game__form { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 .8rem; }
     /* An author rule that sets display beats the browser's own [hidden] rule, so hiding the form
@@ -347,7 +347,7 @@ function gameStyles() {
     .game__go:hover { filter: brightness(1.06); }
     .game__skip { background: transparent; color: var(--cream-dim); border: 1px solid var(--cream-faint) !important; }
     .game__skip:hover { color: var(--gold); border-color: var(--gold-soft) !important; }
-    .game__left { font-size: .8rem; color: var(--cream-faint); margin: 0 0 1.2rem; }
+    .game__left { font-size: .8rem; color: var(--cream-faint-text); margin: 0 0 1.2rem; }
 
     .guesses { list-style: none; padding: 0; margin: 0 0 1.4rem; display: grid; gap: .35rem; }
     .guess { padding: .5rem .8rem; border-radius: .45rem; border: 1px solid var(--cream-faint); font-size: .9rem; color: var(--cream-dim); }
@@ -361,10 +361,10 @@ function gameStyles() {
 
     .streaks { display: flex; gap: 2rem; margin: 1.6rem 0 0; padding-top: 1.2rem; border-top: 1px solid var(--cream-faint); }
     .streaks div { display: flex; flex-direction: column; gap: .2rem; }
-    .streaks dt { font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; color: var(--cream-faint); }
+    .streaks dt { font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; color: var(--cream-faint-text); }
     .streaks dd { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: 1.8rem; color: var(--cream); }
 
-    .game__credit { margin: 1.6rem 0 0; font-size: .78rem; color: var(--cream-faint); }
+    .game__credit { margin: 1.6rem 0 0; font-size: .78rem; color: var(--cream-faint-text); }
     .game__noscript { padding: 1rem 1.1rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .9rem; color: var(--cream-dim); }
     .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   </style>`;

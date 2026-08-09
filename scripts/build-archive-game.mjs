@@ -386,7 +386,7 @@ const html = `<!doctype html>
   <meta name="description" content="${escAttr(clampDescription(LEDE))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${PAGE_URL}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${pageCsp}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />

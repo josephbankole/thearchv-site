@@ -131,7 +131,7 @@ function render(laneKey, lane) {
   <meta name="description" content="${escAttr(clampDescription(lane.intro))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
@@ -234,7 +234,7 @@ function renderSportLane(sport, laneKey) {
   <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${canonical}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />

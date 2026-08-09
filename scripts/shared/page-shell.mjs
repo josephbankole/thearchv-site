@@ -319,6 +319,7 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
       </nav>
     </div>
   </header>
+  <div class="mast-rule" aria-hidden="true"></div>
   ${sportNav(currentSportKey)}
   <script>
     (function () {
@@ -366,7 +367,7 @@ export function footer() {
         <a href="/about/">About</a>
         <a href="/corrections/">Corrections</a>
       </nav>
-      <p class="footer__tag">Football history, illustrated. Daily.</p>
+      <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>
   </footer>`;
@@ -462,45 +463,71 @@ export function fontLinks() {
 export function pageStyles() {
   return `<style>
     :root {
-      --navy: #0C2A3E; --navy-deep: #071C2B; --navy-soft: #133A52;
-      --cream: #F2EAD3; --cream-dim: rgba(242,234,211,.72); --cream-faint: rgba(242,234,211,.3);
-      /* Text-only variant. --cream-faint at .3 composites to #51646B on the navy and measures
-         2.38:1, so every breadcrumb, byline, date, desk-nav link, related dek, prev/next label
-         and footer legal line on this page family failed AA (4.5:1) on 2026-08-09. At .6 the
-         same cream measures 5.35:1 on --navy and 4.64:1 at the peak of the top-of-page radial
-         gradient (--navy-soft), so it passes on both surfaces. Borders, rules and other purely
-         decorative uses keep --cream-faint, which has no contrast requirement. Mirrors the
-         identical token in src/style.css; the two files do not import each other. */
-      --cream-faint-text: rgba(242,234,211,.6);
-      --gold: #C9A14A; --gold-soft: rgba(201,161,74,.5);
+      /* ---------- the white system (phase 2A, 2026-08-09) ----------
+         The ground flipped from navy to white and the ink flipped with it, across every page
+         family at once, so the article, lane, sport, glossary, standards, duel, guess and
+         author pages are the same publication as the front page rather than a dark annex of it.
+
+         MIRRORS the :root block in src/style.css and the smaller one in public/content.css.
+         The three files do not import each other. Change one, change all three. */
+      --bg: #FFFFFF; --bg-sunken: #F4F2F3;
+      --ink: #1E223D;        /* 15.54:1 on white, 13.94:1 on sunken */
+      --ink-soft: #4A4F73;   /*  7.90:1 on white,  7.09:1 on sunken */
+      /* --ink-muted is the readable-muted TEXT token and the direct successor of
+         --cream-faint-text: the prototype's --ink-faint (#7A7F9E) measures 3.92:1 on white and
+         3.52:1 on the sunken grey, so it fails AA wherever it carries words. #5F6485 is the same
+         hue ramp at 5.76:1 / 5.16:1, and it is what every breadcrumb, byline, date, desk-nav
+         link, related dek, prev/next label and footer legal line resolves to. */
+      --ink-muted: #5F6485;
+      /* Decorative only — bar fills and marks, never text. */
+      --ink-faint: #7A7F9E;
+      /* --accent is a fill and a rule, never text (#F54F1B is 3.49:1 on white). --accent-ink is
+         the text/link form at 5.13:1 white / 4.60:1 sunken. --on-accent goes on the fill. */
+      --accent-fill: #F54F1B; --accent-ink: #C93A0F; --on-accent: #16192E;
+      --rule: #DED9DB; --rule-soft: #EDEAEB;
+      --confirmed: #1E7A38; --on-status: #FFFFFF;
+
+      /* ---------- legacy aliases ----------
+         Every rule below this block was written against the navy vocabulary. The names stay and
+         resolve into the white system, which is the migration seam: one place to read, no rule
+         left behind. --gold points at --accent-ink because it was text far more often than it
+         was a fill, and white on --accent-ink measures 5.13:1 for the few cases where it is a
+         fill. Where the bright orange is wanted, a rule says var(--accent-fill). */
+      --navy: var(--bg); --navy-deep: var(--bg-sunken); --navy-soft: var(--bg-sunken);
+      --cream: var(--ink); --cream-dim: var(--ink-soft); --cream-faint: var(--rule);
+      --cream-faint-text: var(--ink-muted);
+      --gold: var(--accent-ink); --gold-soft: var(--rule);
       --maxw: 46rem;
 
-      /* ---------- semantic token layer (Tier 0, 2026-08-04) ----------
-         The five brand colours above are LOCKED and none of them changed. This layer only gives
-         them role names, so a rule can say what a colour is FOR instead of which hex it happens
-         to be, and so the dark-surface language has one place to live. Every value here resolves
-         to a brand colour or an alpha of one: --text-primary IS --cream, --bg-main IS --navy.
-         Adding a sixth hue here is a brand break, not a refactor. Mirrors the same block in
-         src/style.css; the two files do not import each other, so keep them in step. */
-      --text-primary: var(--cream);
-      --text-secondary: var(--cream-dim);
-      --text-faint: var(--cream-faint-text);
-      --bg-main: var(--navy);
-      --bg-elevated: var(--navy-deep);
-      --bg-raised: var(--navy-soft);
-      --border-main: var(--cream-faint);
-      --accent: var(--gold);
-      --accent-soft: var(--gold-soft);
-      /* Elevation. Softened 2026-08-04: the old panel shadow was rgba(0,0,0,.55), which on navy
-         read as a hard slab edge. Quiet ambient depth reads as expensive; a heavy drop shadow
-         reads as a 2014 UI kit. Two steps only, so elevation stays legible. */
-      --shadow-soft: 0 12px 32px -10px rgba(0,0,0,.32);
-      --shadow-lift: 0 18px 40px -14px rgba(0,0,0,.4);
+      /* ---------- semantic token layer ---------- */
+      --text-primary: var(--ink);
+      --text-secondary: var(--ink-soft);
+      --text-faint: var(--ink-muted);
+      --bg-main: var(--bg);
+      --bg-elevated: var(--bg);
+      --bg-raised: var(--bg-sunken);
+      --border-main: var(--rule);
+      --accent: var(--accent-ink);
+      --accent-soft: var(--rule);
+      /* Elevation. On a white ground the old wide, dark spreads read as a smudge rather than as
+         depth, so both steps are tighter and lighter: paper lifting off paper. */
+      --shadow-soft: 0 1px 2px rgba(30,34,61,.05), 0 8px 20px -12px rgba(30,34,61,.18);
+      --shadow-lift: 0 2px 4px rgba(30,34,61,.06), 0 16px 34px -18px rgba(30,34,61,.26);
       /* Micro-label face. System stack on purpose: the brand type lock is Fraunces + Inter Tight,
          and a third webfont for 10px eyebrows would cost a network round trip for nothing. */
       --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-      /* Dot-grid field colour: cream at a very low alpha, i.e. the locked cream, not a new grey. */
-      --dot: rgba(242,234,211,.06);
+      /* Dot-grid field colour: ink at a very low alpha (cream on white was invisible). */
+      --dot: rgba(30,34,61,.07);
+      /* Anton, the headline face. Self-hosted latin subset, same file the front page loads. */
+      --display: 'Anton', 'Inter Tight', system-ui, sans-serif;
+    }
+    /* Single-look by design: the dark-mode token block mirrors the light one, because a news
+       product with two grounds is two designs to maintain. */
+    :root[data-theme="dark"], :root[data-theme="light"] { color-scheme: light; }
+    @media (prefers-color-scheme: dark) { :root { color-scheme: light; } }
+    @font-face {
+      font-family: 'Anton'; font-style: normal; font-weight: 400; font-display: swap;
+      src: url('/fonts/anton-latin.woff2') format('woff2');
     }
     * { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
@@ -509,7 +536,7 @@ export function pageStyles() {
       margin: 0; background: var(--bg-main); color: var(--text-secondary);
       font-family: "Inter Tight", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       font-size: 18px; line-height: 1.65; -webkit-font-smoothing: antialiased;
-      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-raised) 0%, rgba(12,42,62,0) 70%);
+      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-sunken) 0%, rgba(255,255,255,0) 70%);
     }
     /* Dot-grid field (Tier 0). Two offset radial-gradient layers on a 24px lattice, masked so it
        fades out before the content gets dense. Purely decorative, pointer-events off, and it sits
@@ -545,10 +572,14 @@ export function pageStyles() {
     .wordmark { display: inline-flex; align-items: center; gap: .5rem; color: var(--cream); font-weight: 700; letter-spacing: .02em; flex-shrink: 0; white-space: nowrap; }
     .wordmark img { width: 34px; height: 34px; }
     .wordmark__the { opacity: .7; font-size: .8rem; letter-spacing: .18em; }
-    .wordmark__archv { font-size: 1.15rem; font-family: "Fraunces", Georgia, serif; }
+    .wordmark__archv { font-size: 1.35rem; font-family: var(--display); text-transform: uppercase; letter-spacing: .01em; }
+    .wordmark__the { color: var(--accent-ink); opacity: 1; font-family: var(--display); }
+    /* The accent hairline under the masthead: the front page's one bar of colour, repeated here
+       so a reader landing on an article sees the same publication. */
+    .mast-rule { height: 3px; background: var(--accent-fill); max-width: 72rem; margin: 0 auto; }
     .btn { display: inline-block; padding: .5rem .9rem; border-radius: .5rem; font-size: .85rem; font-weight: 600; white-space: nowrap; }
     .btn--ghost { border: 1px solid var(--gold-soft); color: var(--cream); }
-    .btn--gold { background: var(--gold); color: var(--navy-deep); }
+    .btn--gold { background: var(--gold); color: #FFFFFF; }  /* 5.13:1 on --accent-ink */
 
     /* masthead hamburger menu (founder design, 2026-07-11) */
     .masthead__menu { position: relative; flex-shrink: 0; }
@@ -572,7 +603,7 @@ export function pageStyles() {
       display: block; padding: .65em .8em; border-radius: .35rem; font-size: .85rem; font-weight: 600;
       color: var(--cream);
     }
-    .masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(242, 234, 211, .08); color: var(--gold); text-decoration: none; }
+    .masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(30, 34, 61, .06); color: var(--accent-ink); text-decoration: none; }
     .masthead__panel-link--gold { color: var(--gold); }
     /* Hairline between the internal destinations and the outbound ones (2026-08-09). Decorative,
        so it keeps --cream-faint rather than the text token. Mirrors the same rule in
@@ -623,7 +654,7 @@ export function pageStyles() {
     .sport-head__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     .sport-head h1 { margin: 0 0 .6rem; }
     .sport-head__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 1.6rem; }
-    .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: linear-gradient(180deg, rgba(19,58,82,.35), rgba(7,28,43,.35)); }
+    .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: var(--bg-sunken); }
     .sport-holding p { margin: 0; color: var(--cream-dim); font-size: 1rem; }
 
     .share { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 1.75rem; }
@@ -636,7 +667,7 @@ export function pageStyles() {
     .breadcrumb { font-size: .8rem; letter-spacing: .04em; color: var(--cream-faint-text); text-transform: uppercase; margin: 0 0 1rem; }
     .breadcrumb a { color: var(--cream-faint-text); }
     .article__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
-    h1 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; letter-spacing: -.01em; margin: 0 0 .5rem; }
+    h1 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.02; letter-spacing: .01em; margin: 0 0 .5rem; }
     /* named byline, sitting between the headline and the date. Deliberately quiet: same
        register as .article__meta below, with the author's name a touch brighter so the link
        reads as a link without becoming the loudest thing under the headline. */
@@ -645,7 +676,7 @@ export function pageStyles() {
     .article__byline a:hover { color: var(--gold); }
     .article__meta { color: var(--cream-faint-text); font-size: .9rem; margin: 0 0 1.5rem; }
     .article__fig { margin: 1.5rem 0 2rem; }
-    .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
+    .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
     .article__body p { margin: 1rem 0; }
     .article__body strong { color: var(--cream); }
     /* Answer Desk question heading (SEO/AEO audit fix 3, 2026-07-28). The sport question lanes
@@ -674,7 +705,7 @@ export function pageStyles() {
     .adjacent__headline:hover { text-decoration: underline; }
 
     .related { margin: 2.5rem 0 1rem; }
-    .related h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.5rem; margin: 0 0 .6rem; padding-top: 1.4rem; border-top: 1px solid var(--cream-faint); }
+    .related h2 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; font-size: 1.5rem; margin: 0 0 .6rem; padding-top: 1.4rem; border-top: 1px solid var(--cream-faint); }
     .related ul { list-style: none; padding: 0; margin: 0; }
     .related li { margin: .5rem 0; }
 
@@ -704,10 +735,10 @@ export function pageStyles() {
     .lane__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 2rem; }
     .lane-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
     .lane-card { display: flex; gap: 1.1rem; align-items: flex-start; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem;
-      background: linear-gradient(180deg, rgba(19, 58, 82, 0.35), rgba(7, 28, 43, 0.35)); color: inherit; transition: border-color .2s ease, transform .2s ease; }
+      background: var(--bg-raised); color: inherit; transition: border-color .2s ease, transform .2s ease; }
     .lane-card:hover { border-color: var(--gold-soft); text-decoration: none; transform: translateY(-2px); }
     .lane-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-    .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
+    .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
     .lane-card__body { min-width: 0; }
     .lane-card__kicker { display: block; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .4rem; }
     /* Same inline-span margin bug as .more-card__headline above; see the note there. */
@@ -745,7 +776,7 @@ export function pageStyles() {
     .glossary__answer { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.6rem; }
     .glossary__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
     .glossary-card { display: block; padding: 1.3rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; color: inherit;
-      background: linear-gradient(180deg, rgba(19, 58, 82, 0.35), rgba(7, 28, 43, 0.35)); transition: border-color .2s ease, transform .2s ease; }
+      background: var(--bg-raised); transition: border-color .2s ease, transform .2s ease; }
     .glossary-card:hover { border-color: var(--gold-soft); text-decoration: none; transform: translateY(-2px); }
     .glossary-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .glossary-card__term { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; line-height: 1.24; margin: 0 0 .4rem; }
@@ -753,7 +784,7 @@ export function pageStyles() {
 
     .standards { padding: 1.5rem 0 1rem; }
     .standards .lead { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.8rem; }
-    .standards h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.35rem; line-height: 1.2; margin: 2rem 0 .5rem; }
+    .standards h2 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; font-size: 1.35rem; line-height: 1.2; margin: 2rem 0 .5rem; }
     .standards p { margin: 0 0 1rem; }
 
     /* ============================================================
@@ -793,7 +824,7 @@ export function pageStyles() {
     }
     /* The crest stand-in is artwork, not a face: it gets padding and a transparent-friendly fit
        so it never reads as a cropped photograph of a person. */
-    .author__portrait--crest { object-fit: contain; padding: .55rem; background: rgba(7,28,43,.6); }
+    .author__portrait--crest { object-fit: contain; padding: .55rem; background: var(--bg-sunken); }
     .author__headtext { min-width: 0; }
     .author__headtext h1 { margin: 0 0 .35rem; }
     .author__role { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); margin: 0; }

@@ -105,19 +105,22 @@ export function percentileBar({
 /** The component's CSS. Emit once per page. Brand tokens are inlined so the module stays standalone. */
 export function percentileBarStyles() {
   return `<style>
-    /* percentile-bar.mjs — self-contained. Colours are the locked brand set:
-       navy #0C2A3E, gold #C9A14A, cream #F2EAD3. */
+    /* percentile-bar.mjs — self-contained. Colours are the white system (phase 2A, 2026-08-09):
+       ink #1E223D, muted ink #5F6485 (5.76:1 on white, the AA floor for the label and rank text),
+       accent #F54F1B for the fill (a graphic mark, no contrast floor), rule #DED9DB for the track.
+       Values are literals rather than var() because this module is emitted standalone into the
+       carousel renderer as well as the duel pages, where no :root block is present. */
     .pctl { display: flex; flex-direction: column; gap: .28rem; min-width: 0; }
     .pctl--right { align-items: flex-end; text-align: right; }
-    .pctl__label { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(242,234,211,.45); }
-    .pctl__value { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1; color: #F2EAD3; font-variant-numeric: tabular-nums; }
+    .pctl__label { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: #5F6485; }
+    .pctl__value { font-family: 'Anton', 'Inter Tight', system-ui, sans-serif; font-weight: 400; text-transform: uppercase; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1; color: #1E223D; font-variant-numeric: tabular-nums; }
     /* Deliberately short. Wherever this sits next to a wider bar (the duel row's split bar, a
        carousel slide's chart) a full-width track reads as a second chart competing with the first.
        This one is a chip that qualifies the number above it. */
-    .pctl__track { display: block; width: 100%; max-width: 8.5rem; height: 4px; border-radius: 2px; background: rgba(242,234,211,.14); overflow: hidden; }
-    .pctl__fill { display: block; height: 100%; border-radius: 2px; background: #C9A14A; }
-    .pctl--cream .pctl__fill { background: rgba(242,234,211,.6); }
-    .pctl__rank { font-size: .74rem; color: rgba(242,234,211,.55); }
-    .pctl__note { font-size: .72rem; line-height: 1.4; color: #C9A14A; }
+    .pctl__track { display: block; width: 100%; max-width: 8.5rem; height: 4px; border-radius: 2px; background: #DED9DB; overflow: hidden; }
+    .pctl__fill { display: block; height: 100%; border-radius: 2px; background: #F54F1B; }
+    .pctl--cream .pctl__fill { background: #7A7F9E; }
+    .pctl__rank { font-size: .74rem; color: #5F6485; }
+    .pctl__note { font-size: .72rem; line-height: 1.4; color: #C93A0F; }
   </style>`;
 }

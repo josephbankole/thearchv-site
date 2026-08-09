@@ -1,0 +1,77 @@
+{
+  "schema": "archv.site-illustrated/1",
+  "_comment": "Illustrated art the site may place on a page: ARCHV-drawn player portraits and ARCHV-designed club badges. Faces are illustrated-only by canon, and every badge here is our own typographic disc, never a club's real crest. Files live in public/media/illustrated/ and are committed at display size x2, compressed. Sources: portraits from fifa.archv/assets/headshots (see player-headshot-bank.md for the generation and QC record), badges from fifa.archv/match-covers/carousel/assets/badges (see that folder's MANIFEST.json). Read through scripts/shared/illustrated.mjs, never by hand-writing a path: phase 2B wires article templates to the same map.",
+  "players": [
+    {
+      "slug": "nilson-angulo",
+      "name": "Nilson Angulo",
+      "nation": "Ecuador",
+      "src": "/media/illustrated/head-angulo.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Nilson Angulo of Ecuador"
+    },
+    {
+      "slug": "elijah-just",
+      "name": "Elijah Just",
+      "nation": "New Zealand",
+      "src": "/media/illustrated/head-elijahjust.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Elijah Just of New Zealand"
+    },
+    {
+      "slug": "issa-diop",
+      "name": "Issa Diop",
+      "nation": "Morocco",
+      "src": "/media/illustrated/head-issadiop.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Issa Diop of Morocco"
+    },
+    {
+      "slug": "riyad-mahrez",
+      "name": "Riyad Mahrez",
+      "nation": "Algeria",
+      "src": "/media/illustrated/head-mahrez.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Riyad Mahrez of Algeria"
+    },
+    {
+      "slug": "vozinha",
+      "name": "Vozinha",
+      "nation": "Cape Verde",
+      "src": "/media/illustrated/head-vozinha.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of the Cape Verde goalkeeper Vozinha"
+    }
+  ],
+  "clubs": [
+    {
+      "slug": "leeds-united",
+      "name": "Leeds United",
+      "src": "/media/illustrated/badge-leeds-united.png",
+      "width": 120,
+      "height": 120,
+      "alt": "The ARCHV badge for Leeds United"
+    },
+    {
+      "slug": "manchester-united",
+      "name": "Manchester United",
+      "src": "/media/illustrated/badge-manchester-united.png",
+      "width": 120,
+      "height": 120,
+      "alt": "The ARCHV badge for Manchester United"
+    },
+    {
+      "slug": "paris-saint-germain",
+      "name": "Paris Saint-Germain",
+      "src": "/media/illustrated/badge-paris-saint-germain.png",
+      "width": 120,
+      "height": 120,
+      "alt": "The ARCHV badge for Paris Saint-Germain"
+    }
+  ]
+}

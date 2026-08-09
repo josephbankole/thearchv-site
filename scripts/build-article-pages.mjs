@@ -553,7 +553,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
   <meta name="description" content="${escAttr(metaDescription(entry.dek, entry.body))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${pageCsp}
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />

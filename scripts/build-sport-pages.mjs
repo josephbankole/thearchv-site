@@ -87,7 +87,7 @@ function renderSection(sport) {
   <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
@@ -166,13 +166,13 @@ function renderFootballAlias() {
   <meta name="description" content="Football lives at the front door of The ARCHV. Redirecting you there now." />
   <link rel="canonical" href="${home}" />
   <meta name="robots" content="noindex,follow" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${cspMeta({})}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   ${RSS_LINK}
   <style>
-    body { margin: 0; background: #0C2A3E; color: #F2EAD3; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; text-align: center; }
-    a { color: #C9A14A; }
+    body { margin: 0; background: #FFFFFF; color: #1E223D; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; text-align: center; }
+    a { color: #C93A0F; }
   </style>
 </head>
 <body>

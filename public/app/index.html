@@ -61,11 +61,11 @@
 
   <style>
     :root {
-      --navy: #0C2A3E;
-      --navy-deep: #071C2B;
-      --cream: #F2EAD3;
-      --cream-dim: #B3AB92;
-      --gold: #C9A14A;
+      --navy: #FFFFFF;
+      --navy-deep: #F4F2F3;
+      --cream: #1E223D;
+      --cream-dim: #5F6485;
+      --gold: #C93A0F;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     /* No fixed heights anywhere (2026-07-22): body's min-height is viewport-relative
@@ -80,7 +80,7 @@
       justify-content: center;
       padding: 28px 24px 48px;
       background:
-        radial-gradient(120% 80% at 50% 0%, #0e3047 0%, var(--navy) 45%, var(--navy-deep) 100%);
+        radial-gradient(120% 80% at 50% 0%, #FFFFFF 0%, var(--navy) 45%, var(--navy-deep) 100%);
       color: var(--cream);
       font-family: "Inter Tight", system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -146,7 +146,7 @@
     .pitch {
       margin-top: 30px;
       padding-top: 24px;
-      border-top: 1px solid rgba(242, 234, 211, 0.14);
+      border-top: 1px solid rgba(30, 34, 61, 0.08);
       font-size: 0.98rem;
       line-height: 1.55;
       color: var(--cream);
@@ -179,7 +179,7 @@
       border: 0;
       border-radius: 12px;
       background: var(--gold);
-      color: var(--navy-deep);
+      color: #FFFFFF;  /* 5.13:1 on the accent fill */
       text-decoration: none;
       font-family: inherit;
       font-size: 1.02rem;
@@ -201,7 +201,7 @@
       width: 100%;
       padding: 15px 22px;
       border-radius: 12px;
-      border: 1px solid rgba(242, 234, 211, 0.4);
+      border: 1px solid rgba(30, 34, 61, 0.18);
       background: transparent;
       color: var(--cream);
       text-decoration: none;
@@ -219,7 +219,7 @@
       width: 100%;
       padding: 15px 16px;
       border-radius: 12px;
-      border: 1px solid rgba(242, 234, 211, 0.28);
+      border: 1px solid rgba(30, 34, 61, 0.13);
       background: rgba(255, 255, 255, 0.04);
       color: var(--cream);
       font-family: inherit;
@@ -246,7 +246,7 @@
     .dispatch-embed iframe {
       display: block;
       width: 100%;
-      border: 1px solid rgba(242, 234, 211, 0.18);
+      border: 1px solid rgba(30, 34, 61, 0.08);
       border-radius: 12px;
       background: #ffffff;
     }

@@ -32,6 +32,7 @@ import {
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
+import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
 import { percentileBar, percentileBarStyles } from "./shared/percentile-bar.mjs";
 import { loadDataset, listPairs, compareStat, formatValue, providerName } from "./shared/football-data.mjs";
 
@@ -134,7 +135,7 @@ function statRow(metric, playerA, playerB) {
 
 /* ---------- headshots: illustrated only, and never a broken image ---------- */
 // public/heads/ is committed to main by the daily engine, so a preview checkout can legitimately
-// be missing a face. A missing file falls back to a gold monogram disc rather than an alt-text
+// be missing a face. A missing file falls back to a monogram disc rather than an alt-text
 // stub, which keeps the card looking deliberate instead of broken.
 function headPath(player) {
   if (!player.head) return null;
@@ -159,12 +160,12 @@ function headFigure(player, size = 104) {
   return `<span class="duel-head__monogram" role="img" aria-label="${escAttr(player.headAlt)}">${esc(initials(player.name))}</span>`;
 }
 
-/* ---------- the OG card ---------- */
-const CARD_FONTS = [
-  { name: "Fraunces", data: readFileSync(join(FONTS_DIR, "Fraunces-SemiBold.ttf")), weight: 600, style: "normal" },
-  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-Regular.ttf")), weight: 400, style: "normal" },
-  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-SemiBold.ttf")), weight: 600, style: "normal" },
-];
+/* ---------- the OG card ----------
+   RE-ARTED ON THE WHITE SYSTEM, phase 2B, alongside the article cards: palette, fonts and the
+   wordmark all come from scripts/shared/card-brand.mjs, so a duel shared into a feed previews as
+   the page it opens. The split bars keep the same reading as the percentile bars on the page
+   itself (scripts/shared/percentile-bar.mjs): the accent is the one in front, the muted ink is
+   the one behind, and the track is the rule grey. */
 
 const headPngCache = new Map();
 async function headPng(player) {
@@ -173,7 +174,11 @@ async function headPng(player) {
   let uri = null;
   if (path) {
     // satori and resvg cannot read webp, so the 240px brand webp becomes a PNG data URI.
-    const png = await sharp(path).resize(400, 400, { fit: "cover" }).png().toBuffer();
+    const png = await sharp(path)
+      .resize(400, 400, { fit: "cover", background: { r: 255, g: 255, b: 255, alpha: 1 } })
+      .flatten({ background: { r: 255, g: 255, b: 255 } })
+      .png()
+      .toBuffer();
     uri = `data:image/png;base64,${png.toString("base64")}`;
   }
   headPngCache.set(player.id, uri);
@@ -185,24 +190,22 @@ const CARD_H = 630;
 const CARD_PAD = 56;
 const BAR_W = CARD_W - CARD_PAD * 2;
 
-const div = (style, children) => ({ type: "div", props: { style, children } });
-const text = (style, value) => ({ type: "div", props: { style, children: String(value) } });
-
 function cardHeadNode(uri, player, align) {
   const face = uri
-    ? { type: "img", props: { src: uri, width: 116, height: 116, style: { borderRadius: 116, border: "3px solid rgba(201,161,74,.55)" } } }
+    ? { type: "img", props: { src: uri, width: 116, height: 116, style: { borderRadius: 116, border: `2px solid ${CARD.rule}` } } }
     : div(
-        { display: "flex", width: 116, height: 116, borderRadius: 116, border: "3px solid rgba(201,161,74,.55)", alignItems: "center", justifyContent: "center", backgroundColor: "#0A2233" },
-        [text({ fontFamily: "Fraunces", fontWeight: 600, fontSize: 40, color: "#C9A14A" }, initials(player.name))],
+        { display: "flex", width: 116, height: 116, borderRadius: 116, border: `2px solid ${CARD.rule}`, alignItems: "center", justifyContent: "center", backgroundColor: CARD.bgSunken },
+        [text({ fontFamily: "Anton", fontSize: 44, color: CARD.accentInk }, initials(player.name))],
       );
 
   // Shrink-to-fit so a long name keeps to one line where it can and never runs into the centre V.
-  const nameSize = player.name.length <= 14 ? 40 : player.name.length <= 20 ? 34 : 29;
+  // Anton is condensed, so each step sits above the old Fraunces one.
+  const nameSize = player.name.length <= 14 ? 46 : player.name.length <= 20 ? 39 : 33;
   const words = div(
     { display: "flex", flexDirection: "column", alignItems: align === "right" ? "flex-end" : "flex-start", marginLeft: align === "right" ? 0 : 22, marginRight: align === "right" ? 22 : 0, width: 320 },
     [
-      text({ fontFamily: "Fraunces", fontWeight: 600, fontSize: nameSize, color: "#F2EAD3", lineHeight: 1.08, lineClamp: 2, textAlign: align === "right" ? "right" : "left", width: 320 }, player.name),
-      text({ fontFamily: "Inter Tight", fontWeight: 400, fontSize: 21, color: "rgba(242,234,211,.6)", marginTop: 6, lineClamp: 1, width: 320, textAlign: align === "right" ? "right" : "left" }, player.club || ""),
+      text({ fontFamily: "Anton", fontSize: nameSize, color: CARD.ink, lineHeight: 1.06, lineClamp: 2, textAlign: align === "right" ? "right" : "left", width: 320 }, String(player.name).toUpperCase()),
+      text({ fontFamily: "Inter Tight", fontWeight: 400, fontSize: 21, color: CARD.inkMuted, marginTop: 6, lineClamp: 1, width: 320, textAlign: align === "right" ? "right" : "left" }, player.club || ""),
     ],
   );
 
@@ -220,22 +223,25 @@ function cardStatRow(metric, playerA, playerB) {
   const aW = Math.round((BAR_W * split.a) / 100);
   const bW = BAR_W - aW;
 
-  const gold = "#C9A14A";
-  const dim = "rgba(242,234,211,.24)";
-  const aFill = winner === "a" ? gold : winner === "tie" ? "rgba(242,234,211,.42)" : dim;
-  const bFill = winner === "b" ? gold : winner === "tie" ? "rgba(242,234,211,.42)" : dim;
+  // Same three colours the page's own bars use: the accent leads, the muted ink follows, the
+  // rule grey is the track. A tie gives both sides the muted ink rather than both the accent,
+  // so "in front" always means exactly one thing.
+  const lead = CARD.accentFill;
+  const behind = "#7A7F9E";
+  const aFill = winner === "a" ? lead : behind;
+  const bFill = winner === "b" ? lead : behind;
 
   return div({ display: "flex", flexDirection: "column", width: BAR_W, marginTop: 22 }, [
     div({ display: "flex", alignItems: "flex-end", justifyContent: "space-between", width: BAR_W, marginBottom: 8 }, [
-      text({ fontFamily: "Fraunces", fontWeight: 600, fontSize: 44, color: winner === "a" ? "#F2EAD3" : "rgba(242,234,211,.55)", width: 150 }, formatValue(metric, statA.value)),
+      text({ fontFamily: "Anton", fontSize: 50, color: winner === "a" ? CARD.ink : CARD.inkMuted, width: 150 }, formatValue(metric, statA.value)),
       // A flex box with justifyContent, not textAlign: satori honours the box, and textAlign alone
       // on a grown text node leaves the label hard against its left edge.
       div({ display: "flex", justifyContent: "center", alignItems: "flex-end", width: BAR_W - 300 }, [
-        text({ fontFamily: "Inter Tight", fontWeight: 600, fontSize: 19, letterSpacing: 3.4, color: "rgba(242,234,211,.6)" }, metric.label.toUpperCase()),
+        text({ fontFamily: "Inter Tight", fontWeight: 600, fontSize: 19, letterSpacing: 3.4, color: CARD.inkMuted }, metric.label.toUpperCase()),
       ]),
-      text({ fontFamily: "Fraunces", fontWeight: 600, fontSize: 44, color: winner === "b" ? "#F2EAD3" : "rgba(242,234,211,.55)", width: 150, textAlign: "right" }, formatValue(metric, statB.value)),
+      text({ fontFamily: "Anton", fontSize: 50, color: winner === "b" ? CARD.ink : CARD.inkMuted, width: 150, textAlign: "right" }, formatValue(metric, statB.value)),
     ]),
-    div({ display: "flex", width: BAR_W, height: 10, borderRadius: 5, overflow: "hidden", backgroundColor: "rgba(242,234,211,.12)" }, [
+    div({ display: "flex", width: BAR_W, height: 10, borderRadius: 5, overflow: "hidden", backgroundColor: CARD.rule }, [
       div({ display: "flex", width: aW, height: 10, backgroundColor: aFill }, []),
       div({ display: "flex", width: bW, height: 10, backgroundColor: bFill }, []),
     ]),
@@ -246,35 +252,32 @@ async function ogCard(playerA, playerB) {
   const [uriA, uriB] = await Promise.all([headPng(playerA), headPng(playerB)]);
   const rows = metrics.filter((m) => playerA.stats[m.key] && playerB.stats[m.key]).slice(0, 3);
 
-  const tree = div(
-    {
-      width: CARD_W, height: CARD_H, display: "flex", flexDirection: "column", justifyContent: "space-between",
-      backgroundColor: "#071C2B",
-      backgroundImage: "radial-gradient(at 50% -20%, #133A52 0%, #071C2B 68%)",
-      padding: CARD_PAD,
-    },
-    [
-      div({ display: "flex", flexDirection: "column", width: BAR_W }, [
-        text({ fontFamily: "Inter Tight", fontWeight: 600, fontSize: 20, letterSpacing: 4.5, color: "#C9A14A", lineClamp: 1 },
-          `PLAYER DUEL · ${competition.label.toUpperCase()} ${competition.season}`),
-        div({ display: "flex", alignItems: "center", justifyContent: "space-between", width: BAR_W, marginTop: 22 }, [
-          cardHeadNode(uriA, playerA, "left"),
-          text({ fontFamily: "Fraunces", fontWeight: 600, fontSize: 30, color: "#C9A14A", marginLeft: 16, marginRight: 16 }, "V"),
-          cardHeadNode(uriB, playerB, "right"),
+  const tree = div({ width: CARD_W, height: CARD_H, display: "flex", flexDirection: "column", backgroundColor: CARD.bg, backgroundImage: CARD_GROUND }, [
+    accentRule(CARD_W),
+    div(
+      {
+        display: "flex", flexDirection: "column", justifyContent: "space-between",
+        flexGrow: 1, width: CARD_W, padding: CARD_PAD,
+      },
+      [
+        div({ display: "flex", flexDirection: "column", width: BAR_W }, [
+          text({ fontFamily: "Inter Tight", fontWeight: 600, fontSize: 20, letterSpacing: 4.5, color: CARD.accentInk, lineClamp: 1 },
+            `PLAYER DUEL · ${competition.label.toUpperCase()} ${competition.season}`),
+          div({ display: "flex", alignItems: "center", justifyContent: "space-between", width: BAR_W, marginTop: 22 }, [
+            cardHeadNode(uriA, playerA, "left"),
+            text({ fontFamily: "Anton", fontSize: 34, color: CARD.accentFill, marginLeft: 16, marginRight: 16 }, "V"),
+            cardHeadNode(uriB, playerB, "right"),
+          ]),
         ]),
-      ]),
-      div({ display: "flex", flexDirection: "column", width: BAR_W }, rows.map((m) => cardStatRow(m, playerA, playerB))),
-      div({ display: "flex", alignItems: "baseline", justifyContent: "space-between", width: BAR_W }, [
-        div({ display: "flex", alignItems: "baseline" }, [
-          text({ fontFamily: "Inter Tight", fontWeight: 600, fontSize: 18, letterSpacing: 4.5, color: "rgba(242,234,211,.7)", marginRight: 10 }, "THE"),
-          text({ fontFamily: "Fraunces", fontWeight: 600, fontSize: 28, color: "#F2EAD3" }, "ARCHV"),
-          text({ fontFamily: "Fraunces", fontWeight: 600, fontSize: 28, color: "#C9A14A" }, "."),
+        div({ display: "flex", flexDirection: "column", width: BAR_W }, rows.map((m) => cardStatRow(m, playerA, playerB))),
+        div({ display: "flex", alignItems: "baseline", justifyContent: "space-between", width: BAR_W }, [
+          wordmark(30),
+          text({ fontFamily: "Inter Tight", fontWeight: 400, fontSize: 17, color: CARD.inkMuted },
+            `${sourceNames([...new Set(rows.flatMap((m) => [...(playerA.stats[m.key].sources || []), ...(playerB.stats[m.key].sources || [])]))])} · thearchv.ca/duel`),
         ]),
-        text({ fontFamily: "Inter Tight", fontWeight: 400, fontSize: 17, color: "rgba(242,234,211,.5)" },
-          `${sourceNames([...new Set(rows.flatMap((m) => [...(playerA.stats[m.key].sources || []), ...(playerB.stats[m.key].sources || [])]))])} · thearchv.ca/duel`),
-      ]),
-    ],
-  );
+      ],
+    ),
+  ]);
 
   const svg = await satori(tree, { width: CARD_W, height: CARD_H, fonts: CARD_FONTS });
   return new Resvg(svg, { fitTo: { mode: "width", value: CARD_W } }).render().asPng();
@@ -285,7 +288,7 @@ const INDEX_LEDE =
   "Two players, the same competition and the same season, with every figure showing where it came from. Pick a pair. The page you land on is the argument, and the link is how you send it to whoever needs correcting.";
 const INDEX_NOTE =
   "Nothing here is a live feed. These are settled end-of-season records, each one checked by hand against two named sources, and the sources sit under the numbers they belong to.";
-const PAIR_INTRO = "Each row splits the bar between them. Gold is the one in front.";
+const PAIR_INTRO = "Each row splits the bar between them. The orange side is the one in front.";
 
 /* ---------- shared page CSS for this family ---------- */
 function duelStyles() {
@@ -298,8 +301,8 @@ function duelStyles() {
     /* the two faces, name and club, either side of a gold V */
     .duel-heads { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin: 0 0 1.4rem; }
     .duel-head { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1 1 0; min-width: 0; }
-    .duel-head__img, .duel-head__monogram { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
-    .duel-head__monogram { display: flex; align-items: center; justify-content: center; background: #0A2233; color: var(--gold); font-family: "Fraunces", Georgia, serif; font-size: 2rem; font-weight: 600; }
+    .duel-head__img, .duel-head__monogram { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
+    .duel-head__monogram { display: flex; align-items: center; justify-content: center; background: var(--bg-sunken); color: var(--accent-ink); font-family: var(--display); font-size: 2rem; font-weight: 400; }
     .duel-head__name { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.05rem, 3.4vw, 1.35rem); line-height: 1.2; margin: .8rem 0 .2rem; }
     .duel-head__club { font-size: .82rem; color: var(--cream-faint-text); margin: 0; }
     .duel-head__line { font-size: .8rem; color: var(--cream-dim); margin: .5rem 0 0; max-width: 15rem; }
@@ -312,10 +315,15 @@ function duelStyles() {
     .duel-row__metric { text-align: center; padding: 0 .2rem; }
     .duel-row__metric-name { display: block; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-dim); }
     .duel-row__metric-calc { display: block; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--cream-faint-text); margin-top: .2rem; }
-    .duel-bar { display: flex; width: 100%; height: 10px; border-radius: 5px; overflow: hidden; background: rgba(242,234,211,.12); margin: .7rem 0 .5rem; }
-    .duel-bar__side { display: block; height: 100%; background: rgba(242,234,211,.24); }
-    .duel-bar__side--win { background: var(--gold); }
-    .duel-bar__side--tie { background: rgba(242,234,211,.42); }
+    /* The split bar. Its three colours were cream at 12, 24 and 42 per cent, which on the navy
+       ground read as a track and two fills and on the white ground read as nothing at all. They
+       are now the same three the percentile bars use (scripts/shared/percentile-bar.mjs): the
+       accent leads, the muted mark follows, the rule grey is the track. --ink-faint is a
+       decorative token and never carries text, which is exactly what a bar fill is. */
+    .duel-bar { display: flex; width: 100%; height: 10px; border-radius: 5px; overflow: hidden; background: var(--rule); margin: .7rem 0 .5rem; }
+    .duel-bar__side { display: block; height: 100%; background: var(--ink-faint); }
+    .duel-bar__side--win { background: var(--accent-fill); }
+    .duel-bar__side--tie { background: var(--ink-faint); }
     .duel-row__flag { font-size: .78rem; color: var(--gold); margin: 0 0 .3rem; }
     .duel-row__source { font-size: .76rem; color: var(--cream-faint-text); margin: 0; }
 
@@ -329,12 +337,12 @@ function duelStyles() {
     .duel-sources ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
 
     /* picker */
-    .duel-picker { display: flex; flex-wrap: wrap; gap: .7rem; align-items: flex-end; margin: 0 0 2rem; padding: 1.2rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: linear-gradient(180deg, rgba(19,58,82,.35), rgba(7,28,43,.35)); }
+    .duel-picker { display: flex; flex-wrap: wrap; gap: .7rem; align-items: flex-end; margin: 0 0 2rem; padding: 1.2rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: var(--bg-sunken); box-shadow: var(--shadow-soft); }
     .duel-picker__field { display: flex; flex-direction: column; gap: .3rem; flex: 1 1 12rem; min-width: 0; }
     .duel-picker__field label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint-text); }
     .duel-picker select { font: inherit; font-size: .95rem; color: var(--cream); background: var(--navy-deep); border: 1px solid var(--gold-soft); border-radius: .45rem; padding: .55rem .6rem; width: 100%; }
     .duel-picker select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-    .duel-picker button { font: inherit; font-size: .85rem; font-weight: 600; padding: .6rem 1.1rem; border-radius: .5rem; border: 0; background: var(--gold); color: var(--navy-deep); cursor: pointer; }
+    .duel-picker button { font: inherit; font-size: .85rem; font-weight: 600; padding: .6rem 1.1rem; border-radius: .5rem; border: 0; background: var(--accent-ink); color: #FFFFFF; cursor: pointer; }
     .duel-picker button:hover { filter: brightness(1.06); }
     .duel-picker__hint { flex: 1 1 100%; font-size: .78rem; color: var(--cream-faint-text); margin: 0; }
 

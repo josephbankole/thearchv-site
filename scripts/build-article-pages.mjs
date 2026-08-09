@@ -25,6 +25,7 @@ import {
 } from "./shared/page-shell.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
+import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -254,111 +255,91 @@ function schema(entry, url, label, faq, images) {
    NewsArticle JSON-LD image array alongside og.png). Same design at both sizes: the wide card
    puts its extra 45px into vertical padding, so the inner layout never re-wraps and nothing
    clips. If generation fails for an entry the page falls back to the static /og.jpg and the
-   build carries on. Fonts are static TTF instances committed at scripts/fonts/ (Google Fonts
-   API static builds; satori does not take variable fonts well). */
-const FONTS_DIR = join(ROOT, "scripts", "fonts");
-const CARD_FONTS = [
-  { name: "Fraunces", data: readFileSync(join(FONTS_DIR, "Fraunces-SemiBold.ttf")), weight: 600, style: "normal" },
-  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-Regular.ttf")), weight: 400, style: "normal" },
-  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-SemiBold.ttf")), weight: 600, style: "normal" },
-];
+   build carries on.
 
-// Shrink-to-fit headline sizing: three lines maximum, ellipsized by satori's lineClamp as a
-// last resort so text can never overflow the card.
+   RE-ARTED ON THE WHITE SYSTEM, phase 2B. The card was navy, cream and gold while the page it
+   opens has been white since phase 2A, so a link previewed in a feed as one publication and
+   opened as another. It is now the article page's own furniture at share size: white ground, the
+   accent hairline across the top, the kicker in accent ink, the headline in Anton and uppercase
+   exactly as the page sets its own h1, and the wordmark as the masthead draws it. Palette and
+   fonts come from scripts/shared/card-brand.mjs. */
+const CARD_W = 1200;
+
+// Shrink-to-fit headline sizing: three lines maximum, ellipsized by satori's lineClamp as a last
+// resort so text can never overflow the card. The steps sit above the old Fraunces ones because
+// Anton is a condensed face and fits noticeably more per line at the same size.
 function headlineSize(text) {
   const len = String(text).length;
-  if (len <= 42) return 68;
-  if (len <= 64) return 58;
-  if (len <= 90) return 50;
-  return 44;
+  if (len <= 42) return 82;
+  if (len <= 64) return 70;
+  if (len <= 90) return 58;
+  return 50;
 }
 
-async function ogCard(entry, laneLabel, height = 630) {
+async function ogCard(entry, laneLabel, height = 630, art = undefined) {
   // The card was designed at 1200x630. Any taller render (og-wide at 675) keeps the content
   // block at its designed height by absorbing the difference into the vertical padding — no
   // scaling, no letterbox bars, and the headline wraps identically at both sizes.
-  const padY = 64 + Math.round((height - 630) / 2);
+  const padY = 60 + Math.round((height - 630) / 2);
   const kicker = `${laneLabel} · ${longDate(entry.date)}`.toUpperCase();
 
-  // satori/resvg cannot read webp; the brand headshots in public/heads/ are 240px webp, so
-  // convert to a PNG data URI with sharp (already a build dependency).
+  // The same art the page shows (entryArt: filed image, banked portrait, club badge, nothing).
+  // satori and resvg cannot read webp, and the head bank is 240px webp, so sharp converts to a
+  // PNG data URI on the way in — sharp reads webp perfectly well, it is only the SVG stack that
+  // does not.
+  const resolved = art === undefined ? entryArt(entry) : art;
   let portrait = null;
-  if (entry.image) {
-    const imgPath = join(ROOT, "public", entry.image.replace(/^\//, ""));
+  if (resolved) {
+    const imgPath = join(ROOT, "public", resolved.src.replace(/^\//, ""));
     if (existsSync(imgPath)) {
-      const png = await sharp(imgPath).resize(600, 600, { fit: "cover" }).png().toBuffer();
+      const png = await sharp(imgPath)
+        .resize(600, 600, { fit: "cover", background: { r: 255, g: 255, b: 255, alpha: 1 } })
+        .flatten({ background: { r: 255, g: 255, b: 255 } })
+        .png()
+        .toBuffer();
       portrait = `data:image/png;base64,${png.toString("base64")}`;
     }
   }
 
-  const left = {
-    type: "div",
-    props: {
-      style: { display: "flex", flexDirection: "column", justifyContent: "space-between", flexGrow: 1, flexShrink: 1, height: "100%", minWidth: 0 },
-      children: [
-        {
-          type: "div",
-          props: {
-            style: { display: "flex", flexDirection: "column" },
-            children: [
-              { type: "div", props: { style: { color: "#C9A14A", fontFamily: "Inter Tight", fontWeight: 600, fontSize: 26, letterSpacing: 4.5, lineClamp: 1, marginBottom: 34 }, children: kicker } },
-              { type: "div", props: { style: { color: "#F2EAD3", fontFamily: "Fraunces", fontWeight: 600, fontSize: headlineSize(entry.headline), lineHeight: 1.12, letterSpacing: -0.5, lineClamp: 3 }, children: entry.headline } },
-            ],
-          },
-        },
-        {
-          type: "div",
-          props: {
-            style: { display: "flex", alignItems: "baseline" },
-            children: [
-              { type: "div", props: { style: { color: "rgba(242,234,211,.7)", fontFamily: "Inter Tight", fontWeight: 600, fontSize: 22, letterSpacing: 5, marginRight: 12 }, children: "THE" } },
-              { type: "div", props: { style: { color: "#F2EAD3", fontFamily: "Fraunces", fontWeight: 600, fontSize: 34 }, children: "ARCHV" } },
-              { type: "div", props: { style: { color: "#C9A14A", fontFamily: "Fraunces", fontWeight: 600, fontSize: 34 }, children: "." } },
-            ],
-          },
-        },
-      ],
-    },
-  };
+  const left = div(
+    { display: "flex", flexDirection: "column", justifyContent: "space-between", flexGrow: 1, flexShrink: 1, height: "100%", minWidth: 0 },
+    [
+      div({ display: "flex", flexDirection: "column" }, [
+        text({ color: CARD.accentInk, fontFamily: "Inter Tight", fontWeight: 600, fontSize: 24, letterSpacing: 4.5, lineClamp: 1, marginBottom: 30 }, kicker),
+        text({ color: CARD.ink, fontFamily: "Anton", fontSize: headlineSize(entry.headline), lineHeight: 1.06, letterSpacing: 0.5, lineClamp: 3 }, String(entry.headline).toUpperCase()),
+      ]),
+      div({ display: "flex", alignItems: "baseline", justifyContent: "space-between", width: "100%" }, [
+        wordmark(38),
+        text({ color: CARD.inkMuted, fontFamily: "Inter Tight", fontWeight: 400, fontSize: 20 }, "thearchv.ca"),
+      ]),
+    ],
+  );
 
   const children = [left];
   if (portrait) {
-    children.push({
-      type: "div",
-      props: {
-        style: { display: "flex", alignItems: "center", marginLeft: 56, flexShrink: 0 },
-        children: [
-          {
-            type: "img",
-            props: {
-              src: portrait,
-              width: 300,
-              height: 300,
-              style: { borderRadius: 300, border: "3px solid rgba(201,161,74,.55)", boxShadow: "0 0 0 10px rgba(7,28,43,.6)" },
-            },
+    children.push(
+      div({ display: "flex", alignItems: "center", marginLeft: 56, flexShrink: 0 }, [
+        {
+          type: "img",
+          props: {
+            src: portrait,
+            width: 300,
+            height: 300,
+            style: { borderRadius: 300, border: `2px solid ${CARD.rule}`, boxShadow: `0 0 0 12px ${CARD.bg}` },
           },
-        ],
-      },
-    });
+        },
+      ]),
+    );
   }
 
-  const svg = await satori(
-    {
-      type: "div",
-      props: {
-        style: {
-          width: 1200, height, display: "flex", alignItems: "center",
-          backgroundColor: "#071C2B",
-          backgroundImage: "radial-gradient(at 50% -20%, #133A52 0%, #071C2B 68%)",
-          padding: `${padY}px 72px`,
-        },
-        children,
-      },
-    },
-    { width: 1200, height, fonts: CARD_FONTS },
-  );
+  const tree = div({ width: CARD_W, height, display: "flex", flexDirection: "column", backgroundColor: CARD.bg, backgroundImage: CARD_GROUND }, [
+    accentRule(CARD_W),
+    div({ display: "flex", alignItems: "center", flexGrow: 1, width: CARD_W, padding: `${padY}px 72px` }, children),
+  ]);
 
-  return new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
+  const svg = await satori(tree, { width: CARD_W, height, fonts: CARD_FONTS });
+
+  return new Resvg(svg, { fitTo: { mode: "width", value: CARD_W } }).render().asPng();
 }
 
 // The share-row script embeds this page's own url/title, so - unlike masthead()/posthogSnippet()
@@ -512,12 +493,15 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
         <a class="ladder__alt" id="ladder-alt" href="/"></a>
       </aside>
       <style>
-        .ladder{margin:44px 0 8px;padding:28px 24px;border:1px solid rgba(201,161,74,.32);border-radius:16px;background:rgba(255,255,255,.03);text-align:center}
-        .ladder__note{margin:0 0 18px;font-size:1rem;line-height:1.55;color:#F2EAD3}
-        .ladder__cta{display:inline-block;padding:14px 26px;border-radius:12px;background:#C9A14A;color:#071C2B;text-decoration:none;font-weight:600}
+        /* The one block on this page family that still carried navy hex codes after the phase 2A
+           flip (found by the 2B sweep). It resolves through the same tokens as everything else
+           now: white on --accent-ink measures 5.13:1, --ink-muted on the sunken grey 5.16:1. */
+        .ladder{margin:44px 0 8px;padding:28px 24px;border:1px solid var(--rule);border-radius:16px;background:var(--bg-sunken);box-shadow:var(--shadow-soft);text-align:center}
+        .ladder__note{margin:0 0 18px;font-size:1rem;line-height:1.55;color:var(--ink)}
+        .ladder__cta{display:inline-block;padding:14px 26px;border-radius:12px;background:var(--accent-ink);color:#FFFFFF;text-decoration:none;font-weight:600}
         .ladder__cta:hover{filter:brightness(1.06)}
-        .ladder__alt{display:block;margin-top:14px;font-size:.9rem;color:#B3AB92;text-decoration:underline;text-underline-offset:3px}
-        .ladder__alt:hover{color:#F2EAD3}
+        .ladder__alt{display:block;margin-top:14px;font-size:.9rem;color:var(--ink-muted);text-decoration:underline;text-underline-offset:3px}
+        .ladder__alt:hover{color:var(--accent-ink)}
       </style>`;
 
   // W3.1 — "More from the <lane>": whole-card links to the previous 3 entries in this lane.

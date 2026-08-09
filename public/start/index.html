@@ -48,6 +48,11 @@
       --cream: #1E223D;
       --cream-dim: #5F6485;
       --gold: #C93A0F;
+      /* Added by the phase 2B sweep: the hairline and the elevation the white system uses, so
+         this page stops reaching for a gold alpha and a heavy black smudge that were drawn for
+         the navy ground. Mirrors --rule / --shadow-lift in scripts/shared/page-shell.mjs. */
+      --rule: #DED9DB;
+      --shadow-lift: 0 2px 4px rgba(30, 34, 61, 0.06), 0 16px 34px -18px rgba(30, 34, 61, 0.26);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     /* No fixed heights anywhere (2026-07-22): body{height:100%} plus flex centring
@@ -93,8 +98,8 @@
       position: relative;
       border-radius: 18px;
       overflow: hidden;
-      border: 1px solid rgba(201, 161, 74, 0.4);
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--rule);
+      box-shadow: var(--shadow-lift);
     }
     .today-card img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
     .kicker {
@@ -171,7 +176,7 @@
       text-decoration: none;
       color: var(--cream);
       background: rgba(30, 34, 61, 0.08);
-      border: 1px solid rgba(201, 161, 74, 0.45);
+      border: 1px solid var(--rule);
       transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
     }
     .desk-link:hover {

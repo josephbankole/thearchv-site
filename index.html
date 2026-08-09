@@ -49,18 +49,28 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- JSON-LD: Organization + WebSite + poster ItemList. No trademarked terms in structured data. -->
+    <!-- JSON-LD: Organization + WebSite + poster ItemList. No trademarked terms in structured data.
+
+         THIS BLOCK IS NOW THE FRONT PAGE'S PRIMARY BRAND SIGNAL. Until phase 2A the h1 read
+         "Football has a memory. We are the archive."; the rebuilt front page gives the h1 to the
+         day's lead headline, which is right for a news product and does mean the strongest
+         on-page statement of who publishes this is no longer a heading. The <title>, the
+         og:site_name, the masthead wordmark and the two nodes below carry it instead, so none of
+         them is decoration. Every sameAs URL here is the ORG_SAMEAS list in
+         scripts/shared/page-shell.mjs, verbatim and asserted equal by hand; no handle on this
+         page was written from memory. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": "Organization",
+            "@type": ["Organization", "NewsMediaOrganization"],
             "@id": "https://thearchv.ca/#org",
             "name": "The ARCHV",
-            "alternateName": ["ARCHV", "The ARCHV FC", "thearchvfc"],
+            "alternateName": ["THE ARCHV", "ARCHV", "The ARCHV FC", "thearchvfc"],
             "url": "https://thearchv.ca/",
-            "description": "Illustrated football history: every final since 1970, a daily transfer desk, and long reads on the systems behind the game.",
+            "foundingDate": "2026",
+            "description": "A daily illustrated sports desk covering football, the NFL, Formula 1, tennis and golf, with long reads on the systems behind the games. Every entry is checked against two independent sources before it goes up, and no photograph appears anywhere on the site.",
             "logo": "https://thearchv.ca/brand/logo-badge@192.png",
             "image": "https://thearchv.ca/og.jpg",
             "sameAs": [
@@ -84,8 +94,8 @@
             "@id": "https://thearchv.ca/#website",
             "url": "https://thearchv.ca/",
             "name": "The ARCHV",
-            "alternateName": "The ARCHV: Football History, Illustrated",
-            "description": "Illustrated football history: every final since 1970, a daily transfer desk, and long reads on the systems behind the game.",
+            "alternateName": ["THE ARCHV", "ARCHV", "The ARCHV: Sports History, Illustrated"],
+            "description": "Illustrated sports history: a daily desk across football, the NFL, Formula 1, tennis and golf, plus long reads on the systems behind the games.",
             "inLanguage": "en-GB",
             "publisher": { "@id": "https://thearchv.ca/#org" }
           },

@@ -35,6 +35,16 @@
    worthless, and it looked exactly like a real bug. It had already returned blank screenshots on
    scrolled pages earlier the same day. Use a real browser, or ask the founder.
 
+   **The lesson, stated for the site as it is now (phase 2A, 2026-08-09).** The three homepage day
+   rails this incident happened inside are gone: the front page is server-rendered cards in a grid.
+   The rule is not about day rails. **A horizontal scroller must never be able to own a vertical
+   gesture, and the way it starts owning one is a downward transform on something inside it.**
+   The site still has horizontal scrollers, on the homepage (`.rail`, the poster archive) and on
+   every static page (`.sportnav`, the sport tab bar). Both carry `overflow-y: hidden` and a
+   comment saying why. Keep the guard on anything new that scrolls sideways, and do not put a
+   translate-down resting state inside one. The account below is the original diagnosis; line
+   numbers in it are from the pre-rebuild `src/style.css` and no longer resolve.
+
    **Root cause, found 2026-08-04 by a controlled diagnosis run (no deploy).** The break is one
    declaration: `transform: translateY(16px)` at `src/style.css:784`, the resting state of the
    Tier 0 `[data-inview]` reveal.
@@ -114,13 +124,70 @@
 
 ## What this site is
 
-Vite + TypeScript + GSAP single-page site for The ARCHV. Brand is locked: navy
-#0C2A3E, navy-deep #071C2B, cream #F2EAD3, gold #C9A14A used sparingly, pitch
-#2E6B3A; Fraunces + Inter Tight; British voice, no em dashes, restrained archival
-register. CSP is strict: no inline scripts (script-src 'self' + one hash); all JS
-lives in bundled `src/` files. Reduced-motion support is a hard requirement on any
-animation; the existing patterns in `src/anim/` show the register (fast, no bounce,
+Vite + TypeScript + GSAP. Not a single-page site: it is a page graph of static families
+(front page, lane fronts, article pages, sport sections, glossary, standards, duels, the
+daily game, the author page), and `npm run build` is a chain of generators, not one bundle.
+British voice, no em dashes, restrained register. CSP is strict: no inline scripts on the
+homepage beyond one hashed bootstrap, and every inline script in the static family is
+allowed by an exact sha256 (see the CSP section under Per-article pages). Reduced motion is
+a hard requirement on any animation; `src/anim/` shows the register (fast, no bounce,
 content readable if JS never runs).
+
+**THE BRAND IS A WHITE TOKEN SYSTEM, and any file still saying navy is out of date.**
+Phase 2A (2026-08-09) flipped the ground and the ink across every page family in one pass.
+
+- `--bg` #FFFFFF, `--bg-sunken` #F4F2F3, `--ink` #1E223D, `--ink-soft` #4A4F73,
+  `--ink-muted` #5F6485, `--accent-fill` #F54F1B, `--accent-ink` #C93A0F, `--rule` #DED9DB,
+  `--rule-soft` #EDEAEB, `--confirmed` #1E7A38.
+- **Two tokens are never text.** `--accent-fill` measures 3.49:1 on white and `--ink-faint`
+  (#7A7F9E) 3.92:1, so both are fills, bars and marks only. The text form of the accent is
+  `--accent-ink` at 5.13:1, and the readable muted text token is `--ink-muted` at 5.76:1 on
+  white and 5.16:1 on the sunken grey. Reaching for the bright orange because a label looked
+  quiet is the mistake that keeps getting made.
+- **The old navy names still resolve.** `--navy: var(--bg)`, `--cream: var(--ink)`,
+  `--gold: var(--accent-ink)` and the rest are aliases, deliberately, so no rule written
+  against the old vocabulary had to be rewritten. They are a migration seam, not a palette.
+  New rules should use the real names.
+- Type: **Anton** for display (self-hosted latin subset at `public/fonts/anton-latin.woff2`,
+  preloaded on the front page), Fraunces and Inter Tight for everything else.
+- **The token block is duplicated in four files that do not import each other**:
+  `src/style.css`, `pageStyles()` in `scripts/shared/page-shell.mjs`, `public/content.css`,
+  and `scripts/shared/card-brand.mjs` for the rendered share images. Change one, change all
+  four. There is no build step that will catch you.
+- Adding a sixth hue is a brand break, not a refactor. Two hand-built pages under `public/`
+  declare their own small `:root` (`/app`, `/start`, `/quiz`); they carry the same values.
+
+**The front page is rendered at build time, and the bundle enhances it.**
+`src/render/home.ts` builds the dateline, the wire, the lead, the three desk bands, the
+illustrated library, the desk brief, the legends wall and the long reads into the HTML.
+`vite.config.ts` swaps them in through the `archvHome()` plugin, which runs in `npm run dev`
+as well as in `npm run build`, so a developer sees what ships.
+
+- Each block is an HTML comment marker in `index.html` (`<!--archv:lead-->` and friends) and
+  the plugin **throws** if one is missing. A silently unfilled block is the failure this whole
+  arrangement exists to remove.
+- **Nothing in `src/render/` may emit a `<script>` tag.** `index.html` carries exactly one
+  inline bootstrap and `scripts/check-csp-hash.mjs` asserts that count.
+- `src/main.ts` creates no front-page content. It attaches behaviour: the wire's pause on
+  hover, the poster rail, the contact form, the masthead menu, the long-reads height
+  animation. If the bundle never arrives the page still reads, and that is the test to apply
+  to anything new.
+- The long reads are a native `<details>` per essay for exactly that reason. They open with
+  no JS on the page at all. Do not reintroduce a button plus a panel with a CSS resting
+  height of zero.
+- There is no WebGL hero and no `three` in the graph any more. `three` and `@types/three` are
+  still in `package.json` and are dead weight.
+
+**Illustrated art goes through the registry, never a hand-written path.**
+`scripts/data/illustrated.json` is the one list of drawn portraits and ARCHV club badges.
+Read it through `scripts/shared/illustrated.mjs` (generators) or `src/render/illustrated.ts`
+(front page); the two mirror each other and share the JSON, so change a matcher and change
+both. `entryArt(entry)` is the resolution chain every card and article uses: the desk's own
+filed image, then a banked portrait of a player named in the headline or standfirst, then the
+club badge, then **nothing**. A miss renders no `<img>` at all. Never add a face to that
+registry on one source: each head-bank entry is identified by both the bank index at
+`../player-headshot-bank.md` and the desk's own committed `imageAlt` for that same file, and
+the 2026-08-05 Alex Scott case is why. Bare mononyms are left out on purpose.
 
 ## The feed contract (the iOS app depends on this)
 
@@ -145,15 +212,16 @@ app build before it started reading it. Do not rename fields, do not remove
 The site is a navigable graph, not one long homepage: home -> lane index -> article ->
 onward. Three static page families sit under `/desk/`:
 
-- **Home** (`/`) — the brand statement. Each lane's section header (the `section-index`
-  line, e.g. "02 / The transfer desk") is now a link out to that lane's index page,
-  while the section's own anchor id (`#transfer-desk`, `#world-cup`, `#football-leagues`)
-  is unchanged in the DOM — the app's fallback share links still resolve. The day-rail
-  cards (`src/components/dailyDigest.ts`) are whole-card links: the entire `<a class="day">`
-  navigates to the article, guarded against the rail's drag-to-scroll by an ~8px
-  pointerdown-to-pointerup movement threshold (`DRAG_THRESHOLD_PX` in that file) that
-  cancels the click when the pointer moved more than that. This is homepage bundle code:
-  CSP-clean, no inline handlers, no client-side router.
+- **Home** (`/`) — a front page, not a brand statement, since phase 2A. The `<h1>` is the
+  day's lead headline. The brand signal moved to the `<title>`, `og:site_name`, the masthead
+  wordmark and the Organization/NewsMediaOrganization plus WebSite JSON-LD in `index.html`;
+  that block is load-bearing now rather than decorative, so do not thin it out. Each desk
+  band's title links to that lane's index page and **the section anchor ids
+  (`#transfer-desk`, `#world-cup`, `#football-leagues`) are unchanged in the DOM**, because
+  the app's fallback share links resolve against them. The day rails and
+  `src/components/dailyDigest.ts` are gone: cards are server-rendered by `renderBands()` in
+  `src/render/home.ts` and each headline is a plain link, so the drag-versus-click threshold
+  the rails needed no longer exists. Still true: no inline handlers, no client-side router.
 - **Lane index pages** (`/desk/transfer/`, `/desk/world-cup/`, `/desk/leagues/`) —
   `scripts/build-lane-pages.mjs`, the section fronts. Every entry in the lane, newest
   first, as a full-width whole-card link to its article page. Runs in the build chain
@@ -193,10 +261,21 @@ build time by the same script at `dist/desk/<lane>/<date>/og.png` (satori +
 @resvg/resvg-js, both devDependencies; headshots are converted webp -> png via sharp
 because satori/resvg cannot read webp). The page's `og:image` / `twitter:image` point
 at that PNG; if card generation fails for an entry the build logs it and that page
-falls back to the static `/og.jpg` — a card failure never fails the build. Card fonts
-are static TTF instances committed at `scripts/fonts/` (Fraunces SemiBold, Inter Tight
-Regular and SemiBold, pulled from the Google Fonts API; satori does not handle
-variable fonts well, so keep these static). Legacy day pages keep `/og.jpg` — they
+falls back to the static `/og.jpg` — a card failure never fails the build.
+
+**The cards are on the white system as of phase 2B, and `scripts/shared/card-brand.mjs` is
+the only place their palette, fonts and wordmark live.** The per-article pair, the duel
+cards in `build-duel-pages.mjs` and the site-wide `public/og.jpg` (`npm run og`, not part of
+the build chain) all import it, so a shared link previews as the page it opens. Card fonts
+are static TTF instances committed at `scripts/fonts/`: satori does not handle variable
+fonts and cannot read woff2 at all, which is why `Anton-Regular.ttf` sits there as a TTF
+decompressed from the very woff2 the site serves. Keep them static, and never point a card
+at `public/fonts/`. The art on a card comes from the same `entryArt()` chain the page uses;
+sharp converts webp to PNG on the way in because satori and resvg cannot read webp.
+The 1080x1350 infogram story cards (`scripts/shared/infogram.mjs`) are deliberately still
+navy: they are a founder-approved poster format, not a share preview of a page.
+
+Legacy day pages keep `/og.jpg` — they
 are noindex and not worth the render time. Article pages also carry a share row
 (native share, X intent, copy link) with PostHog events `share_native` / `share_x` /
 `share_copy`; the masthead on article sub pages has no Shop button (founder call,
@@ -294,24 +373,29 @@ Semantic token layer, softened shadows, mono micro-labels, a dot-grid field, edg
 masks on the horizontal scrollers, and one IntersectionObserver reveal. Founder-approved
 Tier 0 only from the deep-dive report. Four things to know before touching it:
 
-- **The palette did not change and must not.** The token layer (`--text-primary`,
-  `--bg-main`, `--border-main`, `--accent`, …) is a rename over the locked five brand
-  colours, nothing more; every token resolves to a brand colour or an alpha of one. Proof
-  at the time: a computed-style census of all 905 rendered homepage elements returned the
-  same 14 distinct colour values with identical counts before and after. **The token layer
-  is duplicated in `src/style.css` and in `pageStyles()` in `scripts/shared/page-shell.mjs`
-  — the two files do not import each other, so a change to one needs the same change to
-  the other.** Adding a sixth hue is a brand break, not a refactor.
+- **The semantic token layer survived; its values did not.** This section used to say "the
+  palette did not change and must not", and that was true of Tier 0 and is not true now.
+  Phase 2A (2026-08-09) repointed every one of these names at the white system, which is
+  precisely what the layer was for: `--text-primary`, `--bg-main`, `--border-main`,
+  `--accent` and the rest are still the names to write against, and they now resolve to
+  `--ink`, `--bg`, `--rule` and `--accent-ink`. The current values and the duplication list
+  are under "What this site is" above, which is the authority. Adding a sixth hue is still a
+  brand break rather than a refactor.
 - **The reveal lives in `src/anim/reveal.ts`, bundled, never inline** (CSP is script-src
-  'self' plus one hash). It is pointed only at elements the bundle injects itself: the
-  day-rail cards. Never put `data-inview` on server-rendered markup, because the resting
-  state is `opacity: 0` and a bundle that fails to load would leave real content invisible.
-  The static page family gets the CSS half of Tier 0 and no reveal, by design: it ships no
-  bundled JS at all.
+  'self' plus one hash). It is pointed only at elements the bundle injects itself. Never put
+  `data-inview` on server-rendered markup, because the resting state is `opacity: 0` and a
+  bundle that fails to load would leave real content invisible. That rule got sharper after
+  phase 2A, not softer: almost everything on the front page is server-rendered now, so almost
+  everything is off limits to it. In practice the mechanism is currently unused. The day-rail
+  cards it was written for are gone and `initReveal()` finds no `[data-inview-group]` on the
+  built page, so it returns immediately. Keep it or remove it deliberately; do not repurpose
+  it by pointing it at markup the build wrote. The static page family gets the CSS half of
+  Tier 0 and no reveal, by design: it ships no bundled JS at all.
 - **The reveal is a fade, with no transform, and that is not negotiable.** The first
   version translated the card down 16px at rest. That is the declaration that broke
   homepage scrolling on a phone and forced the rollback; the whole mechanism is in trap 3
-  above. A downward transform on anything inside a `.rail` is the mistake to not repeat.
+  above. A downward transform on anything inside a horizontal scroller is the mistake to not
+  repeat, and `.rail` was only the scroller it happened to be inside.
 - **Reduced motion is a designed state, not a disabled one.** `[data-inview]` resolves
   straight to its finished state under both `prefers-reduced-motion` and the
   `.reduced-motion` class the early bootstrap sets. The edge-fade masks drop on
@@ -334,7 +418,29 @@ and approved by the founder on that audit, which always archives its predecessor
 Alex Scott case shows why the audit comes first: the candidate failed it); no club
 crests, kits, photos or FIFA marks anywhere.
 
-## Open site work (as of 2026-07-09)
+The ARCHV club badges in `public/media/illustrated/` are not an exception to that last line.
+They are our own typographic disc, designed here, and the set is Leeds United, Manchester
+United and Paris Saint-Germain only. It grows per fixture through `build_badges.py` in
+`../match-covers/carousel/`, which requires the founded year to be verified against two named
+sources or left off. Do not hand-add a badge file to this repo to fill a gap on a card.
+
+## Open site work
+
+**The news-product rebuild, phases 2A and 2B (2026-08-09).** Branch
+`feature/news-product-phase2`, not merged as this line was written, so read it as the state
+of that branch rather than of main. 2A flipped every page family onto the white token
+system, brought in Anton, and moved the front page from JS-built rails to build-time render.
+2B put the illustrated registry behind every article and card template, server-rendered the
+legends wall and the long reads, re-arted the share cards to match, and swept the last
+hard-coded navy out of the generators. What it did NOT do, and what a later pass should pick
+up: the brand crest is still the pre-flip navy, gold and green mark carrying a football, and
+it is on the front page footer and in the Organization `logo`; the infogram story cards are
+still navy; `three` and `@types/three` are unused dependencies; `src/components/giantKillers.ts`
+and the `src/anim/reveal.ts` mechanism are both unreferenced by `src/main.ts`; and the ARCHV
+badge set is three clubs, which is why a card about Newcastle United gets no mark.
+
+The entries below predate the rebuild. Their decisions still stand; their descriptions of
+the homepage do not.
 
 - Football Leagues SECTION UI: DONE (commit `54ebe0c`). The homepage carries a
   `#football-leagues` section with its section-index header linking to `/desk/leagues/`

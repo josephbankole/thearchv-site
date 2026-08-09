@@ -493,38 +493,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 /* ---------- manifesto bridge line ---------- */
 .manifesto__line { margin-top: 1.75rem; max-width: 40ch; color: var(--cream-dim); font-family: var(--serif); font-weight: 300; font-size: clamp(1.2rem, 2.4vw, 1.7rem); line-height: 1.45; }
 
-/* ---------- daily-digest rails (transfer desk + world cup) ---------- */
-/* The rail clips its children's ink at the padding box in both axes, so the Tier 0 --shadow-soft on
-   .day (12px down, 32px blur, -10px spread: roughly 18px of reach below the card) was being cut off
-   by the old 8px of bottom padding. 1.5rem clears it. Top stays at 8px: nothing casts upward. */
-.day-rail { padding-block: 0.5rem 1.5rem; }
-.day {
-  flex: 0 0 auto; width: clamp(280px, 82vw, 440px); scroll-snap-align: start;
-  background: var(--bg-raised);
-  border: 1px solid var(--border-main); border-radius: 3px; padding: clamp(1.5rem, 3vw, 2.25rem);
-  display: flex; flex-direction: column; min-height: 320px;
-  box-shadow: var(--shadow-soft);
-  /* whole-card link (SITE-DEPTH-PLAN.md W2.2): .day is now the <a> itself */
-  color: inherit; text-decoration: none;
-}
-.day:hover { text-decoration: none; }
-.day:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-.day__top { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
-.day__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: center 20%; flex: 0 0 auto; border: 1px solid var(--rule); background: var(--bg-sunken); box-shadow: 0 0 0 4px #FFFFFF; }
-.day__date { font-family: var(--serif); font-weight: 360; font-size: 1.5rem; letter-spacing: -0.01em; }
-.day__label { font-size: var(--t-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream-dim); }
-.day__status { margin-left: auto; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3em 0.7em; border-radius: 2px; white-space: nowrap; }
-.day__status--live { color: var(--gold); border: 1px solid var(--gold-soft); }
-.day__status--done { background: var(--positive); color: var(--on-status); }
-.day__headline { font-family: var(--serif); font-weight: 360; font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 1rem; } /* single line of air before the dek (founder 2026-07-24) */
-.day__dek { font-size: var(--t-label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.1rem; }
-.day__body { color: var(--cream-dim); font-size: 0.95rem; line-height: 1.6; }
-
-/* ---------- banner band ---------- */
-.banner-band { height: clamp(170px, 32vh, 360px); overflow: hidden; padding: 0; position: relative; }
-.banner-band::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 120px 30px var(--navy); pointer-events: none; }
-.banner-band__img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; will-change: transform; }
-
 /* ---------- footer brand lockup ---------- */
 .footer__brand { display: inline-flex; align-items: center; gap: 1rem; }
 .footer__badge { width: 64px; height: 64px; display: block; }
@@ -540,7 +508,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .kin-w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.12em; margin-bottom: -0.12em; }
 .kin-w__i { display: inline-block; will-change: transform; }
 
-/* reduced motion: show everything, no transforms, no webgl, no decorative loops */
+/* reduced motion: show everything, no transforms, no decorative loops */
 .reduced-motion [data-reveal], .reduced-motion [data-reveal-line] { opacity: 1 !important; transform: none !important; }
 .reduced-motion * { scroll-behavior: auto; }
 
@@ -671,10 +639,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .poster__frame img { transition: opacity 0.8s var(--ease), transform 0.9s var(--ease); }
 .poster:hover .poster__frame img.is-loaded { transform: scale(1.04); }
 
-/* daily-digest cards: match the legend-card hover language */
-.day { transition: transform 0.4s var(--ease), border-color 0.4s var(--ease); }
-.day:hover { transform: translateY(-4px); border-color: var(--gold-soft); }
-
 /* ---------- keyboard focus rings (visible, gold, keyboard-only) ---------- */
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
 .btn:focus-visible { outline-offset: 4px; }
@@ -689,7 +653,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .reduced-motion .btn--gold,
 .reduced-motion .poster__frame,
 .reduced-motion .poster__frame img,
-.reduced-motion .day { transition: none; }
 
 /* ============================================================
    Tier 0 pass (2026-08-04). Type, elevation, masking and one reveal.
@@ -706,8 +669,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    have overrun its line at 375px. */
 .eyebrow,
 .section-index,
-.day__label,
-.day__dek,
 .poster__host,
 .killer__meta,
 .field span {
@@ -823,7 +784,10 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 }
 .wire__item b { color: var(--accent-ink); font-weight: 700; font-size: 0.68rem; letter-spacing: 0.1em; }
 .wire__item:hover { color: var(--ink); }
-.wire__dot { color: var(--accent); margin: 0 0.9rem; font-size: 0.5rem; }
+/* The separator is aria-hidden and purely decorative, but it is still a glyph the renderer
+   draws as text, so it takes --accent-ink (5.13:1) rather than the fill-only --accent (3.49:1).
+   That keeps the rule "no text is ever set in --accent" true without an exception to remember. */
+.wire__dot { color: var(--accent-ink); margin: 0 0.9rem; font-size: 0.5rem; }
 @keyframes wire-run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .wire { overflow-x: auto; }

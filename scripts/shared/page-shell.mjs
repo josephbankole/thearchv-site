@@ -14,6 +14,13 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 
+// The ARCHV Dispatch, revived on Substack 2026-06-20 and the ONLY newsletter destination for
+// football and site content. There is a separate AI lane elsewhere in the workspace; nothing on
+// this site captures to it. One constant so the masthead link, the footer link, the read ladder
+// and the inline capture on every article page cannot drift apart.
+export const DISPATCH_URL = "https://thearchvdispatch.substack.com";
+export const DISPATCH_SUBSCRIBE_URL = `${DISPATCH_URL}/subscribe`;
+
 // The named author and editor of The ARCHV (founder decision, 2026-07-21; name FROZEN as
 // "Joseph Bankole" by founder ruling 2026-08-04 - do not vary it, and never introduce a second
 // spelling anywhere on the site). Single source of truth for both halves of the byline: the
@@ -319,7 +326,12 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 export function masthead(currentSportKey = DEFAULT_SPORT) {
   return `<header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
-    <div class="masthead__menu">
+    <div class="masthead__actions">
+      <a class="masthead__search" href="/search/" aria-label="Search the archive">
+        <svg class="masthead__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="6.8" cy="6.8" r="4.9" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="M10.5 10.5 L14.4 14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
+        <span class="masthead__search-label">Search</span>
+      </a>
+      <div class="masthead__menu">
       <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
         <span class="masthead__toggle-bar"></span>
         <span class="masthead__toggle-bar"></span>
@@ -337,6 +349,7 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a class="masthead__panel-link" href="${APP_STORE_URL}">App</a>
       </nav>
+      </div>
     </div>
   </header>
   <div class="mast-rule" aria-hidden="true"></div>
@@ -447,7 +460,12 @@ export const POSTHOG_SCRIPT_HASH = scriptHash(extractScriptBody(posthogSnippet()
 // body's hash on THAT page (masthead + PostHog are shared; build-article-pages.mjs also
 // passes a per-page hash for its share-row script, which embeds that page's own url/title
 // and so is NOT identical across pages - verified: it must be computed per page, not once).
-export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null } = {}) {
+// `forms` narrows form-action to a named allowlist. It is opt-in rather than a default because
+// form-action has NO fallback to default-src: a page that omits it can post anywhere, which is
+// the status quo every page here shipped with. Article pages pass the Dispatch (the inline email
+// capture posts to Substack) and get 'self' with it; every other family stays as it was rather
+// than being silently tightened by a change made for one page.
+export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null, forms = null } = {}) {
   const scriptSrc = ["'self'", ...scripts.map((h) => `'${h}'`)];
   if (posthog) scriptSrc.push("https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com");
   const styleSrc = ["'self'", "'unsafe-inline'"]; // inline style="" attrs (e.g. the hidden App Store link)
@@ -467,6 +485,7 @@ export function cspMeta({ scripts = [], posthog = false, googleFonts = false, fr
     `base-uri 'self'`,
     `object-src 'none'`,
     `frame-src ${frameSrc.join(" ")}`,
+    ...(forms ? [`form-action 'self' ${forms.join(" ")}`] : []),
   ].join("; ");
   return `<meta http-equiv="Content-Security-Policy" content="${content}" />`;
 }
@@ -601,7 +620,22 @@ export function pageStyles() {
     .btn--ghost { border: 1px solid var(--gold-soft); color: var(--cream); }
     .btn--gold { background: var(--gold); color: #FFFFFF; }  /* 5.13:1 on --accent-ink */
 
-    /* masthead hamburger menu (founder design, 2026-07-11) */
+    /* masthead search + hamburger. The search link is a visible destination beside the menu
+       rather than an item inside it (phase 3). MIRROR of the same rules in src/style.css and in
+       public/content.css; none of the three imports another. Change one, change all three. */
+    .masthead__actions { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+    .masthead__search {
+      display: inline-flex; align-items: center; gap: .4rem; height: 42px; padding: 0 .75rem;
+      border: 1px solid var(--gold-soft); border-radius: .4rem; color: var(--cream);
+      font-size: .8rem; font-weight: 600; letter-spacing: .04em; white-space: nowrap;
+    }
+    .masthead__search:hover { border-color: var(--cream); color: var(--accent-ink); text-decoration: none; }
+    .masthead__search:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .masthead__search-icon { flex: 0 0 auto; display: block; }
+    @media (max-width: 420px) {
+      .masthead__search-label { display: none; }
+      .masthead__search { width: 42px; padding: 0; justify-content: center; }
+    }
     .masthead__menu { position: relative; flex-shrink: 0; }
     .masthead__toggle {
       display: inline-flex; flex-direction: column; align-items: center; justify-content: center;

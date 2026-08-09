@@ -115,9 +115,6 @@
   /* Dot-grid field colour: ink at a very low alpha (was cream, invisible on white). */
   --dot: rgba(30, 34, 61, 0.07);
 
-  /* Reveal timing, shared by the IntersectionObserver layer in src/anim/reveal.ts. */
-  --reveal-dur: 0.6s;
-  --reveal-step: 60ms;
 }
 
 /* Single-look by design: the dark-mode block mirrors the light tokens. A newspaper front
@@ -235,7 +232,31 @@ main, .masthead, .footer { position: relative; z-index: 2; }
 /* The accent rule under the masthead: the one bar of colour at the top of the page. */
 .mast-rule { height: 3px; background: var(--accent); max-width: var(--maxw); margin: 0 auto; }
 
-/* ---------- masthead hamburger menu (founder design, 2026-07-11) ---------- */
+/* ---------- masthead search + hamburger ----------
+   The search link is a visible destination beside the hamburger rather than an item inside it
+   (phase 3): the audit's finding was that a site called an archive had no way to search it, and
+   a search hidden behind a menu is that finding one click deeper. The label drops under 420px
+   and the magnifier carries it alone; the accessible name lives on the anchor's aria-label, so
+   it survives either way.
+
+   MIRRORED in pageStyles() in scripts/shared/page-shell.mjs and in public/content.css. The three
+   files do not import each other. Change one, change all three. */
+.masthead__actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; align-self: center; }
+.masthead__search {
+  display: inline-flex; align-items: center; gap: 0.4rem; height: 44px; padding: 0 0.8rem;
+  border: 1px solid var(--cream-faint); border-radius: 2px; color: var(--cream);
+  font-family: var(--grotesque); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em;
+  white-space: nowrap; transition: border-color 0.4s, color 0.3s;
+}
+.masthead__search:hover { border-color: var(--cream); color: var(--accent-ink); text-decoration: none; }
+.masthead__search:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.masthead__search-icon { flex: 0 0 auto; display: block; }
+@media (max-width: 420px) {
+  .masthead__search-label { display: none; }
+  .masthead__search { width: 44px; padding: 0; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { .masthead__search { transition: none; } }
+
 .masthead__menu { position: relative; }
 .masthead__toggle {
   display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
@@ -723,35 +744,20 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .rail:focus-within,
 .sportnav:focus-within { -webkit-mask-image: none; mask-image: none; }
 
-/* ---------- IntersectionObserver staggered reveal ----------
-   Driven by src/anim/reveal.ts (bundled, never inline: script-src is 'self' plus one hash).
-   Applied ONLY to elements this bundle injects itself, never to markup that ships in index.html.
-   That is the safety rule: if the bundle never runs, the elements do not exist either, so there
-   is no path where a failed script leaves real content stuck at opacity 0.
-   --i is set per child by the observer for the stagger.
+/* ---------- the IntersectionObserver staggered reveal is GONE (phase 3, 2026-08-09) ----------
+   src/anim/reveal.ts, the [data-inview] / [data-inview-group] rules that used to sit here, and
+   the --reveal-dur / --reveal-step tokens at the top of this file were all removed together.
+   Phase 2A moved the front page from JS-built rails to build-time render, and the mechanism was
+   only ever allowed to touch markup the bundle created itself, so after 2A it had nothing left
+   to find: initReveal() queried [data-inview-group], matched zero elements and returned. The
+   history it carried is not lost — trap 3 in CLAUDE.md holds the full account of the downward
+   transform that broke homepage scrolling on 2026-08-04, and the guard it produced,
+   overflow-y: hidden on .rail and .sportnav, is still in force above.
 
-   The reveal is opacity-only, and that is load-bearing rather than a style preference. It used to
-   carry transform: translateY(16px). The day cards sit 8px clear of the rail's bottom padding edge,
-   so translating them down 16px pushed them 8px past it; .rail is overflow-x: auto, which makes the
-   used value of overflow-y auto as well, so each rail became a vertical scroll container with 8px
-   of room. An element with vertical scroll room owns any vertical gesture that starts inside it,
-   the rails are full bleed and 600 to 780px tall on a phone, and the founder could not scroll the
-   homepage (2026-08-04, trap 3 in CLAUDE.md). Do not reintroduce a downward transform here. The
-   guard rail is overflow-y: hidden on .rail; this is the root fix. */
-[data-inview] {
-  opacity: 0;
-  transition: opacity var(--reveal-dur) var(--ease);
-  transition-delay: calc(var(--i, 0) * var(--reveal-step));
-}
-[data-inview='true'] { opacity: 1; }
-/* Reduced motion is a designed state here, not a disabled one: the content is simply already
-   there, at full opacity, with no transition to interrupt. Both the media query and the
-   .reduced-motion class the early bootstrap sets are covered, because the class is what the rest
-   of this file gates on and the media query is what covers a mid-session OS change. */
-@media (prefers-reduced-motion: reduce) {
-  [data-inview] { opacity: 1; transform: none; transition: none; }
-}
-.reduced-motion [data-inview] { opacity: 1; transform: none; transition: none; }
+   The CSS went with the script rather than being left inert. Its resting state was opacity: 0,
+   so leaving the rules behind would have left a loaded weapon: anyone putting data-inview on
+   server-rendered markup would have made real content permanently invisible, with no script left
+   to switch it on. Do not reinstate this without a reason and a target. */
 
 /* ============================================================
    FRONT PAGE (phase 2A, 2026-08-09)
@@ -872,6 +878,46 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .lead__panel-note { margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid var(--rule-soft); font-family: var(--serif); font-size: 0.85rem; line-height: 1.55; color: var(--ink-soft); }
 .lead__panel-note a { color: var(--accent-ink); border-bottom: 1px solid var(--rule); }
 
+/* ---------- today at the desk (phase 3) ----------
+   A dated band between the lead and the front grid, listing what has been filed today across
+   every desk. Rendered by renderToday() in src/render/home.ts, which never fabricates a day: on
+   a quiet morning this collapses to one honest sentence, so every rule here has to read as well
+   with a single paragraph in it as with seven rows.
+
+   The rows are a grid rather than a flex row so the desk label, the headline and the read time
+   line up down the column at desktop, and they stack in source order under 720px, where three
+   items across a 375px phone would put the headline on four words a line. */
+/* padding-block: 0 is not tidiness. The global `section { padding-block: clamp(5rem,12vh,10rem) }`
+   rhythm belongs to the long scrolling sections lower down the page; .lead and everything inside
+   .frontgrid already opt out of it on the line below this block, and .today sits between the two
+   and would otherwise have inherited five rems of air on each side of a one-line strip. */
+.today { border-block: 1px solid var(--rule); background: var(--bg-raised); padding-block: 0; }
+.today__inner { padding-block: 1.25rem 1.4rem; }
+.today__title { display: inline; font-family: var(--display); font-weight: 400; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+.today__date { display: inline; margin-left: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
+.today__none { margin: 0.7rem 0 0; font-family: var(--serif); font-size: 0.95rem; line-height: 1.5; color: var(--ink-soft); max-width: 62ch; }
+.today__none a { color: var(--accent-ink); border-bottom: 1px solid var(--rule); }
+.today__list { list-style: none; margin: 0.85rem 0 0; padding: 0; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.today__item { background: var(--bg); }
+.today__item > a {
+  display: grid; grid-template-columns: 12rem 1fr auto; align-items: baseline;
+  gap: 0.15rem 1rem; padding: 0.7rem 0.9rem;
+}
+.today__item > a:hover { background: var(--bg-raised); }
+.today__item > a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
+.today__desk { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
+.today__headline { font-family: var(--serif); font-size: 0.98rem; line-height: 1.35; color: var(--ink); }
+.today__item > a:hover .today__headline { color: var(--accent-ink); }
+.today__time { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--ink-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (max-width: 720px) {
+  /* Two rows: the desk label and the read time face each other on the first, the headline takes
+     the full width of the second. No negative margins and no source reordering. */
+  .today__item > a { grid-template-columns: 1fr auto; gap: 0.25rem 0.8rem; }
+  .today__desk { grid-column: 1; grid-row: 1; }
+  .today__time { grid-column: 2; grid-row: 1; justify-self: end; }
+  .today__headline { grid-column: 1 / -1; grid-row: 2; }
+}
+
 /* ---------- front grid ---------- */
 .frontgrid { display: grid; grid-template-columns: 2fr 1fr; gap: 2.25rem; padding-block: 2.25rem; }
 @media (max-width: 900px) { .frontgrid { grid-template-columns: 1fr; } }
@@ -910,7 +956,10 @@ a.band__more:hover { color: var(--accent-ink); }
 .fcard__headline { font-family: var(--display); font-weight: 400; font-size: 1.05rem; line-height: 1.2; letter-spacing: 0.03em; text-wrap: balance; }
 .fcard__headline a:hover { color: var(--accent-ink); }
 .fcard__dek { font-family: var(--serif); font-size: 0.84rem; line-height: 1.5; color: var(--ink-soft); }
-.fcard__foot { margin-top: auto; padding-top: 0.5rem; display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.68rem; letter-spacing: 0.04em; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+/* flex-wrap is load-bearing since the read time joined the date and the desk here (phase 3):
+   three items at 0.68rem do not fit one line inside a card at 375px, and without the wrap the
+   third would push the row past the card's padding box. */
+.fcard__foot { margin-top: auto; padding-top: 0.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.2rem 0.75rem; font-size: 0.68rem; letter-spacing: 0.04em; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) { .fcard { transition: none; } .fcard:hover { transform: none; } }
 .reduced-motion .fcard { transition: none; }
 .reduced-motion .fcard:hover { transform: none; }

@@ -22,6 +22,7 @@ import {
   cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
+  DISPATCH_URL, DISPATCH_SUBSCRIBE_URL,
 } from "./shared/page-shell.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
@@ -40,6 +41,9 @@ const entrySrc = [
   `export { f1Days } from "./data/f1Days.ts";`,
   `export { tennisDays } from "./data/tennisDays.ts";`,
   `export { golfDays } from "./data/golfDays.ts";`,
+  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
+  // the bundle this script already builds rather than being reimplemented here in .mjs.
+  `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".article-bundle.mjs");
 let data;
@@ -61,6 +65,7 @@ const SPORT_DAYS = {
   tennis: [...data.tennisDays].sort(byDateDesc),
   golf: [...data.golfDays].sort(byDateDesc),
 };
+const { readLabel, readDuration, wordCount } = data;
 
 // A "section" is one sport+lane's article surface. `base` is the path prefix under which its
 // articles live (leading and trailing slash), `anchor` is what the breadcrumb and "more" link
@@ -214,6 +219,11 @@ function schema(entry, url, label, faq, images) {
         // fixed 2026-08-06 — image previously pointed at the headshot). Falls back to the
         // site-wide /og.jpg only when card generation failed for this entry.
         image: images,
+        // Derived from the entry's own words by src/lib/readTime.ts, the same helper that prints
+        // "N min read" in the meta line below and on every card that links here, so the page and
+        // its structured data can never quote a reader two different numbers.
+        wordCount: wordCount(entry.dek, entry.body),
+        timeRequired: readDuration(entry.dek, entry.body),
         mainEntityOfPage: url,
       },
   ];
@@ -425,7 +435,23 @@ function ladderScriptTag(url, lanePath) {
         variant = 'dispatch';
         note.textContent = 'That is three you have read. The Dispatch brings the archive to you.';
         cta.textContent = 'Join the Dispatch';
-        external(cta, 'https://thearchvdispatch.substack.com');
+        // Phase 3: the page now carries an inline capture form higher up, and the escalated
+        // ask should not be a second, weaker copy of it. Send the reader to the field instead
+        // of off-site, and put the caret in it. The external link stays as the fallback for
+        // any page without the block, so the behaviour before this change is what happens if
+        // the form is ever removed. Event names and payloads are untouched either way.
+        var capture = document.getElementById('inline-capture');
+        var field = document.getElementById('capture-email');
+        if (capture) {
+          cta.href = '#inline-capture';
+          cta.removeAttribute('target');
+          cta.removeAttribute('rel');
+          cta.addEventListener('click', function () {
+            if (field) setTimeout(function () { field.focus({ preventScroll: true }); }, 0);
+          });
+        } else {
+          external(cta, 'https://thearchvdispatch.substack.com');
+        }
         alt.textContent = 'Or follow on ' + social.name;
         external(alt, social.url);
       } else {
@@ -451,6 +477,40 @@ function ladderScriptTag(url, lanePath) {
   </script>`;
 }
 
+/* ---------- the inline email capture (phase 3) ----------
+   Until this pass the only place a reader could give the site an address was the /start page's
+   embedded form. Every article ended in a link to Substack instead, which asks somebody who has
+   just finished reading to leave the site, find the form and start again.
+
+   THE LANE DECIDES THE DESTINATION AND THIS IS FOOTBALL AND SITE CONTENT, SO IT IS THE DISPATCH.
+   thearchvdispatch.substack.com, from DISPATCH_SUBSCRIBE_URL in page-shell.mjs. The AI lane's
+   list is a different list on a different property and nothing on this site captures to it.
+
+   It is a plain GET form, which is the whole design. The address goes to Substack's own subscribe
+   page as a query parameter and the reader finishes there, so this site never receives it, never
+   stores it and needs no endpoint, no key and no JavaScript. It works with the bundle blocked and
+   with scripting off. form-action on this page family is narrowed to 'self' plus the Dispatch
+   (see cspMeta), so the field cannot be repointed at anything else by an injected attribute.
+
+   ONE PER PAGE, AND BEHIND THE CONTENT. It sits after the body and before the rights notice, at
+   the point a reader has finished rather than in the middle of the piece. See the read ladder
+   below for how the two coordinate: this is the quiet standing ask, the ladder is the escalation,
+   and at three reads the ladder points at this form rather than repeating it. */
+const CAPTURE_ID = "inline-capture";
+const captureBlock = () => `
+      <aside class="capture" id="${CAPTURE_ID}" aria-labelledby="capture-title">
+        <h2 class="capture__title" id="capture-title">Get the next one by email</h2>
+        <p class="capture__note">The ARCHV Dispatch goes out free on Substack. Put an address in below and you finish signing up over there, so it goes to Substack and never to us.</p>
+        <form class="capture__form" action="${escAttr(DISPATCH_SUBSCRIBE_URL)}" method="get" target="_blank" rel="noopener noreferrer">
+          <label class="vh" for="capture-email">Your email address</label>
+          <input class="capture__field" id="capture-email" name="email" type="email" required
+                 autocomplete="email" inputmode="email" spellcheck="false"
+                 placeholder="you@example.com" />
+          <button class="capture__go" type="submit">Join the Dispatch</button>
+        </form>
+        <p class="capture__fine">Every issue carries an unsubscribe link. This site is static files with no database, so there is nowhere here to keep an address anyway.</p>
+      </aside>`;
+
 function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry) {
   const lane = section; // section carries label/seoSuffix/anchor/base/sportKey/laneKey
   // The Answer Desk lanes (NFL, F1, tennis, golf) file a question as the headline and its answer
@@ -474,6 +534,9 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
     scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript)), scriptHash(extractScriptBody(ladderScript))],
     posthog: true,
     googleFonts: true,
+    // The one form on this page family is the inline capture, and it posts to the Dispatch.
+    // Naming it here means an injected action attribute has nowhere to send an address.
+    forms: [DISPATCH_URL],
   });
 
   // The page's own art. Resolved through entryArt() (phase 2B) rather than reading entry.image
@@ -502,6 +565,23 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
         .ladder__cta:hover{filter:brightness(1.06)}
         .ladder__alt{display:block;margin-top:14px;font-size:.9rem;color:var(--ink-muted);text-decoration:underline;text-underline-offset:3px}
         .ladder__alt:hover{color:var(--accent-ink)}
+
+        /* The inline capture. Deliberately quieter than the ladder: a hairline box on the sunken
+           grey rather than a shadowed card, and the accent kept to the submit button. It is the
+           standing ask, not the escalated one. */
+        .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+        .capture{margin:2.4rem 0 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:.75rem;background:var(--bg-sunken)}
+        .capture[hidden]{display:none}
+        .capture__title{margin:0 0 .5rem;color:var(--ink);font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3}
+        .capture__note{margin:0 0 1rem;font-size:.95rem;line-height:1.55;color:var(--ink-soft)}
+        .capture__form{display:flex;flex-wrap:wrap;gap:.6rem}
+        .capture__field{flex:1 1 14rem;min-width:0;padding:.7rem .9rem;font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:.5rem;-webkit-appearance:none;appearance:none}
+        .capture__field::placeholder{color:var(--ink-muted)}
+        .capture__field:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px;border-color:var(--accent-ink)}
+        .capture__go{flex:0 0 auto;padding:.7rem 1.15rem;font:inherit;font-weight:600;cursor:pointer;color:#FFFFFF;background:var(--accent-ink);border:1px solid var(--accent-ink);border-radius:.5rem}
+        .capture__go:hover{filter:brightness(1.06)}
+        .capture__fine{margin:.85rem 0 0;font-size:.8rem;line-height:1.5;color:var(--ink-muted)}
+        @media (max-width:480px){.capture__go{width:100%}}
       </style>`;
 
   // W3.1 — "More from the <lane>": whole-card links to the previous 3 entries in this lane.
@@ -515,7 +595,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
               // Same resolution chain as the article's own figure, at the smaller card size.
               // The alt is never empty: these are content headshots inside a link, not chrome.
               const avatar = cardArt(e, { className: "more-card__avatar", size: 44 });
-              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
+              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))} · ${esc(readLabel(e.dek, e.body))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
             })
             .join("\n          ")}
         </ul>
@@ -575,7 +655,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
       <p class="article__byline">By <a href="${escAttr(AUTHOR_URL)}" rel="author">${esc(AUTHOR_NAME)}</a></p>
-      <p class="article__meta">${esc(longDate(entry.date))}</p>
+      <p class="article__meta">${esc(longDate(entry.date))} &middot; ${esc(readLabel(entry.dek, entry.body))}</p>
       <div class="share" aria-label="Share this article">
         <button class="btn btn--ghost" id="share-native" type="button" hidden>Share</button>
         <a class="btn btn--ghost" id="share-x" href="${escAttr(xIntent)}" target="_blank" rel="noopener noreferrer">Share on X</a>
@@ -585,6 +665,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
         ${faq ? `<h2 class="answer__q">${esc(faq.question)}</h2>\n        ` : ""}<p><strong>${esc(entry.dek)}</strong></p>
         ${bodyHtml(entry.body)}
       </div>
+      ${captureBlock()}
       <p class="article__rights">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.</p>
       ${adjacent}
       <nav class="article__nav" aria-label="More from this section">

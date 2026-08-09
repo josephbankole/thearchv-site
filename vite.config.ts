@@ -1,7 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import {
   renderWire, renderLead, renderBands, renderLibrary, renderBrief, renderDateline,
-  renderLegends, renderLongReads,
+  renderLegends, renderLongReads, renderToday,
 } from './src/render/home';
 
 /* Server-render the front page at build time (phase 2A).
@@ -28,6 +28,7 @@ function archvHome(): Plugin {
           '<!--archv:dateline-->': renderDateline,
           '<!--archv:wire-->': renderWire,
           '<!--archv:lead-->': renderLead,
+          '<!--archv:today-->': renderToday,
           '<!--archv:bands-->': renderBands,
           '<!--archv:library-->': renderLibrary,
           '<!--archv:brief-->': renderBrief,

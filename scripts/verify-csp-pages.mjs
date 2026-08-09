@@ -129,6 +129,11 @@ const targets = [
   ["section: /notes/", join(DIST, "notes", "index.html")],
   ["section: /legends/", join(DIST, "legends", "index.html")],
   ["reads front: /reads/", join(DIST, "reads", "index.html")],
+  // Site search (build-search.mjs, 2026-08-09). It carries the shared masthead + PostHog inline
+  // scripts and NO per-page inline script: the client is a file under script-src 'self'. That is
+  // exactly the claim worth checking, because the day someone inlines the search client to save a
+  // request, this is what fails.
+  ["search: /search/", join(DIST, "search", "index.html")],
 ];
 
 // Every long-read page. Slugs are derived from the essay titles (src/data/readSlug.ts), so this

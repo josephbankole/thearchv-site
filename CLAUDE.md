@@ -381,21 +381,26 @@ Tier 0 only from the deep-dive report. Four things to know before touching it:
   `--ink`, `--bg`, `--rule` and `--accent-ink`. The current values and the duplication list
   are under "What this site is" above, which is the authority. Adding a sixth hue is still a
   brand break rather than a refactor.
-- **The reveal lives in `src/anim/reveal.ts`, bundled, never inline** (CSP is script-src
-  'self' plus one hash). It is pointed only at elements the bundle injects itself. Never put
-  `data-inview` on server-rendered markup, because the resting state is `opacity: 0` and a
-  bundle that fails to load would leave real content invisible. That rule got sharper after
-  phase 2A, not softer: almost everything on the front page is server-rendered now, so almost
-  everything is off limits to it. In practice the mechanism is currently unused. The day-rail
-  cards it was written for are gone and `initReveal()` finds no `[data-inview-group]` on the
-  built page, so it returns immediately. Keep it or remove it deliberately; do not repurpose
-  it by pointing it at markup the build wrote. The static page family gets the CSS half of
-  Tier 0 and no reveal, by design: it ships no bundled JS at all.
-- **The reveal is a fade, with no transform, and that is not negotiable.** The first
-  version translated the card down 16px at rest. That is the declaration that broke
-  homepage scrolling on a phone and forced the rollback; the whole mechanism is in trap 3
-  above. A downward transform on anything inside a horizontal scroller is the mistake to not
-  repeat, and `.rail` was only the scroller it happened to be inside.
+- **THE REVEAL IS GONE, REMOVED DELIBERATELY IN PHASE 3 (2026-08-09).** `src/anim/reveal.ts`,
+  its `initReveal()` call in `src/main.ts`, the `[data-inview]` rules in `src/style.css` and the
+  `--reveal-dur` / `--reveal-step` tokens all went in one commit. It was not broken and it was
+  not in the way; it had simply run out of work. The mechanism was only ever allowed to touch
+  markup the bundle created itself, and phase 2A moved the front page to build-time render, so
+  by the time this pass ran `initReveal()` queried `[data-inview-group]`, matched zero elements
+  and returned. A mechanism that finds nothing is not a feature in reserve, it is a thing the
+  next reader has to work out is dead.
+  **The CSS went with the script rather than being left inert**, because its resting state was
+  `opacity: 0`. Leaving the rules behind would have left a loaded weapon: put `data-inview` on
+  server-rendered markup with no script left to switch it on and the content is invisible for
+  good. The removal note lives in `src/style.css` where the block used to be.
+  **What the reveal is remembered for survives, and it is the important half.** The first
+  version translated the card down 16px at rest. That is the declaration that broke homepage
+  scrolling on a phone and forced the 2026-08-04 rollback; trap 3 above is the full account, and
+  it is the authority. The guard it produced, `overflow-y: hidden` on `.rail` and `.sportnav`,
+  is still in force and stays in force. A downward transform on anything inside a horizontal
+  scroller is the mistake not to repeat, whatever mechanism happens to apply it. Any future
+  reveal starts from that, not from a resurrected `reveal.ts`. The static page family gets the
+  CSS half of Tier 0 and never had a reveal, by design: it ships no bundled JS at all.
 - **Reduced motion is a designed state, not a disabled one.** `[data-inview]` resolves
   straight to its finished state under both `prefers-reduced-motion` and the
   `.reduced-motion` class the early bootstrap sets. The edge-fade masks drop on
@@ -435,9 +440,18 @@ legends wall and the long reads, re-arted the share cards to match, and swept th
 hard-coded navy out of the generators. What it did NOT do, and what a later pass should pick
 up: the brand crest is still the pre-flip navy, gold and green mark carrying a football, and
 it is on the front page footer and in the Organization `logo`; the infogram story cards are
-still navy; `three` and `@types/three` are unused dependencies; `src/components/giantKillers.ts`
-and the `src/anim/reveal.ts` mechanism are both unreferenced by `src/main.ts`; and the ARCHV
-badge set is three clubs, which is why a card about Newcastle United gets no mark.
+still navy; and the ARCHV badge set is three clubs, which is why a card about Newcastle United
+gets no mark. **The dead weight that list also named is cleared as of phase 3 (2026-08-09):**
+`three` and `@types/three` are out of `package.json`, `src/components/giantKillers.ts` is
+deleted (its data file stays, `scripts/build-feed.mjs` reads it), and `src/anim/reveal.ts` is
+removed with its CSS — see the Tier 0 section for why and what survives.
+
+**Phase 3, the retention pass (2026-08-09).** Site search at `/search/`
+(`scripts/build-search.mjs`, a build-time JSON index at `/search-index.json` and a vanilla
+client at `/search/search.js`, no third party, no inline script), a dated "Today at the desk"
+strip on the front page, word-count read times from one shared helper
+(`src/lib/readTime.ts`), and an inline Dispatch capture on every article page. Details in the
+sections above and in each file's header comment.
 
 The entries below predate the rebuild. Their decisions still stand; their descriptions of
 the homepage do not.

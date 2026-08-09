@@ -637,6 +637,13 @@ export function pageStyles() {
        than following a definition, and given no top margin because it is the body's first child. */
     .answer__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: clamp(1.2rem, 2.6vw, 1.4rem); line-height: 1.3; margin: 0 0 .35rem; }
     .article__body .answer__q + p { margin-top: .6rem; }
+    /* The closing "Sources: ..." paragraph. Its named outlets are links now (see SOURCE_LINKS in
+       scripts/build-article-pages.mjs), and the default gold anchor colour would turn the whole
+       paragraph into a gold rash, so the links take the quieter underlined treatment
+       .article__byline a already uses and save gold for the hover. */
+    .article__sources { font-size: .92rem; color: var(--cream-dim); }
+    .article__sources a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
+    .article__sources a:hover { color: var(--gold); }
     .article__rights { margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .85rem; color: var(--cream-faint-text); }
     .article__nav { margin: 2.2rem 0 1rem; display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; font-size: .95rem; }
 

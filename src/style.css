@@ -165,7 +165,9 @@ em { font-style: italic; }
 }
 .skip:focus { top: 1rem; }
 
-main, .masthead, .footer { position: relative; z-index: 2; }
+main, .footer { position: relative; z-index: 2; }
+/* Above .sportnav (55) so the open menu panel is never painted over; below lightbox (100) and skip (200). */
+.masthead { position: relative; z-index: 60; }
 
 /* ---------- type primitives ---------- */
 .eyebrow, .section-index {

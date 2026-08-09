@@ -255,6 +255,12 @@ function render(p, allPages) {
         <span class="masthead__toggle-bar"></span>
       </button>
       <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+        <a class="masthead__panel-link" href="/">Front page</a>
+        <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+        <a class="masthead__panel-link" href="/duel/">Player duels</a>
+        <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
+        <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
+        <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
@@ -282,6 +288,9 @@ function render(p, allPages) {
         <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
+        <a href="/duel/">Duels</a>
+        <a href="/guess/">Daily Archive</a>
+        <a href="/feed.xml">RSS</a>
       </nav>
       <p class="footer__tag">Football history, illustrated. Daily.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>

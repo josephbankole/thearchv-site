@@ -306,6 +306,12 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <span class="masthead__toggle-bar"></span>
       </button>
       <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+        <a class="masthead__panel-link" href="/">Front page</a>
+        <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+        <a class="masthead__panel-link" href="/duel/">Player duels</a>
+        <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
+        <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
+        <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
@@ -354,6 +360,7 @@ export function footer() {
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
+        <a href="/feed.xml">RSS</a>
         <a href="/glossary/">Glossary</a>
         <a href="/standards/">Standards</a>
         <a href="/about/">About</a>
@@ -560,6 +567,10 @@ export function pageStyles() {
     }
     .masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(242, 234, 211, .08); color: var(--gold); text-decoration: none; }
     .masthead__panel-link--gold { color: var(--gold); }
+    /* Hairline between the internal destinations and the outbound ones (2026-08-09). Decorative,
+       so it keeps --cream-faint rather than the text token. Mirrors the same rule in
+       src/style.css and public/content.css; none of the three imports another. */
+    .masthead__panel-sep { display: block; height: 1px; margin: .3rem .55rem; background: var(--cream-faint); }
 
     /* three-desk text nav (W3.3): plain, wrapping, never collides at 320px */
     .desknav { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem .9rem; display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }

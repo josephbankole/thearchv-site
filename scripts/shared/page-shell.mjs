@@ -74,9 +74,18 @@ export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 // appending each following segment only while the whole stays within `max`. This
 // preserves the entity-rich pattern (headline · seoSuffix · The ARCHV) when it
 // fits and drops the least-important trailing pieces (brand first) when it does
-// not, rather than letting Google truncate the tail. Falls back to a word-boundary
-// truncation of the lead segment only if that alone overflows.
-export function clampTitle(segments, max = 60) {
+// not, rather than letting Google truncate the tail.
+//
+// THE LEAD SEGMENT IS NEVER CUT (2026-08-09). It used to be truncated to `max` with a
+// baked ellipsis, which shipped titles like "Manchester United have moved Altay Bayindir
+// off the wage…" — a headline visibly broken in the browser tab, in the share preview and
+// in every copy of the page a reader saves, to save nothing. A search engine already
+// truncates a long title in its own results, at its own width, and it does that whether or
+// not we pre-cut it; pre-cutting only destroys the full headline everywhere else. So the
+// lead segment now passes through whole, and `max` governs only which optional trailing
+// segments get appended. Raised to 65 at the same time so a full headline more often keeps
+// its entity suffix.
+export function clampTitle(segments, max = 65) {
   const parts = (Array.isArray(segments) ? segments : [segments])
     .map((s) => String(s ?? "").trim())
     .filter(Boolean);
@@ -87,13 +96,23 @@ export function clampTitle(segments, max = 60) {
     const candidate = `${title}${SEP}${parts[i]}`;
     if (candidate.length <= max) title = candidate;
   }
-  if (title.length > max) {
-    const cut = parts[0].slice(0, max - 1);
-    const sp = cut.lastIndexOf(" ");
-    title = (sp > max * 0.5 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?·-]+$/, "") + "…";
-  }
   return title;
 }
+
+// tests-by-assertion, the convention build-article-pages.mjs uses for its own helpers: a
+// regression fails the build at import time rather than shipping a broken <title>.
+(function selfTestClampTitle() {
+  const longHeadline = "Manchester United have moved Altay Bayindir off the wage bill and into a Championship season";
+  const out = clampTitle([longHeadline, "Manchester United transfer news", "The ARCHV"]);
+  if (out !== longHeadline) throw new Error(`clampTitle: an oversized lead segment must pass through whole, got ${JSON.stringify(out)}`);
+  if (/…/.test(out)) throw new Error("clampTitle: no baked ellipsis may survive in a title");
+  const fits = clampTitle(["Ederson is off, for now", "The ARCHV"]);
+  if (fits !== "Ederson is off, for now · The ARCHV") throw new Error(`clampTitle: a fitting suffix must be appended, got ${JSON.stringify(fits)}`);
+  const drops = clampTitle(["A headline of exactly forty-eight characters here", "Manchester United transfer news", "The ARCHV"]);
+  if (drops !== "A headline of exactly forty-eight characters here · The ARCHV") {
+    throw new Error(`clampTitle: an over-long middle segment should be dropped and the brand kept, got ${JSON.stringify(drops)}`);
+  }
+})();
 
 // clampDescription: collapse whitespace, then truncate to `max` at a word boundary
 // with a trailing ellipsis. Meta descriptions over ~160 chars get cut off in search
@@ -287,6 +306,12 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <span class="masthead__toggle-bar"></span>
       </button>
       <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+        <a class="masthead__panel-link" href="/">Front page</a>
+        <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+        <a class="masthead__panel-link" href="/duel/">Player duels</a>
+        <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
+        <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
+        <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
@@ -335,6 +360,7 @@ export function footer() {
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
+        <a href="/feed.xml">RSS</a>
         <a href="/glossary/">Glossary</a>
         <a href="/standards/">Standards</a>
         <a href="/about/">About</a>
@@ -438,6 +464,14 @@ export function pageStyles() {
     :root {
       --navy: #0C2A3E; --navy-deep: #071C2B; --navy-soft: #133A52;
       --cream: #F2EAD3; --cream-dim: rgba(242,234,211,.72); --cream-faint: rgba(242,234,211,.3);
+      /* Text-only variant. --cream-faint at .3 composites to #51646B on the navy and measures
+         2.38:1, so every breadcrumb, byline, date, desk-nav link, related dek, prev/next label
+         and footer legal line on this page family failed AA (4.5:1) on 2026-08-09. At .6 the
+         same cream measures 5.35:1 on --navy and 4.64:1 at the peak of the top-of-page radial
+         gradient (--navy-soft), so it passes on both surfaces. Borders, rules and other purely
+         decorative uses keep --cream-faint, which has no contrast requirement. Mirrors the
+         identical token in src/style.css; the two files do not import each other. */
+      --cream-faint-text: rgba(242,234,211,.6);
       --gold: #C9A14A; --gold-soft: rgba(201,161,74,.5);
       --maxw: 46rem;
 
@@ -450,7 +484,7 @@ export function pageStyles() {
          src/style.css; the two files do not import each other, so keep them in step. */
       --text-primary: var(--cream);
       --text-secondary: var(--cream-dim);
-      --text-faint: var(--cream-faint);
+      --text-faint: var(--cream-faint-text);
       --bg-main: var(--navy);
       --bg-elevated: var(--navy-deep);
       --bg-raised: var(--navy-soft);
@@ -491,7 +525,14 @@ export function pageStyles() {
       -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
       mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
     }
-    .masthead, .desknav, main, .footer { position: relative; z-index: 1; }
+    .desknav, main, .footer { position: relative; z-index: 1; }
+    /* The masthead needs more than z-index 1. It sits ABOVE the sticky .sportnav-wrap in document
+       order, its dropdown panel opens downward through that band, and .sportnav-wrap is z-index 30
+       — so with the masthead at 1 the tab bar painted over the panel's first item and swallowed it.
+       Live before this pass too: the old four-item menu simply lost "Follow" the same way. Raising
+       the masthead above the bar cannot hide the bar in return, because the masthead is static on
+       this page family and has scrolled away by the time the bar is pinned to anything. */
+    .masthead { position: relative; z-index: 40; }
     @media print { body::before { display: none; } }
     a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -533,10 +574,14 @@ export function pageStyles() {
     }
     .masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(242, 234, 211, .08); color: var(--gold); text-decoration: none; }
     .masthead__panel-link--gold { color: var(--gold); }
+    /* Hairline between the internal destinations and the outbound ones (2026-08-09). Decorative,
+       so it keeps --cream-faint rather than the text token. Mirrors the same rule in
+       src/style.css and public/content.css; none of the three imports another. */
+    .masthead__panel-sep { display: block; height: 1px; margin: .3rem .55rem; background: var(--cream-faint); }
 
     /* three-desk text nav (W3.3): plain, wrapping, never collides at 320px */
     .desknav { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem .9rem; display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
-    .desknav__link { color: var(--cream-faint); }
+    .desknav__link { color: var(--cream-faint-text); }
     .desknav__link:hover { color: var(--gold); }
     .desknav__link[aria-current="page"] { color: var(--gold); }
 
@@ -588,17 +633,17 @@ export function pageStyles() {
     .share [hidden] { display: none; }
 
     .article { padding: 2rem 0 1rem; }
-    .breadcrumb { font-size: .8rem; letter-spacing: .04em; color: var(--cream-faint); text-transform: uppercase; margin: 0 0 1rem; }
-    .breadcrumb a { color: var(--cream-faint); }
+    .breadcrumb { font-size: .8rem; letter-spacing: .04em; color: var(--cream-faint-text); text-transform: uppercase; margin: 0 0 1rem; }
+    .breadcrumb a { color: var(--cream-faint-text); }
     .article__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     h1 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; letter-spacing: -.01em; margin: 0 0 .5rem; }
     /* named byline, sitting between the headline and the date. Deliberately quiet: same
        register as .article__meta below, with the author's name a touch brighter so the link
        reads as a link without becoming the loudest thing under the headline. */
-    .article__byline { color: var(--cream-faint); font-size: .85rem; margin: 0 0 .25rem; }
+    .article__byline { color: var(--cream-faint-text); font-size: .85rem; margin: 0 0 .25rem; }
     .article__byline a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
     .article__byline a:hover { color: var(--gold); }
-    .article__meta { color: var(--cream-faint); font-size: .9rem; margin: 0 0 1.5rem; }
+    .article__meta { color: var(--cream-faint-text); font-size: .9rem; margin: 0 0 1.5rem; }
     .article__fig { margin: 1.5rem 0 2rem; }
     .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
     .article__body p { margin: 1rem 0; }
@@ -610,14 +655,21 @@ export function pageStyles() {
        than following a definition, and given no top margin because it is the body's first child. */
     .answer__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: clamp(1.2rem, 2.6vw, 1.4rem); line-height: 1.3; margin: 0 0 .35rem; }
     .article__body .answer__q + p { margin-top: .6rem; }
-    .article__rights { margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .85rem; color: var(--cream-faint); }
+    /* The closing "Sources: ..." paragraph. Its named outlets are links now (see SOURCE_LINKS in
+       scripts/build-article-pages.mjs), and the default gold anchor colour would turn the whole
+       paragraph into a gold rash, so the links take the quieter underlined treatment
+       .article__byline a already uses and save gold for the hover. */
+    .article__sources { font-size: .92rem; color: var(--cream-dim); }
+    .article__sources a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
+    .article__sources a:hover { color: var(--gold); }
+    .article__rights { margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .85rem; color: var(--cream-faint-text); }
     .article__nav { margin: 2.2rem 0 1rem; display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; font-size: .95rem; }
 
     /* prev/next chronological row (W3.2) */
     .adjacent { margin: 1.6rem 0; padding: 1.2rem 0 0; border-top: 1px solid var(--cream-faint); display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem 1.5rem; }
     .adjacent__link { max-width: 22rem; }
     .adjacent__link--next { text-align: right; margin-left: auto; }
-    .adjacent__dir { display: block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint); margin-bottom: .3rem; }
+    .adjacent__dir { display: block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint-text); margin-bottom: .3rem; }
     .adjacent__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.3; }
     .adjacent__headline:hover { text-decoration: underline; }
 
@@ -641,7 +693,7 @@ export function pageStyles() {
        headline did not happen to fill its last line. Live bug, fixed 2026-08-04, found when the
        author page reused this component at a wider measure where it showed on every card. */
     .more-card__headline { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.28; margin: 0 0 .6rem; }
-    .more-card__dek { display: block; font-size: .85rem; color: var(--cream-faint); margin: 0; }
+    .more-card__dek { display: block; font-size: .85rem; color: var(--cream-faint-text); margin: 0; }
     .related__all { display: inline-block; margin-top: 1.1rem; font-size: .9rem; }
 
     /* lane index page: full-width whole-card list */
@@ -661,6 +713,15 @@ export function pageStyles() {
     /* Same inline-span margin bug as .more-card__headline above; see the note there. */
     .lane-card__headline { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.24; margin: 0 0 .75rem; }
     .lane-card__dek { display: block; font-size: .9rem; color: var(--cream-dim); margin: 0; }
+    /* A lane card that is not a link. The Legends front (scripts/build-section-pages.mjs) lists
+       profiles that have no page of their own, so those cards must not lift or glow on hover and
+       imply something to click. */
+    .lane-card--static:hover { border-color: var(--cream-faint); transform: none; box-shadow: var(--shadow-soft); }
+    /* Headline-only cards: the 404's route-back list. Without a kicker or a dek to fill them the
+       full-size card runs to 130px a row, and nine of those is a page of scrolling to find the
+       front page. */
+    .lane-card--compact { padding: .85rem 1.2rem; }
+    .lane-card--compact .lane-card__headline { font-size: 1.1rem; margin: 0; }
 
     /* "From the glossary" strip on lane index pages: a compact row of the lane's key terms,
        sitting above the footer. Inherits the enclosing main's width; no button styling. */
@@ -668,14 +729,14 @@ export function pageStyles() {
     .lane-glossary__title { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; margin: 0 0 .75rem; }
     .lane-glossary__list { list-style: none; padding: 0; margin: 0 0 .85rem; display: flex; flex-wrap: wrap; gap: .5rem .9rem; font-size: .95rem; }
     .lane-glossary__list a { color: var(--gold); }
-    .lane-glossary__all { font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--cream-faint); }
+    .lane-glossary__all { font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--cream-faint-text); }
     .lane-glossary__all:hover { color: var(--gold); }
 
     .footer { margin-top: 3rem; border-top: 1px solid var(--cream-faint); background: var(--navy-deep); }
     .footer .wrap { max-width: 72rem; padding-top: 2rem; padding-bottom: 2.5rem; }
     .footer__links { display: flex; flex-wrap: wrap; gap: .9rem 1.5rem; font-size: .9rem; margin: 0 0 1rem; }
     .footer__tag { color: var(--cream); margin: .5rem 0; }
-    .footer__legal { color: var(--cream-faint); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
+    .footer__legal { color: var(--cream-faint-text); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
 
     /* glossary (UNIT 1) + standards (UNIT 2): evergreen static surfaces */
     .glossary { padding: 1.5rem 0 1rem; }

@@ -2,24 +2,31 @@
    Runs AFTER `vite build` (see package.json). Output dir defaults to ./dist, override with CONTENT_OUT.
    Dependency-free on purpose: a small frontmatter parser + a markdown subset renderer.
    Article pages are pure static HTML + /content.css (no app JS) for speed and crawlability. */
-import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, statSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription, longDate } from "./shared/page-shell.mjs";
+// The frontmatter parser and the content/ walk moved to shared/content-pages.mjs on 2026-08-09,
+// so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
+// builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
+import { loadContentPages } from "./shared/content-pages.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
 import { listPairs } from "./shared/football-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const CONTENT_DIR = join(ROOT, "content");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SITE = "https://thearchv.ca";
+// `href` is where the breadcrumb and the BreadcrumbList's second item point. Every one of these
+// used to be a homepage anchor, because /finals/, /united/ and /explainers/ returned GitHub's
+// default 404: the breadcrumb was routing around a missing page. scripts/build-section-pages.mjs
+// builds those fronts now, so the breadcrumb points at the real parent (2026-08-09).
 const SECTION = {
-  finals: { label: "Finals", href: "/#archive", more: "More finals" },
-  united: { label: "Manchester United", href: "/#transfer-desk", more: "More United history" },
-  explainers: { label: "Explained", href: "/#faq", more: "More explainers" },
-  notes: { label: "Notes", href: "/", more: "More from the archive" },
+  finals: { label: "Finals", href: "/finals/", more: "More finals" },
+  united: { label: "Manchester United", href: "/united/", more: "More United history" },
+  explainers: { label: "Explained", href: "/explainers/", more: "More explainers" },
+  notes: { label: "Notes", href: "/notes/", more: "More from the archive" },
 };
 const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More from the archive" };
 
@@ -101,22 +108,6 @@ const MASTHEAD_SCRIPT = `(function () {
 const MASTHEAD_SCRIPT_TAG = `<script>\n    ${MASTHEAD_SCRIPT}\n  </script>`;
 const PAGE_CSP = cspMeta({ scripts: [scriptHash(extractScriptBody(MASTHEAD_SCRIPT_TAG))] });
 
-/* ---------- frontmatter ---------- */
-function parse(raw) {
-  const m = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
-  if (!m) return { data: {}, body: raw };
-  const data = {};
-  for (const line of m[1].split("\n")) {
-    const mm = line.match(/^(\w+):\s*(.*)$/);
-    if (!mm) continue;
-    let v = mm[2].trim();
-    if (v.startsWith("[") || v.startsWith("{")) { try { v = JSON.parse(v); } catch {} }
-    else if (v.startsWith('"') && v.endsWith('"')) v = v.slice(1, -1);
-    data[mm[1]] = v;
-  }
-  return { data, body: m[2].trim() };
-}
-
 /* ---------- markdown subset -> html ---------- */
 function inline(t) {
   t = esc(t);
@@ -150,18 +141,8 @@ function md(body) {
 }
 
 /* ---------- collect ---------- */
-function walk(dir) {
-  const files = [];
-  for (const e of readdirSync(dir)) {
-    const p = join(dir, e);
-    if (statSync(p).isDirectory()) files.push(...walk(p));
-    else if (e.endsWith(".md") && e !== "BACKLOG.md") files.push(p);
-  }
-  return files;
-}
-if (!existsSync(CONTENT_DIR)) { console.log("No content/ dir; skipping content build."); process.exit(0); }
-const pages = walk(CONTENT_DIR).map((f) => { const { data, body } = parse(readFileSync(f, "utf8")); return { ...data, body }; })
-  .filter((p) => p.slug && p.section);
+const pages = loadContentPages();
+if (!pages.length) { console.log("No content/ pages found; skipping content build."); process.exit(0); }
 
 /* ---------- schema ---------- */
 // author/publisher reference the site's Organization entity by @id (SEO/AEO pass, UNIT 3,
@@ -255,6 +236,12 @@ function render(p, allPages) {
         <span class="masthead__toggle-bar"></span>
       </button>
       <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+        <a class="masthead__panel-link" href="/">Front page</a>
+        <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+        <a class="masthead__panel-link" href="/duel/">Player duels</a>
+        <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
+        <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
+        <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
@@ -282,6 +269,9 @@ function render(p, allPages) {
         <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
+        <a href="/duel/">Duels</a>
+        <a href="/guess/">Daily Archive</a>
+        <a href="/feed.xml">RSS</a>
       </nav>
       <p class="footer__tag">Football history, illustrated. Daily.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>

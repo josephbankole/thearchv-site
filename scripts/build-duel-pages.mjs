@@ -292,7 +292,7 @@ function duelStyles() {
   return `<style>
     .duel-wrap { padding: 1.6rem 0 1rem; }
     .duel-eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
-    .duel-scope { font-size: .82rem; color: var(--cream-faint); margin: 0 0 1.6rem; }
+    .duel-scope { font-size: .82rem; color: var(--cream-faint-text); margin: 0 0 1.6rem; }
     .duel-lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 1.6rem; }
 
     /* the two faces, name and club, either side of a gold V */
@@ -301,7 +301,7 @@ function duelStyles() {
     .duel-head__img, .duel-head__monogram { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
     .duel-head__monogram { display: flex; align-items: center; justify-content: center; background: #0A2233; color: var(--gold); font-family: "Fraunces", Georgia, serif; font-size: 2rem; font-weight: 600; }
     .duel-head__name { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.05rem, 3.4vw, 1.35rem); line-height: 1.2; margin: .8rem 0 .2rem; }
-    .duel-head__club { font-size: .82rem; color: var(--cream-faint); margin: 0; }
+    .duel-head__club { font-size: .82rem; color: var(--cream-faint-text); margin: 0; }
     .duel-head__line { font-size: .8rem; color: var(--cream-dim); margin: .5rem 0 0; max-width: 15rem; }
     .duel-v { color: var(--gold); font-family: "Fraunces", Georgia, serif; font-size: 1.5rem; flex: 0 0 auto; padding: 0 .2rem; }
 
@@ -311,38 +311,38 @@ function duelStyles() {
     .duel-row__grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: .6rem; }
     .duel-row__metric { text-align: center; padding: 0 .2rem; }
     .duel-row__metric-name { display: block; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-dim); }
-    .duel-row__metric-calc { display: block; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--cream-faint); margin-top: .2rem; }
+    .duel-row__metric-calc { display: block; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: var(--cream-faint-text); margin-top: .2rem; }
     .duel-bar { display: flex; width: 100%; height: 10px; border-radius: 5px; overflow: hidden; background: rgba(242,234,211,.12); margin: .7rem 0 .5rem; }
     .duel-bar__side { display: block; height: 100%; background: rgba(242,234,211,.24); }
     .duel-bar__side--win { background: var(--gold); }
     .duel-bar__side--tie { background: rgba(242,234,211,.42); }
     .duel-row__flag { font-size: .78rem; color: var(--gold); margin: 0 0 .3rem; }
-    .duel-row__source { font-size: .76rem; color: var(--cream-faint); margin: 0; }
+    .duel-row__source { font-size: .76rem; color: var(--cream-faint-text); margin: 0; }
 
     .duel-missing { margin: 2.2rem 0 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; }
     .duel-missing h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; margin: 0 0 .5rem; }
-    .duel-missing p { font-size: .85rem; color: var(--cream-faint); margin: 0 0 .5rem; }
-    .duel-missing ul { margin: 0; padding-left: 1.1rem; font-size: .85rem; color: var(--cream-faint); }
+    .duel-missing p { font-size: .85rem; color: var(--cream-faint-text); margin: 0 0 .5rem; }
+    .duel-missing ul { margin: 0; padding-left: 1.1rem; font-size: .85rem; color: var(--cream-faint-text); }
 
-    .duel-sources { margin: 1.6rem 0 0; font-size: .8rem; color: var(--cream-faint); }
+    .duel-sources { margin: 1.6rem 0 0; font-size: .8rem; color: var(--cream-faint-text); }
     .duel-sources h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; margin: 0 0 .5rem; }
     .duel-sources ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
 
     /* picker */
     .duel-picker { display: flex; flex-wrap: wrap; gap: .7rem; align-items: flex-end; margin: 0 0 2rem; padding: 1.2rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: linear-gradient(180deg, rgba(19,58,82,.35), rgba(7,28,43,.35)); }
     .duel-picker__field { display: flex; flex-direction: column; gap: .3rem; flex: 1 1 12rem; min-width: 0; }
-    .duel-picker__field label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint); }
+    .duel-picker__field label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint-text); }
     .duel-picker select { font: inherit; font-size: .95rem; color: var(--cream); background: var(--navy-deep); border: 1px solid var(--gold-soft); border-radius: .45rem; padding: .55rem .6rem; width: 100%; }
     .duel-picker select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
     .duel-picker button { font: inherit; font-size: .85rem; font-weight: 600; padding: .6rem 1.1rem; border-radius: .5rem; border: 0; background: var(--gold); color: var(--navy-deep); cursor: pointer; }
     .duel-picker button:hover { filter: brightness(1.06); }
-    .duel-picker__hint { flex: 1 1 100%; font-size: .78rem; color: var(--cream-faint); margin: 0; }
+    .duel-picker__hint { flex: 1 1 100%; font-size: .78rem; color: var(--cream-faint-text); margin: 0; }
 
     .duel-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: .7rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
     .duel-grid a { display: block; padding: .85rem 1rem; border: 1px solid var(--cream-faint); border-radius: .6rem; color: var(--cream); font-size: .92rem; }
     .duel-grid a:hover { border-color: var(--gold-soft); text-decoration: none; }
     .duel-grid a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-    .duel-grid__sub { display: block; font-size: .74rem; color: var(--cream-faint); margin-top: .25rem; }
+    .duel-grid__sub { display: block; font-size: .74rem; color: var(--cream-faint-text); margin-top: .25rem; }
 
     @media (max-width: 34rem) {
       .duel-row__grid { grid-template-columns: 1fr auto 1fr; gap: .35rem; }

@@ -22,3 +22,7 @@ supabase/.branches/
 
 # transient esbuild bundle from scripts/build-day-pages.mjs
 .day-bundle.mjs
+
+# transient esbuild bundles from scripts/build-reads-pages.mjs and build-section-pages.mjs
+.reads-bundle.mjs
+.sections-bundle.mjs

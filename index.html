@@ -142,7 +142,17 @@
           <span class="masthead__toggle-bar"></span>
           <span class="masthead__toggle-bar"></span>
         </button>
+        <!-- The only menu on every page carried four links and all four left the site. The
+             internal destinations sit above the divider now (2026-08-09); the external four are
+             unchanged below it. Mirrors masthead() in scripts/shared/page-shell.mjs and the
+             hand-built copy in scripts/build-content.mjs — three copies, no shared import. -->
         <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+          <a class="masthead__panel-link" href="/">Front page</a>
+          <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+          <a class="masthead__panel-link" href="/duel/">Player duels</a>
+          <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
+          <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
+          <span class="masthead__panel-sep" role="separator"></span>
           <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
           <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
           <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
@@ -182,7 +192,7 @@
           <p class="hero__sub" data-reveal>Illustrated sports history. The upsets, the finals, the nights that still hurt twenty years on. Football first, now NFL, F1, tennis and golf.</p>
           <div class="hero__cta" data-reveal>
             <a class="btn btn--gold" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow on Instagram</a>
-            <a class="btn btn--text" href="#long-reads">Read the long reads</a>
+            <a class="btn btn--text" href="/reads/">Read the long reads</a>
           </div>
         </div>
         <a class="hero__scroll" href="#football-leagues" aria-label="Scroll">
@@ -298,6 +308,10 @@
           <h2 class="killers__title" data-reveal>Long reads<span class="dot">.</span></h2>
           <p class="killers__lede" data-reveal>Football, read like a business. How the dynasties were built, how the money really moves, and why some giants quietly fell apart.</p>
           <ol class="killers__list" id="long-reads-list" aria-label="Long-read essays"></ol>
+          <!-- Every essay has its own page at /reads/<slug>/ (scripts/build-reads-pages.mjs).
+               This link is server-rendered on purpose: the <ol> above is empty until the bundle
+               hydrates, so without it a reader with no JS reaches this section and finds nothing. -->
+          <a class="killers__all" href="/reads/">Every long read</a>
           <a class="btn btn--ghost killers__follow" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow for the next one</a>
         </div>
       </section>
@@ -403,8 +417,12 @@
           <a class="btn btn--ghost" href="#partnerships">Partner with us</a>
         </nav>
         <nav class="footer__links" aria-label="More" data-stagger>
+          <a href="/desk/transfer/">Transfer Desk</a>
+          <a href="/duel/">Player duels</a>
+          <a href="/guess/">Daily archive game</a>
           <a href="/glossary/">Glossary</a>
           <a href="/standards/">How we verify</a>
+          <a href="/feed.xml">RSS</a>
           <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
           <a href="https://www.linkedin.com/company/thearchvfc/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a href="https://open.spotify.com/show/2z628foL4d6swp2Z0RfQyD" target="_blank" rel="noopener noreferrer">Podcast</a>

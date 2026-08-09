@@ -23,6 +23,7 @@ import {
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
 } from "./shared/page-shell.mjs";
+import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -87,13 +88,19 @@ for (const sport of SPORTS) {
   }
 }
 
+/* ---------- the sources line ----------
+   SOURCE_LINKS, linkSources and isSourcesPara moved to scripts/shared/source-links.mjs on
+   2026-08-09, because build-rss.mjs renders the same paragraph into content:encoded and was
+   shipping it as flat text. One module, imported by both, so the page and the feed cannot
+   disagree about which outlets are linked. The self-tests run when that module loads. */
+
 /* ---------- body: \n\n paragraph breaks, dated "Update, N Jul:" additions stay visible paragraphs ---------- */
 function bodyHtml(text) {
   return String(text)
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean)
-    .map((p) => `<p>${esc(p)}</p>`)
+    .map((p) => (isSourcesPara(p) ? `<p class="article__sources">${sourcesAwareParagraph(p)}</p>` : `<p>${sourcesAwareParagraph(p)}</p>`))
     .join("\n        ");
 }
 

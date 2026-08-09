@@ -1,4 +1,5 @@
 import { longReads } from '../data/longReads';
+import { readPath } from '../data/readSlug';
 import { track } from '../analytics';
 
 // The accordion head/body are built with innerHTML, so every interpolated essay field must be
@@ -51,10 +52,15 @@ export function initLongReads(animate: boolean): void {
     panel.setAttribute('role', 'region');
     const inner = document.createElement('div');
     inner.className = 'killer__panel-inner';
-    inner.innerHTML = r.body
-      .split(/\n\s*\n/)
-      .map((p) => `<p>${esc(p.trim())}</p>`)
-      .join('');
+    // The essay still expands in place, and it now ends on its own permalink. Every read has a
+    // real page at /reads/<slug>/ (scripts/build-reads-pages.mjs); readPath is the same derivation
+    // that generator uses, so the link and its destination cannot drift apart.
+    inner.innerHTML =
+      r.body
+        .split(/\n\s*\n/)
+        .map((p) => `<p>${esc(p.trim())}</p>`)
+        .join('') +
+      `<p class="killer__permalink"><a href="${esc(readPath(r.title))}">Open this on its own page</a></p>`;
     panel.appendChild(inner);
 
     head.addEventListener('click', () => {

@@ -308,6 +308,10 @@
           <h2 class="killers__title" data-reveal>Long reads<span class="dot">.</span></h2>
           <p class="killers__lede" data-reveal>Football, read like a business. How the dynasties were built, how the money really moves, and why some giants quietly fell apart.</p>
           <ol class="killers__list" id="long-reads-list" aria-label="Long-read essays"></ol>
+          <!-- Every essay has its own page at /reads/<slug>/ (scripts/build-reads-pages.mjs).
+               This link is server-rendered on purpose: the <ol> above is empty until the bundle
+               hydrates, so without it a reader with no JS reaches this section and finds nothing. -->
+          <a class="killers__all" href="/reads/">Every long read</a>
           <a class="btn btn--ghost killers__follow" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow for the next one</a>
         </div>
       </section>

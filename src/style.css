@@ -352,7 +352,13 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
   .killer__panel-inner { padding-left: 2.2rem; }
 }
 .killers__outro { margin-top: 3rem; font-family: var(--serif); font-weight: 300; font-size: clamp(1.25rem, 2.4vw, 1.9rem); line-height: 1.4; max-width: 30ch; }
+/* Permalink at the foot of an expanded essay (2026-08-09). Every long read has a real page at
+   /reads/<slug>/ now; this is how a reader gets to it from the accordion. */
+.killer__permalink { margin-top: 1.5rem; font-size: 0.9rem; }
+.killer__permalink a { color: var(--gold); border-bottom: 1px solid var(--gold-soft); padding-bottom: 0.15rem; }
 .killers__follow { margin-top: 2.5rem; }
+.killers__all { display: inline-block; margin-top: 2rem; margin-right: 1.5rem; color: var(--cream); border-bottom: 1px solid var(--cream-faint); padding-bottom: 0.15rem; }
+.killers__all:hover { color: var(--gold); }
 
 /* ---------- archive rail ---------- */
 .archive__title { margin-bottom: 1.25rem; }

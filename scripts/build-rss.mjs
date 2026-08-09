@@ -40,6 +40,8 @@ const entrySrc = [
   `export { f1Days } from "./data/f1Days.ts";`,
   `export { tennisDays } from "./data/tennisDays.ts";`,
   `export { golfDays } from "./data/golfDays.ts";`,
+  `export { longReads } from "./data/longReads.ts";`,
+  `export { readSlug } from "./data/readSlug.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".rss-bundle.mjs");
 let data;
@@ -68,12 +70,36 @@ for (const sport of SPORTS) {
     lanes.push({ base: `/${sport.urlBase}/${laneKey}/`, days: SPORT_DATA[sport.key] || [] });
   }
 }
+// Long reads (2026-08-09). They got real URLs at /reads/<slug>/ in the same pass
+// (scripts/build-reads-pages.mjs) and a feed a reader subscribes to should carry them. Mapped
+// onto the same {headline, dek, body, date, base} shape the daily entries use, with the essay's
+// own opening sentence as the dek because a LongRead has no standfirst field and inventing one
+// would put words in the feed that are not on the page. `base` is empty and the item's path is
+// carried whole in `date`-free form by articleUrl below, so these are given an explicit `path`
+// instead — see articleUrl. Every essay currently on file predates the newest 30 daily entries,
+// so today's feed.xml is unchanged; the next essay the engine files will syndicate.
+const readFirstSentence = (body) => {
+  const first = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  const m = first.match(/^.*?[.!?](?=\s|$)/);
+  return (m ? m[0] : first).trim();
+};
+const readItems = data.longReads.map((r) => ({
+  headline: String(r.title).replace(/\.$/, ""),
+  dek: readFirstSentence(r.body),
+  body: r.body,
+  date: r.date,
+  path: `/reads/${data.readSlug(r.title)}/`,
+}));
+
 const items = lanes
   .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
+  .concat(readItems)
   .sort(byDateDesc)
   .slice(0, MAX_ITEMS);
 
-const articleUrl = (it) => `${SITE}${it.base}${it.date}/`;
+// Daily entries live at <base>/<date>/; a long read carries its whole path on `path` because its
+// URL is slug-based, not date-based.
+const articleUrl = (it) => `${SITE}${it.path ?? `${it.base}${it.date}/`}`;
 
 /* ---------- XML helpers ---------- */
 const xmlEsc = (s = "") =>
@@ -135,6 +161,10 @@ function imageAsset(entry) {
 // 1200x630, satisfying both. The length is the byte size of the file actually on disk, and if
 // the card was never generated the item simply carries no enclosure rather than a fabricated one.
 function ogAsset(it) {
+  // Long reads have no per-item card (they share the site-wide /og.jpg), so they take the same
+  // route a daily entry whose card failed to render takes: no enclosure at all, never a
+  // fabricated one.
+  if (it.path) return null;
   const rel = `${it.base}${it.date}/og.png`;
   try {
     const bytes = statSync(join(OUT, ...rel.split("/").filter(Boolean))).size;

@@ -98,7 +98,7 @@ function head({ title, description, url, robots = "index,follow,max-image-previe
   <meta name="description" content="${escAttr(clampDescription(description))}" />
   <meta name="robots" content="${escAttr(robots)}" />
   ${url ? `<link rel="canonical" href="${url}" />` : ""}
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />

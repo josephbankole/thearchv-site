@@ -87,7 +87,7 @@ function render(entry, sectionKey) {
   <meta name="description" content="${escAttr(clampDescription(entry.dek))}" />
   <meta name="robots" content="noindex,follow" />
   <link rel="canonical" href="${canonicalUrl}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />
@@ -132,7 +132,7 @@ function render(entry, sectionKey) {
         <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
       </nav>
-      <p class="footer__tag">Football history, illustrated. Daily.</p>
+      <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>
   </footer>

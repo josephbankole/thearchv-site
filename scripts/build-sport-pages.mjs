@@ -11,7 +11,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   SITE, esc, escAttr, longDate, byDateDesc, clampTitle, clampDescription,
-  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY,
+  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
   masthead, deskNav, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
@@ -55,9 +55,7 @@ const COPY = SPORT_DESK_COPY;
 // A lane's entries as whole-card links, reusing the lane-card styling from pageStyles(). Matches
 // build-lane-pages.mjs's laneCard so a sport section and a lane front render identically.
 function laneCard(entry, sportKey, laneKey) {
-  const avatar = entry.image
-    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
-    : "";
+  const avatar = cardArt(entry);
   return `<li><a class="lane-card" href="/${sportKey}/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
 }
 
@@ -87,7 +85,7 @@ function renderSection(sport) {
   <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
@@ -166,13 +164,13 @@ function renderFootballAlias() {
   <meta name="description" content="Football lives at the front door of The ARCHV. Redirecting you there now." />
   <link rel="canonical" href="${home}" />
   <meta name="robots" content="noindex,follow" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${cspMeta({})}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   ${RSS_LINK}
   <style>
-    body { margin: 0; background: #0C2A3E; color: #F2EAD3; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; text-align: center; }
-    a { color: #C9A14A; }
+    body { margin: 0; background: #FFFFFF; color: #1E223D; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; text-align: center; }
+    a { color: #C93A0F; }
   </style>
 </head>
 <body>

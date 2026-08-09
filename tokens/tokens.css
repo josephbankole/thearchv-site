@@ -1,36 +1,52 @@
 /* ============================================================
    THE ARCHV — brand tokens (portable)
-   Extracted from src/style.css :root, reconciled with public/content.css.
-   Canonical, locked palette. Drop this :root into any project to inherit
-   the brand surface. Fonts: Fraunces (display) + Inter Tight (UI/body),
-   both variable — load them separately (see fonts note at bottom).
+   WHITE GROUND, phase 2A (2026-08-09). Extracted from src/style.css :root and reconciled
+   with public/content.css and pageStyles() in scripts/shared/page-shell.mjs.
+   Drop this :root into any project to inherit the brand surface.
+   Fonts: Anton (headlines, self-hosted latin subset), Fraunces (serif deks and prose),
+   Inter Tight (UI and labels) — load them separately (see the fonts note at the bottom).
+
+   The contrast figure beside a text token is its measured WCAG ratio on #FFFFFF and on
+   #F4F2F3, the only two grounds this system paints text on. Every text role clears 4.5:1.
    ============================================================ */
 
 :root {
-  /* ---- color: navy base ---- */
-  --navy: #0c2a3e;
-  --navy-deep: #071c2b;
-  --navy-soft: #133a52;
+  /* ---- ground ---- */
+  --bg: #FFFFFF;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #F4F2F3;
 
-  /* ---- color: cream text ---- */
-  --cream: #f2ead3;
-  --cream-dim: rgba(242, 234, 211, 0.6);
-  --cream-faint: rgba(242, 234, 211, 0.28);
+  /* ---- ink ---- */
+  --ink: #1E223D;        /* 15.54:1 / 13.94:1 — primary text */
+  --ink-soft: #4A4F73;   /*  7.90:1 /  7.09:1 — secondary text, deks */
+  --ink-muted: #5F6485;  /*  5.76:1 /  5.16:1 — the readable-muted TEXT token */
+  --ink-faint: #7A7F9E;  /*  3.92:1 /  3.52:1 — DECORATIVE ONLY, never text */
 
-  /* ---- color: gold accent (capped — max 2 elements per viewport) ---- */
-  --gold: #c9a14a;
-  --gold-soft: rgba(201, 161, 74, 0.5);
+  /* ---- accent ---- */
+  --accent: #F54F1B;     /* fill and rule only: 3.49:1 on white, fails as text */
+  --accent-ink: #C93A0F; /*  5.13:1 /  4.60:1 — accent text and links */
+  --accent-soft: rgba(245, 79, 27, 0.45);
+  --on-accent: #16192E;  /*  4.96:1 on the --accent fill */
 
-  /* ---- color: pitch green (confirm/done) ---- */
-  --pitch: #2e6b3a;
+  /* ---- rules ---- */
+  --rule: #DED9DB;
+  --rule-soft: #EDEAEB;
 
-  /* ---- color: form states ---- */
-  --error: #d9785f;
-  --error-border: #b5563f;
+  /* ---- status ---- */
+  --confirmed: #1E7A38;  /*  5.39:1 /  4.84:1 */
+  --reported: #7A6000;   /*  6.00:1 /  5.38:1 */
+  --on-status: #FFFFFF;  /*  5.39:1 on --confirmed */
+
+  /* ---- section band hues (decorative rules only, no contrast floor) ---- */
+  --yellow: #FFD85F;
+  --lilac: #C8BEFA;
+  --chalk: #EFE9E9;
 
   /* ---- type families ---- */
+  --display: 'Anton', 'Inter Tight Variable', 'Inter Tight', system-ui, sans-serif;
   --serif: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
   --grotesque: 'Inter Tight Variable', 'Inter Tight', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
   /* ---- fluid type scale ---- */
   --t-display: clamp(2.8rem, 8vw, 5rem);
@@ -49,25 +65,39 @@
   --r-md: 3px;        /* digest cards */
   --r-lg: 10px;       /* legend cards */
 
+  /* ---- elevation ---- */
+  --shadow-soft: 0 1px 2px rgba(30, 34, 61, 0.05), 0 8px 20px -12px rgba(30, 34, 61, 0.18);
+  --shadow-lift: 0 2px 4px rgba(30, 34, 61, 0.06), 0 16px 34px -18px rgba(30, 34, 61, 0.26);
+
   /* ---- motion ---- */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* One look. The dark-mode block mirrors the light one on purpose: a news front page has one
+   ground, and two would be two designs to maintain.
+:root[data-theme="dark"], :root[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { color-scheme: light; } }
+*/
+
 /* Baseline application of the surface (optional — copy what you need):
 body {
-  background: var(--navy);
-  color: var(--cream);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--grotesque);
   font-size: var(--t-body);
   line-height: 1.6;
 }
-::selection { background: var(--gold); color: var(--navy); }
+::selection { background: var(--accent-ink); color: #FFFFFF; }
 */
 
-/* Fonts — both are variable. With npm:
+/* Fonts.
+   Anton is the headline face, self-hosted as a latin subset (SIL OFL 1.1):
+     @font-face { font-family: 'Anton'; font-weight: 400; font-display: swap;
+                  src: url('/fonts/anton-latin.woff2') format('woff2'); }
+   Fraunces and Inter Tight are both variable. With npm:
      import '@fontsource-variable/fraunces';
      import '@fontsource-variable/inter-tight';
    Or via Google Fonts:
-     https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter+Tight:wght@400..700&display=swap
-   Display type runs LIGHT — default Fraunces weight is ~340, not 400+. */
+     https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:opsz,wght@9..144,300..600&family=Inter+Tight:wght@400..700&display=swap
+   Fraunces runs LIGHT where it sets prose; Anton has one weight and needs no choice. */

@@ -102,7 +102,7 @@ function head({ title, description, url, extraLd }) {
   <meta name="description" content="${escAttr(clampDescription(description))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />

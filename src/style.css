@@ -318,19 +318,31 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .killer {
   border-bottom: 1px solid var(--cream-faint);
 }
+/* The accordion is a native <details> as of phase 2B, so it opens with no JS on the page at all.
+   The head is the <summary>: the default disclosure triangle is removed in both engines
+   (list-style for the standard one, the -webkit pseudo-element for Safari) because the row draws
+   its own + on the right. */
+.killer__box { display: block; }
 .killer__head {
   display: grid; grid-template-columns: 3.5rem 1fr auto; gap: 1.5rem; align-items: baseline;
   width: 100%; text-align: left; background: none; border: none; color: inherit;
   padding: 1.6rem 0; cursor: pointer; font-family: inherit;
   transition: padding-left 0.5s var(--ease);
+  list-style: none;
 }
+.killer__head::-webkit-details-marker { display: none; }
+.killer__head::marker { content: ''; }
+.killer__head:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .killer__head:hover { padding-left: 0.75rem; }
 .killer__n { font-family: var(--grotesque); font-size: 0.85rem; color: var(--cream-faint-text); letter-spacing: 0.1em; }
 .killer__match { font-family: var(--serif); font-weight: 340; font-size: clamp(1.35rem, 3vw, 2.1rem); letter-spacing: -0.015em; }
 .killer__meta { font-size: var(--t-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-dim); white-space: nowrap; }
 .killer__plus { color: var(--gold); transition: transform 0.5s var(--ease); font-size: 1.2rem; }
-.killer.is-open .killer__plus { transform: rotate(45deg); }
-.killer__panel { overflow: hidden; height: 0; }
+.killer__box[open] .killer__plus { transform: rotate(45deg); }
+/* No resting height here any more. <details> hides the panel when closed, and an open panel sits
+   at its natural height, which is what a reader with no JS gets. The height is only ever set
+   inline, by src/components/longReads.ts, for the length of the open or close animation. */
+.killer__panel { overflow: hidden; }
 .killer__panel-inner { padding: 0 0 2rem calc(3.5rem + 1.5rem); max-width: 60ch; color: var(--cream-dim); }
 @media (max-width: 640px) {
   .killer__head { grid-template-columns: 2.2rem 1fr; row-gap: 0.4rem; }

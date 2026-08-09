@@ -278,7 +278,9 @@
           <p class="section-index">06 / Legends</p>
           <h2 class="killers__title" data-reveal>The Legends<span class="dot">.</span></h2>
           <p class="killers__lede" data-reveal>One football great, fully told. The players who bent the game to their will, drawn in the house style.</p>
-          <ul class="legends__list" id="legends-grid" aria-label="Legends Series profiles" data-stagger></ul>
+          <ul class="legends__list" id="legends-grid" aria-label="Legends Series profiles" data-stagger>
+            <!--archv:legends-->
+          </ul>
           <a class="btn btn--ghost killers__follow" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow the series</a>
         </div>
       </section>
@@ -289,10 +291,13 @@
           <p class="section-index">The writers' room · Long reads</p>
           <h2 class="killers__title" data-reveal>Long reads<span class="dot">.</span></h2>
           <p class="killers__lede" data-reveal>Football, read like a business. How the dynasties were built, how the money really moves, and why some giants quietly fell apart.</p>
-          <ol class="killers__list" id="long-reads-list" aria-label="Long-read essays"></ol>
-          <!-- Every essay has its own page at /reads/<slug>/ (scripts/build-reads-pages.mjs).
-               This link is server-rendered on purpose: the <ol> above is empty until the bundle
-               hydrates, so without it a reader with no JS reaches this section and finds nothing. -->
+          <!-- Server-rendered at build time (phase 2B). Each essay is a native <details>, so it
+               opens on a click with no JS at all; src/components/longReads.ts only adds the
+               height animation and the expand event on top of what is already here. -->
+          <ol class="killers__list" id="long-reads-list" aria-label="Long-read essays">
+            <!--archv:longreads-->
+          </ol>
+          <!-- Every essay also has its own page at /reads/<slug>/ (scripts/build-reads-pages.mjs). -->
           <a class="killers__all" href="/reads/">Every long read</a>
           <a class="btn btn--ghost killers__follow" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow for the next one</a>
         </div>

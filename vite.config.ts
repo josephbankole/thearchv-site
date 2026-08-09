@@ -1,5 +1,8 @@
 import { defineConfig, type Plugin } from 'vite';
-import { renderWire, renderLead, renderBands, renderLibrary, renderBrief, renderDateline } from './src/render/home';
+import {
+  renderWire, renderLead, renderBands, renderLibrary, renderBrief, renderDateline,
+  renderLegends, renderLongReads,
+} from './src/render/home';
 
 /* Server-render the front page at build time (phase 2A).
 
@@ -28,6 +31,8 @@ function archvHome(): Plugin {
           '<!--archv:bands-->': renderBands,
           '<!--archv:library-->': renderLibrary,
           '<!--archv:brief-->': renderBrief,
+          '<!--archv:legends-->': renderLegends,
+          '<!--archv:longreads-->': renderLongReads,
         };
         let out = html;
         for (const [marker, render] of Object.entries(blocks)) {

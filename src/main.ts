@@ -4,7 +4,6 @@ import './style.css';
 
 import { initFrontCards } from './components/frontCards';
 import { initLongReads } from './components/longReads';
-import { initLegends } from './components/legends';
 import { initArchiveRail } from './components/archiveRail';
 import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
@@ -18,15 +17,17 @@ const reducedMotion = root.classList.contains('reduced-motion');
 const animate = !reducedMotion;
 
 function boot(): void {
-  // The three desk bands, the lead, the wire and the illustrated library are all in the HTML
-  // before this file runs (src/render/home.ts, injected at build time). Nothing below creates
-  // front-page content; it attaches behaviour to content that is already there. That is the
-  // whole point of the phase 2A rebuild: no reader ever waits on this bundle to see a story.
+  // Every block on this page is in the HTML before this file runs (src/render/home.ts, injected
+  // at build time): the bands, the lead, the wire, the illustrated library, and as of phase 2B
+  // the legends wall and the long reads too. Nothing below creates front-page content; it
+  // attaches behaviour to content that is already there. That is the whole point of the rebuild:
+  // no reader ever waits on this bundle to see a story.
   initFrontCards();
 
-  // Content + conversion paths (must work with zero motion)
+  // Content + conversion paths (must work with zero motion). initLongReads attaches the height
+  // animation to an accordion that is already in the HTML and already works without it; the
+  // legends wall has no behaviour at all now, so its component is gone rather than idle.
   initLongReads(animate);
-  initLegends();
   initArchiveRail();
   initContactForm();
   initStickyFollow();

@@ -16,6 +16,9 @@
 // and scripts/check-csp-hash.mjs asserts that; an injected second one would break the CSP gate.
 import type { DayEntry } from '../data/worldCupDays';
 import { leaguesDays } from '../data/leaguesDays';
+import { legends } from '../data/legends';
+import { longReads } from '../data/longReads';
+import { readPath } from '../data/readSlug';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
 import { entryArt, PLAYERS } from './illustrated';
@@ -277,6 +280,64 @@ export function renderLibrary(): string {
             ${figures}
           </div>
         </section>`;
+}
+
+/* ---------- the legends wall ----------
+   Was built by src/components/legends.ts from JS strings into an empty <ul>, which meant a
+   reader with no JS reached the section and found fourteen profiles' worth of nothing, and
+   fourteen bios rode into the bundle. There is no behaviour on this grid at all: it is a wall
+   of cards, so it is markup, and the component that used to build it is gone. */
+export function renderLegends(): string {
+  return legends
+    .map((l) => {
+      const meta = l.years ? `${l.nation} · ${l.years}` : l.nation;
+      return `<li class="legend">
+              <div class="legend__avatar">
+                <img src="${esc(l.headshot)}" alt="${esc(`${l.name}, illustrated by The ARCHV.`)}" width="160" height="160" loading="lazy" decoding="async" />
+              </div>
+              <p class="legend__no">${esc(l.no)}</p>
+              <h3 class="legend__name">${esc(l.name)}</h3>
+              <p class="legend__meta">${esc(meta)}</p>
+              <p class="legend__bio">${esc(l.bio)}</p>
+            </li>`;
+    })
+    .join('\n            ');
+}
+
+/* ---------- the long reads ----------
+   Same story as the legends wall, with one extra requirement: this one has behaviour. It was a
+   button plus a div whose CSS resting height was 0, so the essays were only ever reachable by
+   the bundle's own click handler. Now every essay is in the built HTML inside a real <details>,
+   which means a reader with no JS at all can still open one — the browser does it.
+
+   src/components/longReads.ts no longer creates anything. It attaches the height animation and
+   the analytics to what is already on the page, and if it never loads the accordion still works.
+   That is the whole point of the phase 2A pattern applied to the one block that resisted it.
+
+   Note the panel's paragraphs are the full essay text: the section has always rendered it into
+   the DOM for search, and <details> keeps it in the document when closed. */
+export function renderLongReads(): string {
+  return longReads
+    .map((r) => {
+      const paragraphs = r.body
+        .split(/\n\s*\n/)
+        .map((p) => `<p>${esc(p.trim())}</p>`)
+        .join('');
+      return `<li class="killer">
+              <details class="killer__box" data-read-title="${esc(r.title)}" data-read-kicker="${esc(r.kicker)}">
+                <summary class="killer__head">
+                  <span class="killer__n">${esc(r.kicker)}</span>
+                  <span class="killer__match">${esc(r.title)}</span>
+                  <span class="killer__meta">${esc(r.meta)}</span>
+                  <span class="killer__plus" aria-hidden="true">+</span>
+                </summary>
+                <div class="killer__panel">
+                  <div class="killer__panel-inner">${paragraphs}<p class="killer__permalink"><a href="${esc(readPath(r.title))}">Open this on its own page</a></p></div>
+                </div>
+              </details>
+            </li>`;
+    })
+    .join('\n            ');
 }
 
 /* ---------- the desk brief rail ---------- */

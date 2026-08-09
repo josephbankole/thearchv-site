@@ -887,7 +887,11 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    The rows are a grid rather than a flex row so the desk label, the headline and the read time
    line up down the column at desktop, and they stack in source order under 720px, where three
    items across a 375px phone would put the headline on four words a line. */
-.today { border-block: 1px solid var(--rule); background: var(--bg-raised); }
+/* padding-block: 0 is not tidiness. The global `section { padding-block: clamp(5rem,12vh,10rem) }`
+   rhythm belongs to the long scrolling sections lower down the page; .lead and everything inside
+   .frontgrid already opt out of it on the line below this block, and .today sits between the two
+   and would otherwise have inherited five rems of air on each side of a one-line strip. */
+.today { border-block: 1px solid var(--rule); background: var(--bg-raised); padding-block: 0; }
 .today__inner { padding-block: 1.25rem 1.4rem; }
 .today__title { display: inline; font-family: var(--display); font-weight: 400; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
 .today__date { display: inline; margin-left: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }

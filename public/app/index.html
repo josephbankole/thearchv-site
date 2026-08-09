@@ -231,12 +231,14 @@
       font-size: 1rem;
       text-align: center;
     }
-    .waitlist input::placeholder { color: rgba(179, 171, 146, 0.7); }
+    .waitlist input::placeholder { color: var(--cream-dim); }
     .waitlist input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
     .formnote { margin-top: 12px; font-size: 0.88rem; line-height: 1.5; min-height: 1.3em; }
     .formnote.ok { color: var(--gold); }
-    .formnote.bad { color: #E8A0A0; }
+    /* An error line has to be readable before it is red. #E8A0A0 measured 2.11:1 on the
+       white ground, which is a message nobody can read; #A32219 is 7.50:1. */
+    .formnote.bad { color: #A32219; }
 
     /* Substack subscribe, embedded. Cross-origin iframe, so we cannot restyle its
        inside; we only frame it to sit tidily in the column. */
@@ -260,7 +262,7 @@
       margin-top: 26px;
       font-size: 0.85rem;
       line-height: 1.6;
-      color: rgba(179, 171, 146, 0.75);
+      color: var(--cream-dim);
     }
     .fallback a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
     .fallback a:hover { color: var(--cream); }

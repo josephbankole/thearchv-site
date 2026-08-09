@@ -1,5 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="10" fill="#0C2A3E"/>
-  <text x="32" y="44" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-weight="400" fill="#F2EAD3" letter-spacing="-1">A</text>
-  <circle cx="46.5" cy="42" r="2.6" fill="#C9A14A"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="The ARCHV">
+  <title>The ARCHV monogram</title>
+  <rect data-crest="ground" width="512" height="512" fill="#1E223D"/>
+  <circle data-crest="disc" cx="256.00" cy="256.00" r="250.00" fill="#1E223D"/>
+  <circle data-crest="ring" cx="256.00" cy="256.00" r="203.00" fill="none" stroke="#F54F1B" stroke-width="10.00"/>
+  <path data-crest="letter" d="M198.99 371.42 219.75 156.58H292.62L313.01 371.42H272.36L269.31 336.75H243.43L240.74 371.42ZM246.48 302.45H266.01L256.61 193.20H254.66Z" fill="#F5F2F3"/>
+  <rect data-crest="bar" x="122.00" y="298.47" width="268.00" height="17.00" rx="0" fill="#F54F1B"/>
 </svg>
+

@@ -77,7 +77,7 @@ const HEADSHOT_CANDIDATES = [
 ];
 const portrait =
   HEADSHOT_CANDIDATES.find((c) => existsSync(join(ROOT, "public", c.src.replace(/^\//, "")))) ||
-  { src: "/brand/crest-badge-400.webp", alt: "The ARCHV crest", real: false };
+  { src: "/brand/crest-badge-400.webp", alt: "The ARCHV monogram", real: false };
 
 /* ---------- day data (same bundled-temp-module pattern as build-lane-pages.mjs) ---------- */
 const entrySrc = [

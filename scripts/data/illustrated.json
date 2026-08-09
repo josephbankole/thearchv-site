@@ -191,6 +191,16 @@
       "width": 240,
       "height": 240,
       "alt": "Illustrated ARCHV portrait of Folarin Balogun of the United States"
+    },
+    {
+      "slug": "raul-jimenez",
+      "name": "Raul Jimenez",
+      "nation": "Mexico",
+      "src": "/heads/jimenez.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Raul Jimenez of Mexico",
+      "verifiedBy": "Two agreeing in-repo records, checked 2026-08-09: the bank index row 'Raúl Jiménez | MEX' (regen3 2026-06-11, photo-ref Wikimedia '2017 Confederation Cup - MEXNZL - Raúl Jiménez (crop).jpg'), and the desk's own committed imageAlt 'Raúl Jiménez, illustrated by The ARCHV.' on /heads/jimenez.webp in src/data/worldCupDays.ts. Full name only: the bare surname would also match /heads/jimenez-fulham.webp and any other Jimenez."
     }
   ],
   "clubs": [

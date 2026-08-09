@@ -117,7 +117,29 @@ const targets = [
   // constant across the family. Every pair page is checked in the loop further down.
   ["duel index: /duel/", join(DIST, "duel", "index.html")],
   ["archive game: /guess/", join(DIST, "guess", "index.html")],
+  // Section fronts and the branded 404 (build-section-pages.mjs, 2026-08-09) and the long-read
+  // family (build-reads-pages.mjs, same pass). All carry the shared masthead + PostHog inline
+  // scripts and no per-page script, so both hashes must be in each page's own CSP. The 404 is
+  // included deliberately: it is served at arbitrary paths, so a CSP break there is a CSP break
+  // everywhere a link rots.
+  ["404: /404.html", join(DIST, "404.html")],
+  ["section: /finals/", join(DIST, "finals", "index.html")],
+  ["section: /united/", join(DIST, "united", "index.html")],
+  ["section: /explainers/", join(DIST, "explainers", "index.html")],
+  ["section: /notes/", join(DIST, "notes", "index.html")],
+  ["section: /legends/", join(DIST, "legends", "index.html")],
+  ["reads front: /reads/", join(DIST, "reads", "index.html")],
 ];
+
+// Every long-read page. Slugs are derived from the essay titles (src/data/readSlug.ts), so this
+// enumerates rather than hand-lists them and a new essay is covered automatically.
+const readsDir = join(DIST, "reads");
+if (existsSync(readsDir)) {
+  for (const entry of readdirSync(readsDir)) {
+    const file = join(readsDir, entry, "index.html");
+    if (existsSync(file)) targets.push([`read: /reads/${entry}/`, file]);
+  }
+}
 
 // Every duel pair page. The share-row script carries that page's own URL, so this is the same
 // per-page-hash failure mode the article loop below guards against.

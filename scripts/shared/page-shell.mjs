@@ -525,7 +525,14 @@ export function pageStyles() {
       -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
       mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
     }
-    .masthead, .desknav, main, .footer { position: relative; z-index: 1; }
+    .desknav, main, .footer { position: relative; z-index: 1; }
+    /* The masthead needs more than z-index 1. It sits ABOVE the sticky .sportnav-wrap in document
+       order, its dropdown panel opens downward through that band, and .sportnav-wrap is z-index 30
+       — so with the masthead at 1 the tab bar painted over the panel's first item and swallowed it.
+       Live before this pass too: the old four-item menu simply lost "Follow" the same way. Raising
+       the masthead above the bar cannot hide the bar in return, because the masthead is static on
+       this page family and has scrolled away by the time the bar is pinned to anything. */
+    .masthead { position: relative; z-index: 40; }
     @media print { body::before { display: none; } }
     a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -706,6 +713,15 @@ export function pageStyles() {
     /* Same inline-span margin bug as .more-card__headline above; see the note there. */
     .lane-card__headline { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.24; margin: 0 0 .75rem; }
     .lane-card__dek { display: block; font-size: .9rem; color: var(--cream-dim); margin: 0; }
+    /* A lane card that is not a link. The Legends front (scripts/build-section-pages.mjs) lists
+       profiles that have no page of their own, so those cards must not lift or glow on hover and
+       imply something to click. */
+    .lane-card--static:hover { border-color: var(--cream-faint); transform: none; box-shadow: var(--shadow-soft); }
+    /* Headline-only cards: the 404's route-back list. Without a kicker or a dek to fill them the
+       full-size card runs to 130px a row, and nine of those is a page of scrolling to find the
+       front page. */
+    .lane-card--compact { padding: .85rem 1.2rem; }
+    .lane-card--compact .lane-card__headline { font-size: 1.1rem; margin: 0; }
 
     /* "From the glossary" strip on lane index pages: a compact row of the lane's key terms,
        sitting above the footer. Inherits the enclosing main's width; no button styling. */

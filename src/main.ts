@@ -8,7 +8,6 @@ import { initArchiveRail } from './components/archiveRail';
 import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
 import { initChrome, initMastheadMenu } from './ui/chrome';
-import { initReveal } from './anim/reveal';
 import { initSportTabs } from './ui/sportTabs';
 import { initAnalytics } from './analytics';
 
@@ -38,11 +37,6 @@ function boot(): void {
 
   // Sport tab bar: scroll the active tab into view. Runs in every mode (instant, no motion).
   initSportTabs();
-
-  // Tier 0 scroll reveal, for elements the bundle injects itself. Never pointed at
-  // server-rendered markup: the resting state is opacity 0, so a bundle that failed to load
-  // would leave real content invisible.
-  initReveal();
 
   // Page chrome (progress bar + scroll-spy nav). Affordance, not decoration:
   // runs in every mode; its motion is CSS-gated and reduced-motion safe.

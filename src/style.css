@@ -115,9 +115,6 @@
   /* Dot-grid field colour: ink at a very low alpha (was cream, invisible on white). */
   --dot: rgba(30, 34, 61, 0.07);
 
-  /* Reveal timing, shared by the IntersectionObserver layer in src/anim/reveal.ts. */
-  --reveal-dur: 0.6s;
-  --reveal-step: 60ms;
 }
 
 /* Single-look by design: the dark-mode block mirrors the light tokens. A newspaper front
@@ -723,35 +720,20 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .rail:focus-within,
 .sportnav:focus-within { -webkit-mask-image: none; mask-image: none; }
 
-/* ---------- IntersectionObserver staggered reveal ----------
-   Driven by src/anim/reveal.ts (bundled, never inline: script-src is 'self' plus one hash).
-   Applied ONLY to elements this bundle injects itself, never to markup that ships in index.html.
-   That is the safety rule: if the bundle never runs, the elements do not exist either, so there
-   is no path where a failed script leaves real content stuck at opacity 0.
-   --i is set per child by the observer for the stagger.
+/* ---------- the IntersectionObserver staggered reveal is GONE (phase 3, 2026-08-09) ----------
+   src/anim/reveal.ts, the [data-inview] / [data-inview-group] rules that used to sit here, and
+   the --reveal-dur / --reveal-step tokens at the top of this file were all removed together.
+   Phase 2A moved the front page from JS-built rails to build-time render, and the mechanism was
+   only ever allowed to touch markup the bundle created itself, so after 2A it had nothing left
+   to find: initReveal() queried [data-inview-group], matched zero elements and returned. The
+   history it carried is not lost — trap 3 in CLAUDE.md holds the full account of the downward
+   transform that broke homepage scrolling on 2026-08-04, and the guard it produced,
+   overflow-y: hidden on .rail and .sportnav, is still in force above.
 
-   The reveal is opacity-only, and that is load-bearing rather than a style preference. It used to
-   carry transform: translateY(16px). The day cards sit 8px clear of the rail's bottom padding edge,
-   so translating them down 16px pushed them 8px past it; .rail is overflow-x: auto, which makes the
-   used value of overflow-y auto as well, so each rail became a vertical scroll container with 8px
-   of room. An element with vertical scroll room owns any vertical gesture that starts inside it,
-   the rails are full bleed and 600 to 780px tall on a phone, and the founder could not scroll the
-   homepage (2026-08-04, trap 3 in CLAUDE.md). Do not reintroduce a downward transform here. The
-   guard rail is overflow-y: hidden on .rail; this is the root fix. */
-[data-inview] {
-  opacity: 0;
-  transition: opacity var(--reveal-dur) var(--ease);
-  transition-delay: calc(var(--i, 0) * var(--reveal-step));
-}
-[data-inview='true'] { opacity: 1; }
-/* Reduced motion is a designed state here, not a disabled one: the content is simply already
-   there, at full opacity, with no transition to interrupt. Both the media query and the
-   .reduced-motion class the early bootstrap sets are covered, because the class is what the rest
-   of this file gates on and the media query is what covers a mid-session OS change. */
-@media (prefers-reduced-motion: reduce) {
-  [data-inview] { opacity: 1; transform: none; transition: none; }
-}
-.reduced-motion [data-inview] { opacity: 1; transform: none; transition: none; }
+   The CSS went with the script rather than being left inert. Its resting state was opacity: 0,
+   so leaving the rules behind would have left a loaded weapon: anyone putting data-inview on
+   server-rendered markup would have made real content permanently invisible, with no script left
+   to switch it on. Do not reinstate this without a reason and a target. */
 
 /* ============================================================
    FRONT PAGE (phase 2A, 2026-08-09)

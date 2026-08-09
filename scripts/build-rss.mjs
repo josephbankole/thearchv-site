@@ -16,6 +16,7 @@ import { writeFileSync, rmSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { byDateDesc, esc, escAttr, SPORTS } from "./shared/page-shell.mjs";
+import { sourcesAwareParagraph } from "./shared/source-links.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -129,13 +130,20 @@ function rfc822(dateOnly) {
 
    Paragraph splitting and image access reuse build-article-pages.mjs exactly (body is one string
    with blank-line paragraph breaks; image is an OPTIONAL site-relative path with imageAlt beside
-   it), so the feed body and the canonical page can never disagree about what an article says. */
+   it), so the feed body and the canonical page can never disagree about what an article says.
+
+   The closing "Sources:" paragraph is linkified through the same shared allowlist the page uses
+   (scripts/shared/source-links.mjs), added 2026-08-09: until then the page named the outlets as
+   links and the feed shipped them as flat text, so a reader who took the syndicated copy lost the
+   one thing the sources line is for. The anchors sit inside content:encoded's CDATA section, which
+   is where HTML belongs in this feed — nothing here is double-escaped, and the paragraph text is
+   escaped exactly once before any link is written into it. */
 function bodyHtml(text) {
   return String(text)
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean)
-    .map((p) => `<p>${esc(p)}</p>`)
+    .map((p) => `<p>${sourcesAwareParagraph(p)}</p>`)
     .join("\n");
 }
 

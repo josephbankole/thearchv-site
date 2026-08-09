@@ -11,10 +11,10 @@ type Section = { id: string; label: string; el: HTMLElement; link: HTMLAnchorEle
 // Curated nav labels. Only sections actually present in the DOM are used, so the
 // markup and this list can drift apart without breaking.
 const NAV: Array<{ id: string; label: string }> = [
-  { id: 'hero', label: 'Top' },
   { id: 'football-leagues', label: 'Football leagues' },
   { id: 'transfer-desk', label: 'Transfer desk' },
   { id: 'world-cup', label: 'International Football' },
+  { id: 'illustrated-library', label: 'Illustrated library' },
   { id: 'archive', label: 'Archive' },
   { id: 'legends', label: 'Legends' },
   { id: 'long-reads', label: 'Long reads' },
@@ -79,10 +79,10 @@ export function initChrome(): void {
     const p = Math.min(1, Math.max(0, scrollTop / max));
     fill.style.transform = `scaleX(${p})`;
 
-    // Reveal the nav once the hero is mostly behind us. Keeps the top of the page
-    // clean (and keeps the gold count down where the gold CTA already sits).
-    const heroH = sections[0] ? sections[0].el.offsetHeight : window.innerHeight;
-    const shouldShow = scrollTop > heroH * 0.6;
+    // Reveal the nav once the lead block is mostly behind us. Keeps the top of the front
+    // page clean, where the masthead and the wire are already doing the orienting. The old
+    // reference point was the full-viewport hero, which the phase 2A rebuild removed.
+    const shouldShow = scrollTop > window.innerHeight * 0.6;
     if (shouldShow !== navShown) {
       navShown = shouldShow;
       nav.classList.toggle('is-visible', shouldShow);

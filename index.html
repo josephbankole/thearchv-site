@@ -12,7 +12,7 @@
          Every indexable page family on the site carries the same directive (2026-08-04). -->
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://thearchv.ca/" />
-    <meta name="theme-color" content="#0C2A3E" />
+    <meta name="theme-color" content="#FFFFFF" />
     <meta name="google-site-verification" content="_B_-X8W_yayn2TBLrrYkiolQcRNHZl93C00ZJts0iT0" />
     <!-- PostHog (public client key, safe to commit). Read by src/analytics.ts; reaches the CI build since .env is gitignored. -->
     <meta name="posthog-key" content="phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm" />
@@ -38,6 +38,10 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title="The ARCHV" href="/feed.xml" />
+
+    <!-- Anton, the headline face: self-hosted latin subset, preloaded because the front-page
+         lead headline is the largest thing above the fold. font-display: swap in src/style.css. -->
+    <link rel="preload" href="/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Content Security Policy. GitHub Pages cannot send headers, so this meta is the ceiling.
          If the domain is fronted by a CDN (Cloudflare), promote these to real response headers
@@ -128,24 +132,30 @@
   <body>
     <a class="skip" href="#archive">Skip to the archive</a>
 
-    <!-- WebGL canvas lives behind everything; content never waits on it. -->
-    <div id="webgl" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+    <!-- ================= FRONT PAGE CHROME (phase 2A, 2026-08-09) =================
+         Masthead, dateline, sport tabs, wire. The hamburger panel's links are phase 1's
+         (five internal destinations above the rule, the outbound four below it) and this
+         markup is the reference copy: masthead() in scripts/shared/page-shell.mjs and the
+         hand-built copy in scripts/build-content.mjs mirror it. Three copies, no shared
+         import — change one, change all three. -->
+    <div class="topbar">
+      <div class="topbar__inner">
+        <span class="topbar__date"><!--archv:dateline--></span>
+        <span class="topbar__strap">Sports history, illustrated &middot; Est. 2026</span>
+      </div>
+    </div>
 
     <header class="masthead">
-      <a class="wordmark" href="#top" aria-label="The ARCHV, home">
+      <a class="wordmark" href="/" aria-label="The ARCHV, home">
         <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
       </a>
+      <p class="masthead__tagline">Football has a memory. We are the archive.</p>
       <div class="masthead__menu">
         <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
           <span class="masthead__toggle-bar"></span>
           <span class="masthead__toggle-bar"></span>
           <span class="masthead__toggle-bar"></span>
         </button>
-        <!-- The only menu on every page carried four links and all four left the site. The
-             internal destinations sit above the divider now (2026-08-09); the external four are
-             unchanged below it. Mirrors masthead() in scripts/shared/page-shell.mjs and the
-             hand-built copy in scripts/build-content.mjs — three copies, no shared import. -->
         <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
           <a class="masthead__panel-link" href="/">Front page</a>
           <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
@@ -160,13 +170,12 @@
         </nav>
       </div>
     </header>
+    <div class="mast-rule" aria-hidden="true"></div>
 
-    <!-- Sport tab row (multi-sport, 2026-07-22). Pinned to the top of the viewport with the
-         brand row floating just beneath it, so switching sport is one tap away from anywhere.
-         Football is the default and always first. Markup mirrors sportNav() in
-         scripts/shared/page-shell.mjs; styling lives in src/style.css (.sportnav*), the parallel
-         of that module's pageStyles() copy. The active-tab scroll-into-view is bundled
-         (src/ui/sportTabs.ts, wired in src/main.ts), never inline, so the CSP hash is untouched. -->
+    <!-- Sport tab row (multi-sport, 2026-07-22). Markup, hrefs and aria-current are unchanged
+         from the navy build: these routes are the section keys the feeds and the app resolve
+         against, so nothing here may be renamed. Only the styling moved to the white ground.
+         The active-tab scroll-into-view is bundled (src/ui/sportTabs.ts), never inline. -->
     <div class="sportnav-wrap sportnav-wrap--home">
       <nav class="sportnav" aria-label="Sports">
         <div class="sportnav__row">
@@ -179,78 +188,51 @@
       </nav>
     </div>
 
+    <!-- The wire. Server-rendered from the same desk data as the cards below; the bundle only
+         pauses it on hover. Two identical tracks make the marquee seamless, and the second is
+         aria-hidden so a screen reader hears each line once. -->
+    <div class="wire" id="wire">
+      <span class="wire__label">The Wire</span>
+      <div class="wire__tracks"><!--archv:wire--></div>
+    </div>
+
     <main id="top">
-      <!-- 1. HERO — static headline + CTA, instant, no-JS proof -->
-      <section class="hero" id="hero">
-        <div class="hero__inner">
-          <img class="hero__crest" src="/brand/crest-badge-400.webp" width="132" height="132" alt="The ARCHV crest" loading="eager" fetchpriority="high" />
-          <p class="eyebrow" data-reveal>The archive, alive.</p>
-          <h1 class="hero__title">
-            <span data-reveal-line>Football's history lives here.</span>
-            <span data-reveal-line>This is the <em>ARCHV<span class="dot">.</span></em></span>
-          </h1>
-          <p class="hero__sub" data-reveal>Illustrated sports history. The upsets, the finals, the nights that still hurt twenty years on. Football first, now NFL, F1, tennis and golf.</p>
-          <div class="hero__cta" data-reveal>
-            <a class="btn btn--gold" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow on Instagram</a>
-            <a class="btn btn--text" href="/reads/">Read the long reads</a>
+      <!-- LEAD. The front-page lead story is the newest entry across the three football desks,
+           rendered at build time, so it is in the HTML a crawler and a no-JS reader both get. -->
+      <section class="lead" aria-label="Lead story">
+        <div class="wrap lead__grid">
+          <!--archv:lead-->
+        </div>
+      </section>
+
+      <div class="wrap frontgrid">
+        <div class="frontgrid__main">
+          <!-- The three football desk bands. Section ids (#football-leagues, #transfer-desk,
+               #world-cup) are unchanged: the app's fallback share links resolve against them. -->
+          <!--archv:bands-->
+
+          <!--archv:library-->
+        </div>
+
+        <aside class="brief" aria-label="The desk brief">
+          <!--archv:brief-->
+        </aside>
+      </div>
+
+      <div class="appstrip">
+        <div class="wrap appstrip__inner">
+          <div>
+            <h2 class="appstrip__title">The archive, in your pocket</h2>
+            <p class="appstrip__copy">The daily desk, player duels and an archive game a day. Free on the App Store.</p>
           </div>
+          <a class="btn-solid" href="https://apps.apple.com/app/id6786508653">Download the app</a>
         </div>
-        <a class="hero__scroll" href="#football-leagues" aria-label="Scroll">
-          <span>Scroll</span><span class="hero__scroll-line" aria-hidden="true"></span>
-        </a>
-      </section>
+      </div>
 
-      <!-- 1. FOOTBALL LEAGUES -->
-      <section class="leagues dot-grid" id="football-leagues">
-        <div class="wrap">
-          <p class="section-index"><a class="section-index__link" href="/desk/leagues/">01 / Football leagues</a></p>
-          <h2 class="desk__title" data-reveal>The club season, documented.</h2>
-          <p class="desk__lede" data-reveal>Title races, promotions, sackings and the tables behind them. Checked against two sources before anything goes up. Scroll the days.</p>
-        </div>
-        <div class="rail day-rail" id="leagues-days" role="list" aria-label="Football leagues, daily wrap-ups"></div>
-      </section>
-
-      <!-- 2. THE TRANSFER DESK -->
-      <section class="desk dot-grid" id="transfer-desk">
-        <div class="wrap">
-          <p class="section-index"><a class="section-index__link" href="/desk/transfer/">02 / The transfer desk</a></p>
-          <h2 class="desk__title" data-reveal>The window, documented.</h2>
-          <p class="desk__lede" data-reveal>Every move, checked against two sources and drawn the same day. If it's done, we say done. If it's a rumour, we say rumour. Scroll the days.</p>
-        </div>
-        <div class="rail day-rail" id="transfer-days" role="list" aria-label="Transfer desk, daily wrap-ups"></div>
-        <!-- Static, crawlable links to the United history long-form pages. The SEO agent adds one line per page as it publishes. -->
-        <div class="wrap archive__reads">
-          <h3 class="archive__reads-title">Manchester United, in depth</h3>
-          <ul class="archive__reads-list" data-stagger>
-            <li><a href="/united/treble-1999/">The 1999 treble: how United did the impossible</a></li>
-            <li><a href="/united/class-of-92/">The Class of '92: the kids who won everything</a></li>
-            <li><a href="/united/united-european-nights/">United's great European nights</a></li>
-            <li><a href="/united/fergie-greatest-xi/">Ferguson's greatest XI, debated</a></li>
-            <li><a href="/united/united-record-signings/">Every time United broke the British transfer record</a></li>
-            <li><a href="/explainers/loan-with-obligation-to-buy-explained/">Loan with an obligation to buy, explained</a></li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 3. INTERNATIONAL FOOTBALL -->
-      <section class="worldcup dot-grid" id="world-cup">
-        <div class="wrap">
-          <p class="section-index"><a class="section-index__link" href="/desk/world-cup/">03 / International Football</a></p>
-          <h2 class="desk__title" data-reveal>Every day, documented.</h2>
-          <p class="desk__lede" data-reveal>Men's and women's international football, every competition, every day it's on. Checked against two sources before it goes up. Scroll the days.</p>
-        </div>
-        <div class="rail day-rail" id="worldcup-days" role="list" aria-label="International football, daily wrap-ups"></div>
-      </section>
-
-      <!-- BANNER BAND — animated brand plaque -->
-      <section class="banner-band" aria-hidden="true">
-        <img class="banner-band__img" src="/brand/banner.webp" alt="The ARCHV brand banner" width="2000" height="1117" loading="lazy" decoding="async" />
-      </section>
-
-      <!-- 4. THE ARCHIVE — poster gallery -->
+      <!-- 5. THE ARCHIVE — poster gallery -->
       <section class="archive" id="archive">
         <div class="wrap">
-          <p class="section-index">04 / The archive</p>
+          <p class="section-index">05 / The archive</p>
           <h2 class="archive__title" data-reveal>From the archive.</h2>
           <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it. Every final, Mexico 1970 through Lusail 2022. Drag to explore.</p>
         </div>
@@ -290,10 +272,10 @@
         </div>
       </section>
 
-      <!-- 5. LEGENDS — the ARCHV Legends Series profiles -->
+      <!-- 6. LEGENDS — the ARCHV Legends Series profiles -->
       <section class="legends" id="legends">
         <div class="wrap">
-          <p class="section-index">05 / Legends</p>
+          <p class="section-index">06 / Legends</p>
           <h2 class="killers__title" data-reveal>The Legends<span class="dot">.</span></h2>
           <p class="killers__lede" data-reveal>One football great, fully told. The players who bent the game to their will, drawn in the house style.</p>
           <ul class="legends__list" id="legends-grid" aria-label="Legends Series profiles" data-stagger></ul>
@@ -428,7 +410,7 @@
           <a href="https://open.spotify.com/show/2z628foL4d6swp2Z0RfQyD" target="_blank" rel="noopener noreferrer">Podcast</a>
           <a href="https://podcasts.apple.com/us/podcast/pros-in-the-arena/id1745668123" target="_blank" rel="noopener noreferrer">Apple Podcasts</a>
         </nav>
-        <p class="footer__tag">Football history, illustrated. Daily.</p>
+        <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
         <p class="footer__legal">
           The ARCHV is an independent football-history publication. We are not affiliated with, endorsed by, or connected to any governing body, confederation, league, club, or competition organiser. All club names, competition names, and tournaments are referenced for editorial and historical commentary only, and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs, and are published as editorial commentary. No official marks, crests, or competition logos are used. © 2026 The ARCHV. All original artwork and writing are our own.
         </p>
@@ -450,8 +432,5 @@
       Follow <strong>@thearchvfc</strong>
     </a>
 
-    <noscript>
-      <style>#webgl,.grain,.hero__scroll{display:none}</style>
-    </noscript>
   </body>
 </html>

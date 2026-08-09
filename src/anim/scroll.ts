@@ -44,10 +44,9 @@ function splitWords(el: HTMLElement): HTMLElement[] {
 
 // All scroll motion. Never called under prefers-reduced-motion (CSS shows everything).
 export function initScroll(): void {
-  // Hero is intentionally NOT hidden by JS. This module is dynamically imported, so
-  // gating hero visibility on it left the hero blank until the chunk loaded and the
-  // tween finished. The hero entrance is now a pure-CSS fade (.hero__inner in
-  // style.css) that paints immediately and is disabled under prefers-reduced-motion.
+  // Nothing here hides content. Every tween is a gsap.from(), so a motion layer that never
+  // loads leaves the page fully readable — which is also why the front page renders its
+  // stories server-side and this module only decorates them.
 
   // kinetic headline reveals: section titles split into words that rise out of a mask.
   // Sub-0.9s total, no bounce, fires once on scroll into view.
@@ -66,7 +65,6 @@ export function initScroll(): void {
 
   // generic scroll reveals for everything below the fold
   gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
-    if (el.closest('.hero')) return; // hero handled above
     if (el.matches(KINETIC_TITLES)) return; // kinetic titles handled above
     gsap.from(el, {
       opacity: 0,
@@ -113,38 +111,4 @@ export function initScroll(): void {
       },
     );
   });
-
-  // banner band: gentle parallax + reveal as it crosses the viewport
-  const banner = document.querySelector<HTMLElement>('.banner-band__img');
-  if (banner) {
-    gsap.fromTo(
-      banner,
-      { yPercent: -8, scale: 1.06, opacity: 0.55 },
-      {
-        yPercent: 8,
-        scale: 1,
-        opacity: 1,
-        ease: 'none',
-        scrollTrigger: { trigger: '.banner-band', start: 'top bottom', end: 'bottom top', scrub: true },
-      },
-    );
-  }
-
-  // masthead: hide on scroll down, reveal on scroll up
-  const masthead = document.querySelector<HTMLElement>('.masthead');
-  if (masthead) {
-    let last = 0;
-    ScrollTrigger.create({
-      start: 0,
-      end: 'max',
-      onUpdate: (self) => {
-        const y = self.scroll();
-        if (y > last && y > 200) masthead.classList.add('is-hidden');
-        else masthead.classList.remove('is-hidden');
-        last = y;
-      },
-    });
-  }
 }
-
-export { ScrollTrigger, gsap };

@@ -14,6 +14,13 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 
+// The ARCHV Dispatch, revived on Substack 2026-06-20 and the ONLY newsletter destination for
+// football and site content. There is a separate AI lane elsewhere in the workspace; nothing on
+// this site captures to it. One constant so the masthead link, the footer link, the read ladder
+// and the inline capture on every article page cannot drift apart.
+export const DISPATCH_URL = "https://thearchvdispatch.substack.com";
+export const DISPATCH_SUBSCRIBE_URL = `${DISPATCH_URL}/subscribe`;
+
 // The named author and editor of The ARCHV (founder decision, 2026-07-21; name FROZEN as
 // "Joseph Bankole" by founder ruling 2026-08-04 - do not vary it, and never introduce a second
 // spelling anywhere on the site). Single source of truth for both halves of the byline: the
@@ -453,7 +460,12 @@ export const POSTHOG_SCRIPT_HASH = scriptHash(extractScriptBody(posthogSnippet()
 // body's hash on THAT page (masthead + PostHog are shared; build-article-pages.mjs also
 // passes a per-page hash for its share-row script, which embeds that page's own url/title
 // and so is NOT identical across pages - verified: it must be computed per page, not once).
-export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null } = {}) {
+// `forms` narrows form-action to a named allowlist. It is opt-in rather than a default because
+// form-action has NO fallback to default-src: a page that omits it can post anywhere, which is
+// the status quo every page here shipped with. Article pages pass the Dispatch (the inline email
+// capture posts to Substack) and get 'self' with it; every other family stays as it was rather
+// than being silently tightened by a change made for one page.
+export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null, forms = null } = {}) {
   const scriptSrc = ["'self'", ...scripts.map((h) => `'${h}'`)];
   if (posthog) scriptSrc.push("https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com");
   const styleSrc = ["'self'", "'unsafe-inline'"]; // inline style="" attrs (e.g. the hidden App Store link)
@@ -473,6 +485,7 @@ export function cspMeta({ scripts = [], posthog = false, googleFonts = false, fr
     `base-uri 'self'`,
     `object-src 'none'`,
     `frame-src ${frameSrc.join(" ")}`,
+    ...(forms ? [`form-action 'self' ${forms.join(" ")}`] : []),
   ].join("; ");
   return `<meta http-equiv="Content-Security-Policy" content="${content}" />`;
 }

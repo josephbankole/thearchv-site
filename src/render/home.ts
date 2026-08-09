@@ -434,10 +434,10 @@ export function renderToday(): string {
     // The headline carries its own full stop (the desks file period-terminated headlines), so it
     // goes last and ends the sentence rather than colliding with a comma.
     const pointer = latest
-      ? ` The last entry up went in on ${esc(longDate(latest.entry.date))}: <a href="${esc(latest.path)}${esc(latest.entry.date)}/">${esc(latest.entry.headline)}</a>`
+      ? ` The last entry went up on ${esc(longDate(latest.entry.date))}: <a href="${esc(latest.path)}${esc(latest.entry.date)}/">${esc(latest.entry.headline)}</a>`
       : '';
     return `${head}
-        <p class="today__none">Nothing filed yet today. A desk files when it has something two sources agree on, and skips the day when it does not.${pointer}</p>`;
+        <p class="today__none">Nothing filed yet today. The desks file when two independent sources agree on something, and stay quiet otherwise.${pointer}</p>`;
   }
 
   const items = filed

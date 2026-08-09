@@ -98,7 +98,9 @@
         _tw: ' ' + t + ' ',
         _d: dek,
         _dw: ' ' + dek + ' ',
-        _l: fold(d.lane)
+        // The lane name and the date share one haystack. The date is in it because the page says
+        // a reader can search by year, and a claim on the page has to be true of the code.
+        _l: fold(d.lane + ' ' + (d.date || ''))
       };
     });
   }
@@ -163,6 +165,19 @@
     if (cursor < text.length) el.appendChild(document.createTextNode(text.slice(cursor)));
   }
 
+  /* "9 Aug 2026", the same short form the front-page cards use. The index carries the ISO date
+     because that is what sorts and what the year search matches; a result row printing
+     2026-08-09 at a reader would be the one place on the site that does. Formatted by hand
+     rather than through toLocaleDateString, which would apply the reader's own timezone to a
+     date-only value and slide it a day for anyone behind UTC. */
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function shortDate(iso) {
+    var parts = String(iso).split('-');
+    var month = MONTHS[parseInt(parts[1], 10) - 1];
+    if (parts.length < 3 || !month) return iso;
+    return parseInt(parts[2], 10) + ' ' + month + ' ' + parts[0];
+  }
+
   function row(doc, qTokens) {
     var li = document.createElement('li');
     li.className = 'sresult';
@@ -173,7 +188,7 @@
 
     var kicker = document.createElement('span');
     kicker.className = 'sresult__kicker';
-    kicker.textContent = doc.date ? doc.lane + ' · ' + doc.date : doc.lane;
+    kicker.textContent = doc.date ? doc.lane + ' \u00b7 ' + shortDate(doc.date) : doc.lane;
     a.appendChild(kicker);
 
     var h = document.createElement('span');

@@ -174,7 +174,7 @@ const clientVersion = shortHash(readFileSync(clientPath));
 const URL_SELF = `${SITE}/search/`;
 const TITLE = "Search the archive";
 const LEDE =
-  "Every desk entry, long read, final, explainer, glossary term and legend on this site, searchable by name, club, competition or date. It runs in your browser: nothing you type here is sent anywhere.";
+  "Every desk entry, long read, final, explainer, glossary term and legend on the site, searchable by name, club, competition or year. There is no server here to ask, so your browser downloads the index once and does the matching itself.";
 
 // The browse list under the empty field. A search page that shows a blank box and nothing else
 // asks a reader to guess what is in the archive; this tells them.
@@ -309,15 +309,15 @@ const page = `<!doctype html>
       <ul class="search__results" id="search-results" aria-label="Search results"></ul>
 
       <div class="search__browse" id="search-browse">
-        <h2 class="search__browse-title">Or start somewhere</h2>
+        <h2 class="search__browse-title">Or start from a desk</h2>
         <ul class="search__browse-list">
           ${BROWSE.map(([href, label]) => `<li><a href="${escAttr(href)}">${esc(label)}</a></li>`).join("\n          ")}
         </ul>
-        <p class="search__note">${docs.length} pages in the index, rebuilt with the site every morning.</p>
+        <p class="search__note">${docs.length} pages in the index, rebuilt with the site.</p>
       </div>
 
       <noscript>
-        <p class="search__note">Search needs JavaScript, because there is no server here to ask: the index is a file your browser reads. Every desk and section is linked above, and each one lists its entries in full.</p>
+        <p class="search__note">Search needs JavaScript, which is not running here. The desks and sections above list every entry in full.</p>
       </noscript>
     </section>
   </main>

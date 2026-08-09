@@ -19,6 +19,7 @@ import { leaguesDays } from '../data/leaguesDays';
 import { legends } from '../data/legends';
 import { longReads } from '../data/longReads';
 import { readPath } from '../data/readSlug';
+import { readLabel } from '../lib/readTime';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
 import { entryArt, PLAYERS } from './illustrated';
@@ -209,7 +210,7 @@ export function renderLead(): string {
         <span class="kicker">${esc(lane.label)} &middot; ${esc(longDate(entry.date))}</span>
         <h1 class="lead__title"><a href="${esc(url)}" data-desk-card data-lane="${esc(lane.key)}" data-date="${esc(entry.date)}" data-day="${esc(entry.day)}">${esc(entry.headline)}</a></h1>
         <p class="lead__dek">${esc(entry.dek)}</p>
-        <p class="lead__meta"><span>Filed by <b>${esc(lane.desk)}</b></span><span>Checked against <b>two sources</b></span><span>Read in <b>under a minute</b></span></p>
+        <p class="lead__meta"><span>Filed by <b>${esc(lane.desk)}</b></span><span>Checked against <b>two sources</b></span><span><b>${esc(readLabel(entry.dek, entry.body))}</b></span></p>
         <p class="lead__cta"><a class="btn-solid" href="${esc(url)}">Read the story</a><a class="btn-ghost" href="/desk/${esc(lane.urlLane)}/">Every ${esc(lane.label)} story</a></p>
       </div>
       <aside class="lead__panel" aria-label="How this desk works">
@@ -240,7 +241,7 @@ function renderBand(lane: Lane, skip: DayEntry | null): string {
               ${chip(entry)}
               <h3 class="fcard__headline"><a href="${esc(url)}" data-desk-card data-lane="${esc(lane.key)}" data-date="${esc(entry.date)}" data-day="${esc(entry.day)}">${esc(entry.headline)}</a></h3>
               <p class="fcard__dek">${esc(entry.dek)}</p>
-              <p class="fcard__foot"><span>${esc(shortDate(entry.date))}</span><span>${esc(lane.desk)}</span></p>
+              <p class="fcard__foot"><span>${esc(shortDate(entry.date))}</span><span>${esc(lane.desk)}</span><span>${esc(readLabel(entry.dek, entry.body))}</span></p>
             </article>`;
     })
     .join('\n            ');

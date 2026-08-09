@@ -39,6 +39,9 @@ const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH],
 const entrySrc = [
   `export { longReads } from "./data/longReads.ts";`,
   `export { readSlug, readPath } from "./data/readSlug.ts";`,
+  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
+  // the bundle this script already builds rather than being reimplemented here in .mjs.
+  `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".reads-bundle.mjs");
 let data;
@@ -48,7 +51,7 @@ try {
   data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
 } finally { try { rmSync(tmp); } catch {} }
 
-const { readSlug, readPath } = data;
+const { readSlug, readPath, readLabel, readDuration, wordCount } = data;
 // Newest first, matching every other lane on the site. The array is committed in that order but
 // nothing in the type enforces it, so sort rather than trust — same reasoning as byDateDesc.
 const reads = [...data.longReads].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
@@ -165,6 +168,9 @@ ${head({
         author: ORG_REF,
         publisher: ORG_REF,
         image: `${SITE}/og.jpg`,
+        // Same helper as the visible "N min read" on the page and on the /reads/ front card.
+        wordCount: wordCount(read.body),
+        timeRequired: readDuration(read.body),
         mainEntityOfPage: url,
       },
       {
@@ -185,7 +191,7 @@ ${head({
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${INDEX_PATH}">Long reads</a></p>
       <p class="article__eyebrow">${esc(read.kicker)}</p>
       <h1>${esc(read.title)}</h1>
-      <p class="article__meta">${esc(read.meta)} · ${esc(longDate(read.date))}</p>
+      <p class="article__meta">${esc(read.meta)} · ${esc(longDate(read.date))} · ${esc(readLabel(read.body))}</p>
       <div class="article__body">
         ${paras(read.body)}
       </div>
@@ -243,7 +249,7 @@ ${head({
       <p class="lane__lede">${esc(INDEX_LEDE)}</p>
       <ul class="lane-list" aria-label="Long reads, newest first">
         ${reads
-          .map((r) => `<li><a class="lane-card" href="${escAttr(readPath(r.title))}"><span class="lane-card__body"><span class="lane-card__kicker">${esc(r.kicker)} · ${esc(longDate(r.date))}</span><span class="lane-card__headline">${esc(r.title)}</span><span class="lane-card__dek">${esc(r.meta)}</span></span></a></li>`)
+          .map((r) => `<li><a class="lane-card" href="${escAttr(readPath(r.title))}"><span class="lane-card__body"><span class="lane-card__kicker">${esc(r.kicker)} · ${esc(longDate(r.date))} · ${esc(readLabel(r.body))}</span><span class="lane-card__headline">${esc(r.title)}</span><span class="lane-card__dek">${esc(r.meta)}</span></span></a></li>`)
           .join("\n        ")}
       </ul>
     </section>

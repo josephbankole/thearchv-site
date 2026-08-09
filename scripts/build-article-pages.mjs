@@ -40,6 +40,9 @@ const entrySrc = [
   `export { f1Days } from "./data/f1Days.ts";`,
   `export { tennisDays } from "./data/tennisDays.ts";`,
   `export { golfDays } from "./data/golfDays.ts";`,
+  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
+  // the bundle this script already builds rather than being reimplemented here in .mjs.
+  `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".article-bundle.mjs");
 let data;
@@ -61,6 +64,7 @@ const SPORT_DAYS = {
   tennis: [...data.tennisDays].sort(byDateDesc),
   golf: [...data.golfDays].sort(byDateDesc),
 };
+const { readLabel, readDuration, wordCount } = data;
 
 // A "section" is one sport+lane's article surface. `base` is the path prefix under which its
 // articles live (leading and trailing slash), `anchor` is what the breadcrumb and "more" link
@@ -214,6 +218,11 @@ function schema(entry, url, label, faq, images) {
         // fixed 2026-08-06 — image previously pointed at the headshot). Falls back to the
         // site-wide /og.jpg only when card generation failed for this entry.
         image: images,
+        // Derived from the entry's own words by src/lib/readTime.ts, the same helper that prints
+        // "N min read" in the meta line below and on every card that links here, so the page and
+        // its structured data can never quote a reader two different numbers.
+        wordCount: wordCount(entry.dek, entry.body),
+        timeRequired: readDuration(entry.dek, entry.body),
         mainEntityOfPage: url,
       },
   ];
@@ -515,7 +524,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
               // Same resolution chain as the article's own figure, at the smaller card size.
               // The alt is never empty: these are content headshots inside a link, not chrome.
               const avatar = cardArt(e, { className: "more-card__avatar", size: 44 });
-              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
+              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))} · ${esc(readLabel(e.dek, e.body))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
             })
             .join("\n          ")}
         </ul>
@@ -575,7 +584,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
       <p class="article__byline">By <a href="${escAttr(AUTHOR_URL)}" rel="author">${esc(AUTHOR_NAME)}</a></p>
-      <p class="article__meta">${esc(longDate(entry.date))}</p>
+      <p class="article__meta">${esc(longDate(entry.date))} &middot; ${esc(readLabel(entry.dek, entry.body))}</p>
       <div class="share" aria-label="Share this article">
         <button class="btn btn--ghost" id="share-native" type="button" hidden>Share</button>
         <a class="btn btn--ghost" id="share-x" href="${escAttr(xIntent)}" target="_blank" rel="noopener noreferrer">Share on X</a>

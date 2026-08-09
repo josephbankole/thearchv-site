@@ -46,6 +46,9 @@ const entrySrc = [
   `export { f1Days } from "./data/f1Days.ts";`,
   `export { tennisDays } from "./data/tennisDays.ts";`,
   `export { golfDays } from "./data/golfDays.ts";`,
+  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
+  // the bundle this script already builds rather than being reimplemented here in .mjs.
+  `export { readLabel } from "./lib/readTime.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".lane-bundle.mjs");
 let data;
@@ -69,6 +72,7 @@ const SPORT_DAYS = {
   tennis: [...data.tennisDays].sort(byDateDesc),
   golf: [...data.golfDays].sort(byDateDesc),
 };
+const { readLabel } = data;
 
 // Intro copy (SEO/AEO pass, UNIT 2, 2026-07-14): each lane's cards carried little or no
 // crawlable prose above them, so every intro now states what the lane covers (keyword-bearing,
@@ -89,7 +93,7 @@ function laneCard(entry, laneKey) {
   // filed image first and falls back to a banked portrait or the club badge (phase 2B). Before
   // that, a lane front was a wall of text on every day the desk filed no image field.
   const avatar = cardArt(entry);
-  return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
+  return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))} · ${esc(readLabel(entry.dek, entry.body))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
 }
 
 // Compact "From the glossary" strip: the lane's 2-3 relevant terms, linked to their glossary
@@ -219,7 +223,7 @@ function renderSportLane(sport, laneKey) {
 
   const rail = days.length
     ? `<ul class="lane-list" aria-label="${escAttr(`${sport.label} ${laneLabel}`)}, newest first">
-        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${cardArt(entry)}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
+        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${cardArt(entry)}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))} · ${esc(readLabel(entry.dek, entry.body))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
       </ul>`
     : `<div class="sport-holding"><p>${esc(copy.holding)}</p></div>`;
 

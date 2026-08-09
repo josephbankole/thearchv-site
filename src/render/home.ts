@@ -202,14 +202,14 @@ export function renderLead(): string {
         <h1 class="lead__title"><a href="${esc(url)}" data-desk-card data-lane="${esc(lane.key)}" data-date="${esc(entry.date)}" data-day="${esc(entry.day)}">${esc(entry.headline)}</a></h1>
         <p class="lead__dek">${esc(entry.dek)}</p>
         <p class="lead__meta"><span>Filed by <b>${esc(lane.desk)}</b></span><span>Checked against <b>two sources</b></span><span>Read in <b>under a minute</b></span></p>
-        <p class="lead__cta"><a class="btn-solid" href="${esc(url)}">Read the story</a><a class="btn-ghost" href="/desk/${esc(lane.urlLane)}/">All ${esc(lane.label.toLowerCase())} stories</a></p>
+        <p class="lead__cta"><a class="btn-solid" href="${esc(url)}">Read the story</a><a class="btn-ghost" href="/desk/${esc(lane.urlLane)}/">Every ${esc(lane.label)} story</a></p>
       </div>
       <aside class="lead__panel" aria-label="How this desk works">
         <span class="index-stamp">The ARCHV &middot; as of ${esc(longDate(entry.date))}</span>
         <h2 class="lead__panel-title">The desk, in numbers</h2>
         <ul class="lead__figures">
           <li><span>Football entries in the archive</span><b>${items.length}</b></li>
-          <li><span>Desks filing every morning</span><b>${LANES.length}</b></li>
+          <li><span>Football desks</span><b>${LANES.length}</b></li>
           <li><span>Photographs used</span><b>0</b></li>
         </ul>
         ${art}
@@ -242,7 +242,7 @@ function renderBand(lane: Lane, skip: DayEntry | null): string {
             <p class="band__index">${esc(lane.index)}</p>
             <h2 class="band__title"><a href="/desk/${esc(lane.urlLane)}/">${esc(lane.label)}</a></h2>
             <span class="band__rule" aria-hidden="true"></span>
-            <a class="band__more" href="/desk/${esc(lane.urlLane)}/">All ${esc(lane.label.toLowerCase())} &rarr;</a>
+            <a class="band__more" href="/desk/${esc(lane.urlLane)}/">More from ${esc(lane.label)} &rarr;</a>
           </div>
           <p class="band__blurb">${esc(lane.blurb)}</p>
           <div class="fcards">
@@ -289,13 +289,13 @@ export function renderBrief(): string {
     )
     .join('\n            ');
   return `<h2 class="brief__title">The Desk Brief</h2>
-        <p class="brief__sub">Filed by the morning desk</p>
+        <p class="brief__sub">The three football desks, newest first</p>
         <ul class="brief__list">
             ${lines}
         </ul>
         <div class="brief__cta">
-          <h3>One sourced desk, every morning</h3>
-          <p>The long reads go out on the Dispatch, free.</p>
+          <h3>The ARCHV Dispatch</h3>
+          <p>The long reads go out free on Substack.</p>
           <a class="btn-ghost" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Read the Dispatch</a>
         </div>`;
 }

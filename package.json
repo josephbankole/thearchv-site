@@ -6,7 +6,8 @@
   "description": "The ARCHV — Football history, illustrated. The owned site for @thearchvfc.",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/check-csp-hash.mjs && tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/build-section-pages.mjs && node scripts/build-reads-pages.mjs && node scripts/build-infograms.mjs && node scripts/build-feed.mjs && node scripts/build-day-pages.mjs && node scripts/build-lane-pages.mjs && node scripts/build-article-pages.mjs && node scripts/build-rss.mjs && node scripts/build-news-sitemap.mjs && node scripts/build-author-page.mjs && node scripts/build-sport-pages.mjs && node scripts/build-glossary-pages.mjs && node scripts/build-standards-page.mjs && node scripts/build-duel-pages.mjs && node scripts/build-archive-game.mjs && node scripts/build-search.mjs && node scripts/verify-csp-pages.mjs",
+    "build": "node scripts/check-csp-hash.mjs && tsc --noEmit && node scripts/build-crest.mjs && vite build && node scripts/build-content.mjs && node scripts/build-section-pages.mjs && node scripts/build-reads-pages.mjs && node scripts/build-infograms.mjs && node scripts/build-feed.mjs && node scripts/build-day-pages.mjs && node scripts/build-lane-pages.mjs && node scripts/build-article-pages.mjs && node scripts/build-rss.mjs && node scripts/build-news-sitemap.mjs && node scripts/build-author-page.mjs && node scripts/build-sport-pages.mjs && node scripts/build-glossary-pages.mjs && node scripts/build-standards-page.mjs && node scripts/build-duel-pages.mjs && node scripts/build-archive-game.mjs && node scripts/build-search.mjs && node scripts/verify-csp-pages.mjs",
+    "crest": "node scripts/build-crest.mjs",
     "sports": "node scripts/build-sport-pages.mjs",
     "check-csp": "node scripts/check-csp-hash.mjs",
     "verify-csp": "node scripts/verify-csp-pages.mjs",

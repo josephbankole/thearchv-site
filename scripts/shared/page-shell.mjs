@@ -325,7 +325,7 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 // script is untouched, so MASTHEAD_SCRIPT_HASH and every football page's CSP stay identical.
 export function masthead(currentSportKey = DEFAULT_SPORT) {
   return `<header class="masthead">
-    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
+    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <div class="masthead__actions">
       <a class="masthead__search" href="/search/" aria-label="Search the archive">
         <svg class="masthead__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="6.8" cy="6.8" r="4.9" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="M10.5 10.5 L14.4 14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>

@@ -438,10 +438,46 @@ system, brought in Anton, and moved the front page from JS-built rails to build-
 2B put the illustrated registry behind every article and card template, server-rendered the
 legends wall and the long reads, re-arted the share cards to match, and swept the last
 hard-coded navy out of the generators. What it did NOT do, and what a later pass should pick
-up: the brand crest is still the pre-flip navy, gold and green mark carrying a football, and
-it is on the front page footer and in the Organization `logo`; the infogram story cards are
-still navy; and the ARCHV badge set is three clubs, which is why a card about Newcastle United
-gets no mark. **The dead weight that list also named is cleared as of phase 3 (2026-08-09):**
+up: the ARCHV badge set is three clubs, which is why a card about Newcastle United gets no
+mark. The infogram story cards are still navy, and that is deliberate rather than outstanding
+(a founder-approved poster format, not a share preview of a page). **The crest is DONE as of
+2026-08-09 — see the crest section below.**
+
+## The crest, and the one rule about it (2026-08-09)
+
+The mark is **option 02, the monogram**, founder-picked from `../brand-crest-2026-08/`: one
+Anton A at full field height, its crossbar overprinted by an accent rule, the name moved out to
+the ring. It replaced the navy disc with the double gold ring and the football in the middle,
+which was both the wrong colour system after phase 2A and the wrong sport after 22 July.
+
+**`scripts/build-crest.mjs` is the only thing allowed to make a crest asset.** It runs in
+`npm run build` before `vite build`, and on its own as `npm run crest`. Before it existed,
+`brand-assets.mjs` built the two `logo-badge` files and **nothing at all** built the five
+`crest-badge` files or any favicon: they were made by hand, off-repo, so a brand change meant
+redoing that by hand and hoping. Thirteen assets now come off one source. Do not hand-edit a
+file in `public/brand/` or a favicon; edit the SVG and re-run.
+
+- Source of truth: `scripts/brand/crest-monogram-{light,ink}.svg`. Same geometry, two
+  colourways, both needed. On the ink ground the wordmark's THE/ARCHV colour split cannot clear
+  AA, so the dark colourway is its own drawing rather than a filter over the light one.
+- Every element carries a `data-crest` role, and the generator cuts two variants by keeping or
+  dropping roles. **full** is everything, for 192px and up. **compact** drops the ring type, the
+  dots and the keyline, for 180px and down: ring type stops being legible around 120px and the
+  2.5px keyline is a sixteenth of a pixel at favicon scale, so at small sizes they are not
+  detail, they are grey. That is why the mark still reads at 16px.
+- The `ground` role is the full-bleed square behind the disc. Dropped for in-page crests, so
+  they sit on white or on the sunken grey with no visible corner. Kept for the favicons and the
+  apple-touch icon, because iOS composites a transparent touch icon onto black.
+- **The `crest-badge*` family is the light colourway and the `crest-badge-ink*` files are the
+  dark one.** Two surfaces are still dark by design and read the ink files: the infogram story
+  cards and the `/lab/` landing page, which declares its own dark `:root`. Point a new dark
+  surface at `crest-badge-ink@512.png`, never at `crest-badge@512.png`.
+- Alt text is "The ARCHV monogram" on every crest `<img>` on the site, with the single
+  deliberate exception of the `/lab/` room crest, which is `alt="" aria-hidden="true"` because
+  the wordmark beside it already names the brand. `check-img-alt.mjs` documents that exclusion.
+- The retired navy marks are archived at `scripts/brand/_superseded/` with a note. They sit
+  under `scripts/` rather than `public/` on purpose: Vite copies `public/` into `dist/`, so
+  keeping them there would publish about 1.2 MB of dead weight to every visitor. **The dead weight that list also named is cleared as of phase 3 (2026-08-09):**
 `three` and `@types/three` are out of `package.json`, `src/components/giantKillers.ts` is
 deleted (its data file stays, `scripts/build-feed.mjs` reads it), and `src/anim/reveal.ts` is
 removed with its CSS — see the Tier 0 section for why and what survives.

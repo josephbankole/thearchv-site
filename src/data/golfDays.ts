@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-10",
+    day: "Monday",
+    headline: "Who won the 2026 Wyndham Championship?",
+    dek: "Michael Brennan won the 2026 Wyndham Championship at Sedgefield Country Club on Sunday 9 August, closing with a 6-under 64 to finish 22 under and take his second PGA Tour title.",
+    body: "Michael Brennan won the 2026 Wyndham Championship on Sunday 9 August, and he won it the hard way to watch and the easy way to read: five consecutive birdies to pull clear of Beau Hossler, a closing 6-under 64, and a 22-under total of 258 that matched the tournament record at Sedgefield Country Club in Greensboro, North Carolina. The Washington Post, Golf Channel and Yahoo Sports all carried the result.\n\nIt is his second PGA Tour title in two years, and it booked his place in the FedExCup playoffs at the last possible moment, because the Wyndham Championship was the final event of the regular season.\n\nBrennan has been threatening a week like this all summer. At the Rocket Classic in July he made eight consecutive birdies in a single round, one short of the PGA Tour record, and still finished behind the winner. On Sunday the same streak arrived with the lead on the line.\n\nThe playoff field is now set. The top 70 in the FedExCup standings advance, and The Golf News Net published the full list of 70 on Sunday night, each of them also securing a PGA Tour card for 2027. From here the season narrows quickly: the FedEx St. Jude Championship at TPC Southwind in Memphis runs Thursday 13 to Sunday 16 August, the BMW Championship cuts the field to 50, and the Tour Championship at East Lake takes 30.\n\nThe first playoff tee shot is on Thursday.\n\nSources: The Washington Post, Golf Channel and Yahoo Sports on the final round and result; The Golf News Net on the finalised top 70 and the 2027 cards; Golf Channel on the playoff schedule and format; PGA Tour official round-one report from the Rocket Classic on Brennan's eight-birdie run.",
+    status: "verified",
+  },
+  {
     date: "2026-08-06",
     day: "Thursday",
     headline: "Who is Jackson Koivun, the 21-year-old who beat Scottie Scheffler in his third professional start?",

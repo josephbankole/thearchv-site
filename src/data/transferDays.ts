@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-10",
+    day: "Monday",
+    headline: "Manchester United are ready to talk at £80m for Alex Scott.",
+    dek: "Manchester United are preparing formal talks with AFC Bournemouth over Alex Scott and are considering an offer at the club's £80m valuation. David Ornstein expects one more midfielder, and Brighton's Carlos Baleba is the named fallback.",
+    body: "Manchester United are preparing to open formal talks with AFC Bournemouth for Alex Scott, and are considering an offer at the £80m the club have put on him. Football Today and Yahoo Sports report Michael Carrick has signed off on the pursuit, with Scott top of the midfield shortlist. TEAMtalk carry the same valuation. (REPORTED)\n\nThe structural case comes from David Ornstein. His line is that Manchester United expect one more midfielder this window, \"which has always been the plan\", after the £50m Andrey Santos deal and the £35m Youri Tielemans release clause. Ornstein reports the recruitment staff love Scott, and that AFC Bournemouth do not want to sell at all this summer.\n\nThe lever is the contract. Football365 report Scott has rejected a new deal at AFC Bournemouth. A club that will not sell holding a player who will not sign is a stand-off, and the £80m is the price of ending it.\n\nThe queue behind Manchester United is real. Arsenal had a formal enquiry knocked back last week and spent £75m on Bruno Guimaraes instead, confirmed by Arsenal on their own channels on 8 August. Manchester City have approached AFC Bournemouth directly in recent weeks, per Yahoo Sports, and Pep Guardiola has called Scott an \"unbelievable player\" in public.\n\nScott, 22, made 37 appearances in 2025/26 as AFC Bournemouth qualified for European football for the first time in the club's 127-year history. He cost around £25m from Bristol City in 2023. If AFC Bournemouth hold out, Ornstein names Brighton's Carlos Baleba as the club Manchester United could go back to.\n\nThe left-back search runs colder: Ornstein does not expect Lewis Hall to arrive, with Newcastle United set on keeping him. The window closes at 23:00 BST on Tuesday 1 September 2026.\n\nSources: Football Today and Yahoo Sports on the formal talks and Carrick's approval; TEAMtalk on the £80m valuation; David Ornstein, carried by Football365 and TEAMtalk, on the one-more-midfielder plan, the Scott interest, the Baleba fallback and the Hall position; Football365 on the rejected contract; Arsenal official on the Guimaraes signing; Yahoo Sports on the Manchester City approach.",
+    status: "verified",
+    image: "/heads/scott.webp",
+    imageAlt: "Brand-illustrated portrait of AFC Bournemouth midfielder Alex Scott in the ARCHV navy and gold house style.",
+  },
+  {
     date: "2026-08-09",
     day: "Sunday",
     headline: "David Ornstein now has the Lewis Hall move looking unlikely.",

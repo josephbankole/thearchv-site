@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-11",
+    day: "Tuesday",
+    headline: "Newcastle United have said no on Lewis Hall.",
+    dek: "Newcastle United have told Manchester United that Lewis Hall is not for sale in the 2026 summer window, per Sky Sports. Fabrizio Romano reports Racing de Santander's Jorge Salinas has been offered as the fallback.",
+    body: "Newcastle United have answered the question that has hung over Manchester United's window for two weeks. Sky Sports report the club have told Manchester United that Lewis Hall is not for sale this summer, and that it would take an offer north of 60m pounds to move the conversation at all. David Ornstein, on The Athletic FC podcast, says he does not expect Hall to join Manchester United this window, with Newcastle United's resolve hardened since Eddie Howe left.\n\nThe pursuit was real. Fabrizio Romano reported on 1 August that Manchester United had internally approved the signing, with an opening proposal of around 60m pounds being prepared. Ben Jacobs reported at the same time that there had been no club-to-club contact, and no bid has been reported since.\n\nGoal report Hall left Newcastle United's training camp in Spain early and flew home while the story ran. Nothing about the club's position travelled with him.\n\nThe context is what makes the refusal notable. Newcastle United have sold Sandro Tonali to Tottenham Hotspur, Anthony Gordon to Barcelona and Bruno Guimaraes to Arsenal this summer, and lost their head coach. The line has been drawn at the left-back.\n\nManchester United have signed Andrey Santos, Youri Tielemans and Karl Darlow this window and loaned Altay Bayindir to Celta Vigo, and left-back is the one open brief. The window closes at 23:00 BST on Tuesday 1 September, and the league season opens at Hull City on Saturday 22 August at 12:30.\n\nSo the fallback is already moving. Fabrizio Romano reports that Jorge Salinas, a 19-year-old left-back at Racing de Santander, has been offered to Manchester United. TEAMtalk call him the Plan B behind Hall and report a release clause of around 16m pounds. Each of those claims stands on one named source.\n\nSources: Sky Sports (Hall not for sale, 60m pound demand); David Ornstein via The Athletic FC podcast; Goal (training camp departure); Fabrizio Romano (internal approval on 1 August, Salinas offered); TEAMtalk (Salinas as Plan B, release clause); Arsenal official and TNT Sports (Guimaraes); prior verified desk entries and club statements (Tonali, Gordon, Santos, Tielemans, Darlow, Bayindir); Premier League official and ESPN (opening fixture).",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Lewis Hall, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-08-10",
     day: "Monday",
     headline: "Manchester United are ready to talk at £80m for Alex Scott.",

@@ -4,7 +4,7 @@ slug: "how-transfer-fees-are-actually-paid"
 section: "explainers"
 eyebrow: "ARCHV Explains · Transfer mechanics"
 datePublished: "2026-08-08"
-description: "The headline fee is one number and almost never the number that moves. Instalments, amortisation, add-ons, sell-on clauses, the FIFA solidarity mechanism and agent fees, worked through the £75m Arsenal paid Newcastle United for Bruno Guimaraes."
+description: "The £75m Arsenal agreed with Newcastle United for Bruno Guimaraes: instalments, amortisation, add-ons, sell-on clauses and the 5% solidarity cut."
 quickAnswer: "A transfer fee is rarely paid in one go. It is normally split into instalments over two to five years, spread across a club's accounts by amortisation, topped up by add-ons, and reduced by sell-on clauses and the FIFA solidarity mechanism. The headline number is the total, not the cheque."
 players: ["Bruno Guimaraes"]
 ogImage: "/og.jpg"
@@ -45,7 +45,7 @@ This was, for a while, the most exploitable rule in the sport. Because the slice
 
 It was closed from 1 July 2023 for UEFA competitions, and Premier League clubs voted in December 2023 to bring their own rules into line, capping amortisation at five years however long the contract runs. Inside World Football carried the vote. A ten-year contract is now allowed and pointless, at least for this purpose.
 
-The cap matters more than it sounds. It sets a floor under what any signing costs per season, which means a club near its spending limit can no longer buy time by buying length.
+The cap sets a floor under what any signing costs per season. A club near its spending limit can no longer buy time by buying length.
 
 ## Add-ons: the fee that has not happened yet
 
@@ -61,13 +61,13 @@ Manchester United's signing of Andrey Santos from Chelsea in the same window is 
 
 A sell-on clause entitles a selling club to a share of what the buying club later receives for the same player. It is the mechanism that lets a smaller club keep a stake in a career it can no longer afford to own.
 
-The important distinction, and the one almost every report blurs, is what the percentage is a percentage of.
+Reports rarely say what the percentage is a percentage of, and that term decides the money.
 
 A fee-based sell-on takes a share of the next transfer fee. A profit-based sell-on takes a share only of the gain, meaning the next fee minus what the selling club originally paid. The second is far more common and far cheaper, and it produces very different money.
 
-Guimaraes is a clean worked example. Olympique Lyonnais sold him to Newcastle United in January 2022, at a fee Goal reported at around £33m, and kept 20% of any profit Newcastle United later made on him. Newcastle United sold at £75m. Sky Sports puts the resulting sell-on payment at £6m to £7m; the Irish Times puts it at about €8m. Neither figure is a club disclosure, and the two are close enough to be describing the same cheque converted differently.
+Guimaraes is a clean worked example. Olympique Lyonnais sold him to Newcastle United in January 2022, at a fee Goal reported at around £33m, and kept 20% of any profit Newcastle United later made on him. Newcastle United sold at £75m. Sky Sports puts the resulting sell-on payment at £6m to £7m; the Irish Times puts it at about €8m. Neither figure is a club disclosure, and the two are close enough to be describing the same cheque converted differently: €8m is roughly £6.8m, inside the Sky Sports range. The raw arithmetic on the reported numbers, 20% of a £33m-to-£75m gain, comes out a little higher at £8.4m; the gap is whatever the clause lets Newcastle United deduct before the profit is struck, and those terms have not been published.
 
-Now run the other version. Twenty per cent of the fee rather than the profit would be £15m on a £75m sale. Same clause, same percentage, one word different, and roughly double the money. Olympique Lyonnais gave that word away in 2022, and on this deal it cost them more than most transfers do.
+Now run the other version. Twenty per cent of the fee rather than the profit would be £15m on a £75m sale. Same clause, same percentage, one word different, and more than twice the money actually changing hands. Olympique Lyonnais gave that word away in 2022, and on this deal it cost them more than most transfers do.
 
 Chelsea did the paperwork better. On the Andrey Santos sale they kept a 10% sell-on, reported by Sky Sports and ESPN, so a club that has already banked £48m still owns a slice of wherever he goes after Old Trafford. He is 22. That clause could comfortably outlive the contract he has just signed.
 
@@ -93,7 +93,7 @@ Nearly half a billion pounds, in one division, in one year, for representation. 
 
 Take the £75m at face value and follow it.
 
-Newcastle United do not receive £75m. They receive £75m minus the 5% solidarity share, minus £6m to £8m to Olympique Lyonnais, arriving across two or three years depending on which report is right. Arsenal do not spend £75m this season. They spend an amortisation slice of it, capped at a fifth of the fee, plus wages, plus whatever the agents were paid to make it happen.
+Newcastle United do not receive £75m. They receive £75m minus the 5% solidarity share, minus £6m to £7m to Olympique Lyonnais, arriving across two or three years depending on which report is right. Arsenal do not spend £75m this season. They spend an amortisation slice of it, at least a fifth of the fee a season under the five-year cap, plus wages, plus whatever the agents were paid to make it happen.
 
 That is one announced number and at least six mechanisms deciding what it actually means, none of which appear on the graphic.
 
@@ -111,4 +111,4 @@ So the fix, such as it is, sits with the people reading. When the next fee lands
 
 ---
 
-*Reporting and sourcing: Guimaraes fee and agreement per Sky Sports and ESPN, 5 August 2026. Andrey Santos fee, the £48m and £2m split and Chelsea's 10% sell-on per Manchester United's own announcement, Sky Sports and ESPN. Payment structure per Yahoo Sports and The Times, which do not agree. Sell-on share per Sky Sports and the Irish Times. Original January 2022 fee per Goal, single-sourced and flagged for verification. Amortisation cap per Inside World Football and the Guardian. Solidarity mechanism per FIFA's Regulations on the Status and Transfer of Players and ESPN. Agent fees per the Football Association's published figures and Goal.*
+*Reporting and sourcing: Guimaraes fee and agreement per Sky Sports and ESPN, 5 August 2026. Andrey Santos fee, the £48m and £2m split and Chelsea's 10% sell-on per Manchester United's own announcement, Sky Sports and ESPN. Payment structure per Yahoo Sports and The Times, which do not agree. Sell-on share per Sky Sports and the Irish Times. Original January 2022 fee per Goal. Amortisation cap per Inside World Football and the Guardian. Solidarity mechanism per FIFA's Regulations on the Status and Transfer of Players and ESPN. Agent fees per the Football Association's published figures and Goal.*

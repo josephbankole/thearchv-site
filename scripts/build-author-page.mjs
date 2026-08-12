@@ -185,11 +185,15 @@ function render() {
         description: BIO_SUMMARY,
         jobTitle: "Founder and Editor",
         knowsAbout: ["Football history", "Association football", "Transfer reporting", "World Cup", "Sports journalism"],
-        worksFor: { "@id": `${SITE}/#organization` },
+        worksFor: { "@id": `${SITE}/#org` },
       },
       {
         "@type": "NewsMediaOrganization",
-        "@id": `${SITE}/#organization`,
+        // #org matches the Organization @id index.html has declared since before this page
+        // existed — a second id (#organization, as first shipped) never merges with it, and the
+        // founder/publishingPrinciples/correctionsPolicy fields here would hang off an orphan
+        // node (2026-08-12 review).
+        "@id": `${SITE}/#org`,
         name: "The ARCHV",
         url: `${SITE}/`,
         logo: { "@type": "ImageObject", url: `${SITE}/brand/logo-badge@192.png`, width: 192, height: 192 },

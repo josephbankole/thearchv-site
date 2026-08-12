@@ -8,6 +8,7 @@
 // old badge step today would clobber them with the retired navy mark, so it is gone rather than
 // left commented out. Rebuild the marks with `npm run crest`.
 import sharp from 'sharp';
+import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -15,6 +16,10 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SRC = join(__dirname, '..', '..');
 const OUT = join(__dirname, '..', 'public', 'brand');
+if (!existsSync(join(SRC, 'ARCHV_BANNER.png'))) {
+  console.error(`[brand-assets] ARCHV_BANNER.png not found under ${SRC} — this script reads outside the repo and only runs in the founder's workspace; never add it to the build chain.`);
+  process.exit(1);
+}
 await mkdir(OUT, { recursive: true });
 
 // --- Banner: the wide "The ARCHV" banner, web-optimized ---

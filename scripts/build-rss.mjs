@@ -15,7 +15,7 @@ import { build } from "esbuild";
 import { writeFileSync, rmSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { byDateDesc, esc, escAttr, SPORTS } from "./shared/page-shell.mjs";
+import { byDateDesc, esc, escAttr, SPORTS, laneByFeedKey } from "./shared/page-shell.mjs";
 import { sourcesAwareParagraph } from "./shared/source-links.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -60,10 +60,12 @@ try {
 // from /<urlBase>/questions/. New sports are empty today, so feed.xml is unchanged until they
 // publish. The SPORT_DATA map ties each new sport's exported array to its base.
 const SPORT_DATA = { nfl: data.nflDays, f1: data.f1Days, tennis: data.tennisDays, golf: data.golfDays };
+// Football lane bases derive from LANE_META.feedKey via laneByFeedKey — the worldcup↔world-cup
+// hyphenation is declared once in page-shell.mjs, not restated here (2026-08-12 review).
 const lanes = [
-  { base: "/desk/transfer/", days: data.transferDays },
-  { base: "/desk/world-cup/", days: data.worldCupDays },
-  { base: "/desk/leagues/", days: data.leaguesDays },
+  { base: `/desk/${laneByFeedKey.transfer}/`, days: data.transferDays },
+  { base: `/desk/${laneByFeedKey.worldcup}/`, days: data.worldCupDays },
+  { base: `/desk/${laneByFeedKey.leagues}/`, days: data.leaguesDays },
 ];
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;

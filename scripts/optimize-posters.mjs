@@ -1,7 +1,11 @@
 // Optimize the cleared poster set for web delivery.
 // Source: ../POSTERS/FINAL (7246x10800 JPEGs). Output: public/posters/*.webp + lqip.json
 // Moscow 2018 is intentionally EXCLUDED (trophy silhouette = registered design-mark risk).
+// NEVER add to the "build" chain: reads OUTSIDE the repo, founder's workspace only — in CI it is
+// a guaranteed ENOENT (CLAUDE.md trap 0). It also REWRITES committed binaries (public/posters/*):
+// a sharp/libvips upgrade changes every byte at the same nominal quality, so run deliberately.
 import sharp from 'sharp';
+import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -9,6 +13,10 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SRC = join(__dirname, '..', '..', 'POSTERS', 'FINAL');
 const OUT = join(__dirname, '..', 'public', 'posters');
+if (!existsSync(SRC)) {
+  console.error(`[optimize-posters] source not found: ${SRC} — this script reads outside the repo and only runs in the founder's workspace; never add it to the build chain.`);
+  process.exit(1);
+}
 
 // hash -> slug (chronological). Moscow 2018 omitted by design.
 const MAP = [

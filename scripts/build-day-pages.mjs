@@ -10,7 +10,7 @@ import { build } from "esbuild";
 import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { cspMeta, clampTitle, clampDescription, longDate } from "./shared/page-shell.mjs";
+import { cspMeta, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META } from "./shared/page-shell.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
 // hamburger JS) and no PostHog/Google Fonts CDN (/content.css is self-hosted, no remote font
@@ -23,10 +23,10 @@ const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SITE = "https://thearchv.ca";
 
-const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
-// longDate comes from page-shell.mjs, which pins it to UTC. A local redefinition here rendered the
-// previous day on any machine behind UTC while the page's own URL said otherwise.
+// esc/escAttr/longDate all come from page-shell.mjs. A local redefinition of longDate here once
+// rendered the previous day on any machine behind UTC, and local esc/escAttr shadows are the same
+// class of drift — a hardening change to the shared pair would have skipped this file
+// (2026-08-12 review, same lesson as the longDate bug).
 
 /* ---------- load the typed day data via a bundled temp module ---------- */
 const entry = [
@@ -41,9 +41,12 @@ try {
   data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
 } finally { try { rmSync(tmp); } catch {} }
 
+// Labels read from LANE_META, not restated: when the World Cup lane was renamed to
+// "International Football" the registry moved and this file's literals did not follow until the
+// 2026-08-12 review. laneHref is the canonical lane index these legacy pages funnel to.
 const SECTIONS = {
-  transfer: { base: "desk", lane: "transfer", label: "Transfer Desk", days: data.transferDays },
-  worldcup: { base: "world-cup", lane: "world-cup", label: "International Football", days: data.worldCupDays },
+  transfer: { base: "desk", lane: "transfer", label: LANE_META.transfer.label, laneHref: "/desk/transfer/", days: data.transferDays },
+  worldcup: { base: "world-cup", lane: "world-cup", label: LANE_META["world-cup"].label, laneHref: "/desk/world-cup/", days: data.worldCupDays },
 };
 
 function body(text) {
@@ -51,7 +54,7 @@ function body(text) {
     .map((p) => `<p>${esc(p)}</p>`).join("\n        ");
 }
 
-function schema(entry, url, label) {
+function schema(entry, url, label, laneHref) {
   return JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
@@ -62,7 +65,7 @@ function schema(entry, url, label) {
         "image": `${SITE}/og.jpg`, "mainEntityOfPage": url },
       { "@type": "BreadcrumbList", "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": `${SITE}/` },
-        { "@type": "ListItem", "position": 2, "name": label, "item": `${SITE}/` },
+        { "@type": "ListItem", "position": 2, "name": label, "item": `${SITE}${laneHref}` },
         { "@type": "ListItem", "position": 3, "name": entry.headline, "item": url } ] },
     ],
   }).replace(/</g, "\\u003c");
@@ -101,7 +104,7 @@ function render(entry, sectionKey) {
   <meta name="twitter:image" content="${SITE}/og.jpg" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/content.css" />
-  <script type="application/ld+json">${schema(entry, url, s.label)}</script>
+  <script type="application/ld+json">${schema(entry, url, s.label, s.laneHref)}</script>
 </head>
 <body>
   <header class="masthead">
@@ -113,7 +116,7 @@ function render(entry, sectionKey) {
   </header>
   <main class="wrap">
     <article class="article">
-      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/">${esc(s.label)}</a></p>
+      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(s.laneHref)}">${esc(s.label)}</a></p>
       <p class="article__eyebrow">${esc(s.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
       <p class="article__meta">${esc(longDate(entry.date))}</p>

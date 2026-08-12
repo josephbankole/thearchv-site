@@ -8,6 +8,14 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+// Lane and sport coverage is DERIVED from the registries, never hand-listed: this is the one
+// script whose entire job is exhaustiveness, and a literal list here meant a new lane or sport
+// shipped pages this file never opened while still printing "All N checked page(s) OK"
+// (2026-08-12 review). A new LANE_META key or SPORTS row is now covered automatically.
+import { LANE_META, SPORTS } from "./shared/page-shell.mjs";
+
+const FOOTBALL_LANES = Object.keys(LANE_META); // transfer, world-cup, leagues
+const NEW_SPORTS = SPORTS.filter((s) => s.key !== "football");
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(ROOT, "dist");
@@ -89,9 +97,7 @@ const targets = [
   ["static: /app/", join(DIST, "app", "index.html")],
   ["static: /about/", join(DIST, "about", "index.html")],
   ["static: /corrections/", join(DIST, "corrections", "index.html")],
-  ["lane: /desk/transfer/", join(DIST, "desk", "transfer", "index.html")],
-  ["lane: /desk/world-cup/", join(DIST, "desk", "world-cup", "index.html")],
-  ["lane: /desk/leagues/", join(DIST, "desk", "leagues", "index.html")],
+  ...FOOTBALL_LANES.map((lane) => [`lane: /desk/${lane}/`, join(DIST, "desk", lane, "index.html")]),
   // Evergreen surfaces (build-glossary-pages.mjs, build-standards-page.mjs): both carry the
   // shared masthead + PostHog inline scripts, so their static hashes must be in each page's CSP.
   ["glossary hub: /glossary/", join(DIST, "glossary", "index.html")],
@@ -108,8 +114,10 @@ const targets = [
   // section page and a sport lane front both carry the shared masthead + PostHog inline scripts,
   // so their static hashes must be in each page's CSP. The /football/ alias carries a CSP meta but
   // no inline script, so it verifies as zero-script clean (proves the meta is present and correct).
-  ["sport section: /nfl/", join(DIST, "nfl", "index.html")],
-  ["sport lane: /nfl/questions/", join(DIST, "nfl", "questions", "index.html")],
+  ...NEW_SPORTS.flatMap((s) => [
+    [`sport section: /${s.urlBase}/`, join(DIST, s.urlBase, "index.html")],
+    [`sport lane: /${s.urlBase}/${s.lanes[0]}/`, join(DIST, s.urlBase, s.lanes[0], "index.html")],
+  ]),
   ["football alias: /football/", join(DIST, "football", "index.html")],
   // Player duels (build-duel-pages.mjs) and the daily archive game (build-archive-game.mjs).
   // Both carry a per-page inline script on top of the shared masthead and PostHog pair: the duel
@@ -169,7 +177,7 @@ if (existsSync(legacyDeskDir)) {
 }
 
 // Every article page - this is where a per-page hash bug would actually show up.
-for (const lane of ["transfer", "world-cup", "leagues"]) {
+for (const lane of FOOTBALL_LANES) {
   const laneDir = join(DIST, "desk", lane);
   if (!existsSync(laneDir)) continue;
   for (const entry of readdirSync(laneDir)) {
@@ -183,12 +191,12 @@ for (const lane of ["transfer", "world-cup", "leagues"]) {
 // 2026-07-28 with the FAQPage + question-H2 change: locally these directories are usually empty,
 // because src/data/<sport>Days.ts is engine-owned and stale in any checkout (see CLAUDE.md), so
 // this loop is a no-op here and a real check wherever the current data is present.
-for (const sport of ["nfl", "f1", "tennis", "golf"]) {
-  const laneDir = join(DIST, sport, "questions");
+for (const sport of NEW_SPORTS) {
+  const laneDir = join(DIST, sport.urlBase, sport.lanes[0]);
   if (!existsSync(laneDir)) continue;
   for (const entry of readdirSync(laneDir)) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(entry)) continue;
-    targets.push([`answer: /${sport}/questions/${entry}/`, join(laneDir, entry, "index.html")]);
+    targets.push([`answer: /${sport.urlBase}/${sport.lanes[0]}/${entry}/`, join(laneDir, entry, "index.html")]);
   }
 }
 

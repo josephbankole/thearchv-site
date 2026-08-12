@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-12",
+    day: "Wednesday",
+    headline: "The player has joined the Lewis Hall argument.",
+    dek: "The Sun report Lewis Hall wants a move to Manchester United, and Goal report he left Newcastle United's training camp early. Newcastle United's answer has not moved.",
+    body: "The stand-off over Lewis Hall gained a third voice this week: the player's.\n\nThe Sun report Hall has made it clear he wants to join Manchester United before the window closes. Goal report he left Newcastle United's training camp early amid the interest. Both are single-outlet stories, and neither club has commented on either, so they should be read at that weight. What they describe points the same way.\n\nThe club positions have not moved. Sky Sports reported on Monday that Newcastle United have told Manchester United the left-back is not for sale this summer, at any price. That message arrived at the end of a window in which Newcastle United have sold Anthony Gordon, Sandro Tonali and Bruno Guimaraes, lost Eddie Howe, and appointed Matthias Jaissle. A fourth sale is the one they are refusing.\n\nThe reporting on Manchester United's side has been split for a fortnight. Fabrizio Romano says the club have internally approved a deal for Hall. David Ornstein does not expect the move to happen this summer, and reports Newcastle United want Hall on a new long-term contract instead. FootballTransfers say Manchester United would pay up to 70m euros. No agreed fee exists in any named report, because no agreement exists.\n\nThe case for pushing is straightforward. Hall is 21, an England international, and Michael Carrick's pick as the long-term successor to Luke Shaw, whose contract runs out next summer. Ornstein reports that left-back and midfield are the two remaining priorities of Manchester United's window, after Andrey Santos, Youri Tielemans, Tynan Thompson and Karl Darlow arrived.\n\nThe case for holding is a date. Hall's contract runs to 2029, so Newcastle United do not have to sell this year, next year, or the year after that.\n\nSources: The Sun via Yahoo Sports (Hall wants the move); Goal (early training-camp departure); Sky Sports, 11 August 2026, on the not-for-sale message; Fabrizio Romano via Football365 (internal approval); David Ornstein via The Athletic (does not expect the move; the remaining priorities); FootballTransfers (the 70m euro ceiling); BBC Sport (the 28m pound move from Chelsea in 2024).",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Lewis Hall, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-08-11",
     day: "Tuesday",
     headline: "Newcastle United have said no on Lewis Hall.",

@@ -1,6 +1,10 @@
 // Prepare brand assets for the web: transparent circular badge + optimized banner.
 // Sources live in ../ (the fifa.archv working folder). Outputs to public/brand/.
+// NEVER add to the "build" chain: reads OUTSIDE the repo, founder's workspace only — in CI it is
+// a guaranteed ENOENT (CLAUDE.md trap 0). Rewrites committed binaries in public/brand/, so run
+// deliberately, not as a side effect of a dependency bump.
 import sharp from 'sharp';
+import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -8,6 +12,10 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SRC = join(__dirname, '..', '..');
 const OUT = join(__dirname, '..', 'public', 'brand');
+if (!existsSync(join(SRC, 'THEARCHV_LOGO.png')) || !existsSync(join(SRC, 'ARCHV_BANNER.png'))) {
+  console.error(`[brand-assets] sources not found under ${SRC} — this script reads outside the repo and only runs in the founder's workspace; never add it to the build chain.`);
+  process.exit(1);
+}
 await mkdir(OUT, { recursive: true });
 
 // --- Badge: circle-crop the 1024² logo so the cream background becomes transparent ---

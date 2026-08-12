@@ -138,26 +138,40 @@ export const jsLiteral = (value) => JSON.stringify(value).replace(/</g, "\\u003c
 // seoSuffix = the entity phrase appended after an article headline in its <title> (search-only,
 // never shown on the page). indexTitle = the full <title> for that lane's index page. Visible
 // copy (h1, og:/twitter: titles) stays brand-clean; only <title> and meta description use these.
+// feedKey is the lane's `section` value in the feed contract (archv-feed/3) and its .json file
+// name — THE one place the worldcup↔world-cup split is declared on the script side. Before
+// 2026-08-12 that mapping was restated as literals in build-feed.mjs, build-rss.mjs and
+// build-day-pages.mjs, each a separate chance to drift. (src/components/dailyDigest.ts still
+// carries the bundle-side mirror, same deal as SPORTS vs src/data/sports.ts below.)
 export const LANE_META = {
   transfer: {
     label: "Transfer Desk",
+    feedKey: "transfer",
     anchor: "#transfer-desk",
     seoSuffix: "Manchester United transfer news",
     indexTitle: "Manchester United Transfer News, Verified Daily · The ARCHV",
   },
   "world-cup": {
     label: "International Football",
+    feedKey: "worldcup",
     anchor: "#world-cup",
     seoSuffix: "World Cup 2026",
     indexTitle: "World Cup 2026 & International Football · The ARCHV",
   },
   leagues: {
     label: "Football Leagues",
+    feedKey: "leagues",
     anchor: "#football-leagues",
     seoSuffix: "Football Leagues",
     indexTitle: "Football Leagues: Premier League, Champions League & More · The ARCHV",
   },
 };
+// section/feed key -> URL lane segment, derived from LANE_META (worldcup -> "world-cup").
+export const laneByFeedKey = Object.fromEntries(
+  Object.entries(LANE_META).map(([lane, meta]) => [meta.feedKey, lane]),
+);
+// Canonical article path for a football day entry: /desk/<lane>/<date>/.
+export const articlePath = (feedKey, date) => `/desk/${laneByFeedKey[feedKey]}/${date}/`;
 
 // ---------- multi-sport registry (2026-07-22) ----------
 // Build-side mirror of src/data/sports.ts. TWO SOURCES OF TRUTH, kept in step by hand: this

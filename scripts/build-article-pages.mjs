@@ -195,10 +195,14 @@ function schema(entry, url, label, faq) {
         // As of 2026-08-04 author.url resolves to the on-site author page and sameAs carries both
         // that page and josephbankole.ca, so the two profiles read as one Person entity.
         // publisher stays the Organization, unchanged.
-        author: { "@type": "Person", name: AUTHOR_NAME, url: AUTHOR_URL, sameAs: AUTHOR_SAMEAS },
+        // @id matches the Person node the author page emits (`<author URL>#person`), so every
+        // article's author and the ProfilePage's mainEntity resolve to ONE entity instead of a
+        // url-string coincidence (2026-08-12 review). Publisher likewise references the #org id
+        // index.html declares rather than shipping an anonymous Organization per page.
+        author: { "@type": "Person", "@id": `${AUTHOR_URL}#person`, name: AUTHOR_NAME, url: AUTHOR_URL, sameAs: AUTHOR_SAMEAS },
         // Compact Organization carrying the sameAs entity graph, so every article page reinforces
         // the same brand entity (matches the homepage Organization JSON-LD in index.html).
-        publisher: { "@type": "Organization", name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
+        publisher: { "@type": "Organization", "@id": `${SITE}/#org`, name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
         image: entry.image ? `${SITE}${entry.image}` : `${SITE}/og.jpg`,
         mainEntityOfPage: url,
       },
@@ -257,6 +261,18 @@ function headlineSize(text) {
   return 44;
 }
 
+// The 147 entries reference only ~22 distinct head files, so cache the webp→PNG conversion by
+// resolved path — build-duel-pages.mjs has carried the same cache since it shipped, this
+// generator just never got it (2026-08-12 review).
+const headPngCache = new Map();
+async function headPngDataUri(imgPath) {
+  if (headPngCache.has(imgPath)) return headPngCache.get(imgPath);
+  const png = await sharp(imgPath).resize(600, 600, { fit: "cover" }).png().toBuffer();
+  const uri = `data:image/png;base64,${png.toString("base64")}`;
+  headPngCache.set(imgPath, uri);
+  return uri;
+}
+
 async function ogCard(entry, laneLabel) {
   const kicker = `${laneLabel} · ${longDate(entry.date)}`.toUpperCase();
 
@@ -266,8 +282,7 @@ async function ogCard(entry, laneLabel) {
   if (entry.image) {
     const imgPath = join(ROOT, "public", entry.image.replace(/^\//, ""));
     if (existsSync(imgPath)) {
-      const png = await sharp(imgPath).resize(600, 600, { fit: "cover" }).png().toBuffer();
-      portrait = `data:image/png;base64,${png.toString("base64")}`;
+      portrait = await headPngDataUri(imgPath);
     }
   }
 
@@ -618,8 +633,8 @@ for (const section of sections) {
     // W3.1 — "more from the lane": lane.days is newest-first (see src/data/*.ts), so entries at
     // higher indices are chronologically earlier ("previous"). Pad from the newer side if the
     // current entry is near the end of the array so the block is never empty/short.
-    const older = lane.days.filter((_, j) => j > i).slice(0, 3);
-    const newer = lane.days.filter((_, j) => j < i).slice(-1 * (3 - older.length)).reverse();
+    const older = lane.days.slice(i + 1, i + 4);
+    const newer = lane.days.slice(Math.max(0, i - (3 - older.length)), i).reverse();
     const moreFrom = [...older, ...newer].slice(0, 3);
     const prevEntry = lane.days[i + 1] ?? null; // older
     const nextEntry = lane.days[i - 1] ?? null; // newer

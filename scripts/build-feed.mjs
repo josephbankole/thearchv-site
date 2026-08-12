@@ -9,7 +9,7 @@ import { writeFileSync, mkdirSync, rmSync, statSync, readFileSync, existsSync } 
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
-import { byDateDesc, LANE_META, SPORTS } from "./shared/page-shell.mjs";
+import { byDateDesc, LANE_META, SPORTS, laneByFeedKey, articlePath } from "./shared/page-shell.mjs";
 import { infogramEligible, infogramAlt, infogramRelPath } from "./shared/infogram.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -64,10 +64,10 @@ leaguesDays.sort(byDateDesc);
 /* ---------- compose the feeds ---------- */
 const SITE = "https://thearchv.ca";
 // Lane segment in the article URL differs from the internal `section` key for World Cup
-// (section "worldcup", URL lane "world-cup") to match the founder-approved URL shape
-// thearchv.ca/desk/<lane>/<date>/ built by scripts/build-article-pages.mjs.
-const LANES = { transfer: "transfer", worldcup: "world-cup", leagues: "leagues" };
-const articleUrl = (section, date) => `${SITE}/desk/${LANES[section]}/${date}/`;
+// (section "worldcup", URL lane "world-cup"). The mapping lives on LANE_META.feedKey in
+// page-shell.mjs — declared once, derived here (2026-08-12 review).
+const LANES = Object.fromEntries(Object.entries(laneByFeedKey));
+const articleUrl = (section, date) => `${SITE}${articlePath(section, date)}`;
 
 // Additive infogram fields (INFOGRAM-PLAN.md P3, schema archv-feed/3): attach
 // `infogram` (site-relative PNG path) + `infogramAlt` (one plain sentence) to an entry ONLY when
@@ -99,7 +99,7 @@ const leaguesTagged = leaguesDays.map((d) => withInfogram({ ...d, section: "leag
 // "newest dated wrap" and a leagues launch batch must not displace the day's transfer/WC lead.
 const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);
 
-const lastUpdated = daily.length ? daily[0].date : null;
+const newestOf = (days) => (days.length ? days[0].date : null);
 
 // Per-sport feeds (v3): each new sport's Question Desk lane in the same { schema, lastUpdated,
 // days } envelope as the football lanes, entries tagged with sport + section + url, newest-first.
@@ -119,14 +119,26 @@ for (const sport of SPORTS) {
   const days = [...(SPORT_RAW[sport.key] || [])]
     .sort(byDateDesc)
     .map((d) => ({ ...d, section: sport.key, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
-  sportFeeds[sport.key] = { days, lastUpdated: days.length ? days[0].date : null };
+  sportFeeds[sport.key] = { days, lastUpdated: newestOf(days) };
 }
+
+// lastUpdated is sold to the app as the polling signal, so it must move whenever ANY lane ships —
+// deriving it from the today-pool alone left leagues.json reporting stale on a leagues-only
+// publish day (2026-08-12 review). Envelope default = newest date across every lane; the three
+// football lane feeds carry their own, same as the per-sport feeds already did. ISO dates, so
+// string comparison is date comparison.
+const lastUpdated = [
+  newestOf(transferTagged),
+  newestOf(worldCupTagged),
+  newestOf(leaguesTagged),
+  ...Object.values(sportFeeds).map((f) => f.lastUpdated),
+].filter(Boolean).sort().at(-1) ?? null;
 
 const feeds = {
   today: { lead: daily[0] ?? null, wrap: daily.slice(1, 5) },
-  transfer: { days: transferTagged },
-  worldcup: { days: worldCupTagged },
-  leagues: { days: leaguesTagged },
+  transfer: { days: transferTagged, lastUpdated: newestOf(transferTagged) },
+  worldcup: { days: worldCupTagged, lastUpdated: newestOf(worldCupTagged) },
+  leagues: { days: leaguesTagged, lastUpdated: newestOf(leaguesTagged) },
   ...sportFeeds,
   posters: { posters },
   archive: {
@@ -151,7 +163,11 @@ for (const [name, payload] of Object.entries(feeds)) {
   manifestFeeds.push({ name, path: `/feed/${name}.json`, bytes: statSync(file).size, hash: shortHash(json) });
 }
 
-// v3: the sport registry, so the app's chip row is feed-driven the way its shelves already are.
+// v3: the sport registry, INTENDED to make the app's chip row feed-driven the way its shelves
+// already are. NOT YET TRUE on the consumer side (verified 2026-08-12): SportFilter.swift
+// hardcodes the sport enum, feed filenames and display order, Models.swift's DayEntry has no
+// `sport` property, and nothing in the app fetches index.json. Until that app work lands, adding
+// a sport here does NOT surface it in the app — the Xcode project needs its own change.
 // One row per sport in display order; `feed` is the file the app fetches when that sport is the
 // active filter (football uses today.json, the existing lead pool); `hasEntries` lets the app
 // keep an empty new sport out of the "All" view while still showing its chip.

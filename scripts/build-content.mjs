@@ -5,11 +5,24 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription, longDate } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription, longDate, esc, escAttr } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
 import { listPairs } from "./shared/football-data.mjs";
+
+// The adapter selects a provider from ARCHV_FOOTBALL_PROVIDER at load and can throw (unknown
+// provider, cache miss with fetching off, head-kit guard) — four scripts before build-duel-pages
+// runs. Re-throw with the step named so the failure doesn't read as a duels bug when it is this
+// script that died. The throw is kept: silently dropping the pair rows would 404-rot the sitemap.
+async function listPairsForSitemap() {
+  try {
+    return await listPairs();
+  } catch (err) {
+    err.message = `football data adapter failed while deriving duel sitemap rows in build-content.mjs (check ARCHV_FOOTBALL_PROVIDER / ARCHV_FOOTBALL_ALLOW_FETCH — an exported provider env var reaches this step too): ${err.message}`;
+    throw err;
+  }
+}
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = join(ROOT, "content");
@@ -18,7 +31,7 @@ const SITE = "https://thearchv.ca";
 const SECTION = {
   finals: { label: "Finals", href: "/#archive", more: "More finals" },
   united: { label: "Manchester United", href: "/#transfer-desk", more: "More United history" },
-  explainers: { label: "Explained", href: "/#faq", more: "More explainers" },
+  explainers: { label: "Explained", href: "/#archive", more: "More explainers" },
   notes: { label: "Notes", href: "/", more: "More from the archive" },
 };
 const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More from the archive" };
@@ -64,8 +77,9 @@ function glossaryBlock(slug) {
         </nav>`;
 }
 
-const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
+// esc/escAttr come from page-shell.mjs — a local shadow here kept the old behaviour whenever the
+// shared pair was hardened, and this file drives the long-read family AND the sitemap
+// (2026-08-12 review).
 
 /* ---------- CSP (2026-07-13 review, finding #9: "only the homepage has a CSP") ----------
    These pages build their own masthead markup rather than importing scripts/shared/page-shell.mjs's
@@ -294,7 +308,6 @@ function render(p, allPages) {
 }
 
 /* ---------- write pages ---------- */
-const finals = pages.filter((p) => p.section === "finals");
 let n = 0;
 for (const p of pages) {
   const dir = join(OUT, p.section, p.slug);
@@ -331,13 +344,6 @@ const EXTRA_URLS = [
   // Entry rows are DERIVED from glossary-data.mjs, never hand-listed. The hand list silently
   // capped the sitemap at the original ten entries when the glossary grew to sixty (2026-07-28).
   ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, changefreq: "monthly", priority: "0.5" })),
-  // Glossary expansion (SEO/AEO pass, 2026-07-14): +6 entries, scripts/glossary-data.mjs.
-  { loc: "/glossary/pressing/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/low-block/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/inverted-full-back/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/half-space/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/xa/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/glossary/loan-with-obligation/", changefreq: "monthly", priority: "0.5" },
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
   // The author page (build-author-page.mjs, 2026-08-04). Every article page's byline and its
   // NewsArticle author.url resolve here, so it has to be crawlable in its own right rather than
@@ -354,7 +360,7 @@ const EXTRA_URLS = [
   // Player duels (build-duel-pages.mjs) and the daily archive game (build-archive-game.mjs).
   // The pair rows come from the data adapter so the sitemap grows with the roster on its own.
   { loc: "/duel/", changefreq: "weekly", priority: "0.7" },
-  ...(await listPairs()).map((p) => ({ loc: p.href, changefreq: "monthly", priority: "0.6" })),
+  ...(await listPairsForSitemap()).map((p) => ({ loc: p.href, changefreq: "monthly", priority: "0.6" })),
   { loc: "/guess/", changefreq: "daily", priority: "0.6" },
 ];
 const today = new Date().toISOString().slice(0, 10);

@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "description": "The ARCHV — Football history, illustrated. The owned site for @thearchvfc.",
   "scripts": {
     "dev": "vite",
@@ -16,7 +19,7 @@
     "faq": "node scripts/build-faq.mjs",
     "pages": "node scripts/build-day-pages.mjs",
     "lanes": "node scripts/build-lane-pages.mjs",
-    "articles": "node scripts/build-article-pages.mjs",
+    "articles": "node scripts/build-article-pages.mjs && node scripts/build-author-page.mjs",
     "author": "node scripts/build-author-page.mjs",
     "glossary": "node scripts/build-glossary-pages.mjs",
     "duel": "node scripts/build-duel-pages.mjs",

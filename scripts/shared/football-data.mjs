@@ -79,8 +79,13 @@ function normalise(data) {
 
   // Rank within the seeded pool, per metric. Honest by construction: the pool is exactly the
   // players in this dataset and the label says so, rather than implying a league-wide percentile
-  // the static layer cannot see. When a live provider supplies a real pool, it sets `leagueRank`
-  // and `poolSize` on the stat and the page prefers those.
+  // the static layer cannot see. The bar ALWAYS ranks against this roster pool (rosterRank /
+  // rosterSize) — that is a design decision, not a fallback: "1st of 6 in the ARCHV set" is
+  // provable from this dataset and "1st in the Premier League" is not. A provider with a sourced
+  // league-wide placing sets `leagueRankNote` on the stat (a ready sentence, e.g. "1st in the
+  // Premier League for goals, per FBref"), which build-duel-pages.mjs renders UNDER the row as a
+  // note. (An earlier version of this comment promised `leagueRank`/`poolSize` fields the page
+  // would "prefer" — no code ever read them; corrected 2026-08-12.)
   for (const metric of metrics) {
     const rated = players
       .filter((p) => p.stats[metric.key] && typeof p.stats[metric.key].value === "number")

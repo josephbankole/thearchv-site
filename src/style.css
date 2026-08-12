@@ -814,3 +814,9 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
   [data-inview] { opacity: 1; transform: none; transition: none; }
 }
 .reduced-motion [data-inview] { opacity: 1; transform: none; transition: none; }
+/* Print is the third designed state: IntersectionObserver never fires for content outside the
+   session's viewport, so without this a Cmd-P / save-as-PDF ships every unscrolled day card at
+   opacity 0 — three desk sections printing as headers over empty boxes (2026-08-12 review). */
+@media print {
+  [data-inview] { opacity: 1; transition: none; }
+}

@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-08-12",
+    day: "Wednesday",
+    headline: "Croke Park hosts its first club football match tonight.",
+    dek: "Manchester United play Leeds United at Croke Park in Dublin on Wednesday 12 August 2026, the first club football fixture in the stadium's history. Kick-off is 19:30 local time.",
+    body: "Manchester United and Leeds United meet at Croke Park in Dublin tonight, and no club football fixture has ever been played there before.\n\nThe Gaelic Athletic Association's 82,000-seat stadium has taken football only at international level, when the Republic of Ireland played there while Lansdowne Road was rebuilt. The last football match at the ground was the Republic of Ireland against France in November 2009, a FIFA World Cup play-off. Both clubs confirmed the fixture on their official channels, and ESPN carried the announcement: a pre-season friendly, part of Manchester United's 2026 tour, kicking off at 19:30 local time. It sold out.\n\nManchester United's director of football Jason Wilcox said the fixture, against one of the club's biggest rivals, was an opportunity to connect with supporters in Ireland.\n\nOne transfer thread runs through the evening. Karl Darlow arrived at Manchester United from Leeds United this summer, so the goalkeeper may line up against the club he left weeks ago.\n\nThe Premier League season opens on 21 August, nine days from now, which is what tonight is actually for: minutes, patterns and a first eleven taking shape. The occasion is doing the rest of the work. Nearly seventeen years after football last visited, and for the first time in its history, Croke Park belongs to club football for a night.\n\nSources: Manchester United official announcement (fixture, venue, Wilcox); Leeds United official announcement (fixture and coverage); ESPN (first club football match at Croke Park, first football there since the November 2009 World Cup play-off).",
+    status: "verified",
+  },
+  {
     date: "2026-08-01",
     day: "Saturday",
     headline: "Newcastle United are rebuilding, not reshuffling.",

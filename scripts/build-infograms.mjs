@@ -75,7 +75,10 @@ const CARD_FONTS = [
    A conversion failure returns null and the card simply renders as it did before: this must
    never break the build. */
 const PUBLIC = join(ROOT, "public");
-const CREST = join(PUBLIC, "brand", "crest-badge@512.png");
+// The ink colourway on purpose: these story cards are a founder-approved navy poster format and
+// are deliberately NOT on the white system, so the crest that goes on them is the paper-on-ink
+// monogram, not the ink-on-paper one every page-facing surface uses.
+const CREST = join(PUBLIC, "brand", "crest-badge-ink@512.png");
 const portraitCache = new Map();
 
 async function toDataUri(absPath) {

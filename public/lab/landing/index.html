@@ -11,8 +11,8 @@
 <!-- Prototype. Hidden and unlinked, not part of the site navigation or sitemap. -->
 <meta name="robots" content="noindex,nofollow" />
 <link rel="icon" href="data:," />
-<link rel="preload" as="image" href="/brand/crest-badge@512.png" />
-<link rel="preload" as="image" href="/brand/crest-badge@192.png" />
+<link rel="preload" as="image" href="/brand/crest-badge-ink@512.png" />
+<link rel="preload" as="image" href="/brand/crest-badge-ink@192.png" />
 <style>
 /* ===== Fonts: subset, self-hosted, base64. No external CDN. ===== */
 @font-face {
@@ -39,12 +39,12 @@
 
 /* ===== Reset + brand tokens ===== */
 :root {
-  --navy: #0C2A3E;
-  --navy-deep: #071a26;
-  --cream: #F2EAD3;
-  --gold: #C9A14A;
-  --cream-faint: rgba(242, 234, 211, .38);
-  --cream-dim: rgba(242, 234, 211, .16);
+  --navy: #FFFFFF;
+  --navy-deep: #F4F2F3;
+  --cream: #1E223D;
+  --gold: #C93A0F;
+  --cream-faint: rgba(30, 34, 61, .24);
+  --cream-dim: rgba(30, 34, 61, .12);
 }
 * { box-sizing: border-box; }
 html, body {
@@ -190,8 +190,8 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
   position: absolute;
   inset: 0;
   background: radial-gradient(circle 20vmax at 50% 38%,
-    rgba(242,234,211,.10) 0%,
-    rgba(242,234,211,0) 60%);
+    rgba(30, 34, 61, 0.08) 0%,
+    rgba(30, 34, 61, 0.08) 60%);
 }
 
 /* Drifting gold specks ("the snowing effect"): same gold and softness as the
@@ -376,7 +376,7 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
 <div id="act1" role="button" aria-label="Skip intro">
   <div class="a1-stage" id="a1Stage">
     <div class="a1-glow" id="a1Glow"></div>
-    <img class="a1-crest" id="a1Crest" src="/brand/crest-badge@512.png" alt="The ARCHV crest" decoding="async" />
+    <img class="a1-crest" id="a1Crest" src="/brand/crest-badge-ink@512.png" alt="The ARCHV monogram" decoding="async" />
     <div class="a1-wordmark" id="a1Wordmark" aria-hidden="true"></div>
   </div>
   <p class="a1-skip" id="a1Skip">Tap or scroll to skip</p>
@@ -387,7 +387,7 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
   <div class="specks" id="specks" aria-hidden="true"></div>
   <div class="room">
     <div class="room__mast">
-      <img class="room__crest" src="/brand/crest-badge@192.png" alt="" aria-hidden="true" decoding="async" />
+      <img class="room__crest" src="/brand/crest-badge-ink@192.png" alt="" aria-hidden="true" decoding="async" />
       <p class="room__wordmark">The ARCHV</p>
     </div>
 

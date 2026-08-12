@@ -330,11 +330,17 @@ function gameStyles() {
     .game__lede { color: var(--cream-dim); font-size: 1.05rem; margin: 0 0 1.8rem; }
 
     .clues { list-style: none; padding: 0; margin: 0 0 1.6rem; display: grid; gap: .6rem; }
-    .clue { display: flex; flex-direction: column; gap: .25rem; padding: .85rem 1rem; border: 1px solid var(--cream-faint); border-radius: .6rem; background: rgba(255,255,255,.03); }
-    .clue--locked { opacity: .45; }
-    .clue__label { font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; color: var(--gold); }
-    .clue__value { color: var(--cream); font-size: 1.02rem; line-height: 1.4; }
-    .clue--locked .clue__value { color: var(--cream-faint); font-style: italic; }
+    .clue { display: flex; flex-direction: column; gap: .25rem; padding: .85rem 1rem; border: 1px solid var(--rule); border-radius: .6rem; background: var(--bg); }
+    /* The locked state used to be opacity .45 on the whole row. That is a legibility bug wearing
+       a dimmer's clothes: the alpha multiplies through the text as well as the furniture, and it
+       landed the word "Locked" at 2.15:1 on white, well under the 4.5:1 floor. The inactive
+       affordance now lives on the row's own furniture — a lighter border and the sunken ground —
+       and the value keeps a real text token. Measured: --ink-muted on --bg-sunken is 5.16:1. */
+    .clue--locked { border-color: var(--rule-soft); background: var(--bg-sunken); }
+    .clue__label { font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; color: var(--accent-ink); }
+    .clue--locked .clue__label { color: var(--ink-muted); }
+    .clue__value { color: var(--ink); font-size: 1.02rem; line-height: 1.4; }
+    .clue--locked .clue__value { color: var(--ink-muted); font-style: italic; }
 
     .game__form { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 .8rem; }
     /* An author rule that sets display beats the browser's own [hidden] rule, so hiding the form
@@ -347,13 +353,13 @@ function gameStyles() {
     .game__go:hover { filter: brightness(1.06); }
     .game__skip { background: transparent; color: var(--cream-dim); border: 1px solid var(--cream-faint) !important; }
     .game__skip:hover { color: var(--gold); border-color: var(--gold-soft) !important; }
-    .game__left { font-size: .8rem; color: var(--cream-faint); margin: 0 0 1.2rem; }
+    .game__left { font-size: .8rem; color: var(--cream-faint-text); margin: 0 0 1.2rem; }
 
     .guesses { list-style: none; padding: 0; margin: 0 0 1.4rem; display: grid; gap: .35rem; }
     .guess { padding: .5rem .8rem; border-radius: .45rem; border: 1px solid var(--cream-faint); font-size: .9rem; color: var(--cream-dim); }
     .guess--right { border-color: var(--gold); color: var(--gold); }
 
-    .result { margin: 0 0 1.6rem; padding: 1.2rem 1.25rem; border: 1px solid var(--gold-soft); border-radius: .7rem; background: rgba(201,161,74,.06); }
+    .result { margin: 0 0 1.6rem; padding: 1.2rem 1.25rem; border: 1px solid var(--rule); border-radius: .7rem; background: var(--bg-sunken); box-shadow: var(--shadow-soft); }
     .result__head { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; line-height: 1.3; margin: 0 0 .5rem; }
     .result__note { font-size: .95rem; color: var(--cream-dim); margin: 0 0 1rem; }
     .result button { font: inherit; font-size: .85rem; font-weight: 600; padding: .55rem 1rem; border-radius: .5rem; border: 1px solid var(--gold-soft); background: transparent; color: var(--cream); cursor: pointer; }
@@ -361,10 +367,10 @@ function gameStyles() {
 
     .streaks { display: flex; gap: 2rem; margin: 1.6rem 0 0; padding-top: 1.2rem; border-top: 1px solid var(--cream-faint); }
     .streaks div { display: flex; flex-direction: column; gap: .2rem; }
-    .streaks dt { font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; color: var(--cream-faint); }
+    .streaks dt { font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; color: var(--cream-faint-text); }
     .streaks dd { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: 1.8rem; color: var(--cream); }
 
-    .game__credit { margin: 1.6rem 0 0; font-size: .78rem; color: var(--cream-faint); }
+    .game__credit { margin: 1.6rem 0 0; font-size: .78rem; color: var(--cream-faint-text); }
     .game__noscript { padding: 1rem 1.1rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .9rem; color: var(--cream-dim); }
     .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   </style>`;
@@ -386,7 +392,7 @@ const html = `<!doctype html>
   <meta name="description" content="${escAttr(clampDescription(LEDE))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${PAGE_URL}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${pageCsp}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />

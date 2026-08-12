@@ -19,10 +19,14 @@ import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc, clampTitle,
-  deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
+  DISPATCH_URL, DISPATCH_SUBSCRIBE_URL,
 } from "./shared/page-shell.mjs";
+import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
+import { entryArt } from "./shared/illustrated.mjs";
+import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
@@ -37,6 +41,9 @@ const entrySrc = [
   `export { f1Days } from "./data/f1Days.ts";`,
   `export { tennisDays } from "./data/tennisDays.ts";`,
   `export { golfDays } from "./data/golfDays.ts";`,
+  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
+  // the bundle this script already builds rather than being reimplemented here in .mjs.
+  `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".article-bundle.mjs");
 let data;
@@ -58,6 +65,7 @@ const SPORT_DAYS = {
   tennis: [...data.tennisDays].sort(byDateDesc),
   golf: [...data.golfDays].sort(byDateDesc),
 };
+const { readLabel, readDuration, wordCount } = data;
 
 // A "section" is one sport+lane's article surface. `base` is the path prefix under which its
 // articles live (leading and trailing slash), `anchor` is what the breadcrumb and "more" link
@@ -87,13 +95,19 @@ for (const sport of SPORTS) {
   }
 }
 
+/* ---------- the sources line ----------
+   SOURCE_LINKS, linkSources and isSourcesPara moved to scripts/shared/source-links.mjs on
+   2026-08-09, because build-rss.mjs renders the same paragraph into content:encoded and was
+   shipping it as flat text. One module, imported by both, so the page and the feed cannot
+   disagree about which outlets are linked. The self-tests run when that module loads. */
+
 /* ---------- body: \n\n paragraph breaks, dated "Update, N Jul:" additions stay visible paragraphs ---------- */
 function bodyHtml(text) {
   return String(text)
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean)
-    .map((p) => `<p>${esc(p)}</p>`)
+    .map((p) => (isSourcesPara(p) ? `<p class="article__sources">${sourcesAwareParagraph(p)}</p>` : `<p>${sourcesAwareParagraph(p)}</p>`))
     .join("\n        ");
 }
 
@@ -175,7 +189,7 @@ function questionAnswer(dek, body) {
   }
 })();
 
-function schema(entry, url, label, faq) {
+function schema(entry, url, label, faq, images) {
   const graph = [
     {
         // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
@@ -203,7 +217,17 @@ function schema(entry, url, label, faq) {
         // Compact Organization carrying the sameAs entity graph, so every article page reinforces
         // the same brand entity (matches the homepage Organization JSON-LD in index.html).
         publisher: { "@type": "Organization", "@id": `${SITE}/#org`, name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
-        image: entry.image ? `${SITE}${entry.image}` : `${SITE}/og.jpg`,
+        // The generated share cards, both crops (1.91:1 og.png and 16:9 og-wide.png), as an
+        // array of absolute URLs. NEVER the entry headshot: that file is 240x240, which fails
+        // Google News's large-image minimums and misrepresents the page's share art (defect
+        // fixed 2026-08-06 — image previously pointed at the headshot). Falls back to the
+        // site-wide /og.jpg only when card generation failed for this entry.
+        image: images,
+        // Derived from the entry's own words by src/lib/readTime.ts, the same helper that prints
+        // "N min read" in the meta line below and on every card that links here, so the page and
+        // its structured data can never quote a reader two different numbers.
+        wordCount: wordCount(entry.dek, entry.body),
+        timeRequired: readDuration(entry.dek, entry.body),
         mainEntityOfPage: url,
       },
   ];
@@ -239,121 +263,109 @@ function schema(entry, url, label, faq) {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
 }
 
-/* ---------- per-article OG share cards (1200x630 PNG via satori + resvg) ----------
-   One unique card per canonical article at dist/desk/<lane>/<date>/og.png, referenced by that
-   page's og:image / twitter:image. If generation fails for an entry the page falls back to the
-   static /og.jpg and the build carries on. Fonts are static TTF instances committed at
-   scripts/fonts/ (Google Fonts API static builds; satori does not take variable fonts well). */
-const FONTS_DIR = join(ROOT, "scripts", "fonts");
-const CARD_FONTS = [
-  { name: "Fraunces", data: readFileSync(join(FONTS_DIR, "Fraunces-SemiBold.ttf")), weight: 600, style: "normal" },
-  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-Regular.ttf")), weight: 400, style: "normal" },
-  { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-SemiBold.ttf")), weight: 600, style: "normal" },
-];
+/* ---------- per-article OG share cards (satori + resvg) ----------
+   TWO unique cards per canonical article: og.png at 1200x630 (1.91:1, the OG standard, and the
+   one og:image / twitter:image reference) and og-wide.png at 1200x675 (16:9, referenced from the
+   NewsArticle JSON-LD image array alongside og.png). Same design at both sizes: the wide card
+   puts its extra 45px into vertical padding, so the inner layout never re-wraps and nothing
+   clips. If generation fails for an entry the page falls back to the static /og.jpg and the
+   build carries on.
 
-// Shrink-to-fit headline sizing: three lines maximum, ellipsized by satori's lineClamp as a
-// last resort so text can never overflow the card.
+   RE-ARTED ON THE WHITE SYSTEM, phase 2B. The card was navy, cream and gold while the page it
+   opens has been white since phase 2A, so a link previewed in a feed as one publication and
+   opened as another. It is now the article page's own furniture at share size: white ground, the
+   accent hairline across the top, the kicker in accent ink, the headline in Anton and uppercase
+   exactly as the page sets its own h1, and the wordmark as the masthead draws it. Palette and
+   fonts come from scripts/shared/card-brand.mjs. */
+const CARD_W = 1200;
+
+// Shrink-to-fit headline sizing: three lines maximum, ellipsized by satori's lineClamp as a last
+// resort so text can never overflow the card. The steps sit above the old Fraunces ones because
+// Anton is a condensed face and fits noticeably more per line at the same size.
 function headlineSize(text) {
   const len = String(text).length;
-  if (len <= 42) return 68;
-  if (len <= 64) return 58;
-  if (len <= 90) return 50;
-  return 44;
+  if (len <= 42) return 82;
+  if (len <= 64) return 70;
+  if (len <= 90) return 58;
+  return 50;
 }
 
-// The 147 entries reference only ~22 distinct head files, so cache the webp→PNG conversion by
-// resolved path — build-duel-pages.mjs has carried the same cache since it shipped, this
-// generator just never got it (2026-08-12 review).
+// The entries reference far fewer distinct head files than there are pages, so cache the
+// webp→PNG conversion by resolved path — build-duel-pages.mjs has carried the same cache since
+// it shipped, this generator just never got it (2026-08-12 review). Pipeline matches the inline
+// original exactly: white-flattened 600x600 cover crop.
 const headPngCache = new Map();
 async function headPngDataUri(imgPath) {
   if (headPngCache.has(imgPath)) return headPngCache.get(imgPath);
-  const png = await sharp(imgPath).resize(600, 600, { fit: "cover" }).png().toBuffer();
+  const png = await sharp(imgPath)
+    .resize(600, 600, { fit: "cover", background: { r: 255, g: 255, b: 255, alpha: 1 } })
+    .flatten({ background: { r: 255, g: 255, b: 255 } })
+    .png()
+    .toBuffer();
   const uri = `data:image/png;base64,${png.toString("base64")}`;
   headPngCache.set(imgPath, uri);
   return uri;
 }
 
-async function ogCard(entry, laneLabel) {
+async function ogCard(entry, laneLabel, height = 630, art = undefined) {
+  // The card was designed at 1200x630. Any taller render (og-wide at 675) keeps the content
+  // block at its designed height by absorbing the difference into the vertical padding — no
+  // scaling, no letterbox bars, and the headline wraps identically at both sizes.
+  const padY = 60 + Math.round((height - 630) / 2);
   const kicker = `${laneLabel} · ${longDate(entry.date)}`.toUpperCase();
 
-  // satori/resvg cannot read webp; the brand headshots in public/heads/ are 240px webp, so
-  // convert to a PNG data URI with sharp (already a build dependency).
+  // The same art the page shows (entryArt: filed image, banked portrait, club badge, nothing).
+  // satori and resvg cannot read webp, and the head bank is 240px webp, so sharp converts to a
+  // PNG data URI on the way in — sharp reads webp perfectly well, it is only the SVG stack that
+  // does not.
+  const resolved = art === undefined ? entryArt(entry) : art;
   let portrait = null;
-  if (entry.image) {
-    const imgPath = join(ROOT, "public", entry.image.replace(/^\//, ""));
+  if (resolved) {
+    const imgPath = join(ROOT, "public", resolved.src.replace(/^\//, ""));
     if (existsSync(imgPath)) {
       portrait = await headPngDataUri(imgPath);
     }
   }
 
-  const left = {
-    type: "div",
-    props: {
-      style: { display: "flex", flexDirection: "column", justifyContent: "space-between", flexGrow: 1, flexShrink: 1, height: "100%", minWidth: 0 },
-      children: [
-        {
-          type: "div",
-          props: {
-            style: { display: "flex", flexDirection: "column" },
-            children: [
-              { type: "div", props: { style: { color: "#C9A14A", fontFamily: "Inter Tight", fontWeight: 600, fontSize: 26, letterSpacing: 4.5, lineClamp: 1, marginBottom: 34 }, children: kicker } },
-              { type: "div", props: { style: { color: "#F2EAD3", fontFamily: "Fraunces", fontWeight: 600, fontSize: headlineSize(entry.headline), lineHeight: 1.12, letterSpacing: -0.5, lineClamp: 3 }, children: entry.headline } },
-            ],
-          },
-        },
-        {
-          type: "div",
-          props: {
-            style: { display: "flex", alignItems: "baseline" },
-            children: [
-              { type: "div", props: { style: { color: "rgba(242,234,211,.7)", fontFamily: "Inter Tight", fontWeight: 600, fontSize: 22, letterSpacing: 5, marginRight: 12 }, children: "THE" } },
-              { type: "div", props: { style: { color: "#F2EAD3", fontFamily: "Fraunces", fontWeight: 600, fontSize: 34 }, children: "ARCHV" } },
-              { type: "div", props: { style: { color: "#C9A14A", fontFamily: "Fraunces", fontWeight: 600, fontSize: 34 }, children: "." } },
-            ],
-          },
-        },
-      ],
-    },
-  };
+  const left = div(
+    { display: "flex", flexDirection: "column", justifyContent: "space-between", flexGrow: 1, flexShrink: 1, height: "100%", minWidth: 0 },
+    [
+      div({ display: "flex", flexDirection: "column" }, [
+        text({ color: CARD.accentInk, fontFamily: "Inter Tight", fontWeight: 600, fontSize: 24, letterSpacing: 4.5, lineClamp: 1, marginBottom: 30 }, kicker),
+        text({ color: CARD.ink, fontFamily: "Anton", fontSize: headlineSize(entry.headline), lineHeight: 1.06, letterSpacing: 0.5, lineClamp: 3 }, String(entry.headline).toUpperCase()),
+      ]),
+      div({ display: "flex", alignItems: "baseline", justifyContent: "space-between", width: "100%" }, [
+        wordmark(38),
+        text({ color: CARD.inkMuted, fontFamily: "Inter Tight", fontWeight: 400, fontSize: 20 }, "thearchv.ca"),
+      ]),
+    ],
+  );
 
   const children = [left];
   if (portrait) {
-    children.push({
-      type: "div",
-      props: {
-        style: { display: "flex", alignItems: "center", marginLeft: 56, flexShrink: 0 },
-        children: [
-          {
-            type: "img",
-            props: {
-              src: portrait,
-              width: 300,
-              height: 300,
-              style: { borderRadius: 300, border: "3px solid rgba(201,161,74,.55)", boxShadow: "0 0 0 10px rgba(7,28,43,.6)" },
-            },
+    children.push(
+      div({ display: "flex", alignItems: "center", marginLeft: 56, flexShrink: 0 }, [
+        {
+          type: "img",
+          props: {
+            src: portrait,
+            width: 300,
+            height: 300,
+            style: { borderRadius: 300, border: `2px solid ${CARD.rule}`, boxShadow: `0 0 0 12px ${CARD.bg}` },
           },
-        ],
-      },
-    });
+        },
+      ]),
+    );
   }
 
-  const svg = await satori(
-    {
-      type: "div",
-      props: {
-        style: {
-          width: 1200, height: 630, display: "flex", alignItems: "center",
-          backgroundColor: "#071C2B",
-          backgroundImage: "radial-gradient(at 50% -20%, #133A52 0%, #071C2B 68%)",
-          padding: "64px 72px",
-        },
-        children,
-      },
-    },
-    { width: 1200, height: 630, fonts: CARD_FONTS },
-  );
+  const tree = div({ width: CARD_W, height, display: "flex", flexDirection: "column", backgroundColor: CARD.bg, backgroundImage: CARD_GROUND }, [
+    accentRule(CARD_W),
+    div({ display: "flex", alignItems: "center", flexGrow: 1, width: CARD_W, padding: `${padY}px 72px` }, children),
+  ]);
 
-  return new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
+  const svg = await satori(tree, { width: CARD_W, height, fonts: CARD_FONTS });
+
+  return new Resvg(svg, { fitTo: { mode: "width", value: CARD_W } }).render().asPng();
 }
 
 // The share-row script embeds this page's own url/title, so - unlike masthead()/posthogSnippet()
@@ -439,7 +451,23 @@ function ladderScriptTag(url, lanePath) {
         variant = 'dispatch';
         note.textContent = 'That is three you have read. The Dispatch brings the archive to you.';
         cta.textContent = 'Join the Dispatch';
-        external(cta, 'https://thearchvdispatch.substack.com');
+        // Phase 3: the page now carries an inline capture form higher up, and the escalated
+        // ask should not be a second, weaker copy of it. Send the reader to the field instead
+        // of off-site, and put the caret in it. The external link stays as the fallback for
+        // any page without the block, so the behaviour before this change is what happens if
+        // the form is ever removed. Event names and payloads are untouched either way.
+        var capture = document.getElementById('inline-capture');
+        var field = document.getElementById('capture-email');
+        if (capture) {
+          cta.href = '#inline-capture';
+          cta.removeAttribute('target');
+          cta.removeAttribute('rel');
+          cta.addEventListener('click', function () {
+            if (field) setTimeout(function () { field.focus({ preventScroll: true }); }, 0);
+          });
+        } else {
+          external(cta, 'https://thearchvdispatch.substack.com');
+        }
         alt.textContent = 'Or follow on ' + social.name;
         external(alt, social.url);
       } else {
@@ -465,7 +493,41 @@ function ladderScriptTag(url, lanePath) {
   </script>`;
 }
 
-function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
+/* ---------- the inline email capture (phase 3) ----------
+   Until this pass the only place a reader could give the site an address was the /start page's
+   embedded form. Every article ended in a link to Substack instead, which asks somebody who has
+   just finished reading to leave the site, find the form and start again.
+
+   THE LANE DECIDES THE DESTINATION AND THIS IS FOOTBALL AND SITE CONTENT, SO IT IS THE DISPATCH.
+   thearchvdispatch.substack.com, from DISPATCH_SUBSCRIBE_URL in page-shell.mjs. The AI lane's
+   list is a different list on a different property and nothing on this site captures to it.
+
+   It is a plain GET form, which is the whole design. The address goes to Substack's own subscribe
+   page as a query parameter and the reader finishes there, so this site never receives it, never
+   stores it and needs no endpoint, no key and no JavaScript. It works with the bundle blocked and
+   with scripting off. form-action on this page family is narrowed to 'self' plus the Dispatch
+   (see cspMeta), so the field cannot be repointed at anything else by an injected attribute.
+
+   ONE PER PAGE, AND BEHIND THE CONTENT. It sits after the body and before the rights notice, at
+   the point a reader has finished rather than in the middle of the piece. See the read ladder
+   below for how the two coordinate: this is the quiet standing ask, the ladder is the escalation,
+   and at three reads the ladder points at this form rather than repeating it. */
+const CAPTURE_ID = "inline-capture";
+const captureBlock = () => `
+      <aside class="capture" id="${CAPTURE_ID}" aria-labelledby="capture-title">
+        <h2 class="capture__title" id="capture-title">Get the next one by email</h2>
+        <p class="capture__note">The ARCHV Dispatch goes out free on Substack. Put an address in below and you finish signing up over there, so it goes to Substack and never to us.</p>
+        <form class="capture__form" action="${escAttr(DISPATCH_SUBSCRIBE_URL)}" method="get" target="_blank" rel="noopener noreferrer">
+          <label class="vh" for="capture-email">Your email address</label>
+          <input class="capture__field" id="capture-email" name="email" type="email" required
+                 autocomplete="email" inputmode="email" spellcheck="false"
+                 placeholder="you@example.com" />
+          <button class="capture__go" type="submit">Join the Dispatch</button>
+        </form>
+        <p class="capture__fine">Every issue carries an unsubscribe link. This site is static files with no database, so there is nowhere here to keep an address anyway.</p>
+      </aside>`;
+
+function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry) {
   const lane = section; // section carries label/seoSuffix/anchor/base/sportKey/laneKey
   // The Answer Desk lanes (NFL, F1, tennis, golf) file a question as the headline and its answer
   // as the body. Those two facts drive both the FAQPage block and the question H2 below; the
@@ -475,6 +537,12 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
     : null;
   const url = `${SITE}${section.base}${entry.date}/`;
   const ogImage = hasCard ? `${SITE}${section.base}${entry.date}/og.png` : `${SITE}/og.jpg`;
+  // JSON-LD image array: both generated crops when they exist. og:image above deliberately
+  // stays the single 1200x630 og.png (1.91:1 is the OG standard); the 16:9 variant is offered
+  // to the parsers that read schema.org image arrays, not to the share scrapers.
+  const schemaImages = hasCard
+    ? [ogImage, ...(hasWide ? [`${SITE}${section.base}${entry.date}/og-wide.png`] : [])]
+    : [`${SITE}/og.jpg`];
   const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
   const shareScript = shareScriptTag(url, entry.headline);
   const ladderScript = ladderScriptTag(url, section.base);
@@ -482,12 +550,19 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
     scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript)), scriptHash(extractScriptBody(ladderScript))],
     posthog: true,
     googleFonts: true,
+    // The one form on this page family is the inline capture, and it posts to the Dispatch.
+    // Naming it here means an injected action attribute has nowhere to send an address.
+    forms: [DISPATCH_URL],
   });
 
-  const figure = entry.image
+  // The page's own art. Resolved through entryArt() (phase 2B) rather than reading entry.image
+  // directly, so an entry the desk filed without an image still gets the banked portrait of the
+  // player it is about, or the club badge, or — on a genuine miss — nothing at all.
+  const art = entryArt(entry);
+  const figure = art
     ? `
       <figure class="article__fig">
-        <img src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? entry.headline)}" width="240" height="240" loading="eager" decoding="async" />
+        <img src="${escAttr(art.src)}" alt="${escAttr(art.alt)}" width="${art.width}" height="${art.height}" loading="eager" decoding="async" />
       </figure>` : "";
 
   const ladder = `
@@ -497,12 +572,32 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
         <a class="ladder__alt" id="ladder-alt" href="/"></a>
       </aside>
       <style>
-        .ladder{margin:44px 0 8px;padding:28px 24px;border:1px solid rgba(201,161,74,.32);border-radius:16px;background:rgba(255,255,255,.03);text-align:center}
-        .ladder__note{margin:0 0 18px;font-size:1rem;line-height:1.55;color:#F2EAD3}
-        .ladder__cta{display:inline-block;padding:14px 26px;border-radius:12px;background:#C9A14A;color:#071C2B;text-decoration:none;font-weight:600}
+        /* The one block on this page family that still carried navy hex codes after the phase 2A
+           flip (found by the 2B sweep). It resolves through the same tokens as everything else
+           now: white on --accent-ink measures 5.13:1, --ink-muted on the sunken grey 5.16:1. */
+        .ladder{margin:44px 0 8px;padding:28px 24px;border:1px solid var(--rule);border-radius:16px;background:var(--bg-sunken);box-shadow:var(--shadow-soft);text-align:center}
+        .ladder__note{margin:0 0 18px;font-size:1rem;line-height:1.55;color:var(--ink)}
+        .ladder__cta{display:inline-block;padding:14px 26px;border-radius:12px;background:var(--accent-ink);color:#FFFFFF;text-decoration:none;font-weight:600}
         .ladder__cta:hover{filter:brightness(1.06)}
-        .ladder__alt{display:block;margin-top:14px;font-size:.9rem;color:#B3AB92;text-decoration:underline;text-underline-offset:3px}
-        .ladder__alt:hover{color:#F2EAD3}
+        .ladder__alt{display:block;margin-top:14px;font-size:.9rem;color:var(--ink-muted);text-decoration:underline;text-underline-offset:3px}
+        .ladder__alt:hover{color:var(--accent-ink)}
+
+        /* The inline capture. Deliberately quieter than the ladder: a hairline box on the sunken
+           grey rather than a shadowed card, and the accent kept to the submit button. It is the
+           standing ask, not the escalated one. */
+        .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+        .capture{margin:2.4rem 0 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:.75rem;background:var(--bg-sunken)}
+        .capture[hidden]{display:none}
+        .capture__title{margin:0 0 .5rem;color:var(--ink);font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3}
+        .capture__note{margin:0 0 1rem;font-size:.95rem;line-height:1.55;color:var(--ink-soft)}
+        .capture__form{display:flex;flex-wrap:wrap;gap:.6rem}
+        .capture__field{flex:1 1 14rem;min-width:0;padding:.7rem .9rem;font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:.5rem;-webkit-appearance:none;appearance:none}
+        .capture__field::placeholder{color:var(--ink-muted)}
+        .capture__field:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px;border-color:var(--accent-ink)}
+        .capture__go{flex:0 0 auto;padding:.7rem 1.15rem;font:inherit;font-weight:600;cursor:pointer;color:#FFFFFF;background:var(--accent-ink);border:1px solid var(--accent-ink);border-radius:.5rem}
+        .capture__go:hover{filter:brightness(1.06)}
+        .capture__fine{margin:.85rem 0 0;font-size:.8rem;line-height:1.5;color:var(--ink-muted)}
+        @media (max-width:480px){.capture__go{width:100%}}
       </style>`;
 
   // W3.1 — "More from the <lane>": whole-card links to the previous 3 entries in this lane.
@@ -513,12 +608,10 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
         <ul class="more-cards">
           ${moreFrom
             .map((e) => {
-              // Non-empty alt (img alt audit, UNIT 4): these are content headshots inside a link,
-              // not decorative chrome, so they get the same fallback as the article's main figure.
-              const avatar = e.image
-                ? `<img class="more-card__avatar" src="${escAttr(e.image)}" alt="${escAttr(e.imageAlt ?? e.headline)}" loading="lazy" decoding="async" width="44" height="44" />`
-                : "";
-              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
+              // Same resolution chain as the article's own figure, at the smaller card size.
+              // The alt is never empty: these are content headshots inside a link, not chrome.
+              const avatar = cardArt(e, { className: "more-card__avatar", size: 44 });
+              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))} · ${esc(readLabel(e.dek, e.body))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
             })
             .join("\n          ")}
         </ul>
@@ -543,7 +636,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
   <meta name="description" content="${escAttr(metaDescription(entry.dek, entry.body))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${pageCsp}
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="The ARCHV" />
@@ -560,7 +653,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
   <meta name="twitter:image" content="${ogImage}" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   ${RSS_LINK}
-  <script type="application/ld+json">${schema(entry, url, lane.label, faq)}</script>
+  <script type="application/ld+json">${schema(entry, url, lane.label, faq, schemaImages)}</script>
 
   <!-- PostHog: pageview only on this static surface. Same project as the website. -->
   ${posthogSnippet()}
@@ -578,7 +671,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
       <p class="article__byline">By <a href="${escAttr(AUTHOR_URL)}" rel="author">${esc(AUTHOR_NAME)}</a></p>
-      <p class="article__meta">${esc(longDate(entry.date))}</p>
+      <p class="article__meta">${esc(longDate(entry.date))} &middot; ${esc(readLabel(entry.dek, entry.body))}</p>
       <div class="share" aria-label="Share this article">
         <button class="btn btn--ghost" id="share-native" type="button" hidden>Share</button>
         <a class="btn btn--ghost" id="share-x" href="${escAttr(xIntent)}" target="_blank" rel="noopener noreferrer">Share on X</a>
@@ -588,6 +681,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
         ${faq ? `<h2 class="answer__q">${esc(faq.question)}</h2>\n        ` : ""}<p><strong>${esc(entry.dek)}</strong></p>
         ${bodyHtml(entry.body)}
       </div>
+      ${captureBlock()}
       <p class="article__rights">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.</p>
       ${adjacent}
       <nav class="article__nav" aria-label="More from this section">
@@ -608,6 +702,7 @@ function render(entry, section, hasCard, moreFrom, prevEntry, nextEntry) {
 /* ---------- write pages ---------- */
 let count = 0;
 let cards = 0;
+let wideCards = 0;
 const urls = [];
 for (const section of sections) {
   // dist path segments from the section base: "/desk/transfer/" -> ["desk","transfer"];
@@ -619,8 +714,11 @@ for (const section of sections) {
     const dir = join(OUT, ...relParts, entry.date);
     mkdirSync(dir, { recursive: true });
 
-    // Per-article OG card; a failure never breaks the build, the page just keeps /og.jpg.
+    // Per-article OG cards, both crops; a failure never breaks the build, the page just keeps
+    // /og.jpg. The wide card is tried independently so a one-off failure there still leaves the
+    // standard og.png as og:image and in the JSON-LD image array.
     let hasCard = false;
+    let hasWide = false;
     try {
       const png = await ogCard(entry, lane.label);
       writeFileSync(join(dir, "og.png"), png);
@@ -628,6 +726,16 @@ for (const section of sections) {
       cards++;
     } catch (err) {
       console.warn(`[build-article-pages] og card failed for ${section.sportKey}/${section.laneKey}/${entry.date} (${entry.headline}): ${err && err.message ? err.message : err}`);
+    }
+    if (hasCard) {
+      try {
+        const wide = await ogCard(entry, lane.label, 675);
+        writeFileSync(join(dir, "og-wide.png"), wide);
+        hasWide = true;
+        wideCards++;
+      } catch (err) {
+        console.warn(`[build-article-pages] og-wide card failed for ${section.sportKey}/${section.laneKey}/${entry.date} (${entry.headline}): ${err && err.message ? err.message : err}`);
+      }
     }
 
     // W3.1 — "more from the lane": lane.days is newest-first (see src/data/*.ts), so entries at
@@ -639,7 +747,7 @@ for (const section of sections) {
     const prevEntry = lane.days[i + 1] ?? null; // older
     const nextEntry = lane.days[i - 1] ?? null; // newer
 
-    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, moreFrom, prevEntry, nextEntry));
+    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry));
     urls.push(`  <url><loc>${SITE}${section.base}${entry.date}/</loc><lastmod>${entry.date}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
     count++;
   }
@@ -657,4 +765,4 @@ if (sitemapSrc && urls.length) {
   writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
 }
 
-console.log(`[build-article-pages] wrote ${count} article page(s) and ${cards} og card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);
+console.log(`[build-article-pages] wrote ${count} article page(s), ${cards} og card(s) and ${wideCards} og-wide card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);

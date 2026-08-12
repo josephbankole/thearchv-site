@@ -7,7 +7,7 @@
   <meta name="description" content="A daily archive of sport in original illustration. Football, NFL, F1, tennis and golf. No ads, no account, no betting, and one quiet notification a day. Free on iPhone." />
   <!-- Indexable since 2026-07-28 (founder call): carries SoftwareApplication schema for app search. -->
   <link rel="canonical" href="https://thearchv.ca/app/" />
-  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, mirroring index.html.
@@ -61,11 +61,16 @@
 
   <style>
     :root {
-      --navy: #0C2A3E;
-      --navy-deep: #071C2B;
-      --cream: #F2EAD3;
-      --cream-dim: #B3AB92;
-      --gold: #C9A14A;
+      --navy: #FFFFFF;
+      --navy-deep: #F4F2F3;
+      --cream: #1E223D;
+      --cream-dim: #5F6485;
+      --gold: #C93A0F;
+      /* Added by the phase 2B sweep: the hairline and the elevation the white system uses, so
+         this page stops reaching for a gold alpha and a heavy black smudge that were drawn for
+         the navy ground. Mirrors --rule / --shadow-lift in scripts/shared/page-shell.mjs. */
+      --rule: #DED9DB;
+      --shadow-lift: 0 2px 4px rgba(30, 34, 61, 0.06), 0 16px 34px -18px rgba(30, 34, 61, 0.26);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     /* No fixed heights anywhere (2026-07-22): body's min-height is viewport-relative
@@ -80,7 +85,7 @@
       justify-content: center;
       padding: 28px 24px 48px;
       background:
-        radial-gradient(120% 80% at 50% 0%, #0e3047 0%, var(--navy) 45%, var(--navy-deep) 100%);
+        radial-gradient(120% 80% at 50% 0%, #FFFFFF 0%, var(--navy) 45%, var(--navy-deep) 100%);
       color: var(--cream);
       font-family: "Inter Tight", system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -115,8 +120,8 @@
       aspect-ratio: 4 / 5;
       object-fit: cover;
       border-radius: 16px;
-      border: 1px solid rgba(201, 161, 74, 0.35);
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--rule);
+      box-shadow: var(--shadow-lift);
       background: var(--navy-deep);
     }
     .kicker {
@@ -146,7 +151,7 @@
     .pitch {
       margin-top: 30px;
       padding-top: 24px;
-      border-top: 1px solid rgba(242, 234, 211, 0.14);
+      border-top: 1px solid rgba(30, 34, 61, 0.08);
       font-size: 0.98rem;
       line-height: 1.55;
       color: var(--cream);
@@ -179,7 +184,7 @@
       border: 0;
       border-radius: 12px;
       background: var(--gold);
-      color: var(--navy-deep);
+      color: #FFFFFF;  /* 5.13:1 on the accent fill */
       text-decoration: none;
       font-family: inherit;
       font-size: 1.02rem;
@@ -201,7 +206,7 @@
       width: 100%;
       padding: 15px 22px;
       border-radius: 12px;
-      border: 1px solid rgba(242, 234, 211, 0.4);
+      border: 1px solid rgba(30, 34, 61, 0.18);
       background: transparent;
       color: var(--cream);
       text-decoration: none;
@@ -219,19 +224,21 @@
       width: 100%;
       padding: 15px 16px;
       border-radius: 12px;
-      border: 1px solid rgba(242, 234, 211, 0.28);
+      border: 1px solid rgba(30, 34, 61, 0.13);
       background: rgba(255, 255, 255, 0.04);
       color: var(--cream);
       font-family: inherit;
       font-size: 1rem;
       text-align: center;
     }
-    .waitlist input::placeholder { color: rgba(179, 171, 146, 0.7); }
+    .waitlist input::placeholder { color: var(--cream-dim); }
     .waitlist input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
     .formnote { margin-top: 12px; font-size: 0.88rem; line-height: 1.5; min-height: 1.3em; }
     .formnote.ok { color: var(--gold); }
-    .formnote.bad { color: #E8A0A0; }
+    /* An error line has to be readable before it is red. #E8A0A0 measured 2.11:1 on the
+       white ground, which is a message nobody can read; #A32219 is 7.50:1. */
+    .formnote.bad { color: #A32219; }
 
     /* Substack subscribe, embedded. Cross-origin iframe, so we cannot restyle its
        inside; we only frame it to sit tidily in the column. */
@@ -246,7 +253,7 @@
     .dispatch-embed iframe {
       display: block;
       width: 100%;
-      border: 1px solid rgba(242, 234, 211, 0.18);
+      border: 1px solid rgba(30, 34, 61, 0.08);
       border-radius: 12px;
       background: #ffffff;
     }
@@ -255,7 +262,7 @@
       margin-top: 26px;
       font-size: 0.85rem;
       line-height: 1.6;
-      color: rgba(179, 171, 146, 0.75);
+      color: var(--cream-dim);
     }
     .fallback a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
     .fallback a:hover { color: var(--cream); }

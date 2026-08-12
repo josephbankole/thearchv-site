@@ -5,6 +5,7 @@
    masthead, same CSP-exempt inline-style pattern per thearchv-site/CLAUDE.md "Per-article
    pages"). Not used by the homepage bundle (src/), which stays CSP-clean and router-free. */
 import { createHash } from "node:crypto";
+import { entryArt } from "./illustrated.mjs";
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -12,6 +13,13 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // LIVE 2026-07-16. Country-neutral URL: Apple geo-redirects each visitor to their
 // own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
+
+// The ARCHV Dispatch, revived on Substack 2026-06-20 and the ONLY newsletter destination for
+// football and site content. There is a separate AI lane elsewhere in the workspace; nothing on
+// this site captures to it. One constant so the masthead link, the footer link, the read ladder
+// and the inline capture on every article page cannot drift apart.
+export const DISPATCH_URL = "https://thearchvdispatch.substack.com";
+export const DISPATCH_SUBSCRIBE_URL = `${DISPATCH_URL}/subscribe`;
 
 // The named author and editor of The ARCHV (founder decision, 2026-07-21; name FROZEN as
 // "Joseph Bankole" by founder ruling 2026-08-04 - do not vary it, and never introduce a second
@@ -37,11 +45,18 @@ export const AUTHOR_SAMEAS = [AUTHOR_URL, AUTHOR_PERSONAL_URL];
 // block point at the same set, consolidating the entity for search and answer engines.
 export const ORG_SAMEAS = [
   "https://www.instagram.com/thearchvfc/",
+  "https://www.instagram.com/thearchv.ca/",
   "https://www.threads.net/@thearchvfc",
+  "https://www.tiktok.com/@thearchvfc",
+  "https://www.facebook.com/profile.php?id=61590734246013",
+  "https://www.youtube.com/@thearchvca",
+  "https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg",
   "https://thearchvdispatch.substack.com",
   "https://www.linkedin.com/company/thearchvfc/",
   "https://x.com/thearchvfc",
   "https://www.etsy.com/shop/TheARCHVCA",
+  "https://apps.apple.com/app/id6786508653",
+  "https://flipboard.com/@thearchv",
 ];
 
 // Defensive sort: every lane's day-entry array is committed newest-first by convention
@@ -67,9 +82,18 @@ export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 // appending each following segment only while the whole stays within `max`. This
 // preserves the entity-rich pattern (headline · seoSuffix · The ARCHV) when it
 // fits and drops the least-important trailing pieces (brand first) when it does
-// not, rather than letting Google truncate the tail. Falls back to a word-boundary
-// truncation of the lead segment only if that alone overflows.
-export function clampTitle(segments, max = 60) {
+// not, rather than letting Google truncate the tail.
+//
+// THE LEAD SEGMENT IS NEVER CUT (2026-08-09). It used to be truncated to `max` with a
+// baked ellipsis, which shipped titles like "Manchester United have moved Altay Bayindir
+// off the wage…" — a headline visibly broken in the browser tab, in the share preview and
+// in every copy of the page a reader saves, to save nothing. A search engine already
+// truncates a long title in its own results, at its own width, and it does that whether or
+// not we pre-cut it; pre-cutting only destroys the full headline everywhere else. So the
+// lead segment now passes through whole, and `max` governs only which optional trailing
+// segments get appended. Raised to 65 at the same time so a full headline more often keeps
+// its entity suffix.
+export function clampTitle(segments, max = 65) {
   const parts = (Array.isArray(segments) ? segments : [segments])
     .map((s) => String(s ?? "").trim())
     .filter(Boolean);
@@ -80,13 +104,23 @@ export function clampTitle(segments, max = 60) {
     const candidate = `${title}${SEP}${parts[i]}`;
     if (candidate.length <= max) title = candidate;
   }
-  if (title.length > max) {
-    const cut = parts[0].slice(0, max - 1);
-    const sp = cut.lastIndexOf(" ");
-    title = (sp > max * 0.5 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?·-]+$/, "") + "…";
-  }
   return title;
 }
+
+// tests-by-assertion, the convention build-article-pages.mjs uses for its own helpers: a
+// regression fails the build at import time rather than shipping a broken <title>.
+(function selfTestClampTitle() {
+  const longHeadline = "Manchester United have moved Altay Bayindir off the wage bill and into a Championship season";
+  const out = clampTitle([longHeadline, "Manchester United transfer news", "The ARCHV"]);
+  if (out !== longHeadline) throw new Error(`clampTitle: an oversized lead segment must pass through whole, got ${JSON.stringify(out)}`);
+  if (/…/.test(out)) throw new Error("clampTitle: no baked ellipsis may survive in a title");
+  const fits = clampTitle(["Ederson is off, for now", "The ARCHV"]);
+  if (fits !== "Ederson is off, for now · The ARCHV") throw new Error(`clampTitle: a fitting suffix must be appended, got ${JSON.stringify(fits)}`);
+  const drops = clampTitle(["A headline of exactly forty-eight characters here", "Manchester United transfer news", "The ARCHV"]);
+  if (drops !== "A headline of exactly forty-eight characters here · The ARCHV") {
+    throw new Error(`clampTitle: an over-long middle segment should be dropped and the brand kept, got ${JSON.stringify(drops)}`);
+  }
+})();
 
 // clampDescription: collapse whitespace, then truncate to `max` at a word boundary
 // with a trailing ellipsis. Meta descriptions over ~160 chars get cut off in search
@@ -256,6 +290,25 @@ export function sportNav(currentSportKey = DEFAULT_SPORT, { home = false } = {})
     </div>`;
 }
 
+/* ---------- card art (phase 2B) ----------
+   The one place this page family turns a desk entry into an <img>. Resolution order lives in
+   entryArt() in scripts/shared/illustrated.mjs (filed image, then a banked player portrait named
+   in the copy, then the club badge, then nothing); this only decides how the tag is written.
+
+   Two rules the call sites used to each own a copy of, now held here. The alt is never empty: a
+   card avatar sits inside a link and is content, not chrome, so it always describes what it
+   shows. And the rendered box is square and fixed, because these come off two shelves at two
+   sizes (320px portraits, 240px head bank) and a card that resized itself per player would make
+   the lane front ripple.
+
+   `art` may be passed pre-resolved when the caller has already computed it (the article page
+   needs the same object for its OG card); otherwise pass the entry and let it resolve. */
+export function cardArt(entry, { className = "lane-card__avatar", size = 64, loading = "lazy", art = undefined } = {}) {
+  const a = art === undefined ? entryArt(entry) : art;
+  if (!a) return "";
+  return `<img class="${className}" src="${escAttr(a.src)}" alt="${escAttr(a.alt)}" loading="${loading}" decoding="async" width="${size}" height="${size}" />`;
+}
+
 // Simple desk text nav, on article AND lane pages (SITE-DEPTH-PLAN.md W3.3). Kept as plain
 // wrapping text links (not the masthead's button styling) so it stays collision-proof down to
 // 320px — verified in the build's interactive check. Now sport-aware: football keeps
@@ -286,21 +339,34 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 // script is untouched, so MASTHEAD_SCRIPT_HASH and every football page's CSP stay identical.
 export function masthead(currentSportKey = DEFAULT_SPORT) {
   return `<header class="masthead">
-    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
-    <div class="masthead__menu">
+    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
+    <div class="masthead__actions">
+      <a class="masthead__search" href="/search/" aria-label="Search the archive">
+        <svg class="masthead__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="6.8" cy="6.8" r="4.9" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="M10.5 10.5 L14.4 14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
+        <span class="masthead__search-label">Search</span>
+      </a>
+      <div class="masthead__menu">
       <button type="button" class="masthead__toggle" id="masthead-toggle" aria-expanded="false" aria-controls="masthead-panel" aria-label="Menu">
         <span class="masthead__toggle-bar"></span>
         <span class="masthead__toggle-bar"></span>
         <span class="masthead__toggle-bar"></span>
       </button>
       <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
+        <a class="masthead__panel-link" href="/">Front page</a>
+        <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+        <a class="masthead__panel-link" href="/duel/">Player duels</a>
+        <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
+        <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
+        <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
         <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
         <a class="masthead__panel-link" href="${APP_STORE_URL}">App</a>
       </nav>
+      </div>
     </div>
   </header>
+  <div class="mast-rule" aria-hidden="true"></div>
   ${sportNav(currentSportKey)}
   <script>
     (function () {
@@ -342,12 +408,13 @@ export function footer() {
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
+        <a href="/feed.xml">RSS</a>
         <a href="/glossary/">Glossary</a>
         <a href="/standards/">Standards</a>
         <a href="/about/">About</a>
         <a href="/corrections/">Corrections</a>
       </nav>
-      <p class="footer__tag">Football history, illustrated. Daily.</p>
+      <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>
   </footer>`;
@@ -407,7 +474,12 @@ export const POSTHOG_SCRIPT_HASH = scriptHash(extractScriptBody(posthogSnippet()
 // body's hash on THAT page (masthead + PostHog are shared; build-article-pages.mjs also
 // passes a per-page hash for its share-row script, which embeds that page's own url/title
 // and so is NOT identical across pages - verified: it must be computed per page, not once).
-export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null } = {}) {
+// `forms` narrows form-action to a named allowlist. It is opt-in rather than a default because
+// form-action has NO fallback to default-src: a page that omits it can post anywhere, which is
+// the status quo every page here shipped with. Article pages pass the Dispatch (the inline email
+// capture posts to Substack) and get 'self' with it; every other family stays as it was rather
+// than being silently tightened by a change made for one page.
+export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null, forms = null } = {}) {
   const scriptSrc = ["'self'", ...scripts.map((h) => `'${h}'`)];
   if (posthog) scriptSrc.push("https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com");
   const styleSrc = ["'self'", "'unsafe-inline'"]; // inline style="" attrs (e.g. the hidden App Store link)
@@ -427,6 +499,7 @@ export function cspMeta({ scripts = [], posthog = false, googleFonts = false, fr
     `base-uri 'self'`,
     `object-src 'none'`,
     `frame-src ${frameSrc.join(" ")}`,
+    ...(forms ? [`form-action 'self' ${forms.join(" ")}`] : []),
   ].join("; ");
   return `<meta http-equiv="Content-Security-Policy" content="${content}" />`;
 }
@@ -443,37 +516,71 @@ export function fontLinks() {
 export function pageStyles() {
   return `<style>
     :root {
-      --navy: #0C2A3E; --navy-deep: #071C2B; --navy-soft: #133A52;
-      --cream: #F2EAD3; --cream-dim: rgba(242,234,211,.72); --cream-faint: rgba(242,234,211,.3);
-      --gold: #C9A14A; --gold-soft: rgba(201,161,74,.5);
+      /* ---------- the white system (phase 2A, 2026-08-09) ----------
+         The ground flipped from navy to white and the ink flipped with it, across every page
+         family at once, so the article, lane, sport, glossary, standards, duel, guess and
+         author pages are the same publication as the front page rather than a dark annex of it.
+
+         MIRRORS the :root block in src/style.css and the smaller one in public/content.css.
+         The three files do not import each other. Change one, change all three. */
+      --bg: #FFFFFF; --bg-sunken: #F4F2F3;
+      --ink: #1E223D;        /* 15.54:1 on white, 13.94:1 on sunken */
+      --ink-soft: #4A4F73;   /*  7.90:1 on white,  7.09:1 on sunken */
+      /* --ink-muted is the readable-muted TEXT token and the direct successor of
+         --cream-faint-text: the prototype's --ink-faint (#7A7F9E) measures 3.92:1 on white and
+         3.52:1 on the sunken grey, so it fails AA wherever it carries words. #5F6485 is the same
+         hue ramp at 5.76:1 / 5.16:1, and it is what every breadcrumb, byline, date, desk-nav
+         link, related dek, prev/next label and footer legal line resolves to. */
+      --ink-muted: #5F6485;
+      /* Decorative only — bar fills and marks, never text. */
+      --ink-faint: #7A7F9E;
+      /* --accent is a fill and a rule, never text (#F54F1B is 3.49:1 on white). --accent-ink is
+         the text/link form at 5.13:1 white / 4.60:1 sunken. --on-accent goes on the fill. */
+      --accent-fill: #F54F1B; --accent-ink: #C93A0F; --on-accent: #16192E;
+      --rule: #DED9DB; --rule-soft: #EDEAEB;
+      --confirmed: #1E7A38; --on-status: #FFFFFF;
+
+      /* ---------- legacy aliases ----------
+         Every rule below this block was written against the navy vocabulary. The names stay and
+         resolve into the white system, which is the migration seam: one place to read, no rule
+         left behind. --gold points at --accent-ink because it was text far more often than it
+         was a fill, and white on --accent-ink measures 5.13:1 for the few cases where it is a
+         fill. Where the bright orange is wanted, a rule says var(--accent-fill). */
+      --navy: var(--bg); --navy-deep: var(--bg-sunken); --navy-soft: var(--bg-sunken);
+      --cream: var(--ink); --cream-dim: var(--ink-soft); --cream-faint: var(--rule);
+      --cream-faint-text: var(--ink-muted);
+      --gold: var(--accent-ink); --gold-soft: var(--rule);
       --maxw: 46rem;
 
-      /* ---------- semantic token layer (Tier 0, 2026-08-04) ----------
-         The five brand colours above are LOCKED and none of them changed. This layer only gives
-         them role names, so a rule can say what a colour is FOR instead of which hex it happens
-         to be, and so the dark-surface language has one place to live. Every value here resolves
-         to a brand colour or an alpha of one: --text-primary IS --cream, --bg-main IS --navy.
-         Adding a sixth hue here is a brand break, not a refactor. Mirrors the same block in
-         src/style.css; the two files do not import each other, so keep them in step. */
-      --text-primary: var(--cream);
-      --text-secondary: var(--cream-dim);
-      --text-faint: var(--cream-faint);
-      --bg-main: var(--navy);
-      --bg-elevated: var(--navy-deep);
-      --bg-raised: var(--navy-soft);
-      --border-main: var(--cream-faint);
-      --accent: var(--gold);
-      --accent-soft: var(--gold-soft);
-      /* Elevation. Softened 2026-08-04: the old panel shadow was rgba(0,0,0,.55), which on navy
-         read as a hard slab edge. Quiet ambient depth reads as expensive; a heavy drop shadow
-         reads as a 2014 UI kit. Two steps only, so elevation stays legible. */
-      --shadow-soft: 0 12px 32px -10px rgba(0,0,0,.32);
-      --shadow-lift: 0 18px 40px -14px rgba(0,0,0,.4);
+      /* ---------- semantic token layer ---------- */
+      --text-primary: var(--ink);
+      --text-secondary: var(--ink-soft);
+      --text-faint: var(--ink-muted);
+      --bg-main: var(--bg);
+      --bg-elevated: var(--bg);
+      --bg-raised: var(--bg-sunken);
+      --border-main: var(--rule);
+      --accent: var(--accent-ink);
+      --accent-soft: var(--rule);
+      /* Elevation. On a white ground the old wide, dark spreads read as a smudge rather than as
+         depth, so both steps are tighter and lighter: paper lifting off paper. */
+      --shadow-soft: 0 1px 2px rgba(30,34,61,.05), 0 8px 20px -12px rgba(30,34,61,.18);
+      --shadow-lift: 0 2px 4px rgba(30,34,61,.06), 0 16px 34px -18px rgba(30,34,61,.26);
       /* Micro-label face. System stack on purpose: the brand type lock is Fraunces + Inter Tight,
          and a third webfont for 10px eyebrows would cost a network round trip for nothing. */
       --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-      /* Dot-grid field colour: cream at a very low alpha, i.e. the locked cream, not a new grey. */
-      --dot: rgba(242,234,211,.06);
+      /* Dot-grid field colour: ink at a very low alpha (cream on white was invisible). */
+      --dot: rgba(30,34,61,.07);
+      /* Anton, the headline face. Self-hosted latin subset, same file the front page loads. */
+      --display: 'Anton', 'Inter Tight', system-ui, sans-serif;
+    }
+    /* Single-look by design: the dark-mode token block mirrors the light one, because a news
+       product with two grounds is two designs to maintain. */
+    :root[data-theme="dark"], :root[data-theme="light"] { color-scheme: light; }
+    @media (prefers-color-scheme: dark) { :root { color-scheme: light; } }
+    @font-face {
+      font-family: 'Anton'; font-style: normal; font-weight: 400; font-display: swap;
+      src: url('/fonts/anton-latin.woff2') format('woff2');
     }
     * { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
@@ -482,7 +589,7 @@ export function pageStyles() {
       margin: 0; background: var(--bg-main); color: var(--text-secondary);
       font-family: "Inter Tight", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       font-size: 18px; line-height: 1.65; -webkit-font-smoothing: antialiased;
-      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-raised) 0%, rgba(12,42,62,0) 70%);
+      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-sunken) 0%, rgba(255,255,255,0) 70%);
     }
     /* Dot-grid field (Tier 0). Two offset radial-gradient layers on a 24px lattice, masked so it
        fades out before the content gets dense. Purely decorative, pointer-events off, and it sits
@@ -498,7 +605,14 @@ export function pageStyles() {
       -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
       mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
     }
-    .masthead, .desknav, main, .footer { position: relative; z-index: 1; }
+    .desknav, main, .footer { position: relative; z-index: 1; }
+    /* The masthead needs more than z-index 1. It sits ABOVE the sticky .sportnav-wrap in document
+       order, its dropdown panel opens downward through that band, and .sportnav-wrap is z-index 30
+       — so with the masthead at 1 the tab bar painted over the panel's first item and swallowed it.
+       Live before this pass too: the old four-item menu simply lost "Follow" the same way. Raising
+       the masthead above the bar cannot hide the bar in return, because the masthead is static on
+       this page family and has scrolled away by the time the bar is pinned to anything. */
+    .masthead { position: relative; z-index: 40; }
     @media print { body::before { display: none; } }
     a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -511,12 +625,31 @@ export function pageStyles() {
     .wordmark { display: inline-flex; align-items: center; gap: .5rem; color: var(--cream); font-weight: 700; letter-spacing: .02em; flex-shrink: 0; white-space: nowrap; }
     .wordmark img { width: 34px; height: 34px; }
     .wordmark__the { opacity: .7; font-size: .8rem; letter-spacing: .18em; }
-    .wordmark__archv { font-size: 1.15rem; font-family: "Fraunces", Georgia, serif; }
+    .wordmark__archv { font-size: 1.35rem; font-family: var(--display); text-transform: uppercase; letter-spacing: .01em; }
+    .wordmark__the { color: var(--accent-ink); opacity: 1; font-family: var(--display); }
+    /* The accent hairline under the masthead: the front page's one bar of colour, repeated here
+       so a reader landing on an article sees the same publication. */
+    .mast-rule { height: 3px; background: var(--accent-fill); max-width: 72rem; margin: 0 auto; }
     .btn { display: inline-block; padding: .5rem .9rem; border-radius: .5rem; font-size: .85rem; font-weight: 600; white-space: nowrap; }
     .btn--ghost { border: 1px solid var(--gold-soft); color: var(--cream); }
-    .btn--gold { background: var(--gold); color: var(--navy-deep); }
+    .btn--gold { background: var(--gold); color: #FFFFFF; }  /* 5.13:1 on --accent-ink */
 
-    /* masthead hamburger menu (founder design, 2026-07-11) */
+    /* masthead search + hamburger. The search link is a visible destination beside the menu
+       rather than an item inside it (phase 3). MIRROR of the same rules in src/style.css and in
+       public/content.css; none of the three imports another. Change one, change all three. */
+    .masthead__actions { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+    .masthead__search {
+      display: inline-flex; align-items: center; gap: .4rem; height: 42px; padding: 0 .75rem;
+      border: 1px solid var(--gold-soft); border-radius: .4rem; color: var(--cream);
+      font-size: .8rem; font-weight: 600; letter-spacing: .04em; white-space: nowrap;
+    }
+    .masthead__search:hover { border-color: var(--cream); color: var(--accent-ink); text-decoration: none; }
+    .masthead__search:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .masthead__search-icon { flex: 0 0 auto; display: block; }
+    @media (max-width: 420px) {
+      .masthead__search-label { display: none; }
+      .masthead__search { width: 42px; padding: 0; justify-content: center; }
+    }
     .masthead__menu { position: relative; flex-shrink: 0; }
     .masthead__toggle {
       display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
@@ -538,12 +671,16 @@ export function pageStyles() {
       display: block; padding: .65em .8em; border-radius: .35rem; font-size: .85rem; font-weight: 600;
       color: var(--cream);
     }
-    .masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(242, 234, 211, .08); color: var(--gold); text-decoration: none; }
+    .masthead__panel-link:hover, .masthead__panel-link:focus-visible { background: rgba(30, 34, 61, .06); color: var(--accent-ink); text-decoration: none; }
     .masthead__panel-link--gold { color: var(--gold); }
+    /* Hairline between the internal destinations and the outbound ones (2026-08-09). Decorative,
+       so it keeps --cream-faint rather than the text token. Mirrors the same rule in
+       src/style.css and public/content.css; none of the three imports another. */
+    .masthead__panel-sep { display: block; height: 1px; margin: .3rem .55rem; background: var(--cream-faint); }
 
     /* three-desk text nav (W3.3): plain, wrapping, never collides at 320px */
     .desknav { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem .9rem; display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
-    .desknav__link { color: var(--cream-faint); }
+    .desknav__link { color: var(--cream-faint-text); }
     .desknav__link:hover { color: var(--gold); }
     .desknav__link[aria-current="page"] { color: var(--gold); }
 
@@ -585,7 +722,7 @@ export function pageStyles() {
     .sport-head__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     .sport-head h1 { margin: 0 0 .6rem; }
     .sport-head__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 1.6rem; }
-    .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: linear-gradient(180deg, rgba(19,58,82,.35), rgba(7,28,43,.35)); }
+    .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: var(--bg-sunken); }
     .sport-holding p { margin: 0; color: var(--cream-dim); font-size: 1rem; }
 
     .share { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 1.75rem; }
@@ -595,19 +732,19 @@ export function pageStyles() {
     .share [hidden] { display: none; }
 
     .article { padding: 2rem 0 1rem; }
-    .breadcrumb { font-size: .8rem; letter-spacing: .04em; color: var(--cream-faint); text-transform: uppercase; margin: 0 0 1rem; }
-    .breadcrumb a { color: var(--cream-faint); }
+    .breadcrumb { font-size: .8rem; letter-spacing: .04em; color: var(--cream-faint-text); text-transform: uppercase; margin: 0 0 1rem; }
+    .breadcrumb a { color: var(--cream-faint-text); }
     .article__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
-    h1 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; letter-spacing: -.01em; margin: 0 0 .5rem; }
+    h1 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.02; letter-spacing: .01em; margin: 0 0 .5rem; }
     /* named byline, sitting between the headline and the date. Deliberately quiet: same
        register as .article__meta below, with the author's name a touch brighter so the link
        reads as a link without becoming the loudest thing under the headline. */
-    .article__byline { color: var(--cream-faint); font-size: .85rem; margin: 0 0 .25rem; }
+    .article__byline { color: var(--cream-faint-text); font-size: .85rem; margin: 0 0 .25rem; }
     .article__byline a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
     .article__byline a:hover { color: var(--gold); }
-    .article__meta { color: var(--cream-faint); font-size: .9rem; margin: 0 0 1.5rem; }
+    .article__meta { color: var(--cream-faint-text); font-size: .9rem; margin: 0 0 1.5rem; }
     .article__fig { margin: 1.5rem 0 2rem; }
-    .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
+    .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
     .article__body p { margin: 1rem 0; }
     .article__body strong { color: var(--cream); }
     /* Answer Desk question heading (SEO/AEO audit fix 3, 2026-07-28). The sport question lanes
@@ -617,19 +754,26 @@ export function pageStyles() {
        than following a definition, and given no top margin because it is the body's first child. */
     .answer__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: clamp(1.2rem, 2.6vw, 1.4rem); line-height: 1.3; margin: 0 0 .35rem; }
     .article__body .answer__q + p { margin-top: .6rem; }
-    .article__rights { margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .85rem; color: var(--cream-faint); }
+    /* The closing "Sources: ..." paragraph. Its named outlets are links now (see SOURCE_LINKS in
+       scripts/build-article-pages.mjs), and the default gold anchor colour would turn the whole
+       paragraph into a gold rash, so the links take the quieter underlined treatment
+       .article__byline a already uses and save gold for the hover. */
+    .article__sources { font-size: .92rem; color: var(--cream-dim); }
+    .article__sources a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
+    .article__sources a:hover { color: var(--gold); }
+    .article__rights { margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .85rem; color: var(--cream-faint-text); }
     .article__nav { margin: 2.2rem 0 1rem; display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; font-size: .95rem; }
 
     /* prev/next chronological row (W3.2) */
     .adjacent { margin: 1.6rem 0; padding: 1.2rem 0 0; border-top: 1px solid var(--cream-faint); display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem 1.5rem; }
     .adjacent__link { max-width: 22rem; }
     .adjacent__link--next { text-align: right; margin-left: auto; }
-    .adjacent__dir { display: block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint); margin-bottom: .3rem; }
+    .adjacent__dir { display: block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint-text); margin-bottom: .3rem; }
     .adjacent__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.3; }
     .adjacent__headline:hover { text-decoration: underline; }
 
     .related { margin: 2.5rem 0 1rem; }
-    .related h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.5rem; margin: 0 0 .6rem; padding-top: 1.4rem; border-top: 1px solid var(--cream-faint); }
+    .related h2 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; font-size: 1.5rem; margin: 0 0 .6rem; padding-top: 1.4rem; border-top: 1px solid var(--cream-faint); }
     .related ul { list-style: none; padding: 0; margin: 0; }
     .related li { margin: .5rem 0; }
 
@@ -648,7 +792,7 @@ export function pageStyles() {
        headline did not happen to fill its last line. Live bug, fixed 2026-08-04, found when the
        author page reused this component at a wider measure where it showed on every card. */
     .more-card__headline { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.28; margin: 0 0 .6rem; }
-    .more-card__dek { display: block; font-size: .85rem; color: var(--cream-faint); margin: 0; }
+    .more-card__dek { display: block; font-size: .85rem; color: var(--cream-faint-text); margin: 0; }
     .related__all { display: inline-block; margin-top: 1.1rem; font-size: .9rem; }
 
     /* lane index page: full-width whole-card list */
@@ -659,15 +803,24 @@ export function pageStyles() {
     .lane__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 2rem; }
     .lane-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
     .lane-card { display: flex; gap: 1.1rem; align-items: flex-start; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem;
-      background: linear-gradient(180deg, rgba(19, 58, 82, 0.35), rgba(7, 28, 43, 0.35)); color: inherit; transition: border-color .2s ease, transform .2s ease; }
+      background: var(--bg-raised); color: inherit; transition: border-color .2s ease, transform .2s ease; }
     .lane-card:hover { border-color: var(--gold-soft); text-decoration: none; transform: translateY(-2px); }
     .lane-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-    .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--gold-soft); box-shadow: 0 0 0 4px rgba(7,28,43,.6); }
+    .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
     .lane-card__body { min-width: 0; }
     .lane-card__kicker { display: block; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .4rem; }
     /* Same inline-span margin bug as .more-card__headline above; see the note there. */
     .lane-card__headline { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.24; margin: 0 0 .75rem; }
     .lane-card__dek { display: block; font-size: .9rem; color: var(--cream-dim); margin: 0; }
+    /* A lane card that is not a link. The Legends front (scripts/build-section-pages.mjs) lists
+       profiles that have no page of their own, so those cards must not lift or glow on hover and
+       imply something to click. */
+    .lane-card--static:hover { border-color: var(--cream-faint); transform: none; box-shadow: var(--shadow-soft); }
+    /* Headline-only cards: the 404's route-back list. Without a kicker or a dek to fill them the
+       full-size card runs to 130px a row, and nine of those is a page of scrolling to find the
+       front page. */
+    .lane-card--compact { padding: .85rem 1.2rem; }
+    .lane-card--compact .lane-card__headline { font-size: 1.1rem; margin: 0; }
 
     /* "From the glossary" strip on lane index pages: a compact row of the lane's key terms,
        sitting above the footer. Inherits the enclosing main's width; no button styling. */
@@ -675,14 +828,14 @@ export function pageStyles() {
     .lane-glossary__title { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; margin: 0 0 .75rem; }
     .lane-glossary__list { list-style: none; padding: 0; margin: 0 0 .85rem; display: flex; flex-wrap: wrap; gap: .5rem .9rem; font-size: .95rem; }
     .lane-glossary__list a { color: var(--gold); }
-    .lane-glossary__all { font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--cream-faint); }
+    .lane-glossary__all { font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--cream-faint-text); }
     .lane-glossary__all:hover { color: var(--gold); }
 
     .footer { margin-top: 3rem; border-top: 1px solid var(--cream-faint); background: var(--navy-deep); }
     .footer .wrap { max-width: 72rem; padding-top: 2rem; padding-bottom: 2.5rem; }
     .footer__links { display: flex; flex-wrap: wrap; gap: .9rem 1.5rem; font-size: .9rem; margin: 0 0 1rem; }
     .footer__tag { color: var(--cream); margin: .5rem 0; }
-    .footer__legal { color: var(--cream-faint); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
+    .footer__legal { color: var(--cream-faint-text); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
 
     /* glossary (UNIT 1) + standards (UNIT 2): evergreen static surfaces */
     .glossary { padding: 1.5rem 0 1rem; }
@@ -691,7 +844,7 @@ export function pageStyles() {
     .glossary__answer { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.6rem; }
     .glossary__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
     .glossary-card { display: block; padding: 1.3rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; color: inherit;
-      background: linear-gradient(180deg, rgba(19, 58, 82, 0.35), rgba(7, 28, 43, 0.35)); transition: border-color .2s ease, transform .2s ease; }
+      background: var(--bg-raised); transition: border-color .2s ease, transform .2s ease; }
     .glossary-card:hover { border-color: var(--gold-soft); text-decoration: none; transform: translateY(-2px); }
     .glossary-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .glossary-card__term { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; line-height: 1.24; margin: 0 0 .4rem; }
@@ -699,7 +852,7 @@ export function pageStyles() {
 
     .standards { padding: 1.5rem 0 1rem; }
     .standards .lead { font-size: 1.15rem; color: var(--cream); margin: 0 0 1.8rem; }
-    .standards h2 { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.35rem; line-height: 1.2; margin: 2rem 0 .5rem; }
+    .standards h2 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; font-size: 1.35rem; line-height: 1.2; margin: 2rem 0 .5rem; }
     .standards p { margin: 0 0 1rem; }
 
     /* ============================================================
@@ -739,7 +892,7 @@ export function pageStyles() {
     }
     /* The crest stand-in is artwork, not a face: it gets padding and a transparent-friendly fit
        so it never reads as a cropped photograph of a person. */
-    .author__portrait--crest { object-fit: contain; padding: .55rem; background: rgba(7,28,43,.6); }
+    .author__portrait--crest { object-fit: contain; padding: .55rem; background: var(--bg-sunken); }
     .author__headtext { min-width: 0; }
     .author__headtext h1 { margin: 0 0 .35rem; }
     .author__role { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); margin: 0; }

@@ -27,7 +27,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, byDateDesc,
-  deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_PATH, AUTHOR_URL, AUTHOR_PERSONAL_URL, AUTHOR_SAMEAS,
   LANE_META, SPORTS, QUESTION_LANE_META,
@@ -77,7 +77,7 @@ const HEADSHOT_CANDIDATES = [
 ];
 const portrait =
   HEADSHOT_CANDIDATES.find((c) => existsSync(join(ROOT, "public", c.src.replace(/^\//, "")))) ||
-  { src: "/brand/crest-badge-400.webp", alt: "The ARCHV crest", real: false };
+  { src: "/brand/crest-badge-400.webp", alt: "The ARCHV monogram", real: false };
 
 /* ---------- day data (same bundled-temp-module pattern as build-lane-pages.mjs) ---------- */
 const entrySrc = [
@@ -150,9 +150,7 @@ const explainers = longReads("explainers").slice(0, 4);
 
 /* ---------- markup ---------- */
 function recentCard(e) {
-  const avatar = e.image
-    ? `<img class="lane-card__avatar" src="${escAttr(e.image)}" alt="${escAttr(e.imageAlt ?? `Illustration: ${e.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
-    : "";
+  const avatar = cardArt(e);
   return `<li><a class="lane-card" href="${escAttr(e.href)}">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(e.laneLabel)} · ${esc(longDate(e.date))}</span><span class="lane-card__headline">${esc(e.headline)}</span><span class="lane-card__dek">${esc(e.dek)}</span></span></a></li>`;
 }
 
@@ -251,7 +249,7 @@ function render() {
   <meta name="description" content="${escAttr(clampDescription(BIO_SUMMARY))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${PAGE_URL}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="profile" />
   <meta property="og:site_name" content="The ARCHV" />

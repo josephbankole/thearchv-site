@@ -8,6 +8,22 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-07",
+    day: "Friday",
+    headline: "Who won the 2026 Hall of Fame Game, and how did it end?",
+    dek: "The Carolina Panthers beat the Arizona Cardinals 33-30 in Canton, Ohio on 6 August 2026, on the last play of the game. It was the first NFL football of the 2026 preseason.",
+    body: "The Carolina Panthers beat the Arizona Cardinals 33-30 at Tom Benson Hall of Fame Stadium in Canton, Ohio on Thursday 6 August 2026. The Pro Football Hall of Fame's own report and ESPN's box score both give the score, and the NFL's report on the game agrees.\n\nIt finished on the final snap. Rookie quarterback Haynes King ran in a five-yard touchdown with no time remaining on the clock, which is how the Pro Football Hall of Fame and Yahoo Sports both describe the winning play. A preseason opener that nobody was scheduled to remember produced the one thing that makes people remember a preseason opener.\n\nThe game is an exhibition and the result carries no competitive weight. What it does carry is the calendar. This was the first NFL football of the 2026 season, and it exists because of the enshrinement weekend it opens. The 2026 Hall of Fame class goes in on 8 August: Larry Fitzgerald, Luke Kuechly, Drew Brees, Roger Craig and Adam Vinatieri, per NBC and Yahoo Sports.\n\nThe rest of the league starts a week later. Preseason Week 1 runs from 13 to 15 August with all 32 teams playing, and the preseason as a whole runs to 29 August, per the NFL's own schedule release and Fox Sports.\n\nSo if you have been waiting for the season to start: it has, technically, and it ended on a quarterback keeper with the clock on zero.",
+    status: "verified",
+  },
+  {
+    date: "2026-08-05",
+    day: "Wednesday",
+    headline: "Why have the Atlanta Falcons made Bijan Robinson the highest-paid running back in NFL history?",
+    dek: "Bijan Robinson has signed a three-year extension with the Atlanta Falcons carrying a record 51 million dollars guaranteed, and it arrived while he was sitting out training camp.",
+    body: "Bijan Robinson has the biggest running back contract in NFL history, and he got it by not turning up.\n\nThe Atlanta Falcons announced the extension on 4 August 2026. It runs three years, and the number that makes it a record is the guarantee: 51 million dollars, with 37 million paid at signing. Reported totals vary by outlet, with Athlon Sports and Sports Illustrated putting the maximum value at up to 75 million dollars, so the guarantee is the figure worth holding onto. It is the part the club cannot walk away from.\n\nThe deal begins after Robinson's fifth-year option in 2027 and ties him to Atlanta through 2030.\n\nHe earned it in every phase. Last season Robinson ran for 1,478 yards and seven touchdowns on 287 carries, and caught 79 passes for 820 yards and four more scores. A back who is also a primary receiving option is not the kind of running back the position's pay scale was built around, which is precisely the argument being made on his behalf while he stayed away.\n\nBecause he did stay away. Robinson missed training camp during the negotiation, and the extension arrived while he was off the field.\n\nRunning backs spent a decade being told the position was not worth paying at the top of the market. This is the clearest answer yet to that.\n\nThe same week cost the Atlanta Falcons something too. Edge rusher Jalon Walker went down with a knee injury feared to be a torn anterior cruciate ligament, reported by Ian Rapoport of NFL Network. That one is not confirmed, and this entry does not treat it as settled.\n\nSources: Atlanta Falcons official announcement, 4 August 2026; UPI; Sports Illustrated; Pro Football Rumors; Pro Football Focus; Athlon Sports; Atlanta News First on the highest-paid running back in NFL history; Ian Rapoport of NFL Network via Bleacher Report on Jalon Walker.",
+    status: "verified",
+  },
+  {
     date: "2026-08-04",
     day: "Tuesday",
     headline: "Which players have already lost the 2026 NFL season to injury?",

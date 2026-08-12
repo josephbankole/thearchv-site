@@ -1,0 +1,285 @@
+/* build-reads-pages.mjs — gives the long reads real URLs.
+
+   Until 2026-08-09 the ten flagship essays existed only as accordion strings inside the homepage
+   JS bundle: no URL, so nothing to share, nothing for a search engine to index, and no way for a
+   reader to get back to one. The hero's second CTA pointed at them. This script emits:
+
+     dist/reads/index.html          the section front, every essay newest first
+     dist/reads/<slug>/index.html   one page per essay
+
+   Slugs are DERIVED from the title by src/data/readSlug.ts, the same module the homepage
+   accordion imports to build its links, so the link and its destination cannot disagree. The
+   daily engine prepends essays to src/data/longReads.ts; a new one gets its page, its sitemap
+   row and its feed item on the next build with no other edit.
+
+   Same self-contained page family as the article and lane pages (scripts/shared/page-shell.mjs:
+   masthead, footer, brand CSS, PostHog, Google Fonts, CSP). Runs after build-content.mjs, which
+   writes dist/sitemap.xml first; this script appends its rows to whatever sitemap exists at that
+   point, the pattern build-lane-pages.mjs and build-article-pages.mjs already use. */
+import { build } from "esbuild";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import {
+  SITE, esc, escAttr, longDate, clampTitle, clampDescription,
+  masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+} from "./shared/page-shell.mjs";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const SRC = join(ROOT, "src");
+const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
+
+// Both inline scripts on this family (masthead toggle + PostHog loader) are static, no per-page
+// interpolation, so one CSP serves every page here — same as the lane fronts.
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+
+/* ---------- load the typed essay data via a bundled temp module (the pattern every generator
+   in this chain uses: a .mjs build script cannot import a .ts at run time) ---------- */
+const entrySrc = [
+  `export { longReads } from "./data/longReads.ts";`,
+  `export { readSlug, readPath } from "./data/readSlug.ts";`,
+  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
+  // the bundle this script already builds rather than being reimplemented here in .mjs.
+  `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
+].join("\n");
+const tmp = join(ROOT, ".reads-bundle.mjs");
+let data;
+try {
+  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "reads-entry.ts" },
+    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
+  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
+} finally { try { rmSync(tmp); } catch {} }
+
+const { readSlug, readPath, readLabel, readDuration, wordCount } = data;
+// Newest first, matching every other lane on the site. The array is committed in that order but
+// nothing in the type enforces it, so sort rather than trust — same reasoning as byDateDesc.
+const reads = [...data.longReads].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+// Two essays that slugged to the same path would silently overwrite each other's page and leave
+// one of them unreachable behind a link that looks fine. Fail the build instead.
+const bySlug = new Map();
+for (const r of reads) {
+  const slug = readSlug(r.title);
+  if (!slug) throw new Error(`[build-reads-pages] "${r.title}" produced an empty slug`);
+  if (bySlug.has(slug)) throw new Error(`[build-reads-pages] slug collision "${slug}": ${JSON.stringify(bySlug.get(slug).title)} and ${JSON.stringify(r.title)}`);
+  bySlug.set(slug, r);
+}
+
+const INDEX_PATH = "/reads/";
+const INDEX_LEDE = "Long-form from the archive. The ownership structures, the academies, the accounting and the television money that decide what happens on the pitch, one subject at a time.";
+// The standing rights notice the article pages carry, kept byte-identical to that copy.
+const RIGHTS = "The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.";
+
+// House titles carry a closing full stop ("The collapse of the Galácticos."). It belongs on the
+// page, where it is the brand's punctuation; it reads as a typo in a browser tab and a search
+// result, so strip it there only.
+const plainTitle = (t) => String(t).replace(/\.$/, "");
+
+// The essay's own opening sentence as its meta/social description: it is the first thing a
+// reader sees on the page too, so the preview and the page agree. Never invented copy.
+function firstSentence(body) {
+  const first = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  const m = first.match(/^.*?[.!?](?=\s|$)/);
+  return (m ? m[0] : first).trim();
+}
+
+const paras = (body) =>
+  String(body)
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => `<p>${esc(p)}</p>`)
+    .join("\n        ");
+
+// author/publisher reference the site's Organization entity by @id, the same shape the other
+// long-form family uses (scripts/build-content.mjs): index.html's Organization JSON-LD carries
+// this @id, so every essay points back at the one entity rather than describing a duplicate.
+const ORG_REF = { "@id": `${SITE}/#org` };
+
+function head({ title, description, url, extraLd }) {
+  return `<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>${esc(clampTitle([title, "The ARCHV"]))}</title>
+  <meta name="description" content="${escAttr(clampDescription(description))}" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <link rel="canonical" href="${url}" />
+  <meta name="theme-color" content="#FFFFFF" />
+  ${PAGE_CSP}
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="The ARCHV" />
+  <meta property="og:title" content="${escAttr(title)}" />
+  <meta property="og:description" content="${escAttr(description)}" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:image" content="${SITE}/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@thearchvfc" />
+  <meta name="twitter:title" content="${escAttr(title)}" />
+  <meta name="twitter:description" content="${escAttr(description)}" />
+  <meta name="twitter:image" content="${SITE}/og.jpg" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  ${RSS_LINK}
+  <script type="application/ld+json">${JSON.stringify(extraLd).replace(/</g, "\\u003c")}</script>
+
+  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
+  ${posthogSnippet()}
+
+  ${fontLinks()}
+
+  ${pageStyles()}
+</head>`;
+}
+
+function renderRead(read) {
+  const path = readPath(read.title);
+  const url = `${SITE}${path}`;
+  const description = firstSentence(read.body);
+  const others = reads.filter((r) => r !== read).slice(0, 6);
+
+  const related = others.length
+    ? `
+      <nav class="related" aria-label="More long reads">
+        <h2>More long reads</h2>
+        <ul>${others.map((r) => `<li><a href="${escAttr(readPath(r.title))}">${esc(r.title)}</a></li>`).join("")}</ul>
+        <a class="related__all" href="${INDEX_PATH}">Every long read &rarr;</a>
+      </nav>` : "";
+
+  return `<!doctype html>
+<html lang="en-GB">
+${head({
+  title: plainTitle(read.title),
+  description,
+  url,
+  extraLd: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        headline: plainTitle(read.title),
+        description,
+        datePublished: read.date,
+        dateModified: read.date,
+        isAccessibleForFree: true,
+        inLanguage: "en-GB",
+        articleSection: read.kicker,
+        author: ORG_REF,
+        publisher: ORG_REF,
+        image: `${SITE}/og.jpg`,
+        // Same helper as the visible "N min read" on the page and on the /reads/ front card.
+        wordCount: wordCount(read.body),
+        timeRequired: readDuration(read.body),
+        mainEntityOfPage: url,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Long reads", item: `${SITE}${INDEX_PATH}` },
+          { "@type": "ListItem", position: 3, name: plainTitle(read.title), item: url },
+        ],
+      },
+    ],
+  },
+})}
+<body>
+  ${masthead()}
+  <main class="wrap">
+    <article class="article">
+      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${INDEX_PATH}">Long reads</a></p>
+      <p class="article__eyebrow">${esc(read.kicker)}</p>
+      <h1>${esc(read.title)}</h1>
+      <p class="article__meta">${esc(read.meta)} · ${esc(longDate(read.date))} · ${esc(readLabel(read.body))}</p>
+      <div class="article__body">
+        ${paras(read.body)}
+      </div>
+      <p class="article__rights">${esc(RIGHTS)}</p>${related}
+    </article>
+  </main>
+  ${footer()}
+</body>
+</html>
+`;
+}
+
+function renderIndex() {
+  const url = `${SITE}${INDEX_PATH}`;
+  return `<!doctype html>
+<html lang="en-GB">
+${head({
+  title: "Long reads",
+  description: INDEX_LEDE,
+  url,
+  extraLd: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: "Long reads",
+        description: INDEX_LEDE,
+        url,
+        inLanguage: "en-GB",
+        isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` },
+        hasPart: reads.map((r) => ({
+          "@type": "Article",
+          headline: plainTitle(r.title),
+          datePublished: r.date,
+          url: `${SITE}${readPath(r.title)}`,
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Long reads", item: url },
+        ],
+      },
+    ],
+  },
+})}
+<body>
+  ${masthead()}
+  <main class="wrap wrap--wide">
+    <section class="lane">
+      <p class="breadcrumb"><a href="/">The ARCHV</a> / Long reads</p>
+      <p class="lane__eyebrow">Long reads</p>
+      <h1>Long reads</h1>
+      <p class="lane__lede">${esc(INDEX_LEDE)}</p>
+      <ul class="lane-list" aria-label="Long reads, newest first">
+        ${reads
+          .map((r) => `<li><a class="lane-card" href="${escAttr(readPath(r.title))}"><span class="lane-card__body"><span class="lane-card__kicker">${esc(r.kicker)} · ${esc(longDate(r.date))} · ${esc(readLabel(r.body))}</span><span class="lane-card__headline">${esc(r.title)}</span><span class="lane-card__dek">${esc(r.meta)}</span></span></a></li>`)
+          .join("\n        ")}
+      </ul>
+    </section>
+  </main>
+  ${footer()}
+</body>
+</html>
+`;
+}
+
+/* ---------- write pages ---------- */
+const urls = [`  <url><loc>${SITE}${INDEX_PATH}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>`];
+mkdirSync(join(OUT, "reads"), { recursive: true });
+writeFileSync(join(OUT, "reads", "index.html"), renderIndex());
+for (const [slug, read] of bySlug) {
+  const dir = join(OUT, "reads", slug);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "index.html"), renderRead(read));
+  urls.push(`  <url><loc>${SITE}/reads/${slug}/</loc><lastmod>${read.date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`);
+}
+
+/* ---------- sitemap: append to whatever dist/sitemap.xml exists at this point in the chain,
+   falling back to public/sitemap.xml if dist's copy is somehow missing. Same as the lane and
+   article generators. */
+const sitemapOut = join(OUT, "sitemap.xml");
+const sitemapFallback = join(ROOT, "public", "sitemap.xml");
+const sitemapSrc = existsSync(sitemapOut) ? sitemapOut : existsSync(sitemapFallback) ? sitemapFallback : null;
+if (sitemapSrc) {
+  const xml = readFileSync(sitemapSrc, "utf8");
+  writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
+}
+
+console.log(`[build-reads-pages] wrote ${bySlug.size} long-read page(s) + the /reads/ front to ${OUT}/reads/, appended ${urls.length} sitemap row(s)`);

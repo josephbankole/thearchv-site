@@ -17,7 +17,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { existsSync } from "node:fs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, byDateDesc,
-  deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
+  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
@@ -46,6 +46,9 @@ const entrySrc = [
   `export { f1Days } from "./data/f1Days.ts";`,
   `export { tennisDays } from "./data/tennisDays.ts";`,
   `export { golfDays } from "./data/golfDays.ts";`,
+  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
+  // the bundle this script already builds rather than being reimplemented here in .mjs.
+  `export { readLabel } from "./lib/readTime.ts";`,
 ].join("\n");
 const tmp = join(ROOT, ".lane-bundle.mjs");
 let data;
@@ -69,6 +72,7 @@ const SPORT_DAYS = {
   tennis: [...data.tennisDays].sort(byDateDesc),
   golf: [...data.golfDays].sort(byDateDesc),
 };
+const { readLabel } = data;
 
 // Intro copy (SEO/AEO pass, UNIT 2, 2026-07-14): each lane's cards carried little or no
 // crawlable prose above them, so every intro now states what the lane covers (keyword-bearing,
@@ -85,13 +89,11 @@ const LANES = {
 };
 
 function laneCard(entry, laneKey) {
-  // Non-empty fallback (img alt audit, UNIT 4): matches the convention in dailyDigest.ts and
-  // build-article-pages.mjs's main figure — every lane card avatar gets a real description even
-  // when the day's data has no explicit imageAlt.
-  const avatar = entry.image
-    ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />`
-    : "";
-  return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
+  // Art and its alt now come from cardArt() in scripts/shared/page-shell.mjs, which resolves the
+  // filed image first and falls back to a banked portrait or the club badge (phase 2B). Before
+  // that, a lane front was a wall of text on every day the desk filed no image field.
+  const avatar = cardArt(entry);
+  return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))} · ${esc(readLabel(entry.dek, entry.body))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
 }
 
 // Compact "From the glossary" strip: the lane's 2-3 relevant terms, linked to their glossary
@@ -131,7 +133,7 @@ function render(laneKey, lane) {
   <meta name="description" content="${escAttr(clampDescription(lane.intro))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
@@ -221,7 +223,7 @@ function renderSportLane(sport, laneKey) {
 
   const rail = days.length
     ? `<ul class="lane-list" aria-label="${escAttr(`${sport.label} ${laneLabel}`)}, newest first">
-        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${entry.image ? `<img class="lane-card__avatar" src="${escAttr(entry.image)}" alt="${escAttr(entry.imageAlt ?? `Illustration: ${entry.headline}`)}" loading="lazy" decoding="async" width="64" height="64" />` : ""}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
+        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${cardArt(entry)}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))} · ${esc(readLabel(entry.dek, entry.body))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
       </ul>`
     : `<div class="sport-holding"><p>${esc(copy.holding)}</p></div>`;
 
@@ -234,7 +236,7 @@ function renderSportLane(sport, laneKey) {
   <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${canonical}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />

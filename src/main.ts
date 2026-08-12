@@ -2,48 +2,41 @@ import '@fontsource-variable/fraunces';
 import '@fontsource-variable/inter-tight';
 import './style.css';
 
+import { initFrontCards } from './components/frontCards';
 import { initLongReads } from './components/longReads';
-import { initLegends } from './components/legends';
 import { initArchiveRail } from './components/archiveRail';
-import { initDailyDigest } from './components/dailyDigest';
 import { initContactForm } from './components/contactForm';
 import { initStickyFollow } from './components/stickyFollow';
 import { initChrome, initMastheadMenu } from './ui/chrome';
-import { initReveal } from './anim/reveal';
 import { initSportTabs } from './ui/sportTabs';
 import { initAnalytics } from './analytics';
-import { leaguesDays } from './data/leaguesDays';
-import { transferDays } from './data/transferDays';
-import { worldCupDays } from './data/worldCupDays';
 
 const root = document.documentElement;
 const reducedMotion = root.classList.contains('reduced-motion');
-const isMobile = root.classList.contains('is-mobile');
 const animate = !reducedMotion;
 
 function boot(): void {
-  // Content + conversion paths (must work with zero motion)
-  initDailyDigest('leagues-days', leaguesDays, 'leagues');
-  initDailyDigest('transfer-days', transferDays, 'transfer');
-  initDailyDigest('worldcup-days', worldCupDays, 'worldcup');
+  // Every block on this page is in the HTML before this file runs (src/render/home.ts, injected
+  // at build time): the bands, the lead, the wire, the illustrated library, and as of phase 2B
+  // the legends wall and the long reads too. Nothing below creates front-page content; it
+  // attaches behaviour to content that is already there. That is the whole point of the rebuild:
+  // no reader ever waits on this bundle to see a story.
+  initFrontCards();
+
+  // Content + conversion paths (must work with zero motion). initLongReads attaches the height
+  // animation to an accordion that is already in the HTML and already works without it; the
+  // legends wall has no behaviour at all now, so its component is gone rather than idle.
   initLongReads(animate);
-  initLegends();
   initArchiveRail();
   initContactForm();
   initStickyFollow();
 
-  // Masthead hamburger (Follow / Subscribe / Shop / hidden App). Runs in every
+  // Masthead hamburger (internal destinations above the rule, outbound below). Runs in every
   // mode: it toggles a `hidden` attribute directly, no CSS transition to gate.
   initMastheadMenu();
 
   // Sport tab bar: scroll the active tab into view. Runs in every mode (instant, no motion).
   initSportTabs();
-
-  // Tier 0 scroll reveal for the day-rail cards the digest just injected. Runs in every mode on
-  // purpose: under reduced motion the CSS resolves [data-inview] straight to its finished state,
-  // so this only flips an attribute and nothing animates. Must run AFTER initDailyDigest, which
-  // is what creates the cards it observes.
-  initReveal();
 
   // Page chrome (progress bar + scroll-spy nav). Affordance, not decoration:
   // runs in every mode; its motion is CSS-gated and reduced-motion safe.
@@ -55,16 +48,6 @@ function boot(): void {
   // Motion layer
   if (animate) {
     import('./anim/scroll').then(({ initScroll }) => initScroll());
-  }
-
-  // WebGL hero: desktop only, never under reduced motion. Off the critical path.
-  if (animate && !isMobile) {
-    const mount = document.getElementById('webgl');
-    if (mount) {
-      import('./webgl/hero')
-        .then(({ initHero }) => initHero(mount))
-        .catch(() => { /* WebGL unsupported: navy + grain fallback covers it */ });
-    }
   }
 }
 

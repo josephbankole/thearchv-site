@@ -101,7 +101,7 @@ const html = `<!doctype html>
   <meta name="description" content="${escAttr(DESCRIPTION)}" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="${URL}" />
-  <meta name="theme-color" content="#0C2A3E" />
+  <meta name="theme-color" content="#FFFFFF" />
   ${PAGE_CSP}
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />

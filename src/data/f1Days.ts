@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-11",
+    day: "Tuesday",
+    headline: "When does Formula 1 return, and what is new at the 2026 Dutch Grand Prix?",
+    dek: "Formula 1 returns at Zandvoort on 21 to 23 August 2026 with the first sprint ever held at the Dutch Grand Prix. Kimi Antonelli leads the drivers' championship by 50 points from Lewis Hamilton.",
+    body: "Formula 1 has been on its summer break since the Hungarian Grand Prix at the end of July. The next round is the Dutch Grand Prix at Zandvoort, running 21 to 23 August, per Formula 1's official 2026 calendar.\n\nThe new part is the format. The weekend carries the first Formula 1 sprint ever held on Dutch soil, per the race's official site and Formula 1's published weekend timetable. The grand prix itself starts at 3pm local time on Sunday 23 August.\n\nKimi Antonelli goes into the second half of the season leading the drivers' standings by 50 points from Lewis Hamilton, per Forbes' round-up after the Hungarian Grand Prix. The same standings have George Russell third, nine points behind Hamilton, Charles Leclerc fourth on 138 points, and Lando Norris fifth on 128 after his win in Hungary.\n\nNorris won in Budapest on 26 July. Nobody has raced since.\n\nSources: Formula 1 official 2026 calendar and Dutch Grand Prix weekend timetable (dates, sprint, start time); dutchgp.com (first sprint at Zandvoort); Forbes (drivers' standings after the Hungarian Grand Prix).",
+    status: "verified",
+  },
+  {
     date: "2026-07-31",
     day: "Friday",
     headline: "Why is there no Formula 1 race for the next three weeks?",

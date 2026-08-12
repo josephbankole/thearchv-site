@@ -1,0 +1,232 @@
+{
+  "schema": "archv.site-illustrated/1",
+  "_comment": "Illustrated art the site may place on a page: ARCHV-drawn player portraits and ARCHV-designed club badges. Faces are illustrated-only by canon, and every badge here is our own typographic disc, never a club's real crest. Read through scripts/shared/illustrated.mjs (generators) or src/render/illustrated.ts (front page), never by hand-writing a path. TWO ASSET HOMES, both in this repo: public/media/illustrated/ holds the 320px front-page portraits and the badges (sources: fifa.archv/assets/headshots and fifa.archv/match-covers/carousel/assets/badges), and public/heads/ holds the 240px webp head bank the daily desk job commits and already cites in entry.image. Phase 2B banked the head-bank faces here so a card gets a portrait even on the days the desk filed no image field. Nothing new was generated: every player below was already drawn, already committed, and already named on this site.",
+  "_identity": "Each head-bank entry's identity comes from two in-repo records that agree: the bank index at fifa.archv/player-headshot-bank.md, and the desk's own committed imageAlt for that same file in src/data/*.ts. A face with only one of the two is not listed. Deliberately NOT listed: /heads/ederson.webp, because the desk's Ederson is the Atalanta midfielder and a bare mononym would also match Manchester City's goalkeeper, who is a different Brazilian with a different face. A wrong face is worse than no face, so that one stays on the entries that name it by hand.",
+  "players": [
+    {
+      "slug": "nilson-angulo",
+      "name": "Nilson Angulo",
+      "nation": "Ecuador",
+      "src": "/media/illustrated/head-angulo.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Nilson Angulo of Ecuador"
+    },
+    {
+      "slug": "elijah-just",
+      "name": "Elijah Just",
+      "nation": "New Zealand",
+      "src": "/media/illustrated/head-elijahjust.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Elijah Just of New Zealand"
+    },
+    {
+      "slug": "issa-diop",
+      "name": "Issa Diop",
+      "nation": "Morocco",
+      "src": "/media/illustrated/head-issadiop.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Issa Diop of Morocco"
+    },
+    {
+      "slug": "riyad-mahrez",
+      "name": "Riyad Mahrez",
+      "nation": "Algeria",
+      "src": "/media/illustrated/head-mahrez.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of Riyad Mahrez of Algeria"
+    },
+    {
+      "slug": "vozinha",
+      "name": "Vozinha",
+      "nation": "Cape Verde",
+      "src": "/media/illustrated/head-vozinha.jpg",
+      "width": 320,
+      "height": 320,
+      "alt": "Illustrated ARCHV portrait of the Cape Verde goalkeeper Vozinha"
+    },
+    {
+      "slug": "lewis-hall",
+      "name": "Lewis Hall",
+      "nation": "England",
+      "src": "/heads/hall.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Lewis Hall of England"
+    },
+    {
+      "slug": "marcus-rashford",
+      "name": "Marcus Rashford",
+      "nation": "England",
+      "src": "/heads/rashford.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Marcus Rashford of England"
+    },
+    {
+      "slug": "andrey-santos",
+      "name": "Andrey Santos",
+      "nation": "Brazil",
+      "src": "/heads/andrey-santos.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Andrey Santos of Brazil"
+    },
+    {
+      "slug": "youri-tielemans",
+      "name": "Youri Tielemans",
+      "nation": "Belgium",
+      "src": "/heads/youri-tielemans.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Youri Tielemans of Belgium"
+    },
+    {
+      "slug": "manu-kone",
+      "name": "Manu Kone",
+      "nation": "France",
+      "src": "/heads/kone.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Manu Kone of France"
+    },
+    {
+      "slug": "mateus-fernandes",
+      "name": "Mateus Fernandes",
+      "nation": "Portugal",
+      "src": "/heads/fernandes.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Mateus Fernandes of Portugal"
+    },
+    {
+      "slug": "carlos-baleba",
+      "name": "Carlos Baleba",
+      "nation": "Cameroon",
+      "src": "/heads/baleba.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Carlos Baleba of Cameroon"
+    },
+    {
+      "slug": "elliot-anderson",
+      "name": "Elliot Anderson",
+      "nation": "England",
+      "src": "/heads/anderson.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Elliot Anderson of England"
+    },
+    {
+      "slug": "aurelien-tchouameni",
+      "name": "Aurelien Tchouameni",
+      "nation": "France",
+      "src": "/heads/tchouameni.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Aurelien Tchouameni of France"
+    },
+    {
+      "slug": "eduardo-camavinga",
+      "name": "Eduardo Camavinga",
+      "nation": "France",
+      "src": "/heads/camavinga.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Eduardo Camavinga of France"
+    },
+    {
+      "slug": "jude-bellingham",
+      "name": "Jude Bellingham",
+      "nation": "England",
+      "src": "/heads/bellingham.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Jude Bellingham of England"
+    },
+    {
+      "slug": "kylian-mbappe",
+      "name": "Kylian Mbappe",
+      "nation": "France",
+      "src": "/heads/mbappe.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Kylian Mbappe of France"
+    },
+    {
+      "slug": "lionel-messi",
+      "name": "Lionel Messi",
+      "nation": "Argentina",
+      "src": "/heads/messi.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Lionel Messi of Argentina"
+    },
+    {
+      "slug": "cristiano-ronaldo",
+      "name": "Cristiano Ronaldo",
+      "nation": "Portugal",
+      "src": "/heads/ronaldo.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Cristiano Ronaldo of Portugal"
+    },
+    {
+      "slug": "erling-haaland",
+      "name": "Erling Haaland",
+      "nation": "Norway",
+      "src": "/heads/haaland.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Erling Haaland of Norway"
+    },
+    {
+      "slug": "folarin-balogun",
+      "name": "Folarin Balogun",
+      "nation": "United States",
+      "src": "/heads/balogun.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Folarin Balogun of the United States"
+    },
+    {
+      "slug": "raul-jimenez",
+      "name": "Raul Jimenez",
+      "nation": "Mexico",
+      "src": "/heads/jimenez.webp",
+      "width": 240,
+      "height": 240,
+      "alt": "Illustrated ARCHV portrait of Raul Jimenez of Mexico",
+      "verifiedBy": "Two agreeing in-repo records, checked 2026-08-09: the bank index row 'Raúl Jiménez | MEX' (regen3 2026-06-11, photo-ref Wikimedia '2017 Confederation Cup - MEXNZL - Raúl Jiménez (crop).jpg'), and the desk's own committed imageAlt 'Raúl Jiménez, illustrated by The ARCHV.' on /heads/jimenez.webp in src/data/worldCupDays.ts. Full name only: the bare surname would also match /heads/jimenez-fulham.webp and any other Jimenez."
+    }
+  ],
+  "clubs": [
+    {
+      "slug": "leeds-united",
+      "name": "Leeds United",
+      "src": "/media/illustrated/badge-leeds-united.png",
+      "width": 120,
+      "height": 120,
+      "alt": "The ARCHV badge for Leeds United"
+    },
+    {
+      "slug": "manchester-united",
+      "name": "Manchester United",
+      "src": "/media/illustrated/badge-manchester-united.png",
+      "width": 120,
+      "height": 120,
+      "alt": "The ARCHV badge for Manchester United"
+    },
+    {
+      "slug": "paris-saint-germain",
+      "name": "Paris Saint-Germain",
+      "src": "/media/illustrated/badge-paris-saint-germain.png",
+      "width": 120,
+      "height": 120,
+      "alt": "The ARCHV badge for Paris Saint-Germain"
+    }
+  ]
+}

@@ -8,6 +8,30 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-11",
+    day: "Tuesday",
+    headline: "Who is in the field for the 2026 FedEx St. Jude Championship?",
+    dek: "The first FedEx Cup playoff event of 2026 runs 13 to 16 August at TPC Southwind in Memphis with 69 players, after Daniel Berger qualified and is not playing. Only 50 advance to the BMW Championship.",
+    body: "The 2026 FedEx Cup playoffs open on Thursday. The FedEx St. Jude Championship runs from 13 to 16 August at TPC Southwind in Memphis, Tennessee, with a 20 million dollar purse and 750 FedEx Cup points to the winner, per The Golf News Net's field report and the tournament's official guide.\n\nThe field is built for 70 players, the top 70 in the season-long FedEx Cup standings. It will start with 69. Daniel Berger qualified and is not in the field, per Yahoo Sports and Heavy, so nobody moves up to replace him and the tournament plays one man short.\n\nScottie Scheffler, Rory McIlroy and Cameron Young headline the entry list, per The Golf News Net.\n\nFifty players advance to the following week's BMW Championship, and thirty reach the Tour Championship after that. A player ranked in the sixties needs the round of his season in the one week the season cannot be extended.\n\nThe field was settled two days ago. The Wyndham Championship closed the regular season on Sunday 9 August and finalised the top 70, per The Golf News Net, which is how 69 names ended up on this entry list.\n\nSources: The Golf News Net (field, rankings, finalised top 70); Yahoo Sports and Heavy (Berger absence); Memphis Travel tournament guide (venue, format); Wikipedia, 2026 FedEx Cup Playoffs (structure, advancement numbers).",
+    status: "verified",
+  },
+  {
+    date: "2026-08-10",
+    day: "Monday",
+    headline: "Who won the 2026 Wyndham Championship?",
+    dek: "Michael Brennan won the 2026 Wyndham Championship at Sedgefield Country Club on Sunday 9 August, closing with a 6-under 64 to finish 22 under and take his second PGA Tour title.",
+    body: "Michael Brennan won the 2026 Wyndham Championship on Sunday 9 August, and he won it the hard way to watch and the easy way to read: five consecutive birdies to pull clear of Beau Hossler, a closing 6-under 64, and a 22-under total of 258 that matched the tournament record at Sedgefield Country Club in Greensboro, North Carolina. The Washington Post, Golf Channel and Yahoo Sports all carried the result.\n\nIt is his second PGA Tour title in two years, and it booked his place in the FedExCup playoffs at the last possible moment, because the Wyndham Championship was the final event of the regular season.\n\nBrennan has been threatening a week like this all summer. At the Rocket Classic in July he made eight consecutive birdies in a single round, one short of the PGA Tour record, and still finished behind the winner. On Sunday the same streak arrived with the lead on the line.\n\nThe playoff field is now set. The top 70 in the FedExCup standings advance, and The Golf News Net published the full list of 70 on Sunday night, each of them also securing a PGA Tour card for 2027. From here the season narrows quickly: the FedEx St. Jude Championship at TPC Southwind in Memphis runs Thursday 13 to Sunday 16 August, the BMW Championship cuts the field to 50, and the Tour Championship at East Lake takes 30.\n\nThe first playoff tee shot is on Thursday.\n\nSources: The Washington Post, Golf Channel and Yahoo Sports on the final round and result; The Golf News Net on the finalised top 70 and the 2027 cards; Golf Channel on the playoff schedule and format; PGA Tour official round-one report from the Rocket Classic on Brennan's eight-birdie run.",
+    status: "verified",
+  },
+  {
+    date: "2026-08-06",
+    day: "Thursday",
+    headline: "Who is Jackson Koivun, the 21-year-old who beat Scottie Scheffler in his third professional start?",
+    dek: "Jackson Koivun won the 2026 3M Open in his third start as a professional, holding off world number one Scottie Scheffler by three shots. He tees off at the Wyndham Championship at Sedgefield Country Club on 6 August.",
+    body: "Jackson Koivun turned professional this summer and won a PGA Tour event in his third start. The player he held off was Scottie Scheffler.\n\nKoivun won the 3M Open at TPC Twin Cities on 26 July, closing with a 5 under 66 to finish 25 under par at 259, a tournament record. That was three shots clear of the world number one. He was 21 years old and collected 1,584,000 dollars, and he is the fourth rookie to win on the PGA Tour this season.\n\nThe amateur record behind it is the part that explains the speed. Koivun broke the NCAA career record for per round stroke average at 68.89 and helped Auburn win the national championship. He had already won the Phil Mickelson Award and the Fred Haskins Award.\n\nHe is in the field at the Wyndham Championship, which starts at Sedgefield Country Club today and runs to 9 August. It is the last event of the PGA Tour regular season and the final chance to reach the top 70 of the FedExCup before the FedEx St. Jude Championship next week. The field runs to 147 players and the purse is 8.5 million dollars.\n\nThe names around him are worth knowing. Defending champion Cameron Young goes out at 7:45 in the morning with Alex Fitzpatrick and Justin Thomas. The afternoon group has Jason Day, Ryan Gerard and Jordan Spieth at 1:05. Keegan Bradley, the 2025 United States Ryder Cup captain, is outside the playoff places a year after finishing seventh in the FedExCup, and this is the week he has left to fix it.\n\nFor Koivun the maths runs the other way. A player who was in college golf a few months ago arrives at the regular season finale having already won, while the established names in the field are playing for the right to keep their season going.",
+    status: "verified",
+  },
+  {
     date: "2026-08-04",
     day: "Tuesday",
     headline: "Who is on the FedExCup line going into the Wyndham Championship?",

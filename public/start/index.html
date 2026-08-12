@@ -7,7 +7,7 @@
   <meta name="description" content="Every final since 1970, drawn. Today's verified story, the poster archive, the Dispatch and the store." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="https://thearchv.ca/start/" />
-  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, mirroring index.html.
@@ -43,11 +43,16 @@
 
   <style>
     :root {
-      --navy: #0C2A3E;
-      --navy-deep: #071C2B;
-      --cream: #F2EAD3;
-      --cream-dim: #B3AB92;
-      --gold: #C9A14A;
+      --navy: #FFFFFF;
+      --navy-deep: #F4F2F3;
+      --cream: #1E223D;
+      --cream-dim: #5F6485;
+      --gold: #C93A0F;
+      /* Added by the phase 2B sweep: the hairline and the elevation the white system uses, so
+         this page stops reaching for a gold alpha and a heavy black smudge that were drawn for
+         the navy ground. Mirrors --rule / --shadow-lift in scripts/shared/page-shell.mjs. */
+      --rule: #DED9DB;
+      --shadow-lift: 0 2px 4px rgba(30, 34, 61, 0.06), 0 16px 34px -18px rgba(30, 34, 61, 0.26);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     /* No fixed heights anywhere (2026-07-22): body{height:100%} plus flex centring
@@ -62,7 +67,7 @@
       justify-content: center;
       padding: 32px 24px;
       background:
-        radial-gradient(120% 80% at 50% 0%, #0e3047 0%, var(--navy) 45%, var(--navy-deep) 100%);
+        radial-gradient(120% 80% at 50% 0%, #FFFFFF 0%, var(--navy) 45%, var(--navy-deep) 100%);
       color: var(--cream);
       font-family: "Inter Tight", system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -93,8 +98,8 @@
       position: relative;
       border-radius: 18px;
       overflow: hidden;
-      border: 1px solid rgba(201, 161, 74, 0.4);
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--rule);
+      box-shadow: var(--shadow-lift);
     }
     .today-card img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
     .kicker {
@@ -109,7 +114,7 @@
       padding: 17px 22px;
       border-radius: 12px;
       background: var(--gold);
-      color: var(--navy-deep);
+      color: #FFFFFF;  /* 5.13:1 on the accent fill */
       text-decoration: none;
       font-size: 1.05rem;
       font-weight: 600;
@@ -125,11 +130,11 @@
     }
     .linkrow .quiet { color: var(--cream-dim); text-decoration: none; padding: 8px 6px; }
     .linkrow .quiet:hover { color: var(--cream); }
-    .linkrow .sep { color: rgba(179, 171, 146, 0.5); padding: 8px 0; }
+    .linkrow .sep { color: var(--rule); padding: 8px 0; }
     .linkrow .quiet:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
     .strip { margin-top: 26px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .strip a { display: block; border-radius: 10px; overflow: hidden; border: 1px solid rgba(242, 234, 211, 0.16); }
+    .strip a { display: block; border-radius: 10px; overflow: hidden; border: 1px solid rgba(30, 34, 61, 0.08); }
     .strip img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
     .strip a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
@@ -147,7 +152,7 @@
     .dispatch-embed iframe {
       display: block;
       width: 100%;
-      border: 1px solid rgba(242, 234, 211, 0.18);
+      border: 1px solid rgba(30, 34, 61, 0.08);
       border-radius: 12px;
       background: #ffffff;
     }
@@ -170,14 +175,14 @@
       border-radius: 14px;
       text-decoration: none;
       color: var(--cream);
-      background: rgba(242, 234, 211, 0.06);
-      border: 1px solid rgba(201, 161, 74, 0.45);
+      background: rgba(30, 34, 61, 0.08);
+      border: 1px solid var(--rule);
       transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
     }
     .desk-link:hover {
       transform: translateY(-2px);
       border-color: var(--gold);
-      background: rgba(242, 234, 211, 0.1);
+      background: rgba(30, 34, 61, 0.08);
     }
     .desk-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .desk-link__kicker {

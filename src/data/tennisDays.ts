@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-12",
+    day: "Wednesday",
+    headline: "Why are Jannik Sinner and Carlos Alcaraz missing the Cincinnati Open?",
+    dek: "Jannik Sinner has withdrawn from the 2026 Cincinnati Open with a right knee injury, and Carlos Alcaraz remains out with a wrist injury. The Masters 1000 starts on Thursday 13 August without the world's top two.",
+    body: "The 2026 Cincinnati Open starts on Thursday without either of the two best players in the world.\n\nJannik Sinner, the world number one, withdrew ahead of the tournament with a right knee injury. The ATP Tour and ESPN both carried the withdrawal: the knee has been troubling him since Wimbledon, he has not played a match since, and despite working with his medical team he is not ready to compete. NBC Sports reported the same decision.\n\nCarlos Alcaraz, the world number two and the defending champion in Cincinnati, did not need a new announcement. The wrist injury that has kept him out since April rules him out here too, per Olympics.com and Forbes.\n\nThe tournament runs from 13 to 23 August on hard courts, and the men's title will not be defended, because the champion is not in the draw.\n\nWhat the withdrawals cost is the preparation. Cincinnati is the main hard-court warm-up for the year's final major, and Sinner will now arrive in New York without having played either Masters 1000 of the North American swing. Yahoo Sports reported that the withdrawal puts his US Open participation itself into question, though nothing that firm has come from his own camp. The US Open starts on 30 August.\n\nSources: ATP Tour and ESPN on the Sinner withdrawal; NBC Sports; Olympics.com and Forbes on the Alcaraz absence and his title defence; Yahoo Sports on the US Open question; Cincinnati Open official and the WTA tournament page on dates and surface.",
+    status: "verified",
+  },
+  {
     date: "2026-08-09",
     day: "Sunday",
     headline: "How have the Canadians done at the 2026 National Bank Open?",

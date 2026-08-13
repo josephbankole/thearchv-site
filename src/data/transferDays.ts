@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-13",
+    day: "Thursday",
+    headline: "Lewis Hall is staying. Manchester United's left-back search moves to David Raum",
+    dek: "Manchester United have turned to RB Leipzig captain David Raum after Newcastle United refused to sell Lewis Hall, with TEAMtalk reporting a £34m release clause and a player open to the move.",
+    body: "The left-back chase that ran the length of Manchester United's summer ended this week without a bid. David Ornstein of The Athletic reports that Newcastle United's determination to keep Lewis Hall only increased after Eddie Howe's departure, and he does not expect the England left-back to join. Fabrizio Romano carries the same message from Newcastle United: Hall is not leaving.\n\nThe new name is David Raum. TEAMtalk reports that Manchester United have spoken with the RB Leipzig captain, that he would be happy to move to Old Trafford and compete with Luke Shaw, and that his release clause stands at £34m. He is inside the final year of his contract, which is why Manchester United believe a deal closer to £30m is possible. ESPN's daily transfer roundup carried the interest the same day.\n\nRaum is 28, a Germany international, and finished 2025/26 with 30 Bundesliga appearances, 3 goals and 7 assists, per the Bundesliga's official player records. Leipzig can hold their captain for the nineteen days left in the window, or sell him in the only one where he still carries a fee.\n\nHe is not the only file open. Ben Jacobs reports that Manchester United are assessing Joaquin Seys of Club Brugge, with Arsenal ahead in that race, and a third midfielder remains on the agenda after Youri Tielemans and Andrey Santos, per Fabrizio Romano.\n\nThe last time Newcastle United put any number on Lewis Hall, Sky Sports reported it north of £60m. No bid for David Raum has been reported.\n\nSources: TEAMtalk (Raum talks, release clause, player stance); The Athletic, David Ornstein (Hall expectation, window priorities); Fabrizio Romano (Newcastle United stance, third midfielder); Ben Jacobs (Joaquin Seys assessment); Sky Sports (Hall price, 11 August); Bundesliga official records (2025/26 appearances).",
+    status: "verified",
+  },
+  {
     date: "2026-08-12",
     day: "Wednesday",
     headline: "The player has joined the Lewis Hall argument.",

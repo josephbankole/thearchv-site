@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-13",
+    day: "Thursday",
+    headline: "How do the 2026 FedEx Cup playoffs work?",
+    dek: "The 2026 FedEx Cup playoffs begin on Thursday 13 August at the FedEx St. Jude Championship in Memphis: 69 players tee off, 50 reach the BMW Championship, 30 reach the Tour Championship, and the season ends on 30 August.",
+    body: "Three tournaments, eighteen days, and a field that shrinks twice. The 2026 FedEx Cup playoffs open on Thursday 13 August at the FedEx St. Jude Championship at TPC Southwind in Memphis, and run to 30 August, per the PGA Tour's playoff schedule carried by Golf Channel and The Golf News Net.\n\nThe first event carries a $20m purse with $3.6m to the winner, per NBC Sports. The top 70 in the season-long FedEx Cup standings qualified for it; 69 are playing, because Daniel Berger qualified and is not in the field, per Yahoo Sports, and nobody moves up to replace him.\n\nThe cuts work by ranking, not by rounds. The top 50 in the standings after Sunday advance to the BMW Championship, played 20 to 23 August at Bellerive Country Club in Missouri with no halfway cut, per The Golf News Net. The top 30 after that reach the Tour Championship, which decides the FedEx Cup champion on 30 August.\n\nSo a player ranked in the fifties or sixties this week is playing a one-tournament season. Finish outside the top 50 on Sunday and there is no next week.\n\nThe playoffs open with a full purse, a bracket that halves and then nearly halves again, and one empty spot nobody is allowed to fill.\n\nSources: The Golf News Net (playoff format, field sizes, BMW venue); Golf Channel (schedule, format history); NBC Sports (purse, winner's share); Yahoo Sports (Daniel Berger absence); Wikipedia, 2026 FedEx Cup Playoffs (dates, structure).",
+    status: "verified",
+  },
+  {
     date: "2026-08-11",
     day: "Tuesday",
     headline: "Who is in the field for the 2026 FedEx St. Jude Championship?",

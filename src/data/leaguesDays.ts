@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-08-13",
+    day: "Thursday",
+    headline: "Manchester United 1-1 Leeds United: Bruno Fernandes misses, Noussair Mazraoui settles the shootout at Croke Park",
+    dek: "Manchester United drew 1-1 with Leeds United at a sold-out Croke Park on Wednesday 12 August 2026 and won the pre-season penalty shootout 5-4, with Joshua Zirkzee scoring and Bruno Fernandes missing from the spot.",
+    body: "The first club football match staged at Croke Park finished level and got decided from twelve yards. Manchester United drew 1-1 with Leeds United in Dublin on Wednesday 12 August and won the penalty shootout 5-4, per RTE and the Irish Examiner.\n\nJoshua Zirkzee put Manchester United ahead on 16 minutes, set up by Bryan Mbeumo, per ESPN's match coverage. Brenden Aaronson levelled just before the half hour, finishing a move built by Daniel James, the former Manchester United winger.\n\nThe shootout carried the evening's drama. Bruno Fernandes missed from the spot, James Justin struck the crossbar in sudden death, and Noussair Mazraoui scored the kick that settled it, per RTE.\n\nIt was a friendly, and the scoreline expires with pre-season. Michael Carrick's side open the Premier League on 21 August.\n\nCroke Park, a ground Gaelic games have held for over a century, was sold out for it, per RTE.\n\nSources: RTE (result, shootout order, attendance); Irish Examiner (match report); ESPN (goals, assists, live coverage).",
+    status: "verified",
+  },
+  {
     date: "2026-08-12",
     day: "Wednesday",
     headline: "Croke Park hosts its first club football match tonight.",

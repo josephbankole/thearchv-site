@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-08-14",
+    day: "Friday",
+    headline: "The Premier League returns one week from today.",
+    dek: "The 2026-27 Premier League season opens on Friday 21 August with Arsenal against newly promoted Coventry City at the Emirates, the first of 380 matches that end on 30 May 2027.",
+    body: "The 2026-27 Premier League season starts one week from today. The opening match is Arsenal against Coventry City at the Emirates on Friday 21 August, an 8pm kick-off, per the Premier League's own dates announcement and Sky Sports.\n\nCoventry City are newly promoted, per Yahoo Sports and beIN Sports, and start with the hardest away day the fixture computer could have found them. The rest of the opening round runs across the weekend of 21 to 23 August and carries two London derbies: Brentford against Tottenham Hotspur, and Fulham against Chelsea, per Sky Sports and Yahoo Sports.\n\nManchester United begin away at Hull City on Saturday 22 August, per the published fixture list.\n\nThe start is one week later than recent seasons. The league confirmed the shift leaves 89 clear days from the end of last season and 33 days from the FIFA World Cup final. The final round of the season is scheduled for Sunday 30 May 2027.\n\nThe last pre-season business finishes this weekend. Manchester United close their summer against AC Milan in Wroclaw on Saturday, confirmed by the club, and Milan open Serie A away at Torino the following weekend.\n\nSources: Premier League official dates announcement; Sky Sports (season start, fixtures, broadcast schedule); Yahoo Sports and beIN Sports (opening weekend fixtures, Coventry City promotion); Manchester United official (the Wroclaw friendly); ESPN (Milan's opening fixture).",
+    status: "verified",
+  },
+  {
     date: "2026-08-13",
     day: "Thursday",
     headline: "Manchester United 1-1 Leeds United: Bruno Fernandes misses, Noussair Mazraoui settles the shootout at Croke Park",

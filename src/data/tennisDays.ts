@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-14",
+    day: "Friday",
+    headline: "Who won on day one of the 2026 Cincinnati Open?",
+    dek: "Martin Landaluce beat Jack Draper in straight sets in the upset of the opening day in Mason, Ohio, all 32 seeds had first-round byes, and Thiago Agustin Tirante set up a second-round meeting with Novak Djokovic.",
+    body: "The 2026 Cincinnati Open opened its main draw on Thursday, and the result of the day belonged to Martin Landaluce, who beat Jack Draper in straight sets, per Yahoo Sports' first-round report and Perfect Tennis's day-one recap.\n\nAll 32 seeds received first-round byes, per Yahoo Sports, so day one belonged entirely to the unseeded field. Cameron Norrie came through a difficult opener, and Thiago Agustin Tirante won to earn a second-round meeting with Novak Djokovic, per the same reports.\n\nIn the women's draw, Kamilla Rakhimova beat Kimberly Birrell 6-2, 6-2, per Perfect Tennis. It was her first main-draw win in Cincinnati after a first-round exit last year.\n\nThe tournament runs to Sunday 23 August at the Lindner Family Tennis Center in Mason, Ohio, with the singles finals scheduled for that Sunday evening, per the tournament's official schedule and the WTA's tournament page. It is the last big hard-court tune-up before the US Open.\n\nThe men's draw is already missing its two biggest names: Jannik Sinner and Carlos Alcaraz both withdrew before play began, as this desk covered on Wednesday, which leaves Novak Djokovic as the headline name in the men's draw.\n\nSources: Yahoo Sports (first-round results, seed byes); Perfect Tennis (day-one recap, Rakhimova result); Cincinnati Open official schedule and WTA official tournament page (dates, venue, finals); prior verified desk entry, 12 August 2026 (Sinner and Alcaraz withdrawals).",
+    status: "verified",
+  },
+  {
     date: "2026-08-12",
     day: "Wednesday",
     headline: "Why are Jannik Sinner and Carlos Alcaraz missing the Cincinnati Open?",

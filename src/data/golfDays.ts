@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-14",
+    day: "Friday",
+    headline: "Who leads the 2026 FedEx St. Jude Championship after round one?",
+    dek: "Five players share the lead at five under after Thursday's opening round at TPC Southwind: Jordan Spieth, Michael Thorbjornsen, Kurt Kitayama, Jake Knapp and Michael Kim. Scottie Scheffler sits at two under, and Rory McIlroy is four over.",
+    body: "Five players lead the first FedEx Cup playoff event of 2026 at five under par after Thursday's opening round in Memphis: Jordan Spieth, Michael Thorbjornsen, Kurt Kitayama, Jake Knapp and Michael Kim, per Yahoo Sports' leaderboard report and Bleacher Report's day-one coverage.\n\nSpieth's round was built on the back nine. He birdied the 11th, 12th, 13th and 15th to reach five under, per Yahoo Sports. Adam Scott sits just behind after an opening 66, per Golf Channel.\n\nThe two names the week was billed around went opposite ways. Scottie Scheffler, the world number one, opened at two under and is within reach. Rory McIlroy shot four over, per Yahoo Sports and Bleacher Report, and in a no-cut event that is survivable for the weekend but expensive for the standings.\n\nThe stakes are the standings. The FedEx St. Jude Championship runs to Sunday 16 August with 69 players and no cut, and only the top 50 in the FedEx Cup standings after Sunday advance to next week's BMW Championship at Bellerive Country Club in Missouri, per Wikipedia's playoff record and NBC's format explainer. A player on the bubble who opened over par has three rounds to buy back his season.\n\nRound two is today. Five men at five under, and the world number one two shots into the chase.\n\nSources: Yahoo Sports (round-one leaderboard, Spieth's back nine, Scheffler and McIlroy scores); Bleacher Report (day-one scorecards); ESPN (round-one highlights); Golf Channel (Adam Scott's 66); Wikipedia, 2026 FedEx Cup Playoffs, and NBC Sports (format, advancement, BMW Championship venue).",
+    status: "verified",
+  },
+  {
     date: "2026-08-13",
     day: "Thursday",
     headline: "How do the 2026 FedEx Cup playoffs work?",

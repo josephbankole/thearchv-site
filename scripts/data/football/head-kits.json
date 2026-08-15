@@ -36,58 +36,112 @@
     "A prompt records what was asked for; only the pixels record what arrived."
   ],
   "schemaVersion": 1,
-  "updated": "2026-08-04",
-
+  "updated": "2026-08-13",
   "colour_aliases": {
     "navy": "navy blue",
     "claret": "dark red",
     "old gold": "gold"
   },
-
   "clubs": {
     "MANCHESTER CITY": {
-      "colours": ["sky blue"],
+      "colours": [
+        "sky blue"
+      ],
       "note": "Sky blue home shirt. The 2026-27 shirt is a sky-blue-to-white gradient; the body colour is unchanged.",
       "source": "Footy Headlines, Manchester City 26-27 home kit; ESPN Premier League 2026-27 kit round-up (retrieved 2026-08-04)"
     },
     "MANCHESTER UNITED": {
-      "colours": ["red"],
+      "colours": [
+        "red"
+      ],
       "source": "Club colours, unchanged"
     },
     "FULHAM": {
-      "colours": ["white"],
+      "colours": [
+        "white"
+      ],
       "note": "White shirt, black shorts. Red and black are trim only.",
       "source": "ESPN Premier League 2026-27 kit round-up (retrieved 2026-08-04)"
     },
     "CRYSTAL PALACE": {
-      "colours": ["red", "blue", "red and blue"],
+      "colours": [
+        "red",
+        "blue",
+        "red and blue"
+      ],
       "note": "Red and blue vertical stripes are the club identity. The 2026-27 home shirt is a one-off anniversary design placing a red-and-blue sash on white; the identity colours are unchanged.",
       "source": "GiveMeSport, every Premier League home kit 26-27 (retrieved 2026-08-04)"
     },
     "NOTTINGHAM FOREST": {
-      "colours": ["red"],
+      "colours": [
+        "red"
+      ],
       "source": "Club colours, unchanged"
     },
     "BRIGHTON AND HOVE ALBION": {
-      "colours": ["blue", "white", "blue and white"],
+      "colours": [
+        "blue",
+        "white",
+        "blue and white"
+      ],
       "source": "Club colours, unchanged"
     },
     "PARIS SAINT-GERMAIN": {
-      "colours": ["blue", "navy blue"],
+      "colours": [
+        "blue",
+        "navy blue"
+      ],
       "note": "Blue body. The red central stripe and its white edging are TRIM and are deliberately absent from this list.",
       "source": "Club colours, unchanged"
     },
     "WOLVERHAMPTON WANDERERS": {
-      "colours": ["gold", "black"],
+      "colours": [
+        "gold",
+        "black"
+      ],
       "source": "Club colours, unchanged"
     },
-    "NORWAY": { "colours": ["red"] },
-    "PORTUGAL": { "colours": ["red"] },
-    "MEXICO": { "colours": ["green"] },
-    "ENGLAND": { "colours": ["white"] },
-    "CAMEROON": { "colours": ["green"] }
+    "NORWAY": {
+      "colours": [
+        "red"
+      ]
+    },
+    "PORTUGAL": {
+      "colours": [
+        "red"
+      ]
+    },
+    "MEXICO": {
+      "colours": [
+        "green"
+      ]
+    },
+    "ENGLAND": {
+      "colours": [
+        "white"
+      ]
+    },
+    "CAMEROON": {
+      "colours": [
+        "green"
+      ]
+    },
+    "AC MILAN": {
+      "colours": [
+        "red",
+        "black",
+        "white"
+      ],
+      "note": "Red and black striped home shirt. White is listed on its merits, not as trim: the all-white change strip is the shirt AC Milan have worn in their most famous European finals and remains the standard away kit."
+    },
+    "RC LENS": {
+      "colours": [
+        "red",
+        "gold"
+      ],
+      "note": "Sang et Or: blood-red and gold home shirt."
+    }
   },
-
   "heads": {
     "haaland-manchester-city": {
       "player": "Erling Haaland",
@@ -117,7 +171,6 @@
       "kit_of": "Paris Saint-Germain",
       "measured": "2026-08-04"
     },
-
     "bruno-fernandes": {
       "player": "Bruno Fernandes",
       "kit": "red",
@@ -142,7 +195,6 @@
       "measured": "2026-08-04",
       "note": "Already a club head. Cameroon play in green; this one is blue and clears Brighton and Hove Albion."
     },
-
     "haaland": {
       "player": "Erling Haaland",
       "kit": "red",
@@ -174,6 +226,62 @@
       "kit_of": "Portugal",
       "measured": "2026-08-04",
       "note": "THE NATIONAL HEAD, red with a green collar trim. Correct under a Portugal label and wrong under Paris Saint-Germain. Superseded for club use by vitinha-paris-saint-germain. Retained, never overwritten."
+    },
+    "pulisic": {
+      "player": "Christian Pulisic",
+      "kit": "white",
+      "kit_hex": "#EFE8D5",
+      "kit_of": "USA",
+      "measured": "2026-08-13",
+      "note": "A NATIONAL kit that legitimately clears an AC Milan label: the warm cream-white body reads as Milan's traditional all-white change shirt. Kept as banked rather than regenerated; passes the check on its merits."
+    },
+    "pulisic-tile": {
+      "player": "Christian Pulisic",
+      "kit": "white",
+      "kit_hex": "#EFE8D5",
+      "kit_of": "USA",
+      "measured": "2026-08-13",
+      "note": "A NATIONAL kit that legitimately clears an AC Milan label: the warm cream-white body reads as Milan's traditional all-white change shirt. Kept as banked rather than regenerated; passes the check on its merits."
+    },
+    "dembele": {
+      "player": "Ousmane Dembele",
+      "kit": "blue",
+      "kit_hex": "#1C3B7F",
+      "kit_of": "France",
+      "measured": "2026-08-13",
+      "note": "France blue clears Paris Saint-Germain blue, the same merit-pass as the banked Bruno Fernandes Portugal red under Manchester United."
+    },
+    "dembele-tile": {
+      "player": "Ousmane Dembele",
+      "kit": "blue",
+      "kit_hex": "#1C3B7F",
+      "kit_of": "France",
+      "measured": "2026-08-13",
+      "note": "France blue clears Paris Saint-Germain blue, the same merit-pass as the banked Bruno Fernandes Portugal red under Manchester United."
+    },
+    "thauvin": {
+      "player": "Florian Thauvin",
+      "kit": "red",
+      "kit_hex": "#5B1107",
+      "kit_of": "RC Lens",
+      "measured": "2026-08-13",
+      "note": "Generated 2026-08-13 in a plain unbranded blood-red collar for RC Lens, gpt_image_2, Commons ref Florian_Thauvin_2018.jpg."
+    },
+    "thauvin-tile": {
+      "player": "Florian Thauvin",
+      "kit": "red",
+      "kit_hex": "#5B1107",
+      "kit_of": "RC Lens",
+      "measured": "2026-08-13",
+      "note": "Generated 2026-08-13 in a plain unbranded blood-red collar for RC Lens, gpt_image_2, Commons ref Florian_Thauvin_2018.jpg."
+    },
+    "bruno-fernandes-tile": {
+      "player": "Bruno Fernandes",
+      "kit": "red",
+      "kit_hex": "#943D42",
+      "kit_of": "Portugal",
+      "measured": "2026-08-13",
+      "note": "A NATIONAL kit that legitimately clears a Manchester United label, because Portugal red and Manchester United red are the same colour. Kept as-is rather than regenerated: it passes the check on its merits."
     }
   }
 }

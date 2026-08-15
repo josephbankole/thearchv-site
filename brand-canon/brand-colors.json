@@ -1,0 +1,139 @@
+{
+  "version": "2026-08-14",
+  "canon": "D-2026-08-09b",
+  "anchorPair": 1,
+  "inks": {
+    "light": "#F5F2F3",
+    "soft": "#EFE9E9"
+  },
+  "legacy": {
+    "navy": "#0C2A3E",
+    "gold": "#C9A14A",
+    "cream": "#F2EAD3",
+    "green": "#2E6B3A"
+  },
+  "pairs": [
+    {
+      "id": 1,
+      "name": "Archive Navy / Signal Orange",
+      "dark": "#1E223D",
+      "light": "#F54F1B",
+      "contrast": 4.45,
+      "bodyTextSafe": false,
+      "role": "anchor",
+      "third": "#FFC53D",
+      "thirdName": "Amber Gold",
+      "thirdContrast": 9.85
+    },
+    {
+      "id": 2,
+      "name": "Pine / Parchment",
+      "dark": "#035352",
+      "light": "#F3E8BC",
+      "contrast": 7.23,
+      "bodyTextSafe": true,
+      "role": "retired",
+      "note": "retired from rotation by founder decision 2026-08-14"
+    },
+    {
+      "id": 3,
+      "name": "Pitch Black-Green / Matchday Yellow",
+      "dark": "#202B22",
+      "light": "#FFD85F",
+      "contrast": 10.66,
+      "bodyTextSafe": true,
+      "role": "retired",
+      "note": "retired from rotation by founder decision 2026-08-14"
+    },
+    {
+      "id": 4,
+      "name": "Atlantic / Ice",
+      "dark": "#0F4B70",
+      "light": "#C4F8FF",
+      "contrast": 8.06,
+      "bodyTextSafe": true,
+      "role": "rotation",
+      "third": "#FFA576",
+      "thirdName": "Sunset Coral",
+      "thirdContrast": 4.82
+    },
+    {
+      "id": 5,
+      "name": "Claret / Chalk",
+      "dark": "#5A2132",
+      "light": "#EFE9E9",
+      "contrast": 10.31,
+      "bodyTextSafe": true,
+      "role": "rotation",
+      "third": "#FFAD4D",
+      "thirdName": "Claret Amber",
+      "thirdContrast": 6.68
+    },
+    {
+      "id": 6,
+      "name": "Midnight / Lilac",
+      "dark": "#151130",
+      "light": "#C8BEFA",
+      "contrast": 10.57,
+      "bodyTextSafe": true,
+      "role": "rotation",
+      "third": "#FF6EC7",
+      "thirdName": "Electric Magenta",
+      "thirdContrast": 7.19
+    },
+    {
+      "id": 7,
+      "name": "Royal / Paper",
+      "dark": "#021F94",
+      "light": "#F5F2F3",
+      "contrast": 11.61,
+      "bodyTextSafe": true,
+      "role": "rotation",
+      "third": "#63E6BE",
+      "thirdName": "Royal Mint",
+      "thirdContrast": 8.36
+    },
+    {
+      "id": 8,
+      "name": "Espresso / Lime",
+      "dark": "#1F0E06",
+      "light": "#C6E385",
+      "contrast": 13.11,
+      "bodyTextSafe": true,
+      "role": "retired",
+      "note": "retired from rotation by founder decision 2026-08-14"
+    },
+    {
+      "id": 9,
+      "name": "Old Trafford Red / Cream",
+      "dark": "#8B1A1F",
+      "light": "#F2EAD3",
+      "contrast": 7.72,
+      "bodyTextSafe": true,
+      "role": "main",
+      "note": "MAIN rotation, founder-ratified 2026-08-14; United-audience pairs (DESIGN-PLAYBOOK.md)",
+      "third": "#FFD85F",
+      "thirdName": "Matchday Yellow",
+      "thirdContrast": 6.73
+    },
+    {
+      "id": 10,
+      "name": "Archive Navy / Cream",
+      "dark": "#1E223D",
+      "light": "#F2EAD3",
+      "contrast": 12.94,
+      "bodyTextSafe": true,
+      "role": "main",
+      "note": "MAIN rotation, founder-ratified 2026-08-14; United-audience pairs (DESIGN-PLAYBOOK.md)",
+      "third": "#FA6A3C",
+      "thirdName": "Signal Orange Bright",
+      "thirdContrast": 5.32
+    }
+  ],
+  "rules": {
+    "rotation": "MAIN pairs 9 and 10 lead; pairs 4-7 rotate behind them; pairs 2, 3 and 8 are RETIRED (founder, 2026-08-14); no pair repeats within a day on one account; log the pair per unit",
+    "anchor": "pair 1 is permanent identity: wordmark, watermark, CTA end-cards, personal-brand accents",
+    "pair1Text": "display sizes only on pair 1; small text on #1E223D uses inks.light or inks.soft",
+    "third": "every unit is a TRIO (D-2026-08-14d): pair dark ground + pair light type + the pair's OWN scroll-stopping third for ALL numbers, references/source lines and quoted names/attributions; every third clears 4.5:1 on its dark; the third never carries claims or body text"
+  }
+}

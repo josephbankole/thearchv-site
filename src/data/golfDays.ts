@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-15",
+    day: "Saturday",
+    headline: "Scottie Scheffler shot 61 to tie the TPC Southwind course record at the FedEx St. Jude Championship.",
+    dek: "Round two of the 2026 FedEx St. Jude Championship, Friday 14 August. Scheffler's nine-under 61 matched the TPC Southwind course record and moved him to 11 under, three clear of the field.",
+    body: "Scottie Scheffler went round TPC Southwind in Memphis in 61 shots on Friday, nine under par. CBS Sports and Yahoo Sports both record the round as a tie of the course record.\n\nThat put him on 11 under for the tournament, from rounds of 68 and 61, three shots clear going into the weekend. Yahoo Sports counted 11 birdies.\n\nSungjae Im and Viktor Hovland share second at eight under and Ludvig Aberg is fourth at seven under, per Yahoo Sports. CBS Sports has Jordan Spieth, Tommy Fleetwood, Nico Echavarria and Brian Harman tied for fifth at six under.\n\nThere is no cut. The FedEx St. Jude Championship is the first event of the FedEx Cup playoffs, and both CBS Sports and Yahoo Sports report all 68 players in the field playing all four rounds.\n\nRory McIlroy is one of them. He finished round two at four over, from rounds of 74 and 70, tied 60th on the Yahoo Sports leaderboard.\n\nTwo rounds are left, and Scheffler starts them three clear on the back of one Friday round at TPC Southwind.\n\nSources: CBS Sports live round two coverage, 14 August 2026 (Scheffler's 61, the course record, 11-under total, the chase pack, the tied-fifth group, no cut, 68 players, Memphis venue, playoffs opener); Yahoo Sports round two leaderboard report, 14 August 2026 (the 61, course record, 68-61 for 11 under, three-shot lead, 11 birdies, Im and Hovland at eight under, Aberg at seven under, McIlroy 74-70 for four over and tied 60th, no cut).",
+    status: "verified",
+  },
+  {
     date: "2026-08-14",
     day: "Friday",
     headline: "Who leads the 2026 FedEx St. Jude Championship after round one?",

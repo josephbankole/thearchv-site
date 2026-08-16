@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-16",
+    day: "Sunday",
+    headline: "Scottie Scheffler takes a two-shot lead into the final round of the FedEx St. Jude Championship.",
+    dek: "Round three at TPC Southwind, Saturday 15 August. Scheffler shot 68 for 13 under, and Sam Burns went bogey-free for a 62 that pulled him level with Sungjae Im, two back.",
+    body: "Scottie Scheffler leads the 2026 FedEx St. Jude Championship by two shots going into Sunday's final round at TPC Southwind in Memphis, Tennessee. He shot 68 on Saturday for a 54-hole total of 13 under par, per CBS Sports and Bleacher Report, both filed 15 August.\n\nIt was not comfortable. Scheffler was one over through seven holes before the back nine turned, and he signed for four birdies and two bogeys. The round that made Saturday belonged to Sam Burns, who went bogey-free for an eight-under 62, the best score of the day, and reached 11 under. Sungjae Im is level with him. Jake Knapp and Tommy Fleetwood sit at eight under.\n\nThe detail Scheffler volunteered afterwards is the one worth keeping: this is his first 54-hole lead since the 2025 Open Championship. Both outlets carry it.\n\nThis is the opening leg of the FedEx Cup playoffs. The final round is Sunday 16 August.",
+    status: "verified",
+  },
+  {
     date: "2026-08-15",
     day: "Saturday",
     headline: "Scottie Scheffler shot 61 to tie the TPC Southwind course record at the FedEx St. Jude Championship.",

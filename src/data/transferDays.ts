@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-16",
+    day: "Sunday",
+    headline: "Sixteen days left, and Manchester United still have not signed a left back.",
+    dek: "£85m has gone on two midfielders. Of the four names still live in the window, exactly one clears two independent named sources.",
+    body: "Manchester United have spent £85m on midfielders this summer and have not signed a left back. Andrey Santos arrived from Chelsea for £50m. Youri Tielemans followed from Aston Villa for £35m, the fee triggering a release clause, on a five-year deal, CONFIRMED by Sky Sports on 15 July and ESPN on 14 July. Karl Darlow signed the same week on two years plus a one-year option, fee undisclosed, per ESPN. Left back and midfield were the two stated priorities. One of them has been shopped.\n\nRate the rest by how well it is sourced rather than by how likely it feels.\n\nCONFIRMED, meaning two independent named sources: Tielemans, and nothing else on the current board.\n\nREPORTED, meaning one named reporter attributed in the sentence: Marcus Rashford staying, per Fabrizio Romano on 9 August, who said Manchester United feel there are \"concrete, strong, likely chances\" of it. Lewis Hall, per Ben Jacobs on 3 July: \"I stand by my information on Lewis Hall. Despite suggestions he is not a Man Utd target, he is, according to my information.\" Jacobs put Hall's market valuation at £40-45m; TeamTalk reported on 13 July that Manchester United remained determined at around £60m, and Hall is contracted to Newcastle United until 2029. Alex Scott, per David Ornstein via TeamTalk on 13 July, with INEOS said to \"love\" the Bournemouth midfielder and an £80m valuation attached.\n\nOne midfielder the club were linked with has already gone elsewhere. Elliot Anderson joined Manchester City from Nottingham Forest on 24 July for £116m, five years plus a twelve-month option, per Sky Sports, which also reported he had been a Manchester United target this summer.\n\nThe window shuts on 1 September. Manchester United open the season at Hull City on Saturday 22 August at 12:30, per ESPN, with Luke Shaw, Tyrell Malacia and Patrick Dorgu the left back options on the day.",
+    status: "verified",
+  },
+  {
     date: "2026-08-14",
     day: "Friday",
     headline: "Marcus Rashford is being written back into Manchester United's plans.",

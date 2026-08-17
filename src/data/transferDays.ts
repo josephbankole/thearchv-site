@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-17",
+    day: "Monday",
+    headline: "Newcastle United have sold £240m of players and kept the one Manchester United wanted.",
+    dek: "Sandro Tonali went to Tottenham Hotspur for £100m and captain Bruno Guimaraes to Arsenal for £75m. Eddie Howe left in July. Lewis Hall is still at St James' Park.",
+    body: "Newcastle United have passed £240m in player sales this summer, per Sky Sports, after a season that ended 12th in the Premier League.\n\nThe two largest are settled and agree across sources. Sandro Tonali joined Tottenham Hotspur for £100m and Bruno Guimaraes, the captain, joined Arsenal for £75m, both figures carried identically by Sky Sports and by ESPN's confirmed ins and outs, updated 17 August. Kieran Trippier left for Wolverhampton Wanderers on a free transfer.\n\nOne fee does not agree and is therefore not stated here. Anthony Gordon's move to Barcelona is reported at £60.5m by ESPN and £69.3m by Sky Sports. Two reputable providers, two numbers, so the transfer ships without one rather than with a figure this desk cannot stand behind.\n\nThe manager went before the players. Eddie Howe left at the end of July after nearly five years, per Sky Sports and RTE, in a statement issued the evening after a pre-season defeat to Bristol City.\n\nWhat Newcastle United have not done is sell Lewis Hall. Sky Sports reported on 7 August that an enquiry from Manchester United was rejected and that the England left back is not for sale this summer, with three years left on his contract. David Ornstein, via TeamTalk on 5 August, said he does not expect the move and that Howe's departure has hardened rather than softened the club's position. Fabrizio Romano, via Football365 on 1 August, reported Manchester United rate Hall highly and that Newcastle United do not want to sell. Status: RUMOUR, and consistently refused.\n\nCORRECTION, appended per the archive rules and not edited into the original. This desk's entry of 16 August listed Tyrell Malacia among Manchester United's left back options for the Hull City fixture. Malacia left Manchester United as a free agent when his contract expired, announced by the club in May 2026 and reported by Goal and Fox Sports. Sky Sports, reporting on 13 August, lists Luke Shaw and Noussair Mazraoui as the club's two options at left back, with Patrick Dorgu used further forward under Michael Carrick. The 16 August entry stands as filed with this correction attached.\n\nSources: Sky Sports transfer centre, 15 August 2026, and ESPN confirmed ins and outs, updated 17 August 2026 (Tonali, Guimaraes, Trippier, Gordon, the £240m total); Sky Sports and RTE, 30 July 2026 (Eddie Howe); Sky Sports, 7 August 2026 (Hall not for sale, contract length); David Ornstein via TeamTalk, 5 August 2026; Fabrizio Romano via Football365, 1 August 2026; Goal and Fox Sports, May 2026 (Malacia); Sky Sports, 13 August 2026 (Manchester United left back options).",
+    status: "verified",
+    image: "/heads/hall.webp",
+    imageAlt: "Lewis Hall, illustrated by The ARCHV.",
+  },
+  {
     date: "2026-08-16",
     day: "Sunday",
     headline: "Sixteen days left, and Manchester United still have not signed a left back.",

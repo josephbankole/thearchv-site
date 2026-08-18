@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-18",
+    day: "Tuesday 18 August",
+    headline: "Bruno Fernandes is in his final contract year and Manchester United say he is not for sale",
+    dek: "Sky Sports and Fabrizio Romano both reported on 18 August that the captain is staying, that Manchester United are negotiating a new deal, and that the release clause foreign clubs could once trigger has expired.",
+    body: "Bruno Fernandes has entered the last year of his Manchester United contract, with the club holding an option to extend by a further year, per Sky Sports on 18 August. The same report put the club position plainly: he is not for sale at any price. Fabrizio Romano said the same day that Fernandes is untouchable and that the player is more than happy to stay. Two independent reporters, no gap between them. The release clause that once let clubs outside England move for him was set at 57m pounds and has now expired, per Sky Sports, which leaves the price entirely with Manchester United. Sky Sports also points back to a 100m pound approach from Al Hilal last December, which did not move him. Galatasaray are the club in the room. Sky Sports reported that the Turkish side are ready to bid and that no formal offer has arrived, and Romano added that Galatasaray, European clubs and Saudi clubs all tried in June. That leaves the bid itself in the rumour tier until one is lodged. Fernandes broke the Premier League record for assists in a single season last term and was named Premier League Player of the Year, per Sky Sports. He is 31. Manchester United open the season away at Hull City on Saturday 22 August at 12:30.",
+    status: "verified",
+  },
+  {
     date: "2026-08-17",
     day: "Monday",
     headline: "Newcastle United have sold £240m of players and kept the one Manchester United wanted.",

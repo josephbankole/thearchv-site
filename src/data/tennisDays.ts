@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-19",
+    day: "Wednesday 19 August 2026",
+    headline: "Who came through the third round at the 2026 Cincinnati Open?",
+    dek: "Felix Auger-Aliassime needed 87 minutes. Brandon Nakashima needed three saved match points and the small matter of the fourth seed.",
+    body: "Felix Auger-Aliassime, the second seed, beat Juan Manuel Cerundolo 7-5, 6-1 on Tuesday 18 August to reach the last 16 at the ATP Masters 1000 event in Cincinnati. The ATP Tour's own report and TSN both put the match at one hour and 27 minutes. He plays Frances Tiafoe next, after Tiafoe came through 6-4, 4-6, 6-4 against Learner Tien in two hours and ten minutes. The longer story of the day belonged to Brandon Nakashima, who trailed 0-40 on his own serve at 4-5 in the second set against fourth seed Daniil Medvedev and was three points from going out. He saved the first match point with a forehand approach and a volley, the second at the end of an 18-shot rally, and the third with a serve and volley, then won 6-7, 7-6, 6-1 in two hours and 51 minutes. The ATP Tour and Local 12 in Cincinnati both carried it. It was Nakashima's first win in four meetings with Medvedev, who has won this tournament before. The quarter-finals are on Thursday 20 and Friday 21 August, and the finals are on Sunday 23 August.",
+    status: "verified",
+  },
+  {
     date: "2026-08-14",
     day: "Friday",
     headline: "Who won on day one of the 2026 Cincinnati Open?",

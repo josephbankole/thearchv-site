@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-19",
+    day: "Wednesday 19 August 2026",
+    headline: "Manchester United have put about £60m in front of Brighton for Carlos Baleba, and the fee is the part still open",
+    dek: "David Ornstein of The Athletic and Sky Sports both had Manchester United closing on an agreement for the Cameroon midfielder on 19 August. Personal terms are the settled bit.",
+    body: "David Ornstein reported for The Athletic on 19 August that Manchester United are closing in on a deal for Carlos Baleba, the 22-year-old Brighton and Hove Albion midfielder, with an offer worth about £60m plus £5m in add-ons. Ornstein wrote that the proposal sits under Brighton's valuation and that talks between the clubs have stayed amicable. Sky Sports reported the same morning that the two clubs are close to full agreement, and that Baleba has agreed personal terms on a five-year contract running to the summer of 2031. Nothing is signed and neither club has put a word on the record, so this is labelled REPORTED here, on Ornstein and Sky Sports, both named on the claim. Sky Sports also reported that Baleba is recovering from an ankle ligament injury picked up in pre-season, and that he is not expected to be out long. The midfield he would join has already been rebuilt once this summer. Andrey Santos came from Chelsea for £50m, £48m guaranteed and £2m in add-ons, with Chelsea keeping a 10 per cent sell-on, and Youri Tielemans arrived alongside him. Michael Carrick said last week that the squad still needs reinforcements. Manchester United open the Premier League season away at Hull City on Saturday at 12:30.",
+    status: "verified",
+  },
+  {
     date: "2026-08-18",
     day: "Tuesday 18 August",
     headline: "Bruno Fernandes is in his final contract year and Manchester United say he is not for sale",

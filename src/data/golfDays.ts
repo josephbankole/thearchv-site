@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-20",
+    day: "Thursday",
+    headline: "What is at stake at the 2026 BMW Championship?",
+    dek: "Fifty players, no cut, and thirty places at East Lake. The 2026 BMW Championship runs from 20 to 23 August at Bellerive Country Club.",
+    body: "Fifty players teed it up at Bellerive Country Club in St. Louis, Missouri on Thursday 20 August 2026 for the BMW Championship, the second event of the FedEx Cup playoffs. Thirty of them will still be playing next week.\n\nThat is the whole of it. The BMW Championship cuts the playoff field from 50 to 30, and the 30 who survive go to East Lake for the Tour Championship. There is no halfway cut here, so every player in the field gets four rounds to move, per CBS Sports on 19 August 2026.\n\nBellerive is a par 70 measuring 7,448 yards, a Robert Trent Jones Sr. design. The tournament runs from 20 to 23 August.\n\nScottie Scheffler arrives as the defending BMW Championship winner and at the top of the FedEx Cup standings, having won the previous playoff event in Memphis by eight strokes, per CBS Sports and Golf News Net. Twenty-two of the fifty in this field had already secured an East Lake place before a ball was struck, which leaves the real tournament inside the tournament somewhere around the twenty-third to thirtieth positions.\n\nThe other prize is quieter and lasts longer. Making the top 50 of the FedEx Cup standings, which is what qualified this field, also books a player into every signature event of the 2027 season, per Golf News Net on 17 August 2026. A week at Bellerive is worth a year of starts.",
+    status: "verified",
+  },
+  {
     date: "2026-08-16",
     day: "Sunday",
     headline: "Scottie Scheffler takes a two-shot lead into the final round of the FedEx St. Jude Championship.",

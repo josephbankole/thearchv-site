@@ -36,7 +36,7 @@
     "A prompt records what was asked for; only the pixels record what arrived."
   ],
   "schemaVersion": 1,
-  "updated": "2026-08-13",
+  "updated": "2026-08-20",
   "colour_aliases": {
     "navy": "navy blue",
     "claret": "dark red",
@@ -140,6 +140,28 @@
         "gold"
       ],
       "note": "Sang et Or: blood-red and gold home shirt."
+    },
+    "BRENTFORD": {
+      "colours": [
+        "red",
+        "white"
+      ],
+      "note": "Red and white striped home shirt, black shorts. Striped since the 1925-26 season. Black is shorts and trim, never the body colour.",
+      "source": "Wikipedia, “Brentford F.C.” (retrieved 2026-08-20)"
+    },
+    "TOTTENHAM HOTSPUR": {
+      "colours": [
+        "white"
+      ],
+      "note": "White home shirt, navy blue shorts. Navy is the SHORTS colour and is deliberately not listed: admitting it would let a navy head pass under this label.",
+      "source": "Wikipedia, “Tottenham Hotspur F.C.” (retrieved 2026-08-20)"
+    },
+    "CHELSEA": {
+      "colours": [
+        "blue"
+      ],
+      "note": "Royal blue home shirt. Not sky blue: the tokens are matched exactly and collapsing the two would let a Manchester City head pass here.",
+      "source": "Club colours, unchanged"
     }
   },
   "heads": {
@@ -282,6 +304,62 @@
       "kit_of": "Portugal",
       "measured": "2026-08-13",
       "note": "A NATIONAL kit that legitimately clears a Manchester United label, because Portugal red and Manchester United red are the same colour. Kept as-is rather than regenerated: it passes the check on its merits."
+    },
+    "igor-thiago": {
+      "player": "Igor Thiago",
+      "kit": "red",
+      "kit_hex": "#8C1C14",
+      "kit_of": "Brentford",
+      "measured": "2026-08-20"
+    },
+    "igor-thiago-tile": {
+      "player": "Igor Thiago",
+      "kit": "red",
+      "kit_hex": "#8C1C14",
+      "kit_of": "Brentford",
+      "measured": "2026-08-20"
+    },
+    "richarlison": {
+      "player": "Richarlison",
+      "kit": "white",
+      "kit_hex": "#D6C3AF",
+      "kit_of": "Tottenham Hotspur",
+      "measured": "2026-08-20"
+    },
+    "richarlison-tile": {
+      "player": "Richarlison",
+      "kit": "white",
+      "kit_hex": "#D6C3AF",
+      "kit_of": "Tottenham Hotspur",
+      "measured": "2026-08-20"
+    },
+    "alex-iwobi": {
+      "player": "Alex Iwobi",
+      "kit": "white",
+      "kit_hex": "#C1BFB5",
+      "kit_of": "Fulham",
+      "measured": "2026-08-20"
+    },
+    "alex-iwobi-tile": {
+      "player": "Alex Iwobi",
+      "kit": "white",
+      "kit_hex": "#C1BFB5",
+      "kit_of": "Fulham",
+      "measured": "2026-08-20"
+    },
+    "cole-palmer": {
+      "player": "Cole Palmer",
+      "kit": "blue",
+      "kit_hex": "#0E3D76",
+      "kit_of": "Chelsea",
+      "measured": "2026-08-20"
+    },
+    "cole-palmer-tile": {
+      "player": "Cole Palmer",
+      "kit": "blue",
+      "kit_hex": "#0E3D76",
+      "kit_of": "Chelsea",
+      "measured": "2026-08-20"
     }
   }
 }

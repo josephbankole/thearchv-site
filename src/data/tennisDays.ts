@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-22",
+    day: "Saturday",
+    headline: "Why is Jannik Sinner missing the 2026 US Open?",
+    dek: "A right knee injury. The world number one withdrew on 21 August, eight days before the main draw begins, and has not played a competitive match since defending his Wimbledon title in July.",
+    body: "Jannik Sinner has withdrawn from the 2026 US Open with a right knee injury, announced on 21 August. It is the first Grand Slam tournament he has missed since 2019.\n\nHis statement, carried by ESPN and the ATP Tour: \"Even though I have been working hard with my team and my medical staff, we have now had to make the difficult decision that I will not be able to compete at the US Open this year.\"\n\nSinner has not played a competitive match since beating Alexander Zverev at Wimbledon in July to defend that title. The knee kept him out of the Masters 1000 events in Canada and Cincinnati, the two hard-court tournaments that lead into New York. He returned to practice in Monte Carlo this week and concluded he needed longer. His team's plan is to stay in Europe and aim at the Asian swing, Beijing and Shanghai.\n\nHe is still ranked world number one, more than 5,000 points clear of the next player, and he won this tournament in 2024.\n\nThe main draw at the USTA Billie Jean King National Tennis Center starts on 30 August and the tournament finishes on 13 September. The seeding cut-off is the ATP ranking published on Monday 24 August, which is the last update before the draw, so the 32 seeds are settled from a list Sinner is not in.\n\nThe knee that kept him out of Canada and Cincinnati has now cost him a major he has already won, and every seed below him moves up one place.\n\nSources: ESPN, 21 August 2026 (withdrawal, right knee, the quoted statement, world number one by more than 5,000 points, last match the Wimbledon final against Zverev, Canada and Cincinnati missed, Monte Carlo practice, main draw starting 30 August); ATP Tour official, 21 August 2026 (withdrawal announcement and statement); the US Open official site, 21 August 2026 (withdrawal, right knee injury); Tennis Majors and the tournament's published calendar (main draw 30 August to 13 September, USTA Billie Jean King National Tennis Center); Tennis365, 21 August 2026 (seeding cut-off from the ATP ranking of Monday 24 August, 32 seeds in a 128-player draw).",
+    status: "verified",
+  },
+  {
     date: "2026-08-19",
     day: "Wednesday 19 August 2026",
     headline: "Who came through the third round at the 2026 Cincinnati Open?",

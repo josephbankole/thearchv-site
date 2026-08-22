@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-22",
+    day: "Saturday",
+    headline: "Who leads the 2026 BMW Championship after round two?",
+    dek: "Wyndham Clark, at 12 under. Gary Woodland is one back and has played himself off the FedEx Cup bubble. Scottie Scheffler shot 65 on Friday and is still seven adrift.",
+    body: "Wyndham Clark leads the 2026 BMW Championship at Bellerive Country Club at 12 under par after Friday's second round, per CBS Sports' round-two coverage and ESPN's second-round report, both filed 21 August.\n\nGary Woodland is second at 11 under from rounds of 64 and 65. J.J. Spaun is third at 10 under. Spaun had a four-shot lead at one point on Friday and gave most of it back with consecutive bogeys at the 14th and 15th.\n\nWoodland's two days are the story of the week so far. He arrived 31st in the FedEx Cup standings, two points off elimination, and 11 under through 36 holes has turned a survival week into a tournament. Only the top 30 after Sunday go to the Tour Championship at East Lake.\n\nScottie Scheffler started slowly again and then shot 5 under on the back nine for a 65. That puts the world number one at 3 under, seven behind. He won the previous playoff event by eight strokes.\n\nFifty players started at Bellerive on Thursday, there is no halfway cut, and 20 of them finish their season on Sunday.\n\nSources: CBS Sports round-two live coverage, 21 August 2026 (Clark 12 under, Woodland 11 under from 64 and 65, Spaun 10 under, Gotterup and Im 9 under, Cantlay and Thorbjornsen 8 under, Scheffler 65 for 3 under and seven back with a 5-under back nine, Woodland entering the week 31st and two points from elimination); ESPN second-round report, 21 August 2026 (Clark finishing Friday at 12 under, Woodland second at 11 under, Spaun third at 10 under); CBS Sports, 19 August 2026, via the prior verified desk entry (50-player field, no halfway cut, top 30 to the Tour Championship at East Lake, Scheffler's eight-shot win in the previous playoff event).",
+    status: "verified",
+  },
+  {
     date: "2026-08-21",
     day: "Friday",
     headline: "Who leads the 2026 BMW Championship after round one?",

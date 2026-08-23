@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-23",
+    day: "Sunday",
+    headline: "Who is on pole for the 2026 Dutch Grand Prix, and where does Max Verstappen start?",
+    dek: "Lando Norris is on pole with a 1:11.163, by 0.102 seconds from George Russell. Max Verstappen qualified seventh at his home circuit, for the last Dutch Grand Prix on the calendar.",
+    body: "Lando Norris took pole position for the 2026 Dutch Grand Prix at Circuit Zandvoort on Saturday with a lap of 1:11.163. It was his 18th career pole and he beat George Russell to it by 0.102 seconds. Rain arrived during the third part of qualifying.\n\nAndrea Kimi Antonelli qualified third, 0.133 off, with Oscar Piastri fourth at 0.142. Lewis Hamilton was fifth and Charles Leclerc sixth. Max Verstappen qualified seventh, 0.455 from pole, at the circuit where he has won more than anywhere else, and at the last Dutch Grand Prix on the Formula 1 calendar. Liam Lawson was eighth, Gabriel Bortoleto ninth and Arvid Lindblad tenth.\n\nRussell had already won Saturday's sprint, by 1.360 seconds from Leclerc, with Norris third and Verstappen sixth. It was Zandvoort's first sprint weekend.\n\nAntonelli leads the drivers' championship on 224 points after the sprint, 53 clear of Hamilton on 171 and 56 clear of Russell on 168. Leclerc is fourth on 145 and Norris fifth on 134. Verstappen is sixth on 112. Mercedes lead the constructors' championship on 392 from Ferrari on 316.\n\nThe race was scheduled for 3pm local time, which is 9am Eastern.\n\nSources: Formula1.com qualifying report, 22 August 2026 (Norris's 1:11.163 pole, his 18th, the 0.102 margin to Russell, rain in the third part of qualifying); Motorsport Week qualifying results, 22 August 2026 (the full classification and gaps, Verstappen seventh at 0.455); Formula1.com sprint report, 22 August 2026 (Russell's win by 1.360 from Leclerc, Norris third, Verstappen sixth); GPFans standings, 22 August 2026 (Antonelli 224, Hamilton 171, Russell 168, Leclerc 145, Norris 134, Verstappen 112, Mercedes 392, Ferrari 316).",
+    status: "verified",
+  },
+  {
     date: "2026-08-21",
     day: "Friday",
     headline: "Why is the 2026 Dutch Grand Prix the last one?",

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-23",
+    day: "Sunday",
+    headline: "Who leads the 2026 BMW Championship going into the final round?",
+    dek: "Wyndham Clark, by five, at 17 under. Rory McIlroy and Patrick Cantlay are tied second at 12 under, and Cantlay needs the week to save his Tour Championship place.",
+    body: "Wyndham Clark shot 65 in Saturday's third round at Bellerive Country Club to reach 17 under par and lead the 2026 BMW Championship by five shots going into Sunday.\n\nRory McIlroy and Patrick Cantlay share second at 12 under. McIlroy also shot 65, after rounds of 64 and 65 earlier in the week. Chris Gotterup and Gary Woodland are a shot further back at 11 under. Scottie Scheffler is tied 15th at 5 under, twelve behind.\n\nClark's round was not tidy at the start. His bogey-free run through the first two days ended with a double bogey at the first. He then birdied the fourth and the seventh, eagled the eighth and holed a long birdie putt at the tenth.\n\nCantlay is the man with the most to lose. He arrived at Bellerive 43rd in the FedEx Cup standings, and only the top 30 after Sunday go on to the Tour Championship at East Lake.\n\nThe leaders were due off at 1.50pm Eastern.\n\nSources: The Associated Press via The Boston Globe, 22 August 2026 (Clark's 65 for a five-shot lead, McIlroy and Cantlay tied second, Woodland and Gotterup six back, Scheffler tied 15th, Cantlay 43rd in the FedEx Cup standings, top 30 to East Lake); CBS Sports round-three leaderboard, 22 August 2026 (Clark 17 under, the double bogey at the first, birdies at the fourth and seventh, the eagle at the eighth, the birdie putt at the tenth, second place at 12 under, Scheffler tied 15th at 5 under); Golf.com Sunday tee times, 22 August 2026 (final pairing at 1.50pm Eastern).",
+    status: "verified",
+  },
+  {
     date: "2026-08-22",
     day: "Saturday",
     headline: "Who leads the 2026 BMW Championship after round two?",

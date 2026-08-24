@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-24",
+    day: "Monday",
+    headline: "When does the 2026 US Open start?",
+    dek: "The main draw begins on Sunday 30 August at Flushing Meadows and runs to the men's singles final on Sunday 13 September. Qualifying starts today, and the draw is made on Thursday.",
+    body: "The 2026 US Open main draw begins on Sunday 30 August at the USTA Billie Jean King National Tennis Center in Flushing Meadows and runs through to the men's singles final on Sunday 13 September, per the Lawn Tennis Association's tournament preview and Tennis Majors' published calendar.\n\nThis week is the part nobody televises. Qualifying runs from Monday 24 August to Thursday 27 August, and the singles main draw is announced on Thursday 27 August.\n\nOne name is already missing. Jannik Sinner withdrew with a right knee problem, which this desk covered on 22 August from ESPN's report of his statement. The seedings that follow from his absence are being projected rather than published, and projections are not results, so this entry does not carry them.\n\nSources: Lawn Tennis Association preview, 18 August 2026 (qualifying Monday 24 to Thursday 27 August, main draw Sunday 30 August to the men's singles final on Sunday 13 September, singles main draw announced Thursday 27 August, venue); Tennis Majors, 2026 US Open dates and full calendar; ESPN, 21 August 2026 (Sinner withdrawal, right knee), as recorded in this desk's 22 August tennis entry.",
+    status: "verified",
+  },
+  {
     date: "2026-08-22",
     day: "Saturday",
     headline: "Why is Jannik Sinner missing the 2026 US Open?",

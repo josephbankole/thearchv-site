@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-24",
+    day: "Monday",
+    headline: "Who won the 2026 BMW Championship?",
+    dek: "Wyndham Clark, at 17 under par at Bellerive Country Club, three shots clear of Patrick Cantlay. It is his third win of the 2026 season, and he closed with an even-par 70.",
+    body: "Wyndham Clark won the 2026 BMW Championship at Bellerive Country Club on Sunday at 17 under par, three shots clear of Patrick Cantlay at 14 under, with Rory McIlroy third at 13 under, per the PGA TOUR's own final-round wrap and the Associated Press report carried by NBC.\n\nClark began the day five ahead and closed with an even-par 70, which is the least comfortable way to win by three. \"Darth Vader had more fun,\" he said afterwards. \"I wasn't really nervous. I was kind of like out of it. When I made the putt on the par 3, it got me back. I'm really proud of myself that I didn't let it get away.\"\n\nIt is his third win of 2026, which he called his best year yet.\n\nThe more consequential arithmetic happened below him. The BMW Championship is the second event of the FedEx Cup playoffs and only the top 30 go to the Tour Championship at East Lake. Patrick Cantlay arrived 43rd and closed with three straight birdies for a 68 to play his way in. Gary Woodland and Robert MacIntyre also moved into the 30, and Ryan Fox took the last place. Rickie Fowler, Bud Cauley and Kurt Kitayama fell out.\n\nThe winner's share was $3.6m from a $20m purse.\n\nSources: PGA TOUR official round-four wrap-up, 23 August 2026 (Clark 17 under, three-shot margin, closing 70, Cantlay 14 under, McIlroy 13 under, third win of the season, Cantlay from 43rd, Woodland, MacIntyre and Fox into the top 30, Fowler, Cauley and Kitayama out, Clark quotes); Associated Press via NBC, 23 August 2026 (Clark's third win of 2026, 17 under, three clear of Cantlay, closing 70, Cantlay's 68 with three closing birdies); Golf Channel, 23 August 2026 ($20m purse and the $3.6m winner's share).",
+    status: "verified",
+  },
+  {
     date: "2026-08-23",
     day: "Sunday",
     headline: "Who leads the 2026 BMW Championship going into the final round?",

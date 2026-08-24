@@ -21,14 +21,14 @@ Aston Villa last won a European trophy in Rotterdam in 1982, beating Bayern Muni
 
 ## The match
 
-Villa won 3-0. Youri Tielemans, Emiliano Buendía and Morgan Rogers scored, per the Turkish Football Federation's own account of the match at Beşiktaş Park and UEFA's competition record.
+Villa won 3-0. Youri Tielemans, Emiliano Buendía and Morgan Rogers scored, per UEFA's own final highlights record and ESPN's match report. Buendía was named man of the match, and Rogers was named the tournament's best player.
 
 Three goals in a European final is a scoreline that hides a contest, and SC Freiburg had reached the final from a starting position nobody in Germany would have predicted either. A first Europa League final for the club ended without a goal in it.
 
 ## Why it mattered
 
-It is Aston Villa's first Europa League and their first European trophy in 44 years. The three scorers say something about how the squad was assembled: Tielemans arrived from Leicester City on a free transfer, Buendía from Norwich City, Rogers from Middlesbrough. None of them cost a headline fee, and all three scored in a European final.
+It is Aston Villa's first Europa League, their first European trophy in 44 years, and their first trophy of any kind since the 1996 League Cup, per UEFA and ESPN. A club that had gone three decades without lifting anything won a European competition and did it without needing a close match.
 
 Tielemans has since left. Manchester United signed him and Andrey Santos for a combined £85m in the summer of 2026, per Sky Sports and ESPN, so the man who opened the scoring in Villa's European final started the following season in a different shirt. That is the modern version of winning something.
 
-Sources: Turkish Football Federation match report, 20 May 2026; UEFA.com Europa League 2025-26 records; Sky Sports and ESPN, 13 August 2026, for the Tielemans transfer.
+Sources: UEFA.com Europa League final highlights and competition records, 20 May 2026; ESPN match report, 20 May 2026 (Freiburg 0-3 Aston Villa, Buendia man of the match, Rogers player of the tournament, the 30-year wait and the 1996 League Cup); Sky Sports and ESPN, 13 August 2026, for the Tielemans transfer.

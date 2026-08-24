@@ -129,7 +129,7 @@ for (const l of data.legends) {
 
 /* the fixed destinations: fronts, sections, evergreen surfaces */
 const DESTINATIONS = [
-  ["The ARCHV front page", "The day's lead across the football desks, the illustrated library, the legends wall and the long reads.", "/", "The ARCHV"],
+  ["The ARCHV front page", "The day's lead across the football desks, the legends wall and the long reads.", "/", "The ARCHV"],
   ["Transfer Desk", "Manchester United transfer news, every move checked against two independent sources.", "/desk/transfer/", "Desks"],
   ["International Football", "World Cup 2026 and international football, men's and women's, every day there is football on.", "/desk/world-cup/", "Desks"],
   ["Football Leagues", "Title races, promotions, relegation fights and the sackings behind them.", "/desk/leagues/", "Desks"],

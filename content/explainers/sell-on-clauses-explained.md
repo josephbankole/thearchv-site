@@ -71,7 +71,7 @@ A **buy-back clause** gives the selling club the right to repurchase the player 
 
 A sell-on clause is the one place a selling club tells the truth about its own pricing.
 
-Every window, clubs brief that they extracted full value, that the number was the number, that nobody leaves cheap. Then the paperwork keeps a percentage of the next sale, and the percentage says what the press release cannot: we know we might be wrong, and we are insuring against our own valuation.
+Every window, clubs brief that they extracted full value, that the number was the number, that nobody leaves cheap. Then the paperwork keeps a percentage of the next sale, and the percentage says what the press release cannot: the club knows it might be wrong, and is insuring against its own valuation.
 
 There is nothing shameful in that. Selling a 21-year-old is pricing a decade of possibility with last season's evidence. The clause is the honest instrument in a business allergic to honesty about uncertainty.
 
@@ -81,6 +81,6 @@ The dishonesty arrives later, in how it gets reported. A fee "rising to" some to
 
 - Andrey Santos to Manchester United, £50m (£48m guaranteed plus £2m add-ons), Chelsea 10% sell-on: Manchester United official announcement; Sky Sports; ESPN.
 - Bellingham to Borussia Dortmund 2020, fee ~£25m: BBC Sport; The Athletic.
-- Bellingham to Real Madrid, initial €103m: AFP (carried by Malay Mail and Soccerway); The Times (Birmingham cut "in excess of £6m"); GiveMeSport (£10m) — figures conflict, presented as conflicting claims, not fact.
+- Bellingham to Real Madrid, initial €103m: AFP (carried by Malay Mail and Soccerway); The Times (Birmingham cut "in excess of £6m"); GiveMeSport (£10m). Figures conflict, and are presented as conflicting claims rather than as fact.
 - Dele Alli to Tottenham Hotspur, initial £5m, 2015: BBC Sport. Sell-on reported at 20%: Milton Keynes Citizen; Spurs Web. Everton move with no guaranteed fee, add-on structured: BBC Sport; Sky Sports.
 - Solidarity mechanism 5%, training clubs ages 12-23: FIFA Regulations on the Status and Transfer of Players (RSTP), Annexe 5.

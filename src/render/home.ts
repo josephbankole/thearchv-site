@@ -26,7 +26,7 @@ import { readLabel } from '../lib/readTime';
 import { tennisDays } from '../data/tennisDays';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
-import { entryArt, PLAYERS } from './illustrated';
+import { entryArt } from './illustrated';
 
 /* ---------- escaping ---------- */
 // Every interpolated field below comes from src/data/*.ts, committed by the daily desk job
@@ -210,24 +210,24 @@ export function renderLead(): string {
         </figure>`
       : '';
 
+  // THE DESK-IN-NUMBERS PANEL WAS REMOVED 2026-08-24 (founder), along with the illustrated
+  // library band below. It was an <aside class="lead__panel"> carrying an entry count, a desk
+  // count, a "photographs used: 0" line and a note linking to /standards/.
+  // Two things inside it were NOT part of what was removed and are kept here rather than lost
+  // with the container: the drawn lead portrait, which is the only art at the top of the page,
+  // now sits in the main column; and the /standards/ link, which was the front page's only route
+  // to the verification policy, now rides on the "two sources" line in the meta row where the
+  // claim it backs already was.
+  // `.lead__grid` went to a single column in the same change. It was `1.7fr 1fr`, so leaving it
+  // would have held an empty right-hand column the width of the deleted panel.
   return `<div class="lead__main">
         <span class="kicker">${esc(lane.label)} &middot; ${esc(longDate(entry.date))}</span>
         <h1 class="lead__title"><a href="${esc(url)}" data-desk-card data-lane="${esc(lane.key)}" data-date="${esc(entry.date)}" data-day="${esc(entry.day)}">${esc(entry.headline)}</a></h1>
         <p class="lead__dek">${esc(entry.dek)}</p>
-        <p class="lead__meta"><span>Filed by <b>${esc(lane.desk)}</b></span><span>Checked against <b>two sources</b></span><span><b>${esc(readLabel(entry.dek, entry.body))}</b></span></p>
+        <p class="lead__meta"><span>Filed by <b>${esc(lane.desk)}</b></span><span>Checked against <a href="/standards/"><b>two sources</b></a></span><span><b>${esc(readLabel(entry.dek, entry.body))}</b></span></p>
         <p class="lead__cta"><a class="btn-solid" href="${esc(url)}">Read the story</a><a class="btn-ghost" href="/desk/${esc(lane.urlLane)}/">Every ${esc(lane.label)} story</a></p>
-      </div>
-      <aside class="lead__panel" aria-label="How this desk works">
-        <span class="index-stamp">The ARCHV &middot; as of ${esc(longDate(entry.date))}</span>
-        <h2 class="lead__panel-title">The desk, in numbers</h2>
-        <ul class="lead__figures">
-          <li><span>Football entries in the archive</span><b>${items.length}</b></li>
-          <li><span>Football desks</span><b>${LANES.length}</b></li>
-          <li><span>Photographs used</span><b>0</b></li>
-        </ul>
         ${art}
-        <p class="lead__panel-note">Every number on this site arrives with a name attached. <a href="/standards/">How we verify</a>.</p>
-      </aside>`;
+      </div>`;
 }
 
 /* ---------- one section band of cards ---------- */
@@ -264,28 +264,15 @@ function renderBand(lane: Lane, skip: DayEntry | null): string {
         </section>`;
 }
 
-/* ---------- the illustrated library ---------- */
-export function renderLibrary(): string {
-  if (!PLAYERS.length) return '';
-  const figures = PLAYERS.map(
-    (p) => `<figure class="hslib__item">
-              <img src="${esc(p.src)}" alt="${esc(p.alt)}" width="${p.width}" height="${p.height}" loading="lazy" decoding="async" />
-              <figcaption>${esc(p.name)}<span>${esc(p.nation ?? '')}</span></figcaption>
-            </figure>`
-  ).join('\n            ');
-  return `<section class="band band--chalk" id="illustrated-library">
-          <div class="band__head">
-            <p class="band__index">04</p>
-            <h2 class="band__title">The Illustrated Library</h2>
-            <span class="band__rule" aria-hidden="true"></span>
-            <span class="band__more">Every face, drawn by the desk</span>
-          </div>
-          <p class="band__blurb">No photographs anywhere on this site. Every player who appears here was drawn for it, in the house style, from a named reference.</p>
-          <div class="hslib">
-            ${figures}
-          </div>
-        </section>`;
-}
+/* ---------- the illustrated library: REMOVED 2026-08-24 (founder) ----------
+   `renderLibrary()` built a band of every drawn portrait in the registry, at band index 04,
+   under the id `illustrated-library`. Removed on the founder's call along with the desk-in-numbers
+   panel above. The registry itself is untouched and still feeds `entryArt()`, which is what puts
+   faces on cards, articles and share images, so this removed a display surface and not the art.
+   Removed with it: the `<!--archv:library-->` marker in index.html, its entry in the archvHome()
+   plugin map in vite.config.ts, the nav row in src/ui/chrome.ts, and the `.hslib` rules in
+   src/style.css. The `PLAYERS` import went too, because noUnusedLocals is on and would have
+   failed the build on a dangling one. */
 
 /* ---------- the legends wall ----------
    Was built by src/components/legends.ts from JS strings into an empty <ul>, which meant a

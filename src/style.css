@@ -851,8 +851,10 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 
 /* ---------- lead ---------- */
 .lead { padding-block: 0; border-bottom: 1px solid var(--rule); }
-.lead__grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: 2.25rem; padding-block: 2.5rem 2.75rem; }
-@media (max-width: 900px) { .lead__grid { grid-template-columns: 1fr; } }
+/* Single column since 2026-08-24: the desk-in-numbers panel that filled the second column was
+   removed on the founder's call. This was `1.7fr 1fr` with a 900px breakpoint collapsing it;
+   leaving that would have held an empty right-hand column the width of the deleted aside. */
+.lead__grid { display: grid; grid-template-columns: 1fr; gap: 2.25rem; padding-block: 2.5rem 2.75rem; }
 .lead__title {
   font-family: var(--display); font-weight: 400; text-transform: uppercase;
   font-size: clamp(2.3rem, 5.4vw, 4rem); line-height: 0.96; letter-spacing: 0.01em;
@@ -864,21 +866,12 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .lead__meta b { color: var(--ink-soft); font-weight: 600; }
 .lead__cta { margin-top: 1.4rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
-.lead__panel { background: var(--bg-raised); border: 1px solid var(--rule); padding: 1.5rem 1.4rem; }
-.index-stamp {
-  display: inline-block; margin-bottom: 0.9rem; padding: 0.18rem 0.5rem;
-  border: 1px solid var(--rule); font-family: var(--grotesque);
-  font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted);
-}
-.lead__panel-title { font-family: var(--display); font-weight: 400; font-size: 1.15rem; letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 0.9rem; }
-.lead__figures { list-style: none; margin: 0; padding: 0; }
-.lead__figures li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.55rem 0; border-top: 1px solid var(--rule-soft); font-size: 0.85rem; color: var(--ink-soft); }
-.lead__figures b { font-family: var(--display); font-weight: 400; font-size: 1.5rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+/* .lead__panel, .index-stamp, .lead__panel-title, .lead__figures and .lead__panel-note were
+   deleted 2026-08-24 with the desk-in-numbers aside they styled. .lead__art stays: the drawn
+   lead portrait survived the removal and now sits in the main column. */
 .lead__art { margin-top: 1.1rem; }
 .lead__art img { width: 100%; max-width: 160px; height: auto; display: block; border: 1px solid var(--rule); }
 .lead__art figcaption { margin-top: 0.4rem; font-size: 0.7rem; color: var(--ink-muted); }
-.lead__panel-note { margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid var(--rule-soft); font-family: var(--serif); font-size: 0.85rem; line-height: 1.55; color: var(--ink-soft); }
-.lead__panel-note a { color: var(--accent-ink); border-bottom: 1px solid var(--rule); }
 
 /* ---------- today at the desk (phase 3) ----------
    A dated band between the lead and the front grid, listing what has been filed today across
@@ -966,12 +959,9 @@ a.band__more:hover { color: var(--accent-ink); }
 .reduced-motion .fcard { transition: none; }
 .reduced-motion .fcard:hover { transform: none; }
 
-/* ---------- the illustrated library ---------- */
-.hslib { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.9rem; }
-.hslib__item { background: var(--bg-sunken); border: 1px solid var(--rule); padding: 0.9rem; text-align: center; }
-.hslib__item img { width: 100%; max-width: 150px; height: auto; aspect-ratio: 1 / 1; object-fit: cover; margin: 0 auto; display: block; }
-.hslib__item figcaption { margin-top: 0.55rem; font-family: var(--grotesque); font-size: 0.72rem; font-weight: 600; color: var(--ink); }
-.hslib__item figcaption span { display: block; margin-top: 0.15rem; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-muted); }
+/* The illustrated library band was removed 2026-08-24 (founder); its .hslib rules went with it.
+   The portrait registry is untouched and still feeds entryArt() on cards, articles and share
+   images, so this deleted a display surface rather than the art. */
 
 /* ---------- desk brief rail ---------- */
 .brief { border-left: 1px solid var(--rule); padding-left: 1.75rem; }

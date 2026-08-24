@@ -14,7 +14,6 @@ const NAV: Array<{ id: string; label: string }> = [
   { id: 'football-leagues', label: 'Football leagues' },
   { id: 'transfer-desk', label: 'Transfer desk' },
   { id: 'world-cup', label: 'International Football' },
-  { id: 'illustrated-library', label: 'Illustrated library' },
   { id: 'archive', label: 'Archive' },
   { id: 'legends', label: 'Legends' },
   { id: 'long-reads', label: 'Long reads' },

@@ -17,8 +17,9 @@ const animate = !reducedMotion;
 
 function boot(): void {
   // Every block on this page is in the HTML before this file runs (src/render/home.ts, injected
-  // at build time): the bands, the lead, the wire, the illustrated library, and as of phase 2B
-  // the legends wall and the long reads too. Nothing below creates front-page content; it
+  // at build time): the bands, the lead, the wire, and as of phase 2B the legends wall and the
+  // long reads too. (The illustrated library band was here until 2026-08-24, when the founder
+  // removed it along with the desk-in-numbers panel.) Nothing below creates front-page content; it
   // attaches behaviour to content that is already there. That is the whole point of the rebuild:
   // no reader ever waits on this bundle to see a story.
   initFrontCards();

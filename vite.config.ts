@@ -1,6 +1,6 @@
 import { defineConfig, type Plugin } from 'vite';
 import {
-  renderWire, renderLead, renderBands, renderLibrary, renderBrief, renderDateline,
+  renderWire, renderLead, renderBands, renderBrief, renderDateline,
   renderLegends, renderLongReads, renderToday,
 } from './src/render/home';
 
@@ -30,7 +30,6 @@ function archvHome(): Plugin {
           '<!--archv:lead-->': renderLead,
           '<!--archv:today-->': renderToday,
           '<!--archv:bands-->': renderBands,
-          '<!--archv:library-->': renderLibrary,
           '<!--archv:brief-->': renderBrief,
           '<!--archv:legends-->': renderLegends,
           '<!--archv:longreads-->': renderLongReads,

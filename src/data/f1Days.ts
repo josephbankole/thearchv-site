@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-24",
+    day: "Monday",
+    headline: "Who won the last Formula 1 Dutch Grand Prix?",
+    dek: "Lando Norris, from Kimi Antonelli and George Russell at Circuit Zandvoort. Max Verstappen crashed out of his home race, and the circuit leaves the calendar after 2026.",
+    body: "Lando Norris won the 2026 Formula 1 Dutch Grand Prix at Circuit Zandvoort on Sunday, ahead of Kimi Antonelli and George Russell, per Formula 1's own race report and Motorsport Week. It was his second win in as many race weekends.\n\nThe race ran to 72 laps and lost its headline act early. Max Verstappen lost the rear of his Red Bull and hit the wall heavily at his home race, and the session was halted a lap later.\n\nZandvoort does not come back. The August 21 to 23 weekend was the circuit's last on the Formula 1 calendar, under the one-year extension Formula 1 confirmed when it announced the 2026 date, which this desk covered on 21 August.\n\nA Dutch Grand Prix that ends with the Dutchman in the wall and a McLaren winning is not the send-off Zandvoort had in mind when it fought its way back onto the calendar in 2021.\n\nSources: Formula1.com race report, 23 August 2026 (\"Norris wins dramatic Dutch Grand Prix from Antonelli and Russell as Verstappen crashes out\", the 72-lap distance, the Verstappen crash and the red flag one lap later); Motorsport Week, 23 August 2026 (Norris's win, second in as many weekends); Formula 1 official calendar announcement (2026 as Zandvoort's final year under the one-year extension), as recorded in this desk's 21 August entry.",
+    status: "verified",
+  },
+  {
     date: "2026-08-23",
     day: "Sunday",
     headline: "Who is on pole for the 2026 Dutch Grand Prix, and where does Max Verstappen start?",

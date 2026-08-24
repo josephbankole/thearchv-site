@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-08-23",
+    day: "Sunday",
+    headline: "Hull City beat Manchester United 2-0 on the opening day of the 2026-27 Premier League season",
+    dek: "Two Regan Slater set pieces did it, finished by Semi Ajayi on 17 minutes and Nobel Mendy on 38. Manchester United had 71.6 per cent of the ball and 21 shots and scored none of them.",
+    body: "Hull City beat Manchester United 2-0 at the MKM Stadium on 22 August, in the first match of their return to the Premier League and the first of Manchester United's season.\n\nBoth goals came before half time and both came from Regan Slater set pieces. Semi Ajayi scored on 17 minutes from a loose ball in the box. Nobel Mendy, making his Premier League debut, scored on 38 from a Slater free kick.\n\nManchester United then had the second half and did nothing with it. Opta recorded 71.6 per cent possession, 21 shots, five on target and 1.81 expected goals. It was the most of the ball Manchester United have held in a Premier League match since September 2023, when they had 77 per cent against Crystal Palace and lost 1-0.\n\nOpta also recorded two firsts. This was Hull City's first Premier League win over Manchester United, having gone eleven meetings without one. And it was the first time Manchester United have lost an opening-day league fixture to a newly promoted club, from fourteen such matches.\n\nHull City came up as the first sixth-placed Championship side to be promoted since Blackpool in 2010, per Opta.\n\nSources: Opta Analyst, 22 August 2026 (71.6 per cent possession, 21 shots, five on target, 1.81 expected goals, 34 open-play crosses, Hull City's previous record of eleven meetings without a win, the newly-promoted opening-day record of fourteen matches, the September 2023 possession comparison, the sixth-placed promotion note); ESPN match report, 22 August 2026 (result, scorers, minutes); Sports Mole, 22 August 2026 (Ajayi's close-range finish on 17, Mendy's finish from Slater's free kick on 38 on his Premier League debut, Hull City's first league win over Manchester United since November 1974).",
+    status: "verified",
+  },
+  {
     date: "2026-08-22",
     day: "Saturday",
     headline: "Coventry City waited 25 years for a Premier League match and were two down inside 23 minutes.",

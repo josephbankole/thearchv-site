@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-23",
+    day: "Sunday",
+    headline: "How many rushing yards did Nick Chubb finish his career with?",
+    dek: "7,349, and 54 rushing touchdowns, over eight seasons and 100 games. Chubb announced his retirement on Instagram on Friday night, aged 30.",
+    body: "Nick Chubb retired on 21 August, announcing it on Instagram. He was 30, and he finished with 7,349 rushing yards and 54 rushing touchdowns across eight NFL seasons and 100 games. Counting receiving, he had 1,109 receiving yards and 59 total touchdowns. He made four Pro Bowls.\n\nThe Cleveland Browns took him 35th overall in the second round of the 2018 draft. He rushed for four consecutive 1,000-yard seasons and peaked at 1,525 yards in 2022.\n\nThen the knee. Chubb suffered a serious knee injury two games into the 2023 season, at Pittsburgh on a Monday night, and missed the remaining fifteen games of that season and the first six of the next. He came back midway through 2024 for 332 rushing yards and three scores. In 2025 he played fifteen games for the Houston Texans for 506 yards and three touchdowns, starting the season as the lead back before the rookie fourth-round pick Woody Marks moved ahead of him.\n\nHe said he had known for some time. He also said he had no regrets, while allowing that there were things he wished had gone differently.\n\nSources: ESPN, 21 August 2026 (7,349 rushing yards, 54 rushing touchdowns, four Pro Bowls, second round and 35th overall in 2018, the 2023 knee injury two games in and the games missed, the 1,525-yard 2022 season, the 2025 Houston Texans line and Woody Marks, the quoted statement); NFL.com, 21 August 2026 (35th overall, 1,109 receiving yards, 59 total touchdowns, 100 career games, the 2018 rookie season, the 2024 return figures of 332 yards and three scores).",
+    status: "verified",
+  },
+  {
     date: "2026-08-07",
     day: "Friday",
     headline: "Who won the 2026 Hall of Fame Game, and how did it end?",

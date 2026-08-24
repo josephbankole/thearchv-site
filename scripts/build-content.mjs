@@ -177,8 +177,13 @@ function schema(p, url) {
       { "@type": "ListItem", "position": 3, "name": p.title, "item": url } ] },
   ];
   if (p.section === "finals" && Array.isArray(p.teams) && p.eventDate) {
+    // `competition` names the actual trophy. It exists because this block used to hard-code
+    // "World Cup final", which was true while /finals/ held only World Cup finals and became a
+    // false statement of fact in structured data the moment the 2026 club and continental finals
+    // were added (2026-08-24). Pages without the field keep the original wording exactly.
+    const compName = p.competition ? `${p.competition} final` : "World Cup final";
     graph.push({ "@type": "SportsEvent",
-      "name": `${p.teams[0]} v ${p.teams[1]} — ${new Date(p.eventDate).getFullYear()} World Cup final`,
+      "name": `${p.teams[0]} v ${p.teams[1]} — ${new Date(p.eventDate).getFullYear()} ${compName}`,
       "startDate": p.eventDate, "sport": "Association football",
       "location": { "@type": "Place", "name": p.venue, "address": [p.city, p.country].filter(Boolean).join(", ") },
       "competitor": p.teams.map((t) => ({ "@type": "SportsTeam", "name": t })) });

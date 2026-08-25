@@ -42,13 +42,43 @@ brand-colors.json roles, one pair for the whole set):
 never purchase credits) still feeds the caption's search line and the story selection;
 it no longer gets a slide of its own.
 
+**Amended 2026-08-24 from the evidence-verified hook review.** The menu stands; these
+rules bind how it is used:
+
+- **The title card names its subject.** Claim-led and payoff-withheld as before, and
+  the claim carries the who in full with enough context to be understood on its own.
+  Withholding the fixtures and the numbers stays; withholding the subject is banned
+  (Meta's demoted-clickbait definition covers zero-context teases, and the
+  8,977-experiment Scientific Reports meta-analysis found moderate concreteness beats
+  maximum vagueness). [research: naked-hook]
+- **Slide 2 stands alone as a hook.** Instagram re-serves an unswiped carousel to the
+  same viewer starting at slide 2 (Mosseri, Oct 2024, verbatim verified), so the first
+  fixture card must open the set cold for a viewer who never saw the title card. Never
+  a mid-list continuation, never the answer to the title card's tease. [research:
+  closure-kills-retention, algo-baseline]
+- **Every middle slide lands one complete, screenshot-able fact** that earns a save on
+  its own. No mid-sentence endings; the SWIPE cue carries the momentum. [research:
+  curiosity-chain]
+- **One slide carries the desk's read, labelled as such.** A verdict on the matchday,
+  not a stat recital. [audit: shipped-output HIGH; canon D-2026-07-27d]
+- **This lane is the sanctioned home of the withheld-number hook.** Pre-match numbers
+  are genuinely unknown to the viewer, which is what keeps the tease honest here. The
+  same construction never runs on a settled result. [audit: shipped-output HIGH]
+- **Eight to ten slides stays the spec (founder ruling R5, 2026-08-24), and the count
+  is now measured rather than believed.** The 8-10 optimum rests on 2020 data, so the
+  per-unit performance-log row records the slide count alongside the CTA type, read
+  against saves. Four slides stays the standard everywhere else per D-2026-08-04l.
+
 ## Per-slide assets and the trio (D-2026-08-14d)
 
-- **Every slide carries an illustrated headshot and/or an ARCHV club disc.** Banked
-  faces first (`assets/headshots`, the site's `public/media/illustrated/head-*`), and a
-  missing face is generated to the headshot guidelines and banked, per canon §1 rule 4.
-  Club marks are ALWAYS the ARCHV typographic discs (`badge-*.png`), never a real crest;
-  a missing disc is generated from the badge pipeline before the build ships.
+- **Discs and faces where the subject calls for them, never as chrome (founder QC,
+  14 Aug).** Fixture cards carry their clubs' discs; player slides carry the banked face
+  (bank-first, per canon §1 rule 4), which REPLACES the disc on that slide; a duel slide
+  carries both players' banked heads as a side-by-side circular pair in the disc slot
+  (D-2026-08-14e); the title card and CTA plate may run clean. One mark
+  per slide at most, aligned top-right at the margin. Club marks are ALWAYS the ARCHV
+  typographic discs (`badge-*.png`), never a real crest; a missing disc is generated from
+  the badge pipeline before the build ships.
 - **The set renders in one TRIO**: pair dark ground, pair light type, and the pair's own
   third color (`brand-colors.json` `third` field) on every number, every source or
   reference line, and every quoted name or attribution.

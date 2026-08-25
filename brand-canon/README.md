@@ -10,6 +10,11 @@ from this folder. The authoritative, routine-read files remain at their original
 `~/Claude/fifa.archv/` paths. If you change a brand file, change the original and
 re-sync this mirror — do not edit files here expecting routines to pick them up.
 
+**Re-synced by script since 2026-08-25** (founder order): `archv-football-desk` step 6
+runs `fifa.archv/scripts/archv-sync-brand-canon.mjs`, which commits changed sources
+straight to `main` over the GitHub Contents API. No local checkout, no branch to be
+on. A hand edit made here gets overwritten on the next sync.
+
 Mirrored 2026-08-25 from these source paths (relative to ~/Claude/fifa.archv/):
 
 - brand-colors.json

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-25",
+    day: "Tuesday",
+    headline: "When is the 2026 NFL 53-man roster cutdown deadline?",
+    dek: "Sunday 30 August 2026, moved forward from the Tuesday after the final preseason weekend to the Sunday immediately after it. Waiver claims and practice squads follow on the 31st.",
+    body: "Every NFL club has to be down to 53 players by Sunday 30 August 2026.\n\nThat is a change, and it is the part worth knowing. For years the cutdown fell on the Tuesday after the last preseason weekend, which gave coaching staffs two clear days to watch the tape from the final exhibition, argue about the bottom eight places on the roster and make the calls. The deadline now sits on the Sunday immediately after that weekend instead. The final preseason games finish and the decisions are due almost straight away.\n\nWhat follows is unchanged in shape. Waiver claims are due on Monday 31 August, and practice squads are filed with the league the same day, after the initial 53-man rosters have been announced. A player cut on the Sunday can be claimed on the Monday by any club with priority, and the ones who clear waivers are the pool the practice squads are built from.\n\nThe compression is the story. Roughly 1,100 players are released across the league in a single afternoon, and clubs that want a specific one back on their practice squad now have less time to plan for the claim order they are gambling against.\n\nOne detail this desk is not printing: the exact clock time of the deadline. Two league-facing outlets carry it differently, one at 5pm Central and one at 6pm Eastern, and those are not the same instant. The date is solid, the hour is not, so the hour is left out rather than guessed.\n\nSources: Raiders.com official notice on the 30 August 2026 cutdown and the 31 August waiver and practice-squad dates; Chargers.com and Bengals.com club briefings on the same deadline; NFL.com roster cuts tracker, August 2026, on the league-wide volume; Yahoo Sports on the move from the Tuesday to the Sunday.",
+    status: "verified",
+  },
+  {
     date: "2026-08-23",
     day: "Sunday",
     headline: "How many rushing yards did Nick Chubb finish his career with?",

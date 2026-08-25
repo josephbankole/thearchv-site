@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-25",
+    day: "Tuesday",
+    headline: "How does the 2026 Tour Championship decide the FedEx Cup?",
+    dek: "72 holes of ordinary stroke play at East Lake from 26 to 30 August, no starting strokes, top 30 only. Lowest score over four rounds wins the FedEx Cup and a 10 million dollar bonus.",
+    body: "The 2026 Tour Championship runs from 26 to 30 August at East Lake Golf Club in Atlanta, with competitive rounds from the 27th to the 30th. Thirty players are in it: the top 30 in the FedEx Cup standings after the regular season and the first two playoff events.\n\nThe format is the simple one. Seventy-two holes of conventional stroke play, everybody starting on level terms, and the lowest score at the end wins both the tournament and the FedEx Cup. There are no starting strokes. Whoever shoots the lowest number at East Lake is the champion, regardless of how the season went before Thursday.\n\nThat is worth stating plainly because it has not always been true. The staggered-start system that ran for several seasons handed the leading player a head start measured in shots before a ball was struck, and a golfer could finish the week with the best four rounds on the property and still lose the trophy. That arrangement is gone. The season now decides who gets in and nothing else.\n\nThe FedEx Cup winner takes a 10 million dollar bonus.\n\nThe trade-off is worth being honest about. A one-week shootout rewards form over consistency, so a player who has been excellent from January can be beaten by somebody who was merely very good until the last Sunday in August. Every playoff format ever tried has had to pick which of those two it would rather reward, and this one has picked the week.\n\nSources: East Lake Golf Club official tournament page (dates, venue); Golfmagic first-round tee times, August 2026 (round dates and field); CBS Sports 2026 FedEx Cup playoffs standings, schedule, format and purse breakdown (the 30-player field, 72 holes of conventional stroke play with no starting strokes, the 10 million dollar bonus); GolfPass viewing guide.",
+    status: "verified",
+  },
+  {
     date: "2026-08-24",
     day: "Monday",
     headline: "Who won the 2026 BMW Championship?",

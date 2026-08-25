@@ -45,7 +45,9 @@ section marker now.*
 - **D-2026-08-05i (founder): Instagram carousels queue in NOTIFICATION mode so the founder adds
   music in the app at publish time.** Same doctrine as the reels' silent cut: the desk ships the
   artwork, the founder supplies the sound. This binds @thearchvfc and @thearchv.ca carousels
-  including the pre-match match-cover units; @thearchv.ai stays automatic (builder deck, no music).
+  including the pre-match match-cover units; @thearchv.ai stayed automatic here (builder deck, no
+  music), **SUPERSEDED 2026-08-24 by D-2026-08-24g, which moved that lane onto the notification path
+  with an explicit ISO `dueAt` like every other Instagram lane.**
   Never flip a queued carousel to automatic, and remember `editPost` cannot change schedulingType
   anyway: the mode is set correctly at creation or fixed in the Buffer UI by the founder alone.
 
@@ -107,20 +109,33 @@ section marker now.*
 - **The humanizer pass carries the HOUSE VOICE (D-2026-08-04e, founder).** De-slopping alone produces
   clean, characterless copy. Every humanizer invocation must also load
   `~/Claude/personal-brand/archv-house-voice-profile.md` and pass it as the voice sample. The skill's own
-  §Voice Calibration makes a supplied sample outrank its defaults, so this is the sanctioned hook. Never
-  edit the humanizer skill to embed the voice: it tracks an upstream git repo and updates overwrite it.
-  The voice is Bourdain plus Clarkson over an NYT/Athletic reporting skeleton, with B/C/E dials set per
-  content type in the profile's table. Read your content type's dial row before rewriting. Football
-  columns B3 C7 E8; transfer and breaking news B1 C3 E9; founder reflections B8 C3 E4; social-native
-  B5 C6 E4; tragedy B2 C0 E10.
-- **Daily desk carve-out: the voice runs WITHOUT first person.** The profile is first-person by default
+  §Voice Calibration makes a supplied sample outrank its defaults, so this is the sanctioned hook. The
+  skill to invoke is `humanizer-archv`, the ARCHV fork; the upstream `humanizer` checkout tracks a git
+  repo whose updates silently overwrite local changes, so it is never edited and the voice is never
+  written into either skill. **The voice is the founder plus Clarkson over an early-90s Sports
+  Illustrated construction method (D-2026-08-09a, which retired the Bourdain and NYT/Athletic layers;
+  this digest line caught up 2026-08-24).** The dials are F (founder), C (Clarkson) and S (SI
+  construction); a B/E citation in an older dated block maps one to one onto F/S and needs no re-edit.
+  Read your content type's dial row before rewriting. Football analysis and columns F3 C7 S8; AI and
+  tech pieces F7 C3 S8; transfer and breaking news F1 C3 S9; founder reflections F8 C3 S4; newsletters
+  and social-native F5 C6 S4; hard news and tragedy F2 C0 S10. The profile's BANNED MOVES and CLOSERS
+  sections are load-bearing: no significance-narration, the reversal closer capped at one in five units
+  per channel, and the day's units read side by side for batch shape before anything ships, because the
+  detector reads one piece at a time and cannot see a batch.
+- **The gate chain is THREE links, in order, on everything that ships: `humanizer-archv` with the house
+  voice, then `ai-writer-detection` (D-2026-08-05d), then `remove-ai-marks` LAST on the final bytes
+  (founder, 2026-08-12, ruled in the workspace CLAUDE.md; recorded into canon 2026-08-24).** The strip
+  runs Layer A on text and the container-metadata strip on files; on video it is ffmpeg copy-remux plus
+  `exiftool -all=`, never `clean_file.py`, which has no video branch and corrupts containers. Layer B
+  stays refused. Anything edited after the strip is re-stripped. Any older block describing the chain
+  as two links is short by the third. The profile is first-person by default
   and this section already bans first-person register on the daily desk. The desk rule wins. On
   @thearchvfc daily captions use the voice's rhythm, verdicts and specificity, but keep it out of "I"
   and "we". First person is available on the Dispatch, founder LinkedIn, long-form, and the fixed
   @thearchv.ai header line, which is a builder-voice surface and carries a mandatory first-person
   sentence (D-2026-08-03b, D-2026-08-04k). It is banned on @thearchvfc and @thearchv.ca captions.
   Where a voice rule and a channel rule disagree, the channel rule wins.
-- **Watch the dial on internal reporting.** Status updates, build reports and specs sit near B2 C1 E9,
+- **Watch the dial on internal reporting.** Status updates, build reports and specs sit near F2 C1 S9,
   not the football-column setting. Running a high Clarkson dial on a status report produces a punchline
   at the end of every paragraph, which reads as machine-written even when the facts are right
   (founder, 2026-08-04).
@@ -133,10 +148,23 @@ section marker now.*
 - **Hooks lead with a claim, not a summary** (D-2026-07-27d). An argument ships. A false statement of fact
   does not. A claim contradicted by our own context slide never ships. No unsourced verdict on a named
   individual; the jab lands on the institution, never on a person's competence.
+- **Hook doctrine v3 (D-2026-08-24a; the evidence lives in `REEL-CARD-BANK.md`).** The slide-1 claim
+  carries the WHO in full entity names and enough context to be understood: withholding the NUMBER
+  stays the payoff mechanic, withholding the SUBJECT is banned, because a zero-context tease matches
+  Meta's own demoted-clickbait definition. Slide 2 is a second first impression: Instagram re-serves
+  unswiped carousels to the same viewer starting at slide 2 (Mosseri, Oct 2024, verbatim verified), so
+  slide 2 must stand alone as a hook, never a mid-list continuation and never "THE ANSWER". A
+  withheld-number hook is valid only where the number is genuinely unknown to the reader; pre-match
+  and archive stats qualify, and a unit built on a settled result leads with the desk's verdict or an
+  unexpected number, never "How many did they score?" hours after full time.
+- **Comment-to-unlock is CONSIDERED AND DECLINED (D-2026-08-24b).** Keyword-comment gating matches
+  Meta's comment-baiting definition, every efficacy figure offered for it is vendor-sourced, and the
+  automated-DM half collides with the 2026-07-02 no-auto-send canon. Revisit only with a lead magnet
+  genuinely worth a DM, and then as a founder question, never as a desk experiment.
 - **Rotating CTA set plus the five-point de-robotify gate** (D-2026-07-22). No first-person register on the
   daily desk. **THE SET WAS REWRITTEN 2026-08-05** on the founder's "they seem robotic" verdict from
   Tom's Creator Code feedback: pool variants and four role-tuned closers, all through the
-  humanizer at social-native B5 C6 E4 and the `ai-writer-detection` gate, none carrying first person.
+  humanizer at social-native F5 C6 S4 and the `ai-writer-detection` gate, none carrying first person.
   **The pool is TEN variants as of 2026-08-13** (variant 8 the values line, 2026-08-07; variants 9
   and 10 the app and site lines, D-2026-08-13a — the app line's destination is an App Store search
   instruction, the one sanctioned exception to the /start line). The D-2026-07-22 list is the only
@@ -191,16 +219,32 @@ section marker now.*
   the three in D-2026-07-24i and the match-only exception in D-2026-08-04f. Match units are cover,
   key player comparison, head to head, rotating CTA; spec at `match-covers/carousel/BUILD-SPEC.md`,
   tokens at `match-covers/carousel/tokens.json`. Every other lane builds four as well. A routine file
-  still saying three is stale: correct it, do not obey it.
+  still saying three is stale: correct it, do not obey it. **Sanctioned exceptions with spec'd counts
+  (D-2026-08-24e, ruling R5, closing the football desk's step-7b open question):** the pre-match lane
+  runs the eight to ten of `PREMATCH-CAROUSEL.md`, MLS Weekly runs five to seven (cover, one slide per
+  qualifying cast subject, the roll-call slide where subjects blanked, CTA plate), and the folabankole
+  personal carousel runs five to seven per `fola-personal-daily`. Nothing else moves off four without
+  a founder ruling.
 - **Every rendered card is read back as an image before queueing.** A build log saying DONE is not evidence.
 
 ### Channels, handles and timing
-- **The ARCHV has left X.** @thearchvfc posts nothing to X; profiles stay up and dormant. @archv_ai keeps
-  posting to X, and `weekly-x-post-scheduling` is the only task allowed to touch it (D-2026-07-28).
-- **TWO daily desks** (D-2026-08-05c, superseding the one-desk line of D-2026-07-29). The **06:07
-  PUBLISH node** (`archv-nightly-desk`) owns everything time-coupled to the morning. The **12:04 BUILD
-  node** (`archv-midday-desk`) owns Phases 7, 7b and 9c plus the end-of-day roll-call. Deadlines on the
-  publish node: Threads by ~7am, Instagram queued before 9am, site and app live before the 10:30am push.
+- **X @thearchvfc is a MANUAL FOUNDER ROUTE (D-2026-08-24d, retiring the X-exit half of D-2026-07-28).**
+  The founder posts there himself when he chooses, as he did with the 2026-08-08 thread; no task or desk
+  builds, queues or posts an X thread for @thearchvfc, and a founder post there is invisible to every
+  Buffer-derived guard, per the D-2026-08-08b lesson. @archv_ai keeps posting to X, and
+  `weekly-x-post-scheduling` is the only task allowed to touch it (D-2026-07-28 carve-out, unchanged).
+- **FOUR daily desks** (D-2026-08-14f, the v2 cutover, superseding the two-node split of D-2026-08-05c;
+  the fourth added by D-2026-08-15a. Digest line corrected 2026-08-24, having still named the retired
+  `archv-nightly-desk` and `archv-midday-desk` ten days after the cutover). Each spec is single-homed in
+  `fifa.archv/routines-v2/`, and every registered cron carries a dispatch delay, so **no run minute is
+  ever hardcoded**. **`archv-football-desk`**, cron `0 6 * * *`, is the PUBLISH node and owns everything
+  time-coupled to the morning: the Manchester United Threads thread, the @thearchvfc carousel ladder,
+  the @thearchv.ca slate, site and app content, the TikTok stage. **`archv-ai-desk`**, cron `0 12 * * *`,
+  owns the josephbankole.ca brief, the next-day @thearchv.ai carousel and the yt-community build.
+  **`archv-metrics-desk`**, cron `30 13 * * *`, owns per-post metrics, the rotation audit and the
+  end-of-day roll-call, with Buffer READ-ONLY. **`josephbankole-site-desk`**, cron `0 15 * * *`, owns the
+  founder's personal site. Deadlines on the publish desk: thread live by about 7am, Instagram queued
+  before the 9am slot, site and app live before the 10:30am push.
 - **Instagram Reels ship the SILENT base cut, never the `_music` cut** (founder, 2026-08-01). The
   founder adds music in the Instagram app on the last lap. TikTok is unaffected and still takes the
   `_music` cut. Both cuts are still exported; this only changes which one Instagram gets. Confirm
@@ -214,19 +258,27 @@ section marker now.*
   mark after the run starts, because the publish desk fires at 06:07 and a datetime of 06:00 is already
   in the past. Never hard-code 6:00am. App push **10:30am ET**, content committed by
   ~10:15. **Dispatch weekly**, send 10:45am ET, founder presses send.
-- **Buffer is the route. Content360 is RETIRED as a route** (D-2026-07-27b, supersedes D-2026-07-24;
-  scope confirmed workspace-wide 2026-08-05). It survives in exactly one place: a named
-  sanctioned-fallback note in the nightly desk's TikTok stage, for the case where Buffer cannot serve
-  that surface. A headless run can never clear its login wall, so no lane treats it as a primary route
-  and no new lane may adopt it.
+- **Buffer is the route everywhere EXCEPT Threads. Content360 is REVIVED as the Threads route**
+  (D-2026-08-18/19, founder, superseding the D-2026-07-27b workspace-wide retirement for Threads only;
+  digest line corrected 2026-08-24, having still read "RETIRED" a week after the ruling). Exactly three
+  Content360 Threads surfaces exist, all running in the founder's logged-in Chrome session:
+  `threads-ca-daily`'s 5pm evening thread (auto-post authorized), `fola-personal-daily`'s @thearchv.ai
+  AI thread (auto-post authorized), and the founder's personal Threads unit, which is only ever left as
+  a DRAFT with no scheduled time because Content360 has no notification mode (manual always, founder
+  2026-08-23). Everywhere else the retirement stands: Buffer is the route, the TikTok-stage
+  sanctioned-fallback note survives, and no other lane adopts Content360. Its
+  caption-drop-after-media-insert bug and its headless login wall are both still real; a run that
+  cannot reach the founder's session HOLDS and says so rather than improvising a route. The 6am
+  football desk's morning Threads thread stays on Buffer, unchanged.
 - **Handles:** @thearchvfc on Instagram, Threads and TikTok. @thearchvca on YouTube. @thearchv.ca is the
   multi-sport Instagram. **archv_ai (X): only `weekly-x-post-scheduling` posts there** (D-2026-07-28
   carve-out). **thearchv.ai (Instagram, channel `6a5988ff80cc80cdcacb64cb`) has exactly ONE sanctioned
-  owner and no others: `archv-midday-desk` `Phase 7b`, the ONE daily AI-news carousel** (D-2026-08-04k,
+  owner and no others: `archv-ai-desk` `STEP 2`, the ONE daily AI-news carousel** (D-2026-08-04k,
   founder, resolving the open question that stood here and superseding the three-owner carve-out in
-  D-2026-08-03b; **Phase 7b and the single-owner rule with it moved from `archv-nightly-desk` to
-  `archv-midday-desk` on 2026-08-05 under D-2026-08-05c, and any file still naming the nightly desk
-  here is stale**). The other two former owners **stand down on this channel and must not post to it**:
+  D-2026-08-03b; **the single-owner rule travelled with the phase, from `archv-nightly-desk` to
+  `archv-midday-desk` on 2026-08-05 under D-2026-08-05c, then onto `archv-ai-desk` STEP 2 in the
+  D-2026-08-14f v2 cutover that retired both of those desks. Owner cell corrected 2026-08-24, and any
+  file still naming a `Phase 7b` or either retired desk here is stale**). The other two former owners **stand down on this channel and must not post to it**:
   the weekly desk's **Monday week-in-lessons batch** and **`archv-ai-weekly-posts` STEP 11**. They keep
   their other work; they lose this channel only. Do not re-add a second owner without a founder ruling.
   History, because it repeated inside one day: the original blanket ban predated Phase 7b and silently
@@ -234,15 +286,37 @@ section marker now.*
   have silently killed the other two owners on Monday 10 August before the founder ruled that they
   should indeed stand down. **A carve-out that names one owner forbids every other owner you forgot to
   name**, so name the survivor deliberately, as this line now does.
-- **Channel ids: D-2026-07-27b is authoritative. §3's Buffer line is stale.**
+- **Channel ids: this table is authoritative (refreshed 2026-08-24 on D-2026-08-14c, D-2026-08-23a and
+  D-2026-08-24d; base ids per D-2026-07-27b). §3's Buffer line is stale.**
 
   | Surface | Channel id |
   |---|---|
   | Instagram @thearchvfc (football) | 6a1e155cc687a22dd44dffda |
   | Instagram @thearchv.ca (multi-sport) | 6a65b5a24b2d03035f42087b |
+  | Instagram folabankole (founder personal; `fola-personal-daily` ONLY, notification mode ONLY, D-2026-08-23a) | 6a7ed151b2d9d57743764a17 |
   | Threads @thearchvfc | 6a5d708de2638b94d79bc0b4 |
-  | TikTok @thearchvfc | 6a65b5844b2d03035f420822 |
-  | X @thearchvfc (dormant, do not post) | 6a1e151fc687a22dd44dfef7 |
+  | TikTok @thearchvfc (REMOVED from Buffer 2026-08-14, D-2026-08-14c; id historical, TikTok ships via Studio or the Drive handoff) | 6a65b5844b2d03035f420822 |
+  | X @thearchvfc (founder-manual only, D-2026-08-24d; no task posts) | 6a1e151fc687a22dd44dfef7 |
+  | X @archv_ai (`weekly-x-post-scheduling` ONLY, D-2026-07-28 carve-out) | 6a4f1a9e404834462886dd5d |
+
+- **`archv-youtube-weekly` is RETIRED (founder, 2026-08-19), and no lane produces video anywhere.**
+  The live YouTube surface is `youtube-goal-archive-weekly`, Tuesdays 06:00 ET, uploading the next
+  banked Drive goal-archive volume as a Short, gated on `fifa.archv/goal-archive-queue.md` reading
+  STATUS CONFIRMED, which is the founder confirming both the queue order and the rights. A closed
+  gate is a HOLD reported by name, never a silent skip.
+- **THE PERSONAL LANE IS MANUAL ALWAYS (founder, 2026-08-23, recorded as D-2026-08-23a; supersedes
+  the personal half of D-2026-08-18/19).** Nothing on a folabankole surface auto-publishes, on any
+  desk, ever. `fola-personal-daily` still prepares both personal units in full and queues them; the
+  founder presses send. Concretely: folabankole Instagram goes to Buffer as
+  `schedulingType: notification`, never automatic, and folabankole Threads is left in Content360 as
+  a DRAFT with no scheduled time. Buffer does NOT post the stored first comment on the notification
+  path, so the first comment is the founder's to post by hand and every run report says so. The
+  D-2026-08-14c folabankole guard is lifted for `fola-personal-daily` ONLY, and only far enough to
+  queue a notification unit; every other desk still never queues to the personal account. Voice
+  authority is `personal-brand/fola-personal-voice.md`, and its no-fabricated-stories rule, never
+  invent a first-person story or timeline the founder did not actually tell, is GLOBAL content canon
+  on every brand and every lane. The three-link gate chain applies to every personal unit, slide
+  PNGs included.
 
 ### Match carousels: the Thursday job publishes (D-2026-08-04h, founder)
 - `archv-weekly-match-covers` becomes a **PUBLISHING lane**. It builds the four-slide carousels and
@@ -297,6 +371,16 @@ section marker now.*
   strongest carousel of the day and let the reel take the other slot. TikTok is unaffected and still
   takes its own one-a-day. Applied same-day on 2026-08-04: the second carousel was deleted and the reel
   queued into its 13:00 slot.
+- **MLS WEEKLY runs Sundays on @thearchvfc (founder, 2026-08-16; recorded in canon 2026-08-24).** A
+  "what happened in Major League Soccer this week" carousel as the account's SECOND Sunday unit, MLS
+  at 09:00 ET and the step-7 ladder unit at 13:00, four hours clear, which keeps the two-a-day cap
+  intact while the reel lane is paused. Cast, the played-AND-scored slide rule, the
+  Sunday-to-Saturday window and full sourcing live in `routines-v2/archv-football-desk.md` step 7b;
+  the slide count is a sanctioned exception per D-2026-08-24e.
+- **@thearchv.ca SUBSTANCE FLOOR (D-2026-08-24f, ruling R7): every unit carries an archive pull or a
+  desk verdict.** A schedule explainer alone no longer qualifies as a unit; the three that shipped as
+  such scored reach of 7, 3 and 2. The account keeps running, this floor is the ONE deliberately
+  changed variable, and nothing else about the lane moves while its effect is read.
 
 ### @thearchv.ai daily carousel (D-2026-08-03b)
 - ONE a day. Header is a FIXED founder line plus a VARIABLE consequence line, never a fixed title:
@@ -369,9 +453,10 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
 - **@thearchv.ca: the pause is LIFTED** (D-2026-08-04j). Normal production resumes immediately. The
   2 August pause and the 30 August review are both closed. The cap discipline stands: a cap is a
   ceiling, never a target, so the desk still stops at the ceiling rather than filling to it.
-- **@thearchv.ai: ONE carousel a day, and `archv-midday-desk` Phase 7b owns it** (D-2026-08-04k; the
+- **@thearchv.ai: ONE carousel a day, and `archv-ai-desk` STEP 2 owns it** (D-2026-08-04k; the
   phase moved off the nightly desk on 2026-08-05 under D-2026-08-05c and the single-owner rule
-  travelled with it). The
+  travelled with it, then onto `archv-ai-desk` STEP 2 in the D-2026-08-14f v2 cutover that retired
+  `archv-midday-desk`. Owner cell corrected here 2026-08-24 in the same pass as the §0 digest line). The
   header line promised one a day and the account now keeps that promise. The other two owners stand
   down on that channel: the **Monday week-in-lessons batch** in `archv-weekly-desk` and the
   **archv-ai-weekly-posts STEP 11 promos** no longer post to `6a5988ff80cc80cdcacb64cb`. This
@@ -459,7 +544,9 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
     two-unit cap does not move and a lane never runs alongside the card it displaces. Anything not
     time-coupled to the 6am cycle went to the weekly desk, which has slack.
   - **THE RUNG ORDER IS THE PRECEDENCE.** Where two lanes fall on the same day they do not both ship
-    and there is no separate tie-break rule to look up: the Phase 5 ladder in `archv-nightly-desk` is
+    and there is no separate tie-break rule to look up: the Phase 5 ladder in `archv-nightly-desk`
+    (since the D-2026-08-14f cutover: the TEMPLATE LADDER in `routines-v2/archv-football-desk.md`
+    step 7, which carries the same rungs; founder-ordered correction 2026-08-24) is
     the ordering, a run works down it and stops at the first rung that fires, and a lane outranked on
     its own day defers to the next available rung-5 day. The worked example is already written in the
     desk and in `fifa.archv/CREATOR-CODE-SESSION-1.md`: **Sunday 23 August 2026 is a United Reality
@@ -873,7 +960,8 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
     is INVISIBLE to Buffer and to every duplicate guard. Never read the reel slot's emptiness in
     Buffer as a slot to fill.
   - **Untouched:** the @thearchv.ca reuse repost (Phase 6's second unit, a repost rather than a
-    generation), the weekly YouTube lane (`archv-youtube-weekly`, its own task and gates), and the
+    generation), the weekly YouTube lane (`archv-youtube-weekly`, its own task and gates; SINCE
+    RETIRED 2026-08-19, see the RATIFIED 2026-08-24 block), and the
     reuse register file itself, which is kept for the founder to pull from.
   - Lifting the pause is a founder ruling; no desk resumes reel work on its own initiative.
 - **D-2026-08-13c (founder, same day, evening session): THE PAUSE ABOVE IS LIFTED and the reel
@@ -925,6 +1013,10 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
     press-conference quotes, live-researched trending questions, withheld-number stats, and
     the both-clubs archive slide (notable players who played for both sides of one fixture).
     Subject override only; caps and slots unchanged. All sourcing gates apply in full.
+    *(Corrected 2026-08-24: the trending-questions SLIDE was cut by D-2026-08-14d below, so the
+    "live-researched trending questions" item in this list no longer gets a slide of its own.
+    Trend research still feeds captions and story selection; the quotes, stats and both-clubs
+    slides stand.)*
   - **From the first Premier League matchday of 2026-27 (verified live, never assumed), the
     @thearchvfc Instagram CTA rotation is 50% follow, 40% get the app (variant 9), 5% shop
     the Etsy store, 5% subscribe to the Dispatch**, held over a rolling twenty units and
@@ -956,14 +1048,53 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
     #FF6EC7, pair 7 Royal Mint #63E6BE, pair 9 Matchday Yellow #FFD85F, pair 10 Signal
     Orange Bright #FA6A3C. Every third clears 4.5:1 on its dark ground so references stay
     legible at small sizes. The third never carries claims or body text.
-  - **Every carousel slide carries an illustrated headshot and/or an ARCHV club disc.**
-    This extends §1 rule 4 (banked illustrated headshots whenever a player features) to a
-    per-slide layout requirement, and the club mark is always the ARCHV-designed
-    typographic disc (`thearchv-site/public/media/illustrated/badge-*.png` and the
-    match-covers badge sources), NEVER a club's real crest.
+  - **Illustrated headshots and ARCHV club discs appear where the SUBJECT calls for them,
+    not as per-slide chrome (founder amendment, 14 Aug evening QC).** Fixture, player and
+    head-to-head slides carry the relevant disc or banked face; title cards and CTA plates
+    may run clean; the AI lane runs clean, its brand presence being the wordmark lockup.
+    Never more than one mark per slide, always aligned to the layout grid (top-right at
+    the margin). The club mark is always the ARCHV-designed typographic disc
+    (`thearchv-site/public/media/illustrated/badge-*.png` and the match-covers badge
+    sources), NEVER a club's real crest. §1 rule 4 (banked face whenever a player
+    features) still stands.
   - **The trending-questions slide is REMOVED from the pre-match carousel menu**
     (`PREMATCH-CAROUSEL.md` amended). Trend research still feeds captions and story
     selection; it just no longer gets its own slide.
+- **D-2026-08-14e (founder): HEADSHOTS WHEN RELEVANT, worked examples ratified.** A slide
+  whose subject is a single player carries that player's banked illustrated head AS its one
+  mark, in the disc's top-right slot with the disc's own ring treatment (ring geometry and
+  gold lifted from the badge PNGs so heads and discs read as one family); the club disc
+  comes off that slide. A DUEL slide, two players compared, carries BOTH banked heads as a
+  side-by-side circular pair in the same slot, subject imagery rather than chrome, and no
+  disc. Applied retroactively 14 Aug to the two queued sets: Bruno Fernandes on the
+  United-Milan assists slide, Thauvin and Dembele on the Lens-PSG duel slide. Bank-first
+  rule unchanged: no banked face means the unit ships typographic with a flag. Head-capable
+  template: the v3 work dirs' `prematch-slide-local.html` (`head` and `heads[]` slots,
+  additive).
+- **D-2026-08-14f (founder): DESK V2 CUTOVER, hard cut.** `archv-nightly-desk` and
+  `archv-midday-desk` are RETIRED, their specs archived untouched at
+  `Scheduled/_archived-2026-08-14/` (consult-and-flag only). Three lane desks replace them,
+  registered in the live scheduler with each spec's single home in `fifa.archv/routines-v2/`:
+  **archv-football-desk** (6am ET; Threads, @thearchvfc carousel via the template ladder,
+  @thearchv.ca, site/app, TikTok stage), **archv-ai-desk** (noon ET; josephbankole.ca brief,
+  next-day @thearchv.ai carousel, yt-community build), **archv-metrics-desk** (1:30pm ET;
+  per-post metrics, rotation audit, end-of-day roll-call, Buffer READ-ONLY). The pointer
+  architecture is D-2026-08-14-dated: specs carry workflow only, every rule lives in one
+  canonical file, defect lessons indexed in `fifa.archv/DESK-LESSONS.md`.
+  `expected-writers.conf` and `lanes.tsv` owner cells re-pointed in the same cutover. First
+  week: every run reports ARCHIVED-SPEC CONSULTS as the pointer-completeness measure. Scope
+  was deliberately these two desks only; all other scheduled routines unchanged.
+- **D-2026-08-15a (founder): THE JB SITE DESK.** A fourth v2 desk, daily 3pm ET, spec single-homed
+  at `fifa.archv/routines-v2/josephbankole-site-desk.md`, for the founder's PERSONAL site
+  josephbankole.ca (no ARCHV identity there). Three lanes: Field Notes blog essays Monday,
+  Wednesday and Friday when warranted plus a daily freshness pass; one or two `answers/` AEO
+  pages a week (Tuesday/Thursday attempts); and a daily whole-site SEO and AEO review. Founder
+  grants: direct commit-and-push to the site repo (same authority as the news-brief lane), safe
+  technical fixes applied same-run, content-level rewrites REPORT-ONLY. The `news/` lane stays
+  archv-ai-desk's; shared files (sitemap, feeds, llms.txt) take additive edits only under
+  pull-rebase-push. Platform cells `JB Field Notes` / `JB Answers` / `JB Site SEO`, never the
+  bare domain, which is the news lane's grep key.
+- **D-2026-08-13d (founder, evening session): THE REEL LANES ARE PAUSED,
   daily AND weekly.** After reviewing the evening's session-built reels (the ten recuts and two
   versions of the Bruno penalties reel), the founder held them all short of approval and ruled
   that no scheduled lane resumes reel work. What stands from tonight:
@@ -977,6 +1108,143 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
     `goals_reels/exports/bruno_39_penalties.mp4` (v2) sit unapproved pending founder edits or
     a rebuild note. The founder continues making his own reels natively per D-2026-08-13b's
     working mode.
+  - *(Heading line restored 2026-08-15 by `archv-metrics-desk`. The D-2026-08-15a insertion had
+    overwritten it, so this whole block ran on from the JB site desk bullet and D-2026-08-13d had
+    no findable heading in §0 while being cited at the D-2026-08-14a reel line above and by both
+    paused lane rows every day. Body text was not touched. The opening clause is RECONSTRUCTED
+    from the surviving "daily AND weekly" tail and memory `archv-reel-pause-2026-08-13`; correct
+    the wording if it differs from what was ruled.)*
+
+### RATIFIED 2026-08-24 (the content-pipeline overhaul approval, plus the 16 to 23 August backlog recorded)
+*The founder approved the overhaul work order on 2026-08-24 (research workflow wf_2af4f8ba, audit
+workflow wf_a43311f9; rulings R1 to R10 in that order). Entries a to f below are that approval. A bare
+"D-2026-08-24", cited by `archv-metrics-desk` (the PENDING-not-FAILED liveness fix) and by
+`linkedin-weekly-idea-refill` (the GraphQL createPost route), is the same day's improvement-proposal
+application and is a different decision from any lettered entry here. The block also records five
+decisions from 12 to 23 August that had landed in specs and the workspace CLAUDE.md without a canon
+entry; each carries its own decision date, and the §0 digest lines above were updated in this same
+edit per the same-run rule.*
+
+- **D-2026-08-24a (founder): HOOK DOCTRINE v3.** Three rules enter the Voice-and-copy digest; the full
+  evidence sits in `REEL-CARD-BANK.md`. (1) The slide-1 claim carries the WHO in full entity names and
+  enough context to be understood. Withholding the NUMBER stays, because that payoff mechanic is what
+  the account's own data ratified; withholding the SUBJECT is banned. A zero-context tease matches
+  Meta's published demoted-clickbait definition, headlines that withhold the information required to
+  understand the content, and the 8,977-experiment Scientific Reports meta-analysis found moderate
+  concreteness beating maximum vagueness. (2) Slide 2 is a second first impression: Mosseri confirmed
+  in October 2024, verbatim verified, that Instagram re-serves unswiped carousels to the same viewer
+  starting at slide 2, so slide 2 must stand alone as a hook, never a mid-list continuation and never
+  "THE ANSWER". (3) A withheld-number hook is valid only where the number is genuinely unknown to the
+  reader. Pre-match and archive stats qualify. A unit built on a settled result leads with the desk's
+  verdict or an unexpected number, never "How many did they score?" hours after full time.
+- **D-2026-08-24b (founder): COMMENT-TO-UNLOCK IS CONSIDERED AND DECLINED.** Keyword-comment gating
+  matches Meta's comment-baiting definition, every efficacy figure offered for it is vendor-sourced,
+  and the automated-DM half collides with the 2026-07-02 no-auto-send canon. Recorded so the idea is
+  not re-litigated from scratch: revisit only if a lead magnet exists that is genuinely worth a DM,
+  and then as a founder question, never as a desk experiment.
+- **D-2026-08-24c (founder, ruling R1): THE CTA POOL QUESTION IS CLOSED. D-2026-07-22 wins, and
+  D-2026-08-09c is stamped SUPERSEDED in place.** The ten-variant pool plus the four role-tuned
+  closers under the D-2026-07-22 heading is the ONLY authority on the set and the count, anchored by
+  the rulings that kept extending it (D-2026-08-13a's variants 9 and 10, D-2026-08-14b's seasonal
+  rotation). The 09c follow-only link-placement rule dies with the stamp: D-2026-08-14b's 50/40/5/5
+  @thearchvfc rotation went live with the 2026-27 Premier League season on 21 August 2026, and the
+  Thursday match-covers lane moves onto that live rotation rather than the follow-only rule it had
+  been reading.
+- **D-2026-08-24d (founder, ruling R4): X @thearchvfc IS A MANUAL FOUNDER ROUTE, and the X-exit half
+  of D-2026-07-28 is formally retired.** Canon now matches reality: the founder ordered and posted an
+  @thearchvfc X thread on 2026-08-08 over the standing exit. He posts there himself when he chooses;
+  no task or desk builds, queues or posts an X thread for @thearchvfc; and a founder post there is a
+  blind spot for every Buffer-derived guard, per the D-2026-08-08b lesson. The @archv_ai carve-out
+  (`weekly-x-post-scheduling` only) is unchanged, and the retired Agents 2 and 2b stay retired.
+- **D-2026-08-24e (founder, ruling R5): SPEC'D SLIDE COUNTS for MLS Weekly and the personal lane are
+  SANCTIONED EXCEPTIONS to the four-slide standard of D-2026-08-04l.** MLS Weekly runs five to seven
+  slides (cover, one slide per qualifying cast subject up to five, the roll-call slide where subjects
+  blanked, CTA plate), which closes open question (a) in `routines-v2/archv-football-desk.md` step
+  7b. The folabankole personal carousel runs five to seven per `fola-personal-daily`. Both join the
+  pre-match lane's eight to ten from `PREMATCH-CAROUSEL.md`. Every other lane stays at four, and a
+  new exception needs a founder ruling, not an analogy to these.
+- **D-2026-08-24f (founder, ruling R7): THE @thearchv.ca SUBSTANCE FLOOR.** Every unit on the account
+  carries an archive pull or a desk verdict; a schedule explainer alone no longer qualifies as a
+  unit. The evidence is the account's own August scoring, where three schedule-explainer units
+  reached 7, 3 and 2 people. The account keeps running rather than pausing, the floor is the ONE
+  deliberately changed variable, and nothing else about the lane moves while its effect is read.
+- **D-2026-08-24g (founder, ruling R2): THE @thearchv.ai INSTAGRAM LANE QUEUES IN NOTIFICATION MODE,
+  on the GraphQL `createPost` route with an explicit ISO `dueAt`, like every other Instagram lane.**
+  The "@thearchv.ai stays automatic" carve-out inside D-2026-08-05i is stamped superseded in place. The
+  builder deck queues with `channelId: 6a5988ff80cc80cdcacb64cb`, `schedulingType: "notification"`,
+  `mode: "customScheduled"` and a `dueAt` at 08:00 ET on the target date carrying that date's offset.
+  The named `create_post` tool stays banned on this lane as on every other, because it cannot carry a
+  datetime at all (DESK-LESSONS 5a), and the mode is decided at creation because `schedulingType` is
+  immutable afterwards (5c). The stage-to-draft regime that grew out of the 15 August flush is retired
+  with it: **a draft left unpromoted past its slot reads FAILED, never STAGED**, in the desk's own row
+  and in the end-of-day roll-call. Buffer does not post the stored first comment on the notification
+  path, so that comment is the founder's to post by hand and the run report says so. Implemented at
+  `routines-v2/archv-ai-desk.md` STEP 2.10.
+- **D-2026-08-24h (founder, 2026-08-24): THE PERSONAL LINKEDIN LANE RUNS 8 TO 10 PAGE DOCUMENTS,
+  and that is a sanctioned slide-count exception under D-2026-08-24e.** The founder asked for one
+  scroll-stopping image per LinkedIn post and, when shown the evidence, chose reach instead: the
+  hook-doctrine research (vault note `2026-08-24-fifaarchv-hook-doctrine-v3-and-evidence-review`)
+  found the carousel structure PORTS to LinkedIn documents at eight to ten pages, where dwell is an
+  official ranking signal worth roughly 1.4x reach, and a single image earns no dwell signal at all.
+  Nine pages is the worked default. Hook doctrine v3 governs the pages exactly as it governs a
+  carousel: page 1 names its subject, page 2 stands alone as a second first impression, middle pages
+  land complete screenshot-able facts, the payoff sits no later than page 7 of 9 and the last content
+  page still carries value. Pages render through `personal-brand/carousel-builder/build.py` at $0,
+  assembled to a PDF and attached as a Buffer `document` asset with a cover thumbnail. **The pair
+  rotation runs across the LinkedIn lane too**: 9 and 10 lead, 4 to 7 rotate behind, and no pair runs
+  on two consecutive units across the personal surfaces.
+- **D-2026-08-24i (founder-directed build, 2026-08-24): THE LINKEDIN LANE CANNOT USE THE NOTIFICATION
+  PATH, SO "MANUAL" THERE MEANS DRAFT.** Buffer rejects `schedulingType: "notification"` on a LinkedIn
+  channel outright, HTTP 400, "Notification scheduling is not supported for linkedin channels. Use
+  automatic scheduling instead." The reminder pattern that protects the folabankole Instagram surface
+  is therefore unavailable on LinkedIn, and a unit that must not self-publish is held as a DRAFT
+  rather than as a notification. A LinkedIn unit the founder has approved for sending is scheduled
+  `automatic` with `mode: "customScheduled"` and an explicit ISO `dueAt`, on the `execute_mutation`
+  GraphQL route, never the named `create_post` tool (DESK-LESSONS 5a). **Creating a LinkedIn draft
+  without an explicit `mode` records `shareMode: addToQueue`**, which is the 5a flush trap lying in
+  wait for whenever that draft is promoted; pass `mode: "customScheduled"` and a `dueAt` even when
+  `saveToDraft` is true, so the datetime is already correct at promotion.
+- **RECORDED, decision date 2026-08-12 (founder, ruled in the workspace CLAUDE.md):
+  `remove-ai-marks` IS GATE THREE.** The chain on everything that ships is `humanizer-archv` with the
+  house voice, then `ai-writer-detection` (D-2026-08-05d), then `remove-ai-marks` LAST on the final
+  bytes: Layer A on text, the container-metadata strip on files, ffmpeg copy-remux plus
+  `exiftool -all=` on video because `clean_file.py` has no video branch and corrupts containers, and
+  Layer B refused. Anything edited after the strip is re-stripped. Canon had carried the chain as two
+  links since D-2026-08-05d; this entry and the Voice-and-copy digest line close that gap.
+- **RECORDED, decision date 2026-08-16 (founder): MLS WEEKLY EXISTS.** A weekly "what happened in
+  Major League Soccer this week" carousel on @thearchvfc, Sundays, the account's SECOND Sunday unit:
+  MLS at 09:00 ET, the step-7 ladder unit at 13:00, four hours clear, the two-a-day cap intact while
+  the reel lane is paused. The standing cast, the played-AND-scored slide rule, the Sunday-to-Saturday
+  window and the sourcing rules live in `routines-v2/archv-football-desk.md` step 7b. Slide count per
+  D-2026-08-24e above; its liveness registration is being fixed in the same overhaul.
+- **RECORDED, decision dates 2026-08-18/19 (founder, D-2026-08-18/19): THE CONTENT360 THREADS
+  CARVE-OUT.** Content360 is REVIVED as the Threads route, superseding the D-2026-07-27b retirement
+  for Threads only; Buffer stays the route everywhere else. Auto-post is approved for exactly two
+  lanes, both running in the founder's logged-in Chrome session: `threads-ca-daily`'s 5pm evening
+  thread and `fola-personal-daily`'s @thearchv.ai AI thread. The founder's personal Threads unit also
+  builds in Content360, but only ever as a DRAFT per the 2026-08-23 ruling below. The no-auto-send
+  rule stands everywhere else, and the route's known faults, the caption drop after a media insert
+  and the headless login wall, are why it runs in the founder's session and nowhere else.
+- **RECORDED, decision date 2026-08-19 (founder): `archv-youtube-weekly` IS RETIRED, and no lane
+  produces video anywhere.** The live YouTube surface is `youtube-goal-archive-weekly`, Tuesdays
+  06:00 ET, uploading the next banked Drive goal-archive volume as a Short, gated on
+  `fifa.archv/goal-archive-queue.md` reading STATUS CONFIRMED, which is the founder confirming both
+  the queue order and the rights. A closed gate is a HOLD reported by name. The "untouched" mention
+  of the weekly lane inside D-2026-08-13b now carries an annotation pointing here.
+- **RECORDED, decision date 2026-08-23 (founder, D-2026-08-23a): THE PERSONAL LANE IS MANUAL
+  ALWAYS.** Supersedes the personal half of D-2026-08-18/19. Nothing on a folabankole surface
+  auto-publishes, on any desk, ever. `fola-personal-daily` still prepares both personal units in full
+  and queues them; the founder presses send. Concretely: folabankole Instagram goes to Buffer as
+  `schedulingType: notification`, never automatic, and folabankole Threads is left in Content360 as a
+  DRAFT with no scheduled time, because Content360 has no notification mode. Buffer does NOT post the
+  stored first comment on the notification path, so the first comment is the founder's to post by
+  hand and every run report says so. The D-2026-08-14c folabankole guard is lifted for
+  `fola-personal-daily` ONLY, and only far enough to queue a notification unit; every other desk
+  still never queues to the personal account. Voice authority is
+  `personal-brand/fola-personal-voice.md`, and its no-fabricated-stories rule, never invent a
+  first-person story or timeline the founder did not actually tell, is GLOBAL content canon on every
+  brand and every lane. The three-link gate chain applies to every personal unit, slide PNGs
+  included.
 
 ---
 
@@ -1998,6 +2266,13 @@ ourselves, or show the claim is untrue? If yes, rewrite the hook. If no, run it 
 
 ## D-2026-07-28: X exit, Threads-only United thread, fixed push time, Dispatch 10:45, paid renders held (founder)
 
+> **POINT 1'S X EXIT IS RETIRED, 2026-08-24 (D-2026-08-24d, founder ruling R4; see the RATIFIED
+> 2026-08-24 block in §0).** The founder had already posted an @thearchvfc X thread himself on
+> 2026-08-08, so canon now records the route as it actually runs: X @thearchvfc is founder-manual
+> only, no task or desk builds or queues there, and the @archv_ai carve-out via
+> `weekly-x-post-scheduling` is unchanged. The daily Threads thread, the retired Agents 2 and 2b,
+> and points 2 to 4 below all stand on their own histories.
+
 Four decisions taken together on 2026-07-28:
 
 1. **The ARCHV leaves X.** Profiles stay up, dormant; nothing posts there. The daily output becomes
@@ -2435,6 +2710,16 @@ founder's personal surfaces (LinkedIn, personal carousels): #1E223D/#F54F1B, #03
   pair each unit used.
 
 ## D-2026-08-09c: CTA set rewritten value-forward; follow-only on IG/TikTok captions (founder)
+
+> **SUPERSEDED IN FULL, 2026-08-24 (D-2026-08-24c, founder ruling R1 of the content-pipeline
+> overhaul; see the RATIFIED 2026-08-24 block in §0). Do not pull CTA lines from this section.**
+> The D-2026-07-22 ten-variant pool plus its four role-tuned closers is the ONLY authority on the
+> set and the count; the 2026-08-13/14 rulings that kept extending that pool (D-2026-08-13a's
+> variants 9 and 10, D-2026-08-14b's seasonal rotation) anchored the choice. The follow-only LINK
+> PLACEMENT rule below is dead the same way: D-2026-08-14b's 50/40/5/5 @thearchvfc rotation went
+> live with the 2026-27 Premier League season on 21 August 2026. This section stays as provenance
+> only, and its "old variant 7 maps to line 6" note is void with it: variant 7 of D-2026-07-22 is
+> the debate lead, exactly as the §0 digest says.
 
 Supersedes the pool lines of D-2026-07-22 (rotation mechanics, handle-per-platform, and the
 de-robotify gate survive). **Why:** the 2026-08-09 assessment scored the old set 5.3/10 on value

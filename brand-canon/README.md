@@ -10,7 +10,7 @@ from this folder. The authoritative, routine-read files remain at their original
 `~/Claude/fifa.archv/` paths. If you change a brand file, change the original and
 re-sync this mirror — do not edit files here expecting routines to pick them up.
 
-Mirrored 2026-08-14 from these source paths (relative to ~/Claude/fifa.archv/):
+Mirrored 2026-08-25 from these source paths (relative to ~/Claude/fifa.archv/):
 
 - brand-colors.json
 - BRAND-COLORS.md

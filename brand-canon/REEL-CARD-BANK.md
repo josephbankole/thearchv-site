@@ -37,6 +37,56 @@ re-render at 1080x1920 if a size ever changes.
 8. Sub lines invite the viewer in rather than command (founder, 2026-08-14). "Let's
    count them", "Take a guess", "Watch the last card". First-person plural is welcome;
    a bare imperative is not.
+9. Word budgets on every card (founder QC + trend study, 14 Aug): claims 8 words
+   maximum, subs and story lines 12, stats as label-and-number with no prose, list rows
+   4. The tone nudges, it never judges a person; talk like a fan, not an analyst. Full
+   craft detail: `DESIGN-PLAYBOOK.md`, slide copy doctrine.
+
+## Hook doctrine v3
+
+Amended 2026-08-24 from the evidence-verified hook review. These rules amend the build
+rules above and bind every unit that pulls its hook from this bank: reels, daily
+carousels, and the pre-match lane. The pairs and the build rules stand; v3 tightens how
+they are used.
+
+1. **The claim carries its subject.** The first card leads with the claim and keeps it
+   bold, and the claim names the who in full with enough context to be understood on
+   its own. Withholding the NUMBER stays: that is the payoff mechanic the account's own
+   numbers ratified. Withholding the SUBJECT is banned. A zero-context tease matches
+   Meta's demoted-clickbait definition ("headlines that withhold information required
+   to understand the content"), and the 8,977-experiment Scientific Reports
+   meta-analysis found moderate concreteness beats maximum vagueness. [research:
+   naked-hook]
+2. **Slide 2 is a second first impression.** Mosseri confirmed (Oct 2024, verbatim
+   verified) that Instagram re-serves an unswiped carousel to the same viewer starting
+   at slide 2. On any carousel built from this bank, slide 2 must stand alone as a
+   hook. Never a mid-list continuation, never "THE ANSWER". [research:
+   closure-kills-retention, algo-baseline]
+3. **Complete facts on middle slides.** Every middle slide lands one complete,
+   screenshot-able fact that earns a save on its own. No mid-sentence endings. The
+   gold SWIPE cue stays as the momentum device; it is the sanctioned version of
+   leading curiosity and carries no bait risk. [research: curiosity-chain]
+4. **Payoff placement.** On a carousel the payoff card sits at slide 3 of 4 at the
+   earliest, and the last card carries the number plus context without being the only
+   slide with value. Reels are unchanged: build rule 3 still holds the number to the
+   last card. [research: closure-kills-retention; audit: shipped-output "payoff spent
+   by slide 2"]
+5. **A withheld number must actually be unknown.** Valid pre-match and on archive
+   stats. A unit built on a settled result leads with the desk's verdict or an
+   unexpected number, never "How many did they score?" hours after full time. [audit:
+   shipped-output HIGH]
+6. **The hook-shape ledger.** The football desk writes a pre-publication ledger of
+   hook constructions, pair shape per unit, alongside the closer ledger the 24 Aug
+   corrective call assigned. A third consecutive withheld-number question is blocked.
+   Pairs 9 and 10 enter the rotation, with at least one pair-9 unit weekly. This
+   extends build rule 7 into a written record. [audit: shipped-output "nine of ten
+   units on one construction"]
+7. **The question pairs stay.** Metricool measured questions at +36.7% comments
+   across 24.4M posts. Nobody "fixes" pairs 5 and 6 into statements. [research:
+   algo-baseline]
+8. **What the ranking pays.** Views and dwell, sends, and saves are the currency.
+   Dense, readable slides people sit with, and one stat card per unit designed to be
+   forwarded to a group chat. [research: algo-baseline]
 
 ## The ten pairs
 

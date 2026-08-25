@@ -21,6 +21,13 @@ free for commercial use.
 - Small utility lines (source lines, handles) stay Helvetica Neue with wide tracking.
 - The wordmark never changes. It is the identity, not part of this system.
 
+**The type scale (founder cheat sheet, 2026-08-14), for 1080x1350 and 1080x1080 social
+units:** title 150px (shrink-to-fit downward, never up), sub-heading 95px, large text
+60px, medium text 48px, small text 36px, captions and kickers 27px. The scale exists
+because feed type is read on phones at a third of desktop size, so mobile sizes run
+roughly three times what desktop habits suggest. Templates enforce the title tier via
+shrink-to-fit; everything else picks from these bands rather than inventing sizes.
+
 If the founder later buys ITC Machine and Albertus Nova from Monotype, they slot into the
 same two roles with a one-line template change.
 
@@ -88,6 +95,48 @@ read. Same for the six font pairings he listed: absent from the pack, source unk
 9. **Leading floor** (Typography 101 p9). Display lines at 1.05 to 1.1, context lines at
    1.2 to 1.3, never tighter.
 10. **RGB always** (Color Theory 101 p3). Every export in this operation is screen-bound.
+
+## Slide copy doctrine (founder QC + trend study, 14 Aug evening)
+
+Studied against the top-performing sports content on Instagram (433, B/R Football, Goal
+and the stats-page genre, all pulled live with performance signals). The findings were
+uniform: on-image copy caps at EIGHT words on the biggest pages, stats land as bare
+label-and-number stacks rather than sentences, and the tone nudges rather than judges.
+The budgets, now binding on every carousel slide:
+
+- **Claim or title: 8 words maximum, 5-7 the target.** One idea. If it needs a second
+  sentence it is two slides or it is cut.
+- **Story or sub line: 12 words maximum.** Conversational, the way a fan says it at the
+  pub, not the way an analyst files it.
+- **Stats: label and number, no prose.** "Goals: Thauvin 11, Dembele 10" beats a
+  sentence every time it was measured. The big number stays in Marcellus in the third.
+- **List rows: 4 words maximum.** A ranked list may withhold its metric entirely; the
+  order is the payload and the number is the reason to keep swiping.
+- **CTA plate: one claim within budget plus one line.**
+- **The ONE dense frame allowed is the breaking-news card**: four strict type tiers
+  (banner, kicker, headline, context), reserved for genuine breaking news, never for a
+  daily unit.
+- **Tone: soft hands.** Flat declaratives over verdicts, questions with a finite answer
+  set, nudge situations rather than judging people, second person sparingly. No emoji
+  on slides; the premium register does with word choice what meme pages do with 🤣.
+- Captions stay on the four-line SEO doctrine and may run longer than the slides; the
+  research confirms captions lengthen only to ask or to quote.
+
+**Amended 2026-08-24 from the evidence-verified hook review.** Substance rules join the
+budgets above; the budgets themselves are unchanged:
+
+- **Every middle slide is complete.** One screenshot-able fact per middle slide,
+  finished inside the slide, earning a save on its own. No mid-sentence endings; the
+  SWIPE cue stays as the momentum device between slides. [research: curiosity-chain]
+- **Build for dwell, sends and saves.** That is the ranking currency. Dense, readable
+  slides people sit with, and one stat card per unit designed to be forwarded to a
+  group chat. [research: algo-baseline]
+- **One verdict-carrying slide per @thearchvfc carousel, labelled as the desk's read**
+  (the 23 Aug YouTube community post is the internal model). A stat recital without an
+  argument does not qualify as a unit. [audit: shipped-output HIGH; canon D-2026-07-27d]
+- **@thearchv.ca substance floor (founder ruling R7, 2026-08-24).** Every unit carries
+  an archive pull or a desk verdict; a schedule explainer alone no longer qualifies.
+  [audit: shipped-output HIGH]
 
 ## How this joins the reel system
 

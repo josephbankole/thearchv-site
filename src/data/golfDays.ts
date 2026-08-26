@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-26",
+    day: "Wednesday",
+    headline: "Who tees off last at the 2026 Tour Championship, and how does the winner take the FedEx Cup?",
+    dek: "The first round is Thursday 27 August at East Lake in Atlanta. Scottie Scheffler goes last at 2:00pm ET with Matt Fitzpatrick, all 30 players start level, and the lowest 72-hole score takes the FedEx Cup and the 10 million dollar bonus.",
+    body: "The 2026 Tour Championship begins on Thursday 27 August at East Lake Golf Club in Atlanta, and the first-round tee times are out. Scottie Scheffler, first in the FedEx Cup standings, goes out last at 2:00pm ET alongside Matt Fitzpatrick, per the tee sheets published by Golfmagic and carried by the Associated Press.\n\nThe format is the one the PGA Tour adopted in 2025. All 30 qualifiers start at even par, there are no starting strokes, and the week is 72 holes of conventional stroke play. The player with the lowest score on Sunday wins the Tour Championship, the FedEx Cup and the 10 million dollar bonus, per GolfPass and golf.com. A season of points gets a player to East Lake and decides nothing after that.\n\nTommy Fleetwood begins his title defence alongside Ludvig Aberg. Rory McIlroy, the record three-time FedEx Cup champion, sits 11th in the standings and plays with Xander Schauffele, per Golfmagic's tee sheet.\n\nThursday's coverage runs from 11:00am ET on ESPN and from 1:00pm ET on Golf Channel, per golf.com and GolfPass.\n\nSources: Golfmagic, first-round tee times, 25 to 26 August 2026 (Scheffler and Fitzpatrick last out at 2:00pm ET, Fleetwood with Aberg, McIlroy with Schauffele and 11th in the standings); Associated Press tee times via Central Oregon Daily, 25 August 2026; GolfPass and golf.com how-to-watch guides, 25 August 2026 (the no-starting-strokes format, the 10 million dollar bonus, the broadcast windows); East Lake Golf Club official (dates and venue).",
+    status: "verified",
+  },
+  {
     date: "2026-08-25",
     day: "Tuesday",
     headline: "How does the 2026 Tour Championship decide the FedEx Cup?",

@@ -1,6 +1,6 @@
 {
   "_comment": [
-    "KIT REGISTRY — the machine-readable half of the `kit` field in player-headshot-bank.md.",
+    "KIT REGISTRY \u2014 the machine-readable half of the `kit` field in player-headshot-bank.md.",
     "",
     "WHY THIS EXISTS (founder ruling 2026-08-04). The headshot bank was built for the World Cup",
     "lane, so most banked faces wear a NATIONAL kit. The moment one of those heads sits under a",
@@ -147,20 +147,61 @@
         "white"
       ],
       "note": "Red and white striped home shirt, black shorts. Striped since the 1925-26 season. Black is shorts and trim, never the body colour.",
-      "source": "Wikipedia, “Brentford F.C.” (retrieved 2026-08-20)"
+      "source": "Wikipedia, \u201cBrentford F.C.\u201d (retrieved 2026-08-20)"
     },
     "TOTTENHAM HOTSPUR": {
       "colours": [
         "white"
       ],
       "note": "White home shirt, navy blue shorts. Navy is the SHORTS colour and is deliberately not listed: admitting it would let a navy head pass under this label.",
-      "source": "Wikipedia, “Tottenham Hotspur F.C.” (retrieved 2026-08-20)"
+      "source": "Wikipedia, \u201cTottenham Hotspur F.C.\u201d (retrieved 2026-08-20)"
     },
     "CHELSEA": {
       "colours": [
         "blue"
       ],
       "note": "Royal blue home shirt. Not sky blue: the tokens are matched exactly and collapsing the two would let a Manchester City head pass here.",
+      "source": "Club colours, unchanged"
+    },
+    "IPSWICH TOWN": {
+      "colours": [
+        "blue",
+        "white"
+      ],
+      "note": "Blue home shirt with white detail.",
+      "source": "Club colours, unchanged"
+    },
+    "ASTON VILLA": {
+      "colours": [
+        "claret",
+        "light blue",
+        "blue"
+      ],
+      "note": "Claret body with sky blue sleeves.",
+      "source": "Club colours, unchanged"
+    },
+    "ARSENAL": {
+      "colours": [
+        "red",
+        "white"
+      ],
+      "note": "Red body with white sleeves.",
+      "source": "Club colours, unchanged"
+    },
+    "NEWCASTLE UNITED": {
+      "colours": [
+        "black",
+        "white",
+        "black and white"
+      ],
+      "note": "Black and white striped home shirt.",
+      "source": "Club colours, unchanged"
+    },
+    "LIVERPOOL": {
+      "colours": [
+        "red"
+      ],
+      "note": "All-red home kit.",
       "source": "Club colours, unchanged"
     }
   },
@@ -360,6 +401,77 @@
       "kit_hex": "#0E3D76",
       "kit_of": "Chelsea",
       "measured": "2026-08-20"
+    },
+    "sesko": {
+      "player": "Benjamin Sesko",
+      "kit": "red",
+      "kit_hex": "#6E1C23",
+      "kit_of": "Manchester United",
+      "measured": "2026-08-27"
+    },
+    "sesko-tile": {
+      "player": "Benjamin Sesko",
+      "kit": "red",
+      "kit_hex": "#6E1C23",
+      "kit_of": "Manchester United",
+      "measured": "2026-08-27"
+    },
+    "rice": {
+      "player": "Declan Rice",
+      "kit": "white",
+      "kit_hex": "#DCD8C5",
+      "kit_of": "Arsenal",
+      "measured": "2026-08-27",
+      "note": "Plain off-white collar; white is an Arsenal body colour (red shirt, white sleeves)."
+    },
+    "rice-tile": {
+      "player": "Declan Rice",
+      "kit": "white",
+      "kit_hex": "#DCD8C5",
+      "kit_of": "Arsenal",
+      "measured": "2026-08-27"
+    },
+    "isak": {
+      "player": "Alexander Isak",
+      "kit": "red",
+      "kit_hex": "#5B1921",
+      "kit_of": "Liverpool",
+      "measured": "2026-08-27"
+    },
+    "ipswich-town-disc": {
+      "player": "ARCHV typographic club disc, Ipswich Town (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#0033A0",
+      "kit_of": "Ipswich Town",
+      "measured": "2026-08-27"
+    },
+    "aston-villa-disc": {
+      "player": "ARCHV typographic club disc, Aston Villa (bank-only stand-down fallback, ruling R6)",
+      "kit": "claret",
+      "kit_hex": "#67002F",
+      "kit_of": "Aston Villa",
+      "measured": "2026-08-27"
+    },
+    "newcastle-united-disc": {
+      "player": "ARCHV typographic club disc, Newcastle United (bank-only stand-down fallback, ruling R6)",
+      "kit": "black",
+      "kit_hex": "#241F20",
+      "kit_of": "Newcastle United",
+      "measured": "2026-08-27"
+    },
+    "nottingham-forest-disc": {
+      "player": "ARCHV typographic club disc, Nottingham Forest (bank-only stand-down fallback, ruling R6)",
+      "kit": "red",
+      "kit_hex": "#DD0000",
+      "kit_of": "Nottingham Forest",
+      "measured": "2026-08-27"
+    },
+    "brighton-and-hove-albion-disc": {
+      "player": "ARCHV typographic club disc, Brighton and Hove Albion (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#0057B8",
+      "kit_of": "Brighton and Hove Albion",
+      "measured": "2026-08-27"
     }
   }
 }

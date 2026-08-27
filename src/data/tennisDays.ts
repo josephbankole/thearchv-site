@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-27",
+    day: "Thursday",
+    headline: "Alexander Zverev and Aryna Sabalenka are the top seeds at the 2026 US Open",
+    dek: "The singles draws are made on Thursday 27 August at Flushing Meadows. Seedings come from the 24 August rankings, and the men's world No.1 is not in the field.",
+    body: "Alexander Zverev and Aryna Sabalenka are the top seeds for the 2026 US Open singles draws, which are made on Thursday 27 August at the USTA Billie Jean King National Tennis Center. Zverev, who won his first major at Roland Garros this year, tops the men's list; Sabalenka leads the women's.\n\nThe seedings come straight from the rankings published on Monday 24 August, with the top 32 in each field seeded. There is no separate seeding formula, so Thursday's ceremony decides opponents, not seedings.\n\nThe men's field is missing its No.1. Jannik Sinner withdrew on 21 August with a right knee problem, having not played since the Wimbledon final; ESPN reported at the time that he led the rankings by more than 5,000 points. His absence leaves Zverev as the highest-ranked player in the field.\n\nPlay in the main draw begins on Sunday 30 August and runs to the men's singles final on Sunday 13 September.\n\nSources: LTA US Open preview, 18 August 2026 (draw date, venue, tournament dates); Flashscore US Open guide (Zverev and Sabalenka arriving as top seeds); puntodebreak, 23 August 2026 (seeding order taken from the 24 August rankings, top 32 seeded); ATP Tour (draw ceremony timing); ESPN, 21 August 2026 (Sinner withdrawal, right knee, the 5,000-point lead).",
+    status: "verified",
+  },
+  {
     date: "2026-08-24",
     day: "Monday",
     headline: "When does the 2026 US Open start?",

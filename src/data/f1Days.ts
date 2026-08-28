@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-28",
+    day: "Friday",
+    headline: "When is the 2026 Italian Grand Prix, and what time does the race start?",
+    dek: "Monza runs 4 to 6 September, a standard weekend with no sprint. The race starts Sunday 6 September at 15:00 local, 09:00 ET, over 53 laps.",
+    body: "The 2026 Italian Grand Prix runs Friday 4 to Sunday 6 September at the Autodromo Nazionale Monza, and the race starts at 15:00 local time on Sunday 6 September, which is 14:00 BST and 09:00 ET. It is a standard weekend with no sprint race.\n\nThe official timetable, per Formula1.com: first practice Friday at 12:30 local, second practice Friday at 16:00, third practice Saturday at 12:30, qualifying Saturday at 16:00, and the race Sunday at 15:00. The race runs 53 laps of the 5.793-kilometre circuit, or 120 minutes, whichever comes first.\n\nThe field arrives from Zandvoort, where Lando Norris won the last Formula 1 Dutch Grand Prix on 23 August from Kimi Antonelli and George Russell, his second win in as many race weekends, with Max Verstappen crashing out. Monza is the second leg of the season's late-summer European run.\n\nWho carries that Zandvoort form through the fastest weekend on the calendar?\n\nSources: Formula1.com official session timetable for the Formula 1 Pirelli Gran Premio d'Italia 2026 (dates, all five session times, 53 laps, 5.793km), single-source sufficient per the desk's official-body rule; Formula1.com race report and Motorsport Week, 23 August 2026 (the Norris Dutch Grand Prix result, as recorded in the 24 August answer).",
+    status: "verified",
+  },
+  {
     date: "2026-08-24",
     day: "Monday",
     headline: "Who won the last Formula 1 Dutch Grand Prix?",

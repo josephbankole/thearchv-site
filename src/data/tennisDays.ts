@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-28",
+    day: "Friday",
+    headline: "How did the 2026 US Open women's draw fall for Aryna Sabalenka?",
+    dek: "The draw made on Thursday put the defending champion in the top half with Jessica Pegula, and stacked Elena Rybakina, Coco Gauff and Iga Swiatek together in the bottom half. Play starts Sunday 30 August.",
+    body: "The 2026 US Open women's singles draw, made on Thursday 27 August at Flushing Meadows, gave Aryna Sabalenka about as clean a route as a No.1 seed can ask for. The defending champion, chasing a third straight title, sits in the top half with No.3 seed Jessica Pegula, Wimbledon champion Linda Noskova at No.6 and Karolina Muchova at No.7. Her projected quarter-final is Muchova and her projected semi-final is Pegula.\n\nThe bottom half is where the field piled up. No.2 seed Elena Rybakina, No.4 Coco Gauff, No.5 Mirra Andreeva, No.8 Iga Swiatek, No.12 Belinda Bencic and No.13 Naomi Osaka all landed on the same side, which means Sabalenka cannot meet Rybakina, Gauff or Swiatek before the final. At most one of those three can reach it.\n\nThe stakes on Sabalenka's side of the bracket have a long tail. The last woman to win three straight US Open titles was Serena Williams, champion in 2012, 2013 and 2014, and only Chris Evert, with four straight from 1975 to 1978, has managed a longer run in the Open era. That is the company a fortnight's work would put Sabalenka in.\n\nThe main draw begins on Sunday 30 August and runs to the men's singles final on Sunday 13 September. The men's field is without world No.1 Jannik Sinner, who withdrew on 21 August with a right knee problem, leaving Alexander Zverev as the men's top seed. The clean route Sabalenka was handed on Thursday is real, and it lasts exactly until whoever survives the bottom half walks into the final.\n\nSources: Tennis Majors, 27 August 2026 (half-by-half seed placements, Sabalenka's projected quarter-final and semi-final, the three-peat bid); usopen.org draw report, 27 August 2026 (Sabalenka, Pegula and Noskova in the top half); usopen.org 50-for-50 archive and Fox Sports, September 2014 (Serena Williams' 2012 to 2014 run, the Chris Evert 1975 to 1978 record); LTA preview, 18 August 2026 (main-draw dates); ESPN, 21 August 2026 (the Sinner withdrawal).",
+    status: "verified",
+  },
+  {
     date: "2026-08-27",
     day: "Thursday",
     headline: "Alexander Zverev and Aryna Sabalenka are the top seeds at the 2026 US Open",

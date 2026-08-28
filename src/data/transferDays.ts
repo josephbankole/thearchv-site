@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-08-28",
+    day: "Friday",
+    headline: "Fiorentina made a formal bid for Joshua Zirkzee, four days before the window shuts",
+    dek: "Fabrizio Romano reported the offer on Thursday: an initial loan with a fee around 5 million euros and a buy option. Manchester United would step up their striker search if he goes, with the deadline on Tuesday.",
+    body: "Fiorentina have made a formal bid for Joshua Zirkzee. Fabrizio Romano reported the offer on Thursday 27 August: an initial loan carrying a fee around 5 million euros with a buy option, and talks with the player's camp described as advanced. Yahoo Sports carried the same story with the structure as a loan to the end of the season, an agreement not yet close, and optimism on both sides that it lands before the window closes on Tuesday 1 September.\n\nThe context on Fiorentina's end is Moise Kean. Como are pushing to sign him, and Zirkzee is the replacement Fiorentina want leading their line if he goes. So one striker deal in Italy is waiting on another, which is partly why nothing is signed yet.\n\nManchester United paid Bologna 36.5 million pounds for Zirkzee in July 2024 on a five-year contract with an option for a sixth. A 5 million euro loan fee against that outlay reads thin on its own, which is what the buy option is for: the loan is the exit, the option sets the price of it.\n\nRomano also reports that Manchester United will step up their search for a striker if Zirkzee leaves. The one name attached so far sits at rumour tier: TeamTalk links Igor Matanovic of SC Freiburg, who scored 11 Bundesliga goals last season. No named reporter has put a bid on record for anyone.\n\nSunday is the home opener against Ipswich Town at Old Trafford, where Carlos Baleba could make his debut after Tuesday's 65 million pound move from Brighton and Hove Albion was completed. The window shuts two days after that.\n\nSources: Fabrizio Romano, 27 August 2026, via The Peoples Person and utdreport (the formal bid, the loan-plus-option structure, the striker search stepping up); Yahoo Sports, 27 August 2026 (season-long loan shape, agreement not close, deadline optimism, the Kean-to-Como context); The Hard Tackle, 27 August 2026 (Fiorentina advancing talks, Kean context); TeamTalk via football365 and LiveScore, 27 August 2026 (the Matanovic link, rumour tier); Sky Sports, July 2024 (the 36.5 million pound fee and contract length); manutd.com and ESPN, 25 August 2026 (the Baleba completion).",
+    status: "verified",
+  },
+  {
     date: "2026-08-27",
     day: "Thursday",
     headline: "Alejandro Balde told Barcelona he is staying, five days before the window shuts",

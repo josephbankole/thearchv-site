@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-28",
+    day: "Friday",
+    headline: "How many players get cut before the 2026 NFL season starts?",
+    dek: "About 1,184. Every team must be down from 90 players to 53 by 6pm ET on Sunday 30 August, which means 37 cuts per club across the league.",
+    body: "Roughly 1,184 players will lose their roster spots by Sunday evening. Every NFL team must cut its roster from 90 players to an initial 53 by 6pm ET on Sunday 30 August 2026, which is 37 cuts per club across all 32 teams. The deadline moved this year to the Sunday after the final preseason weekend, earlier than the traditional Tuesday.\n\nBeing cut on Sunday is not the end of the road. The claiming period for players waived at final cuts expires at 1pm ET on Monday 31 August, and after the waiver wire clears, teams build practice squads of up to 16 players, or 17 with an International Player designation. A large share of Sunday's cuts resurface on practice squads within days, many back with the club that released them.\n\nCuts have been rolling in all week ahead of the deadline. NFL.com's league-wide tracker, running since Monday 24 August, already lists moves at most clubs, including receiver Cedric Tillman released by the Cleveland Browns and safety Taylor Rapp by the Denver Broncos.\n\nThe waiver order runs in reverse order of last season's standings, so the league's weakest teams get first claim on everything that shakes loose. Sunday is the one day of the year the bottom of the league gets to shop first.\n\nSources: NFL.com roster cuts tracker, Around The NFL Staff, updated through 28 August 2026 (the tracker window, team-by-team moves, Tillman and Rapp); NFL.com 53-man roster deadline file, August 2026 (the 6pm ET Sunday 30 August deadline, 90 to 53, the earlier Sunday date); Cincinnati Bengals official site, August 2026 (the 1pm ET 31 August waiver expiry, practice squads of 16 or 17). Official league and club sources, single-source sufficient per the desk's official-body rule.",
+    status: "verified",
+  },
+  {
     date: "2026-08-25",
     day: "Tuesday",
     headline: "When is the 2026 NFL 53-man roster cutdown deadline?",

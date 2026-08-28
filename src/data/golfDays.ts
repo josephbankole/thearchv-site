@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-28",
+    day: "Friday",
+    headline: "Who leads the 2026 Tour Championship after the first round?",
+    dek: "Min Woo Lee shot a bogey-free 8-under 62 at East Lake on Thursday for a two-shot lead, playing most of it alone after J.J. Spaun withdrew injured.",
+    body: "Min Woo Lee leads the 2026 Tour Championship after a bogey-free, 8-under-par 62 at East Lake on Thursday, the lowest round of the FedEx Cup finale's first day and good for a two-shot lead. Collin Morikawa, Chris Gotterup and Viktor Hovland opened with 6-under 64s; world No.1 Scottie Scheffler sits in a group at 5-under 65, three back.\n\nLee played the last 13 holes on his own. His playing partner J.J. Spaun withdrew during the round with a right shoulder injury, leaving the Australian to walk East Lake solo with a scorer for most of the afternoon. His 62 came in one shot off the 9-under 61 Russell Henley shot in the first round of the 2024 edition, the course record before East Lake's renovation.\n\nThe format gives the lead real weight this year. All 30 players started the week at level par, with no starting strokes, so the man on top of the leaderboard on Sunday takes the FedEx Cup and the 10 million dollar bonus outright. A two-shot cushion after one round is exactly what it says it is, and nothing more, with 54 holes left.\n\nRound two is Friday, with the leaders again going late. The tournament runs to Sunday 30 August.\n\nSources: Associated Press via Central Oregon Daily, 27 August 2026 (the 62, the two-shot lead, Spaun's withdrawal, the solo round); ABC News Australia, 28 August 2026 (the bogey-free round, Morikawa, Gotterup and Hovland at 64, Scheffler at 65, the Henley 61 comparison); Yahoo Sports round-one leaderboard, 27 August 2026 (scores and positions). Wire caveat: the AP copy syndicates widely, so ABC News Australia and Yahoo Sports carry the independent confirmations here.",
+    status: "verified",
+  },
+  {
     date: "2026-08-26",
     day: "Wednesday",
     headline: "Who tees off last at the 2026 Tour Championship, and how does the winner take the FedEx Cup?",

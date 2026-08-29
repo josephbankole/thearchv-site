@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-29",
+    day: "Saturday",
+    headline: "Why is the 2026 NFL roster cut deadline on a Sunday?",
+    dek: "Because the San Francisco 49ers are flying to Australia. All 32 teams must be down to 53 players by 6pm ET on Sunday 30 August, a day earlier than the usual Tuesday rhythm, to fit the league's first game in Melbourne.",
+    body: "The deadline for all 32 NFL teams to cut their rosters from 90 players to 53 is Sunday 30 August at 6pm ET, per NFL.com's roster file and Yahoo Sports' cutdown coverage. The unusual Sunday slot exists because of a flight: the San Francisco 49ers leave for Melbourne on Wednesday ahead of their 10 September season opener against the Los Angeles Rams, the league's first game in Australia, and the league moved the whole calendar up so the 49ers travel with a settled roster.\n\nThe squeeze lands hardest on two teams. The Chicago Bears and the Tennessee Titans play their final preseason game on Saturday evening, per Yahoo Sports, which leaves their front offices less than 24 hours to settle their lists.\n\nThe mechanics after the deadline are unchanged, per the Raiders' official deadline FAQ. Players with fewer than four accrued seasons go through waivers, where a claiming team takes on the existing contract; veterans with four or more accrued seasons become free agents immediately. Waiver claims are due by Monday at 1pm ET, and practice squads of up to 17 players build out afterwards.\n\nThis entry leans on the league's own channels for the deadline mechanics, per this desk's official-body sourcing rule for the NFL, with the outlet named on each claim.\n\nSources: NFL.com, 53-man deadline file (6pm ET Sunday 30 August, 90 to 53); Raiders.com official deadline FAQ (waiver mechanics, practice squads, accrued-season rules); Yahoo Sports cutdown file, 28 August 2026 (the 49ers' Wednesday flight to Melbourne for the 10 September opener against the Los Angeles Rams, the Bears and Titans Saturday-night squeeze); this desk's 25 and 28 August entries (the cutdown scale and league-wide mechanics).",
+    status: "verified",
+  },
+  {
     date: "2026-08-28",
     day: "Friday",
     headline: "How many players get cut before the 2026 NFL season starts?",

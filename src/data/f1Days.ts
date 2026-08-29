@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-29",
+    day: "Saturday",
+    headline: "Who leads the Formula 1 drivers' championship going into the Italian Grand Prix?",
+    dek: "Kimi Antonelli on 242 points, with a 59-point cushion over his Mercedes team-mate George Russell and Lewis Hamilton, who sit level on 183. Max Verstappen is sixth on 112.",
+    body: "Kimi Antonelli leads the 2026 Formula 1 drivers' championship on 242 points going into next weekend's Italian Grand Prix, per Formula 1's official standings, read this morning.\n\nBehind the Mercedes driver, George Russell and Lewis Hamilton are level on 183 points, with Russell listed second and Hamilton third. Lando Norris is fourth on 159, Charles Leclerc fifth on 155, and Max Verstappen sixth on 112.\n\nNorris arrives at Monza as the man in form. He won the Dutch Grand Prix at Zandvoort on 23 August from Antonelli and Russell, his second win in as many race weekends, per Formula 1's race report and Motorsport Week, as this desk recorded on 24 August.\n\nThe Italian Grand Prix runs from Friday 4 to Sunday 6 September at Monza, with the race starting at 15:00 local time over 53 laps, per Formula 1's official session timetable, as recorded in yesterday's entry.\n\nThis entry ships on Formula 1's own published standings and timetable, per this desk's official-body sourcing rule, with the source named on each claim.\n\nSources: Formula1.com official 2026 drivers' standings, read 29 August 2026 (Antonelli 242, Russell 183, Hamilton 183, Norris 159, Leclerc 155, Verstappen 112); Formula1.com race report and Motorsport Week, 23 August 2026 (the Zandvoort result), as recorded in the 24 August entry; Formula1.com official session timetable (Italian Grand Prix, 4 to 6 September, race 15:00 local, 53 laps), as recorded in the 28 August entry.",
+    status: "verified",
+  },
+  {
     date: "2026-08-28",
     day: "Friday",
     headline: "When is the 2026 Italian Grand Prix, and what time does the race start?",

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-29",
+    day: "Saturday",
+    headline: "Who plays on day one of the 2026 US Open?",
+    dek: "Novak Djokovic opens against Mariano Navone on Sunday, chasing a 25th Grand Slam title nobody has ever reached. Jessica Pegula and Daniil Medvedev take Arthur Ashe Stadium's day and evening headline slots.",
+    body: "The 2026 US Open main draw begins on Sunday 30 August, and the first day's schedule is out. Novak Djokovic, a four-time champion in New York, opens against Mariano Navone of Argentina, per the ATP Tour's published day-one schedule.\n\nArthur Ashe Stadium's day session starts at 12pm local time with Jessica Pegula against Elena-Gabriela Ruse, and the evening session from 7pm is headlined by Daniil Medvedev against Hugo Gaston, per the ATP Tour and Sky Sports' order of play. Elsewhere on Sunday, Tommy Paul plays Coleman Wong, Alexander Bublik meets J.J. Wolf and Jiri Lehecka takes on Pablo Carreno Busta.\n\nThe number that hangs over the fortnight belongs to Djokovic. He holds 24 Grand Slam titles, level with Margaret Court's all-time mark, and nobody in the history of the sport has won 25. His most recent major came at this tournament in 2023, when he beat Daniil Medvedev in the final, and he reached this year's Australian Open final before losing to Carlos Alcaraz. At 39, the man he beat for number 24 is on the same day-one bill.\n\nThe men's draw is without the world number one. Jannik Sinner withdrew on 21 August with a right knee problem, as this desk covered at the time, which leaves top seed Alexander Zverev as the highest-ranked man in the field.\n\nPlay runs to the women's singles final on Saturday 12 September and the men's singles final on Sunday 13 September.\n\nSources: ATP Tour, day-one schedule article, 28 August 2026 (Djokovic v Navone, Pegula v Ruse from 12pm, Medvedev v Gaston from 7pm, Paul v Wong, Bublik v Wolf, Lehecka v Carreno Busta); Sky Sports order of play, 28 August 2026 (Arthur Ashe Stadium sessions); ATP Tour and Tennis Majors (the 24 titles, level with Margaret Court, the 2023 US Open final over Medvedev, the 2026 Australian Open final); ESPN, 21 August 2026 (Sinner withdrawal), as recorded in the 22 August entry; Lawn Tennis Association preview, 18 August 2026 (tournament dates).",
+    status: "verified",
+  },
+  {
     date: "2026-08-28",
     day: "Friday",
     headline: "How did the 2026 US Open women's draw fall for Aryna Sabalenka?",

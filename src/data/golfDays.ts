@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-29",
+    day: "Saturday",
+    headline: "Who leads the 2026 Tour Championship at halfway?",
+    dek: "Ryan Gerard and Viktor Hovland share the 36-hole lead at East Lake on 10 under, with Collin Morikawa and Chris Gotterup one back and Scottie Scheffler lurking two behind. Round three is Saturday.",
+    body: "Ryan Gerard and Viktor Hovland share the lead at the halfway stage of the 2026 Tour Championship at East Lake Golf Club, both at 10 under par, per ESPN's leaderboard and Golf Monthly's round-three tee sheet.\n\nCollin Morikawa and Chris Gotterup sit one shot back at nine under. Cameron Young and Scottie Scheffler are a further shot behind at eight under, per the same leaderboards, and CBS Sports and Golf Channel both carry the full round-three pairings for Saturday.\n\nThe format sharpens the stakes. The FedEx Cup finale runs with no starting strokes this year, as this desk recorded on 26 August, so the winner of the tournament takes the FedEx Cup and the bonus that goes with it. Whoever finishes on top of the leaderboard on Sunday evening wins both.\n\nScheffler, two back, opened the week with a 65, per ABC News Australia's first-round coverage recorded in yesterday's entry, and is the highest-ranked player in the chasing pack.\n\nRound three tee times run through Saturday afternoon at East Lake, with the final round on Sunday.\n\nSources: ESPN, Tour Championship leaderboard, read 29 August 2026 (Gerard and Hovland 10 under, Morikawa and Gotterup nine under, Young and Scheffler eight under); Golf Monthly, round-three tee times, 28 August 2026 (the 36-hole positions and Saturday pairings); CBS Sports and Golf Channel, 28 August 2026 (round-three schedule and pairings); this desk's 26 August entry (no starting strokes, winner takes the FedEx Cup); ABC News Australia, 28 August 2026 (Scheffler's opening 65), as recorded in the 28 August entry.",
+    status: "verified",
+  },
+  {
     date: "2026-08-28",
     day: "Friday",
     headline: "Who leads the 2026 Tour Championship after the first round?",

@@ -15,10 +15,19 @@
    Fonts are static TTF instances committed at scripts/fonts/. satori does not take variable fonts
    well and cannot read woff2 at all, which is why Anton-Regular.ttf sits there as a TTF
    decompressed from the very woff2 the site itself serves — same version, same outlines, so a
-   headline on a card is the headline on the page. */
-import { readFileSync } from "node:fs";
+   headline on a card is the headline on the page.
+
+   NOTE, since the render pipeline moved in here (see the bottom of the file): this module now
+   pulls satori, resvg and sharp. That is fine for the four card generators, which all had them
+   already, and it is the reason scripts/shared/infogram.mjs still carries its own copies of the
+   `div`/`text` helpers rather than importing these. That module is imported by build-feed.mjs and
+   states its own rule about staying free of the render stack; importing from here would break it. */
+import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import satori from "satori";
+import { Resvg } from "@resvg/resvg-js";
+import sharp from "sharp";
 
 const FONTS_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "fonts");
 
@@ -64,4 +73,45 @@ export function wordmark(size = 34) {
     text({ fontFamily: "Anton", fontSize: size, letterSpacing: size * 0.01, color: CARD.ink }, "ARCHV"),
     text({ fontFamily: "Anton", fontSize: size, color: CARD.accentFill }, "."),
   ]);
+}
+
+/* ---------- the render pipeline ----------
+   Every card in the build is satori to SVG, then resvg to PNG, at the tree's own width. Four
+   generators each wrote that pair out by hand (build-article-pages.mjs, build-duel-pages.mjs,
+   make-og.mjs, build-infograms.mjs), along with four copies of the sharp call that turns the
+   240px brand webp heads into something the SVG stack can read. They are here now.
+
+   renderCard IS DELIBERATELY PALETTE-AGNOSTIC. It rasterises the tree it is handed and nothing
+   more: no ground, no colours, no wordmark applied on the way through. The infogram story cards
+   are a founder-approved NAVY poster format and are not on the white system, so folding CARD or
+   CARD_GROUND into this function would either break them or force them off the shared path.
+   Same reason `fonts` is an argument: the infograms carry no Anton and pass their own set.
+
+   ERROR POLICY LIVES AT THE CALL SITE, NOT HERE. CLAUDE.md is explicit that a card failure logs
+   and that page falls back to the static /og.jpg, and that it never fails the build. Both
+   functions below throw on a real failure so each generator's own try/catch keeps deciding what
+   that means. artPng returns null only for the one non-failure: no art to draw. */
+
+/** satori -> resvg -> PNG bytes. `width` doubles as the raster width, which is what every caller
+    wanted: the cards are drawn at their final pixel size, never scaled. */
+export async function renderCard(tree, { width, height, fonts = CARD_FONTS }) {
+  const svg = await satori(tree, { width, height, fonts });
+  return new Resvg(svg, { fitTo: { mode: "width", value: width } }).render().asPng();
+}
+
+/** A banked head or badge as PNG bytes, ready to be inlined as a data URI. satori and resvg
+    cannot read webp and the head bank is 240px webp, so sharp converts on the way in — sharp
+    reads webp perfectly well, it is only the SVG stack that does not.
+
+    `size` is the square cover crop. `flatten` composites the alpha over white, which the
+    white-system cards want (a transparent head inside a white disc) and the navy infograms do
+    not. Returns null when there is nothing to draw: no path, or the file is not on disk. Note
+    that the resize takes no `background`: under `fit: "cover"` there is never any padding to
+    fill, so the option two of these callers passed was doing nothing (verified byte-identical). */
+export async function artPng(path, { size = 600, flatten = true } = {}) {
+  if (!path || !existsSync(path)) return null;
+  const pipeline = sharp(path).resize(size, size, { fit: "cover" });
+  return (flatten ? pipeline.flatten({ background: { r: 255, g: 255, b: 255 } }) : pipeline)
+    .png()
+    .toBuffer();
 }

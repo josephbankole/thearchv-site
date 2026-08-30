@@ -24,12 +24,10 @@
 
    Not part of `npm run build`: the output is a committed asset in public/, so this runs by hand
    (`npm run og`) when the card itself changes. */
-import satori from "satori";
-import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
+import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard } from "./shared/card-brand.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "public", "og.jpg");
@@ -53,8 +51,9 @@ const tree = div({ width: W, height: H, display: "flex", flexDirection: "column"
   ]),
 ]);
 
-const svg = await satori(tree, { width: W, height: H, fonts: CARD_FONTS });
-const png = new Resvg(svg, { fitTo: { mode: "width", value: W } }).render().asPng();
+// The one card in the build that ships as a JPEG: sharp re-encodes the PNG renderCard hands
+// back, because this is a committed asset in public/ rather than a per-page render.
+const png = await renderCard(tree, { width: W, height: H });
 await sharp(png).jpeg({ quality: 90 }).toFile(OUT);
 
 console.log(`Wrote public/og.jpg (${W}x${H}, white system)`);

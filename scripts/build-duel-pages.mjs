@@ -18,27 +18,23 @@
  * puts the stat rows on the image, with the split bar, so the argument survives being posted.
  *
  * Runs after `vite build` (see package.json "build"). The og.png path follows the proven one in
- * build-article-pages.mjs: satori to SVG, resvg to PNG, sharp to turn the brand webp headshots
- * into something satori can read. A card failure warns and the page falls back to /og.jpg; it
- * never fails the build. */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+ * build-article-pages.mjs, and now literally the same code: renderCard() and artPng() out of
+ * shared/card-brand.mjs. A card failure warns and the page falls back to /og.jpg; it never fails
+ * the build, and that decision stays here rather than in the shared module. */
+import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import satori from "satori";
-import { Resvg } from "@resvg/resvg-js";
-import sharp from "sharp";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, jsLiteral,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
-import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
+import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
 import { percentileBar, percentileBarStyles } from "./shared/percentile-bar.mjs";
 import { loadDataset, listPairs, compareStat, formatValue, providerName } from "./shared/football-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
-const FONTS_DIR = join(ROOT, "scripts", "fonts");
 
 const data = await loadDataset();
 const { competition, asOf, metrics, sources, omitted = [] } = data;
@@ -137,10 +133,11 @@ function statRow(metric, playerA, playerB) {
 // public/heads/ is committed to main by the daily engine, so a preview checkout can legitimately
 // be missing a face. A missing file falls back to a monogram disc rather than an alt-text
 // stub, which keeps the card looking deliberate instead of broken.
+// No existence check here: artPng() returns null for a path that is not on disk, and a duel
+// card with no face falls back to the initials disc either way.
 function headPath(player) {
   if (!player.head) return null;
-  const p = join(ROOT, "public", player.head.replace(/^\//, ""));
-  return existsSync(p) ? p : null;
+  return join(ROOT, "public", player.head.replace(/^\//, ""));
 }
 
 function initials(name) {
@@ -167,20 +164,12 @@ function headFigure(player, size = 104) {
    itself (scripts/shared/percentile-bar.mjs): the accent is the one in front, the muted ink is
    the one behind, and the track is the rule grey. */
 
+// Cached per player, not per path: the same face appears in every pairing that player is in.
 const headPngCache = new Map();
 async function headPng(player) {
   if (headPngCache.has(player.id)) return headPngCache.get(player.id);
-  const path = headPath(player);
-  let uri = null;
-  if (path) {
-    // satori and resvg cannot read webp, so the 240px brand webp becomes a PNG data URI.
-    const png = await sharp(path)
-      .resize(400, 400, { fit: "cover", background: { r: 255, g: 255, b: 255, alpha: 1 } })
-      .flatten({ background: { r: 255, g: 255, b: 255 } })
-      .png()
-      .toBuffer();
-    uri = `data:image/png;base64,${png.toString("base64")}`;
-  }
+  const png = await artPng(headPath(player), { size: 400 });
+  const uri = png ? `data:image/png;base64,${png.toString("base64")}` : null;
   headPngCache.set(player.id, uri);
   return uri;
 }
@@ -279,8 +268,7 @@ async function ogCard(playerA, playerB) {
     ),
   ]);
 
-  const svg = await satori(tree, { width: CARD_W, height: CARD_H, fonts: CARD_FONTS });
-  return new Resvg(svg, { fitTo: { mode: "width", value: CARD_W } }).render().asPng();
+  return renderCard(tree, { width: CARD_W, height: CARD_H });
 }
 
 /* ---------- page copy ---------- */

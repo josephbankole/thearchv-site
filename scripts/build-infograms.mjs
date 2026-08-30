@@ -6,21 +6,19 @@
 
    INFOGRAM-PLAN.md P2: AI verifies the data, DETERMINISTIC code draws the picture. This uses the
    SAME local, $0, pixel-deterministic stack as the OG cards and the approved mocks: satori
-   JSX-object trees -> SVG -> PNG via @resvg/resvg-js. No generative image model, no invented
-   numbers — the card composes only the entry's own verified fields (see scripts/shared/infogram.mjs
-   for the layout and the "clean story card" rationale).
+   JSX-object trees -> SVG -> PNG via @resvg/resvg-js, through the shared renderCard(). No
+   generative image model, no invented numbers — the card composes only the entry's own verified
+   fields (see scripts/shared/infogram.mjs for the layout and the "clean story card" rationale).
 
    RUN ORDER (package.json "build"): AFTER `vite build` (so dist/ exists) and BEFORE
    build-feed.mjs, because build-feed emits the additive `infogram` feed field ONLY for entries
    whose PNG already exists on disk (OG-card discipline: the field never claims a file that was
    not written). A generation failure for one entry is logged and skipped; it never fails the
    build. */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import satori from "satori";
-import sharp from "sharp";
-import { Resvg } from "@resvg/resvg-js";
+import { renderCard, artPng } from "./shared/card-brand.mjs";
 import { LANE_META } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { infogramTree, infogramEligible, INFOGRAM_W, INFOGRAM_H } from "./shared/infogram.mjs";
@@ -42,10 +40,12 @@ const LANES = {
   leagues: { label: LANE_META.leagues.label, days: leaguesDays },
 };
 
-/* ---------- fonts: static TTF instances committed at scripts/fonts/, same set the OG cards use
-   (satori does not handle variable fonts well, so these stay static). ---------- */
+/* ---------- fonts: static TTF instances committed at scripts/fonts/, the same directory the OG
+   cards read (satori does not handle variable fonts well, so these stay static). NOT the shared
+   CARD_FONTS: these cards carry no Anton, so the set is its own and gets passed to renderCard
+   rather than taking its default. ---------- */
 const FONTS_DIR = join(ROOT, "scripts", "fonts");
-const CARD_FONTS = [
+const INFOGRAM_FONTS = [
   { name: "Fraunces", data: readFileSync(join(FONTS_DIR, "Fraunces-SemiBold.ttf")), weight: 600, style: "normal" },
   { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-Regular.ttf")), weight: 400, style: "normal" },
   { name: "Inter Tight", data: readFileSync(join(FONTS_DIR, "InterTight-SemiBold.ttf")), weight: 600, style: "normal" },
@@ -53,12 +53,13 @@ const CARD_FONTS = [
 
 
 /* ---------- portraits: every card gets a face ----------
-   satori/resvg cannot read webp, so the heads bank (public/heads/*.webp) is converted to PNG
-   with sharp and inlined as a data URI. Falls back to our own crest so a card is never
-   faceless, which is the whole point of making it mandatory. Cached because the crest is
+   The heads bank (public/heads/*.webp) goes through artPng() in shared/card-brand.mjs, which the
+   OG and duel cards use too, and is inlined as a data URI. NO WHITE FLATTEN HERE, unlike those:
+   these are navy story cards and the alpha has to survive. Falls back to our own crest so a card
+   is never faceless, which is the whole point of making it mandatory. Cached because the crest is
    reused across most entries and re-encoding it every time would slow the build for nothing.
    A conversion failure returns null and the card simply renders as it did before: this must
-   never break the build. */
+   never break the build, so the swallow stays here rather than inside artPng. */
 const PUBLIC = join(ROOT, "public");
 // The ink colourway on purpose: these story cards are a founder-approved navy poster format and
 // are deliberately NOT on the white system, so the crest that goes on them is the paper-on-ink
@@ -70,10 +71,8 @@ async function toDataUri(absPath) {
   if (portraitCache.has(absPath)) return portraitCache.get(absPath);
   let uri = null;
   try {
-    if (existsSync(absPath)) {
-      const png = await sharp(absPath).resize(480, 480, { fit: "cover" }).png().toBuffer();
-      uri = `data:image/png;base64,${png.toString("base64")}`;
-    }
+    const png = await artPng(absPath, { size: 480, flatten: false });
+    if (png) uri = `data:image/png;base64,${png.toString("base64")}`;
   } catch {
     uri = null;
   }
@@ -90,13 +89,12 @@ async function portraitFor(entry) {
   return toDataUri(CREST);
 }
 
-async function renderInfogram(entry, laneLabel, portrait) {
-  const svg = await satori(infogramTree({ entry, laneLabel, portrait }), {
+function renderInfogram(entry, laneLabel, portrait) {
+  return renderCard(infogramTree({ entry, laneLabel, portrait }), {
     width: INFOGRAM_W,
     height: INFOGRAM_H,
-    fonts: CARD_FONTS,
+    fonts: INFOGRAM_FONTS,
   });
-  return new Resvg(svg, { fitTo: { mode: "width", value: INFOGRAM_W } }).render().asPng();
 }
 
 /* ---------- write cards ---------- */

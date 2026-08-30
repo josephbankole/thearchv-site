@@ -10,12 +10,9 @@
    Also extends dist/sitemap.xml through shared/sitemap.mjs: it appends every article URL to
    whatever sitemap already exists in dist at this point (built by build-content.mjs, then extended
    by the lane, reads, section and search generators), so this must run last in the chain. */
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import satori from "satori";
-import { Resvg } from "@resvg/resvg-js";
-import sharp from "sharp";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle,
   cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -25,7 +22,7 @@ import {
 } from "./shared/page-shell.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
-import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
+import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 
@@ -239,7 +236,7 @@ function schema(entry, url, label, faq, images) {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
 }
 
-/* ---------- per-article OG share cards (satori + resvg) ----------
+/* ---------- per-article OG share cards (renderCard: satori + resvg) ----------
    TWO unique cards per canonical article: og.png at 1200x630 (1.91:1, the OG standard, and the
    one og:image / twitter:image reference) and og-wide.png at 1200x675 (16:9, referenced from the
    NewsArticle JSON-LD image array alongside og.png). Same design at both sizes: the wide card
@@ -267,18 +264,14 @@ function headlineSize(text) {
 }
 
 // The entries reference far fewer distinct head files than there are pages, so cache the
-// webp→PNG conversion by resolved path — build-duel-pages.mjs has carried the same cache since
-// it shipped, this generator just never got it (2026-08-12 review). Pipeline matches the inline
-// original exactly: white-flattened 600x600 cover crop.
+// conversion by resolved path — build-duel-pages.mjs has carried the same cache since it
+// shipped, this generator just never got it (2026-08-12 review). The conversion itself is
+// artPng() in shared/card-brand.mjs; a missing file gives null and the card draws no face.
 const headPngCache = new Map();
 async function headPngDataUri(imgPath) {
   if (headPngCache.has(imgPath)) return headPngCache.get(imgPath);
-  const png = await sharp(imgPath)
-    .resize(600, 600, { fit: "cover", background: { r: 255, g: 255, b: 255, alpha: 1 } })
-    .flatten({ background: { r: 255, g: 255, b: 255 } })
-    .png()
-    .toBuffer();
-  const uri = `data:image/png;base64,${png.toString("base64")}`;
+  const png = await artPng(imgPath, { size: 600 });
+  const uri = png ? `data:image/png;base64,${png.toString("base64")}` : null;
   headPngCache.set(imgPath, uri);
   return uri;
 }
@@ -291,16 +284,10 @@ async function ogCard(entry, laneLabel, height = 630, art = undefined) {
   const kicker = `${laneLabel} · ${longDate(entry.date)}`.toUpperCase();
 
   // The same art the page shows (entryArt: filed image, banked portrait, club badge, nothing).
-  // satori and resvg cannot read webp, and the head bank is 240px webp, so sharp converts to a
-  // PNG data URI on the way in — sharp reads webp perfectly well, it is only the SVG stack that
-  // does not.
   const resolved = art === undefined ? entryArt(entry) : art;
   let portrait = null;
   if (resolved) {
-    const imgPath = join(ROOT, "public", resolved.src.replace(/^\//, ""));
-    if (existsSync(imgPath)) {
-      portrait = await headPngDataUri(imgPath);
-    }
+    portrait = await headPngDataUri(join(ROOT, "public", resolved.src.replace(/^\//, "")));
   }
 
   const left = div(
@@ -339,9 +326,7 @@ async function ogCard(entry, laneLabel, height = 630, art = undefined) {
     div({ display: "flex", alignItems: "center", flexGrow: 1, width: CARD_W, padding: `${padY}px 72px` }, children),
   ]);
 
-  const svg = await satori(tree, { width: CARD_W, height, fonts: CARD_FONTS });
-
-  return new Resvg(svg, { fitTo: { mode: "width", value: CARD_W } }).render().asPng();
+  return renderCard(tree, { width: CARD_W, height });
 }
 
 // The share-row script embeds this page's own url/title, so - unlike masthead()/posthogSnippet()

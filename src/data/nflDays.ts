@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-30",
+    day: "Sunday",
+    headline: "Who have NFL teams already cut before the 2026 53-man roster deadline?",
+    dek: "Mazi Smith, Cedric Tillman, Mecole Hardman and Mitch Wishnowsky are among the names out ahead of today's 6pm ET deadline, per the NFL.com roster cuts tracker.",
+    body: "The cuts started landing before the deadline did. Every club has to be down to 53 players by 6pm ET today, and the NFL.com roster cuts tracker, which is the official league account of the day and is the named source for what follows, already carries some recognisable names.\n\nMazi Smith is the biggest of them by draft capital. The defensive tackle went 26th overall to Dallas in 2023, arrived at the New York Jets in the Quinnen Williams trade, and has been released at 25 with 57 tackles and two sacks across three and a half seasons. Cleveland waived receiver Cedric Tillman, a 2023 third-round pick with 71 catches, 833 yards and five touchdowns, in the final year of his rookie deal. Buffalo released Mecole Hardman, a three-time Super Bowl winner with Kansas City, and punter Mitch Wishnowsky, 34, beaten out by a seventh-round rookie, Tommy Doman Jr.\n\nThe Jets also moved on from quarterback Bailey Zappe and kicker Cade York, Miami from running back Donovan Edwards, the Giants from receiver Isaiah Hodgins, and Philadelphia from receiver Samori Toure and running back Carson Steele, all per the same tracker with SI.com carrying the bigger names alongside it.\n\nAround 1,100 players come off rosters league-wide by this evening. The next gate is Monday: waiver claims are processed at 1pm ET, and practice squads are filed after that, which is where a lot of today's names reappear. The list above is the morning's reading. By 6pm it will be the short version.\n\nSources: NFL.com roster cuts tracker, Around The NFL Staff, read 30 August 2026, official league source named per this desk's single-source rule for official bodies (the deadline, the volume, and every cut listed); SI.com, 28 to 30 August 2026 (Smith, Tillman, Hardman and Wishnowsky, second source); Yahoo Sports and the Philadelphia Inquirer, 29 to 30 August 2026 (the Eagles and Jets moves); NFL.com 53-man deadline file (6pm ET Sunday 30 August, waivers 1pm ET Monday 31 August).",
+    status: "verified",
+  },
+  {
     date: "2026-08-29",
     day: "Saturday",
     headline: "Why is the 2026 NFL roster cut deadline on a Sunday?",

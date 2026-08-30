@@ -11,15 +11,14 @@
    (the full article body as HTML in CDATA, plus the illustration and the rights notice). That
    split is the syndication convention: platforms that republish, Microsoft Start among them,
    read the body from content:encoded and ignore a dek-only feed. */
-import { build } from "esbuild";
-import { writeFileSync, rmSync, statSync } from "node:fs";
+import { writeFileSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { byDateDesc, esc, escAttr, SPORTS, laneByFeedKey } from "./shared/page-shell.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
 import { sourcesAwareParagraph } from "./shared/source-links.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SITE = "https://thearchv.ca";
 const MAX_ITEMS = 30;
@@ -32,25 +31,11 @@ const AUTHOR = "Joseph Bankole";
 const RIGHTS =
   "The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.";
 
-/* ---------- load the typed day data via a bundled temp module (same pattern as build-feed.mjs) ---------- */
-const entrySrc = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-  `export { longReads } from "./data/longReads.ts";`,
-  `export { readSlug } from "./data/readSlug.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".rss-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "rss-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
+/* ---------- the typed day data, through scripts/shared/day-data.mjs (the one loader for
+   src/data/*.ts; the lanes arrive sorted newest-first, the essays in committed order) ---------- */
+const {
+  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA, longReads, readSlug,
+} = await loadDayData({ extras: ["longReads", "readSlug"] });
 
 // URL lane per data source: World Cup's internal `section` key is "worldcup" but its URL lane is
 // hyphenated "world-cup" (same mapping build-article-pages.mjs / build-feed.mjs use for the
@@ -59,13 +44,12 @@ try {
 // /desk/<lane>/ so its items are byte-identical; new sports (multi-sport, 2026-07-22) syndicate
 // from /<urlBase>/questions/. New sports are empty today, so feed.xml is unchanged until they
 // publish. The SPORT_DATA map ties each new sport's exported array to its base.
-const SPORT_DATA = { nfl: data.nflDays, f1: data.f1Days, tennis: data.tennisDays, golf: data.golfDays };
 // Football lane bases derive from LANE_META.feedKey via laneByFeedKey — the worldcup↔world-cup
 // hyphenation is declared once in page-shell.mjs, not restated here (2026-08-12 review).
 const lanes = [
-  { base: `/desk/${laneByFeedKey.transfer}/`, days: data.transferDays },
-  { base: `/desk/${laneByFeedKey.worldcup}/`, days: data.worldCupDays },
-  { base: `/desk/${laneByFeedKey.leagues}/`, days: data.leaguesDays },
+  { base: `/desk/${laneByFeedKey.transfer}/`, days: transferDays },
+  { base: `/desk/${laneByFeedKey.worldcup}/`, days: worldCupDays },
+  { base: `/desk/${laneByFeedKey.leagues}/`, days: leaguesDays },
 ];
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
@@ -86,12 +70,12 @@ const readFirstSentence = (body) => {
   const m = first.match(/^.*?[.!?](?=\s|$)/);
   return (m ? m[0] : first).trim();
 };
-const readItems = data.longReads.map((r) => ({
+const readItems = longReads.map((r) => ({
   headline: String(r.title).replace(/\.$/, ""),
   dek: readFirstSentence(r.body),
   body: r.body,
   date: r.date,
-  path: `/reads/${data.readSlug(r.title)}/`,
+  path: `/reads/${readSlug(r.title)}/`,
 }));
 
 const items = lanes

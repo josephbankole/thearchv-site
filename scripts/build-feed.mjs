@@ -3,17 +3,17 @@
    The feed is generated FROM the same src/data/*.ts files the website renders, so web and app cannot
    drift: one deploy updates both. The app fetches these on launch / pull-to-refresh, with the CDN's
    ETag handling cheap polling and index.json's buildHash giving an app-level "did anything change".
-   esbuild (already present via vite) bundles the TS data into a temp ESM module we import. */
-import { build } from "esbuild";
-import { writeFileSync, mkdirSync, rmSync, statSync, readFileSync, existsSync } from "node:fs";
+   The typed data comes in through scripts/shared/day-data.mjs, which is the one place in this
+   repo that bundles src/data/*.ts into something a .mjs build script can import. */
+import { writeFileSync, mkdirSync, statSync, readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { byDateDesc, LANE_META, SPORTS, laneByFeedKey, articlePath } from "./shared/page-shell.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
 import { infogramEligible, infogramAlt, infogramRelPath } from "./shared/infogram.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.FEED_OUT || join(ROOT, "dist", "feed");
 // The dist root where build-infograms.mjs wrote dist/desk/<lane>/<date>/infogram.png (matches
 // build-article-pages.mjs's OUT). Independent of FEED_OUT so the existence check below still
@@ -25,41 +25,15 @@ const DIST = process.env.CONTENT_OUT || join(ROOT, "dist");
 // unknown keys and never reads the schema string, so old app builds decode v3 unharmed.
 const SCHEMA = "archv-feed/3";
 
-/* ---------- load the typed data via a bundled temp module ---------- */
-const entry = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-  `export { posters } from "./data/posters.ts";`,
-  `export { legends } from "./data/legends.ts";`,
-  `export { longReads } from "./data/longReads.ts";`,
-  `export { upsets, giantKillersIntro, giantKillersOutro } from "./data/giantKillers.ts";`,
-].join("\n");
-
-const tmp = join(ROOT, ".feed-bundle.mjs");
-let data;
-try {
-  await build({
-    stdin: { contents: entry, resolveDir: SRC, loader: "ts", sourcefile: "feed-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent",
-  });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally {
-  try { rmSync(tmp); } catch {}
-}
-
-const { transferDays, worldCupDays, leaguesDays, nflDays, f1Days, tennisDays, golfDays, posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro } = data;
-
-// Defensive sort immediately after loading, before any use (byDateDesc from
-// scripts/shared/page-shell.mjs, shared with build-lane-pages.mjs/build-article-pages.mjs):
-// every downstream feed and the "today" lead-story pick below assume newest-first.
-transferDays.sort(byDateDesc);
-worldCupDays.sort(byDateDesc);
-leaguesDays.sort(byDateDesc);
+/* ---------- the typed data, through scripts/shared/day-data.mjs ----------
+   That module is the one loader for src/data/*.ts and it owns the newest-first sort every
+   downstream feed and the "today" lead-story pick below assume. The rest of what this script
+   needs — the poster archive, the legends wall, the essays and the giant-killers block — comes
+   off the same bundle as named extras. */
+const {
+  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_RAW,
+  posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro,
+} = await loadDayData({ extras: ["posters", "legends", "longReads", "giantKillers"] });
 
 /* ---------- compose the feeds ---------- */
 const SITE = "https://thearchv.ca";
@@ -107,7 +81,6 @@ const newestOf = (days) => (days.length ? days[0].date : null);
 // entry, or null while empty) — this overrides the football lastUpdated when spread into `feeds`.
 // The app fetches only the active sport's file, which protects the cold-launch budget. Football
 // is not a per-sport file: its shelves stay today/transfer/worldcup/leagues, unchanged.
-const SPORT_RAW = { nfl: nflDays, f1: f1Days, tennis: tennisDays, golf: golfDays };
 const sportFeeds = {};
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
@@ -116,8 +89,9 @@ for (const sport of SPORTS) {
   // are simultaneously the lane AND the .json file name). The app routes push payloads by
   // section -> <section>.json (SportRouting.lookup / TodayView.resolve), so for new sports this
   // must be the SPORT key (nfl.json exists, questions.json does not). The lane key stays in the URL.
-  const days = [...(SPORT_RAW[sport.key] || [])]
-    .sort(byDateDesc)
+  // Already newest-first out of day-data.mjs; .map returns a new array, so the shared one is
+  // never touched.
+  const days = (SPORT_RAW[sport.key] || [])
     .map((d) => ({ ...d, section: sport.key, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
   sportFeeds[sport.key] = { days, lastUpdated: newestOf(days) };
 }

@@ -27,11 +27,10 @@
  * dist/sitemap.xml, so its /search/ row appends to whatever is there, the pattern every other
  * generator uses. Nothing outside the repo is read.
  */
-import { build } from "esbuild";
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, LANE_META, byDateDesc,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -39,33 +38,18 @@ import {
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
 
-/* ---------- the typed data, through the same esbuild bundle every generator here uses ---------- */
-const entrySrc = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-  `export { longReads } from "./data/longReads.ts";`,
-  `export { readPath } from "./data/readSlug.ts";`,
-  `export { legends } from "./data/legends.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".search-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "search-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
+/* ---------- the typed data, through scripts/shared/day-data.mjs — the one loader every
+   generator in this chain uses ---------- */
+const {
+  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS, longReads, readPath, legends,
+} = await loadDayData({ extras: ["longReads", "readSlug", "legends"] });
 
 /* ---------- the corpus ----------
    One row is { title, dek, url, lane, date }. The dek is clamped: it is a preview line under a
@@ -88,11 +72,10 @@ function add(title, dek, url, lane, date = "") {
 
 /* desk entries, every lane on the site */
 const deskLanes = [
-  { label: LANE_META.transfer.label, base: "/desk/transfer/", days: data.transferDays },
-  { label: LANE_META["world-cup"].label, base: "/desk/world-cup/", days: data.worldCupDays },
-  { label: LANE_META.leagues.label, base: "/desk/leagues/", days: data.leaguesDays },
+  { label: LANE_META.transfer.label, base: "/desk/transfer/", days: transferDays },
+  { label: LANE_META["world-cup"].label, base: "/desk/world-cup/", days: worldCupDays },
+  { label: LANE_META.leagues.label, base: "/desk/leagues/", days: leaguesDays },
 ];
-const SPORT_DAYS = { nfl: data.nflDays, f1: data.f1Days, tennis: data.tennisDays, golf: data.golfDays };
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
   deskLanes.push({ label: `${sport.label} Question Desk`, base: `/${sport.urlBase}/questions/`, days: SPORT_DAYS[sport.key] || [] });
@@ -104,8 +87,8 @@ for (const { label, base, days } of deskLanes) {
 }
 
 /* long reads */
-for (const r of data.longReads) {
-  add(r.title, `${r.kicker}. ${r.meta}. ${String(r.body).split(/\n\s*\n/)[0] ?? ""}`, data.readPath(r.title), "Long reads", r.date ?? "");
+for (const r of longReads) {
+  add(r.title, `${r.kicker}. ${r.meta}. ${String(r.body).split(/\n\s*\n/)[0] ?? ""}`, readPath(r.title), "Long reads", r.date ?? "");
 }
 
 /* content pages: /finals/, /united/, /explainers/, /notes/ */
@@ -123,7 +106,7 @@ for (const e of glossaryEntries) {
 /* legends. The Legends Series has no per-profile pages, so every profile points at the front
    that actually carries it. A reader searching a name still lands on the page with that name on
    it, and no URL is invented. */
-for (const l of data.legends) {
+for (const l of legends) {
   add(l.name, `${l.years ? `${l.nation}, ${l.years}. ` : `${l.nation}. `}${l.bio ?? ""}`, "/legends/", "Legends");
 }
 

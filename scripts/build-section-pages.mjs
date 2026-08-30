@@ -18,10 +18,10 @@
    Runs after build-content.mjs, which writes dist/sitemap.xml first; this appends its rows to
    whatever sitemap exists at that point, the pattern the other generators use. The 404 gets no
    sitemap row and ships noindex: it is an error page, not a destination. */
-import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -30,7 +30,6 @@ import {
 import { loadContentPages } from "./shared/content-pages.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 // Both inline scripts here (masthead toggle + PostHog loader) are static, so one CSP serves every
@@ -73,16 +72,11 @@ for (const s of sections) {
 }
 
 /* ---------- legends (src/data/legends.ts) ----------
-   Bundled through esbuild like every other .ts the build chain reads. The Legends Series has no
-   per-profile pages and this script does not pretend otherwise: the front carries each profile in
-   full and links nowhere it cannot reach. */
-const tmp = join(ROOT, ".sections-bundle.mjs");
-let legends = [];
-try {
-  await build({ stdin: { contents: `export { legends } from "./data/legends.ts";`, resolveDir: SRC, loader: "ts", sourcefile: "sections-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  legends = (await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`)).legends;
-} finally { try { rmSync(tmp); } catch {} }
+   Loaded through scripts/shared/day-data.mjs like every other .ts the build chain reads, with
+   `days: false` because nothing on these fronts comes from the day lanes. The Legends Series has
+   no per-profile pages and this script does not pretend otherwise: the front carries each profile
+   in full and links nowhere it cannot reach. */
+const { legends } = await loadDayData({ days: false, extras: ["legends"] });
 
 const LEGENDS_FRONT = {
   label: "Legends",

@@ -16,10 +16,10 @@
    masthead, footer, brand CSS, PostHog, Google Fonts, CSP). Runs after build-content.mjs, which
    writes dist/sitemap.xml first; this script appends its rows to whatever sitemap exists at that
    point, the pattern build-lane-pages.mjs and build-article-pages.mjs already use. */
-import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -27,34 +27,25 @@ import {
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 // Both inline scripts on this family (masthead toggle + PostHog loader) are static, no per-page
 // interpolation, so one CSP serves every page here — same as the lane fronts.
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
 
-/* ---------- load the typed essay data via a bundled temp module (the pattern every generator
-   in this chain uses: a .mjs build script cannot import a .ts at run time) ---------- */
-const entrySrc = [
-  `export { longReads } from "./data/longReads.ts";`,
-  `export { readSlug, readPath } from "./data/readSlug.ts";`,
-  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
-  // the bundle this script already builds rather than being reimplemented here in .mjs.
-  `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".reads-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "reads-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
+/* ---------- the typed essay data, through scripts/shared/day-data.mjs — the one loader in this
+   chain, because a .mjs build script cannot import a .ts at run time. `days: false` because this
+   family is the essays: none of the seven day lanes appears on a /reads/ page, so there is no
+   reason to bundle them. src/lib/readTime.ts is the one copy of read-time on the site (see its
+   header) and rides in on the same bundle rather than being reimplemented here. ---------- */
+const { longReads, readSlug, readPath, readLabel, readDuration, wordCount } =
+  await loadDayData({ days: false, extras: ["longReads", "readSlug", "readTime"] });
 
-const { readSlug, readPath, readLabel, readDuration, wordCount } = data;
 // Newest first, matching every other lane on the site. The array is committed in that order but
 // nothing in the type enforces it, so sort rather than trust — same reasoning as byDateDesc.
-const reads = [...data.longReads].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+// day-data.mjs deliberately does NOT sort the extras (its callers want different orders), so
+// this stays the essays' own sort.
+const reads = [...longReads].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 // Two essays that slugged to the same path would silently overwrite each other's page and leave
 // one of them unreachable behind a link that looks fine. Fail the build instead.

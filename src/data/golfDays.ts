@@ -8,6 +8,30 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-30",
+    day: "Sunday",
+    headline: "Who leads the 2026 Tour Championship going into the final round?",
+    dek: "Viktor Hovland, at 15 under, one clear of Ryan Gerard after a Saturday 65 at East Lake. The final pairing tees off at 12:50pm ET with the 10 million dollar FedEx Cup on the line.",
+    body: "Viktor Hovland takes a one-shot lead into the final round of the Tour Championship at East Lake. His Saturday 65, five under, moved him to 15 under and one clear of Ryan Gerard, who plays alongside him in the last pairing at 12:50pm ET.\n\nThe round held one stretch that decided it: six consecutive putts of seven feet or longer holed, four for birdie and two for par, per the AP's account of the third round. Behind the top two sits a four-way group at 12 under, three back: Chris Gotterup, Ludvig Aberg, Adam Scott and Scottie Scheffler. Scheffler goes off with Gotterup at 12:26pm ET, Scott with Aberg at 12:38pm ET.\n\nThe arithmetic is the simple kind this event was redesigned for. No starting strokes, 30 players, and the man who wins the golf tournament wins the FedEx Cup and the 10 million dollars that comes with it. Hovland has never won it. Gerard, one back, is playing East Lake for the first time.\n\nThe field starts going off at 10:50am ET, with television on Golf Channel from noon and CBS from 1:30pm ET.\n\nAfter 54 holes on Thursday the story was two men tied at ten under. Sunday reduces it to one number: 15 under, and one shot in it.\n\nSources: Golfmagic, 30 August 2026 (Hovland 15 under, Gerard one back, final-round tee times and broadcast windows); Golf Channel third-round recap, 29 August 2026 (the 65, the leaderboard); Yahoo Sports, 30 August 2026 (the 12-under group, tee sheet); AP via Texarkana Gazette, 29 August 2026 (the six-putt run detail); CBS Sports and GolfPass, earlier this week (the no-starting-strokes format and the 10 million dollar prize).",
+    status: "verified",
+  },
+  {
+    date: "2026-08-29",
+    day: "Saturday",
+    headline: "Who leads the 2026 Tour Championship at halfway?",
+    dek: "Ryan Gerard and Viktor Hovland share the 36-hole lead at East Lake on 10 under, with Collin Morikawa and Chris Gotterup one back and Scottie Scheffler lurking two behind. Round three is Saturday.",
+    body: "Ryan Gerard and Viktor Hovland share the lead at the halfway stage of the 2026 Tour Championship at East Lake Golf Club, both at 10 under par, per ESPN's leaderboard and Golf Monthly's round-three tee sheet.\n\nCollin Morikawa and Chris Gotterup sit one shot back at nine under. Cameron Young and Scottie Scheffler are a further shot behind at eight under, per the same leaderboards, and CBS Sports and Golf Channel both carry the full round-three pairings for Saturday.\n\nThe format sharpens the stakes. The FedEx Cup finale runs with no starting strokes this year, as this desk recorded on 26 August, so the winner of the tournament takes the FedEx Cup and the bonus that goes with it. Whoever finishes on top of the leaderboard on Sunday evening wins both.\n\nScheffler, two back, opened the week with a 65, per ABC News Australia's first-round coverage recorded in yesterday's entry, and is the highest-ranked player in the chasing pack.\n\nRound three tee times run through Saturday afternoon at East Lake, with the final round on Sunday.\n\nSources: ESPN, Tour Championship leaderboard, read 29 August 2026 (Gerard and Hovland 10 under, Morikawa and Gotterup nine under, Young and Scheffler eight under); Golf Monthly, round-three tee times, 28 August 2026 (the 36-hole positions and Saturday pairings); CBS Sports and Golf Channel, 28 August 2026 (round-three schedule and pairings); this desk's 26 August entry (no starting strokes, winner takes the FedEx Cup); ABC News Australia, 28 August 2026 (Scheffler's opening 65), as recorded in the 28 August entry.",
+    status: "verified",
+  },
+  {
+    date: "2026-08-28",
+    day: "Friday",
+    headline: "Who leads the 2026 Tour Championship after the first round?",
+    dek: "Min Woo Lee shot a bogey-free 8-under 62 at East Lake on Thursday for a two-shot lead, playing most of it alone after J.J. Spaun withdrew injured.",
+    body: "Min Woo Lee leads the 2026 Tour Championship after a bogey-free, 8-under-par 62 at East Lake on Thursday, the lowest round of the FedEx Cup finale's first day and good for a two-shot lead. Collin Morikawa, Chris Gotterup and Viktor Hovland opened with 6-under 64s; world No.1 Scottie Scheffler sits in a group at 5-under 65, three back.\n\nLee played the last 13 holes on his own. His playing partner J.J. Spaun withdrew during the round with a right shoulder injury, leaving the Australian to walk East Lake solo with a scorer for most of the afternoon. His 62 came in one shot off the 9-under 61 Russell Henley shot in the first round of the 2024 edition, the course record before East Lake's renovation.\n\nThe format gives the lead real weight this year. All 30 players started the week at level par, with no starting strokes, so the man on top of the leaderboard on Sunday takes the FedEx Cup and the 10 million dollar bonus outright. A two-shot cushion after one round is exactly what it says it is, and nothing more, with 54 holes left.\n\nRound two is Friday, with the leaders again going late. The tournament runs to Sunday 30 August.\n\nSources: Associated Press via Central Oregon Daily, 27 August 2026 (the 62, the two-shot lead, Spaun's withdrawal, the solo round); ABC News Australia, 28 August 2026 (the bogey-free round, Morikawa, Gotterup and Hovland at 64, Scheffler at 65, the Henley 61 comparison); Yahoo Sports round-one leaderboard, 27 August 2026 (scores and positions). Wire caveat: the AP copy syndicates widely, so ABC News Australia and Yahoo Sports carry the independent confirmations here.",
+    status: "verified",
+  },
+  {
     date: "2026-08-26",
     day: "Wednesday",
     headline: "Who tees off last at the 2026 Tour Championship, and how does the winner take the FedEx Cup?",

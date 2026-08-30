@@ -1246,6 +1246,27 @@ edit per the same-run rule.*
   brand and every lane. The three-link gate chain applies to every personal unit, slide PNGs
   included.
 
+### RATIFIED 2026-08-28 (founder, live session with the football desk)
+- **D-2026-08-28a (founder): NOTHING IS DROPPED WITHOUT THE FOUNDER'S EXPLICIT PERMISSION.** An
+  editorial drop, a lane, a sport or a story skipped on staleness, taste or analyst advice, now
+  needs a founder yes first; the run builds it and the founder kills it, not the reverse. Ruled
+  after the 28 August desk dropped the golf Answer Desk page on an analyst staleness call and it
+  was overridden the same morning. **Verification gates are untouched**: a claim that fails
+  sourcing still holds and is reported, because a failed verification is not an editorial drop.
+  "Drop a sport rather than ship thin" survives only where thin means unverifiable.
+- **D-2026-08-28b (founder): NFL AND F1 MAY SHIP ON ONE SOURCE WHEN THAT SOURCE IS THE OFFICIAL
+  BODY, with a name attached.** Official NFL (NFL.com and league channels) and official Formula 1
+  (Formula1.com and league channels) count as sufficient single sources for those two desks'
+  facts, attributed by name on the claim (the outlet, plus the byline where one exists). This is
+  a scoped exception to the two-source rule for those two lanes only; football, tennis, golf and
+  everything else keep two independent named sources, and non-official single sources remain
+  insufficient everywhere.
+- **Same-day overrides recorded, 2026-08-28:** the founder sent the pre-match MW2 carousel
+  himself at 04:14 ET (the early markedAsPublished flip was him, not a defect); he ordered the
+  Manchester United 8-2 Arsenal 15th-anniversary thread SHIPPED as a second Threads unit that
+  day, overriding the desk's hold; and he ordered the missing banked faces generated on
+  Higgsfield (Ruben Amorim era 2026, Michael Carrick era 2026).
+
 ---
 
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)

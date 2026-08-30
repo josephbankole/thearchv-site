@@ -8,6 +8,30 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-30",
+    day: "Sunday",
+    headline: "How long is Lando Norris signed with McLaren for?",
+    dek: "To at least the end of 2030, under the extension announced on Saturday, with options beyond. The reigning world champion's previous deal ran to the end of 2027.",
+    body: "Lando Norris is a McLaren driver until at least the end of 2030. The team announced the extension on Saturday 29 August, replacing a deal that ran to the end of 2027, and Formula1.com, the official source named for every figure here under this desk's single-source rule for governing bodies, reports the new contract carries multi-year options beyond 2030.\n\nNorris is 26 and the reigning world champion, having taken the 2025 title. His McLaren numbers to date: 13 wins, 18 poles and 48 podiums across 163 races, which is more starts than any driver in the team's history. He joined as a test driver in 2017 and has raced for them since 2019, so a contract running to 2030 would take him to 12 years with one team, matching the length of Lewis Hamilton's Mercedes tenure.\n\nThe announcement was made to staff at a friends-and-family day at the Woking factory, per the AP. Norris said: \"McLaren is my home, and I'm very pleased to be signing a new contract to keep me with the team until at least 2030.\"\n\nThe timing settles McLaren's driver room for the rest of the decade on one side. Oscar Piastri is contracted through 2028, and Max Verstappen's Red Bull deal also runs to 2030, so the two men who have defined the current title fights are now signed to the same horizon.\n\nThe next race is the Italian Grand Prix at Monza, next Sunday 6 September.\n\nSources: Formula1.com, 29 August 2026, official announcement (the 2030 term, the options, the career numbers, the Norris quote, the Piastri and Verstappen contract context); McLaren.com, 29 August 2026 (the announcement); ESPN, 29 August 2026 (the extension and previous 2027 term); AP via the Washington Times, 29 August 2026 (the factory announcement detail).",
+    status: "verified",
+  },
+  {
+    date: "2026-08-29",
+    day: "Saturday",
+    headline: "Who leads the Formula 1 drivers' championship going into the Italian Grand Prix?",
+    dek: "Kimi Antonelli on 242 points, with a 59-point cushion over his Mercedes team-mate George Russell and Lewis Hamilton, who sit level on 183. Max Verstappen is sixth on 112.",
+    body: "Kimi Antonelli leads the 2026 Formula 1 drivers' championship on 242 points going into next weekend's Italian Grand Prix, per Formula 1's official standings, read this morning.\n\nBehind the Mercedes driver, George Russell and Lewis Hamilton are level on 183 points, with Russell listed second and Hamilton third. Lando Norris is fourth on 159, Charles Leclerc fifth on 155, and Max Verstappen sixth on 112.\n\nNorris arrives at Monza as the man in form. He won the Dutch Grand Prix at Zandvoort on 23 August from Antonelli and Russell, his second win in as many race weekends, per Formula 1's race report and Motorsport Week, as this desk recorded on 24 August.\n\nThe Italian Grand Prix runs from Friday 4 to Sunday 6 September at Monza, with the race starting at 15:00 local time over 53 laps, per Formula 1's official session timetable, as recorded in yesterday's entry.\n\nThis entry ships on Formula 1's own published standings and timetable, per this desk's official-body sourcing rule, with the source named on each claim.\n\nSources: Formula1.com official 2026 drivers' standings, read 29 August 2026 (Antonelli 242, Russell 183, Hamilton 183, Norris 159, Leclerc 155, Verstappen 112); Formula1.com race report and Motorsport Week, 23 August 2026 (the Zandvoort result), as recorded in the 24 August entry; Formula1.com official session timetable (Italian Grand Prix, 4 to 6 September, race 15:00 local, 53 laps), as recorded in the 28 August entry.",
+    status: "verified",
+  },
+  {
+    date: "2026-08-28",
+    day: "Friday",
+    headline: "When is the 2026 Italian Grand Prix, and what time does the race start?",
+    dek: "Monza runs 4 to 6 September, a standard weekend with no sprint. The race starts Sunday 6 September at 15:00 local, 09:00 ET, over 53 laps.",
+    body: "The 2026 Italian Grand Prix runs Friday 4 to Sunday 6 September at the Autodromo Nazionale Monza, and the race starts at 15:00 local time on Sunday 6 September, which is 14:00 BST and 09:00 ET. It is a standard weekend with no sprint race.\n\nThe official timetable, per Formula1.com: first practice Friday at 12:30 local, second practice Friday at 16:00, third practice Saturday at 12:30, qualifying Saturday at 16:00, and the race Sunday at 15:00. The race runs 53 laps of the 5.793-kilometre circuit, or 120 minutes, whichever comes first.\n\nThe field arrives from Zandvoort, where Lando Norris won the last Formula 1 Dutch Grand Prix on 23 August from Kimi Antonelli and George Russell, his second win in as many race weekends, with Max Verstappen crashing out. Monza is the second leg of the season's late-summer European run.\n\nWho carries that Zandvoort form through the fastest weekend on the calendar?\n\nSources: Formula1.com official session timetable for the Formula 1 Pirelli Gran Premio d'Italia 2026 (dates, all five session times, 53 laps, 5.793km), single-source sufficient per the desk's official-body rule; Formula1.com race report and Motorsport Week, 23 August 2026 (the Norris Dutch Grand Prix result, as recorded in the 24 August answer).",
+    status: "verified",
+  },
+  {
     date: "2026-08-24",
     day: "Monday",
     headline: "Who won the last Formula 1 Dutch Grand Prix?",

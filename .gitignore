@@ -26,3 +26,6 @@ supabase/.branches/
 # transient esbuild bundles from scripts/build-reads-pages.mjs and build-section-pages.mjs
 .reads-bundle.mjs
 .sections-bundle.mjs
+
+# transient esbuild bundle from scripts/check-illustrated-parity.mjs
+.parity-bundle.mjs

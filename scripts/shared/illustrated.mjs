@@ -89,7 +89,7 @@ export function entryArt(entry) {
     return {
       kind: "entry",
       src: entry.image,
-      alt: entry.imageAlt ?? `Illustration: ${entry.headline}`,
+      alt: entry.imageAlt ?? `Illustration: ${entry.headline ?? ""}`,
       width: 240,
       height: 240,
     };

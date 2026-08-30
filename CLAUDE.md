@@ -345,6 +345,46 @@ lane pages (shared `page-shell.mjs` masthead, footer, CSP, brand CSS).
   `/duel/`, `/guess/` and every pair page: the duel share row and the game's puzzle payload are
   per-page inline scripts, so their hashes are not constant across the family.
 
+## documentShell, and the two parameters it refuses to default (2026-08-30)
+
+`documentShell()` in `scripts/shared/page-shell.mjs` builds the `<!doctype html>` through
+`</head>` for every generated page family. Before it, twenty hand-written heads across thirteen
+generators each repeated the same twenty-five lines, and `max-image-preview:large` had to be
+spelled out in twenty files; it is in one now. Generators still compose their own `<body>` and
+their own JSON-LD. Only the head moved.
+
+- **`robots`, `canonical` and `ogUrl` have no defaults and the function throws without them.**
+  This is the rule the whole thing is built around, not a style preference. A defaulted robots
+  value is how a noindex page ships indexable. `build-day-pages.mjs` is the page it protects:
+  its legacy pages are `noindex,follow` AND name a canonical in a DIFFERENT family
+  (`/desk/<date>/` -> `/desk/transfer/<date>/`), which is the 2026-07-08 duplicate-content fix
+  recorded under "Per-article pages" above. `ogUrl` is separate because that same page's og:url
+  is its OWN address while its canonical is not, and the sport lane fronts
+  (`/<sport>/questions/`) make the opposite choice and point og:url at the canonical. Neither
+  value can be inferred from the other. Pass `canonical: null` out loud where a page has none
+  (the 404).
+- **`ROBOTS_INDEXABLE` and `ROBOTS_NOINDEX_FOLLOW` are constants to pass, never defaults.**
+  They exist so a new directive is one edit. Do not move either into the function signature as
+  a default value: a default is inherited silently by whatever page is added next.
+- **The CSP tag is built by the caller and handed in.** `cspMeta()` must keep being fed the
+  EXACT inline script bodies that page injects. The duel share row, the archive game's puzzle
+  payload and the article share and ladder scripts all embed per-page url and title, so their
+  hashes are not constant across a family. `verify-csp-pages.mjs` is the net under that, not the
+  design for it.
+- **Two head shapes, and the difference is real.** The self-contained family ships PostHog,
+  Google Fonts and inlined brand CSS. The older content.css family (`build-content.mjs`,
+  `build-day-pages.mjs`) links `/content.css` and ships none of the three, plus no RSS
+  autodiscovery, no og:image dimensions and no `twitter:site`. Those absences are passed
+  explicitly (`stylesheet`, `rss: false`, `posthog: false`, `fonts: false`, `styles: false`,
+  `ogImageSize: false`, `twitterSite: false`) rather than inferred from the stylesheet.
+- **One page is deliberately still hand-assembled**: the `/football/` courtesy alias in
+  `build-sport-pages.mjs`. It is a meta-refresh stub with no og or twitter tags at all, its own
+  inline `<style>` and a narrower viewport, so putting it through the shell would mean
+  parameters that exist for one page.
+- Two pages carry og:image with no `twitter:image` (`/standards/` and the glossary hub) and are
+  preserved that way with `twitterImage: false`. It reads as an oversight rather than a decision
+  and is worth a separate call; it was not fixed in passing.
+
 ## The author page and the authorship signal (2026-08-04)
 
 `scripts/build-author-page.mjs` emits one page, `/authors/joseph-bankole/`, in the same

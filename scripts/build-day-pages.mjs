@@ -10,7 +10,7 @@ import { build } from "esbuild";
 import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { cspMeta, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META } from "./shared/page-shell.mjs";
+import { cspMeta, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, byDateDesc } from "./shared/page-shell.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
 // hamburger JS) and no PostHog/Google Fonts CDN (/content.css is self-hosted, no remote font
@@ -41,12 +41,21 @@ try {
   data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
 } finally { try { rmSync(tmp); } catch {} }
 
+// Defensive sort immediately after loading, before any use (see byDateDesc in
+// scripts/shared/page-shell.mjs), matching build-lane-pages.mjs and build-article-pages.mjs.
+// The "More <lane>" block below slices the first six entries and so assumes newest-first, but
+// these files are written by the desk engine through the GitHub Contents API: their ordering is
+// not this script's to assume, and one out-of-order commit would otherwise put six stale
+// headlines under every legacy page.
+const transferDays = [...data.transferDays].sort(byDateDesc);
+const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
+
 // Labels read from LANE_META, not restated: when the World Cup lane was renamed to
 // "International Football" the registry moved and this file's literals did not follow until the
 // 2026-08-12 review. laneHref is the canonical lane index these legacy pages funnel to.
 const SECTIONS = {
-  transfer: { base: "desk", lane: "transfer", label: LANE_META.transfer.label, laneHref: "/desk/transfer/", days: data.transferDays },
-  worldcup: { base: "world-cup", lane: "world-cup", label: LANE_META["world-cup"].label, laneHref: "/desk/world-cup/", days: data.worldCupDays },
+  transfer: { base: "desk", lane: "transfer", label: LANE_META.transfer.label, laneHref: "/desk/transfer/", days: transferDays },
+  worldcup: { base: "world-cup", lane: "world-cup", label: LANE_META["world-cup"].label, laneHref: "/desk/world-cup/", days: worldCupDays },
 };
 
 function body(text) {

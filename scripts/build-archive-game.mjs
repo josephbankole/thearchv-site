@@ -23,8 +23,8 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription,
-  masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, scriptHash, extractScriptBody, jsLiteral, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  masthead, footer, documentShell,
+  cspMeta, scriptHash, extractScriptBody, jsLiteral, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -383,33 +383,23 @@ const pageCsp = cspMeta({
   googleFonts: true,
 });
 
-const html = `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle(["The Daily Archive", "guess the player", "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(LEDE))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${PAGE_URL}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${pageCsp}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="The Daily Archive · The ARCHV" />
-  <meta property="og:description" content="${escAttr(clampDescription(LEDE))}" />
-  <meta property="og:url" content="${PAGE_URL}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="The Daily Archive · The ARCHV" />
-  <meta name="twitter:description" content="${escAttr(clampDescription(LEDE))}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify({
+const html = `${documentShell({
+  title: clampTitle(["The Daily Archive", "guess the player", "The ARCHV"]),
+  metaDescription: clampDescription(LEDE),
+  description: clampDescription(LEDE),
+  socialTitle: "The Daily Archive \u00b7 The ARCHV",
+  robots: "index,follow,max-image-preview:large",
+  canonical: PAGE_URL,
+  ogUrl: PAGE_URL,
+  ogType: "website",
+  // No per-page art on purpose: most of these players have no banked illustrated head and
+  // inventing a face is forbidden, so the game shares the site-wide card.
+  ogImage: `${SITE}/og.jpg`,
+  // Per-page CSP: the puzzle payload is an inline script carrying this build's clue data,
+  // so its hash is not the family constant.
+  csp: pageCsp,
+  extraHead: [gameStyles()],
+  jsonLd: {
     "@context": "https://schema.org",
     "@graph": [
       {
@@ -430,15 +420,8 @@ const html = `<!doctype html>
         ],
       },
     ],
-  }).replace(/</g, "\\u003c")}</script>
-
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-  ${gameStyles()}
-</head>
+  },
+})}
 <body>
   ${masthead()}
   <main class="wrap">

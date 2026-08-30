@@ -15,8 +15,8 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, esc, escAttr, clampTitle, clampDescription, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  SITE, esc, escAttr, clampTitle, clampDescription, masthead, footer, documentShell,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 
@@ -100,41 +100,21 @@ function renderEntry(entry) {
   const socialTitle = `${entry.title} · The ARCHV`;
   const depth = entry.depth.map((p) => `<p>${esc(p)}</p>`).join("\n        ");
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([entry.question, "The ARCHV glossary"]))}</title>
-  <meta name="description" content="${escAttr(description)}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(socialTitle)}" />
-  <meta property="og:description" content="${escAttr(description)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(socialTitle)}" />
-  <meta name="twitter:description" content="${escAttr(description)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${entrySchema(entry, url)}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+  return `${documentShell({
+  title: clampTitle([entry.question, "The ARCHV glossary"]),
+  // `description` is already clampDescription'd where it is built, above.
+  metaDescription: description,
+  description,
+  socialTitle,
+  robots: "index,follow,max-image-preview:large",
+  canonical: url,
+  ogUrl: url,
+  ogType: "article",
+  ogImage: `${SITE}/og.jpg`,
+  csp: PAGE_CSP,
+  // entrySchema() already returns a serialised, <-escaped string.
+  jsonLd: entrySchema(entry, url),
+})}
 <body>
   ${masthead()}
   <main class="wrap">
@@ -193,40 +173,25 @@ function renderHub() {
     ],
   }).replace(/</g, "\\u003c");
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(HUB_TITLE)}</title>
-  <meta name="description" content="${escAttr(HUB_INTRO)}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${HUB_URL}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="The ARCHV glossary" />
-  <meta property="og:description" content="${escAttr(HUB_INTRO)}" />
-  <meta property="og:url" content="${HUB_URL}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="The ARCHV glossary" />
-  <meta name="twitter:description" content="${escAttr(HUB_INTRO)}" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${schema}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+  return `${documentShell({
+  title: HUB_TITLE,
+  // Neither the title nor the intro goes through the length guards here, and both have
+  // always shipped that way: they are standing copy written to length by hand.
+  metaDescription: HUB_INTRO,
+  description: HUB_INTRO,
+  socialTitle: "The ARCHV glossary",
+  robots: "index,follow,max-image-preview:large",
+  canonical: HUB_URL,
+  ogUrl: HUB_URL,
+  ogType: "website",
+  ogImage: `${SITE}/og.jpg`,
+  // og:image with no twitter:image, as this page has always shipped. The entry pages beside
+  // it do emit twitter:image, so this reads as an oversight rather than a decision; it is
+  // preserved rather than fixed in passing. Same case as the standards page.
+  twitterImage: false,
+  csp: PAGE_CSP,
+  jsonLd: schema,
+})}
 <body>
   ${masthead()}
   <main class="wrap wrap--wide">

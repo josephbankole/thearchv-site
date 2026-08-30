@@ -16,10 +16,11 @@
    masthead, footer, brand CSS, PostHog, Google Fonts, CSP). Runs after build-content.mjs, which
    writes dist/sitemap.xml first; this script appends its rows to whatever sitemap exists at that
    point, the pattern build-lane-pages.mjs and build-article-pages.mjs already use. */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
+import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -252,25 +253,19 @@ ${head({
 }
 
 /* ---------- write pages ---------- */
-const urls = [`  <url><loc>${SITE}${INDEX_PATH}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>`];
+const urls = [{ loc: `${SITE}${INDEX_PATH}`, changefreq: "monthly", priority: "0.7" }];
 mkdirSync(join(OUT, "reads"), { recursive: true });
 writeFileSync(join(OUT, "reads", "index.html"), renderIndex());
 for (const [slug, read] of bySlug) {
   const dir = join(OUT, "reads", slug);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), renderRead(read));
-  urls.push(`  <url><loc>${SITE}/reads/${slug}/</loc><lastmod>${read.date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`);
+  urls.push({ loc: `${SITE}/reads/${slug}/`, lastmod: read.date, changefreq: "monthly", priority: "0.7" });
 }
 
-/* ---------- sitemap: append to whatever dist/sitemap.xml exists at this point in the chain,
-   falling back to public/sitemap.xml if dist's copy is somehow missing. Same as the lane and
-   article generators. */
-const sitemapOut = join(OUT, "sitemap.xml");
-const sitemapFallback = join(ROOT, "public", "sitemap.xml");
-const sitemapSrc = existsSync(sitemapOut) ? sitemapOut : existsSync(sitemapFallback) ? sitemapFallback : null;
-if (sitemapSrc) {
-  const xml = readFileSync(sitemapSrc, "utf8");
-  writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
-}
+/* ---------- sitemap: append to whatever dist/sitemap.xml exists at this point in the chain.
+   shared/sitemap.mjs owns the splice, the public/sitemap.xml fallback, the dedupe and the
+   trailing-slash rule, and returns the rows it actually wrote. */
+const added = appendUrls(urls);
 
-console.log(`[build-reads-pages] wrote ${bySlug.size} long-read page(s) + the /reads/ front to ${OUT}/reads/, appended ${urls.length} sitemap row(s)`);
+console.log(`[build-reads-pages] wrote ${bySlug.size} long-read page(s) + the /reads/ front to ${OUT}/reads/, appended ${added} sitemap row(s)`);

@@ -18,10 +18,11 @@
    Runs after build-content.mjs, which writes dist/sitemap.xml first; this appends its rows to
    whatever sitemap exists at that point, the pattern the other generators use. The 404 gets no
    sitemap row and ships noindex: it is an error page, not a destination. */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
+import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate,
   masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -288,7 +289,7 @@ for (const section of sections) {
   const dir = join(OUT, section);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), renderSection(section, FRONTS[section], pages));
-  urls.push(`  <url><loc>${SITE}/${section}/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>`);
+  urls.push({ loc: `${SITE}/${section}/`, changefreq: "monthly", priority: "0.7" });
   count++;
 }
 
@@ -296,21 +297,15 @@ if (legends.length) {
   const dir = join(OUT, "legends");
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), renderLegends());
-  urls.push(`  <url><loc>${SITE}/legends/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
+  urls.push({ loc: `${SITE}/legends/`, changefreq: "monthly", priority: "0.6" });
   count++;
 }
 
 writeFileSync(join(OUT, "404.html"), renderNotFound());
 
-/* ---------- sitemap: append to whatever dist/sitemap.xml exists at this point, falling back to
-   public/sitemap.xml if dist's copy is somehow missing. Same as the other generators. The 404 is
-   deliberately absent. */
-const sitemapOut = join(OUT, "sitemap.xml");
-const sitemapFallback = join(ROOT, "public", "sitemap.xml");
-const sitemapSrc = existsSync(sitemapOut) ? sitemapOut : existsSync(sitemapFallback) ? sitemapFallback : null;
-if (sitemapSrc && urls.length) {
-  const xml = readFileSync(sitemapSrc, "utf8");
-  writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
-}
+/* ---------- sitemap: append to whatever dist/sitemap.xml exists at this point. shared/sitemap.mjs
+   owns the splice, the public/sitemap.xml fallback, the dedupe and the trailing-slash rule. The
+   404 is deliberately absent. */
+const added = appendUrls(urls);
 
-console.log(`[build-section-pages] wrote ${count} section front(s) + 404.html to ${OUT}, appended ${urls.length} sitemap row(s)`);
+console.log(`[build-section-pages] wrote ${count} section front(s) + 404.html to ${OUT}, appended ${added} sitemap row(s)`);

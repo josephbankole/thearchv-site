@@ -10,6 +10,7 @@ import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clam
 // so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
 import { loadContentPages } from "./shared/content-pages.mjs";
+import { writeSitemap } from "./shared/sitemap.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
@@ -325,11 +326,13 @@ for (const p of pages) {
    are indexable but have no frontmatter of their own — verified against public/<slug>/index.html's
    own <meta name="robots"> before being added here. Quiz stays OUT: it ships noindex,nofollow
    until FLIP-DAY.md flips it (see public/quiz/index.html). Deduped by loc in case a future page
-   ends up in both lists. */
+   ends up in both lists — by shared/sitemap.mjs now, not by a local Set. */
 /* Every loc carries its trailing slash. GitHub Pages 301s the slashless form, and a
    sitemap URL that redirects is a GSC "redirect error": /start sat unindexed for weeks
    because of exactly that (founder's GSC email, fixed 2026-07-28). The canonical form
-   is the slashed one; never list the slashless variant here. */
+   is the slashed one; never list the slashless variant here. As of the collector pass this
+   is ENFORCED rather than merely documented: shared/sitemap.mjs throws on a slashless loc,
+   here and at every other splice site, so the build stops instead of shipping the redirect. */
 const EXTRA_URLS = [
   { loc: "/about/", changefreq: "monthly", priority: "0.5" },
   { loc: "/corrections/", changefreq: "monthly", priority: "0.4" },
@@ -366,20 +369,15 @@ const EXTRA_URLS = [
   { loc: "/guess/", changefreq: "daily", priority: "0.6" },
 ];
 const today = new Date().toISOString().slice(0, 10);
-const seen = new Set([`${SITE}/`]);
-const urls = [`  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`];
-for (const p of pages) {
-  const loc = `${SITE}/${p.section}/${p.slug}/`;
-  if (seen.has(loc)) continue;
-  seen.add(loc);
-  urls.push(`  <url><loc>${loc}</loc><lastmod>${p.datePublished || today}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`);
-}
-for (const e of EXTRA_URLS) {
-  const loc = `${SITE}${e.loc}`;
-  if (seen.has(loc)) continue;
-  seen.add(loc);
-  urls.push(`  <url><loc>${loc}</loc><lastmod>${today}</lastmod><changefreq>${e.changefreq}</changefreq><priority>${e.priority}</priority></url>`);
-}
-writeFileSync(join(OUT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
+const urlCount = writeSitemap([
+  { loc: `${SITE}/`, lastmod: today, changefreq: "weekly", priority: "1.0" },
+  ...pages.map((p) => ({
+    loc: `${SITE}/${p.section}/${p.slug}/`,
+    lastmod: p.datePublished || today,
+    changefreq: "monthly",
+    priority: "0.8",
+  })),
+  ...EXTRA_URLS.map((e) => ({ loc: `${SITE}${e.loc}`, lastmod: today, changefreq: e.changefreq, priority: e.priority })),
+]);
 
-console.log(`build-content: wrote ${n} page(s) + sitemap (${urls.length} urls) to ${OUT}`);
+console.log(`build-content: wrote ${n} page(s) + sitemap (${urlCount} urls) to ${OUT}`);

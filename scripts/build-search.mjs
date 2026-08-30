@@ -39,6 +39,7 @@ import {
 import { loadContentPages } from "./shared/content-pages.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
+import { appendUrls } from "./shared/sitemap.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -314,19 +315,11 @@ const dir = join(OUT, "search");
 mkdirSync(dir, { recursive: true });
 writeFileSync(join(dir, "index.html"), page);
 
-/* ---------- sitemap row ---------- */
-const sitemapOut = join(OUT, "sitemap.xml");
-const sitemapFallback = join(ROOT, "public", "sitemap.xml");
-const sitemapSrc = existsSync(sitemapOut) ? sitemapOut : existsSync(sitemapFallback) ? sitemapFallback : null;
-if (sitemapSrc) {
-  const xml = readFileSync(sitemapSrc, "utf8");
-  if (!xml.includes(`<loc>${URL_SELF}</loc>`)) {
-    writeFileSync(
-      sitemapOut,
-      xml.replace("</urlset>", `  <url><loc>${URL_SELF}</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>\n</urlset>`),
-    );
-  }
-}
+/* ---------- sitemap row ----------
+   The "is this loc already here" check this block used to do by hand is the module's dedupe now,
+   and it is the reason appendUrls dedupes at all: /search/ is the one row a generator could
+   plausibly add twice. */
+appendUrls([{ loc: URL_SELF, changefreq: "weekly", priority: "0.5" }]);
 
 console.log(
   `[build-search] wrote search-index.json (${docs.length} rows, ${(indexJson.length / 1024).toFixed(1)} KB) ` +

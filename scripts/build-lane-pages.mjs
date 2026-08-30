@@ -10,11 +10,11 @@
    position doesn't matter for correctness (both scripts append their own URLs to whatever
    dist/sitemap.xml exists at that point), but this keeps the lane fronts building right after
    the day pages that feed them, mirroring the site's other lane-scoped script. */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { existsSync } from "node:fs";
 import { loadDayData } from "./shared/day-data.mjs";
+import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META,
   cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -269,7 +269,7 @@ for (const [laneKey, lane] of Object.entries(LANES)) {
   const dir = join(OUT, "desk", laneKey);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), render(laneKey, lane));
-  urls.push(`  <url><loc>${SITE}/desk/${laneKey}/</loc><changefreq>daily</changefreq><priority>0.7</priority></url>`);
+  urls.push({ loc: `${SITE}/desk/${laneKey}/`, changefreq: "daily", priority: "0.7" });
   count++;
 }
 
@@ -289,15 +289,9 @@ for (const sport of SPORTS) {
   }
 }
 
-/* ---------- sitemap: same append pattern as build-article-pages.mjs — append to whatever
-   dist/sitemap.xml already exists at this point in the chain, falling back to public/sitemap.xml
-   if dist's copy is somehow missing. */
-const sitemapOut = join(OUT, "sitemap.xml");
-const sitemapFallback = join(ROOT, "public", "sitemap.xml");
-const sitemapSrc = existsSync(sitemapOut) ? sitemapOut : existsSync(sitemapFallback) ? sitemapFallback : null;
-if (sitemapSrc && urls.length) {
-  const xml = readFileSync(sitemapSrc, "utf8");
-  writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
-}
+/* ---------- sitemap: append the three football lane fronts to whatever dist/sitemap.xml exists at
+   this point in the chain. shared/sitemap.mjs owns the splice, the public/sitemap.xml fallback,
+   the dedupe and the trailing-slash rule. */
+appendUrls(urls);
 
 console.log(`[build-lane-pages] wrote ${count} lane index page(s) to ${OUT}/desk/<lane>/, appended to sitemap`);

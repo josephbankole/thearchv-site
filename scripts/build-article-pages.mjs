@@ -7,10 +7,10 @@
    PostHog snippet, Google Fonts — deliberately standalone, no dependency on the hashed app bundle
    or on content.css (article pages built by build-content.mjs/build-day-pages.mjs use content.css;
    these pages intentionally match public/start/index.html instead, per the founder-approved plan).
-   Also (re)writes dist/sitemap.xml: it appends every article URL to whatever sitemap already exists
-   in dist at this point (built by build-content.mjs, then extended by build-day-pages.mjs), so this
-   must run last in the chain. */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+   Also extends dist/sitemap.xml through shared/sitemap.mjs: it appends every article URL to
+   whatever sitemap already exists in dist at this point (built by build-content.mjs, then extended
+   by the lane, reads, section and search generators), so this must run last in the chain. */
+import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import satori from "satori";
@@ -27,6 +27,7 @@ import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs"
 import { entryArt } from "./shared/illustrated.mjs";
 import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
+import { appendUrls } from "./shared/sitemap.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -723,21 +724,16 @@ for (const section of sections) {
     const nextEntry = lane.days[i - 1] ?? null; // newer
 
     writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry));
-    urls.push(`  <url><loc>${SITE}${section.base}${entry.date}/</loc><lastmod>${entry.date}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`);
+    urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: entry.date, changefreq: "monthly", priority: "0.6" });
     count++;
   }
 }
 
 /* ---------- sitemap: append to whatever dist/sitemap.xml already exists at this point in the
-   build chain (build-content.mjs writes it first, build-day-pages.mjs appends day pages, this
-   script runs last and appends the canonical <lane>/<date> article URLs). If dist/sitemap.xml is
-   somehow missing, fall back to public/sitemap.xml so the static routes are never lost. */
-const sitemapOut = join(OUT, "sitemap.xml");
-const sitemapFallback = join(ROOT, "public", "sitemap.xml");
-const sitemapSrc = existsSync(sitemapOut) ? sitemapOut : existsSync(sitemapFallback) ? sitemapFallback : null;
-if (sitemapSrc && urls.length) {
-  const xml = readFileSync(sitemapSrc, "utf8");
-  writeFileSync(sitemapOut, xml.replace("</urlset>", `${urls.join("\n")}\n</urlset>`));
-}
+   build chain (build-content.mjs writes it first; build-day-pages.mjs deliberately adds nothing,
+   its legacy URLs being noindex; this script runs last and appends the canonical <lane>/<date>
+   article URLs). The read-modify-write, the public/sitemap.xml fallback, the dedupe and the
+   trailing-slash rule all live in shared/sitemap.mjs now. */
+appendUrls(urls);
 
 console.log(`[build-article-pages] wrote ${count} article page(s), ${cards} og card(s) and ${wideCards} og-wide card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);

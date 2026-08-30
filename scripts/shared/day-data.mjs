@@ -11,11 +11,13 @@
    answer. The win is deduplication, not build time.
 
    THE INVARIANT THIS OWNS: every day lane comes back ALREADY SORTED newest-first, by the same
-   `byDateDesc` from page-shell.mjs the generators used to apply by hand. It matters because
-   src/data/*.ts is written by the desk engine through the GitHub Contents API, not by this repo,
-   and two of the lanes are NOT committed in date order today. Prev/next nav, "more from the
-   lane", the feed's lead-story pick and every ...slice(0, n) downstream assume newest-first. It
-   was a per-caller comment repeated eight times and forgotten twice; it is one line here now.
+   `byDateDesc` from page-shell.mjs the generators used to apply by hand. It is load-bearing, not
+   decorative: src/data/*.ts is written by the desk engine through the GitHub Contents API rather
+   than by this repo, and transferDays and worldCupDays are NOT committed in date order today.
+   Prev/next nav, "more from the lane", the feed's lead-story pick and every ...slice(0, n)
+   downstream assume newest-first. Seven of the twelve callers sorted here and each explained why
+   in its own comment; the rest sorted later, per lane inside a loop or once over a merged list.
+   One line here replaces all of it.
 
    WHAT IT DELIBERATELY DOES NOT SORT: the extras. `longReads`, `posters`, `legends` and the rest
    come back in committed order, because their callers disagree about what order they want and

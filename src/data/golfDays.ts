@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-30",
+    day: "Sunday",
+    headline: "Who leads the 2026 Tour Championship going into the final round?",
+    dek: "Viktor Hovland, at 15 under, one clear of Ryan Gerard after a Saturday 65 at East Lake. The final pairing tees off at 12:50pm ET with the 10 million dollar FedEx Cup on the line.",
+    body: "Viktor Hovland takes a one-shot lead into the final round of the Tour Championship at East Lake. His Saturday 65, five under, moved him to 15 under and one clear of Ryan Gerard, who plays alongside him in the last pairing at 12:50pm ET.\n\nThe round held one stretch that decided it: six consecutive putts of seven feet or longer holed, four for birdie and two for par, per the AP's account of the third round. Behind the top two sits a four-way group at 12 under, three back: Chris Gotterup, Ludvig Aberg, Adam Scott and Scottie Scheffler. Scheffler goes off with Gotterup at 12:26pm ET, Scott with Aberg at 12:38pm ET.\n\nThe arithmetic is the simple kind this event was redesigned for. No starting strokes, 30 players, and the man who wins the golf tournament wins the FedEx Cup and the 10 million dollars that comes with it. Hovland has never won it. Gerard, one back, is playing East Lake for the first time.\n\nThe field starts going off at 10:50am ET, with television on Golf Channel from noon and CBS from 1:30pm ET.\n\nAfter 54 holes on Thursday the story was two men tied at ten under. Sunday reduces it to one number: 15 under, and one shot in it.\n\nSources: Golfmagic, 30 August 2026 (Hovland 15 under, Gerard one back, final-round tee times and broadcast windows); Golf Channel third-round recap, 29 August 2026 (the 65, the leaderboard); Yahoo Sports, 30 August 2026 (the 12-under group, tee sheet); AP via Texarkana Gazette, 29 August 2026 (the six-putt run detail); CBS Sports and GolfPass, earlier this week (the no-starting-strokes format and the 10 million dollar prize).",
+    status: "verified",
+  },
+  {
     date: "2026-08-29",
     day: "Saturday",
     headline: "Who leads the 2026 Tour Championship at halfway?",

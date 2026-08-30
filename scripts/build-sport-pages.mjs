@@ -12,7 +12,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
-  masthead, deskNav, footer, posthogSnippet, fontLinks, pageStyles,
+  masthead, deskNav, footer, documentShell,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
@@ -57,38 +57,23 @@ function renderSection(sport) {
   const pageTitle = `${sport.label}: the Question Desk · The ARCHV`;
   const socialTitle = `${sport.label} · The ARCHV`;
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
-  <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(socialTitle)}" />
-  <meta property="og:description" content="${escAttr(copy.lede)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(socialTitle)}" />
-  <meta name="twitter:description" content="${escAttr(copy.lede)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify({
+  return `${documentShell({
+  title: clampTitle(pageTitle.split(" \u00b7 ")),
+  metaDescription: clampDescription(copy.lede),
+  description: copy.lede,
+  socialTitle,
+  robots: "index,follow,max-image-preview:large",
+  canonical: url,
+  ogUrl: url,
+  ogType: "website",
+  ogImage: `${SITE}/og.jpg`,
+  csp: PAGE_CSP,
+  jsonLd: {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "CollectionPage",
-        name: `${sport.label} · The ARCHV`,
+        name: `${sport.label} \u00b7 The ARCHV`,
         description: copy.lede,
         url,
         inLanguage: "en-GB",
@@ -102,15 +87,8 @@ function renderSection(sport) {
         ],
       },
     ],
-  }).replace(/</g, "\\u003c")}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+  },
+})}
 <body>
   ${masthead(sport.key)}
   ${deskNav(laneKey, sport.key)}

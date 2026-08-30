@@ -26,8 +26,8 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, jsLiteral,
-  masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  masthead, footer, documentShell,
+  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
 import { percentileBar, percentileBarStyles } from "./shared/percentile-bar.mjs";
@@ -414,39 +414,31 @@ function renderPair({ a, b, slug }, hasCard) {
     .filter((p) => p.slug !== slug && (p.a.id === a.id || p.b.id === a.id || p.a.id === b.id || p.b.id === b.id))
     .slice(0, 6);
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([title, `${competition.label} ${competition.season}`, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(description)}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${pageCsp}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(title)}" />
-  <meta property="og:description" content="${escAttr(description)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${ogImage}" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="${escAttr(`${title}: ${competition.label} ${competition.season} goals, assists and goal involvements side by side.`)}" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(title)}" />
-  <meta name="twitter:description" content="${escAttr(description)}" />
-  <meta name="twitter:image" content="${ogImage}" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify({
+  return `${documentShell({
+  title: clampTitle([title, `${competition.label} ${competition.season}`, "The ARCHV"]),
+  // `description` is already clampDescription'd where it is built, above.
+  metaDescription: description,
+  description,
+  socialTitle: title,
+  robots: "index,follow,max-image-preview:large",
+  canonical: url,
+  ogUrl: url,
+  ogType: "website",
+  // This page's OWN card, with the stat rows and the split bars drawn on the image, when
+  // satori produced one; the site-wide /og.jpg when it did not. A card failure never fails
+  // the build, so both branches are live.
+  ogImage,
+  ogImageAlt: `${title}: ${competition.label} ${competition.season} goals, assists and goal involvements side by side.`,
+  // Per-page CSP: the share row's inline script embeds THIS page's url and title, so its
+  // hash is not constant across the family.
+  csp: pageCsp,
+  extraHead: [percentileBarStyles(), duelStyles()],
+  jsonLd: {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebPage",
-        name: `${title} · The ARCHV`,
+        name: `${title} \u00b7 The ARCHV`,
         description,
         url,
         inLanguage: "en-GB",
@@ -462,16 +454,8 @@ function renderPair({ a, b, slug }, hasCard) {
         ],
       },
     ],
-  }).replace(/</g, "\\u003c")}</script>
-
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-  ${percentileBarStyles()}
-  ${duelStyles()}
-</head>
+  },
+})}
 <body>
   ${masthead()}
   <main class="wrap wrap--wide">
@@ -594,38 +578,25 @@ function renderIndex(players) {
       .map((p) => `<option value="${escAttr(p.id)}"${p.id === selected ? " selected" : ""}>${esc(p.name)} (${esc(p.club)})</option>`)
       .join("\n            ");
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle(["Player duels", `${competition.label} ${competition.season}`, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(INDEX_LEDE))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${pageCsp}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="Player duels · The ARCHV" />
-  <meta property="og:description" content="${escAttr(clampDescription(INDEX_LEDE))}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="Player duels · The ARCHV" />
-  <meta name="twitter:description" content="${escAttr(clampDescription(INDEX_LEDE))}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify({
+  return `${documentShell({
+  title: clampTitle(["Player duels", `${competition.label} ${competition.season}`, "The ARCHV"]),
+  metaDescription: clampDescription(INDEX_LEDE),
+  description: clampDescription(INDEX_LEDE),
+  socialTitle: "Player duels \u00b7 The ARCHV",
+  robots: "index,follow,max-image-preview:large",
+  canonical: url,
+  ogUrl: url,
+  ogType: "website",
+  ogImage: `${SITE}/og.jpg`,
+  // Per-page CSP: the picker's inline script carries this build's player id list.
+  csp: pageCsp,
+  extraHead: [percentileBarStyles(), duelStyles()],
+  jsonLd: {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "CollectionPage",
-        name: "Player duels · The ARCHV",
+        name: "Player duels \u00b7 The ARCHV",
         description: INDEX_LEDE,
         url,
         inLanguage: "en-GB",
@@ -639,16 +610,8 @@ function renderIndex(players) {
         ],
       },
     ],
-  }).replace(/</g, "\\u003c")}</script>
-
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-  ${percentileBarStyles()}
-  ${duelStyles()}
-</head>
+  },
+})}
 <body>
   ${masthead()}
   <main class="wrap wrap--wide">

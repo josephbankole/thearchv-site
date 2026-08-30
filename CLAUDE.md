@@ -245,16 +245,21 @@ homepage hero/experience section, the nav's in-page scroll behaviour, or any
 ## Per-article pages
 
 `scripts/build-article-pages.mjs` runs after `vite build`, `build-content.mjs`,
-`build-feed.mjs`, `build-day-pages.mjs` and `build-lane-pages.mjs` (last in the chain,
-see `package.json` "build") and emits one static page per daily entry across all three
+`build-feed.mjs`, `build-day-pages.mjs` and `build-lane-pages.mjs` (see `package.json`
+"build") and emits one static page per daily entry across all three
 lanes at `dist/desk/<lane>/<date>/index.html` — this is the canonical URL the feed's `url`
 field points at and what the app's canonical shares use. Pages are self-contained
 (inline brand styles, PostHog snippet, Google Fonts), following the
 `public/start/index.html` pattern rather than `content.css` (deliberate: these pages
 do not depend on the hashed app bundle or the long-read article template). The script
 also appends every article URL to `dist/sitemap.xml`, which by that point in the
-chain already carries the static routes plus the day pages from `build-day-pages.mjs`
-— run order matters here, this script must run last.
+chain already carries the static routes from `build-content.mjs` plus the rows appended
+by `build-section-pages.mjs`, `build-reads-pages.mjs` and `build-lane-pages.mjs`. Run
+order still matters, but this script is no longer the last link and no longer owns the
+final sitemap: `build-search.mjs` runs near the end of the chain and appends the
+`/search/` row after it. Anything new that appends rows has to run before that one. The
+legacy day pages are not in the sitemap at all, deliberately, so `build-day-pages.mjs`
+never touches the file.
 
 Each canonical article page also gets a unique 1200x630 OG share card, generated at
 build time by the same script at `dist/desk/<lane>/<date>/og.png` (satori +

@@ -9,7 +9,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cspMeta, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META } from "./shared/page-shell.mjs";
+import { cspMeta, documentShell, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
@@ -75,31 +75,45 @@ function render(entry, sectionKey) {
           <h2>More ${esc(s.label)}<span class="dot">.</span></h2>
           <ul>${others.map((d) => `<li><a href="/${s.base}/${d.date}/">${esc(d.headline)}</a></li>`).join("")}</ul>
         </nav>` : "";
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([entry.headline, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(entry.dek))}" />
-  <meta name="robots" content="noindex,follow" />
-  <link rel="canonical" href="${canonicalUrl}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(entry.headline)}" />
-  <meta property="og:description" content="${escAttr(entry.dek)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${escAttr(entry.headline)}" />
-  <meta name="twitter:description" content="${escAttr(entry.dek)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/content.css" />
-  <script type="application/ld+json">${schema(entry, url, s.label, s.laneHref)}</script>
-</head>
+  return `${documentShell({
+  title: clampTitle([entry.headline, "The ARCHV"]),
+  metaDescription: clampDescription(entry.dek),
+  description: entry.dek,
+  socialTitle: entry.headline,
+
+  /* ---------- READ THIS BEFORE CHANGING THE NEXT THREE LINES ----------
+     This is the demotion, and the whole reason these pages are still worth serving. A legacy
+     day page is noindex,follow AND names a DIFFERENT page as its canonical: /desk/<date>/
+     points at /desk/transfer/<date>/, /world-cup/<date>/ at /desk/world-cup/<date>/. That
+     pairing is the 2026-07-08 fix for the duplicate-content split between the legacy URLs and
+     the lane-scoped ones, recorded in thearchv-site/CLAUDE.md under "Per-article pages", and
+     the URLs are kept live rather than retired so no old share 404s. Let either half slip and
+     the split comes straight back: an indexable copy of every article, or a legacy page that
+     self-canonicals and competes with the article it was demoted in favour of.
+
+     og:url is the page's OWN url, NOT the canonical. A share of this URL should preview as the
+     page the reader is actually on. That is the opposite of the choice on /<sport>/questions/,
+     where og:url follows the canonical, which is exactly why documentShell refuses to infer one
+     from the other and makes both callers say what they mean. */
+  robots: "noindex,follow",
+  canonical: canonicalUrl,
+  ogUrl: url,
+
+  ogType: "article",
+  ogImage: `${SITE}/og.jpg`,
+  csp: PAGE_CSP,
+  jsonLd: schema(entry, url, s.label, s.laneHref),
+  /* The content.css shape, same as build-content.mjs: these pages carry no inline script at
+     all, no PostHog and no remote font load, which is why PAGE_CSP above can close everything
+     but same-origin. Each absence is named rather than inferred. */
+  stylesheet: "/content.css",
+  rss: false,
+  posthog: false,
+  fonts: false,
+  styles: false,
+  ogImageSize: false,
+  twitterSite: false,
+})}
 <body>
   <header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>

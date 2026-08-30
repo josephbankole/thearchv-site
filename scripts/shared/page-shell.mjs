@@ -504,6 +504,120 @@ export function cspMeta({ scripts = [], posthog = false, googleFonts = false, fr
   return `<meta http-equiv="Content-Security-Policy" content="${content}" />`;
 }
 
+/* ---------- documentShell: one head for the whole static page graph (C3, 2026-08-30) ----------
+   Before this, twenty hand-written `<!doctype html>` heads across thirteen generators each
+   repeated the same twenty-five lines: charset, viewport, title, description, robots, canonical,
+   theme-color, the CSP meta, six og: tags, four twitter: tags, the favicon, the RSS link and then
+   the JSON-LD. The measure of the cost was that `max-image-preview:large` had to be spelled out
+   in twenty files, so adding a directive meant twenty edits and any one of them could be missed.
+
+   THE TWO PARAMETERS WITH NO DEFAULTS ARE `robots` AND `canonical`, AND THAT IS DELIBERATE.
+   A defaulted robots value is exactly how a noindex page ships indexable. Two families here are
+   noindex on purpose (the legacy day pages, the /football/ redirect) and one page carries no
+   canonical at all (the 404). build-day-pages.mjs is the case that would hurt most: its pages
+   are `noindex,follow` AND their canonical points at a DIFFERENT family — /desk/<date>/ canonicals
+   to /desk/transfer/<date>/ — which is the deliberate cross-canonical demotion recorded in
+   thearchv-site/CLAUDE.md under "Per-article pages". Default either of those and the duplicate
+   content that fix removed comes straight back, silently, on a build that still goes green. So
+   both must be passed on every call, `canonical: null` said out loud when a page has none.
+   `ogUrl` is required for the same reason: on a day page it is the page's OWN url while the
+   canonical points elsewhere, so it can never be quietly inherited from the canonical.
+
+   THE CSP TAG IS PASSED IN, NEVER BUILT HERE. Per-page inline scripts (the duel share row, the
+   archive game's puzzle payload, the article share row) embed that page's own url and title, so
+   their hashes differ page to page. cspMeta() must keep being fed the EXACT script bodies the
+   page injects, which only the caller knows. verify-csp-pages.mjs is the net under that, not the
+   design for it.
+
+   Two head SHAPES live here, and the difference is real rather than cosmetic. The self-contained
+   family (article, lane, sport, glossary, standards, duel, guess, author, search, reads, section)
+   ships its own PostHog snippet, Google Fonts links and inlined brand CSS. The older content.css
+   family (build-content.mjs, build-day-pages.mjs) links /content.css instead and ships none of
+   those three. Passing `stylesheet` and turning off `rss`, `posthog`, `fonts` and `styles` gets
+   the second shape; nothing is inferred from anything else. */
+export function documentShell(opts = {}) {
+  const {
+    title,
+    metaDescription,
+    description,
+    socialTitle,
+    ogType = "website",
+    ogImage,
+    ogImageSize = true,
+    ogImageAlt = null,
+    twitterSite = true,
+    twitterImage = true,
+    csp,
+    rss = true,
+    stylesheet = null,
+    jsonLd = null,
+    posthog = true,
+    fonts = true,
+    styles = true,
+    extraHead = [],
+    lang = "en-GB",
+  } = opts;
+
+  // Required-by-contract. `canonical` and `ogUrl` may legitimately be null, so the test is
+  // whether the key was passed at all, not whether the value is truthy.
+  for (const key of ["robots", "canonical", "ogUrl"]) {
+    if (!(key in opts)) throw new Error(`documentShell: '${key}' is required and has no default - pass it explicitly (null where the page genuinely has none)`);
+  }
+  const { robots, canonical, ogUrl } = opts;
+  if (!robots) throw new Error("documentShell: 'robots' must be a non-empty directive string");
+  if (!csp) throw new Error("documentShell: 'csp' must be the cspMeta() tag for THIS page");
+
+  const ld =
+    jsonLd == null ? null : typeof jsonLd === "string" ? jsonLd : JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+
+  const lines = [
+    `<!doctype html>`,
+    `<html lang="${escAttr(lang)}">`,
+    `<head>`,
+    `  <meta charset="UTF-8" />`,
+    `  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />`,
+    `  <title>${esc(title)}</title>`,
+    `  <meta name="description" content="${escAttr(metaDescription)}" />`,
+    `  <meta name="robots" content="${escAttr(robots)}" />`,
+    ...(canonical ? [`  <link rel="canonical" href="${escAttr(canonical)}" />`] : []),
+    `  <meta name="theme-color" content="#FFFFFF" />`,
+    `  ${csp}`,
+    `  <meta property="og:type" content="${escAttr(ogType)}" />`,
+    `  <meta property="og:site_name" content="The ARCHV" />`,
+    `  <meta property="og:title" content="${escAttr(socialTitle)}" />`,
+    `  <meta property="og:description" content="${escAttr(description)}" />`,
+    ...(ogUrl ? [`  <meta property="og:url" content="${escAttr(ogUrl)}" />`] : []),
+    `  <meta property="og:image" content="${escAttr(ogImage)}" />`,
+    ...(ogImageSize
+      ? [`  <meta property="og:image:width" content="1200" />`, `  <meta property="og:image:height" content="630" />`]
+      : []),
+    ...(ogImageAlt ? [`  <meta property="og:image:alt" content="${escAttr(ogImageAlt)}" />`] : []),
+    `  <meta name="twitter:card" content="summary_large_image" />`,
+    ...(twitterSite ? [`  <meta name="twitter:site" content="@thearchvfc" />`] : []),
+    `  <meta name="twitter:title" content="${escAttr(socialTitle)}" />`,
+    `  <meta name="twitter:description" content="${escAttr(description)}" />`,
+    ...(twitterImage ? [`  <meta name="twitter:image" content="${escAttr(ogImage)}" />`] : []),
+    `  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />`,
+    ...(stylesheet ? [`  <link rel="stylesheet" href="${escAttr(stylesheet)}" />`] : []),
+    ...(rss ? [`  ${RSS_LINK}`] : []),
+    ...(ld ? [`  <script type="application/ld+json">${ld}</script>`] : []),
+  ];
+
+  // Everything below the JSON-LD is a block separated by one blank line, and a page that ships
+  // none of it (the content.css family) gets no trailing blank line at all.
+  const blocks = [];
+  if (posthog) {
+    blocks.push(`  <!-- PostHog: pageview only on this static surface. Same project as the website. -->\n  ${posthogSnippet()}`);
+  }
+  if (fonts) blocks.push(`  ${fontLinks()}`);
+  const styleBlock = [...(styles ? [`  ${pageStyles()}`] : []), ...extraHead.map((s) => `  ${s}`)];
+  if (styleBlock.length) blocks.push(styleBlock.join("\n"));
+  for (const block of blocks) lines.push("", block);
+
+  lines.push(`</head>`);
+  return lines.join("\n");
+}
+
 export function fontLinks() {
   return `<link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

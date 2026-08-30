@@ -17,8 +17,8 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META,
-  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  cardArt, deskNav, masthead, footer, documentShell,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -96,33 +96,18 @@ function render(laneKey, lane) {
   const pageTitle = lane.indexTitle;
   const socialTitle = `${lane.label} · The ARCHV`;
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
-  <meta name="description" content="${escAttr(clampDescription(lane.intro))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(socialTitle)}" />
-  <meta property="og:description" content="${escAttr(lane.intro)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(socialTitle)}" />
-  <meta name="twitter:description" content="${escAttr(lane.intro)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify({
+  return `${documentShell({
+  title: clampTitle(pageTitle.split(" \u00b7 ")),
+  metaDescription: clampDescription(lane.intro),
+  description: lane.intro,
+  socialTitle,
+  robots: "index,follow,max-image-preview:large",
+  canonical: url,
+  ogUrl: url,
+  ogType: "website",
+  ogImage: `${SITE}/og.jpg`,
+  csp: PAGE_CSP,
+  jsonLd: {
     "@context": "https://schema.org",
     "@graph": [
       {
@@ -141,15 +126,8 @@ function render(laneKey, lane) {
         ],
       },
     ],
-  }).replace(/</g, "\\u003c")}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+  },
+})}
 <body>
   ${masthead()}
   ${deskNav(laneKey)}
@@ -199,33 +177,23 @@ function renderSportLane(sport, laneKey) {
       </ul>`
     : `<div class="sport-holding"><p>${esc(copy.holding)}</p></div>`;
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle(pageTitle.split(" · ")))}</title>
-  <meta name="description" content="${escAttr(clampDescription(copy.lede))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${canonical}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(socialTitle)}" />
-  <meta property="og:description" content="${escAttr(copy.lede)}" />
-  <meta property="og:url" content="${canonical}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(socialTitle)}" />
-  <meta name="twitter:description" content="${escAttr(copy.lede)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify({
+  return `${documentShell({
+  title: clampTitle(pageTitle.split(" \u00b7 ")),
+  metaDescription: clampDescription(copy.lede),
+  description: copy.lede,
+  socialTitle,
+  robots: "index,follow,max-image-preview:large",
+  // Canonical and og:url both point at the SPORT ROOT, not at this page. See the note above
+  // where `canonical` is set: this front and /<sport>/ were near-duplicates, and the canonical
+  // is what consolidates them. Deliberately NOT noindexed, and og:url follows the canonical so
+  // a share of either URL credits one page. The two are named separately here because on the
+  // legacy day pages they deliberately differ.
+  canonical,
+  ogUrl: canonical,
+  ogType: "website",
+  ogImage: `${SITE}/og.jpg`,
+  csp: PAGE_CSP,
+  jsonLd: {
     "@context": "https://schema.org",
     "@graph": [
       { "@type": "CollectionPage", name: `${sport.label} ${laneLabel}`, description: copy.lede, url, inLanguage: "en-GB", isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` } },
@@ -235,15 +203,8 @@ function renderSportLane(sport, laneKey) {
         { "@type": "ListItem", position: 3, name: laneLabel, item: url },
       ] },
     ],
-  }).replace(/</g, "\\u003c")}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+  },
+})}
 <body>
   ${masthead(sport.key)}
   ${deskNav(laneKey, sport.key)}

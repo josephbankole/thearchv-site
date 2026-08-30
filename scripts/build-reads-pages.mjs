@@ -23,8 +23,8 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
-  masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  masthead, footer, documentShell,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -89,40 +89,24 @@ const paras = (body) =>
 // this @id, so every essay points back at the one entity rather than describing a duplicate.
 const ORG_REF = { "@id": `${SITE}/#org` };
 
+/* The head for both page types here. Every long read and the /reads/ front is indexable and
+   self-canonical, so those two are stated once, here, rather than at each call site; documentShell
+   itself refuses to default them. og:type is "article" on the index as well as on the reads, which
+   is how this family has always shipped. */
 function head({ title, description, url, extraLd }) {
-  return `<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([title, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(description))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(title)}" />
-  <meta property="og:description" content="${escAttr(description)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(title)}" />
-  <meta name="twitter:description" content="${escAttr(description)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify(extraLd).replace(/</g, "\\u003c")}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>`;
+  return documentShell({
+    title: clampTitle([title, "The ARCHV"]),
+    metaDescription: clampDescription(description),
+    description,
+    socialTitle: title,
+    robots: "index,follow,max-image-preview:large",
+    canonical: url,
+    ogUrl: url,
+    ogType: "article",
+    ogImage: `${SITE}/og.jpg`,
+    csp: PAGE_CSP,
+    jsonLd: extraLd,
+  });
 }
 
 function renderRead(read) {
@@ -139,9 +123,7 @@ function renderRead(read) {
         <a class="related__all" href="${INDEX_PATH}">Every long read &rarr;</a>
       </nav>` : "";
 
-  return `<!doctype html>
-<html lang="en-GB">
-${head({
+  return `${head({
   title: plainTitle(read.title),
   description,
   url,
@@ -198,9 +180,7 @@ ${head({
 
 function renderIndex() {
   const url = `${SITE}${INDEX_PATH}`;
-  return `<!doctype html>
-<html lang="en-GB">
-${head({
+  return `${head({
   title: "Long reads",
   description: INDEX_LEDE,
   url,

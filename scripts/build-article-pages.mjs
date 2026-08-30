@@ -10,15 +10,14 @@
    Also (re)writes dist/sitemap.xml: it appends every article URL to whatever sitemap already exists
    in dist at this point (built by build-content.mjs, then extended by build-day-pages.mjs), so this
    must run last in the chain. */
-import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 import {
-  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, byDateDesc, clampTitle,
+  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle,
   cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
@@ -27,45 +26,21 @@ import {
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
 import { CARD, CARD_GROUND, CARD_FONTS, div, text, accentRule, wordmark } from "./shared/card-brand.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
-/* ---------- load the typed day data via a bundled temp module ---------- */
-const entrySrc = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
-  // the bundle this script already builds rather than being reimplemented here in .mjs.
-  `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".article-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "article-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
-
-// Defensive sort immediately after loading, before any use (see byDateDesc in
-// scripts/shared/page-shell.mjs): prev/next nav and "more from the lane" below both
-// assume newest-first, and a single out-of-order commit would otherwise scramble both.
-const transferDays = [...data.transferDays].sort(byDateDesc);
-const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
-const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
-const SPORT_DAYS = {
-  nfl: [...data.nflDays].sort(byDateDesc),
-  f1: [...data.f1Days].sort(byDateDesc),
-  tennis: [...data.tennisDays].sort(byDateDesc),
-  golf: [...data.golfDays].sort(byDateDesc),
-};
-const { readLabel, readDuration, wordCount } = data;
+/* ---------- the typed day data, through scripts/shared/day-data.mjs ----------
+   That module is the one loader for src/data/*.ts and it owns the newest-first sort. Prev/next
+   nav and "more from the lane" below both assume newest-first, and a single out-of-order commit
+   from the desk engine would otherwise scramble both. `readTime` rides in on the same bundle:
+   src/lib/readTime.ts is the one copy of read-time on the site (see its header) rather than a
+   reimplementation here in .mjs. */
+const {
+  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS,
+  readLabel, readDuration, wordCount,
+} = await loadDayData({ extras: ["readTime"] });
 
 // A "section" is one sport+lane's article surface. `base` is the path prefix under which its
 // articles live (leading and trailing slash), `anchor` is what the breadcrumb and "more" link

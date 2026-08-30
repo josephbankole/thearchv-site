@@ -10,13 +10,13 @@
    position doesn't matter for correctness (both scripts append their own URLs to whatever
    dist/sitemap.xml exists at that point), but this keeps the lane fronts building right after
    the day pages that feed them, mirroring the site's other lane-scoped script. */
-import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
+import { loadDayData } from "./shared/day-data.mjs";
 import {
-  SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, byDateDesc,
+  SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META,
   cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
@@ -33,46 +33,18 @@ const GLOSSARY_BY_SLUG = new Map(glossaryEntries.map((e) => [e.slug, e]));
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
-/* ---------- load the typed day data via a bundled temp module (same pattern as
-   build-article-pages.mjs) ---------- */
-const entrySrc = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-  // Read time. src/lib/readTime.ts is the one copy on the site (see its header); it rides in on
-  // the bundle this script already builds rather than being reimplemented here in .mjs.
-  `export { readLabel } from "./lib/readTime.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".lane-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "lane-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
-
-// Defensive sort immediately after loading, before any use (see byDateDesc in
-// scripts/shared/page-shell.mjs): the rest of this script assumes newest-first.
-const transferDays = [...data.transferDays].sort(byDateDesc);
-const worldCupDays = [...data.worldCupDays].sort(byDateDesc);
-const leaguesDays = [...data.leaguesDays].sort(byDateDesc);
-
-// New-sport day data (empty today; the desks open one entry at a time), keyed by sport for the
-// lane-front loop below. Football keeps its own bespoke LANES rendering above, untouched.
-const SPORT_DAYS = {
-  nfl: [...data.nflDays].sort(byDateDesc),
-  f1: [...data.f1Days].sort(byDateDesc),
-  tennis: [...data.tennisDays].sort(byDateDesc),
-  golf: [...data.golfDays].sort(byDateDesc),
-};
-const { readLabel } = data;
+/* ---------- the typed day data (same seam as build-article-pages.mjs) ---------- */
+// scripts/shared/day-data.mjs is the one loader for src/data/*.ts, and it hands every lane back
+// sorted newest-first, which the rest of this script assumes. `readTime` rides in on the same
+// bundle: src/lib/readTime.ts is the one copy of read-time on the site (see its header) rather
+// than a reimplementation here in .mjs. SPORT_DAYS is the new sports keyed by sport for the
+// lane-front loop below (some empty today; the desks open one entry at a time); football keeps
+// its own bespoke LANES rendering above, untouched.
+const {
+  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS, readLabel,
+} = await loadDayData({ extras: ["readTime"] });
 
 // Intro copy (SEO/AEO pass, UNIT 2, 2026-07-14): each lane's cards carried little or no
 // crawlable prose above them, so every intro now states what the lane covers (keyword-bearing,

@@ -15,46 +15,31 @@
    whose PNG already exists on disk (OG-card discipline: the field never claims a file that was
    not written). A generation failure for one entry is logged and skipped; it never fails the
    build. */
-import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import satori from "satori";
 import sharp from "sharp";
 import { Resvg } from "@resvg/resvg-js";
-import { LANE_META, byDateDesc } from "./shared/page-shell.mjs";
+import { LANE_META } from "./shared/page-shell.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
 import { infogramTree, infogramEligible, INFOGRAM_W, INFOGRAM_H } from "./shared/infogram.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 // Match build-article-pages.mjs so the infogram PNG lands in the same dist/desk tree.
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
-/* ---------- load the typed day data via a bundled temp module (same pattern as build-feed) ---------- */
-const entrySrc = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".infogram-bundle.mjs");
-let data;
-try {
-  await build({
-    stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "infogram-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent",
-  });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally {
-  try { rmSync(tmp); } catch {}
-}
+/* ---------- the typed day data, through scripts/shared/day-data.mjs (the one loader for
+   src/data/*.ts; it hands each lane back sorted newest-first) ---------- */
+const { transferDays, worldCupDays, leaguesDays } = await loadDayData();
 
 // lane = URL segment under /desk/ (World Cup's is hyphenated "world-cup" even though its feed
 // section key is "worldcup"). label comes from the shared LANE_META so the card kicker matches
 // the lane/article pages exactly.
 const LANES = {
-  transfer: { label: LANE_META.transfer.label, days: [...data.transferDays].sort(byDateDesc) },
-  "world-cup": { label: LANE_META["world-cup"].label, days: [...data.worldCupDays].sort(byDateDesc) },
-  leagues: { label: LANE_META.leagues.label, days: [...data.leaguesDays].sort(byDateDesc) },
+  transfer: { label: LANE_META.transfer.label, days: transferDays },
+  "world-cup": { label: LANE_META["world-cup"].label, days: worldCupDays },
+  leagues: { label: LANE_META.leagues.label, days: leaguesDays },
 };
 
 /* ---------- fonts: static TTF instances committed at scripts/fonts/, same set the OG cards use

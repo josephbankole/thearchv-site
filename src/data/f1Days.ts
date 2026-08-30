@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-30",
+    day: "Sunday",
+    headline: "How long is Lando Norris signed with McLaren for?",
+    dek: "To at least the end of 2030, under the extension announced on Saturday, with options beyond. The reigning world champion's previous deal ran to the end of 2027.",
+    body: "Lando Norris is a McLaren driver until at least the end of 2030. The team announced the extension on Saturday 29 August, replacing a deal that ran to the end of 2027, and Formula1.com, the official source named for every figure here under this desk's single-source rule for governing bodies, reports the new contract carries multi-year options beyond 2030.\n\nNorris is 26 and the reigning world champion, having taken the 2025 title. His McLaren numbers to date: 13 wins, 18 poles and 48 podiums across 163 races, which is more starts than any driver in the team's history. He joined as a test driver in 2017 and has raced for them since 2019, so a contract running to 2030 would take him to 12 years with one team, matching the length of Lewis Hamilton's Mercedes tenure.\n\nThe announcement was made to staff at a friends-and-family day at the Woking factory, per the AP. Norris said: \"McLaren is my home, and I'm very pleased to be signing a new contract to keep me with the team until at least 2030.\"\n\nThe timing settles McLaren's driver room for the rest of the decade on one side. Oscar Piastri is contracted through 2028, and Max Verstappen's Red Bull deal also runs to 2030, so the two men who have defined the current title fights are now signed to the same horizon.\n\nThe next race is the Italian Grand Prix at Monza, next Sunday 6 September.\n\nSources: Formula1.com, 29 August 2026, official announcement (the 2030 term, the options, the career numbers, the Norris quote, the Piastri and Verstappen contract context); McLaren.com, 29 August 2026 (the announcement); ESPN, 29 August 2026 (the extension and previous 2027 term); AP via the Washington Times, 29 August 2026 (the factory announcement detail).",
+    status: "verified",
+  },
+  {
     date: "2026-08-29",
     day: "Saturday",
     headline: "Who leads the Formula 1 drivers' championship going into the Italian Grand Prix?",

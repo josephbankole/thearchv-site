@@ -15,8 +15,8 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle,
-  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
+  cardArt, deskNav, masthead, footer, documentShell,
+  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
   DISPATCH_URL, DISPATCH_SUBSCRIBE_URL,
 } from "./shared/page-shell.mjs";
@@ -588,41 +588,27 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
         ${nextEntry ? `<a class="adjacent__link adjacent__link--next" href="${section.base}${nextEntry.date}/"><span class="adjacent__dir">Next &rarr;</span><span class="adjacent__headline">${esc(nextEntry.headline)}</span></a>` : ""}
       </nav>` : "";
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([entry.headline, lane.seoSuffix, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(metaDescription(entry.dek, entry.body))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${pageCsp}
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(entry.headline)}" />
-  <meta property="og:description" content="${escAttr(entry.dek)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${ogImage}" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(entry.headline)}" />
-  <meta name="twitter:description" content="${escAttr(entry.dek)}" />
-  <meta name="twitter:image" content="${ogImage}" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${schema(entry, url, lane.label, faq, schemaImages)}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+  return `${documentShell({
+  title: clampTitle([entry.headline, lane.seoSuffix, "The ARCHV"]),
+  // NOT clampDescription: this family has its own metaDescription(), which stitches the
+  // standfirst to the body's first sentence and throws above 160 characters. og:description
+  // and twitter:description stay on the bare standfirst, as they always have.
+  metaDescription: metaDescription(entry.dek, entry.body),
+  description: entry.dek,
+  socialTitle: entry.headline,
+  robots: "index,follow,max-image-preview:large",
+  canonical: url,
+  ogUrl: url,
+  ogType: "article",
+  // This entry's OWN 1200x630 card when satori made one, the site-wide /og.jpg when it did
+  // not. A card failure logs and falls back rather than failing the build, so both are live.
+  ogImage,
+  // Per-page CSP: the share row and the read-ladder scripts both embed this page's url, so
+  // neither hash is constant across the family, and form-action names the Dispatch because
+  // of the inline email capture.
+  csp: pageCsp,
+  jsonLd: schema(entry, url, lane.label, faq, schemaImages),
+})}
 <body>
   ${masthead(section.sportKey)}
   ${deskNav(section.laneKey, section.sportKey)}

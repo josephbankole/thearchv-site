@@ -25,6 +25,16 @@
    its own date sort and says why. Sorting them here would be a silent output change, not a
    refactor.
 
+   WHAT IT REFUSES TO BUNDLE (2026-08-30). src/data/*.ts is written by the desk engine through
+   the GitHub Contents API, not by anyone on a branch here, and the `import()` below EXECUTES
+   whatever it finds — in Actions, in a job holding pages:write. Every data module named below is
+   therefore checked against a pure-data grammar first, and a file that has grown a runtime import
+   or a top-level call stops the build instead of running. scripts/shared/data-shape.mjs carries
+   the grammar and the reasoning. The guard sits HERE, at the bundle, rather than in a
+   front-of-chain script, because half the generators are also run on their own through their
+   package.json aliases (`npm run articles`, `npm run feed`), where a front-of-chain check never
+   fires at all.
+
    USAGE
      const { transferDays, worldCupDays, leaguesDays, sportDays } = await loadDayData();
      const { legends } = await loadDayData({ days: false, extras: ["legends"] });
@@ -35,13 +45,15 @@ import { rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { byDateDesc } from "./page-shell.mjs";
+import { assertPureDataFile } from "./data-shape.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const SRC = join(ROOT, "src");
 
 /* The seven day lanes, in the order every generator lists them. Football's three first, then the
    four sports opened by the 2026-07-22 multi-sport pass. `sport` names the SPORTS key a lane
-   belongs to, which is what builds the `sportDays` map below. */
+   belongs to, which is what builds the `sportDays` map below. All seven are DATA files written by
+   the desk engine, so all seven go through the shape guard. */
 const DAY_LANES = [
   { name: "transferDays", file: "transferDays" },
   { name: "worldCupDays", file: "worldCupDays" },
@@ -55,17 +67,37 @@ const DAY_LANES = [
 /* Everything else a generator has ever needed off the same bundle, opt-in by key. A key names a
    MODULE, not a single export, so asking for "readSlug" gets both readSlug and readPath: they
    live in one file, esbuild bundles the file either way, and pretending otherwise would just
-   mean two keys resolving to the same work. Nothing here is sorted or reshaped. */
+   mean two keys resolving to the same work. Nothing here is sorted or reshaped.
+
+   `kind` is the only load-bearing addition: "data" means engine-written and checked against the
+   pure-data grammar before it is bundled, "code" means a repo-owned module that reaches the
+   bundle through a reviewed branch like any other source file. Two of these are code and running
+   the data grammar over them would fail the build on the first `function` keyword. */
 const EXTRAS = {
-  posters: `export { posters } from "./data/posters.ts";`,
-  legends: `export { legends } from "./data/legends.ts";`,
-  longReads: `export { longReads } from "./data/longReads.ts";`,
-  giantKillers: `export { upsets, giantKillersIntro, giantKillersOutro } from "./data/giantKillers.ts";`,
-  readSlug: `export { readSlug, readPath } from "./data/readSlug.ts";`,
+  posters: { module: "data/posters.ts", kind: "data", line: `export { posters } from "./data/posters.ts";` },
+  legends: { module: "data/legends.ts", kind: "data", line: `export { legends } from "./data/legends.ts";` },
+  longReads: { module: "data/longReads.ts", kind: "data", line: `export { longReads } from "./data/longReads.ts";` },
+  giantKillers: { module: "data/giantKillers.ts", kind: "data", line: `export { upsets, giantKillersIntro, giantKillersOutro } from "./data/giantKillers.ts";` },
+  // readSlug is CODE that happens to live in src/data/, and its own header says why it sits there
+  // rather than inside the engine-written longReads.ts. The engine never writes it.
+  readSlug: { module: "data/readSlug.ts", kind: "code", line: `export { readSlug, readPath } from "./data/readSlug.ts";` },
   // src/lib/readTime.ts is the one copy of read-time on the site (see its header); it rides in on
   // this bundle rather than being reimplemented in .mjs.
-  readTime: `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";`,
+  readTime: { module: "lib/readTime.ts", kind: "code", line: `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";` },
 };
+
+/* Checked once per process. The scan is a single pass and the whole data set is ~390 kB, so this
+   costs single-digit milliseconds per generator; the memo is here so the second loadDayData call
+   in one process does not pay it twice. A file is checked when it is about to be BUNDLED, which
+   is what keeps this list from drifting away from what actually gets executed. */
+const checkedModules = new Set();
+function guardDataModules(entries) {
+  for (const entry of entries) {
+    if (entry.kind !== "data" || checkedModules.has(entry.module)) continue;
+    assertPureDataFile(join(SRC, entry.module), `src/${entry.module}`);
+    checkedModules.add(entry.module);
+  }
+}
 
 /* One bundle per distinct request within this process, keyed by the entry source itself. Two
    callers asking for the same set share the arrays, so treat what comes back as read-only: copy
@@ -106,15 +138,19 @@ export async function loadDayData({ days = true, extras = [] } = {}) {
     }
   }
   const wanted = [...new Set(extras)].sort();
-  const lines = [
-    ...(days ? DAY_LANES.map((l) => `export { ${l.name} } from "./data/${l.file}.ts";`) : []),
+  // One list, two readings: the entry-module source esbuild bundles, and the modules the shape
+  // guard checks. Derived from the same place so neither can quietly stop covering the other.
+  const requested = [
+    ...(days ? DAY_LANES.map((l) => ({ module: `data/${l.file}.ts`, kind: "data", line: `export { ${l.name} } from "./data/${l.file}.ts";` })) : []),
     ...wanted.map((k) => EXTRAS[k]),
   ];
+  const lines = requested.map((r) => r.line);
   if (!lines.length) throw new Error("[day-data] nothing requested: pass days:true or at least one extra");
 
   const entrySrc = lines.join("\n");
   if (cache.has(entrySrc)) return cache.get(entrySrc);
 
+  guardDataModules(requested);
   const mod = await bundleAndImport(entrySrc);
 
   const out = {};

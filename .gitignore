@@ -18,7 +18,7 @@ supabase/.temp/
 supabase/.branches/
 
 # transient esbuild bundle from scripts/check-illustrated-parity.mjs
-.parity-bundle.mjs
+.parity-bundle-*.mjs
 
 # transient esbuild bundles from scripts/shared/day-data.mjs (pid-scoped, cleaned in a finally)
 .day-data-*.mjs

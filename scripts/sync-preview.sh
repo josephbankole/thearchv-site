@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # sync-preview.sh — run at the START of any thearchv.ca UI session.
 #
-# The daily engine commits the trackers (transferDays / worldCupDays / longReads)
+# The daily engine commits the trackers (the three football lanes, the four new-sport lanes
+# and longReads: see DATA_FILES below, which is the authoritative list)
 # straight to `main` via the GitHub Contents API. UI work happens on `preview`.
 # Left alone, the two branches drift and the eventual preview->main deploy hits
 # conflicts + index.lock pain. This script pulls main's latest into preview first,

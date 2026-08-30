@@ -3,8 +3,9 @@
    article surface is build-article-pages.mjs's /desk/<lane>/<date>/ pages. Each legacy page here
    cross-canonicals to its lane URL and is marked noindex,follow so it stops splitting SEO signal
    with its canonical counterpart, but still passes link equity and stays reachable for any inbound
-   links. Runs AFTER build-content.mjs (which writes sitemap.xml) and BEFORE build-article-pages.mjs
-   (which runs last and owns the final sitemap — this script does NOT touch sitemap.xml).
+   links. Runs AFTER build-content.mjs (which writes sitemap.xml). This script does NOT touch
+   sitemap.xml at all. build-search.mjs runs last in the chain and appends the final rows;
+   sitemap writes now go through scripts/shared/sitemap.mjs.
    Pages reuse /content.css and the same masthead/footer as the article pages. */
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -154,8 +155,9 @@ function render(entry, sectionKey) {
 
 /* ---------- write pages ---------- */
 /* Legacy pages only: noindex + cross-canonical to the lane URL, never added to the sitemap.
-   build-article-pages.mjs owns dist/sitemap.xml and appends the canonical <lane>/<date> set last
-   in the build chain; this script must not touch it. */
+   The canonical <lane>/<date> rows are appended by build-article-pages.mjs, and build-search.mjs
+   appends last of all; every writer goes through scripts/shared/sitemap.mjs. This script must not
+   touch the sitemap. */
 let count = 0;
 for (const [key, s] of Object.entries(SECTIONS)) {
   for (const entry of s.days) {

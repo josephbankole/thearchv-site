@@ -153,7 +153,12 @@ Phase 2A (2026-08-09) flipped the ground and the ink across every page family in
 - **The token block is duplicated in four files that do not import each other**:
   `src/style.css`, `pageStyles()` in `scripts/shared/page-shell.mjs`, `public/content.css`,
   and `scripts/shared/card-brand.mjs` for the rendered share images. Change one, change all
-  four. There is no build step that will catch you.
+  four. `scripts/check-tokens.mjs` is the build step that catches you: it parses the nine core
+  tokens out of all four declarations (plus the three hand-built `public/` pages through their
+  legacy navy aliases) and fails the build on any disagreement. It runs at the front of the
+  chain beside `check-csp-hash.mjs`. Two known exclusions are printed on every run rather than
+  buried: `--cream-dim` genuinely disagrees between the shared files and the hand-built pages,
+  and `--accent` / `--accent-fill` is a spelling split bridged by a table.
 - Adding a sixth hue is a brand break, not a refactor. Two hand-built pages under `public/`
   declare their own small `:root` (`/app`, `/start`, `/quiz`); they carry the same values.
 

@@ -45,7 +45,11 @@ const SRC = join(ROOT, "src");
    is removed in a finally. The JSON registry rides along on esbuild's built-in json loader, so
    the typed side reads the same file it reads in a real build. */
 const entrySrc = `export { entryArt, playerInText, clubInText, PLAYERS, CLUBS } from "./render/illustrated.ts";`;
-const tmp = join(ROOT, ".parity-bundle.mjs");
+// Process-unique, for the same reason scripts/shared/day-data.mjs is: two builds running at
+// once on one laptop would otherwise race a single fixed path, and the loser deletes the
+// winner's bundle between the esbuild write and the import. CI is immune (fresh checkout,
+// serialised by the workflow concurrency group), so this is a laptop hazard only.
+const tmp = join(ROOT, `.parity-bundle-${process.pid}.mjs`);
 let ts;
 try {
   await build({

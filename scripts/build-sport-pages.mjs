@@ -5,47 +5,28 @@
    `vite build` (see package.json "build"); the same page shell as the lane and article pages so
    the masthead, sport tab row, footer and brand styles never drift. Football keeps every existing
    URL; this script adds no football content beyond the aliased homepage stub at /football/. */
-import { build } from "esbuild";
-import { writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { loadDayData } from "./shared/day-data.mjs";
 import {
-  SITE, esc, escAttr, longDate, byDateDesc, clampTitle, clampDescription,
+  SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
   masthead, deskNav, footer, posthogSnippet, fontLinks, pageStyles,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 // Both inline scripts on this page family (masthead toggle + PostHog loader) are static, so one
 // CSP covers every sport section page — same as the lane pages.
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
 
-/* ---------- load the new sports' day data via a bundled temp module (same pattern as the other
-   generators). Empty arrays today; the desks open one entry at a time. ---------- */
-const entrySrc = [
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".sport-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "sport-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
-
-const DAYS = {
-  nfl: [...data.nflDays].sort(byDateDesc),
-  f1: [...data.f1Days].sort(byDateDesc),
-  tennis: [...data.tennisDays].sort(byDateDesc),
-  golf: [...data.golfDays].sort(byDateDesc),
-};
+/* ---------- the new sports' day data, through scripts/shared/day-data.mjs (the one loader for
+   src/data/*.ts; it also owns the newest-first sort every generator here relies on). Empty
+   arrays today for some of these; the desks open one entry at a time. ---------- */
+const { sportDays: DAYS } = await loadDayData();
 
 // Editorial copy per sport comes from SPORT_DESK_COPY in the shared page shell (one source, also
 // used by the lane fronts): `lede` is what the desk covers and its standard; `holding` is the

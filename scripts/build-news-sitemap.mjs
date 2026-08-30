@@ -11,46 +11,30 @@
    The window is rolling, so a day with no publishing still shrinks the list on the next build;
    an empty urlset is valid and expected during a quiet spell. Output dir defaults to ./dist,
    override with CONTENT_OUT to match the other page generators. */
-import { build } from "esbuild";
-import { writeFileSync, rmSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { byDateDesc, SPORTS } from "./shared/page-shell.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SITE = "https://thearchv.ca";
 const PUBLICATION_NAME = "The ARCHV";
 const PUBLICATION_LANGUAGE = "en";
 const WINDOW_MS = 2 * 24 * 60 * 60 * 1000;
 
-/* ---------- load the typed day data via a bundled temp module (same pattern as build-rss.mjs) ---------- */
-const entrySrc = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".news-sitemap-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "news-sitemap-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
+/* ---------- the typed day data, through scripts/shared/day-data.mjs (the one loader for
+   src/data/*.ts, which also hands every lane back sorted newest-first) ---------- */
+const { transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA } = await loadDayData();
 
 // Lane registry, identical to build-rss.mjs: football keeps /desk/<lane>/ (World Cup's URL lane
 // is hyphenated even though its section key is "worldcup"); new sports syndicate from
 // /<urlBase>/<laneKey>/.
-const SPORT_DATA = { nfl: data.nflDays, f1: data.f1Days, tennis: data.tennisDays, golf: data.golfDays };
 const lanes = [
-  { base: "/desk/transfer/", days: data.transferDays },
-  { base: "/desk/world-cup/", days: data.worldCupDays },
-  { base: "/desk/leagues/", days: data.leaguesDays },
+  { base: "/desk/transfer/", days: transferDays },
+  { base: "/desk/world-cup/", days: worldCupDays },
+  { base: "/desk/leagues/", days: leaguesDays },
 ];
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;

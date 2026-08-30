@@ -21,10 +21,10 @@
    Runs after build-article-pages.mjs (see package.json "build"). Its sitemap row is added at
    the one assembly point in build-content.mjs's EXTRA_URLS, the same way /duel/ and /guess/ are,
    rather than by appending here. */
-import { build } from "esbuild";
-import { writeFileSync, mkdirSync, rmSync, readdirSync, readFileSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, readdirSync, readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, byDateDesc,
   cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
@@ -34,7 +34,6 @@ import {
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const CONTENT = join(ROOT, "content");
 
@@ -79,36 +78,20 @@ const portrait =
   HEADSHOT_CANDIDATES.find((c) => existsSync(join(ROOT, "public", c.src.replace(/^\//, "")))) ||
   { src: "/brand/crest-badge-400.webp", alt: "The ARCHV monogram", real: false };
 
-/* ---------- day data (same bundled-temp-module pattern as build-lane-pages.mjs) ---------- */
-const entrySrc = [
-  `export { transferDays } from "./data/transferDays.ts";`,
-  `export { worldCupDays } from "./data/worldCupDays.ts";`,
-  `export { leaguesDays } from "./data/leaguesDays.ts";`,
-  `export { nflDays } from "./data/nflDays.ts";`,
-  `export { f1Days } from "./data/f1Days.ts";`,
-  `export { tennisDays } from "./data/tennisDays.ts";`,
-  `export { golfDays } from "./data/golfDays.ts";`,
-].join("\n");
-const tmp = join(ROOT, ".author-bundle.mjs");
-let data;
-try {
-  await build({ stdin: { contents: entrySrc, resolveDir: SRC, loader: "ts", sourcefile: "author-entry.ts" },
-    bundle: true, format: "esm", platform: "node", outfile: tmp, logLevel: "silent" });
-  data = await import(pathToFileURL(tmp).href + `?t=${process.hrtime.bigint()}`);
-} finally { try { rmSync(tmp); } catch {} }
+/* ---------- day data, through scripts/shared/day-data.mjs (the one loader for src/data/*.ts) ---------- */
+const { transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS } = await loadDayData();
 
 // Every bylined daily entry, flattened to { date, headline, dek, href, laneLabel, image }.
 // Football keeps /desk/<lane>/<date>/; the new sports use /<urlBase>/<lane>/<date>/. Both URL
 // shapes are the ones build-article-pages.mjs actually emits, so no link here can 404.
 const bylined = [];
 for (const [laneKey, days] of [
-  ["transfer", data.transferDays],
-  ["world-cup", data.worldCupDays],
-  ["leagues", data.leaguesDays],
+  ["transfer", transferDays],
+  ["world-cup", worldCupDays],
+  ["leagues", leaguesDays],
 ]) {
   for (const e of days) bylined.push({ ...e, href: `/desk/${laneKey}/${e.date}/`, laneLabel: LANE_META[laneKey].label });
 }
-const SPORT_DAYS = { nfl: data.nflDays, f1: data.f1Days, tennis: data.tennisDays, golf: data.golfDays };
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
   for (const laneKey of sport.lanes) {

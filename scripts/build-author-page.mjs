@@ -27,8 +27,8 @@ import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, byDateDesc,
-  cardArt, deskNav, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
+  cardArt, deskNav, masthead, footer, documentShell,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_PATH, AUTHOR_URL, AUTHOR_PERSONAL_URL, AUTHOR_SAMEAS,
   LANE_META, SPORTS, QUESTION_LANE_META,
 } from "./shared/page-shell.mjs";
@@ -223,41 +223,21 @@ function render() {
       </section>`
     : "";
 
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([AUTHOR_NAME, "Founder and Editor", "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(BIO_SUMMARY))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${PAGE_URL}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="profile" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(`${AUTHOR_NAME} · The ARCHV`)}" />
-  <meta property="og:description" content="${escAttr(BIO_SUMMARY)}" />
-  <meta property="og:url" content="${PAGE_URL}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(`${AUTHOR_NAME} · The ARCHV`)}" />
-  <meta name="twitter:description" content="${escAttr(BIO_SUMMARY)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+  return `${documentShell({
+  title: clampTitle([AUTHOR_NAME, "Founder and Editor", "The ARCHV"]),
+  metaDescription: clampDescription(BIO_SUMMARY),
+  description: BIO_SUMMARY,
+  socialTitle: `${AUTHOR_NAME} \u00b7 The ARCHV`,
+  robots: "index,follow,max-image-preview:large",
+  canonical: PAGE_URL,
+  ogUrl: PAGE_URL,
+  // The one og:type "profile" on the site. This page IS the author entity: AUTHOR_URL points
+  // here and every article's NewsArticle author.url resolves to it.
+  ogType: "profile",
+  ogImage: `${SITE}/og.jpg`,
+  csp: PAGE_CSP,
+  jsonLd: schema,
+})}
 <body>
   ${masthead()}
   ${deskNav()}

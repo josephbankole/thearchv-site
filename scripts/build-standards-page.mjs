@@ -10,8 +10,8 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, esc, escAttr, masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, ORG_SAMEAS,
+  SITE, esc, escAttr, masthead, footer, documentShell,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
 } from "./shared/page-shell.mjs";
 
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
@@ -92,40 +92,26 @@ const sectionsHtml = SECTIONS.map(
   (s) => `      <h2>${esc(s.h2)}</h2>\n      ${s.paras.map((p) => `<p>${esc(p)}</p>`).join("\n      ")}`,
 ).join("\n");
 
-const html = `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(TITLE)}</title>
-  <meta name="description" content="${escAttr(DESCRIPTION)}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${URL}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="How we verify · The ARCHV" />
-  <meta property="og:description" content="${escAttr(DESCRIPTION)}" />
-  <meta property="og:url" content="${URL}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="How we verify · The ARCHV" />
-  <meta name="twitter:description" content="${escAttr(DESCRIPTION)}" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${schema}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>
+const html = `${documentShell({
+  title: TITLE,
+  // NOT clampDescription'd, and that is how this page has always shipped: the standing
+  // description is written to length by hand rather than trimmed by the guard.
+  metaDescription: DESCRIPTION,
+  description: DESCRIPTION,
+  socialTitle: "How we verify · The ARCHV",
+  robots: "index,follow,max-image-preview:large",
+  canonical: URL,
+  ogUrl: URL,
+  ogType: "website",
+  ogImage: `${SITE}/og.jpg`,
+  // This page carries og:image but no twitter:image, and always has. Twitter falls back to
+  // og:image so nothing is broken by it, but it is an inconsistency with the rest of the
+  // family rather than a decision anyone recorded. Preserved here on purpose; changing it
+  // is a separate call, not a side effect of moving the head onto the shell.
+  twitterImage: false,
+  csp: PAGE_CSP,
+  jsonLd: schema,
+})}
 <body>
   ${masthead()}
   <main class="wrap">

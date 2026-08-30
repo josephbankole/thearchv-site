@@ -25,8 +25,8 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate,
-  masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
+  masthead, footer, documentShell,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
 
@@ -85,39 +85,23 @@ const LEGENDS_FRONT = {
   lede: "The Legends Series: one football great per entry, drawn in the house style, with what they won and where they did it.",
 };
 
-function head({ title, description, url, robots = "index,follow,max-image-preview:large", ld = null }) {
-  return `<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([title, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(description))}" />
-  <meta name="robots" content="${escAttr(robots)}" />
-  ${url ? `<link rel="canonical" href="${url}" />` : ""}
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(title)}" />
-  <meta property="og:description" content="${escAttr(description)}" />
-  ${url ? `<meta property="og:url" content="${url}" />` : ""}
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(title)}" />
-  <meta name="twitter:description" content="${escAttr(description)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}${ld ? `\n  <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>` : ""}
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-</head>`;
+/* The head for the three page types this script writes. `robots` has NO default here, and that
+   is the point: two of the three fronts are indexable and the 404 must not be, and this file is
+   the one most likely to grow another page. It is spelled out at each call site instead. */
+function head({ title, description, url, robots, ld = null }) {
+  return documentShell({
+    title: clampTitle([title, "The ARCHV"]),
+    metaDescription: clampDescription(description),
+    description,
+    socialTitle: title,
+    robots,
+    canonical: url,
+    ogUrl: url,
+    ogType: "website",
+    ogImage: `${SITE}/og.jpg`,
+    csp: PAGE_CSP,
+    jsonLd: ld,
+  });
 }
 
 // A content page's card. `datePublished` and `eyebrow` are optional in the frontmatter, so the
@@ -133,12 +117,11 @@ function contentCard(section, page) {
 
 function renderSection(section, front, pages) {
   const url = `${SITE}/${section}/`;
-  return `<!doctype html>
-<html lang="en-GB">
-${head({
+  return `${head({
   title: front.heading,
   description: front.lede,
   url,
+  robots: "index,follow,max-image-preview:large",
   ld: {
     "@context": "https://schema.org",
     "@graph": [
@@ -183,12 +166,11 @@ ${head({
 function renderLegends() {
   const url = `${SITE}/legends/`;
   const front = LEGENDS_FRONT;
-  return `<!doctype html>
-<html lang="en-GB">
-${head({
+  return `${head({
   title: front.heading,
   description: front.lede,
   url,
+  robots: "index,follow,max-image-preview:large",
   ld: {
     "@context": "https://schema.org",
     "@graph": [
@@ -251,9 +233,7 @@ const NOT_FOUND_LINKS = [
 ];
 
 function renderNotFound() {
-  return `<!doctype html>
-<html lang="en-GB">
-${head({
+  return `${head({
   title: "Page not found",
   description: "That page is not in the archive. The finals, the desk, the long reads and the games are all still here.",
   url: null,

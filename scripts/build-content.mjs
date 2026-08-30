@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, clampTitle, clampDescription, longDate, esc, escAttr } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, clampTitle, clampDescription, longDate, esc, escAttr } from "./shared/page-shell.mjs";
 // The frontmatter parser and the content/ walk moved to shared/content-pages.mjs on 2026-08-09,
 // so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
@@ -223,31 +223,33 @@ function render(p, allPages) {
   // "From the glossary" (UNIT 3): only the five United long reads have an entry in
   // GLOSSARY_LINKS, so this is "" for every finals/explainers page.
   const glossaryNav = glossaryBlock(p.slug);
-  return `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([p.title, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(p.description))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="${url}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(p.title)}" />
-  <meta property="og:description" content="${escAttr(p.description)}" />
-  <meta property="og:url" content="${url}" />
-  <meta property="og:image" content="${SITE}${escAttr(p.ogImage || "/og.jpg")}" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${escAttr(p.title)}" />
-  <meta name="twitter:description" content="${escAttr(p.description)}" />
-  <meta name="twitter:image" content="${SITE}${escAttr(p.ogImage || "/og.jpg")}" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/content.css" />
-  <script type="application/ld+json">${schema(p, url)}</script>
-</head>
+  return `${documentShell({
+  title: clampTitle([p.title, "The ARCHV"]),
+  metaDescription: clampDescription(p.description),
+  description: p.description,
+  socialTitle: p.title,
+  robots: "index,follow,max-image-preview:large",
+  canonical: url,
+  ogUrl: url,
+  ogType: "article",
+  ogImage: `${SITE}${p.ogImage || "/og.jpg"}`,
+  csp: PAGE_CSP,
+  jsonLd: schema(p, url),
+  /* ---------- the content.css shape ----------
+     These pages predate scripts/shared/page-shell.mjs's masthead() and inline brand styles.
+     They build their own masthead markup, link the static /content.css and ship no PostHog
+     snippet, no Google Fonts and no RSS autodiscovery. Every one of those absences is stated
+     here rather than inferred from the stylesheet: turning any of them back on would change
+     what this family loads, and the CSP above allows exactly one inline script accordingly. */
+  stylesheet: "/content.css",
+  rss: false,
+  posthog: false,
+  fonts: false,
+  styles: false,
+  // No og:image dimensions and no twitter:site on this family, as it has always shipped.
+  ogImageSize: false,
+  twitterSite: false,
+})}
 <body>
   <header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>

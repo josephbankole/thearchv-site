@@ -26,7 +26,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, jsLiteral,
-  masthead, footer, documentShell,
+  masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
@@ -420,7 +420,7 @@ function renderPair({ a, b, slug }, hasCard) {
   metaDescription: description,
   description,
   socialTitle: title,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "website",
@@ -583,7 +583,7 @@ function renderIndex(players) {
   metaDescription: clampDescription(INDEX_LEDE),
   description: clampDescription(INDEX_LEDE),
   socialTitle: "Player duels \u00b7 The ARCHV",
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "website",

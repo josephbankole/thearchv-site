@@ -17,7 +17,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META,
-  cardArt, deskNav, masthead, footer, documentShell,
+  cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
@@ -101,7 +101,7 @@ function render(laneKey, lane) {
   metaDescription: clampDescription(lane.intro),
   description: lane.intro,
   socialTitle,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "website",
@@ -182,7 +182,7 @@ function renderSportLane(sport, laneKey) {
   metaDescription: clampDescription(copy.lede),
   description: copy.lede,
   socialTitle,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   // Canonical and og:url both point at the SPORT ROOT, not at this page. See the note above
   // where `canonical` is set: this front and /<sport>/ were near-duplicates, and the canonical
   // is what consolidates them. Deliberately NOT noindexed, and og:url follows the canonical so

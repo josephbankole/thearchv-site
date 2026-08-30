@@ -23,7 +23,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription,
-  masthead, footer, documentShell,
+  masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, scriptHash, extractScriptBody, jsLiteral, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 
@@ -388,7 +388,7 @@ const html = `${documentShell({
   metaDescription: clampDescription(LEDE),
   description: clampDescription(LEDE),
   socialTitle: "The Daily Archive \u00b7 The ARCHV",
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: PAGE_URL,
   ogUrl: PAGE_URL,
   ogType: "website",

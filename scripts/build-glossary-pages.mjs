@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, esc, escAttr, clampTitle, clampDescription, masthead, footer, documentShell,
+  SITE, esc, escAttr, clampTitle, clampDescription, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -106,7 +106,7 @@ function renderEntry(entry) {
   metaDescription: description,
   description,
   socialTitle,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "article",
@@ -180,7 +180,7 @@ function renderHub() {
   metaDescription: HUB_INTRO,
   description: HUB_INTRO,
   socialTitle: "The ARCHV glossary",
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: HUB_URL,
   ogUrl: HUB_URL,
   ogType: "website",

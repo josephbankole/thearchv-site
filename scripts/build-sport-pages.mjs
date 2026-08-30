@@ -12,7 +12,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
-  masthead, deskNav, footer, documentShell,
+  masthead, deskNav, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
@@ -62,7 +62,7 @@ function renderSection(sport) {
   metaDescription: clampDescription(copy.lede),
   description: copy.lede,
   socialTitle,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "website",

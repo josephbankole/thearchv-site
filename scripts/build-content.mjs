@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, clampTitle, clampDescription, longDate, esc, escAttr } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, clampDescription, longDate, esc, escAttr } from "./shared/page-shell.mjs";
 // The frontmatter parser and the content/ walk moved to shared/content-pages.mjs on 2026-08-09,
 // so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
@@ -228,7 +228,7 @@ function render(p, allPages) {
   metaDescription: clampDescription(p.description),
   description: p.description,
   socialTitle: p.title,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "article",

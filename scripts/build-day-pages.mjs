@@ -9,7 +9,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cspMeta, documentShell, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META } from "./shared/page-shell.mjs";
+import { cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
@@ -95,7 +95,7 @@ function render(entry, sectionKey) {
      page the reader is actually on. That is the opposite of the choice on /<sport>/questions/,
      where og:url follows the canonical, which is exactly why documentShell refuses to infer one
      from the other and makes both callers say what they mean. */
-  robots: "noindex,follow",
+  robots: ROBOTS_NOINDEX_FOLLOW,
   canonical: canonicalUrl,
   ogUrl: url,
 

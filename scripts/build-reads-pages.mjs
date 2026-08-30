@@ -23,7 +23,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
-  masthead, footer, documentShell,
+  masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 
@@ -99,7 +99,7 @@ function head({ title, description, url, extraLd }) {
     metaDescription: clampDescription(description),
     description,
     socialTitle: title,
-    robots: "index,follow,max-image-preview:large",
+    robots: ROBOTS_INDEXABLE,
     canonical: url,
     ogUrl: url,
     ogType: "article",

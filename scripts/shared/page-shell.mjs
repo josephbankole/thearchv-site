@@ -72,6 +72,17 @@ export const byDateDesc = (a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 
 // readers and crawlers at the same /feed.xml built by scripts/build-rss.mjs.
 export const RSS_LINK = `<link rel="alternate" type="application/rss+xml" title="The ARCHV" href="/feed.xml" />`;
 
+/* The two robots directives this page graph actually uses, named so that adding a directive
+   (max-image-preview:large was the last one) is one edit rather than a dozen.
+
+   These are CONSTANTS TO PASS, NOT DEFAULTS. documentShell still refuses to build a head
+   without `robots`, and every call site still names which of these it wants. That is the whole
+   safety property: a default is inherited silently by whatever page is added next, whereas a
+   named constant has to be typed by someone who can see the word "indexable" or "noindex" while
+   they type it. Do not turn either of these into a default value in documentShell's signature. */
+export const ROBOTS_INDEXABLE = "index,follow,max-image-preview:large";
+export const ROBOTS_NOINDEX_FOLLOW = "noindex,follow";
+
 export const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 export const escAttr = (s = "") => esc(s).replace(/"/g, "&quot;");
 

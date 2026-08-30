@@ -15,7 +15,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle,
-  cardArt, deskNav, masthead, footer, documentShell,
+  cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
   DISPATCH_URL, DISPATCH_SUBSCRIBE_URL,
@@ -596,7 +596,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
   metaDescription: metaDescription(entry.dek, entry.body),
   description: entry.dek,
   socialTitle: entry.headline,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "article",

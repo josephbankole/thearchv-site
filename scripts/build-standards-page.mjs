@@ -10,7 +10,7 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, esc, escAttr, masthead, footer, documentShell,
+  SITE, esc, escAttr, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
 } from "./shared/page-shell.mjs";
 
@@ -99,7 +99,7 @@ const html = `${documentShell({
   metaDescription: DESCRIPTION,
   description: DESCRIPTION,
   socialTitle: "How we verify · The ARCHV",
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: URL,
   ogUrl: URL,
   ogType: "website",

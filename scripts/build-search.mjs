@@ -33,7 +33,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, LANE_META, byDateDesc,
-  masthead, footer, documentShell,
+  masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, SPORTS,
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
@@ -227,7 +227,7 @@ const page = `${documentShell({
   metaDescription: clampDescription(LEDE),
   description: LEDE,
   socialTitle: TITLE,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: URL_SELF,
   ogUrl: URL_SELF,
   ogType: "website",

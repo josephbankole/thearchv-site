@@ -25,7 +25,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate,
-  masthead, footer, documentShell,
+  masthead, footer, documentShell, ROBOTS_INDEXABLE, ROBOTS_NOINDEX_FOLLOW,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
@@ -121,7 +121,7 @@ function renderSection(section, front, pages) {
   title: front.heading,
   description: front.lede,
   url,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   ld: {
     "@context": "https://schema.org",
     "@graph": [
@@ -170,7 +170,7 @@ function renderLegends() {
   title: front.heading,
   description: front.lede,
   url,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   ld: {
     "@context": "https://schema.org",
     "@graph": [
@@ -237,7 +237,7 @@ function renderNotFound() {
   title: "Page not found",
   description: "That page is not in the archive. The finals, the desk, the long reads and the games are all still here.",
   url: null,
-  robots: "noindex,follow",
+  robots: ROBOTS_NOINDEX_FOLLOW,
 })}
 <body>
   ${masthead()}

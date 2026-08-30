@@ -27,7 +27,7 @@ import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, byDateDesc,
-  cardArt, deskNav, masthead, footer, documentShell,
+  cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_PATH, AUTHOR_URL, AUTHOR_PERSONAL_URL, AUTHOR_SAMEAS,
   LANE_META, SPORTS, QUESTION_LANE_META,
@@ -228,7 +228,7 @@ function render() {
   metaDescription: clampDescription(BIO_SUMMARY),
   description: BIO_SUMMARY,
   socialTitle: `${AUTHOR_NAME} \u00b7 The ARCHV`,
-  robots: "index,follow,max-image-preview:large",
+  robots: ROBOTS_INDEXABLE,
   canonical: PAGE_URL,
   ogUrl: PAGE_URL,
   // The one og:type "profile" on the site. This page IS the author entity: AUTHOR_URL points

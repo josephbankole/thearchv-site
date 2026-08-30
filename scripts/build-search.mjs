@@ -33,8 +33,8 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, LANE_META, byDateDesc,
-  masthead, footer, posthogSnippet, fontLinks, pageStyles,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK, SPORTS,
+  masthead, footer, documentShell,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, SPORTS,
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -175,63 +175,10 @@ const BROWSE = [
   ["/guess/", "Daily archive game"],
 ];
 
-const page = `<!doctype html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${esc(clampTitle([TITLE, "The ARCHV"]))}</title>
-  <meta name="description" content="${escAttr(clampDescription(LEDE))}" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <!-- The canonical is the bare path on purpose. /search/?q=... is a real, shareable URL and
-       GitHub Pages serves this same file for every query string, so without this a crawler
-       following one shared query link would index it as a separate thin page. -->
-  <link rel="canonical" href="${URL_SELF}" />
-  <meta name="theme-color" content="#FFFFFF" />
-  ${PAGE_CSP}
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The ARCHV" />
-  <meta property="og:title" content="${escAttr(TITLE)}" />
-  <meta property="og:description" content="${escAttr(LEDE)}" />
-  <meta property="og:url" content="${URL_SELF}" />
-  <meta property="og:image" content="${SITE}/og.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@thearchvfc" />
-  <meta name="twitter:title" content="${escAttr(TITLE)}" />
-  <meta name="twitter:description" content="${escAttr(LEDE)}" />
-  <meta name="twitter:image" content="${SITE}/og.jpg" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  ${RSS_LINK}
-  <script type="application/ld+json">${JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        name: TITLE,
-        description: LEDE,
-        url: URL_SELF,
-        inLanguage: "en-GB",
-        isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` },
-      },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-          { "@type": "ListItem", position: 2, name: TITLE, item: URL_SELF },
-        ],
-      },
-    ],
-  }).replace(/</g, "\\u003c")}</script>
-
-  <!-- PostHog: pageview only on this static surface. Same project as the website. -->
-  ${posthogSnippet()}
-
-  ${fontLinks()}
-
-  ${pageStyles()}
-  <style>
+/* The per-page <style> block. Lives beside the page rather than in pageStyles() because it is
+   the only surface that has a search field, a result list or a browse strip. documentShell puts
+   it straight after pageStyles() through `extraHead`, which is where it has always sat. */
+const SEARCH_STYLES = `<style>
     .search { padding: 1.5rem 0 1rem; }
     /* The field has a placeholder and a visible submit button, so its label is for screen
        readers rather than for the layout. .skip on the homepage is a skip LINK and reappears on
@@ -270,8 +217,44 @@ const page = `<!doctype html>
       .search__form { flex-wrap: wrap; }
       .search__go { width: 100%; }
     }
-  </style>
-</head>
+  </style>`;
+
+/* The canonical is the bare path on purpose. /search/?q=... is a real, shareable URL and
+   GitHub Pages serves this same file for every query string, so without this a crawler
+   following one shared query link would index it as a separate thin page. */
+const page = `${documentShell({
+  title: clampTitle([TITLE, "The ARCHV"]),
+  metaDescription: clampDescription(LEDE),
+  description: LEDE,
+  socialTitle: TITLE,
+  robots: "index,follow,max-image-preview:large",
+  canonical: URL_SELF,
+  ogUrl: URL_SELF,
+  ogType: "website",
+  ogImage: `${SITE}/og.jpg`,
+  csp: PAGE_CSP,
+  jsonLd: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        name: TITLE,
+        description: LEDE,
+        url: URL_SELF,
+        inLanguage: "en-GB",
+        isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: TITLE, item: URL_SELF },
+        ],
+      },
+    ],
+  },
+  extraHead: [SEARCH_STYLES],
+})}
 <body>
   ${masthead()}
   <main class="wrap">

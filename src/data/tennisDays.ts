@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-30",
+    day: "Sunday",
+    headline: "When does Venus Williams play at the 2026 US Open?",
+    dek: "Tonight, second match of the night session on Arthur Ashe Stadium, after Novak Djokovic opens against Mariano Navone from 7pm ET. Venus Williams, 46 and on a wild card, faces Sofia Kenin.",
+    body: "Venus Williams plays the second match of tonight's night session on Arthur Ashe Stadium, which begins at 7pm ET with Novak Djokovic against Mariano Navone. Her opponent is Sofia Kenin, the 2020 Australian Open champion, and the pairing of two wild cards was drawn by lot on Thursday.\n\nWilliams is 46. She arrives on a 14-match WTA losing streak, her last tour-level win now more than a year behind her, and she is the oldest singles player in the main draw by some distance. Kenin took a wild card of her own after her ranking slipped, six years on from her major title. One of them leaves the first round with the streak question answered.\n\nThe day session, from 11am ET on the same court, has third seed Jessica Pegula against Elena-Gabriela Ruse followed by seventh seed Daniil Medvedev against Hugo Gaston.\n\nThe seedings behind all of this still carry Jannik Sinner's absence. The world number one withdrew on 21 August with a right knee problem, so Alexander Zverev is the top seed, Carlos Alcaraz second, Felix Auger-Aliassime third and Djokovic fourth, each man seeded one place above his ranking.\n\nThe last time Venus Williams won a US Open singles title was 2001. She has been entering this tournament since 1997, which is longer than Kenin has been alive.\n\nSources: Olympics.com order of play, 28 August 2026 (Ashe day and night sessions, match order, session times); Sky Sports order of play, 28 August 2026 (the same schedule, second source); AP, 27 August 2026 (Williams aged 46 on a wild card, the 14-match losing streak, the Kenin draw); Tennishead, 27 August 2026 (Kenin the 2020 Australian Open champion, both on wild cards); ATP Tour and SI.com, 21 to 24 August 2026 (Sinner withdrawal and the reshuffled seedings).",
+    status: "verified",
+  },
+  {
     date: "2026-08-29",
     day: "Saturday",
     headline: "Who plays on day one of the 2026 US Open?",

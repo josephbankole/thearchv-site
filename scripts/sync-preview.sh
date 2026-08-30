@@ -18,7 +18,9 @@ cd "$(dirname "$0")/.."   # repo root
 git() { command git -c maintenance.auto=false "$@"; }
 
 # main-owned files: the engine writes these directly to main. On any conflict, main wins.
-DATA_FILES="src/data/transferDays.ts src/data/worldCupDays.ts src/data/leaguesDays.ts src/data/longReads.ts"
+DATA_FILES="src/data/transferDays.ts src/data/worldCupDays.ts src/data/leaguesDays.ts \
+src/data/nflDays.ts src/data/f1Days.ts src/data/tennisDays.ts src/data/golfDays.ts \
+src/data/longReads.ts"
 
 # Wait for the index lock, never delete it. Deleting another process's lock is a race, not a cure
 # for one: two writers on .git/index corrupt it, which is itself a source of the stash and merge

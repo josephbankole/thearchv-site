@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-08-31",
+    day: "Monday",
+    headline: "How many quarterbacks did the Minnesota Vikings keep at the 2026 cutdown?",
+    dek: "Four. Kyler Murray, J.J. McCarthy, Carson Wentz and Max Brosmer all made the initial 53-man roster set on Sunday 30 August, the first time in at least a decade Minnesota has carried four. McCarthy was widely expected to go.",
+    body: "The Minnesota Vikings kept four quarterbacks on the initial 53-man roster they set on Sunday 30 August: Kyler Murray, J.J. McCarthy, Carson Wentz and Max Brosmer. The club's own roster release calls it the first time in at least a decade Minnesota has carried four into the season.\n\nThe name that made it a story is McCarthy's. He was the 2024 first-round pick, he went into training camp with a chance to compete with Murray for the starting job, and Kevin O'Connell named Murray the starter two weeks in. Reports before the deadline had Minnesota open to moving McCarthy, with the Los Angeles Chargers and Jim Harbaugh, his college coach, named as the interested party. He is still a Viking.\n\nOnly two other clubs kept four quarterbacks on their initial rosters, the Philadelphia Eagles and the Pittsburgh Steelers.\n\nMinnesota's own cuts included punter Johnny Hekker and defensive linemen Jonathan Harris and Isaiahh Loudermilk, all by terminated contract.\n\nThe rest of the calendar: rosters had to be at 53 by 6pm ET on Sunday 30 August, and waiver claims on every player with four or fewer accrued seasons were due at 1pm ET on Monday 31 August. Anyone unclaimed after that is free to sign to a practice squad.\n\nA note on what this article does not say. Two separate aggregator summaries read this weekend placed McCarthy among the released. The league's own roster page and the club's own release both have him on the 53, so the aggregators are wrong and no version of that claim appears above.\n\nSources: Vikings.com official initial 53-man roster release, 30 August 2026 (the four quarterbacks, the first-time-in-a-decade note, the Hekker, Harris and Loudermilk terminations, the date the roster was set); NFL.com, Nick Shook, Around The NFL (McCarthy on the initial 53, Murray named starter two weeks into camp, the Chargers and Harbaugh interest, the Eagles and Steelers also carrying four, the 6pm ET Sunday deadline). Official-body single-source rule D-2026-08-28b applies and both sources here are league or club channels, named on the claim. Waiver timing per the NFL's published cutdown calendar as recorded in this desk's 29 August entry.",
+    status: "verified",
+  },
+  {
     date: "2026-08-30",
     day: "Sunday",
     headline: "Who have NFL teams already cut before the 2026 53-man roster deadline?",

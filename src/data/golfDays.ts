@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-08-31",
+    day: "Monday",
+    headline: "Who won the 2026 Tour Championship?",
+    dek: "Scottie Scheffler won the 2026 Tour Championship at East Lake Golf Club on Sunday 30 August, 16 under and three clear, for a second FedEx Cup and the 10 million dollar bonus. He also passed Tiger Woods as the PGA Tour's career money leader.",
+    body: "Scottie Scheffler won the 2026 Tour Championship at East Lake Golf Club in Atlanta on Sunday 30 August, finishing 16 under par and three shots clear of Viktor Hovland. He took the FedEx Cup and its 10 million dollar winner's share with it.\n\nHe started the final round three behind. Hovland had led after 54 holes and had led the field in putting through three rounds, then made nothing on Sunday. Scheffler shot 66. Ryan Gerard finished at 12 under. The PGA Tour has Hovland tied for second at 13 under while CBS Sports has him second alone, so this desk pins the PGA Tour's own leaderboard and states the gap the two agree on: three shots.\n\nThe number worth keeping is not the winning score. Scheffler's career PGA Tour earnings now stand at 130,390,661 dollars, which moves him past Tiger Woods as the leading money winner in the tour's history. He is 30. Woods went into the Playoffs finale a little over 600,000 dollars ahead.\n\nThis is Scheffler's second FedEx Cup in three years, and it puts him alongside Tiger Woods and Rory McIlroy as the only golfers to win the thing more than once since it began in 2007.\n\nScheffler, quoted by the PGA Tour afterwards on winning the tournament outright rather than on adjusted scores: \"When you're coming down the stretch of a tournament and you're tied or one shot back, it's different than when you're adding it up at the end and there's starting strokes.\"\n\nHovland, on the man who beat him: \"He's just good, and he played good every day.\"\n\nSources: PGA Tour official round-four wrap-up, 31 August 2026 (the 16 under total, the three-shot margin, the closing 66, Hovland tied second at 13 under, the 130,390,661 dollar career earnings figure and the pass on Tiger Woods, both quotes); CBS Sports round-four live coverage, 30 August 2026 (the final leaderboard, the 10 million dollar winner's share, Hovland's putting through 54 holes, Gerard at 12 under, the second FedEx Cup in three years); ESPN, 30 August 2026, and Sky Sports, 30 August 2026 (the same result and margin).",
+    status: "verified",
+  },
+  {
     date: "2026-08-30",
     day: "Sunday",
     headline: "Who leads the 2026 Tour Championship going into the final round?",

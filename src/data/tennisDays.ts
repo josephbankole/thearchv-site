@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-08-31",
+    day: "Monday",
+    headline: "How did Venus Williams's 2026 US Open end?",
+    dek: "Sofia Kenin beat Venus Williams 6-2, 7-6(6) in the first round, finishing at 2:01am on Monday 31 August, the latest first-round finish in the tournament's history. Williams is 46 and it was her 26th US Open.",
+    body: "Sofia Kenin beat Venus Williams 6-2, 7-6(6) in the first round of the 2026 US Open. The match started after midnight on Arthur Ashe Stadium and finished at 2:01am on Monday 31 August, the latest a first-round match has ever finished at the tournament. The delay came from the five-set men's match that preceded it, Novak Djokovic's.\n\nThe second set is the part to keep. Kenin led 4-2. Williams took it to a tiebreak, went 6-2 up in it, and then lost six consecutive points. Across the set she held seven set points in total, three in a row on Kenin's serve and four in a row in the tiebreak, and converted none of them.\n\nWilliams is 46. This was her record-extending 26th US Open singles appearance and her 96th Grand Slam appearance, the most by anyone in the Open Era. It is also her second straight first-round exit in New York.\n\nKenin, the 2020 Australian Open champion, plays the No. 3 seed Jessica Pegula in the second round. Pegula beat Elena-Gabriela Ruse 6-3, 6-2.\n\nSources: USA TODAY Sports, 31 August 2026, via Yahoo Sports (the 6-2, 7-6(6) score, the 2:01am finish and the latest-first-round-finish record, the seven set points and how they broke down, the 26th US Open and 96th Grand Slam appearance, the Pegula result and second-round tie); TAG24, 31 August 2026 (the same score, Williams at 46, the 4-2 second-set deficit, the 6-2 tiebreak lead and the six straight points).",
+    status: "verified",
+  },
+  {
     date: "2026-08-30",
     day: "Sunday",
     headline: "When does Venus Williams play at the 2026 US Open?",

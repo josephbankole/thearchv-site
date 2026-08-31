@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-08-31",
+    day: "Monday",
+    headline: "Which team leads the 2026 Formula 1 constructors' championship going into Monza?",
+    dek: "Mercedes, on 425 points, 87 clear of Ferrari with the Italian Grand Prix next on 4 to 6 September. McLaren are third on 263 and Red Bull Racing fourth on 186.",
+    body: "Mercedes lead the 2026 Formula 1 constructors' championship on 425 points going into the Italian Grand Prix at Monza. Ferrari are second on 338, which is a gap of 87. McLaren are third on 263 and Red Bull Racing fourth on 186.\n\nBelow the four, the order reads Racing Bulls 66, Alpine 63, Haas 21, Audi 16, Williams 11, Aston Martin 3 and Cadillac 0.\n\nThe shape of it is a two-team title fight and then a drop. The distance from Mercedes to Ferrari is 87 points. The distance from Ferrari to McLaren is 75. The distance from Red Bull Racing in fourth to Racing Bulls in fifth is 120, which is more than the gap across the whole top three.\n\nThe Italian Grand Prix runs from Friday 4 to Sunday 6 September, with the race at 15:00 local time over 53 laps of the 5.793 kilometre circuit, as recorded in this desk's 28 August entry from the official session timetable.\n\nSources: Formula1.com official 2026 constructors' standings, read live on 31 August 2026 (every team and every points total above). Official-body single-source rule D-2026-08-28b applies and the source is named on the claim. Formula1.com official session timetable for the Italian Grand Prix (the 4 to 6 September dates, the 15:00 local start, 53 laps and the circuit length), as recorded in this desk's 28 August entry.",
+    status: "verified",
+  },
+  {
     date: "2026-08-30",
     day: "Sunday",
     headline: "How long is Lando Norris signed with McLaren for?",

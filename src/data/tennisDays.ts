@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-01",
+    day: "US Open, day two",
+    headline: "Has Novak Djokovic ever lost in the first round of the US Open?",
+    dek: "Not in twenty previous main draws. Mariano Navone of Argentina, the world number 49, ended that on Sunday night at Arthur Ashe Stadium.",
+    body: "Mariano Navone beat Novak Djokovic 7-6(5), 5-7, 4-6, 6-2, 6-1 in 4 hours 36 minutes, per CBS Sports and the United States Tennis Association's own report at usopen.org. It is the first opening-round defeat of Djokovic's US Open career across 20 previous main draws, and his first at any Grand Slam since the 2006 Australian Open, ending a run of 78 consecutive first-round wins at majors. Djokovic committed 70 unforced errors, 29 of them across the last two sets, and was visibly unwell throughout. He said afterwards that \"I didn't enjoy myself. I think it was obvious that it was an awful feeling on the court for me.\" He has been ill for months, he said, and \"it's something that I've been carrying, unfortunately, pretty much every match this year: vomiting, throwing up, a serious issue there.\" Navone is 25 and ranked 49th in the world. His own verdict, per Al Jazeera: \"Five sets, against the GOAT (greatest of all time), it's not something you do every day.\" The match was played on the night of Sunday 30 August in New York, which is why some outlets date it 31 August.",
+    status: "verified",
+  },
+  {
     date: "2026-08-31",
     day: "Monday",
     headline: "How did Venus Williams's 2026 US Open end?",

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-01",
+    day: "Waivers cleared",
+    headline: "When does the 2026 NFL season start, and why is the opener on a Wednesday?",
+    dek: "Wednesday 9 September, New England Patriots at Seattle Seahawks, and the unusual night exists to make room for a game in Melbourne.",
+    body: "The 2026 NFL regular season opens on Wednesday 9 September, New England Patriots at Seattle Seahawks at Lumen Field, 8:20pm ET, per NFL.com's official Week 1 schedule. It is a rematch of Super Bowl LX. ESPN's schedule-release report of 14 May 2026 explains the slot: \"The rare Wednesday night opener is to accommodate the first regular-season game in Melbourne, Australia.\" That game is San Francisco 49ers against Los Angeles Rams on Thursday 10 September, one of a record nine international fixtures in 2026. The rosters that will play it were settled this week. The cutdown to 53 players fell at 6pm ET on Sunday 30 August and the waiver period closed at 1pm ET on Monday 31 August, with 29 players claimed by 14 clubs, per CBS Sports. The Miami Dolphins took seven, more than anyone. Quarterback Will Levis, waived by the Tennessee Titans per NFL.com's own cuts tracker, went unclaimed and is now an unrestricted free agent.",
+    status: "verified",
+  },
+  {
     date: "2026-08-31",
     day: "Monday",
     headline: "How many quarterbacks did the Minnesota Vikings keep at the 2026 cutdown?",

@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-01",
+    day: "Monza race week",
+    headline: "Why is Kimi Antonelli starting at the back of the grid at Monza?",
+    dek: "Mercedes are fitting a complete new power unit, which exceeds the season's allocation, and they picked the championship leader's home race to take the penalty.",
+    body: "Formula1.com's Italian Grand Prix race-week preview of 31 August 2026 confirms Kimi Antonelli takes a full power-unit change at Monza and starts from the back. A complete new unit exceeds the permitted allocation, and the penalty has to be served somewhere: Monza's long straights reward fresh power-unit performance and the circuit offers more overtaking than most, so the cost of a rear start is lower there than later in the season. Toto Wolff, the Mercedes team principal, on the choice, per Formula1.com on 26 August 2026: \"With Kimi, we're taking the full thing. Our calculations say that that's the best track to take it.\" Asked about doing it at the driver's home race, Wolff said: \"Obviously, algorithms don't take their nationality into consideration. We're here to fight for a championship and not get the most PR.\" Antonelli leads the drivers' championship on 242 points, 59 clear of Lewis Hamilton on 183, who is level with George Russell. Lando Norris is fourth on 159. Hamilton is also set for an Italian Grand Prix grid penalty after a power-unit change of his own, per Formula1.com. The race runs 4 to 6 September.",
+    status: "verified",
+  },
+  {
     date: "2026-08-31",
     day: "Monday",
     headline: "Which team leads the 2026 Formula 1 constructors' championship going into Monza?",

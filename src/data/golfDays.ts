@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-01",
+    day: "After East Lake",
+    headline: "How much did Scottie Scheffler win at the 2026 Tour Championship?",
+    dek: "Ten million dollars, the winner's share of a forty million dollar pool, and the cheque that moved him past Tiger Woods on the PGA Tour career money list.",
+    body: "Scottie Scheffler closed with a 4-under 66 at East Lake Golf Club on Sunday 30 August 2026 to finish 16 under and win the FedExCup by three shots, per Sky Sports and NBC Sports Golf. Viktor Hovland led after 54 holes, shot 72 and finished 13 under alongside Ryan Gerard. Rory McIlroy shot 69 for 11 under and a share of fourth. The winner's share was 10m dollars from a 40m dollar pool, per CBS Sports, and it carried Scheffler's PGA Tour career earnings past 130m dollars and past Tiger Woods on the all-time list. It is his second FedExCup, which puts him alongside Woods and McIlroy as the only players with more than one. Sky Sports records 22 PGA Tour wins across the last five seasons, double any other player over that span. Hovland, on what makes him hard to catch: \"He knows that he's got an edge on most guys out here, so he doesn't have to do anything crazy. He can play smart and just kind of pick his spots, stay in it constantly.\"",
+    status: "verified",
+  },
+  {
     date: "2026-08-31",
     day: "Monday",
     headline: "Who won the 2026 Tour Championship?",

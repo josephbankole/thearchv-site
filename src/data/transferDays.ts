@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-09-01",
+    day: "Deadline day",
+    headline: "Serie A closes four hours before the Premier League, and Joshua Zirkzee needs the Italian clock",
+    dek: "Juventus have an offer in for the Manchester United striker, but it is gated on Jonathan David leaving first, and the buying window shuts at 19:00 BST.",
+    body: "The Premier League summer window closes at 23:00 BST on Tuesday 1 September, per the Premier League's own deadline-day page of 30 August 2026, which also sets out the two-hour grace period for a club that files a deal sheet before the deadline. Serie A closes at 19:00 BST, per ESPN. Manchester United can still be selling at 22:00 tonight. Juventus will have stopped buying three hours earlier. REPORTED, per Gianluca Di Marzio of Sky Sport Italia on 31 August 2026: Juventus have made an official offer of roughly a 2.5m euro loan fee with a 30m euro buy option, against a Manchester United valuation of 35m euros for the combined package. The move is conditional on Juventus first moving Jonathan David to Atletico Madrid. REPORTED, per Fabrizio Romano on 31 August 2026: Fiorentina had offered a 5m euro loan fee and the same 30m euro buy option, which adds up to the 35m euros Manchester United are asking, and Zirkzee turned it down. Simon Stone of the BBC then reported that move dead, with Fiorentina going to Beto instead. Manchester United signed Zirkzee from Bologna in July 2024, paying above his 40m euro release clause to spread the payments across three years, per ESPN and Sky Sports, on a contract to 2029 with an option for a further twelve months. One outgoing has been confirmed and announced by the club: Toby Collyer to West Bromwich Albion permanently, an initial 3m pounds rising to 7.6m with a 40 per cent sell-on clause.",
+    status: "verified",
+  },
+  {
     date: "2026-08-31",
     day: "Monday",
     headline: "Fiorentina offered 30 million euros for Joshua Zirkzee and he said no",

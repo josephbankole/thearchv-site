@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-02",
+    day: "Wednesday",
+    headline: "Who did Geoff Ogilvy pick for the 2026 International Presidents Cup team?",
+    dek: "Corey Conners, Nico Echavarria, Sungjae Im, Ryo Hisatsune, Nick Taylor and Christiaan Bezuidenhout, announced on 1 September alongside Brandt Snedeker's United States picks.",
+    body: "International captain Geoff Ogilvy used his six captain's picks on Corey Conners, Nico Echavarria, Sungjae Im, Ryo Hisatsune, Nick Taylor and Christiaan Bezuidenhout, announced on Tuesday 1 September 2026 and reported by CBS Sports' Patrick McDonald the same day.\n\nThey join the six automatic qualifiers: Si Woo Kim, Ryan Fox, Hideki Matsuyama, Min Woo Lee, Tom Kim and Adam Scott.\n\nOn the other side, Brandt Snedeker's United States picks are Chris Gotterup, Xander Schauffele, Justin Thomas, Patrick Cantlay, Jacob Bridgeman and Jackson Koivun, joining automatic qualifiers Scottie Scheffler, Cameron Young, Wyndham Clark, Sam Burns, Russell Henley and Collin Morikawa. The PGA Tour's own announcement, written by Paul Hodowanic on 1 September, carries the United States twelve, and Sports Illustrated's Andy Nesbitt and Field Level Media carry both rosters.\n\nThe matches are at Medinah Country Club in Medinah, Illinois, from 24 to 27 September 2026. The venue is regularly written as Chicago in shorthand; the club is in Medinah, outside the city.\n\nOne caution for anyone checking this against an encyclopaedia entry rather than the announcement. The Wikipedia page for the 2026 Presidents Cup was still listing Ben Griffin and J.J. Spaun as United States picks and omitting Cantlay and Koivun when this desk read it on 2 September. The rosters above come from the PGA Tour's announcement and the outlets that covered it.\n\nSources: CBS Sports, Patrick McDonald, 1 September 2026 (both sets of captain's picks, both sets of automatic qualifiers, the venue); PGA Tour, Paul Hodowanic, 1 September 2026 (the United States team announcement); Sports Illustrated, Andy Nesbitt, 1 September 2026, and Field Level Media, 1 September 2026 (rosters and the 24 to 27 September dates).",
+    status: "verified",
+  },
+  {
     date: "2026-09-01",
     day: "After East Lake",
     headline: "How much did Scottie Scheffler win at the 2026 Tour Championship?",

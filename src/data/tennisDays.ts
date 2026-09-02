@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-02",
+    day: "Wednesday",
+    headline: "Did Gael Monfils win on his 40th birthday at the 2026 US Open?",
+    dek: "He did, beating Adolfo Daniel Vallejo in four sets on 1 September to become the oldest man to win a US Open main-draw match since Jimmy Connors in 1992. It is his last Grand Slam.",
+    body: "Yes. Gael Monfils beat Paraguay's Adolfo Daniel Vallejo 2-6, 6-1, 6-2, 6-0 in the first round at Flushing Meadows on Tuesday 1 September 2026, his 40th birthday. The scoreline is carried identically by the Associated Press, in Brian Mahoney's report, by Reuters, by ESPN News Services and by Ubitennis.\n\nHe lost the opening set and won the last one to love.\n\nThe record is a US Open one and should not be widened. The Associated Press has Monfils as the oldest man to win a main-draw singles match at the tournament since Jimmy Connors, who beat Jaime Oncins on 2 September 1992, the day Connors himself turned 40. ESPN and Ubitennis carry the same line. It is not an all-Slam record.\n\nThis is his last Grand Slam rather than his last tournament. Monfils announced on 1 October 2025 that 2026 would be his final season as a professional, reported that day by Sky Sports and ESPN, and he plays on past New York. He entered this US Open on a wild card.\n\nOn the court afterwards he said, per ESPN News Services and the Associated Press: \"That was definitely very special. To play the day of my 40th birthday is special. You guys made it, like, incredible.\"\n\nHe plays Learner Tien next, the 20-year-old American seeded 14th, who beat Nuno Borges 6-4, 6-1, 6-2 in the first round and won their only previous meeting in Montreal in August 2026. That match is scheduled for 3 September.\n\nOne figure that has circulated has been left out here. Eurosport France published the scoreline as 6-2, 6-1, 6-2, 6-0, which cannot be a four-set win, and a report putting Tien as unseeded conflicts with the Associated Press, ESPN and the Sky Sports draw. Both were discarded rather than reconciled.\n\nSources: Associated Press, Brian Mahoney, 1 September 2026 (scoreline, birthday, the Connors record, Tien's seeding); Reuters, 2 September 2026 (scoreline, the record); ESPN News Services, 1 September 2026 (scoreline, the record, the quotation, next opponent); Ubitennis, Adam Addicott, 2 September 2026 (scoreline, the record, the birthday); Sky Sports, 1 October 2025, and ESPN, 1 October 2025 (the retirement announcement); Sky Sports US Open draw page (Tien's seeding).",
+    status: "verified",
+  },
+  {
     date: "2026-09-01",
     day: "US Open, day two",
     headline: "Has Novak Djokovic ever lost in the first round of the US Open?",

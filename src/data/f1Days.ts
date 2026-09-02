@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-02",
+    day: "Wednesday",
+    headline: "Which drivers are sitting out first practice at the 2026 Italian Grand Prix?",
+    dek: "Sergio Perez, Pierre Gasly and a Williams driver step aside on Friday 4 September for Colton Herta, Paul Aron and Luke Browning under the rookie-session rule.",
+    body: "Three race drivers give up first practice at Monza on Friday 4 September 2026.\n\nSergio Perez sits out for Colton Herta, who takes over the Cadillac. PlanetF1's Oliver Harden reported the swap on 2 September, and it is Herta's third first-practice appearance of the season for the team after Barcelona and Budapest. Herta, quoted in that report: \"This is an excellent opportunity to experience different aspects of the MAC-26. Having driven on the high-downforce tracks in Barcelona and Budapest, the challenge will be very different in Monza.\"\n\nPierre Gasly sits out for Paul Aron. Motorsport Week's Jack Oliver Smith, writing on 1 September, names Alpine's Estonian academy prospect and puts it as Aron's fourth first-practice outing of the season and his second for Alpine. Smith's wording: \"With the continuing trend of teams trying out their reservists during FP1s, Alpine will sideline Gasly on Friday afternoon for its Estonian academy prospect, Paul Aron.\"\n\nWilliams also runs a substitute. Motorsport Week has Luke Browning taking a session in between his Super Formula commitments with Kondo Racing.\n\nMotorsport Week puts three teams running reserve drivers on the same Friday down to what it calls the continuing trend of teams trying out their reservists in first practice.\n\nThe Italian Grand Prix runs from 4 to 6 September 2026. First practice is on Friday from 12:30 local, second practice at 16:00, third practice on Saturday at 12:30, qualifying at 16:00, and the race on Sunday at 15:00 over 53 laps. There is no sprint. Those session times come from Formula 1's own timetable for the weekend.\n\nSources: PlanetF1, Oliver Harden, 2 September 2026 (Sergio Perez out, Colton Herta in the Cadillac, the Herta quotation, Pierre Gasly out); Motorsport Week, Jack Oliver Smith, 1 September 2026 (Paul Aron named as the Alpine driver, his fourth session of the season, Luke Browning at Williams, the quoted line); Speedcafe, 1 September 2026 (three rookies set for Monza first practice); Formula 1 official 2026 Italian Grand Prix timetable (dates, session times, race distance).",
+    status: "verified",
+  },
+  {
     date: "2026-09-01",
     day: "Monza race week",
     headline: "Why is Kimi Antonelli starting at the back of the grid at Monza?",

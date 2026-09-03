@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-03",
+    day: "Thursday",
+    headline: "Why is James Pearce Jr. suspended for the start of the 2026 NFL season?",
+    dek: "The Atlanta Falcons edge rusher was suspended eight games for violating the NFL's personal conduct policy. He did not appeal, and he is eligible to return in Week 9 against the Cincinnati Bengals in Madrid.",
+    body: "James Pearce Jr., the Atlanta Falcons edge rusher, is suspended for the first eight games of the 2026 NFL season for violating the league's personal conduct policy.\n\nESPN's Marc Raimondi reported the suspension on 14 August 2026, with the ban taking effect on 30 August and Pearce eligible for reinstatement on 2 November. NFL.com's Grant Gordon records the same eight-game length and puts his return in Week 9, against the Cincinnati Bengals in Madrid. Pearce did not appeal, so the suspension is final.\n\nThe discipline follows an arrest in February 2026 after a domestic incident. Pearce was charged with three felony counts, aggravated battery with a deadly weapon, fleeing and eluding police, and resisting an officer with violence, plus a misdemeanour count. He entered a pretrial intervention programme, with the charges to be dropped if he completes its conditions. ESPN and NFL.com give different months and durations for that programme, so neither figure is stated here.\n\nPearce was the 26th pick of the 2025 draft. ESPN records 10.5 sacks in his rookie season, a Falcons rookie record, and a third-place finish in the Associated Press Defensive Rookie of the Year voting.\n\nNFL spokesman Brian McCarthy, quoted by ESPN, said Pearce \"will be eligible to participate in all preseason activities, including games\" before the suspension began.\n\nSources: ESPN, Marc Raimondi, 14 August 2026 (eight games, effective 30 August, reinstatement 2 November, no appeal, age 22, 26th pick in 2025, 10.5 rookie sacks and the franchise rookie record, third in Defensive Rookie of the Year voting, the charges, and the McCarthy quotation); NFL.com, Grant Gordon (eight games from the season opener, Week 9 return against the Cincinnati Bengals in Madrid, the personal conduct policy, the February arrest and the pretrial intervention programme). Official-body corroboration under D-2026-08-28b, with both outlets named on the claim.",
+    status: "verified",
+  },
+  {
     date: "2026-09-02",
     day: "Wednesday",
     headline: "Will Keenan Allen play in the Indianapolis Colts' season opener after his arrest?",

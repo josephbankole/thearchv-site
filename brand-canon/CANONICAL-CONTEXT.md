@@ -293,7 +293,7 @@ section marker now.*
   |---|---|
   | Instagram @thearchvfc (football) | 6a1e155cc687a22dd44dffda |
   | Instagram @thearchv.ca (multi-sport) | 6a65b5a24b2d03035f42087b |
-  | Instagram folabankole (founder personal; `fola-personal-daily` ONLY, notification mode ONLY, D-2026-08-23a) | 6a7ed151b2d9d57743764a17 |
+  | Instagram folabankole (founder personal; `fola-personal-daily` ONLY, notification mode ONLY, D-2026-08-23a, IG half unchanged by D-2026-09-02a) | 6a7ed151b2d9d57743764a17 |
   | Threads @thearchvfc | 6a5d708de2638b94d79bc0b4 |
   | TikTok @thearchvfc (REMOVED from Buffer 2026-08-14, D-2026-08-14c; id historical, TikTok ships via Studio or the Drive handoff) | 6a65b5844b2d03035f420822 |
   | X @thearchvfc (founder-manual only, D-2026-08-24d; no task posts) | 6a1e151fc687a22dd44dfef7 |
@@ -304,12 +304,24 @@ section marker now.*
   banked Drive goal-archive volume as a Short, gated on `fifa.archv/goal-archive-queue.md` reading
   STATUS CONFIRMED, which is the founder confirming both the queue order and the rights. A closed
   gate is a HOLD reported by name, never a silent skip.
-- **THE PERSONAL LANE IS MANUAL ALWAYS (founder, 2026-08-23, recorded as D-2026-08-23a; supersedes
-  the personal half of D-2026-08-18/19).** Nothing on a folabankole surface auto-publishes, on any
-  desk, ever. `fola-personal-daily` still prepares both personal units in full and queues them; the
-  founder presses send. Concretely: folabankole Instagram goes to Buffer as
-  `schedulingType: notification`, never automatic, and folabankole Threads is left in Content360 as
-  a DRAFT with no scheduled time. Buffer does NOT post the stored first comment on the notification
+- **AMENDED 2026-09-02 (founder, in session, D-2026-09-02a): THE PERSONAL LANE IS SPLIT. IG MANUAL,
+  THREADS SCHEDULED.** This amends D-2026-08-23a (2026-08-23), which had made the whole personal
+  lane manual always: the IG half of that ruling STANDS, the Threads half is REVERSED. folabankole
+  INSTAGRAM never auto-publishes, on any desk, ever: `fola-personal-daily` goes to Buffer as
+  `schedulingType: notification`, never automatic, and the founder presses send. folabankole THREADS
+  is now SCHEDULED and auto-publishing at 13:00 ET the same day. The old rule forced an untimed
+  Content360 DRAFT, because Content360 has no notification mode, and the founder was not sending
+  them: by 2026-09-02 eleven personal drafts had accumulated covering every pillar, with a duplicate
+  follow-the-sun pair and a duplicate side-hustles pair. He asked why nothing was going out and
+  ruled "i want them to be scheduled"; nine were laddered one per day at 13:00 ET from 2 to 10
+  September, no two adjacent days on one pillar. UNCLEARED RISK: the only folabankole thread ever
+  scheduled through Content360 FAILED on 2026-08-22 13:09 with Threads `OAuthException` code 24,
+  subcode 4279009, media container not found, and no folabankole Threads post has been confirmed
+  published through Content360 as of this amendment. A scheduled thread landing in Failed goes in
+  the report's first line and pauses further scheduling; a partial publish, post 1 live with replies
+  failed, needs the orphan deleted by hand. Content360's SCHEDULE button also silently no-ops
+  sometimes, leaving the time chip set while the header still reads Draft, so always re-verify the
+  row on the live Scheduled list rather than trusting the click. Buffer does NOT post the stored first comment on the notification
   path, so the first comment is the founder's to post by hand and every run report says so. The
   D-2026-08-14c folabankole guard is lifted for `fola-personal-daily` ONLY, and only far enough to
   queue a notification unit; every other desk still never queues to the personal account. Voice
@@ -1232,11 +1244,14 @@ edit per the same-run rule.*
   the queue order and the rights. A closed gate is a HOLD reported by name. The "untouched" mention
   of the weekly lane inside D-2026-08-13b now carries an annotation pointing here.
 - **RECORDED, decision date 2026-08-23 (founder, D-2026-08-23a): THE PERSONAL LANE IS MANUAL
-  ALWAYS.** Supersedes the personal half of D-2026-08-18/19. Nothing on a folabankole surface
-  auto-publishes, on any desk, ever. `fola-personal-daily` still prepares both personal units in full
-  and queues them; the founder presses send. Concretely: folabankole Instagram goes to Buffer as
-  `schedulingType: notification`, never automatic, and folabankole Threads is left in Content360 as a
-  DRAFT with no scheduled time, because Content360 has no notification mode. Buffer does NOT post the
+  ALWAYS. PARTLY SUPERSEDED 2026-09-02 by D-2026-09-02a, see below and the amended header entry:
+  the IG half stands, the Threads half is reversed and folabankole Threads is now SCHEDULED at
+  13:00 ET.** As originally recorded: supersedes the personal half of D-2026-08-18/19. Nothing on a
+  folabankole surface auto-publishes, on any desk, ever. `fola-personal-daily` still prepares both
+  personal units in full and queues them; the founder presses send. Concretely: folabankole
+  Instagram goes to Buffer as `schedulingType: notification`, never automatic, and folabankole
+  Threads was left in Content360 as a DRAFT with no scheduled time, because Content360 has no
+  notification mode. Buffer does NOT post the
   stored first comment on the notification path, so the first comment is the founder's to post by
   hand and every run report says so. The D-2026-08-14c folabankole guard is lifted for
   `fola-personal-daily` ONLY, and only far enough to queue a notification unit; every other desk

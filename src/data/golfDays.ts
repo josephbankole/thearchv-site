@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-03",
+    day: "Thursday",
+    headline: "Who is on the United States team for the 2026 Presidents Cup?",
+    dek: "Six automatic qualifiers and six captain's picks, named by Brandt Snedeker on 1 September. Jackson Koivun, 21, and Jacob Bridgeman and Chris Gotterup are the three debutants. Medinah Country Club, 24 to 27 September.",
+    body: "Brandt Snedeker's United States team for the 2026 Presidents Cup is complete, announced on 1 September 2026.\n\nThe six automatic qualifiers are Scottie Scheffler, Cameron Young, Wyndham Clark, Russell Henley, Sam Burns and Collin Morikawa. The six captain's picks are Chris Gotterup, Xander Schauffele, Justin Thomas, Patrick Cantlay, Jacob Bridgeman and Jackson Koivun. The PGA Tour and NBC Sports list the same twelve.\n\nBridgeman, Gotterup and Koivun are making their Presidents Cup debuts. Koivun is 21 and turned professional this year after leaving Auburn; NBC Sports records his first professional win at the 3M Open weeks into his career.\n\nSnedeker on Cantlay, per the official Presidents Cup site: \"Patrick is exactly the kind of player you want on a Presidents Cup team. His experience, consistency and ability to perform under pressure make him a no brainer.\" On Koivun, per the PGA Tour: \"It's rare to see a player this young demonstrate the level of poise and confidence that Jackson has, even before turning professional.\"\n\nThe match is at Medinah Country Club from 24 to 27 September 2026. Geoff Ogilvy captains the International team, whose own six picks were announced the same day. NBC Sports puts the United States record in the event at 13 wins, one defeat and one tie.\n\nSources: PGA Tour, 1 September 2026 (the full twelve split into automatic qualifiers and captain's picks, and the Snedeker quotation on Koivun); NBC Sports via Yahoo Sports, Mike Bachmann, 2 September 2026 (the same twelve, Medinah Country Club, 24 to 27 September, both captains, Koivun aged 21 and his 3M Open win, and the 13-1-1 United States record); presidentscup.com official announcement, 1 September 2026 (both captains, the six United States picks, and the Snedeker quotation on Cantlay).",
+    status: "verified",
+  },
+  {
     date: "2026-09-02",
     day: "Wednesday",
     headline: "Who did Geoff Ogilvy pick for the 2026 International Presidents Cup team?",

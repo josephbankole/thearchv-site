@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-03",
+    day: "Thursday",
+    headline: "Who is Mariano Navone, the player who knocked Novak Djokovic out of the 2026 US Open?",
+    dek: "A 25-year-old Argentine, unseeded, who won his first ATP singles title in April 2026. He beat Djokovic 7-6(5), 5-7, 4-6, 6-2, 6-1 in the first round on 30 August, ending a 19-0 record.",
+    body: "Mariano Navone is a 25-year-old Argentine who arrived at Flushing Meadows unseeded and beat the fourth seed in the first round.\n\nNavone beat Novak Djokovic 7-6(5), 5-7, 4-6, 6-2, 6-1 on 30 August 2026, in a match that ran four hours and 36 minutes. Al Jazeera records his age, his unseeded status and his first ATP singles title, won in April 2026. PBS NewsHour reports that Djokovic had been 19-0 in US Open first-round matches before this one, and had not lost an opening match at any Grand Slam since the 2006 Australian Open.\n\nDjokovic is 39 and has 24 major titles. He struggled physically through the match and afterwards described the problem as a recurring one. \"It's something that I've been carrying, unfortunately, pretty much every match this year: vomiting, throwing up, a serious issue there,\" he said, per Al Jazeera.\n\nNavone's own reaction, also per Al Jazeera: \"For sure it's the best thing I've had on court. This is an amazing court and the biggest stage.\"\n\nThe 2026 US Open runs from 30 August to 13 September.\n\nSources: Al Jazeera, 31 August 2026 (Navone 25, Argentine, unseeded, first ATP title April 2026; the set-by-set score; four hours and 36 minutes; Djokovic seeded fourth, aged 39, 24 major titles; both quotations verbatim); PBS NewsHour, 30 August 2026 (Djokovic previously 19-0 in US Open first rounds, no opening-match Grand Slam defeat since the 2006 Australian Open, the score and the No. 4 seeding); Wikipedia 2026 US Open tournament page, read 3 September 2026 (tournament dates 30 August to 13 September).",
+    status: "verified",
+  },
+  {
     date: "2026-09-02",
     day: "Wednesday",
     headline: "Did Gael Monfils win on his 40th birthday at the 2026 US Open?",

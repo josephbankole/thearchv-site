@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-03",
+    day: "Thursday",
+    headline: "Who leads the 2026 Formula 1 drivers' championship going into the Italian Grand Prix?",
+    dek: "Kimi Antonelli, by 59 points, with Lewis Hamilton joint-second on the same margin. Monza is round 13 of the 2026 season, and the championship leader takes a grid penalty at his home race.",
+    body: "Kimi Antonelli leads the 2026 Formula 1 drivers' championship by 59 points going into the Italian Grand Prix at the Autodromo Nazionale Monza, per Formula1.com's race-week preview published on 31 August 2026.\n\nLewis Hamilton sits joint-second, also 59 points behind Antonelli. Mercedes lead the constructors' championship by 87 points. Formula1.com lists Monza as round 13 of the season and the second half of a double-header closing the European rounds.\n\nThe leader arrives with a problem of his own making, or rather his team's. Formula1.com's preview names Antonelli's grid penalty at his home Grand Prix as the first of its five race-week storylines, the penalty following a planned Mercedes power unit change. A championship leader starting out of position at Monza is the kind of thing that decides seasons rather than weekends.\n\nThe same preview names four other threads: whether Isack Hadjar returns at Red Bull or Liam Lawson keeps the seat after Zandvoort; a driver market that has gone quiet, with Max Verstappen contracted through 2030; the Tifosi behind Hamilton and Charles Leclerc against Mercedes; and Ferrari marking 30 years of Michael Schumacher's association with the team.\n\nSources: Formula1.com race-week preview, 31 August 2026 (Antonelli leading by 59 points, Hamilton joint-second at the same margin, Mercedes 87 points clear in the constructors' championship, round 13, the double-header framing, and all five named storylines including the Antonelli power unit penalty). Official-body single source under D-2026-08-28b, attributed by name on the claim.",
+    status: "verified",
+  },
+  {
     date: "2026-09-02",
     day: "Wednesday",
     headline: "Which drivers are sitting out first practice at the 2026 Italian Grand Prix?",

@@ -15,7 +15,7 @@ runs `fifa.archv/scripts/archv-sync-brand-canon.mjs`, which commits changed sour
 straight to `main` over the GitHub Contents API. No local checkout, no branch to be
 on. A hand edit made here gets overwritten on the next sync.
 
-Mirrored 2026-08-29 from these source paths (relative to ~/Claude/fifa.archv/):
+Mirrored 2026-09-03 from these source paths (relative to ~/Claude/fifa.archv/):
 
 - brand-colors.json
 - BRAND-COLORS.md

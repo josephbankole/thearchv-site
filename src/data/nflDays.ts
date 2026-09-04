@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-04",
+    day: "Friday",
+    headline: "How much did the Seattle Seahawks sell for?",
+    dek: "9.612 billion dollars, closed on Thursday 3 September 2026. It is the highest price ever paid for a National Football League franchise, and it beats the previous record by more than three and a half billion.",
+    body: "The Khosla family closed its purchase of the Seattle Seahawks for 9.612 billion dollars on Thursday 3 September 2026, per the Associated Press, carried by NFL.com, and per ESPN (Brady Henderson, 3 September 2026). It is the highest price ever paid for a National Football League franchise.\n\nNational Football League owners approved the sale unanimously on 26 August 2026, eight days before it closed. Vinod Khosla is chair, Neeru Khosla is controlling owner and president of the Seahawks Charitable Foundation, and Neal Khosla is vice chair. The sale came from the estate of Paul Allen, which began the process in February 2026. As a condition of the purchase the family had to divest its stake in the San Francisco 49ers.\n\nThe previous record for a National Football League team was 6.05 billion dollars, paid for the Washington Commanders in 2023, per the Associated Press. The Associated Press also reports that the 12 million dollars sitting above a round 9.6 billion is a nod to Seattle's supporters, who are known as the 12s.\n\nThe Seattle Seahawks are the reigning champions, having won Super Bowl LX. They open the 2026 regular season at home to the New England Patriots at Lumen Field at 8:20pm Eastern on Wednesday 9 September, a rematch of that final, per NFL.com's official week one schedule.",
+    status: "verified",
+  },
+  {
     date: "2026-09-03",
     day: "Thursday",
     headline: "Why is James Pearce Jr. suspended for the start of the 2026 NFL season?",

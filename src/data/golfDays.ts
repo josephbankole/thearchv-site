@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-04",
+    day: "Friday",
+    headline: "Who leads the 2026 Omega European Masters after the first round?",
+    dek: "Ashun Wu, on seven under par after a 63 at Crans-sur-Sierre on Thursday 3 September. Five players share second a shot back, and the PGA Tour is dark until the middle of the month.",
+    body: "Ashun Wu of China leads the 2026 Omega European Masters after the first round, on seven under par following a 63 at Crans-sur-Sierre Golf Club in Crans Montana, Switzerland, on Thursday 3 September 2026. The leaderboard is per ESPN's DP World Tour scoring page, which recorded the first round as complete, and per Sky Sports Golf, 3 September 2026.\n\nFive players share second place on six under par: Todd Clements, Nicolai von Dellingshausen, Shubhankar Sharma, Angel Ayora and Thriston Lawrence. Harry Hall, Jack Yule, Niklas Lemke and Eugenio Chacarra are a further shot back on five under.\n\nThe tournament runs from 3 to 6 September over a par-70 course measuring 6,830 yards, with a purse of 3,250,000 dollars.\n\nThere is no PGA Tour event this week. The season ended at East Lake Golf Club in Atlanta on 30 August, where Scottie Scheffler won the Tour Championship from a 40 million dollar purse, per ESPN and CBS Sports schedules. The next PGA Tour tournament is the Biltmore Championship from 17 to 20 September at The Cliffs at Walnut Cove in Asheville, North Carolina.\n\nA warning for anyone searching this one. Several Omega European Masters reports that surface high in search are from the 2025 edition, not this one; every figure above is from the 2026 leaderboard read on 4 September 2026.",
+    status: "verified",
+  },
+  {
     date: "2026-09-03",
     day: "Thursday",
     headline: "Who is on the United States team for the 2026 Presidents Cup?",

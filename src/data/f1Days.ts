@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-04",
+    day: "Friday",
+    headline: "Who has won the most Italian Grand Prix races at Monza?",
+    dek: "Michael Schumacher and Lewis Hamilton, five each. Hamilton also holds the record for pole positions at the circuit, and Monza has staged every Italian Grand Prix but one since 1950.",
+    body: "Michael Schumacher and Lewis Hamilton share the record for Italian Grand Prix wins at the Autodromo Nazionale Monza with five apiece, per Formula1.com's official race-week facts and statistics piece published on 3 September 2026.\n\nThe same official piece records that Lewis Hamilton holds the Monza pole-position record on his own, with seven. The lap record at the circuit stands to Lando Norris of McLaren at 1m 20.901s, set in 2025. The circuit measures 5.793km and staged the first Italian Grand Prix of the world championship in 1950.\n\nMonza has hosted every Italian Grand Prix since then with one exception: the 1980 race, which was held at Imola. Formula1.com also puts 47 overtakes at the 2025 race and a roughly 50 per cent historical probability of a safety car.\n\nThe 2026 Italian Grand Prix runs from 4 to 6 September and is round 13 of a 23-race season, per Formula1.com's official calendar. Practice one and practice two are on Friday, qualifying is at 16:00 local time on Saturday, and the race is 53 laps from 15:00 local time on Sunday.\n\nSourcing note. This entry runs on Formula1.com, the official body, under the scoped single-source rule for Formula 1 facts; the outlet is named on every claim above.",
+    status: "verified",
+  },
+  {
     date: "2026-09-03",
     day: "Thursday",
     headline: "Who leads the 2026 Formula 1 drivers' championship going into the Italian Grand Prix?",

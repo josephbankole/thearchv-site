@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-04",
+    day: "Friday",
+    headline: "Can Aryna Sabalenka win a third straight US Open?",
+    dek: "She is through to the third round as defending champion and world number one. No woman has won three consecutive US Open singles titles since Serena Williams took the 2012, 2013 and 2014 editions.",
+    body: "Aryna Sabalenka is attempting to become the first woman to win three consecutive US Open singles titles since Serena Williams, who won in 2012, 2013 and 2014. That is reported by the Associated Press (Brian Mahoney, 3 September 2026) and by Reuters, in a preview published on 27 August 2026.\n\nSabalenka reached the third round at Flushing Meadows by beating Polina Iatcenko 6-1, 6-1 in 53 minutes, per Reuters and the Associated Press. She is the defending champion and the world number one.\n\nThe 2026 main draw runs from 30 August to 13 September at the USTA Billie Jean King National Tennis Center in New York, per Tennis Majors and the ATP Tour. The women's singles final is on Saturday 12 September and the men's singles final on Sunday 13 September.\n\nElsewhere in the draw, defending men's champion Carlos Alcaraz beat Jaime Faria 4-6, 6-0, 6-3, 6-2 to reach the third round, and Jessica Pegula beat Sofia Kenin 6-3, 6-1, both per Reuters and the Associated Press. Jannik Sinner is not in the tournament, having withdrawn on 21 August with a right knee injury.\n\nOne caveat this desk will not paper over. Reuters and the Associated Press print different first-set scores for Daniil Medvedev's second-round win, so no scoreline for that match appears here.",
+    status: "verified",
+  },
+  {
     date: "2026-09-03",
     day: "Thursday",
     headline: "Who is Mariano Navone, the player who knocked Novak Djokovic out of the 2026 US Open?",

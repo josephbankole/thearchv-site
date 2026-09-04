@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-09-04",
+    day: "Friday",
+    headline: "Manchester United leave Kobbie Mainoo and Leny Yoro off their Champions League List A",
+    dek: "Twenty-five names went to UEFA before Wednesday night's deadline for Manchester United's first Champions League campaign since 2023/24. Both missing players go automatically to List B, which carries no size limit, so both can still play in the league phase.",
+    body: "Manchester United have registered 25 players on their UEFA Champions League List A for the 2026/27 league phase, and neither Kobbie Mainoo nor Leny Yoro is among them. UEFA's own Manchester United squad page carries the 25 names, and the same 25 were printed by the Manchester Evening News (Ross Jackson, 4 September 2026) and by 101 Great Goals (Cian Cheesbrough, 4 September 2026).\n\nNeither player has been dropped from the squad. Both were born after 1 January 2005, and the Manchester Evening News sets out the rule that applies to them: a player born on or after that date who has been eligible at the club for two consecutive years since turning 15 is added to List B automatically, without a submission. 101 Great Goals records that List B carries no limit on the number of players and can be added to through the season. Both Kobbie Mainoo and Leny Yoro are therefore available for the league phase.\n\nThe registered 25, per UEFA and the Manchester Evening News. Goalkeepers: Senne Lammens, Karl Darlow, Tom Heaton and Dermot Mee. Defence: Diogo Dalot, Noussair Mazraoui, Matthijs de Ligt, Harry Maguire, Lisandro Martinez, Patrick Dorgu, Luke Shaw and Ayden Heaven. Midfield: Bruno Fernandes, Mason Mount, Manuel Ugarte, Andrey Santos, Youri Tielemans and Carlos Baleba. Forwards: Marcus Rashford, Matheus Cunha, Joshua Zirkzee, Amad, Bryan Mbeumo, Benjamin Sesko and Tynan Thompson.\n\nAll three of the summer's midfield signings are on the list. Sky Sports printed Andrey Santos at 50 million pounds and Youri Tielemans at 35 million pounds on 15 July 2026. Al Jazeera printed Carlos Baleba at 70 million pounds on 25 August 2026, the same day ESPN reported the deal at 65 million pounds plus 5 million in add-ons; the highest figure a named source printed leads here.\n\nThe league phase begins on 8 to 10 September, per Sky Sports (27 August 2026) and UEFA. The draw was made in Monaco on Thursday 27 August, with Manchester United drawn from Pot 2 alongside Aston Villa, and Arsenal, Liverpool and Manchester City in Pot 1. Each club plays eight opponents, four at home and four away.\n\nBefore any of that, Everton host Manchester United at 14:00 on Sunday 6 September in Premier League matchweek 3.",
+    status: "verified",
+  },
+  {
     date: "2026-09-02",
     day: "Wednesday",
     headline: "Manchester United's window shut with no striker and no left-back, and the Champions League list closes tonight",

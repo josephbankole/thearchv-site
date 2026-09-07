@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-07",
+    day: "Monday",
+    headline: "Cole Palmer's 2026/27 Premier League season: two goals",
+    dek: "Cole Palmer has two Premier League goals in the 2026/27 season.",
+    body: "Cole Palmer arrives at Monday 7 September with two Premier League goals in the 2026/27 season.\n\nHe is 23, born in Manchester on 6 May 2002, a Chelsea player, and, on 7 September, uninjured.\n\nTwo is a number nobody builds a montage around. It is also the complete Premier League record of Cole Palmer in 2026/27: every goal he has scored, all season, to date.\n\nSo pick the number you want to argue about. The two he has, or the ones the calendar has not handed him yet.\n\nSources: API-Football, BBC Sport",
+    status: "verified",
+  },
+  {
     date: "2026-09-03",
     day: "Thursday",
     headline: "Premier League matchweek 3 opens on Friday, and Manchester United go to Everton having won once.",

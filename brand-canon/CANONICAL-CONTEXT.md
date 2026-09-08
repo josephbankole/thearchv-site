@@ -46,8 +46,18 @@ section marker now.*
   music in the app at publish time.** Same doctrine as the reels' silent cut: the desk ships the
   artwork, the founder supplies the sound. This binds @thearchvfc and @thearchv.ca carousels
   including the pre-match match-cover units; @thearchv.ai stayed automatic here (builder deck, no
-  music), **SUPERSEDED 2026-08-24 by D-2026-08-24g, which moved that lane onto the notification path
-  with an explicit ISO `dueAt` like every other Instagram lane.**
+  music), was moved onto the notification path by D-2026-08-24g, and is **BACK ON AUTOMATIC as of
+  2026-09-08 (D-2026-09-08c, founder, in session), which reverses D-2026-08-24g / ruling R2 for that
+  one lane and leaves every other Instagram lane on notification.** The reason is the first comment,
+  not the schedule: Buffer does not post a stored `firstComment` on the notification path, so every
+  @thearchv.ai deck was leaving the founder a comment to paste by hand, daily. He traded the send
+  gate for that. **The premise is UNVERIFIED until the first automatic deck lands** and the run after
+  it must check the live post for the comment and report the answer either way; if Buffer does not
+  post it, the ruling has bought nothing and goes back to the founder rather than being quietly kept.
+  @thearchv.ai carries no music, which is why this lane and not the others can give up the gate.
+  **`mode: "customScheduled"` with an explicit ISO `dueAt` remains mandatory:** the 2026-08-15
+  incident that published three decks between 00:03 and 00:07 ET was caused by `addToQueue`, never by
+  `schedulingType`, and that distinction is what makes this reversal safe.
   Never flip a queued carousel to automatic, and remember `editPost` cannot change schedulingType
   anyway: the mode is set correctly at creation or fixed in the Buffer UI by the founder alone.
 
@@ -309,7 +319,12 @@ section marker now.*
   lane manual always: the IG half of that ruling STANDS, the Threads half is REVERSED. folabankole
   INSTAGRAM never auto-publishes, on any desk, ever: `fola-personal-daily` goes to Buffer as
   `schedulingType: notification`, never automatic, and the founder presses send. folabankole THREADS
-  is now SCHEDULED and auto-publishing at 13:00 ET the same day. The old rule forced an untimed
+  is now SCHEDULED and auto-publishing at 13:00 ET the same day. AMENDED AGAIN 2026-09-05 (founder,
+  in session, D-2026-09-05a): NO DAILY CAP on personal threads. "we can have multiple units a day.
+  remove the limits we have, i dont care if we have more than one unit a day." Extra units take
+  16:00 then 19:00 ET; the pillar rotation is per consecutive unit, not per day; a held slot is never
+  a reason to skip the unit. The hook doctrine in personal-brand/fola-personal-voice.md (same date)
+  binds every personal thread. The old rule forced an untimed
   Content360 DRAFT, because Content360 has no notification mode, and the founder was not sending
   them: by 2026-09-02 eleven personal drafts had accumulated covering every pillar, with a duplicate
   follow-the-sun pair and a duplicate side-hustles pair. He asked why nothing was going out and
@@ -354,16 +369,32 @@ section marker now.*
 - **A fixture that fails verification does not ship.** Publishing on a schedule never means shipping
   a slot that came up empty. Fewer carousels is the correct output of a thin week.
 
-### Cadence (D-2026-08-03, on Tom's feedback)
+### Cadence (D-2026-08-03, on Tom's feedback) — EVERY NUMERIC DAY-CAP BELOW IS SUPERSEDED 2026-09-08 by D-2026-09-08a (no cap; 3-hour spacing). Displacement ladders, slates and formats survive as editorial workflow, not ceilings.
+
+**D-2026-09-08b (founder, evening of 2026-09-08) puts ONE cap back, on one account.** Instagram
+@thearchvfc ships **ONE unit a day**, and the lanes compete for that single slot. This does not
+restore any other numeric cap: D-2026-09-08a still governs every other surface, no per-day cap and
+3-hour minimum spacing per platform. The reason is measured, not stylistic. Four desk carousels on
+that account between 1 and 7 September returned a median of 0 saves, 0 shares and 76 reach, and the
+7 September Buffer rollup read 12 `ig-fc` units at median reach 11. Publishing three of those a day
+multiplies a number that is not working. Precedence for the slot lives in step 7 of
+`fifa.archv/routines-v2/archv-football-desk.md`.
+
+**SUNDAY IS THE ONE EXCEPTION, TWO UNITS (founder, 2026-09-08 evening, amending D-2026-09-08b the
+same night it was made): "give mls weekly its own sunday night slot (2 a day is fine in that
+case)".** MLS Weekly no longer competes for the daily slot. It holds a protected Sunday night slot
+of its own and the ordinary lane precedence runs alongside it in the morning or early afternoon.
+Every other day of the week stays at one unit.
 - **Match days: the carousel takes the question post's slot** (D-2026-08-04i, founder). @thearchvfc
   stays at two units. The reel keeps one; on a day with a covered fixture the match carousel takes
   the other and the question carousel stands down. On days without one, the question carousel runs as
-  now. The cap does not move, which keeps Tom's post-less-and-space-it note intact.
-- **Instagram @thearchvfc: max TWO units a day, four hours apart.** Was four or more. **The daily reel
+  now. The cap does not move, which keeps Tom's post-less-and-space-it note intact. *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a: no per-day cap, 3-hour minimum spacing per platform)* The
+  standdown itself survives as the ladder's rung-1 editorial precedence.
+- **Instagram @thearchvfc: max TWO units a day, four hours apart.** *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a, then RE-CAPPED THE SAME DAY at ONE unit a day by D-2026-09-08b, which is the live number for this account; the 3-hour spacing rule is moot at one unit)* Was four or more. **The daily reel
   counts as one of the two and REPLACES a carousel** (D-2026-08-04a, founder, resolved mid-run when the
   desk hit the ambiguity on day one). A reel plus one carousel is a full slate, not a shortfall.
 - **TikTok @thearchvfc: ONE a day.** **@thearchv.ca: max TWO a day, four hours apart, and the day's
-  slate is ONE NEW unit plus the reuse repost** (D-2026-08-04m). The account is RUNNING by default.
+  slate is ONE NEW unit plus the reuse repost** (D-2026-08-04m). *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a: no per-day cap, 3-hour minimum spacing per platform)* The one-new-unit-plus-repost SLATE survives as the desk's default build. The account is RUNNING by default.
 - **THREADS IS UNCHANGED.** Daily Manchester United thread, 6:00am ET, same cadence and format. The
   founder's call: it is going well. Do not apply the cut to Threads.
 - Three small items ship as ONE carousel ("3 stories you missed"), not three posts. Each story answers
@@ -375,7 +406,7 @@ section marker now.*
   seven). **The daily Instagram and TikTok reel slots are UNCHANGED and still fill every day**, from the
   reuse register, labelled CONTROL. A rerun day is a full slate, never a miss. Build cadence and slot
   cadence are different things: only the building was cut.
-- **THE DAILY REEL TAKES ONE OF THE TWO @thearchvfc SLOTS (D-2026-08-04a, founder).** The reel is INSIDE
+- **THE DAILY REEL TAKES ONE OF THE TWO @thearchvfc SLOTS (D-2026-08-04a, founder).** *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a: no per-day cap, 3-hour minimum spacing per platform)* Reel lane founder-paused regardless (D-2026-08-13d). The reel is INSIDE
   the two-unit cap and REPLACES a question carousel; it does not sit alongside them as a third unit.
   So a normal day on @thearchvfc is ONE question carousel plus ONE reel, four hours apart, not two
   carousels. This resolves the standing conflict between the D-2026-08-03 cap and the morning desk's
@@ -386,7 +417,8 @@ section marker now.*
 - **MLS WEEKLY runs Sundays on @thearchvfc (founder, 2026-08-16; recorded in canon 2026-08-24).** A
   "what happened in Major League Soccer this week" carousel as the account's SECOND Sunday unit, MLS
   at 09:00 ET and the step-7 ladder unit at 13:00, four hours clear, which keeps the two-a-day cap
-  intact while the reel lane is paused. Cast, the played-AND-scored slide rule, the
+  intact while the reel lane is paused *(cap rationale SUPERSEDED 2026-09-08 by D-2026-09-08a; the two
+  slots stand as the Sunday default and already clear the 3-hour spacing)*. Cast, the played-AND-scored slide rule, the
   Sunday-to-Saturday window and full sourcing live in `routines-v2/archv-football-desk.md` step 7b;
   the slide count is a sanctioned exception per D-2026-08-24e.
 - **@thearchv.ca SUBSTANCE FLOOR (D-2026-08-24f, ruling R7): every unit carries an archive pull or a
@@ -395,7 +427,9 @@ section marker now.*
   changed variable, and nothing else about the lane moves while its effect is read.
 
 ### @thearchv.ai daily carousel (D-2026-08-03b)
-- ONE a day. Header is a FIXED founder line plus a VARIABLE consequence line, never a fixed title:
+- ONE a day *(as the account's editorial FORMAT and header promise, which D-2026-09-08a does not
+  repeal: the cap lift means extra units breach nothing, not that the desk builds more than its one
+  daily roundup)*. Header is a FIXED founder line plus a VARIABLE consequence line, never a fixed title:
   **"I build with this stuff every day. Here are the 3 things that actually mattered."**
 - **Ship two if there are only two.** Never manufacture a third. Padding kills a daily roundup.
 - "3 biggest AI stories you missed today" and its variants are BANNED: saturated, blames the reader,
@@ -485,7 +519,8 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
   coordinator pause, closes D-2026-08-04j by saying what "normal production" actually is, and overrides
   the hardening pass's PAUSED default: **the default state of this account is RUNNING, not paused.**
   The two-a-day ceiling and the four-hour stagger from D-2026-08-03 are unchanged, and a ceiling is
-  still never a target: drop a sport rather than fill the slot.
+  still never a target: drop a sport rather than fill the slot. *(Ceiling and stagger SUPERSEDED
+  2026-09-08 by D-2026-09-08a; drop-rather-than-pad survives.)*
 - **NEW SHORTS BUILDS CUT FROM 7 A WEEK TO 4, MATCHED TO THE FOUR WEEKLY YOUTUBE SLOTS**
   (D-2026-08-04n, founder). Four new builds a week, aligned one-to-one with the YouTube slots so
   nothing is built that has no home. **The daily Instagram and TikTok reel slots keep running every
@@ -1237,6 +1272,28 @@ edit per the same-run rule.*
   builds in Content360, but only ever as a DRAFT per the 2026-08-23 ruling below. The no-auto-send
   rule stands everywhere else, and the route's known faults, the caption drop after a media insert
   and the headless login wall, are why it runs in the founder's session and nowhere else.
+- **RECORDED, decision date 2026-09-08 (founder, in session, D-2026-09-08d): ON `threads-ca-daily`,
+  A DIFFERENT COMPETITION IS A DIFFERENT ANGLE.** The desk spec's "pick a DIFFERENT angle from that
+  day's slate" does NOT mean a different sport. Football may run on the evening thread even when
+  another unit ran football the same day, provided the competition and the story differ. The block
+  applies only when both units would cover the SAME MATCH or the SAME CLUB STORY. Occasioned by the
+  2026-09-08 run, which dropped Champions League matchday one, the biggest story of that night,
+  because the 14:00 `ig-fc-quote` deck was Manchester United; the founder called that over-cautious.
+  From Wednesday 9 September the fc quote deck may hold Premier League / Manchester United while this
+  desk takes the Champions League.
+- **RECORDED, decision date 2026-09-08 (founder, in session, D-2026-09-08e): THE 17:00 SLOT IS A
+  PER-DAY JUDGEMENT, LOGGED.** The desk decides each run whether to hold ~17:00 ET or slip later to
+  catch a result that lands just after it, and records the choice and the reason in the run report.
+  Occasioned by the 2026-09-08 US Open run, where both quarter-finals were still being played at post
+  time. **This governs TIMING ONLY and changes no accuracy rule:** an in-progress or single-sourced
+  score still never ships, whatever the slot, per the two-source house rule. Holding the slot on
+  locked facts, which is what the 2026-09-08 run did, remains a correct outcome of that judgement.
+- **RECORDED, decision date 2026-09-08 (founder, in session, D-2026-09-08f): `archv-football-desk` IS
+  RE-ENABLED and runs again from 2026-09-09.** `fifa.archv/daily-intel.md` had gone stale at
+  2026-09-04 with no football desk logging since, and the 2026-09-08 evening thread self-sourced its
+  slate from `performance-log.md` and the day's other desk logs instead. Desks resume reading
+  daily-intel.md first. **If it is stale again, self-source and NAME the staleness in the run report;
+  a stale intel file is never a reason to HOLD a thread that can be sourced and verified directly.**
 - **RECORDED, decision date 2026-08-19 (founder): `archv-youtube-weekly` IS RETIRED, and no lane
   produces video anywhere.** The live YouTube surface is `youtube-goal-archive-weekly`, Tuesdays
   06:00 ET, uploading the next banked Drive goal-archive volume as a Short, gated on
@@ -1281,6 +1338,24 @@ edit per the same-run rule.*
   Manchester United 8-2 Arsenal 15th-anniversary thread SHIPPED as a second Threads unit that
   day, overriding the desk's hold; and he ordered the missing banked faces generated on
   Higgsfield (Ruben Amorim era 2026, Michael Carrick era 2026).
+
+### RATIFIED 2026-09-08 (founder, live session with the metrics desk)
+- **D-2026-09-08a (founder): ALL PER-DAY UNIT CAPS ARE LIFTED, every platform, every account.
+  "lift the cap, i dont really care, space posts for each platform at least 3 hours apart,
+  otherwise, no cap."** One rule replaces them all: **posts on ONE platform sit at least THREE HOURS
+  apart.** That is the only volume constraint left. Superseded with this: the @thearchvfc two-a-day
+  (D-2026-08-03, D-2026-08-04a), the @thearchv.ca two-a-day and its four-hour stagger
+  (D-2026-08-04m), TikTok's one-a-day, the MLS-Sunday cap arithmetic, and every four-hour spacing
+  figure, which all drop to the single three-hour rule. What SURVIVES, deliberately: desk default
+  slates and build cadences (a desk still builds what its spec builds; the lift means EXTRA units,
+  founder or desk, breach nothing); the template-ladder and match-day displacement logic as
+  editorial precedence rather than cap enforcement; drop-rather-than-pad; the @thearchv.ai
+  one-roundup-a-day FORMAT and its header promise (a format, not a ceiling); and the reel-lane
+  founder pause (D-2026-08-13d), which is a pause, not a cap. Ruled the day the founder retired
+  ~/archv-pipeline back to the desks, after the roll-call flagged seven pipeline units on
+  @thearchvfc against the old cap. Roll-calls and audits stop flagging unit counts; **under-3-hour
+  spacing on one platform is now the only volume flag.**
+
 
 ---
 
@@ -1347,7 +1422,7 @@ The posting engine is split from one bundled task into FOUR per-platform morning
 4. **X — the United transfer desk is now a named, recurring, verify-first franchise** (one X post drove 64% of X reach). One transfer-desk post/thread per day is the X spine; re-verify overnight before it ships.
 5. **YouTube — lean in (healthiest, compounding channel).** Daily task ships Shorts + manages the ARCHV Explains named series within a per-week cap that never bumps a documentary; documentary flagship protected.
 6. **TikTok — feed-and-watch.** Native repost of existing reels/shorts at $0, zero founder hours; defer silently if a zero-touch repost is not possible (never delegate manual work to the founder yet).
-7. **Capture funnel (highest-leverage):** one bio destination — thearchv.ca with the Dispatch subscribe (thearchvdispatch.substack.com) and Etsy one click away — plus a SOFT Dispatch line on the top reel/thread only (<=1/post, secondary to FOLLOW, never gated by followers). Build steps handed to the founder to execute. Consistent with the 2026-06-20 Dispatch revival; the global workspace CLAUDE.md "newsletter killed" line is stale and overridden by this canon.
+7. **Capture funnel (highest-leverage):** one bio destination — thearchv.ca with the Dispatch subscribe (thearchvdispatch.substack.com) and Etsy one click away — plus a SOFT Dispatch line on the top reel/thread only (<=1/post, secondary to FOLLOW, never gated by followers) **[SECONDARY-TO-FOLLOW IS SUPERSEDED 2026-09-08 by D-2026-09-08g, founder: "add the dispatch ask as our main CTA on our posts". The Dispatch ask is now the PRIMARY call on @thearchvfc posts and FOLLOW drops below it. The never-gated rule survives untouched. The URL does not change and still reads exactly `thearchv.ca/start`, which carries the free daily email above the fold, so the standing /start read-back assertion holds. Written as what the reader gets, the day's story by email, free, never as a product name. Ratified against a measured base of 10 Substack subscribers on 2026-09-08, up from 7 over 30 days, with 0 new subscribers from the three issues published 28 August to 7 September.]**. Build steps handed to the founder to execute. Consistent with the 2026-06-20 Dispatch revival; the global workspace CLAUDE.md "newsletter killed" line is stale and overridden by this canon.
 8. **Out of scope (unchanged):** LinkedIn Company Page stays inside the nightly build (Buffer auto-publishes Tue/Fri, not dropped). Non-posting tasks (analytics pull, queue QC, site trackers, headshot batchgen, money review, SEO, DM setters, Dispatch digest, personal LinkedIn carousel, Joey/MTL) were left untouched.
 
 ## TASK CONSOLIDATION — 2026-07-07 (founder: max output, run lean) — SUPERSEDES the 06-22 task map above for the affected tasks

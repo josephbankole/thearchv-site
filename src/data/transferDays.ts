@@ -6,6 +6,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-09-09",
+    day: "Wednesday",
+    headline: "Ben Jacobs stands by the Lewis Hall reporting, and David Ornstein puts a second left-back in front of Manchester United",
+    dek: "The window shut without a left-back and the reporting has not settled. Jacobs expects urgency in January. Ornstein has named Adrien Truffert of AFC Bournemouth at around sixty million.",
+    body: "Manchester United closed the summer window without signing a senior left-back, and two days later the reporting on what happens next is pulling in opposite directions.\n\nBen Jacobs, on The United Stand, was direct about the target United did not sign: \"I stand by my information on Lewis Hall. Despite suggestions he is not a Man Utd target, he is, according to my information.\" Jacobs also expects urgency in January, with a centre-forward and a left-back among the deals United could negotiate early. Carried by Yahoo Sports, with football365 and TeamTalk on the January framing. RUMOUR.\n\nThe counter-reporting is not quiet either. football365 and The Hard Tackle both have United declining to move for a left-back in January and waiting until next summer instead. Newcastle United wanted more than sixty million pounds for Hall in the summer and United did not pay it.\n\nDavid Ornstein has since put a different name in front of the same problem. In an Athletic question and answer he raised Adrien Truffert, the 24-year-old AFC Bournemouth left-back, as \"one that I don't think anyone has really mentioned yet\", at a value he is hearing of around sixty million pounds and with a deal more likely next summer than in January. Carried by CaughtOffside and Yahoo Sports. RUMOUR.\n\nWhat is settled is the summer business itself. Andrey Santos, Youri Tielemans and Carlos Baleba rebuilt the midfield, Karl Darlow arrived free from Leeds United as the backup goalkeeper, and Tynan Thompson, 18, cost eight million pounds from Tottenham Hotspur. Ornstein's reading of why the left-back was not added is that there is no unlimited flow of cash for Michael Carrick to spend. Reported on TNT Sports and carried by football365 and Yahoo Sports.",
+    status: "pending",
+  },
+  {
     date: "2026-09-08",
     day: "Tuesday",
     headline: "David Ornstein says there was no unlimited flow of cash, and no left-back is expected in January either",

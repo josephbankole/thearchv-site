@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-09",
+    day: "Wednesday",
+    headline: "Who does Aryna Sabalenka play in the 2026 US Open semi-finals?",
+    dek: "Jessica Pegula, in a rematch of the 2024 final. Sabalenka came through Linda Noskova in three sets and Pegula beat Emma Navarro from a set down.",
+    body: "Aryna Sabalenka plays Jessica Pegula in the women's singles semi-finals at Flushing Meadows.\n\nSabalenka, the two-time defending champion, beat Linda Noskova 7-6, 3-6, 7-6 in the quarter-final on 9 September. It is her sixth consecutive US Open semi-final. Sources: The Sports Encounter; Sunday Guardian.\n\nPegula reached the last four by beating Emma Navarro 3-6, 6-4, 6-3 in an all-American quarter-final on the same day, losing the opening set before taking the next two. It is her third consecutive US Open semi-final. Sources: The Sports Encounter; Sunday Guardian, with CBS Sports carrying the same scoreline.\n\nThe pairing is a rematch of the 2024 US Open final, which Sabalenka won 7-5, 7-5.\n\nThe men's semi-final line-up is Ben Shelton against Frances Tiafoe. This desk has verified that pairing but has not verified the Shelton quarter-final scoreline against a second independent outlet, so no score is given here for that match.",
+    status: "verified",
+  },
+  {
     date: "2026-09-04",
     day: "Friday",
     headline: "Can Aryna Sabalenka win a third straight US Open?",

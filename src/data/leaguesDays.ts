@@ -7,6 +7,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-09",
+    day: "Wednesday",
+    headline: "Liverpool host Atletico Madrid as the Champions League league phase opens, and Manchester United return on Thursday",
+    dek: "Two published previews of Liverpool's team agree on ten names and split on one midfield seat. Manchester United play their first Champions League match in two seasons at Old Trafford tomorrow.",
+    body: "The 2026-27 Champions League league phase opened on Tuesday and runs to Thursday. Wednesday's schedule has Barcelona v Feyenoord and Stuttgart v Viking at 18:45 CET, then Liverpool v Atletico Madrid, Paris Saint-Germain v Slovan Bratislava, Sporting CP v Galatasaray and Napoli v Arsenal at 21:00 CET. Source: UEFA.com league-phase fixture list.\n\nLiverpool play Atletico Madrid at Anfield at 20:00 BST, refereed by Davide Massa. The two previews this desk read in full, Sports Illustrated and Goal.com, name the same ten players in a 4-2-3-1: Alisson, Araujo, Jacquet, Van Dijk, Kerkez, Szoboszlai, Gakpo, Wirtz, Barcola and Isak. They split on one seat in midfield. Sports Illustrated names Alexis Mac Allister. Goal names Ryan Gravenberch. Sports Mole's own preview flags the Gravenberch call as an open decision rather than a settled one.\n\nAtletico Madrid travel without Alexander Sorloth, injured, which both previews carry. Sports Illustrated additionally lists Arnau Ortiz suspended and Joe Gomez, Hugo Ekitike, Conor Bradley and Giovanni Leoni injured for Liverpool, with Wataru Endo and Federico Chiesa left out of the Champions League squad. Those names appear in one of the two and are carried here as context rather than as a confirmed team sheet.\n\nManchester United host Sabah FK at Old Trafford on Thursday 10 September at 21:00 CET, their first Champions League match after two seasons away. ESPN, reporting the 3-2 win over Liverpool on 3 May that sealed the place, wrote that United could look forward to a return after two seasons out. Their eight league-phase opponents are Bayern Munich, Atletico Madrid, Roma, Sporting CP, RB Leipzig, Villarreal, Sabah FK and Como.",
+    status: "verified",
+  },
+  {
     date: "2026-09-07",
     day: "Monday",
     headline: "Can Cole Palmer lead Chelsea into the Premier League top four in 2026/27?",

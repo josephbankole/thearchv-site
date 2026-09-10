@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-10",
+    day: "Thursday",
+    headline: "Where is the NFL's first regular-season game in Australia?",
+    dek: "At the Melbourne Cricket Ground, where the Los Angeles Rams play the San Francisco 49ers tonight, Thursday 10 September, at 8:35pm ET on Netflix. In Melbourne it is 10:35am on Friday 11 September.",
+    body: "The NFL's first regular-season game in Australia is at the Melbourne Cricket Ground, where the Los Angeles Rams play the San Francisco 49ers tonight. NFL.com lists kick-off at 8:35pm ET on Thursday 10 September, with the game streaming on Netflix and NFL+.\n\nMelbourne gets it mid-morning. 8:35pm ET on Thursday is 10:35am on Friday 11 September in Melbourne, so NFL.com bills it as a Thursday night and Friday morning game depending on where you watch.\n\nThe game comes a night after the season opener, in which the Seattle Seahawks beat the New England Patriots 13-10 at Lumen Field, NFL.com reported.\n\nThe Rams are the designated home team, and NFL.com's Jeremy Bergman notes they chose to land in Australia with just a day to settle before kick-off.",
+    status: "verified",
+  },
+  {
     date: "2026-09-04",
     day: "Friday",
     headline: "How much did the Seattle Seahawks sell for?",

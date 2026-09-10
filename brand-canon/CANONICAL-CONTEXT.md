@@ -51,9 +51,9 @@ section marker now.*
   one lane and leaves every other Instagram lane on notification.** The reason is the first comment,
   not the schedule: Buffer does not post a stored `firstComment` on the notification path, so every
   @thearchv.ai deck was leaving the founder a comment to paste by hand, daily. He traded the send
-  gate for that. **The premise is UNVERIFIED until the first automatic deck lands** and the run after
-  it must check the live post for the comment and report the answer either way; if Buffer does not
-  post it, the ruling has bought nothing and goes back to the founder rather than being quietly kept.
+  gate for that. **The premise was VERIFIED on 2026-09-10:** the founder's automatic explainer post
+  `6aa204c35585ae60f04a612e` showed its stored first comment live under the post, posted by thearchv.ai.
+  The lane's slot moved to 15:00 ET the same day (D-2026-09-10b).
   @thearchv.ai carries no music, which is why this lane and not the others can give up the gate.
   **`mode: "customScheduled"` with an explicit ISO `dueAt` remains mandatory:** the 2026-08-15
   incident that published three decks between 00:03 and 00:07 ET was caused by `addToQueue`, never by
@@ -92,7 +92,8 @@ section marker now.*
 - **Published stats are citable, with attribution** (D-2026-08-04g, founder, extends D-2026-07-28e).
   A statistic is a fact and facts are not copyrightable. Figures from Statman Dave, The Analyst,
   FBref, Understat and Transfermarkt all ship provided the source is NAMED on the surface the number
-  appears on, not in the caption and not on a credits slide. Two lines survive, about artwork and
+  appears on, not in the caption and not on a credits slide. **One scoped exception (D-2026-09-10c):**
+  the @thearchv.ai carousel carries its sources in ONE block at the foot of the LAST slide, plus the caption. Two lines survive, about artwork and
   volume rather than facts: **never reproduce someone else's graphic** (take the structure, never the
   image), and **never build a bulk scraper** (FBref blocks at 10 requests a minute regardless of
   rights; verifying a figure is fine, harvesting a site into a standing feed is not). Verification
@@ -241,8 +242,8 @@ section marker now.*
 - **X @thearchvfc is a MANUAL FOUNDER ROUTE (D-2026-08-24d, retiring the X-exit half of D-2026-07-28).**
   The founder posts there himself when he chooses, as he did with the 2026-08-08 thread; no task or desk
   builds, queues or posts an X thread for @thearchvfc, and a founder post there is invisible to every
-  Buffer-derived guard, per the D-2026-08-08b lesson. @archv_ai keeps posting to X, and
-  `weekly-x-post-scheduling` is the only task allowed to touch it (D-2026-07-28 carve-out, unchanged).
+  Buffer-derived guard, per the D-2026-08-08b lesson. **@archv_ai X is STOPPED (D-2026-09-10a):**
+  `weekly-x-post-scheduling` is off the Tuesday roster and NO task posts to X on any account.
 - **FOUR daily desks** (D-2026-08-14f, the v2 cutover, superseding the two-node split of D-2026-08-05c;
   the fourth added by D-2026-08-15a. Digest line corrected 2026-08-24, having still named the retired
   `archv-nightly-desk` and `archv-midday-desk` ten days after the cutover). Each spec is single-homed in
@@ -250,7 +251,8 @@ section marker now.*
   ever hardcoded**. **`archv-football-desk`**, cron `0 6 * * *`, is the PUBLISH node and owns everything
   time-coupled to the morning: the Manchester United Threads thread, the @thearchvfc carousel ladder,
   the @thearchv.ca slate, site and app content, the TikTok stage. **`archv-ai-desk`**, cron `0 12 * * *`,
-  owns the josephbankole.ca brief, the next-day @thearchv.ai carousel and the yt-community build.
+  owns the josephbankole.ca brief and the next free 15:00 ET @thearchv.ai carousel (D-2026-09-10b); its
+  yt-community lane was DROPPED on 2026-09-10 (D-2026-09-10d).
   **`archv-metrics-desk`**, cron `30 13 * * *`, owns per-post metrics, the rotation audit and the
   end-of-day roll-call, with Buffer READ-ONLY. **`josephbankole-site-desk`**, cron `0 15 * * *`, owns the
   founder's personal site. Deadlines on the publish desk: thread live by about 7am, Instagram queued
@@ -281,7 +283,7 @@ section marker now.*
   cannot reach the founder's session HOLDS and says so rather than improvising a route. The 6am
   football desk's morning Threads thread stays on Buffer, unchanged.
 - **Handles:** @thearchvfc on Instagram, Threads and TikTok. @thearchvca on YouTube. @thearchv.ca is the
-  multi-sport Instagram. **archv_ai (X): only `weekly-x-post-scheduling` posts there** (D-2026-07-28
+  multi-sport Instagram. **archv_ai (X): STOPPED, nothing posts there** (D-2026-09-10a, retiring the D-2026-07-28
   carve-out). **thearchv.ai (Instagram, channel `6a5988ff80cc80cdcacb64cb`) has exactly ONE sanctioned
   owner and no others: `archv-ai-desk` `STEP 2`, the ONE daily AI-news carousel** (D-2026-08-04k,
   founder, resolving the open question that stood here and superseding the three-owner carve-out in
@@ -304,10 +306,12 @@ section marker now.*
   | Instagram @thearchvfc (football) | 6a1e155cc687a22dd44dffda |
   | Instagram @thearchv.ca (multi-sport) | 6a65b5a24b2d03035f42087b |
   | Instagram folabankole (founder personal; `fola-personal-daily` ONLY, notification mode ONLY, D-2026-08-23a, IG half unchanged by D-2026-09-02a) | 6a7ed151b2d9d57743764a17 |
-  | Threads @thearchvfc | 6a5d708de2638b94d79bc0b4 |
+  | Threads @thearchvfc (NEW ID from the founder's reconnect, channel created 2026-09-10 23:53Z; the old id 6a5d708de2638b94d79bc0b4 no longer exists and its post history went with it) | 6aa342ffcd8b9c702c487f67 |
+  | Threads @thearchv.ca (added to Buffer by the same reconnect, 2026-09-10 23:52Z; the evening lane `threads-ca-daily` still runs on Content360 per D-2026-08-18/19, and no desk queues here without a founder lane) | 6aa342cdcd8b9c702c487ed0 |
+  | Instagram film.joey (appeared in Buffer 2026-09-10 13:57Z; no ARCHV lane owns it, so no desk queues to it) | 6aa2b751cd8b9c702c429c5e |
   | TikTok @thearchvfc (REMOVED from Buffer 2026-08-14, D-2026-08-14c; id historical, TikTok ships via Studio or the Drive handoff) | 6a65b5844b2d03035f420822 |
   | X @thearchvfc (founder-manual only, D-2026-08-24d; no task posts) | 6a1e151fc687a22dd44dfef7 |
-  | X @archv_ai (`weekly-x-post-scheduling` ONLY, D-2026-07-28 carve-out) | 6a4f1a9e404834462886dd5d |
+  | X @archv_ai (STOPPED 2026-09-10, D-2026-09-10a; no task posts) | 6a4f1a9e404834462886dd5d |
 
 - **`archv-youtube-weekly` is RETIRED (founder, 2026-08-19), and no lane produces video anywhere.**
   The live YouTube surface is `youtube-goal-archive-weekly`, Tuesdays 06:00 ET, uploading the next
@@ -1474,6 +1478,27 @@ fourth link of the gate chain for EVERY carousel, LinkedIn document and slide de
 binds every desk and not only the football desk. Exit 1 ships nothing until each item is closed
 or explicitly overruled in the run report.
 
+
+### RATIFIED 2026-09-10 (founder, in session with archv-ai-desk)
+
+- **D-2026-09-10a (founder): NO TWEETS. "i no longer want this lane to create tweets" and "yes, stop the
+  tuesday archv_ai x job too".** `archv-ai-desk` creates no X post on any account, and
+  `weekly-x-post-scheduling` is STOPPED: taken off the `archv-weekly-desk` Tuesday roster, banner-stopped in
+  its own SKILL.md, its `lanes.tsv` row retired. This retires the D-2026-07-28 @archv_ai carve-out. No
+  automated X route exists anywhere; @thearchvfc X stays a manual founder route (D-2026-08-24d). Posts already
+  queued on channel `6a4f1a9e404834462886dd5d` before the stop are the founder's to clear in Buffer (the desk
+  connector gets HTTP 403 on that channel). Restarting X needs a founder ruling.
+- **D-2026-09-10b (founder): the @thearchv.ai daily carousel posts at 15:00 ET**, moved from 08:00. It
+  clears the founder's 10:00 ET explainer series by five hours under D-2026-09-08a. Applied the same day to the
+  queued 12 September deck (`6aa2dafd866944bb2aebc94d`).
+- **D-2026-09-10c (founder): "no more source on each slide, only on the last slide at the bottom."** Scoped
+  to the @thearchv.ai carousel: sources sit in one block at the foot of slide 4 (`sources_on_last_slide` in
+  `archv-ai-carousel/build.mjs`), and the caption still names them. Two-source verification is unchanged. It
+  makes the D-2026-09-09a 8/12 word budgets reachable on this lane, so they now BIND there and the per-run
+  overrule is retired.
+- **D-2026-09-10d (founder): "drop community lane".** `yt-community` is RETIRED: no desk builds, stages or
+  posts YouTube community units, and its `lanes.tsv` row is retired. The last unit, built 2026-09-10, went live
+  text-only on @thearchvca during the session; it stays up under D-2026-08-05e.
 
 ---
 

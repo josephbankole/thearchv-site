@@ -8,6 +8,14 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-10",
+    day: "Thursday",
+    headline: "When did an Italian driver last win the Italian Grand Prix before Kimi Antonelli?",
+    dek: "Ludovico Scarfiotti, in 1966. Kimi Antonelli ended the 60-year wait at Monza on Sunday 6 September 2026, and he did it from 19th on the grid.",
+    body: "Ludovico Scarfiotti, in 1966, was the last Italian driver to win the Italian Grand Prix before Kimi Antonelli. Formula1.com reported that Antonelli's victory at Monza on Sunday 6 September was the first for an Italian driver since Scarfiotti, and Sky Sports put the wait at 60 years.\n\nHe took the long way round. Antonelli started 19th after taking new power unit components, according to Formula1.com, which called P19 the second-lowest starting position a Grand Prix has ever been won from. The race was red-flagged early after a crash for Charles Leclerc, and Formula1.com said Antonelli had already climbed to 12th by the time it stopped.\n\nThe finish came down to the two Mercedes cars. Formula1.com reported that Antonelli pitted under a mid-race Virtual Safety Car and used the fresher tyres to catch and pass his team-mate George Russell late on. Sky Sports listed Russell second and Max Verstappen third.\n\nIt was Antonelli's seventh win of the season, Formula1.com said, and it leaves him 66 points clear of Russell in the drivers' standings. The next round is the Spanish Grand Prix in Madrid, per Formula1.com.",
+    status: "verified",
+  },
+  {
     date: "2026-09-04",
     day: "Friday",
     headline: "Who has won the most Italian Grand Prix races at Monza?",

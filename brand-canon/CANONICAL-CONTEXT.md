@@ -1357,6 +1357,124 @@ edit per the same-run rule.*
   spacing on one platform is now the only volume flag.**
 
 
+### RATIFIED 2026-09-09 (founder, in session with the football desk): THE CAROUSEL BUILD RULES MOVE INTO CANON
+
+**D-2026-09-09a (founder): the four @thearchvfc carousel formats and their build rules are
+CANON, and this section is their home.** They were ratified on 7 and 8 September but lived only
+in `~/.claude/scheduled-tasks/archv-football-desk/SKILL.md`, which is outside the repo, outside
+version control, and unreadable by every other desk and by `archv-metrics-desk`'s audit. That is
+an exception to the D-2026-08-14f pointer architecture, which says specs carry workflow and every
+rule lives in one canonical file. The founder closed it here rather than in
+`REEL-CARD-BANK.md`, choosing the highest authority. **SKILL.md keeps the formats and the
+operational detail and now points here for the rules; on any conflict this section wins.**
+
+Occasioned by the 2026-09-09 run, which read the SKILL.md rules and still shipped three decks
+whose last card carried neither the question nor the send cue. The founder's question was "how
+can we make sure this is read before all future runs", and the honest answer was that it WAS
+read: the section is injected verbatim into every scheduled run's prompt, so the failure was
+application, not access. A louder note fixes nothing, which is the same finding that produced
+`carousel_structure_lint.py` on 2026-09-01.
+
+**THE BUILD RULES, binding on every carousel this operation ships.**
+
+- **Four slides.** Slide 2 must stand alone as its own hook, because Instagram re-serves an
+  unswiped carousel starting from the second slide. Withhold the payoff NUMBER to the last card,
+  never the subject. Sanctioned slide-count exceptions are unchanged (D-2026-08-24e).
+- **LESS WORDY. The word budgets are the ceiling, not the target:** claim 8 words, body 12.
+  Reading grade 12 is a hard ceiling on card copy and caption, measured rather than eyeballed.
+- **STORY DRIVEN. Tell a story, do not recap a fact.** The founder's worked example is Kimi
+  Antonelli starting 19th at Monza and winning, and what that does to George Russell, rather
+  than the result. Slide 1 opens the story and withholds where it ends; slide 4 lands it.
+- **Slide 2 carries more than one line:** the fuller quote or claim, the context, and a second
+  voice when the source has one. Label a pundit as a pundit.
+- **Slide 3 carries the real thing**, not a gesture at it. On a league story that means the live
+  table, top seven, with our own club's position on it.
+- **THE LAST SLIDE ASKS A QUESTION THAT MEANS SOMETHING.** He rejected "does that match what you
+  saw?" by name. Ask what a fan would argue about. Invite, never command. **This is separate from
+  the caption question and does NOT collapse the card closer into `question-fork`: the closer is
+  judged on the last CONTENT beat BEFORE the question**, the convention `hook-closer-ledger.md`
+  already adopted for threads on 2026-09-04, because reading the closer off the final sentence
+  would make every unit a question-fork by construction and kill the six-type rotation.
+- **BUILD FOR THE SEND, NOT THE SAVE.** Instagram's own named ranking signal is sends per reach,
+  so the last slide gives a reason to send the unit to ONE SPECIFIC PERSON. Name the person
+  ("send it to your fantasy manager"), never a generic share prompt.
+- **Every caption ends with a question a fan would actually answer.** "Hit or miss" and an emoji
+  poll do not count. Take the shape from the seven sanctioned shapes and do not repeat one on a
+  channel inside three days.
+- **One club per deck.** A deck built on a Manchester United quote carries no Manchester City
+  angle, in the cards or in the caption. A head-to-head fixture deck is not a breach of this;
+  smuggling an unrelated rival in is.
+- **Our own illustrated headshots go on the cards.** Reuse the bank first, generate to
+  `headshot-guidelines.md` when a face is missing. **Never substitute a Wikimedia photograph:**
+  on 8 September a deck built that way published photographs of the wrong people, a 1925 American
+  footballer captioned BARKLEY and a US Air Force officer captioned KAMARA among them, each with
+  a correct credit naming a real photographer, which makes it worse rather than better.
+
+**D-2026-09-09c (founder, same session): LIVE RESEARCH FIRST, AND REPORTER-FIRST IS NOT
+REPORTER-ONLY.** The freshness gate D-2026-08-03c already says re-verify live facts at PUBLISH
+time and never publish from cache or a previous run's context. This adds the search shape that
+gate assumes and never spelled out:
+
+- **Search the NAMED SUBJECT of a running story as a topic, not only the reporters.** The
+  reporter-first rule in the desk specs orders the search; it does not bound it. A reporter search
+  returns what aggregators have carried under that reporter's name, which lags, and a reporter who
+  is on BOTH sides of a story will hand back the stale half of their own reporting.
+- **A player, club or official who is the SUBJECT of a shipping unit gets their own live search
+  before it ships.** No exceptions for a story the desk covered yesterday: yesterday's verification
+  never licenses today's publish.
+
+**The case that produced it, recorded because the shape repeats.** On 2026-09-09 the 06:30
+Manchester United Threads thread shipped built on Lewis Hall as a live left-back target, quoting
+Ben Jacobs's "I stand by my information on Lewis Hall". Hall had agreed a new five-year Newcastle
+United contract to 30 June 2031, reported by **Jacobs himself** and running on utdreport since
+7 September, two days before the thread. The run searched Jacobs by name, per reporter-first, and
+took a carried item quoting his older line. It never searched "Lewis Hall". The thread was live
+before the error was found; the site entry carrying the same premise was corrected in place with a
+dated correction note per the D-2026-08-05e accuracy carve-out.
+
+**D-2026-09-09d (founder, same session): THE TRANSFER WINDOW IS SHUT UNTIL JANUARY, AND EVERY
+SURFACE WRITES LIKE IT.** The summer 2026 window closed on 1 September. Until the January window
+opens, no club can sign anyone, so **every name attached to a club is a PLAN, a link or a
+contract-renewal story, never a transfer.** No thread, card or caption may imply a move is
+available now. A unit that reads as a live transfer battle during a shut window is wrong even when
+every quote in it is accurate, which is exactly how the 9 September thread read.
+
+**D-2026-09-09b (founder, same session): ON DAYS MANCHESTER UNITED DO NOT PLAY, THE NOSTALGIA
+LANE IS THE PRIORITY.** It stops being the floor and becomes the first choice. The lane precedence
+in `routines-v2/archv-football-desk.md` step 7 is amended, and only this one clause moves:
+
+1. Match-day standdown, unchanged.
+2. **Predicted lineups, MANCHESTER UNITED FIXTURES ONLY.** The "plus one Champions League tie per
+   matchday" clause is SUPERSEDED on days Manchester United do not play; on those days the tie is
+   not built.
+3. Fantasy Premier League, Friday and Monday, **unchanged and still protected**. It is
+   deadline-coupled and missing its day costs the week.
+4. Interview quotes, **unchanged**. A real verbatim quote from a press conference or post-match
+   interview still fires.
+5. **Manchester United history and nostalgia. On any day Manchester United do not play and lanes
+   1, 3 and 4 have not fired, this lane ships.** It remains the floor as well, so the account is
+   never silent.
+
+**Scope, ruled explicitly so it is not re-derived: nostalgia outranks the Champions League tie
+clause ONLY.** It does not outrank Fantasy Premier League on a Friday or Monday, and it does not
+outrank a fresh verbatim quote. The founder was asked the literal reading, where nostalgia beats
+everything on a non-United day, and declined it for the FPL deadline reason.
+
+**Why.** The 2026-09-09 run put a Liverpool v Atletico Madrid predicted-lineup deck on
+@thearchvfc under the old CL-tie clause. In spec, and wrong for the account: 40 per cent of the
+identity is Manchester United, the story-driven lane is the one that answers the saves-and-shares
+problem D-2026-09-08b was ruled on, and Manchester United's own return was the next day. The deck
+was replaced before its 09:00 slot with the 2023-24 group-stage nostalgia unit.
+
+**ENFORCEMENT, because being written down was already proven insufficient.**
+`fifa.archv/scripts/carousel_structure_lint.py` now fails closed on the last-card question and
+the last-card send cue, alongside the word budgets, the reading level, the withheld payoff and
+the slide-2 standalone test. The workspace `CLAUDE.md` already makes that script the mandatory
+fourth link of the gate chain for EVERY carousel, LinkedIn document and slide deck, so the check
+binds every desk and not only the football desk. Exit 1 ships nothing until each item is closed
+or explicitly overruled in the run report.
+
+
 ---
 
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)

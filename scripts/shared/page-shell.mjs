@@ -310,7 +310,7 @@ export const SPORT_DESK_COPY = {
   // covered equally, one question every Monday with the league alternating week to week.
   basketball: {
     lede: "The basketball desk, the NBA and the WNBA covered equally. One answered question every Monday, checked against two independent named sources before it goes up.",
-    holding: "The basketball desk is opening. Every Monday it answers one question fans are asking, the NBA one week and the WNBA the next, checked against two independent named sources. A week without a real answer ships nothing, and the desk says so.",
+    holding: "The basketball desk is opening. Every Monday it answers one question fans are asking, the NBA one week and the WNBA the next, checked against two independent named sources. Nothing is filed in a week without a real answer.",
   },
 };
 

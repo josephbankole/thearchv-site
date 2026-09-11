@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-11",
+    day: "Friday",
+    headline: "When is the next F1 race?",
+    dek: "The 2026 Spanish Grand Prix at the Madring in Madrid, round 14, on Sunday 13 September. Kimi Antonelli arrives 66 points clear of George Russell.",
+    body: "The next Formula 1 race is the 2026 Spanish Grand Prix at the Madring in Madrid, round 14 of the championship, on Sunday 13 September, per Formula1.com. The race starts at 15:00 local time, which is 9am ET. Practice runs on Friday 11 September, and qualifying is on Saturday 12 September at 16:00 local, per Formula1.com.\n\nThe Madring is new to the calendar: a 5.414km part-street, part-permanent circuit at the IFEMA exhibition centre in north-east Madrid, with a banked corner called La Monumental, per Formula1.com. The last world championship venue in the Madrid area was the Circuito del Jarama, which held nine rounds between 1968 and 1981. Barcelona-Catalunya kept its own round on the 2026 calendar, in June.\n\nMercedes' Kimi Antonelli leads the drivers' championship on 267 points after winning the Italian Grand Prix at Monza from 19th on the grid. His team-mate George Russell is second on 201, 66 points back, with Ferrari's Lewis Hamilton third on 191, per Formula1.com's standings. After Madrid the calendar moves to the Azerbaijan Grand Prix on 24 to 26 September, and 10 rounds remain after this weekend.",
+    status: "verified",
+    seoTitle: "Spanish Grand Prix, Madrid, 13 September: next F1 race",
+  },
+  {
     date: "2026-09-10",
     day: "Thursday",
     headline: "When did an Italian driver last win the Italian Grand Prix before Kimi Antonelli?",

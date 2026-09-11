@@ -1624,6 +1624,13 @@ a single static stat card as a reel at 25x to 63x their own medians (`competitor
 - **The lane.** `ig-fc-reel` (Platform `IG Reel @thearchvfc`) is LIVE again from 2026-09-11, logged with
   `ig-fc-reel STAT CARD REEL` in `Pillar`; a day without one is FAILED, not PAUSED. First unit:
   Kobbie Mainoo, 81 passes against Sabah FK, Buffer `6aa3c06874b1f1d0ccd742e9`, 11 September 18:00 ET.
+- **EXTENDED THE SAME MORNING TO @thearchv.ca (founder: "yes add one for thearchv.ca too").** One stat
+  card reel a day on the multi-sport account as well, on top of its two carousels: the strongest number
+  from NFL, Formula 1, tennis or golf, never the same story as that day's new unit, the @thearchv.ca
+  handle on the card, a third-person caption with a D-2026-07-22 pool CTA, and **21:00 ET by default**
+  so the day's Instagram units run 09:00, 12:00, 15:00, 18:00 and 21:00 across both accounts. NFL.com and
+  Formula1.com may stand alone under D-2026-08-28b. New lane `ig-ca-reel`, Platform `IG Reel @thearchv.ca`
+  (added to the closed Platform list the same day), football desk step 8b.
 
 ---
 

@@ -13,7 +13,7 @@
      1. an entry the desk filed with an image keeps that face, served from its app-grade
         rebuild in public/heads/hd/ (same file stem);
      2. an entry with no image gets the banked portrait of the first registered player named in
-        its headline, then its dek. First-named, not longest-named: in the app the portrait
+        its headline, else in its dek provided the body names him too (an actual link). First-named, not longest-named: in the app the portrait
         stands for the story's subject, and the subject is the one the headline leads with.
         (The website's entryArt() keeps its own longest-name rule; this does not touch it.)
      3. otherwise no image, and the app shows the crest.
@@ -87,6 +87,15 @@ export function firstPlayerIn(text) {
   return best;
 }
 
+/** True when the text names the player: full name, or surname where the surname is distinctive. */
+function namedIn(text, player) {
+  const n = ` ${norm(text)} `;
+  const full = norm(player.name);
+  if (n.includes(` ${full} `)) return true;
+  const sur = full.split(" ").pop();
+  return sur.length >= 4 && n.includes(` ${sur} `);
+}
+
 /** { image, imageAlt } for the app, or null for the crest. */
 export function appArt(entry) {
   if (!entry) return null;
@@ -94,10 +103,13 @@ export function appArt(entry) {
     const hd = `/heads/hd/${basename(entry.image).replace(/\.[a-z0-9]+$/i, "")}.webp`;
     return appGrade(hd) ? { image: hd, imageAlt: entry.imageAlt ?? `Illustration: ${entry.headline ?? ""}` } : null;
   }
-  for (const text of [entry.headline, entry.dek]) {
-    const p = firstPlayerIn(text ?? "");
-    if (p && appGrade(p.hd)) return { image: p.hd, imageAlt: p.alt };
-  }
+  const lead = firstPlayerIn(entry.headline ?? "");
+  if (lead && appGrade(lead.hd)) return { image: lead.hd, imageAlt: lead.alt };
+  // A player named only in the dek stands in for the story only when there is an actual link:
+  // the body names him too (founder, 2026-09-11: "a secondary name winning is fine if there is
+  // an actual link"). A one-line passing mention in the standfirst does not earn the portrait.
+  const second = firstPlayerIn(entry.dek ?? "");
+  if (second && appGrade(second.hd) && namedIn(entry.body, second)) return { image: second.hd, imageAlt: second.alt };
   return null;
 }
 

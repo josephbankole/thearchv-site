@@ -14,6 +14,9 @@ What it guarantees for every file it writes:
     and the 300px poster medallion with room to spare.
   * Never upscaled. A master that cannot supply 600px at the target framing is refused.
   * Baked light borders and navy-disc-on-white-square frames are removed before fitting.
+  * Logos, crests, sponsor marks and text listed in an entry's `marks` are painted out of the
+    master before fitting (house canon D90: none of them in a portrait). The master itself is
+    never edited, so the boxes can be corrected and the file rebuilt.
   * The face is found, confirmed by an eye check inside the face box, and placed at the same
     scale and height in every file, centred on the head rather than on the detector's box.
   * The crop never runs off the artwork, so there are no padded seams.
@@ -42,6 +45,7 @@ SIZE = 600          # output side, px
 FACE_FRAC = 0.46    # detector face-box width as a share of the crop side
 FACE_CY = 0.46      # face-box centre, as a share of the crop height from the top
 QUALITY = 88
+TEXTURE_MAX_COST = 150  # donor seam+fabric distance above which a mark gets a plain inpaint
 
 CASC = [cv2.CascadeClassifier(cv2.data.haarcascades + n)
         for n in ("haarcascade_frontalface_default.xml", "haarcascade_frontalface_alt2.xml")]
@@ -88,6 +92,93 @@ def clean_frame(im):
     return Image.fromarray(a.astype(np.uint8)), notes
 
 
+def paint_out_marks(im, marks):
+    """Remove brand, sponsor and kit-maker marks listed in the manifest, in master pixels.
+
+    House canon bars logos from portraits, and the founder's GPT Image 2 prompt may not carry an
+    instruction to leave them out (2026-09-11), so the renders keep whatever the reference wore
+    and the marks come off here instead. A box [x0, y0, x1, y1] paints out only the pixels that
+    stand off the box's own dominant colour (the lettering on a plain cap), grown a little, so the
+    fabric's shading survives. An optional fifth element holds flags: "box" fills the whole box, for
+    a mark on a patterned ground where no dominant colour exists; "flat" skips the borrowed brush
+    texture and uses a plain inpaint, for a spot where every nearby donor carries an edge (a brim,
+    a seam) that would print through. "box flat" does both."""
+    a = np.asarray(im.convert("RGB")).copy()
+    H, W = a.shape[:2]
+    grow = max(3, W // 400)
+    kernel = np.ones((2 * grow + 1, 2 * grow + 1), np.uint8)
+    def keep_out_for(i):
+        # A donor patch may not overlap any OTHER listed mark (it would copy that logo into the
+        # hole). The current mark is kept out through its own mask below, not its box margin:
+        # counting its margin here rejected every side-by-side donor for boxes under ~250px.
+        k = np.zeros((H, W), np.uint8)
+        for j, o in enumerate(marks):
+            if j != i:
+                k[max(0, int(o[1]) - 2 * grow):int(o[3]) + 2 * grow, max(0, int(o[0]) - 2 * grow):int(o[2]) + 2 * grow] = 1
+        return k
+    for i, m in enumerate(marks):
+        x0, y0, x1, y1 = (int(v) for v in m[:4])
+        x0, y0, x1, y1 = max(0, x0), max(0, y0), min(W, x1), min(H, y1)
+        flags = set(str(m[4]).split()) if len(m) > 4 else set()
+        mask = np.zeros((H, W), np.uint8)
+        patch = a[y0:y1, x0:x1].astype(np.int16)
+        ground = np.median(patch.reshape(-1, 3), axis=0)
+        if "box" in flags:
+            mask[y0:y1, x0:x1] = 255
+        else:
+            # Otsu on the distance from the fabric colour splits the mark from the brushwork, which a
+            # fixed threshold cannot: painted highlights on a dark cap sit well above any fixed floor.
+            diff = np.minimum(np.abs(patch - ground).sum(axis=2), 255).astype(np.uint8)
+            thr, _ = cv2.threshold(diff, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            mask[y0:y1, x0:x1][diff > max(60, min(thr, 120))] = 255
+        mask = cv2.dilate(mask, kernel)
+        if not mask.any():
+            continue
+        # Fill with a nearby piece of the same painted fabric rather than a smooth inpaint, so the
+        # brushwork carries across: try donor offsets around the box, keep the one whose ring of
+        # pixels around the mark best matches the ring around the target, and feather it in.
+        # Inpainting alone leaves a flat grey patch on textured paint.
+        ys, xs = np.nonzero(mask)
+        by0, by1, bx0, bx1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+        bh, bw = by1 - by0, bx1 - bx0
+        ring = cv2.dilate(mask, np.ones((4 * grow + 1, 4 * grow + 1), np.uint8)) & ~mask
+        ry, rx = np.nonzero(ring)
+        best, best_cost = None, None
+        keep_out = keep_out_for(i) | (mask > 0)
+        for dy, dx in [(0, bw), (0, -bw), (bh, 0), (-bh, 0), (bh, bw), (bh, -bw), (-bh, bw), (-bh, -bw),
+                       (0, bw // 2 + grow), (0, -bw // 2 - grow), (bh // 2 + grow, 0), (-bh // 2 - grow, 0)]:
+            if not (0 <= by0 + dy and by1 + dy <= H and 0 <= bx0 + dx and bx1 + dx <= W):
+                continue
+            if keep_out[by0 + dy:by1 + dy, bx0 + dx:bx1 + dx].mean() > 0.02:
+                continue
+            ok = (ry + dy >= 0) & (ry + dy < H) & (rx + dx >= 0) & (rx + dx < W)  # the ring can overhang the box
+            if not ok.any():
+                continue
+            seam = np.abs(a[ry[ok] + dy, rx[ok] + dx].astype(np.int32) - a[ry[ok], rx[ok]].astype(np.int32)).mean()
+            win = a[by0 + dy:by1 + dy, bx0 + dx:bx1 + dx].astype(np.int32)
+            cost = seam + 0.5 * np.abs(win - ground).sum(axis=2).mean()  # donor must look like the fabric
+            if best_cost is None or cost < best_cost:
+                best, best_cost = (dy, dx), cost
+        base = cv2.cvtColor(cv2.inpaint(cv2.cvtColor(a, cv2.COLOR_RGB2BGR), mask, 3 * grow, cv2.INPAINT_TELEA), cv2.COLOR_BGR2RGB)
+        fill = base.astype(np.float32)
+        if best is not None and best_cost < TEXTURE_MAX_COST and "flat" not in flags:
+            dy, dx = best
+            af = a.astype(np.float32)
+            lo = lambda x: cv2.GaussianBlur(x, (0, 0), 4 * grow)
+            hi = af - lo(af)
+            # the donor lends only its brushwork (high frequencies), capped at the strength of the
+            # texture already around the mark, so a stray edge in the donor cannot print through
+            cap = 2.0 * float(hi[ry, rx].std())
+            dhi = np.clip(np.roll(np.roll(hi, -dy, axis=0), -dx, axis=1), -cap, cap)
+            fill = np.clip(fill + dhi, 0, 255)
+        if os.environ.get("MARKS_DEBUG"):
+            print(f"mark {m}: masked {int((mask > 0).sum())}px donor {best} cost {best_cost}")
+        alpha = cv2.GaussianBlur(mask.astype(np.float32) / 255, (0, 0), grow)
+        alpha = np.maximum(alpha, mask.astype(np.float32) / 255)[..., None]
+        a = (a * (1 - alpha) + fill * alpha).astype(np.uint8)
+    return Image.fromarray(a)
+
+
 def detect(im):
     """Largest frontal face whose upper half holds at least one eye, in a plausible position."""
     rgb = np.asarray(im.convert("RGB"))
@@ -127,12 +218,20 @@ def head_centre_x(im, box):
 
 def fit(entry, masters):
     path = fetch(entry["source"], masters)
-    im, notes = clean_frame(Image.open(path))
+    if entry.get("frame") == "none":
+        # A master with no baked frame (the GPT Image 2 founder-prompt portraits, 2026-09-11 on):
+        # its background can be light, and a light background is not a border to trim.
+        im, notes = Image.open(path).convert("RGB"), []
+    else:
+        im, notes = clean_frame(Image.open(path))
     W, H = im.size
     if entry.get("maxBottom"):  # a cover master: keep the crop above its title banner
         H = int(H * entry["maxBottom"])
         im = im.crop((0, 0, W, H))
         notes.append(f"banner-guard-{entry['maxBottom']}")
+    # Framing is measured on the master as drawn, before any mark comes off: a cap with its logo
+    # painted out can hand the detector a larger false box and change the zoom, and removing a
+    # logo must never move the face.
     if entry.get("face"):
         box, eyed = tuple(entry["face"]), True
         notes.append("face-override")
@@ -145,6 +244,9 @@ def fit(entry, masters):
     x, y, fw, fh = box
     side = min(fw / FACE_FRAC, W, H)
     cx = head_centre_x(im, box)
+    if entry.get("marks"):
+        im = paint_out_marks(im, entry["marks"])
+        notes.append(f"marks-removed-{len(entry['marks'])}")
     cy = y + fh / 2
     left = min(max(0, cx - side / 2), W - side)
     top = min(max(0, cy - FACE_CY * side), H - side)

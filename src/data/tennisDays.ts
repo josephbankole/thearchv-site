@@ -11,6 +11,7 @@ export const tennisDays: DayEntry[] = [
     date: "2026-09-10",
     day: "Thursday",
     headline: "Who was the last American man to win the US Open?",
+    seoTitle: "Andy Roddick, 2003: last American man to win US Open",
     dek: "Andy Roddick, in 2003. An American man is guaranteed a place in Sunday's 2026 final, because Ben Shelton and Frances Tiafoe meet in Friday's semi-final.",
     body: "Andy Roddick was the last American man to win the US Open men's singles title, in 2003, per ABC News, NBC New York and Bleacher Report. Amsterdam News puts the wait at 23 years going into this weekend.\n\nThis year somebody gets a shot at ending it. Ben Shelton and Frances Tiafoe, both American, meet in the semi-finals at Arthur Ashe Stadium on Friday 11 September, so one of them will play in Sunday's final, per ABC News and Bleacher Report.\n\nShelton knocked out the defending champion, Carlos Alcaraz, 6-7(5), 6-1, 6-3, 1-6, 7-6 in a match that ended after 3:30am on Wednesday, the latest finish in US Open history, per ABC News and NBC New York. Tiafoe, the No. 11 seed, came from two sets down to beat Alex Michelsen 5-7, 3-6, 7-5, 6-3, 7-6 on Tuesday, winning the fifth-set tie-break, per ABC News and the St. Louis American.\n\nThe last American man to reach the final at all was Taylor Fritz in 2024, per ABC News and NBC New York.",
     status: "verified",

@@ -11,6 +11,7 @@ export const golfDays: DayEntry[] = [
     date: "2026-09-10",
     day: "Thursday",
     headline: "How many points does Europe need to win back the Solheim Cup in 2026?",
+    seoTitle: "Solheim Cup 2026: Europe need 14.5 points to win it back",
     dek: "Europe need 14 and a half of the 28 points at Bernardus Golf in the Netherlands. The United States, as holders, keep the trophy with 14.",
     body: "Europe need 14 and a half points to win back the Solheim Cup at Bernardus Golf in the Netherlands, and the United States need 14 to keep it, per the Associated Press and Wikipedia's tournament record. There are 28 points on offer across three days, from Friday 11 September to Sunday 13 September: four foursomes and four fourballs on each of the first two days, then 12 singles on Sunday, per the Associated Press.\n\nThe half point is the holders' advantage. The Americans won in 2024, 15.5 to 12.5 in Virginia, per Sky Sports and the Associated Press, so a 14-14 tie leaves the trophy with them.\n\nAnna Nordqvist captains Europe and Angela Stanford the United States, per Sky Sports and the Associated Press.",
     status: "verified",

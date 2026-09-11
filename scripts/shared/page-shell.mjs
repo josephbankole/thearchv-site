@@ -118,8 +118,49 @@ export function clampTitle(segments, max = 65) {
   return title;
 }
 
+// answerTitle: the search <title> for a page that exists to answer a question (the Answer Desk
+// lanes, the glossary, and any news entry the desk files with one). Founder order 2026-09-11,
+// after the nightly GSC reading scored 0 of 10 striking-distance pages: the <title> used to be
+// the on-page headline, which on these pages is the QUESTION, so the search result repeated the
+// searcher's own question back and kept the answer behind the click. `seoTitle` is the answer
+// itself, under 60 characters, and it is SEARCH-ONLY: the <h1>, the FAQPage question, the social
+// title and the share text all keep the headline. With no seoTitle the old headline path runs
+// unchanged, so every entry filed before this date renders byte-identically. The brand is
+// appended only when the whole title still fits in ANSWER_TITLE_MAX; the answer is never cut.
+export const ANSWER_TITLE_MAX = 60;
+export function answerTitle(seoTitle, fallbackSegments, brand = "The ARCHV") {
+  const lead = String(seoTitle ?? "").trim();
+  if (!lead) return clampTitle(fallbackSegments);
+  return clampTitle([lead, brand], ANSWER_TITLE_MAX);
+}
+
+// Build-time flags for the answer-title rule. Warns, never fails: a failed build here would stop
+// the day's desk commit from deploying at all, which costs more than a title the desk can fix
+// tomorrow. `items` is [{ id, seoTitle }]; returns the ids missing one and the ones over the cap.
+export function answerTitleFlags(items) {
+  const missing = [];
+  const long = [];
+  for (const { id, seoTitle } of items) {
+    const t = String(seoTitle ?? "").trim();
+    if (!t) missing.push(id);
+    else if (t.length > ANSWER_TITLE_MAX) long.push(`${id} (${t.length} chars)`);
+  }
+  return { missing, long };
+}
+
 // tests-by-assertion, the convention build-article-pages.mjs uses for its own helpers: a
 // regression fails the build at import time rather than shipping a broken <title>.
+(function selfTestAnswerTitle() {
+  const fallback = ["Who was the last American man to win the US Open?", "answered", "The ARCHV"];
+  if (answerTitle("", fallback) !== clampTitle(fallback)) throw new Error("answerTitle: no seoTitle must fall back to the headline path unchanged");
+  if (answerTitle("Andy Roddick, 2003: last American man to win US Open", fallback) !== "Andy Roddick, 2003: last American man to win US Open") {
+    throw new Error("answerTitle: the brand must be dropped when it would take the title past 60");
+  }
+  if (answerTitle("FedEx Cup points, explained", fallback) !== "FedEx Cup points, explained · The ARCHV") throw new Error("answerTitle: a short answer must keep the brand");
+  const flags = answerTitleFlags([{ id: "a", seoTitle: "" }, { id: "b", seoTitle: "x".repeat(61) }, { id: "c", seoTitle: "fine" }]);
+  if (flags.missing.join() !== "a" || flags.long.join() !== "b (61 chars)") throw new Error("answerTitleFlags: wrong buckets");
+})();
+
 (function selfTestClampTitle() {
   const longHeadline = "Manchester United have moved Altay Bayindir off the wage bill and into a Championship season";
   const out = clampTitle([longHeadline, "Manchester United transfer news", "The ARCHV"]);

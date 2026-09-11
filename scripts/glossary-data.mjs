@@ -6,6 +6,9 @@
               surfaces describe the same entity (index.html's FAQPage acceptedAnswer carries a
               `url` back to this page, and its acceptedAnswer text is copied verbatim from the
               `answer` field below for the six strongest entries — see index.html's FAQ section).
+     seoTitle OPTIONAL, 2026-09-11: the search-only <title>, stating the answer in under 60
+              characters. The <h1> and the visible question are untouched. With none, the title
+              falls back to `question`. See answerTitle() in scripts/shared/page-shell.mjs.
      answer   the extraction target for answer engines: 40-60 words, definition first sentence,
               mechanism second. This exact string is BOTH the visible answer paragraph AND the
               FAQPage/DefinedTerm answer text in the page's JSON-LD, so keep it free of &, <, >
@@ -227,6 +230,7 @@ export const glossaryEntries = [
     slug: "buy-back-clause",
     title: "The buy-back clause",
     question: "What is a buy-back clause?",
+    seoTitle: "Buy-back clause: the price to re-sign a player you sold",
     answer:
       "A buy-back clause lets the selling club re-sign a player at a price agreed at the time of the sale, usually within a set window of years. Big clubs use it when selling a young player they may want back, so a rival cannot price them out later.",
     depth: [
@@ -727,6 +731,7 @@ export const glossaryEntries = [
     slug: "protected-ranking",
     title: "Protected and special rankings in tennis",
     question: "What is a protected ranking in tennis?",
+    seoTitle: "Protected ranking: injured players enter on old ranking",
     answer:
       "A protected ranking lets a player who has been out injured for a long spell enter tournaments using their old ranking rather than the one they dropped to. The ATP calls it a protected ranking and the WTA a special ranking. Both limit how many events it can be used for.",
     depth: [
@@ -792,6 +797,7 @@ export const glossaryEntries = [
     slug: "fedex-cup",
     title: "The FedEx Cup",
     question: "How do FedEx Cup points work?",
+    seoTitle: "FedEx Cup: PGA Tour's season points race and playoffs",
     answer:
       "The FedEx Cup is the PGA Tour's season long points race. Players earn points at every event, with more on offer at the majors and the biggest tournaments, and the leading players qualify for a short playoff series whose field shrinks at each stage before a final event decides the title.",
     depth: [

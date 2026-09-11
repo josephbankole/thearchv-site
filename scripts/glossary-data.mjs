@@ -1,4 +1,4 @@
-/* scripts/glossary-data.mjs — the sixty evergreen glossary entries, read by
+/* scripts/glossary-data.mjs — the evergreen glossary entries (sixty-one as of 2026-09-11), read by
    scripts/build-glossary-pages.mjs. Each entry:
      slug     URL segment under /glossary/
      title    the term as it reads as an <h1> (e.g. "xG (expected goals)")
@@ -595,7 +595,7 @@ export const glossaryEntries = [
       "The accrued seasons rule is what separates the two paths. A player who has been in the league long enough, released outside the part of the season where waivers apply to everyone, becomes a free agent straight away and can choose where to sign, which is a considerable advantage over being claimed.",
       "Waivers also explain the annual roster cutdown. When every team trims to its final roster on the same day, hundreds of players hit waivers at once, and the worst teams from the previous season get first look at all of them.",
     ],
-    related: ["practice-squad", "franchise-tag", "dead-cap"],
+    related: ["practice-squad", "nfl-roster-cutdown", "dead-cap"],
   },
   {
     slug: "practice-squad",
@@ -609,6 +609,23 @@ export const glossaryEntries = [
       "Practice squad players can be signed away by any other team, provided that team puts them on its active roster. That is the safeguard that stops a strong club stockpiling talent it has no intention of ever playing.",
     ],
     related: ["nfl-waivers", "dead-cap", "franchise-tag"],
+  },
+  {
+    // Added 2026-09-11 (founder order: recurring questions get an evergreen page). The dated Answer
+    // Desk entry nfl/questions/2026-08-25 links here through its `evergreen` field. 2026 facts
+    // web-checked 2026-09-11 against the Yahoo Sports and CBS Sports cut trackers.
+    slug: "nfl-roster-cutdown",
+    title: "The NFL roster cutdown",
+    question: "When is the NFL 53-man roster cutdown deadline?",
+    seoTitle: "NFL roster cutdown: every team cuts from 90 players to 53",
+    answer:
+      "The roster cutdown is the deadline by which every NFL team must trim its roster from the 90 players it carries in preseason to the 53 it can start the season with. It falls just after the final preseason weekend in late August, and in 2026 it was Sunday 30 August.",
+    depth: [
+      "The date moves a little from year to year. For years the cutdown sat on the Tuesday after the last preseason games, which gave coaches two days with the tape before they settled the final places. In 2026 the league brought it forward to the Sunday, because the San Francisco 49ers were flying to Melbourne that week to open the regular season against the Los Angeles Rams.",
+      "The day after the cutdown, most of the released players go on waivers, and clubs claim them in priority order, worst record first. The ones who clear waivers become the pool that practice squads are built from, and those squads are filed the same day.",
+      "More than a thousand players lose their places in a single afternoon. Waiver claims then move players between rosters over the following days, so the list a club names that evening can change before the first game.",
+    ],
+    related: ["nfl-waivers", "practice-squad", "dead-cap"],
   },
   {
     slug: "dead-cap",

@@ -12,6 +12,7 @@ import { createHash } from "node:crypto";
 import { byDateDesc, LANE_META, SPORTS, laneByFeedKey, articlePath } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { infogramEligible, infogramAlt, infogramRelPath } from "./shared/infogram.mjs";
+import { withAppArt } from "./shared/app-art.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.FEED_OUT || join(ROOT, "dist", "feed");
@@ -66,9 +67,12 @@ function withInfogram(entry, section) {
 // (today.lead/wrap reuse these same tagged objects, so the infogram fields propagate there too.)
 // v3: every day entry gains `sport` (resolved here, always populated, so the app never has to
 // know about the absent-means-football default). Football's three lanes are sport "football".
-const transferTagged = transferDays.map((d) => withInfogram({ ...d, section: "transfer", sport: "football", url: articleUrl("transfer", d.date) }, "transfer"));
-const worldCupTagged = worldCupDays.map((d) => withInfogram({ ...d, section: "worldcup", sport: "football", url: articleUrl("worldcup", d.date) }, "worldcup"));
-const leaguesTagged = leaguesDays.map((d) => withInfogram({ ...d, section: "leagues", sport: "football", url: articleUrl("leagues", d.date) }, "leagues"));
+// `image` is the app's only card art: withAppArt swaps in the app-grade portrait (or drops a
+// sub-600px one) and fills it from the illustrated registry when the desk filed none.
+// See scripts/shared/app-art.mjs.
+const transferTagged = transferDays.map((d) => withAppArt(withInfogram({ ...d, section: "transfer", sport: "football", url: articleUrl("transfer", d.date) }, "transfer")));
+const worldCupTagged = worldCupDays.map((d) => withAppArt(withInfogram({ ...d, section: "worldcup", sport: "football", url: articleUrl("worldcup", d.date) }, "worldcup")));
+const leaguesTagged = leaguesDays.map((d) => withAppArt(withInfogram({ ...d, section: "leagues", sport: "football", url: articleUrl("leagues", d.date) }, "leagues")));
 // leagues entries are deliberately NOT in the daily today-pool yet: the Today lead is
 // "newest dated wrap" and a leagues launch batch must not displace the day's transfer/WC lead.
 const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);
@@ -92,7 +96,7 @@ for (const sport of SPORTS) {
   // Already newest-first out of day-data.mjs; .map returns a new array, so the shared one is
   // never touched.
   const days = (SPORT_RAW[sport.key] || [])
-    .map((d) => ({ ...d, section: sport.key, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
+    .map((d) => withAppArt({ ...d, section: sport.key, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
   sportFeeds[sport.key] = { days, lastUpdated: newestOf(days) };
 }
 

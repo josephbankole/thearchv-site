@@ -10,7 +10,8 @@
       "src": "/media/illustrated/head-angulo.jpg",
       "width": 320,
       "height": 320,
-      "alt": "Illustrated ARCHV portrait of Nilson Angulo of Ecuador"
+      "alt": "Illustrated ARCHV portrait of Nilson Angulo of Ecuador",
+      "hd": "/heads/hd/nilson-angulo.webp"
     },
     {
       "slug": "elijah-just",
@@ -19,7 +20,8 @@
       "src": "/media/illustrated/head-elijahjust.jpg",
       "width": 320,
       "height": 320,
-      "alt": "Illustrated ARCHV portrait of Elijah Just of New Zealand"
+      "alt": "Illustrated ARCHV portrait of Elijah Just of New Zealand",
+      "hd": "/heads/hd/elijah-just.webp"
     },
     {
       "slug": "issa-diop",
@@ -28,7 +30,8 @@
       "src": "/media/illustrated/head-issadiop.jpg",
       "width": 320,
       "height": 320,
-      "alt": "Illustrated ARCHV portrait of Issa Diop of Morocco"
+      "alt": "Illustrated ARCHV portrait of Issa Diop of Morocco",
+      "hd": "/heads/hd/issa-diop.webp"
     },
     {
       "slug": "riyad-mahrez",
@@ -37,7 +40,8 @@
       "src": "/media/illustrated/head-mahrez.jpg",
       "width": 320,
       "height": 320,
-      "alt": "Illustrated ARCHV portrait of Riyad Mahrez of Algeria"
+      "alt": "Illustrated ARCHV portrait of Riyad Mahrez of Algeria",
+      "hd": "/heads/hd/riyad-mahrez.webp"
     },
     {
       "slug": "vozinha",
@@ -46,7 +50,8 @@
       "src": "/media/illustrated/head-vozinha.jpg",
       "width": 320,
       "height": 320,
-      "alt": "Illustrated ARCHV portrait of the Cape Verde goalkeeper Vozinha"
+      "alt": "Illustrated ARCHV portrait of the Cape Verde goalkeeper Vozinha",
+      "hd": "/heads/hd/vozinha.webp"
     },
     {
       "slug": "lewis-hall",
@@ -55,7 +60,8 @@
       "src": "/heads/hall.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Lewis Hall of England"
+      "alt": "Illustrated ARCHV portrait of Lewis Hall of England",
+      "hd": "/heads/hd/hall.webp"
     },
     {
       "slug": "marcus-rashford",
@@ -64,7 +70,8 @@
       "src": "/heads/rashford.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Marcus Rashford of England"
+      "alt": "Illustrated ARCHV portrait of Marcus Rashford of England",
+      "hd": "/heads/hd/rashford.webp"
     },
     {
       "slug": "andrey-santos",
@@ -73,7 +80,8 @@
       "src": "/heads/andrey-santos.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Andrey Santos of Brazil"
+      "alt": "Illustrated ARCHV portrait of Andrey Santos of Brazil",
+      "hd": "/heads/hd/andrey-santos.webp"
     },
     {
       "slug": "youri-tielemans",
@@ -82,7 +90,8 @@
       "src": "/heads/youri-tielemans.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Youri Tielemans of Belgium"
+      "alt": "Illustrated ARCHV portrait of Youri Tielemans of Belgium",
+      "hd": "/heads/hd/youri-tielemans.webp"
     },
     {
       "slug": "manu-kone",
@@ -91,7 +100,8 @@
       "src": "/heads/kone.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Manu Kone of France"
+      "alt": "Illustrated ARCHV portrait of Manu Kone of France",
+      "hd": "/heads/hd/kone.webp"
     },
     {
       "slug": "mateus-fernandes",
@@ -100,7 +110,8 @@
       "src": "/heads/fernandes.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Mateus Fernandes of Portugal"
+      "alt": "Illustrated ARCHV portrait of Mateus Fernandes of Portugal",
+      "hd": "/heads/hd/fernandes.webp"
     },
     {
       "slug": "carlos-baleba",
@@ -109,7 +120,8 @@
       "src": "/heads/baleba.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Carlos Baleba of Cameroon"
+      "alt": "Illustrated ARCHV portrait of Carlos Baleba of Cameroon",
+      "hd": "/heads/hd/baleba.webp"
     },
     {
       "slug": "elliot-anderson",
@@ -118,7 +130,8 @@
       "src": "/heads/anderson.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Elliot Anderson of England"
+      "alt": "Illustrated ARCHV portrait of Elliot Anderson of England",
+      "hd": "/heads/hd/anderson.webp"
     },
     {
       "slug": "aurelien-tchouameni",
@@ -127,7 +140,8 @@
       "src": "/heads/tchouameni.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Aurelien Tchouameni of France"
+      "alt": "Illustrated ARCHV portrait of Aurelien Tchouameni of France",
+      "hd": "/heads/hd/tchouameni.webp"
     },
     {
       "slug": "eduardo-camavinga",
@@ -136,7 +150,8 @@
       "src": "/heads/camavinga.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Eduardo Camavinga of France"
+      "alt": "Illustrated ARCHV portrait of Eduardo Camavinga of France",
+      "hd": "/heads/hd/camavinga.webp"
     },
     {
       "slug": "jude-bellingham",
@@ -145,7 +160,8 @@
       "src": "/heads/bellingham.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Jude Bellingham of England"
+      "alt": "Illustrated ARCHV portrait of Jude Bellingham of England",
+      "hd": "/heads/hd/bellingham.webp"
     },
     {
       "slug": "kylian-mbappe",
@@ -154,7 +170,8 @@
       "src": "/heads/mbappe.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Kylian Mbappe of France"
+      "alt": "Illustrated ARCHV portrait of Kylian Mbappe of France",
+      "hd": "/heads/hd/mbappe.webp"
     },
     {
       "slug": "lionel-messi",
@@ -163,7 +180,8 @@
       "src": "/heads/messi.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Lionel Messi of Argentina"
+      "alt": "Illustrated ARCHV portrait of Lionel Messi of Argentina",
+      "hd": "/heads/hd/messi.webp"
     },
     {
       "slug": "cristiano-ronaldo",
@@ -172,7 +190,8 @@
       "src": "/heads/ronaldo.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Cristiano Ronaldo of Portugal"
+      "alt": "Illustrated ARCHV portrait of Cristiano Ronaldo of Portugal",
+      "hd": "/heads/hd/ronaldo.webp"
     },
     {
       "slug": "erling-haaland",
@@ -181,7 +200,8 @@
       "src": "/heads/haaland.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Erling Haaland of Norway"
+      "alt": "Illustrated ARCHV portrait of Erling Haaland of Norway",
+      "hd": "/heads/hd/haaland-manchester-city.webp"
     },
     {
       "slug": "folarin-balogun",
@@ -190,7 +210,8 @@
       "src": "/heads/balogun.webp",
       "width": 240,
       "height": 240,
-      "alt": "Illustrated ARCHV portrait of Folarin Balogun of the United States"
+      "alt": "Illustrated ARCHV portrait of Folarin Balogun of the United States",
+      "hd": "/heads/hd/balogun.webp"
     },
     {
       "slug": "raul-jimenez",
@@ -200,7 +221,208 @@
       "width": 240,
       "height": 240,
       "alt": "Illustrated ARCHV portrait of Raul Jimenez of Mexico",
-      "verifiedBy": "Two agreeing in-repo records, checked 2026-08-09: the bank index row 'Raúl Jiménez | MEX' (regen3 2026-06-11, photo-ref Wikimedia '2017 Confederation Cup - MEXNZL - Raúl Jiménez (crop).jpg'), and the desk's own committed imageAlt 'Raúl Jiménez, illustrated by The ARCHV.' on /heads/jimenez.webp in src/data/worldCupDays.ts. Full name only: the bare surname would also match /heads/jimenez-fulham.webp and any other Jimenez."
+      "verifiedBy": "Two agreeing in-repo records, checked 2026-08-09: the bank index row 'Raúl Jiménez | MEX' (regen3 2026-06-11, photo-ref Wikimedia '2017 Confederation Cup - MEXNZL - Raúl Jiménez (crop).jpg'), and the desk's own committed imageAlt 'Raúl Jiménez, illustrated by The ARCHV.' on /heads/jimenez.webp in src/data/worldCupDays.ts. Full name only: the bare surname would also match /heads/jimenez-fulham.webp and any other Jimenez.",
+      "hd": "/heads/hd/jimenez-fulham.webp"
+    },
+    {
+      "slug": "bruno-fernandes",
+      "name": "Bruno Fernandes",
+      "club": "Manchester United",
+      "src": "/heads/hd/bruno-fernandes.webp",
+      "hd": "/heads/hd/bruno-fernandes.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Bruno Fernandes"
+    },
+    {
+      "slug": "joshua-zirkzee",
+      "name": "Joshua Zirkzee",
+      "club": "Manchester United",
+      "src": "/heads/hd/zirkzee.webp",
+      "hd": "/heads/hd/zirkzee.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Joshua Zirkzee"
+    },
+    {
+      "slug": "diogo-dalot",
+      "name": "Diogo Dalot",
+      "club": "Manchester United",
+      "src": "/heads/hd/diogo-dalot.webp",
+      "hd": "/heads/hd/diogo-dalot.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Diogo Dalot"
+    },
+    {
+      "slug": "noussair-mazraoui",
+      "name": "Noussair Mazraoui",
+      "club": "Manchester United",
+      "src": "/heads/hd/noussair-mazraoui.webp",
+      "hd": "/heads/hd/noussair-mazraoui.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Noussair Mazraoui"
+    },
+    {
+      "slug": "matthijs-de-ligt",
+      "name": "Matthijs de Ligt",
+      "club": "Manchester United",
+      "src": "/heads/hd/matthijs-de-ligt.webp",
+      "hd": "/heads/hd/matthijs-de-ligt.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Matthijs de Ligt"
+    },
+    {
+      "slug": "harry-maguire",
+      "name": "Harry Maguire",
+      "club": "Manchester United",
+      "src": "/heads/hd/harry-maguire.webp",
+      "hd": "/heads/hd/harry-maguire.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Harry Maguire"
+    },
+    {
+      "slug": "lisandro-martinez",
+      "name": "Lisandro Martinez",
+      "club": "Manchester United",
+      "src": "/heads/hd/lisandro-martinez.webp",
+      "hd": "/heads/hd/lisandro-martinez.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Lisandro Martinez"
+    },
+    {
+      "slug": "mason-mount",
+      "name": "Mason Mount",
+      "club": "Manchester United",
+      "src": "/heads/hd/mason-mount.webp",
+      "hd": "/heads/hd/mason-mount.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Mason Mount"
+    },
+    {
+      "slug": "patrick-dorgu",
+      "name": "Patrick Dorgu",
+      "club": "Manchester United",
+      "src": "/heads/hd/patrick-dorgu.webp",
+      "hd": "/heads/hd/patrick-dorgu.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Patrick Dorgu"
+    },
+    {
+      "slug": "leny-yoro",
+      "name": "Leny Yoro",
+      "club": "Manchester United",
+      "src": "/heads/hd/leny-yoro.webp",
+      "hd": "/heads/hd/leny-yoro.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Leny Yoro"
+    },
+    {
+      "slug": "bryan-mbeumo",
+      "name": "Bryan Mbeumo",
+      "club": "Manchester United",
+      "src": "/heads/hd/bryan-mbeumo.webp",
+      "hd": "/heads/hd/bryan-mbeumo.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Bryan Mbeumo"
+    },
+    {
+      "slug": "luke-shaw",
+      "name": "Luke Shaw",
+      "club": "Manchester United",
+      "src": "/heads/hd/luke-shaw.webp",
+      "hd": "/heads/hd/luke-shaw.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Luke Shaw"
+    },
+    {
+      "slug": "manuel-ugarte",
+      "name": "Manuel Ugarte",
+      "club": "Manchester United",
+      "src": "/heads/hd/manuel-ugarte.webp",
+      "hd": "/heads/hd/manuel-ugarte.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Manuel Ugarte"
+    },
+    {
+      "slug": "benjamin-sesko",
+      "name": "Benjamin Sesko",
+      "club": "Manchester United",
+      "src": "/heads/hd/benjamin-sesko.webp",
+      "hd": "/heads/hd/benjamin-sesko.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Benjamin Sesko"
+    },
+    {
+      "slug": "ayden-heaven",
+      "name": "Ayden Heaven",
+      "club": "Manchester United",
+      "src": "/heads/hd/ayden-heaven.webp",
+      "hd": "/heads/hd/ayden-heaven.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Ayden Heaven"
+    },
+    {
+      "slug": "tyler-fletcher",
+      "name": "Tyler Fletcher",
+      "club": "Manchester United",
+      "src": "/heads/hd/tyler-fletcher.webp",
+      "hd": "/heads/hd/tyler-fletcher.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Tyler Fletcher"
+    },
+    {
+      "slug": "senne-lammens",
+      "name": "Senne Lammens",
+      "club": "Manchester United",
+      "src": "/heads/hd/senne-lammens.webp",
+      "hd": "/heads/hd/senne-lammens.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Senne Lammens"
+    },
+    {
+      "slug": "michael-carrick",
+      "name": "Michael Carrick",
+      "club": "Manchester United",
+      "src": "/heads/hd/michael-carrick.webp",
+      "hd": "/heads/hd/michael-carrick.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United head coach Michael Carrick"
+    },
+    {
+      "slug": "tom-heaton",
+      "name": "Tom Heaton",
+      "club": "Manchester United",
+      "src": "/heads/hd/tom-heaton.webp",
+      "hd": "/heads/hd/tom-heaton.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Tom Heaton"
+    },
+    {
+      "slug": "karl-darlow",
+      "name": "Karl Darlow",
+      "club": "Manchester United",
+      "src": "/heads/hd/karl-darlow.webp",
+      "hd": "/heads/hd/karl-darlow.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of Manchester United player Karl Darlow"
     }
   ],
   "clubs": [
@@ -228,5 +450,6 @@
       "height": 120,
       "alt": "The ARCHV badge for Paris Saint-Germain"
     }
-  ]
+  ],
+  "_hd": "Every player also carries `hd`: the 600x600 app-grade portrait in public/heads/hd/, built from the full-resolution master by scripts/heads/normalize-heads.py to one framing, with the master and its identity check recorded in scripts/data/heads-hd.json. The iOS feed (scripts/build-feed.mjs via scripts/shared/app-art.mjs) serves `hd`, never `src`. The Manchester United rows that carry `club` instead of `nation` were added on 2026-09-11 from the 2026-09-10 squad table in fifa.archv/player-headshot-bank.md, where the first team was read from the FPL API and Wikipedia and each face is the named bank row's file with no kit flag. Matheus Cunha, Amad Diallo and Kobbie Mainoo are deliberately absent: their banked faces wear national colours, which the 2026-08-04 kit guard forbids on a Manchester United label."
 }

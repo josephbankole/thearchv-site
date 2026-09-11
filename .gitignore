@@ -22,3 +22,4 @@ supabase/.branches/
 
 # transient esbuild bundles from scripts/shared/day-data.mjs (pid-scoped, cleaned in a finally)
 .day-data-*.mjs
+.heads-cache/

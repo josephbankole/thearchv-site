@@ -270,14 +270,20 @@ section marker now.*
   mark after the run starts, because the publish desk fires at 06:07 and a datetime of 06:00 is already
   in the past. Never hard-code 6:00am. App push **10:30am ET**, content committed by
   ~10:15. **Dispatch weekly**, send 10:45am ET, founder presses send.
-- **Buffer is the route everywhere EXCEPT Threads. Content360 is REVIVED as the Threads route**
-  (D-2026-08-18/19, founder, superseding the D-2026-07-27b workspace-wide retirement for Threads only;
-  digest line corrected 2026-08-24, having still read "RETIRED" a week after the ruling). Exactly three
-  Content360 Threads surfaces exist, all running in the founder's logged-in Chrome session:
-  `threads-ca-daily`'s 5pm evening thread (auto-post authorized), `fola-personal-daily`'s @thearchv.ai
-  AI thread (auto-post authorized), and the founder's personal Threads unit, which is only ever left as
-  a DRAFT with no scheduled time because Content360 has no notification mode (manual always, founder
-  2026-08-23). Everywhere else the retirement stands: Buffer is the route, the TikTok-stage
+- **Buffer is the route everywhere, and the @thearchv.ca Threads thread is BACK ON BUFFER (D-2026-09-10e,
+  founder, in session: "threads account connected via buffer, start using that instead of content360").**
+  `threads-ca-daily`'s 5pm evening thread now publishes through Buffer channel `6aa342cdcd8b9c702c487ed0`,
+  GraphQL `createPost` via `execute_mutation`, `schedulingType: automatic`, `mode: customScheduled`, explicit
+  ISO `dueAt`, read back with `get_post`; auto-post authorization carries over, and the per-post topic tag
+  is now set through `metadata.threads.topic`. That lane no longer opens Content360 and does not fall back
+  to it without a founder word. **Content360 survives as the Threads route ONLY where Buffer has no
+  channel** (D-2026-08-18/19, founder, superseding the D-2026-07-27b retirement for Threads only; digest
+  line corrected 2026-08-24, narrowed 2026-09-10). Exactly ONE Content360 Threads surface remains, in
+  the founder's logged-in Chrome session: `fola-personal-daily`'s @thearchv.ai AI thread (auto-post
+  authorized). The personal folabankole Threads unit is gone altogether, not moved, per the same-day
+  personal-account ruling below ("i no longer want threads on my personal account"). Buffer's org sits at
+  its 7-channel limit as of 2026-09-10 and has no @thearchv.ai Threads channel, which is why that lane has
+  not moved. Everywhere else the retirement stands: Buffer is the route, the TikTok-stage
   sanctioned-fallback note survives, and no other lane adopts Content360. Its
   caption-drop-after-media-insert bug and its headless login wall are both still real; a run that
   cannot reach the founder's session HOLDS and says so rather than improvising a route. The 6am
@@ -298,8 +304,10 @@ section marker now.*
   have silently killed the other two owners on Monday 10 August before the founder ruled that they
   should indeed stand down. **A carve-out that names one owner forbids every other owner you forgot to
   name**, so name the survivor deliberately, as this line now does.
-- **Channel ids: this table is authoritative (refreshed 2026-08-24 on D-2026-08-14c, D-2026-08-23a and
-  D-2026-08-24d; base ids per D-2026-07-27b). §3's Buffer line is stale.**
+- **Channel ids: this table is authoritative (refreshed 2026-09-10 after the founder's Threads reconnect,
+  and 2026-08-24 on D-2026-08-14c, D-2026-08-23a and D-2026-08-24d; base ids per D-2026-07-27b). §3's
+  Buffer line is stale. Resolve ids from this table or a live `list_channels`, never from memory or an old
+  `thread-vars.json`.**
 
   | Surface | Channel id |
   |---|---|
@@ -307,7 +315,7 @@ section marker now.*
   | Instagram @thearchv.ca (multi-sport) | 6a65b5a24b2d03035f42087b |
   | Instagram folabankole (founder personal; `fola-personal-daily` ONLY, notification mode ONLY, D-2026-08-23a, IG half unchanged by D-2026-09-02a) | 6a7ed151b2d9d57743764a17 |
   | Threads @thearchvfc (NEW ID from the founder's reconnect, channel created 2026-09-10 23:53Z; the old id 6a5d708de2638b94d79bc0b4 no longer exists and its post history went with it) | 6aa342ffcd8b9c702c487f67 |
-  | Threads @thearchv.ca (added to Buffer by the same reconnect, 2026-09-10 23:52Z; the evening lane `threads-ca-daily` still runs on Content360 per D-2026-08-18/19, and no desk queues here without a founder lane) | 6aa342cdcd8b9c702c487ed0 |
+  | Threads @thearchv.ca (added to Buffer by the same reconnect, 2026-09-10 23:52Z; OWNED by `threads-ca-daily`'s 5pm evening thread from 2026-09-11, which moved off Content360 by founder ruling D-2026-09-10e; no other desk queues here) | 6aa342cdcd8b9c702c487ed0 |
   | Instagram film.joey (appeared in Buffer 2026-09-10 13:57Z; no ARCHV lane owns it, so no desk queues to it) | 6aa2b751cd8b9c702c429c5e |
   | TikTok @thearchvfc (REMOVED from Buffer 2026-08-14, D-2026-08-14c; id historical, TikTok ships via Studio or the Drive handoff) | 6a65b5844b2d03035f420822 |
   | X @thearchvfc (founder-manual only, D-2026-08-24d; no task posts) | 6a1e151fc687a22dd44dfef7 |
@@ -318,8 +326,19 @@ section marker now.*
   banked Drive goal-archive volume as a Short, gated on `fifa.archv/goal-archive-queue.md` reading
   STATUS CONFIRMED, which is the founder confirming both the queue order and the rights. A closed
   gate is a HOLD reported by name, never a silent skip.
+- **D-2026-09-10a (founder, in session, 2026-09-10): NO THREADS ON THE PERSONAL ACCOUNT.** His
+  words: "i no longer want threads on my personal account." Nothing from any desk, routine,
+  pipeline or ad-hoc run goes to @folabankole on Threads, by Content360, the Threads API or any
+  other route: no drafts, no schedules, no posts. This SUPERSEDES the Threads half of D-2026-09-02a
+  below, D-2026-09-05a (the no-cap order) and the 2026-09-07 subject change for that surface.
+  `fola-personal-daily` unit 2 is retired; its IG carousel and its @thearchv.ai thread are
+  unchanged. The paused `threads-fola` lane in `~/archv-pipeline` never re-enters. The account is not
+  deleted and nothing already published is removed; that is the founder's call alone. The last two
+  personal threads published on 2026-09-10 at 13:00 and 16:10 ET, before the ruling reached the
+  session. folabankole INSTAGRAM is untouched: manual always, Buffer notification.
 - **AMENDED 2026-09-02 (founder, in session, D-2026-09-02a): THE PERSONAL LANE IS SPLIT. IG MANUAL,
-  THREADS SCHEDULED.** This amends D-2026-08-23a (2026-08-23), which had made the whole personal
+  THREADS SCHEDULED. THREADS HALF SUPERSEDED 2026-09-10 BY D-2026-09-10a ABOVE: personal Threads
+  is OFF.** This amends D-2026-08-23a (2026-08-23), which had made the whole personal
   lane manual always: the IG half of that ruling STANDS, the Threads half is REVERSED. folabankole
   INSTAGRAM never auto-publishes, on any desk, ever: `fola-personal-daily` goes to Buffer as
   `schedulingType: notification`, never automatic, and the founder presses send. folabankole THREADS
@@ -1268,8 +1287,26 @@ edit per the same-run rule.*
   the reel lane is paused. The standing cast, the played-AND-scored slide rule, the Sunday-to-Saturday
   window and the sourcing rules live in `routines-v2/archv-football-desk.md` step 7b. Slide count per
   D-2026-08-24e above; its liveness registration is being fixed in the same overhaul.
+- **RECORDED, decision date 2026-09-10 (founder, in session, D-2026-09-10e): `threads-ca-daily` MOVES
+  FROM CONTENT360 TO BUFFER.** "threads account connected via buffer, start using that instead of
+  content360." The @thearchv.ca Threads account is connected in Buffer as channel
+  `6aa342cdcd8b9c702c487ed0`, and the 5pm evening thread publishes there from 2026-09-11 with the same
+  recipe as the football desk's morning thread: GraphQL `createPost` via `execute_mutation` (the named
+  `create_post` tool stays banned, DESK-LESSONS 5a), `schedulingType: automatic`, `mode: customScheduled`,
+  explicit ISO `dueAt`, `metadata.threads.thread[]` for the posts and `metadata.threads.topic` for the tag,
+  then a `get_post` read-back and a live check. Auto-post authorization from D-2026-08-18/19 carries over
+  unchanged. Two Content360-era defects close with the move: the per-post topic tag this desk could not
+  set on sixteen runs, and the composer's tiptap double-hyphen rewrite. If Buffer cannot take the post the
+  desk HOLDS and reports; it does not fall back to Content360 without a founder word. The same
+  reconnection gave @thearchvfc Threads a new id, `6aa342ffcd8b9c702c487f67`, and retired
+  `6a5d708de2638b94d79bc0b4`; the channel table in the Channels block is updated. The one remaining
+  Content360 Threads surface, `fola-personal-daily`'s @thearchv.ai AI thread, is untouched (the personal
+  Threads unit was retired the same day by the personal-account ruling in the Channels block). The
+  2026-09-10 17:11 run was the last one through Content360.
 - **RECORDED, decision dates 2026-08-18/19 (founder, D-2026-08-18/19): THE CONTENT360 THREADS
-  CARVE-OUT.** Content360 is REVIVED as the Threads route, superseding the D-2026-07-27b retirement
+  CARVE-OUT. PARTLY SUPERSEDED 2026-09-10 by D-2026-09-10e, which moved `threads-ca-daily` to Buffer,
+  and by the same day's personal-account ruling, which ended personal Threads; only the @thearchv.ai AI
+  thread stays on Content360.** Content360 is REVIVED as the Threads route, superseding the D-2026-07-27b retirement
   for Threads only; Buffer stays the route everywhere else. Auto-post is approved for exactly two
   lanes, both running in the founder's logged-in Chrome session: `threads-ca-daily`'s 5pm evening
   thread and `fola-personal-daily`'s @thearchv.ai AI thread. The founder's personal Threads unit also
@@ -1307,7 +1344,7 @@ edit per the same-run rule.*
 - **RECORDED, decision date 2026-08-23 (founder, D-2026-08-23a): THE PERSONAL LANE IS MANUAL
   ALWAYS. PARTLY SUPERSEDED 2026-09-02 by D-2026-09-02a, see below and the amended header entry:
   the IG half stands, the Threads half is reversed and folabankole Threads is now SCHEDULED at
-  13:00 ET.** As originally recorded: supersedes the personal half of D-2026-08-18/19. Nothing on a
+  13:00 ET. That in turn is SUPERSEDED 2026-09-10 by D-2026-09-10a: personal Threads is OFF.** As originally recorded: supersedes the personal half of D-2026-08-18/19. Nothing on a
   folabankole surface auto-publishes, on any desk, ever. `fola-personal-daily` still prepares both
   personal units in full and queues them; the founder presses send. Concretely: folabankole
   Instagram goes to Buffer as `schedulingType: notification`, never automatic, and folabankole

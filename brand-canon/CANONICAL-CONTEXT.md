@@ -435,7 +435,7 @@ Every other day of the week stays at one unit.
   seven). **The daily Instagram and TikTok reel slots are UNCHANGED and still fill every day**, from the
   reuse register, labelled CONTROL. A rerun day is a full slate, never a miss. Build cadence and slot
   cadence are different things: only the building was cut.
-- **THE DAILY REEL TAKES ONE OF THE TWO @thearchvfc SLOTS (D-2026-08-04a, founder).** *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a: no per-day cap, 3-hour minimum spacing per platform)* Reel lane founder-paused regardless (D-2026-08-13d). The reel is INSIDE
+- **THE DAILY REEL TAKES ONE OF THE TWO @thearchvfc SLOTS (D-2026-08-04a, founder).** *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a: no per-day cap, 3-hour minimum spacing per platform)* Reel lane founder-paused regardless (D-2026-08-13d), EXCEPT the single stat card reel, one a day and outside the cap, from 2026-09-11 (D-2026-09-11b). The reel is INSIDE
   the two-unit cap and REPLACES a question carousel; it does not sit alongside them as a third unit.
   So a normal day on @thearchvfc is ONE question carousel plus ONE reel, four hours apart, not two
   carousels. This resolves the standing conflict between the D-2026-08-03 cap and the morning desk's
@@ -1174,6 +1174,8 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
   daily AND weekly.** After reviewing the evening's session-built reels (the ten recuts and two
   versions of the Bruno penalties reel), the founder held them all short of approval and ruled
   that no scheduled lane resumes reel work. What stands from tonight:
+  **PARTLY LIFTED 2026-09-11 by D-2026-09-11b: ONE single stat card reel a day on @thearchvfc is
+  back, that format only, outside the one-unit cap. Everything else below still stands.**
   - **The daily desk and the weekly task build, stage and queue NO reels.** They report the
     lane PAUSED citing this decision. The D-2026-08-13c one-a-day regime is ON HOLD, not
     implemented; no desk spec rewrite proceeds.
@@ -1588,8 +1590,40 @@ Instagram. Threads, the site, the @thearchv.ai lane and the personal lane are no
    Manchester United or football angle may take the @thearchvfc step 7 lane 5 slot at most once a week,
    and is always eligible as the @thearchv.ca new unit. Fixture and table guides keep their home in the
    pre-match override.
-7. **NOT RULED, put to the founder:** a weekly test of one finished card set as a photo reel. The reel
-   lanes are paused under D-2026-08-13d and no desk may run it without a ruling.
+7. **RULED THE SAME DAY, and bigger than the weekly test that was proposed: see D-2026-09-11b.**
+
+**D-2026-09-11b (founder, in session): ONE SINGLE STAT CARD REEL A DAY on Instagram @thearchvfc, IN
+ADDITION to the current posts.** Founder wording: "lets add the single stat card reels to the rotation,
+one reel in addition to our current posts daily." The evidence is the study above: micro accounts post
+a single static stat card as a reel at 25x to 63x their own medians (`competitors.md`, micro outliers).
+
+- **It sits OUTSIDE the one-unit cap of D-2026-09-08b.** @thearchvfc keeps its one carousel from the
+  step 7 precedence, and the reel is added on top; on Sunday the account carries three (the step 7 unit,
+  MLS Weekly and the reel). The 3-hour minimum spacing of D-2026-09-08a still binds every pair of them.
+- **It lifts D-2026-08-13d for THIS FORMAT ONLY.** No other reel is built, the D-2026-08-13c one-a-day
+  recut regime stays on hold, and `tiktok-stage` stays PAUSED: the stat card reel goes to Instagram only
+  unless the founder rules otherwise.
+- **The format.** One verified number on one 1080x1920 card, held about seven seconds with a slow
+  push-in, SILENT, with the founder adding music in the app exactly as for every Instagram reel
+  (D-2026-08-05i, D-2026-08-13c). Built at $0 by `fifa.archv/scripts/stat_card_reel.py` from
+  `fifa.archv/brand/stat-card-reel/stat-card.html`, which gates the copy before rendering (claim 8
+  words, label 6, context 20, the sources on the card, full club names, no dashes or hashtags), writes
+  the video through the sanctioned ffmpeg copy-remux and `exiftool -all=` strip, and refuses a file
+  that is not silent or whose duration or streams did not survive. Archivo Black claim and label,
+  Marcellus number and context, the pair's third on the number and the source line, and a different
+  pair from that day's carousel. A banked face goes on only when its kit is club-correct; otherwise
+  the card is typographic, which is how the outliers look anyway.
+- **The number.** Two named sources, or an Opta or Stats Perform measurement pinned OPTA on the card
+  under D-2026-07-28e. Pick it from the FAN SIGNAL (D-2026-09-11a item 5): the player and stat fans are
+  already arguing about. Every number carries a frame (first since, most since, the last man to).
+- **The caption and the queue.** D-2026-09-11a caption rules, checked with
+  `carousel_structure_lint.py --caption-only --post <caption> --caption-rules archv`. Instagram, Buffer
+  GraphQL `createPost` with a `video` asset and `metadata.instagram.type: reel`, `schedulingType:
+  notification`, `mode: customScheduled`, explicit ISO `dueAt`, **18:00 ET by default**, first comment
+  on the same mutation, independent read-back. No `thumbnailUrl` on the video asset (DESK-LESSONS 2).
+- **The lane.** `ig-fc-reel` (Platform `IG Reel @thearchvfc`) is LIVE again from 2026-09-11, logged with
+  `ig-fc-reel STAT CARD REEL` in `Pillar`; a day without one is FAILED, not PAUSED. First unit:
+  Kobbie Mainoo, 81 passes against Sabah FK, Buffer `6aa3c06874b1f1d0ccd742e9`, 11 September 18:00 ET.
 
 ---
 

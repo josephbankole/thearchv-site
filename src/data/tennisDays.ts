@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-11",
+    day: "Friday",
+    headline: "When is the 2026 US Open men's final, and who is playing?",
+    dek: "Sunday 13 September at 2pm ET on ABC. The finalists are decided on Friday night: Alexander Zverev plays Karen Khachanov, and Ben Shelton plays Frances Tiafoe.",
+    body: "The 2026 US Open men's singles final is on Sunday 13 September at 2pm ET, on ABC in the United States, per ESPN and Yahoo Sports. The two finalists are decided on Friday 11 September.\n\nTop seed Alexander Zverev plays unseeded Karen Khachanov in the first semi-final. The night session, starting no earlier than 7pm ET, is an all-American semi-final between No. 8 seed Ben Shelton and No. 11 seed Frances Tiafoe, so an American man is guaranteed a place in Sunday's final, per CBS Sports and ABC News.\n\nShelton reached the last four by beating the defending champion, Carlos Alcaraz, in five sets, in a match that finished after 3:30am, the latest finish in US Open history, per ESPN and CBS Sports. Tiafoe came from two sets down to beat Alex Michelsen. Whichever of them wins on Friday will be the first Black American man to reach the US Open men's final since Arthur Ashe in 1972, per ABC News and ESPN.\n\nThe women's final is a day earlier: No. 1 Aryna Sabalenka plays No. 2 Elena Rybakina on Saturday 12 September at 4pm ET on ESPN, with Sabalenka going for a third straight US Open title, per CBS Sports and HuffPost.",
+    status: "verified",
+    seoTitle: "US Open men's final: Sunday 13 September, 2pm ET, on ABC",
+  },
+  {
     date: "2026-09-10",
     day: "Thursday",
     headline: "Who was the last American man to win the US Open?",

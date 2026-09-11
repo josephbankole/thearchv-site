@@ -20,6 +20,9 @@ export interface Art {
   height: number;
   alt: string;
   nation?: string;
+  club?: string;
+  // 600px app-grade portrait in public/heads/hd/, served to the iOS feed (scripts/shared/app-art.mjs).
+  hd?: string;
 }
 
 export const PLAYERS: Art[] = registry.players;

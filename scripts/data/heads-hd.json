@@ -1,0 +1,567 @@
+{
+ "schema": "archv.heads-hd/1",
+ "size": 600,
+ "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md. A name with no verified master is left out on purpose (scott: two differing Alex Scott covers and an audit note in the bank), and its entries keep the crest in the app. bank-local sources live in fifa.archv/assets/headshots (pass --masters).",
+ "entries": [
+  {
+   "out": "amad",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260712_102829_3ca7c069-e374-48ed-8b6c-68abda383921.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/amad.webp",
+    "score": 0.996
+   }
+  },
+  {
+   "out": "anderson",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_092639_1a1fde91-827e-4873-877d-7a6e0d99050c.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/anderson.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "andrey-santos",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260710_101315_20cc089e-d15a-4398-a06f-62cd964e89aa.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/andrey-santos.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "anton",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094445_6a751d14-7e6e-4be0-8f7a-5b981c2e6a12.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/anton.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "baleba",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_003940_80a0e913-7824-4e9c-bc08-2615ec11f5c3.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/baleba.webp",
+    "score": 0.906
+   },
+   "maxBottom": 0.66
+  },
+  {
+   "out": "balogun",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_024045_ec5e3e9f-9124-496d-b0c0-ac4d3628a495.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/balogun.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "barcola",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260618_091218_3f70cf29-4b5f-4d1d-bf78-714b47e3cf85_min.webp",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/barcola.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "bellingham",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091713_0c90be23-22d9-4166-9c83-6489bfddaffd.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/bellingham.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "bruno-fernandes",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091711_cd082cd5-5f66-4e95-9ed6-93a064cc873e.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/bruno-fernandes.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "camavinga",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260717_100622_bbc09623-fa9b-45e1-a0d4-959596cfdb92.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/camavinga.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "ederson",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091729_411d955e-b7cf-433a-8f5b-141997901c9e.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/ederson.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "enzo-fernandez",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260718_100430_5e504544-7f99-4a04-a1f8-3a33077bd7b0.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/enzo-fernandez.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "eustaquio",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_023802_66262fff-affb-4e37-8622-834b3b7d8526.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/eustaquio.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "fernandes",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112322_eb43058f-bd8c-4530-910c-0c32d68281b9.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/fernandes.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "ferran-torres",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100800_6e90738c-7355-4f78-b233-a023b8ea2f2c.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/ferran-torres.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "gomes",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_111915_f05a7405-65e5-4429-921a-453b0372ab0d.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/gomes.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "haaland-manchester-city",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154249_af24c6fb-4a72-404c-90e8-f451fe1d176e.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/haaland-manchester-city.webp",
+    "score": 0.947
+   }
+  },
+  {
+   "out": "haaland",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112350_859c091b-3ab8-4bc3-9d98-a603dc511447.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/haaland.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "hall",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_111923_cfdfec36-1603-432e-8e8a-87319a0eefc1.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/hall.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "jimenez-fulham",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154408_20016aa5-1f7c-4271-a5c0-25f7930d8ac4.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/jimenez-fulham.webp",
+    "score": 0.929
+   }
+  },
+  {
+   "out": "jimenez",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_092813_60546aae-0185-4155-85b6-f068f99202a9.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/jimenez.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "joao-gomes",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_060354_8909ae14-6b96-4f39-beca-0efa6f74ea48.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/joao-gomes.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "jonathan-david",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_081150_82683c81-0264-4c8d-a3fc-02fb0479beb2.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/jonathan-david.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "kane",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094456_dfae9063-2e6e-4643-a482-a8114b5e5348.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/kane.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "kone",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260717_100624_86237170-5ed8-4763-b6a4-909c79a0222b.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/kone.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "lewis-hall",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100805_a003edd4-1a14-4e6b-8c64-4dc1eda3ecb0.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/lewis-hall.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "mbappe",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112348_6149c50d-69af-4bc4-9127-419262697815.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/mbappe.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "messi",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112345_f71a65bb-d6b1-4b25-8913-958aeed69179.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/messi.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "oyarzabal",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_105047_3a1ee19d-6b66-4d75-9a17-0b7268355b7d.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/oyarzabal.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "rashford",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_004857_cfd26cbf-0ef7-442d-9a1a-eed892f2d195.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/rashford.webp",
+    "score": 0.944
+   },
+   "maxBottom": 0.72
+  },
+  {
+   "out": "rogers",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100803_b656a45c-4cfb-464b-8d07-8976d1ce42e0.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/rogers.webp",
+    "score": 0.997
+   }
+  },
+  {
+   "out": "ronaldo",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094503_e25f60a7-c7a4-4f21-912c-f406359288ed.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/ronaldo.webp",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "santos",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260710_101315_20cc089e-d15a-4398-a06f-62cd964e89aa.png",
+   "identity": {
+    "method": "bank-row",
+    "note": "Entries using /heads/santos.webp name Andrey Santos in imageAlt, but that file is the June text-only generation (bank row 182, no photo reference). Rebuilt from the verified regen (bank row 183, genuine photo ref, founder QC approved 2026-07-10), the same master andrey-santos uses."
+   }
+  },
+  {
+   "out": "summerville",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_122854_546d75bd-d10d-4519-81fc-0b26028fcb48.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/summerville.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "tchouameni",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091701_74757162-783d-4cb0-8d2f-8f200d1e483a.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/tchouameni.webp",
+    "score": 0.997
+   }
+  },
+  {
+   "out": "tielemans",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260702_102500_dd34ec4a-3a10-4b38-bf94-5be2d5446140.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/tielemans.webp",
+    "score": 0.982
+   }
+  },
+  {
+   "out": "undav",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_092632_4c62aee8-eca9-4513-b6d2-6c54e58fc5c1.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/undav.webp",
+    "score": 1.0
+   }
+  },
+  {
+   "out": "vozinha",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_212943_783fb943-e8e2-4db4-96c8-cfd9681d807b.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/media/illustrated/head-vozinha.jpg",
+    "score": 0.998,
+    "note": "Serves /heads/vozinha.webp too: that file is a bracketed card crop of an earlier Vozinha cover (0.70 against its own master), so the clean registry master replaces it."
+   }
+  },
+  {
+   "out": "wharton-crystal-palace",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154500_b040c73c-fabd-4f0a-a093-92c6aec6a096.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/wharton-crystal-palace.webp",
+    "score": 0.992
+   }
+  },
+  {
+   "out": "yamal",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_105023_02ff0542-422b-423f-a4d4-add0b3bdfe48.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/yamal.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "youri-tielemans",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260702_102500_dd34ec4a-3a10-4b38-bf94-5be2d5446140.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/youri-tielemans.webp",
+    "score": 0.982
+   }
+  },
+  {
+   "out": "zirkzee",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100807_60601a93-2b44-4d23-82df-615c7d9a0f55.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/heads/zirkzee.webp",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "nilson-angulo",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211547_93f3e841-cb6b-44db-92c9-fce8879d0c4a.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/media/illustrated/head-angulo.jpg",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "elijah-just",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211548_a66d1878-c743-4689-b371-26903a44f4b2.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/media/illustrated/head-elijahjust.jpg",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "issa-diop",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211550_88ffe3ac-d2df-4d9b-b28a-3298634f01d2.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/media/illustrated/head-issadiop.jpg",
+    "score": 0.998
+   }
+  },
+  {
+   "out": "riyad-mahrez",
+   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211552_e634dbb7-2f6f-45b0-8857-091056fdf712.png",
+   "identity": {
+    "method": "ncc",
+    "against": "/media/illustrated/head-mahrez.jpg",
+    "score": 0.999
+   }
+  },
+  {
+   "out": "diogo-dalot",
+   "source": "bank-local:headshot-dalot-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "noussair-mazraoui",
+   "source": "bank-local:headshot-mazraoui-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "matthijs-de-ligt",
+   "source": "bank-local:headshot-deligt-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "harry-maguire",
+   "source": "bank-local:headshot-maguire-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "lisandro-martinez",
+   "source": "bank-local:headshot-lisandromartinez-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "mason-mount",
+   "source": "bank-local:headshot-mount-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "patrick-dorgu",
+   "source": "bank-local:headshot-dorgu-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "leny-yoro",
+   "source": "bank-local:headshot-yoro-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "bryan-mbeumo",
+   "source": "bank-local:headshot-mbeumo-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "luke-shaw",
+   "source": "bank-local:headshot-shaw-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "manuel-ugarte",
+   "source": "bank-local:headshot-ugarte-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "benjamin-sesko",
+   "source": "bank-local:headshot-sesko-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "ayden-heaven",
+   "source": "bank-local:headshot-heaven-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "tyler-fletcher",
+   "source": "bank-local:headshot-tylerfletcher-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "senne-lammens",
+   "source": "bank-local:headshot-lammens-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "michael-carrick",
+   "source": "bank-local:headshot-carrick-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "tom-heaton",
+   "source": "bank-local:headshot-heaton-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  },
+  {
+   "out": "karl-darlow",
+   "source": "bank-local:headshot-darlow-2026.png",
+   "identity": {
+    "method": "squad-table",
+    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+   }
+  }
+ ]
+}

@@ -33,8 +33,8 @@ const SCHEMA = "archv-feed/3";
    off the same bundle as named extras. */
 const {
   transferDays, worldCupDays, leaguesDays, sportDays: SPORT_RAW,
-  posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro, readPath,
-} = await loadDayData({ extras: ["posters", "legends", "longReads", "giantKillers", "readSlug"] });
+  posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro, readPath, longreadParagraphs,
+} = await loadDayData({ extras: ["posters", "legends", "longReads", "giantKillers", "readSlug", "longreadMd"] });
 
 /* ---------- compose the feeds ---------- */
 const SITE = "https://thearchv.ca";
@@ -127,7 +127,15 @@ const feeds = {
     // cannot disagree. The app's LongRead decodes it as optional (thearchv-app 21a24fd) and shares
     // it instead of the homepage; older builds ignore the key. The body passes through UNCHANGED:
     // since the Dispatch copies it may carry light markdown, and the app renders that itself.
-    longReads: longReads.map((r) => ({ ...r, url: `${SITE}${readPath(r.title)}` })),
+    // `body` is always clean plain paragraphs, so app builds that render it as plain Text never
+    // print ** or [text](url). `bodyMarkdown` rides alongside only when the body carries markdown
+    // (the Dispatch copies, 2026-09-11); builds from 1.5.4 prefer it. Plain essays are unchanged.
+    longReads: longReads.map((r) => {
+      const plain = longreadParagraphs(r.body).join("\n\n");
+      const out = { ...r, body: plain, url: `${SITE}${readPath(r.title)}` };
+      if (plain !== r.body) out.bodyMarkdown = r.body;
+      return out;
+    }),
   },
 };
 

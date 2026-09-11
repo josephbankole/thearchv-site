@@ -14,7 +14,7 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle,
+  SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle, answerTitle, answerTitleFlags,
   cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
@@ -25,6 +25,23 @@ import { entryArt } from "./shared/illustrated.mjs";
 import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
+import { glossaryEntries } from "./glossary-data.mjs";
+
+/* ---------- evergreen links (founder order 2026-09-11) ----------
+   A question that comes back every season (the NFL roster cutdown, how FedEx Cup points work) used
+   to land on a dated Answer Desk page that goes stale by the next year. The glossary is the
+   site's evergreen, slug-based family, so a dated entry names its standing answer with
+   `evergreen: "<glossary slug>"` and the page links to it under the answer. An unknown slug stops
+   the build, the same rule relatedList() applies to the glossary's own cross-links: a typo is a
+   build error, never a silent broken link. */
+const GLOSSARY_BY_SLUG = new Map(glossaryEntries.map((g) => [g.slug, g]));
+function evergreenLink(entry, where) {
+  if (!entry.evergreen) return "";
+  const g = GLOSSARY_BY_SLUG.get(entry.evergreen);
+  if (!g) throw new Error(`[build-article-pages] ${where}: evergreen slug "${entry.evergreen}" is not in scripts/glossary-data.mjs`);
+  return `
+        <p class="article__evergreen">The standing answer, kept up to date: <a href="/glossary/${escAttr(g.slug)}/">${esc(g.title)}</a></p>`;
+}
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -589,7 +606,9 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
       </nav>` : "";
 
   return `${documentShell({
-  title: clampTitle([entry.headline, lane.seoSuffix, "The ARCHV"]),
+  // Search-only title: the entry's seoTitle (the answer) when the desk filed one, else the old
+  // headline + entity suffix path, byte-identical for every entry filed before 2026-09-11.
+  title: answerTitle(entry.seoTitle, [entry.headline, lane.seoSuffix, "The ARCHV"]),
   // NOT clampDescription: this family has its own metaDescription(), which stitches the
   // standfirst to the body's first sentence and throws above 160 characters. og:description
   // and twitter:description stay on the bare standfirst, as they always have.
@@ -626,7 +645,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
       </div>${figure}
       <div class="article__body">
         ${faq ? `<h2 class="answer__q">${esc(faq.question)}</h2>\n        ` : ""}<p><strong>${esc(entry.dek)}</strong></p>
-        ${bodyHtml(entry.body)}
+        ${bodyHtml(entry.body)}${evergreenLink(entry, `${section.base}${entry.date}/`)}
       </div>
       ${captureBlock()}
       <p class="article__rights">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.</p>
@@ -706,5 +725,17 @@ for (const section of sections) {
    article URLs). The read-modify-write, the public/sitemap.xml fallback, the dedupe and the
    trailing-slash rule all live in shared/sitemap.mjs now. */
 appendUrls(urls);
+
+/* ---------- answer-title flags: question lanes only, and only entries from 2026-09-11 on, when
+   the rule started. Older entries are not the desk's to re-file and flagging all of them would
+   bury the one line that matters. */
+const RULE_START = "2026-09-11";
+const titleFlags = answerTitleFlags(
+  sections
+    .filter((s) => s.laneKey === "questions")
+    .flatMap((s) => s.days.filter((e) => e.date >= RULE_START).map((e) => ({ id: `${s.base}${e.date}/`, seoTitle: e.seoTitle }))),
+);
+if (titleFlags.missing.length) console.warn(`[build-article-pages] answer-title: ${titleFlags.missing.length} question page(s) with no seoTitle: ${titleFlags.missing.join(", ")}`);
+if (titleFlags.long.length) console.warn(`[build-article-pages] answer-title: seoTitle over 60 chars: ${titleFlags.long.join(", ")}`);
 
 console.log(`[build-article-pages] wrote ${count} article page(s), ${cards} og card(s) and ${wideCards} og-wide card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);

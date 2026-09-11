@@ -10,6 +10,10 @@ export interface DayEntry {
   status: 'verified' | 'pending';
   image?: string;     // OPTIONAL brand-illustrated headshot only (navy/gold, no crest, not a photo)
   imageAlt?: string;  // editorial alt text
+  seoTitle?: string;  // OPTIONAL search-only <title>: the ANSWER, under 60 chars, full entity names.
+                      // The <h1> keeps `headline`. See answerTitle() in scripts/shared/page-shell.mjs.
+  evergreen?: string; // OPTIONAL glossary slug holding the standing answer to a question that recurs
+                      // (e.g. "nfl-roster-cutdown"). The dated page links to it; an unknown slug stops the build.
 }
 
 export const worldCupDays: DayEntry[] = [

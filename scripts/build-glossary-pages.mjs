@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, esc, escAttr, clampTitle, clampDescription, masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  SITE, esc, escAttr, clampTitle, answerTitle, answerTitleFlags, clampDescription, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -101,7 +101,9 @@ function renderEntry(entry) {
   const depth = entry.depth.map((p) => `<p>${esc(p)}</p>`).join("\n        ");
 
   return `${documentShell({
-  title: clampTitle([entry.question, "The ARCHV glossary"]),
+  // `seoTitle` (the answer, under 60) when the entry carries one; the question otherwise. The
+  // visible <h2> and the FAQPage question stay `question`, which also matches the homepage FAQ.
+  title: answerTitle(entry.seoTitle, [entry.question, "The ARCHV glossary"]),
   // `description` is already clampDescription'd where it is built, above.
   metaDescription: description,
   description,
@@ -221,5 +223,10 @@ for (const entry of glossaryEntries) {
   writeFileSync(join(dir, "index.html"), renderEntry(entry));
   count++;
 }
+
+// Answer-title flags (2026-09-11): every glossary entry is an answer page, so all of them count.
+const titleFlags = answerTitleFlags(glossaryEntries.map((e) => ({ id: `/glossary/${e.slug}/`, seoTitle: e.seoTitle })));
+if (titleFlags.missing.length) console.warn(`[build-glossary-pages] answer-title: ${titleFlags.missing.length} of ${glossaryEntries.length} entries have no seoTitle yet`);
+if (titleFlags.long.length) console.warn(`[build-glossary-pages] answer-title: seoTitle over 60 chars: ${titleFlags.long.join(", ")}`);
 
 console.log(`[build-glossary-pages] wrote the glossary hub + ${count} entry page(s) to ${OUT}/glossary/`);

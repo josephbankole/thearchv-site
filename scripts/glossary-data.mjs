@@ -1,4 +1,4 @@
-/* scripts/glossary-data.mjs — the sixty evergreen glossary entries, read by
+/* scripts/glossary-data.mjs — the evergreen glossary entries (sixty-one as of 2026-09-11), read by
    scripts/build-glossary-pages.mjs. Each entry:
      slug     URL segment under /glossary/
      title    the term as it reads as an <h1> (e.g. "xG (expected goals)")
@@ -6,6 +6,9 @@
               surfaces describe the same entity (index.html's FAQPage acceptedAnswer carries a
               `url` back to this page, and its acceptedAnswer text is copied verbatim from the
               `answer` field below for the six strongest entries — see index.html's FAQ section).
+     seoTitle OPTIONAL, 2026-09-11: the search-only <title>, stating the answer in under 60
+              characters. The <h1> and the visible question are untouched. With none, the title
+              falls back to `question`. See answerTitle() in scripts/shared/page-shell.mjs.
      answer   the extraction target for answer engines: 40-60 words, definition first sentence,
               mechanism second. This exact string is BOTH the visible answer paragraph AND the
               FAQPage/DefinedTerm answer text in the page's JSON-LD, so keep it free of &, <, >
@@ -227,6 +230,7 @@ export const glossaryEntries = [
     slug: "buy-back-clause",
     title: "The buy-back clause",
     question: "What is a buy-back clause?",
+    seoTitle: "Buy-back clause: the price to re-sign a player you sold",
     answer:
       "A buy-back clause lets the selling club re-sign a player at a price agreed at the time of the sale, usually within a set window of years. Big clubs use it when selling a young player they may want back, so a rival cannot price them out later.",
     depth: [
@@ -591,7 +595,7 @@ export const glossaryEntries = [
       "The accrued seasons rule is what separates the two paths. A player who has been in the league long enough, released outside the part of the season where waivers apply to everyone, becomes a free agent straight away and can choose where to sign, which is a considerable advantage over being claimed.",
       "Waivers also explain the annual roster cutdown. When every team trims to its final roster on the same day, hundreds of players hit waivers at once, and the worst teams from the previous season get first look at all of them.",
     ],
-    related: ["practice-squad", "franchise-tag", "dead-cap"],
+    related: ["practice-squad", "nfl-roster-cutdown", "dead-cap"],
   },
   {
     slug: "practice-squad",
@@ -605,6 +609,23 @@ export const glossaryEntries = [
       "Practice squad players can be signed away by any other team, provided that team puts them on its active roster. That is the safeguard that stops a strong club stockpiling talent it has no intention of ever playing.",
     ],
     related: ["nfl-waivers", "dead-cap", "franchise-tag"],
+  },
+  {
+    // Added 2026-09-11 (founder order: recurring questions get an evergreen page). The dated Answer
+    // Desk entry nfl/questions/2026-08-25 links here through its `evergreen` field. 2026 facts
+    // web-checked 2026-09-11 against the Yahoo Sports and CBS Sports cut trackers.
+    slug: "nfl-roster-cutdown",
+    title: "The NFL roster cutdown",
+    question: "When is the NFL 53-man roster cutdown deadline?",
+    seoTitle: "NFL roster cutdown: every team cuts from 90 players to 53",
+    answer:
+      "The roster cutdown is the deadline by which every NFL team must trim its roster from the 90 players it carries in preseason to the 53 it can start the season with. It falls just after the final preseason weekend in late August, and in 2026 it was Sunday 30 August.",
+    depth: [
+      "The date moves a little from year to year. For years the cutdown sat on the Tuesday after the last preseason games, which gave coaches two days with the tape before they settled the final places. In 2026 the league brought it forward to the Sunday, because the San Francisco 49ers were flying to Melbourne that week to open the regular season against the Los Angeles Rams.",
+      "The day after the cutdown, most of the released players go on waivers, and clubs claim them in priority order, worst record first. The ones who clear waivers become the pool that practice squads are built from, and those squads are filed the same day.",
+      "More than a thousand players lose their places in a single afternoon. Waiver claims then move players between rosters over the following days, so the list a club names that evening can change before the first game.",
+    ],
+    related: ["nfl-waivers", "practice-squad", "dead-cap"],
   },
   {
     slug: "dead-cap",
@@ -727,6 +748,7 @@ export const glossaryEntries = [
     slug: "protected-ranking",
     title: "Protected and special rankings in tennis",
     question: "What is a protected ranking in tennis?",
+    seoTitle: "Protected ranking: injured players enter on old ranking",
     answer:
       "A protected ranking lets a player who has been out injured for a long spell enter tournaments using their old ranking rather than the one they dropped to. The ATP calls it a protected ranking and the WTA a special ranking. Both limit how many events it can be used for.",
     depth: [
@@ -792,6 +814,7 @@ export const glossaryEntries = [
     slug: "fedex-cup",
     title: "The FedEx Cup",
     question: "How do FedEx Cup points work?",
+    seoTitle: "FedEx Cup: PGA Tour's season points race and playoffs",
     answer:
       "The FedEx Cup is the PGA Tour's season long points race. Players earn points at every event, with more on offer at the majors and the biggest tournaments, and the leading players qualify for a short playoff series whose field shrinks at each stage before a final event decides the title.",
     depth: [

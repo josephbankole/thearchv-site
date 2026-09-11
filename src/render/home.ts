@@ -21,6 +21,7 @@ import { golfDays } from '../data/golfDays';
 import { leaguesDays } from '../data/leaguesDays';
 import { legends } from '../data/legends';
 import { longReads } from '../data/longReads';
+import { longreadParagraphs } from '../lib/longreadMd';
 import { nflDays } from '../data/nflDays';
 import { readPath } from '../data/readSlug';
 import { readLabel } from '../lib/readTime';
@@ -308,12 +309,23 @@ export function renderLegends(): string {
    That is the whole point of the phase 2A pattern applied to the one block that resisted it.
 
    Note the panel's paragraphs are the full essay text: the section has always rendered it into
-   the DOM for search, and <details> keeps it in the document when closed. */
+   the DOM for search, and <details> keeps it in the document when closed.
+
+   CAPPED AT THE THREE NEWEST (2026-09-11). Every Dispatch issue became a long read that day, and
+   putting the full text of every one into the front page would have made it the heaviest page on
+   the site for no reader's benefit. Every essay keeps its own page and the /reads/ front lists
+   them all; the "Every long read" link under this list (index.html) is the way there. The panel
+   shows the essay as PLAIN paragraphs through the shared stripper (src/lib/longreadMd.ts), so a
+   body's markdown never prints its markers here and nothing in it is ever written as markup: each
+   paragraph is escaped text, as it always was. Links and headings live on the essay's own page,
+   one click away. Sorted rather than trusted, the same reasoning as build-reads-pages.mjs. */
+export const HOME_LONG_READS = 3;
 export function renderLongReads(): string {
-  return longReads
+  return [...longReads]
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+    .slice(0, HOME_LONG_READS)
     .map((r) => {
-      const paragraphs = r.body
-        .split(/\n\s*\n/)
+      const paragraphs = longreadParagraphs(r.body)
         .map((p) => `<p>${esc(p.trim())}</p>`)
         .join('');
       return `<li class="killer">

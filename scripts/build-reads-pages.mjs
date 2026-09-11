@@ -39,8 +39,8 @@ const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH],
    family is the essays: none of the seven day lanes appears on a /reads/ page, so there is no
    reason to bundle them. src/lib/readTime.ts is the one copy of read-time on the site (see its
    header) and rides in on the same bundle rather than being reimplemented here. ---------- */
-const { longReads, readSlug, readPath, readLabel, readDuration, wordCount } =
-  await loadDayData({ days: false, extras: ["longReads", "readSlug", "readTime"] });
+const { longReads, readSlug, readPath, readLabel, readDuration, wordCount, longreadHtml, longreadPlain } =
+  await loadDayData({ days: false, extras: ["longReads", "readSlug", "readTime", "longreadMd"] });
 
 // Newest first, matching every other lane on the site. The array is committed in that order but
 // nothing in the type enforces it, so sort rather than trust — same reasoning as byDateDesc.
@@ -69,20 +69,21 @@ const RIGHTS = "The ARCHV is an independent football-history publication, not af
 const plainTitle = (t) => String(t).replace(/\.$/, "");
 
 // The essay's own opening sentence as its meta/social description: it is the first thing a
-// reader sees on the page too, so the preview and the page agree. Never invented copy.
+// reader sees on the page too, so the preview and the page agree. Never invented copy. Read off
+// the PLAIN text (src/lib/longreadMd.ts): since 2026-09-11 a body may carry light markdown, and a
+// description is words, never "**" or a bracketed URL.
 function firstSentence(body) {
-  const first = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  const first = longreadPlain(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
   const m = first.match(/^.*?[.!?](?=\s|$)/);
   return (m ? m[0] : first).trim();
 }
 
-const paras = (body) =>
-  String(body)
-    .split(/\n{2,}/)
-    .map((p) => p.trim())
-    .filter(Boolean)
-    .map((p) => `<p>${esc(p)}</p>`)
-    .join("\n        ");
+// The body through the one long-read renderer (src/lib/longreadMd.ts): it escapes first and only
+// ever writes its own small set of tags, so no raw HTML in a body can reach the page. A plain
+// paragraph comes out exactly as `<p>${esc(p)}</p>` did before, joined with the same indent.
+const paras = (body) => longreadHtml(body, "\n        ");
+// Read time and schema wordCount count the words a reader gets, not the markdown around them.
+const words = (body) => longreadPlain(body);
 
 // author/publisher reference the site's Organization entity by @id, the same shape the other
 // long-form family uses (scripts/build-content.mjs): index.html's Organization JSON-LD carries
@@ -143,8 +144,8 @@ function renderRead(read) {
         publisher: ORG_REF,
         image: `${SITE}/og.jpg`,
         // Same helper as the visible "N min read" on the page and on the /reads/ front card.
-        wordCount: wordCount(read.body),
-        timeRequired: readDuration(read.body),
+        wordCount: wordCount(words(read.body)),
+        timeRequired: readDuration(words(read.body)),
         mainEntityOfPage: url,
       },
       {
@@ -165,7 +166,7 @@ function renderRead(read) {
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${INDEX_PATH}">Long reads</a></p>
       <p class="article__eyebrow">${esc(read.kicker)}</p>
       <h1>${esc(read.title)}</h1>
-      <p class="article__meta">${esc(read.meta)} · ${esc(longDate(read.date))} · ${esc(readLabel(read.body))}</p>
+      <p class="article__meta">${esc(read.meta)} · ${esc(longDate(read.date))} · ${esc(readLabel(words(read.body)))}</p>
       <div class="article__body">
         ${paras(read.body)}
       </div>
@@ -221,7 +222,7 @@ function renderIndex() {
       <p class="lane__lede">${esc(INDEX_LEDE)}</p>
       <ul class="lane-list" aria-label="Long reads, newest first">
         ${reads
-          .map((r) => `<li><a class="lane-card" href="${escAttr(readPath(r.title))}"><span class="lane-card__body"><span class="lane-card__kicker">${esc(r.kicker)} · ${esc(longDate(r.date))} · ${esc(readLabel(r.body))}</span><span class="lane-card__headline">${esc(r.title)}</span><span class="lane-card__dek">${esc(r.meta)}</span></span></a></li>`)
+          .map((r) => `<li><a class="lane-card" href="${escAttr(readPath(r.title))}"><span class="lane-card__body"><span class="lane-card__kicker">${esc(r.kicker)} · ${esc(longDate(r.date))} · ${esc(readLabel(words(r.body)))}</span><span class="lane-card__headline">${esc(r.title)}</span><span class="lane-card__dek">${esc(r.meta)}</span></span></a></li>`)
           .join("\n        ")}
       </ul>
     </section>

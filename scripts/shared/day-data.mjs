@@ -85,6 +85,10 @@ const EXTRAS = {
   // src/lib/readTime.ts is the one copy of read-time on the site (see its header); it rides in on
   // this bundle rather than being reimplemented in .mjs.
   readTime: { module: "lib/readTime.ts", kind: "code", line: `export { readLabel, readDuration, wordCount } from "./lib/readTime.ts";` },
+  // src/lib/longreadMd.ts (2026-09-11): the light markdown a long-read body may carry since the
+  // Dispatch issues were copied onto the site. The one renderer and the one plain-text stripper;
+  // every generator that reads a long-read body takes both from here (see its header).
+  longreadMd: { module: "lib/longreadMd.ts", kind: "code", line: `export { longreadHtml, longreadPlain, longreadParagraphs } from "./lib/longreadMd.ts";` },
 };
 
 /* Checked once per process. The scan is a single pass and the whole data set is ~390 kB, so this

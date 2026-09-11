@@ -920,6 +920,17 @@ export function pageStyles() {
     .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
     .article__body p { margin: 1rem 0; }
     .article__body strong { color: var(--cream); }
+    /* Long-read light markdown (src/lib/longreadMd.ts, 2026-09-11): the Dispatch issues copied
+       onto /reads/ carry headings, quotes, dividers and lists. Scoped to UNCLASSED children of the
+       body, so the classed .answer__q H2 on the Answer Desk pages keeps its own rule. Accent-fill
+       is a bar here, never text, per the token rules. */
+    .article__body > h2:not([class]), .article__body > h3:not([class]) { color: var(--ink); font-family: "Fraunces", Georgia, serif; font-weight: 500; line-height: 1.3; margin: 2rem 0 .5rem; }
+    .article__body > h2:not([class]) { font-size: clamp(1.25rem, 2.8vw, 1.5rem); }
+    .article__body > h3:not([class]) { font-size: 1.15rem; }
+    .article__body > blockquote:not([class]) { margin: 1.4rem 0; padding: .1rem 0 .1rem 1.1rem; border-left: 3px solid var(--accent-fill); color: var(--ink-soft); }
+    .article__body > hr:not([class]) { border: 0; border-top: 1px solid var(--rule); margin: 2rem 0; }
+    .article__body > ul:not([class]) { margin: 1rem 0; padding-left: 1.25rem; }
+    .article__body > ul:not([class]) li { margin: .35rem 0; }
     /* Answer Desk question heading (SEO/AEO audit fix 3, 2026-07-28). The sport question lanes
        are a question and its answer, so the answer now sits under a real H2 carrying the question
        verbatim rather than floating in a bare div — the same shape as .glossary__q above the

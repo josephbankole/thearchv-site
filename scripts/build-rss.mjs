@@ -34,8 +34,8 @@ const RIGHTS =
 /* ---------- the typed day data, through scripts/shared/day-data.mjs (the one loader for
    src/data/*.ts; the lanes arrive sorted newest-first, the essays in committed order) ---------- */
 const {
-  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA, longReads, readSlug,
-} = await loadDayData({ extras: ["longReads", "readSlug"] });
+  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA, longReads, readSlug, longreadHtml, longreadPlain,
+} = await loadDayData({ extras: ["longReads", "readSlug", "longreadMd"] });
 
 // URL lane per data source: World Cup's internal `section` key is "worldcup" but its URL lane is
 // hyphenated "world-cup" (same mapping build-article-pages.mjs / build-feed.mjs use for the
@@ -65,8 +65,12 @@ for (const sport of SPORTS) {
 // carried whole in `date`-free form by articleUrl below, so these are given an explicit `path`
 // instead — see articleUrl. Every essay currently on file predates the newest 30 daily entries,
 // so today's feed.xml is unchanged; the next essay the engine files will syndicate.
+// Since 2026-09-11 a long-read body may carry light markdown (src/lib/longreadMd.ts): the dek is
+// read off its plain text, and the item carries the body pre-rendered by the same renderer the
+// /reads/ page uses (`html`), so the syndicated copy keeps the links and the page and the feed
+// cannot disagree. contentHtml() below prefers `html` when an item has it.
 const readFirstSentence = (body) => {
-  const first = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  const first = longreadPlain(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
   const m = first.match(/^.*?[.!?](?=\s|$)/);
   return (m ? m[0] : first).trim();
 };
@@ -74,6 +78,7 @@ const readItems = longReads.map((r) => ({
   headline: String(r.title).replace(/\.$/, ""),
   dek: readFirstSentence(r.body),
   body: r.body,
+  html: longreadHtml(r.body),
   date: r.date,
   path: `/reads/${readSlug(r.title)}/`,
 }));
@@ -174,7 +179,7 @@ function ogAsset(it) {
 function contentHtml(entry, img) {
   const parts = [`<p><strong>${esc(entry.dek)}</strong></p>`];
   if (img) parts.push(`<figure><img src="${escAttr(img.url)}" alt="${escAttr(img.alt)}" /></figure>`);
-  parts.push(bodyHtml(entry.body));
+  parts.push(entry.html ?? bodyHtml(entry.body));
   parts.push(`<p>${esc(RIGHTS)}</p>`);
   return parts.filter(Boolean).join("\n");
 }

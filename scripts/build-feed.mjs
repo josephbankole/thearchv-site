@@ -33,8 +33,8 @@ const SCHEMA = "archv-feed/3";
    off the same bundle as named extras. */
 const {
   transferDays, worldCupDays, leaguesDays, sportDays: SPORT_RAW,
-  posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro,
-} = await loadDayData({ extras: ["posters", "legends", "longReads", "giantKillers"] });
+  posters, legends, longReads, upsets, giantKillersIntro, giantKillersOutro, readPath,
+} = await loadDayData({ extras: ["posters", "legends", "longReads", "giantKillers", "readSlug"] });
 
 /* ---------- compose the feeds ---------- */
 const SITE = "https://thearchv.ca";
@@ -122,7 +122,12 @@ const feeds = {
   archive: {
     legends,
     giantKillers: { intro: giantKillersIntro, outro: giantKillersOutro, upsets },
-    longReads,
+    // `url` (2026-09-11, additive): the essay's own page, https://thearchv.ca/reads/<slug>/, from
+    // the same readPath() the /reads/ generator and the front page use, so the link and the page
+    // cannot disagree. The app's LongRead decodes it as optional (thearchv-app 21a24fd) and shares
+    // it instead of the homepage; older builds ignore the key. The body passes through UNCHANGED:
+    // since the Dispatch copies it may carry light markdown, and the app renders that itself.
+    longReads: longReads.map((r) => ({ ...r, url: `${SITE}${readPath(r.title)}` })),
   },
 };
 

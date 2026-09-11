@@ -212,6 +212,19 @@ app build before it started reading it. Do not rename fields, do not remove
 `thearchv-app/Models.swift`. The app's working rules live in
 `../thearchv-app/CLAUDE.md`.
 
+**Long reads carry light markdown and a `url` (2026-09-11, additive).** Every Dispatch issue on
+Substack is copied onto the site as a long read, word for word, links and formatting kept, so a
+long-read body may now hold `## ` headings, `> ` quotes, `---` dividers, `- ` lists, `**bold**`,
+`*em*`, `[text](url)` and `\X` escapes. **`src/lib/longreadMd.ts` is the only reader of that
+syntax**: `longreadHtml()` for the /reads/ page and RSS (escapes first, writes only its own tags,
+links only for http(s) or site-relative URLs), `longreadPlain()` for everything that wants words
+(meta and JSON-LD description, read time, the RSS dek, the search index, the front-page accordion).
+Never read a long-read body with a bare `split` again. The front page shows the three newest long
+reads only; `/reads/` lists them all. `archive.longReads[]` in the feed gained `url`
+(`https://thearchv.ca/reads/<slug>/`, from `readPath()`), and the body passes through unchanged
+because the app renders the same markdown (thearchv-app `21a24fd`). The converter and the weekly
+mirror live in `../dispatch/site-longreads/` (`substack_to_longread.py`).
+
 ## Site structure: the page graph (site depth pass, 2026-07-09)
 
 The site is a navigable graph, not one long homepage: home -> lane index -> article ->

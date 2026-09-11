@@ -49,8 +49,8 @@ const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH],
 /* ---------- the typed data, through scripts/shared/day-data.mjs — the one loader every
    generator in this chain uses ---------- */
 const {
-  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS, longReads, readPath, legends,
-} = await loadDayData({ extras: ["longReads", "readSlug", "legends"] });
+  transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS, longReads, readPath, legends, longreadPlain,
+} = await loadDayData({ extras: ["longReads", "readSlug", "legends", "longreadMd"] });
 
 /* ---------- the corpus ----------
    One row is { title, dek, url, lane, date }. The dek is clamped: it is a preview line under a
@@ -87,9 +87,10 @@ for (const { label, base, days } of deskLanes) {
   }
 }
 
-/* long reads */
+/* long reads. The first paragraph of the PLAIN text (src/lib/longreadMd.ts): a Dispatch copy's
+   body may carry light markdown, and the index should hold words, not "**" or a URL. */
 for (const r of longReads) {
-  add(r.title, `${r.kicker}. ${r.meta}. ${String(r.body).split(/\n\s*\n/)[0] ?? ""}`, readPath(r.title), "Long reads", r.date ?? "");
+  add(r.title, `${r.kicker}. ${r.meta}. ${longreadPlain(r.body).split(/\n\s*\n/)[0] ?? ""}`, readPath(r.title), "Long reads", r.date ?? "");
 }
 
 /* content pages: /finals/, /united/, /explainers/, /notes/ */

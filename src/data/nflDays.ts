@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-11",
+    day: "Friday",
+    headline: "Who won the NFL season opener in 2026?",
+    dek: "The Seattle Seahawks beat the New England Patriots 13-10 at Lumen Field on Wednesday 9 September, in a rematch of Super Bowl LX, with a backup quarterback.",
+    body: "The Seattle Seahawks won the 2026 NFL season opener, beating the New England Patriots 13-10 at Lumen Field in Seattle on Wednesday 9 September, per NFL.com. New England led 10-0 in the third quarter before Seattle scored the last 13 points, per NFL.com and Yahoo Sports.\n\nSeattle won it without their starting quarterback. Sam Darnold left with a hip injury after five plays, and backup Drew Lock finished 16 of 22 for 187 yards and a touchdown, per NFL.com.\n\nPatriots quarterback Drake Maye, runner-up in the 2025 MVP vote, went 23 of 33 for 178 yards with a touchdown and a career-high three interceptions, all of them on throws of 20 or more air yards, per NFL.com. Maye said afterwards: \"Yeah, we had the game under control. Thought we had a good plan to start chipping away and be patient and lost patience and it cost us, decisions that cost us the game on my part, on my end.\"\n\nThe opener moved to a Wednesday because the league played its first regular-season game in Australia the next night, per NBC Sports. The San Francisco 49ers beat the Los Angeles Rams 27-7 at the Melbourne Cricket Ground in front of 100,021 fans, per NFL.com.\n\nThe win made Seattle head coach Mike Macdonald the seventh head coach in NFL history to win more than 10 straight games, playoffs included, before turning 40, per NFL.com.",
+    status: "verified",
+    seoTitle: "Seattle Seahawks beat New England Patriots 13-10 in opener",
+  },
+  {
     date: "2026-09-10",
     day: "Thursday",
     headline: "Where is the NFL's first regular-season game in Australia?",

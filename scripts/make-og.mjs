@@ -42,7 +42,7 @@ const tree = div({ width: W, height: H, display: "flex", flexDirection: "column"
       text({ fontFamily: "Inter Tight", fontWeight: 600, fontSize: 24, letterSpacing: 4.5, color: CARD.accentInk, marginBottom: 34 }, "THE ARCHV · EST. 2026"),
       text({ fontFamily: "Anton", fontSize: 106, lineHeight: 1.02, letterSpacing: 0.5, color: CARD.ink, width: 980 }, "SPORTS HISTORY, ILLUSTRATED."),
       text({ fontFamily: "Inter Tight", fontWeight: 400, fontSize: 27, lineHeight: 1.35, color: CARD.inkSoft, marginTop: 28, width: 800 },
-        "A daily desk across football, the NFL, F1, tennis and golf. Every face on it is drawn, never photographed."),
+        "A daily desk across football, the NFL, F1, tennis, golf and basketball. Every face on it is drawn, never photographed."),
     ]),
     div({ display: "flex", alignItems: "baseline", justifyContent: "space-between", width: "100%" }, [
       wordmark(38),

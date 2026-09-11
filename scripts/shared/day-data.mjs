@@ -50,10 +50,10 @@ import { assertPureDataFile } from "./data-shape.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const SRC = join(ROOT, "src");
 
-/* The seven day lanes, in the order every generator lists them. Football's three first, then the
-   four sports opened by the 2026-07-22 multi-sport pass. `sport` names the SPORTS key a lane
-   belongs to, which is what builds the `sportDays` map below. All seven are DATA files written by
-   the desk engine, so all seven go through the shape guard. */
+/* The eight day lanes, in the order every generator lists them. Football's three first, then the
+   four sports opened by the 2026-07-22 multi-sport pass, then basketball (2026-09-11). `sport`
+   names the SPORTS key a lane belongs to, which is what builds the `sportDays` map below. All eight
+   are DATA files written by the desk engine, so all eight go through the shape guard. */
 const DAY_LANES = [
   { name: "transferDays", file: "transferDays" },
   { name: "worldCupDays", file: "worldCupDays" },
@@ -62,6 +62,7 @@ const DAY_LANES = [
   { name: "f1Days", file: "f1Days", sport: "f1" },
   { name: "tennisDays", file: "tennisDays", sport: "tennis" },
   { name: "golfDays", file: "golfDays", sport: "golf" },
+  { name: "basketballDays", file: "basketballDays", sport: "basketball" },
 ];
 
 /* Everything else a generator has ever needed off the same bundle, opt-in by key. A key names a
@@ -123,7 +124,7 @@ async function bundleAndImport(entrySrc) {
 /**
  * Load the typed site data.
  * @param {object} [options]
- * @param {boolean} [options.days=true]  Include the seven day lanes. Set false when a generator
+ * @param {boolean} [options.days=true]  Include the eight day lanes. Set false when a generator
  *   wants only extras (build-section-pages wants legends, build-reads-pages wants the essays):
  *   there is no reason to bundle 370 kB of day data for them.
  * @param {string[]} [options.extras=[]] Keys from EXTRAS above. An unknown key throws rather than

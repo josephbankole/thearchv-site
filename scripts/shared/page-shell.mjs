@@ -270,6 +270,7 @@ export const SPORTS = [
   { key: "f1", label: "Formula 1", shortLabel: "F1", urlBase: "f1", order: 2, live: true, lanes: ["questions"] },
   { key: "tennis", label: "Tennis", shortLabel: "Tennis", urlBase: "tennis", order: 3, live: true, lanes: ["questions"] },
   { key: "golf", label: "Golf", shortLabel: "Golf", urlBase: "golf", order: 4, live: true, lanes: ["questions"] },
+  { key: "basketball", label: "Basketball", shortLabel: "Basketball", urlBase: "basketball", order: 5, live: true, lanes: ["questions"] },
 ];
 export const DEFAULT_SPORT = "football";
 export const sportByKey = (key) => SPORTS.find((s) => s.key === key) || SPORTS[0];
@@ -304,6 +305,12 @@ export const SPORT_DESK_COPY = {
   golf: {
     lede: "The golf desk, one answered question a day. The question fans keep asking through the season, checked against two independent sources before it goes up.",
     holding: "The golf desk is opening. One question a day from the ones fans keep asking, answered and checked against two independent sources. Nothing is filed on a day without a real answer.",
+  },
+  // Basketball runs weekly, not daily (founder order 2026-09-11): one lane, the NBA and the WNBA
+  // covered equally, one question every Monday with the league alternating week to week.
+  basketball: {
+    lede: "The basketball desk, the NBA and the WNBA covered equally. One answered question every Monday, checked against two independent named sources before it goes up.",
+    holding: "The basketball desk is opening. Every Monday it answers one question fans are asking, the NBA one week and the WNBA the next, checked against two independent named sources. A week without a real answer ships nothing, and the desk says so.",
   },
 };
 

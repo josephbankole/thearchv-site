@@ -15,6 +15,7 @@
 // NOTHING HERE MAY EMIT A <script> TAG. index.html carries exactly one inline bootstrap script
 // and scripts/check-csp-hash.mjs asserts that; an injected second one would break the CSP gate.
 import type { DayEntry } from '../data/worldCupDays';
+import { basketballDays } from '../data/basketballDays';
 import { f1Days } from '../data/f1Days';
 import { golfDays } from '../data/golfDays';
 import { leaguesDays } from '../data/leaguesDays';
@@ -391,6 +392,7 @@ const DESKS: { label: string; path: string; days: DayEntry[] }[] = [
   { label: 'Formula 1', path: '/f1/questions/', days: f1Days },
   { label: 'Tennis', path: '/tennis/questions/', days: tennisDays },
   { label: 'Golf', path: '/golf/questions/', days: golfDays },
+  { label: 'Basketball', path: '/basketball/questions/', days: basketballDays },
 ];
 
 // The build's own date, in UTC. Actions runs in UTC and every entry's `date` is a UTC calendar

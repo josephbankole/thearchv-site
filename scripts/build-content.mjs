@@ -364,6 +364,7 @@ const EXTRA_URLS = [
   { loc: "/f1/", changefreq: "daily", priority: "0.7" },
   { loc: "/tennis/", changefreq: "daily", priority: "0.7" },
   { loc: "/golf/", changefreq: "daily", priority: "0.7" },
+  { loc: "/basketball/", changefreq: "daily", priority: "0.7" },
   // Player duels (build-duel-pages.mjs) and the daily archive game (build-archive-game.mjs).
   // The pair rows come from the data adapter so the sitemap grows with the roster on its own.
   { loc: "/duel/", changefreq: "weekly", priority: "0.7" },

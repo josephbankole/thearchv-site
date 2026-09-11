@@ -121,6 +121,7 @@ const DESTINATIONS = [
   ["Formula 1", "The Formula 1 desk, one answered question a day.", "/f1/", "Desks"],
   ["Tennis", "The tennis desk, one answered question a day.", "/tennis/", "Desks"],
   ["Golf", "The golf desk, one answered question a day.", "/golf/", "Desks"],
+  ["Basketball", "The basketball desk, the NBA and the WNBA covered equally, one answered question every Monday.", "/basketball/", "Desks"],
   ["The finals", "World Cup finals from Mexico 1970 onwards, plus the men's and women's finals of 2026, one page each.", "/finals/", "Sections"],
   ["Manchester United, in depth", "Manchester United in long form, with the numbers attached.", "/united/", "Sections"],
   ["Football, explained", "The rules, the terms and the records, without the jargon.", "/explainers/", "Sections"],

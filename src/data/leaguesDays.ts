@@ -7,6 +7,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-11",
+    day: "Friday",
+    headline: "Manchester United beat Sabah FK 4-0 with Patrick Dorgu at left-back and Luke Shaw rested",
+    dek: "Patrick Dorgu set up the first goal on Manchester United's return to the Champions League while Luke Shaw was rested for cramp. Manchester City are at Old Trafford on Sunday.",
+    body: "Manchester United beat Sabah FK 4-0 at Old Trafford on Thursday 10 September in their first Champions League match after two seasons away. Matheus Cunha scored on 27 minutes from Patrick Dorgu's cross, Bruno Fernandes and Benjamin Sesko scored before half-time, and Lisandro Martinez added the fourth on 68 minutes, per Sky Sports and ESPN.\n\nThe team was Senne Lammens; Noussair Mazraoui, Leny Yoro, Martinez, Dorgu; Youri Tielemans, Kobbie Mainoo; Bryan Mbeumo, Fernandes, Cunha; Sesko, per ESPN and Last Word on Sports. Dorgu played left-back because Luke Shaw was not in the squad. Michael Carrick told TNT Sports before kick-off: \"He came off the other day with a little bit of cramp. We didn't want to take any risks really. We tried to manage him, so we will see how he is after this one,\" per Sports Mole and GiveMeSport.\n\nCarrick was asked about Dorgu afterwards: \"I thought Pat played ever so well, he was a big threat down that side of the pitch for us tonight,\" per The Peoples Person and The Sun Nigeria.\n\nMainoo completed 81 passes in 64 minutes, the most by an English Manchester United player in a Champions League match since Carrick in 2014, per Opta.\n\nOn Wednesday three published predicted XIs named three different left-backs: Dorgu for Sports Illustrated, Mazraoui for Sports Mole and Harry Amass for The Hard Tackle. This desk's own predicted XI named 8 of the 11 who started. It had Diogo Dalot, Harry Maguire and Andrey Santos where Yoro, Dorgu and Tielemans played.\n\nNext is Manchester City at Old Trafford on Sunday 13 September, kick-off 16:30 BST, per Sky Sports.",
+    status: "verified",
+    seoTitle: "Manchester United 4-0 Sabah FK, Champions League 2026",
+  },
+  {
     date: "2026-09-10",
     day: "Thursday",
     headline: "Manchester United host Sabah FK tonight, and three previews cannot agree who plays left-back",

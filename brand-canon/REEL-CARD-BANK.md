@@ -149,6 +149,16 @@ can run it with a straight face.
 
 ## Caption format (SEO, no hashtags)
 
+> **SUPERSEDED IN PART 2026-09-11 by canon D-2026-09-11a (founder).** The four lines below
+> still describe the order, but the CAPTION IS NOW ONE TAKE UNDER 80 WORDS (target under 70):
+> line 1 stays the search line and is written as a take a fan would say out loud; line 2 is
+> ONE loaded fact with a frame, at most one source named (the rest stay on the slides); then
+> one CTA line (the Dispatch ask on @thearchvfc per D-2026-09-08g); then the question LAST,
+> naming two or three options or asking to be corrected. The fan plural "we" is allowed on
+> @thearchvfc Manchester United units. "No nicknames" below now means: full name first,
+> nickname or first name after. Enforced by `carousel_structure_lint.py --caption-rules archv`.
+> Evidence: `creator-study/reddit-2026-09-11/save-send-argue.html`.
+
 Four lines. No hashtags anywhere, per canon D-2026-07-28f. The caption may state the
 number because it sits collapsed behind "more" and search needs it; the on-screen cards
 still withhold it.

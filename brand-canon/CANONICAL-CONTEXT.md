@@ -309,7 +309,9 @@ section marker now.*
   blocked it on its first morning. The 4 August fix then said "no other desk posts there", which would
   have silently killed the other two owners on Monday 10 August before the founder ruled that they
   should indeed stand down. **A carve-out that names one owner forbids every other owner you forgot to
-  name**, so name the survivor deliberately, as this line now does.
+  name**, so name the survivor deliberately, as this line now does. **AMENDED 2026-09-11 (D-2026-09-11g,
+  founder): a SECOND owner is named, `ai-company-feature`, the 07:00 ET daily AI company carousel. Two owners,
+  both named; everything else still stands down on this channel.**
 - **Channel ids: this table is authoritative (refreshed 2026-09-10 after the founder's Threads reconnect,
   and 2026-08-24 on D-2026-08-14c, D-2026-08-23a and D-2026-08-24d; base ids per D-2026-07-27b). §3's
   Buffer line is stale. Resolve ids from this table or a live `list_channels`, never from memory or an old
@@ -1152,8 +1154,8 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
   `Scheduled/_archived-2026-08-14/` (consult-and-flag only). Three lane desks replace them,
   registered in the live scheduler with each spec's single home in `fifa.archv/routines-v2/`:
   **archv-football-desk** (6am ET; Threads, @thearchvfc carousel via the template ladder,
-  @thearchv.ca, site/app, TikTok stage), **archv-ai-desk** (noon ET; josephbankole.ca brief,
-  next-day @thearchv.ai carousel, yt-community build), **archv-metrics-desk** (1:30pm ET;
+  @thearchv.ca, site/app, TikTok stage), **archv-ai-desk** (noon ET, 00:00 ET since D-2026-09-11e; josephbankole.ca brief,
+  next-day @thearchv.ai carousel, yt-community build), **archv-metrics-desk** (1:30pm ET, 01:30 ET since D-2026-09-11e;
   per-post metrics, rotation audit, end-of-day roll-call, Buffer READ-ONLY). The pointer
   architecture is D-2026-08-14-dated: specs carry workflow only, every rule lives in one
   canonical file, defect lessons indexed in `fifa.archv/DESK-LESSONS.md`.
@@ -1632,7 +1634,180 @@ a single static stat card as a reel at 25x to 63x their own medians (`competitor
   Formula1.com may stand alone under D-2026-08-28b. New lane `ig-ca-reel`, Platform `IG Reel @thearchv.ca`
   (added to the closed Platform list the same day), football desk step 8b.
 
+**D-2026-09-11c (founder, in session): THE MULTISPORT ANSWER DESK IS REVIVED AND OWNS EVERY SPORT ARTICLE,
+AND BASKETBALL JOINS AS ITS FIFTH SPORT.** Founder wording: "restart the multisport desk, include the new
+basketball lane" and "move the multisport from the football desk to the multi sport desk cleanly".
+- **`archv-multisport-answer-desk` runs DAILY at 08:00 ET (America/Toronto), re-timed to 05:00 ET the same day by D-2026-09-11e.** Manual single-homed at
+  `Scheduled/archv-multisport-answer-desk/SKILL.md`, pointer at
+  `~/.claude/scheduled-tasks/archv-multisport-answer-desk/SKILL.md`. It owns the Answer Desk for `nfl`, `f1`,
+  `tennis`, `golf` and `basketball`: the articles, the dedupe ledger
+  `multisport/desk/answered-questions.md`, and the illustrated faces those articles carry (bank-first, one
+  shared bank). It publishes nothing social.
+- **`archv-football-desk` step 6 Answer Desk work is RETIRED**, effective from that desk's run of Saturday
+  12 September 2026. The football desk files no Answer Desk article, keeps its football site lanes, its
+  @thearchv.ca Instagram slate (steps 8 and 8b) and its own card faces. No sport is filed by two desks.
+- **NFL, Formula 1, tennis and golf:** at most one article per sport per day, exactly as the football desk
+  filed them. D-2026-08-28b is unchanged: NFL and F1 may ship a fact on one official-body source; tennis and
+  golf need two independent named sources.
+- **Basketball** is a new sport with feed and section key `basketball` and pages at
+  `/basketball/questions/<date>/`. One lane covers the NBA and the WNBA EQUALLY: ONE article on MONDAYS only,
+  the league alternating week to week by calendar, the WNBA on Monday 14 September 2026 (founder: its
+  playoffs are live), the NBA on Monday 21 September, and so on. One article per date is a hard limit. If
+  the due league has no honest verified question that Monday, basketball ships nothing that day and the desk
+  does NOT switch leagues, so equality holds over time. The ledger records which league each Monday used.
+  **Basketball does NOT get the D-2026-08-28b exemption:** two independent named sources on every fact, for
+  example the league's own site plus a wire or a major outlet. Desk profile and traps in
+  `multisport/QUESTION-DESKS-SPEC.md` §2.5 and §4.
+- **The site and the app gain a basketball lane.** `archv-site-commit.mjs` already carries the `basketball`
+  key (`src/data/basketballDays.ts`); until that data file is on `main` the desk stages basketball to
+  `multisport/desk/site-drafts/` and leads its report with the blocker.
+- **The Sunday app desk's auto-submit is RESTORED:** `archv-app-weekly-update` (Sunday 21:00 ET) submits the
+  week's build to App Store review again, under its founder authorization of 2026-08-19.
+- **Open items this entry does not close:** the desk's liveness rows (`.system/expected-writers.conf`,
+  `lanes.tsv`) and `archv-metrics-desk`'s closed Platform list need the desk's cell `Answer Desk thearchv.ca`;
+  and the §0 digest line under Channels, handles and timing still names four daily desks and gives site and
+  app content to `archv-football-desk`, so read it with this entry until it is updated.
+
 ---
+
+**D-2026-09-11d (founder, in session): EVERY TASK DIFFS THE CANON BEFORE EACH RUN, AND ONE GOAL FOR
+EVERY DESK.** Founder wording: "update all tasks so they do a diff of the canonical context before each
+run, to check if anything changed since their last run" and "the goal for all desks is to make content that
+is on brand, and is saveable, shareable and starts a conversation".
+- **Canon diff, first step of every run.** Every scheduled task runs
+  `bash "/Users/josephbankole/Claude/Obsidian Brain/AI-Memory/.system/canon-diff.sh" <task-id>` before any
+  other work. It prints what changed in this file since that task last acknowledged it: new decision ids and
+  line-numbered hunks. The task applies every change that touches its lanes, rules, sources, formats,
+  accounts or schedule in that same run and names the D-id in its report; where a change and an older task
+  file disagree, this file wins, as §0 already says. After its log row the task runs the same command with
+  `--ack`. A run that dies before the ack sees the same diff next time, which is intended. Snapshots live in
+  `.system/canon-snapshots/`, one per task, seeded on 2026-09-11 from `CANONICAL-CONTEXT.md.bak-2026-09-09`,
+  so each task's first diff covers everything decided since 9 September.
+- **The goal for every desk.** Every unit any desk makes is on brand (the house voice profile for the ARCHV
+  brands, `personal-brand/fola-personal-voice.md` for the personal lanes, the design system for social
+  imagery), saveable, shareable, and starts a conversation. Each unit is judged against all four before it
+  ships, and the run report names which of the four each unit is built to earn. `archv-metrics-desk`
+  measures them (saves, shares, and replies or comments for conversation); the nightly review judges every
+  desk's output against them. A conversation starts from a question fans would genuinely argue, never from
+  bait, a false claim or a manufactured controversy. Every existing rule still binds on top: no hashtags,
+  no fabricated first person, verification before publish, attacks aimed at institutions and never at
+  individuals.
+
+**D-2026-09-11e (founder, 2026-09-11, in session): FOUR TASKS RE-TIMED, KEEP THE NEW TIMES.** The founder
+moved four scheduled tasks in another session and confirmed "yes that was me, keep the new times".
+- `archv-multisport-answer-desk` 08:00 to **05:00 ET daily** (runs before the football desk; reads nothing it
+  makes that day). `archv-ai-desk` 12:00 to **00:00 ET daily** (brief dated the run date; the @thearchv.ai
+  carousel still targets the next free 15:00 ET slot from tomorrow on, so publishing times are unchanged).
+  `archv-metrics-desk` 13:30 to **01:30 ET daily**: it now scores and roll-calls THE DAY THAT JUST ENDED
+  (yesterday in America/Toronto); its own log rows keep the run date and name the judged day; PENDING is
+  retired. `archv-expense-sweep` Monday 08:00 to **Monday 04:00 ET** (rolling 21-day window, no logic change).
+- Specs aligned the same day (backups `*.bak-2026-09-11-times`): routines-v2/archv-metrics-desk.md,
+  routines-v2/archv-ai-desk.md, Scheduled/archv-multisport-answer-desk/SKILL.md, their pointers, `lanes.tsv`
+  comments and `expected-writers.conf` notes. Heartbeat tolerances unchanged.
+- Consequences recorded, not decided: the 01:30 roll-call now runs AFTER the 15:00 josephbankole-site-desk, so
+  that desk could gain `lanes.tsv` rows (founder's call); 2026-09-11 had no AI desk run (the noon slot was gone
+  and the 00:00 slot had passed), so the metrics desk resolves that day's AI lanes PAUSED, not FAILED.
+
+**D-2026-09-11f (founder, in session): THE DISPATCH COVERS EVERY SPORT, AND EVERY PUBLISHED ISSUE BECOMES A
+LONG READ ON thearchv.ca AND IN THE APP.** Founder wording: "the substack articles ... added to the website and
+the app as long reads. just copy and paste them word for word", "going forward the job that writes the substack
+should also write the same article to the website and app as long reads" and "for the dispatch writer, it should
+also write stories for all sports, do a deep dive of reddit".
+- **Mirror.** Word for word, links and formatting kept, images left out for now. The 15 free issues went live
+  on 2026-09-11 in one commit (e59122c on thearchv-site main). From then on `archv-weekly-desk` runs the mirror
+  every day (`Scheduled/archv-dispatch-weekly/SKILL.md` PART 4): only posts the founder has already PUBLISHED on
+  thearchvdispatch.substack.com, through `fifa.archv/dispatch/site-longreads/substack_to_longread.py` then
+  `archv-site-commit.mjs longread`, held on any fidelity mismatch or paywalled body, never the thearchv.ai
+  publication. No humanizer on the mirror (the words already shipped); Layer A strip only. Site long reads render
+  light markdown (`src/lib/longreadMd.ts`); the feed sends plain `body` for old app builds and `bodyMarkdown` for
+  the app from 1.5.4 (commit 5e171b7). Paid-only issues are NOT mirrored until the founder decides.
+- **Dispatch rebuild.** Sundays, all seven sports (football, NFL, F1, tennis, golf, NBA, WNBA; NBA and WNBA side
+  by side at equal length), shaped by `fifa.archv/dispatch/research/reddit-sports-deep-dive-2026-09-11.md` and a
+  weekly scan (`reddit_weekly_scan.py`). Reddit is a demand signal only, never a source. Two independent named
+  sources on every fact. Still a Substack DRAFT; the founder presses Publish.
+- **`archv-weekly-desk`** had dropped out of the scheduler after 2026-09-09 with no retirement on record; it was
+  re-registered on 2026-09-11 at 07:50 ET daily (clear of `fola-personal-daily`'s 07:30 Chrome use), pointer
+  plus manual at `Scheduled/archv-weekly-desk/SKILL.md`, roster updated against canon.
+
+**D-2026-09-11g (founder, in session): THE DAILY AI COMPANY FEATURE RUNS ON THE MAC, AND IT IS THE SECOND
+SANCTIONED OWNER OF @thearchv.ai.** The founder's 5 Sep series (50 AI-impact companies, one a day from
+2026-09-06) moved off the cloud onto the local scheduled task `ai-company-feature`, spec at
+`routines-v2/ai-company-feature.md`, toolkit at `ai-company-feature/tools/`. Rulings made in the session:
+- **@thearchv.ai now has TWO owners, both named:** `archv-ai-desk` STEP 2 (the 15:00 ET AI-news carousel,
+  D-2026-09-10b) and `ai-company-feature` (the 07:00 ET company carousel). This amends the single-owner
+  lines in §0 Handles and in RATIFIED 2026-08-04. Anything else still stands down on the channel.
+- **Automatic mode** on the GraphQL `createPost` route with `mode: customScheduled`, consistent with
+  D-2026-09-08c for this channel. The founder chose it over notification knowing it goes live without a press.
+- **Slot 07:00 ET the next day**, moved from the brief's 08:00 to keep the 3-hour spacing (D-2026-09-08a)
+  from the daily 10:00 ET explainer series on the same channel.
+- **Seven slides**, a sanctioned slide-count exception under D-2026-08-24e. **Visuals unchanged by founder
+  order** ("do not change anything, I like them"): Higgsfield `cinematic_studio_2_5` backgrounds and
+  `kling2_6` videos on slides 1 and 4, Poppins Bold/Regular text layer with the amber accent, handle
+  @thearchv.ai. This is a lane exception to the D-2026-08-14a type and colour system and to the
+  local-first engine order. mflux stills may replace Higgsfield ONLY after the founder approves a
+  side-by-side ("if we can match the quality with mflux sure"); the spec carries the one-line switch.
+- **No hashtags** (D-2026-07-28f holds; the brief's "exactly 3 hashtags" is void).
+- **Substack: archvai.substack.com, PUBLISHED, free to everyone, comments limited to paid subscribers**
+  (founder, 10 Sep). Stop and leave a draft if either setting cannot be set. Never thearchvdispatch.
+- The full gate chain applies (humanizer-archv + house voice, ai-writer-detection full pass on the article,
+  banned-moves + structure lints, remove-ai-marks last). Heartbeat row `ai-company-feature | archv | 2`.
+
+**D-2026-09-11h (founder, in session): THE AI DESK RESEARCHES LIKE THE THREAT-REPORT BATCH, SHIPS SINGLE-STORY
+DECKS, UP TO THREE A DAY, AND SCHEDULES @thearchv.ai THREADS ITSELF.** Founder wording: "update this routine so it
+does the same kind of analysis going forward based one recent news, it should check reddit as well etc", then three
+answers in session: single-story deck, up to three a day, the desk queues threads itself.
+- **Research, every run (`archv-ai-desk` STEP 2A):** a live news sweep over 72 hours plus the vendor changelogs
+  (D-2026-09-08d list kept), a deep dive on the primary documents (long ones read by one Opus subagent), a Reddit
+  reaction scan (`archv-ai-carousel/research/reddit_ai_scan.py`, logged out: what drew engagement, which questions
+  recur, what nobody discussed), ideas written against §0, then ONE Opus reviewer ranks them for virality and cuts
+  the bottom third. Files per run in `archv-ai-carousel/ideas/<date>-<slug>/`. Reddit is a demand signal, never a
+  source (as D-2026-09-11f). Weapons and biology material stays at headline level, and a safeguard stop is never
+  worked around.
+- **Lane B format:** the builder roundup header is retired. One story per deck, D-2026-09-09a build rules,
+  sources on the last slide (D-2026-09-10c).
+- **Lane B volume:** up to three decks a day on IG @thearchv.ai at **15:00, 18:00 and 21:00 ET**. This widens the
+  desk's share of the channel named in D-2026-09-11g; `ai-company-feature` keeps 07:00 and the founder's explainers
+  keep 10:00. A slot is free only if nothing on the channel sits within three hours of it (D-2026-09-08a).
+  First-comment shapes: none twice in a day, none repeated within the desk's last six units.
+- **Lane C, new, `threads-ai-desk`:** up to three @thearchv.ai threads a day through Content360 in the founder's
+  logged-in Chrome, at **08:00, 17:00 and 20:00 ET**, three hours clear of `fola-personal-daily`'s 14:00 AI thread,
+  which stays. Auto-publish is approved for this lane as it is for that one. @thearchv.ai Threads now has two
+  owners, `fola-personal-daily` unit 3 and `archv-ai-desk` Lane C; fola's unit 3 skips any story the desk has
+  threaded (rows in `archv-ai-covered.md`, lane `threads-ai-desk`). Platform cell `Threads @thearchv.ai desk`. Lane C
+  holds and hands off when Chrome or the Content360 login is not available. Never `folabankole` on Threads.
+- Files changed the same day (backups `*.bak-2026-09-11-research`): `routines-v2/archv-ai-desk.md`, `lanes.tsv`,
+  `DESK-LESSONS.md` (Content360 scheduling recipe), `~/Claude/CLAUDE.md` (Threads lanes),
+  `~/.claude/scheduled-tasks/fola-personal-daily/SKILL.md` (unit 3 dedup line).
+
+### RATIFIED 2026-09-12 (founder, in chat)
+
+**D-2026-09-12a (founder): THE HOOK BANK, AND EVERY LANE ROTATES THROUGH IT.** Founder wording: "parse the attached
+list of hooks. i want our accounts to start using them to create more viral, engaging content. review them, improve
+them based on our latest canonical context and research from reddit. then update our routines accordingly so they use
+these hooks as part of their rotation".
+- **Single home: `fifa.archv/HOOK-BANK.md`** (pointer architecture, D-2026-08-14f; `REEL-CARD-BANK.md` carries a one-line
+  pointer, not a copy). The 40-template board was re-homed to the lanes that exist: 3 kept, 31 rewritten, 6 retired (no
+  live lane, or no fix for the bait), 17 added from the 2026-09-11 Reddit and competitor research. 51 live hooks.
+  First person comes off the brand hooks, fabricated first-person examples become labelled ILLUSTRATIONs or are refilled
+  from cited desk output and the personal fact sheet, and every factual slot is marked VERIFY, FAN or FOUNDER.
+- **The rotation, in one paragraph.** The desk chooses the story first under its own precedence and verification, then
+  picks a hook whose Home names the unit's channel (one account on one surface, whichever desk feeds it). No family runs
+  twice in a row on a channel, any five consecutive units carry at least three families, an id stays out for the
+  channel's next four units, and the pick is the least recently used family that fits, with the metrics desk's
+  saves-plus-shares-per-reach reading as the tie-break once a family has five scored units. Hook doctrine v3, the
+  D-2026-09-09a build rules, the ledger's third-withheld-number block, the closer, CTA, question-shape and Threads
+  formula rotations all still bind; a hook never bends a fact. Each unit logs `hookid:<id> hookfam:<family>` in its
+  performance-log `Note` (16-column header unchanged; `hook:` stays with the Threads question shape), the football desk
+  also opens its ledger construction cell with it (the ledger keeps its single writer), and `ai-company-feature` carries
+  it in its agent-log outcome. `archv-metrics-desk` STEP 2c scores by family, read-only.
+- **Files changed, each backed up as `<file>.bak-2026-09-12-hooks`:** `routines-v2/archv-football-desk.md` (step 4c, 4b,
+  fallback rung, step 10), `~/.claude/scheduled-tasks/archv-football-desk/SKILL.md` (CAROUSELS build rules),
+  `~/.claude/scheduled-tasks/threads-ca-daily/SKILL.md`, `routines-v2/archv-ai-desk.md` (Lane B, Lane C, STEP 3),
+  `routines-v2/ai-company-feature.md` (STEP 3, STEP 9), `~/.claude/scheduled-tasks/fola-personal-daily/SKILL.md` (units
+  1 and 3, logging), `~/.claude/scheduled-tasks/fola-personal-remix-weekly/SKILL.md`,
+  `Scheduled/linkedin-weekly-idea-refill/SKILL.md`, `film.joey/RUNBOOK.md` (slide 1, close-out),
+  `Scheduled/archv-weekly-match-covers/SKILL.md`, `routines-v2/archv-metrics-desk.md` (STEP 2c, report 3c),
+  `REEL-CARD-BANK.md` (pointer) and this file. No scheduled task was created, re-registered or re-enabled.
 
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)
 1. **brand-voice-CHEATSHEET.md** — the daily operating reference (voice, the loops, pillar mix, format doctrine, visual identity, credit reality, handle lock). Open the full brand-voice-guidelines.md ONLY for a specific edge case, one § at a time.

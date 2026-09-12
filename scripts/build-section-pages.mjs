@@ -115,8 +115,8 @@ function contentCard(section, page) {
   }</span></a></li>`;
 }
 
-// The sport tab row marks no tab current on /finals/ and on the 404 (declutter, 2026-09-12, item
-// 13 of the site review); /united/, /explainers/ and /legends/ keep Football current.
+// The sport tab row marks no tab current on the 404 (declutter, 2026-09-12, item 13 of the site
+// review). Every section front, /finals/ included (World Cup football), keeps Football current.
 function renderSection(section, front, pages) {
   const url = `${SITE}/${section}/`;
   return `${head({
@@ -147,7 +147,7 @@ function renderSection(section, front, pages) {
   },
 })}
 <body>
-  ${masthead(section === "finals" ? NO_SPORT : DEFAULT_SPORT)}
+  ${masthead(DEFAULT_SPORT)}
   <main class="wrap wrap--wide">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(front.label)}</p>

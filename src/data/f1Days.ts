@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-12",
+    day: "Saturday",
+    headline: "Why has the FIA restricted active aero at the Madring?",
+    dek: "To two zones only, after a Formula 3 test at the new Madrid circuit produced 19 red flags in one session, 11 of them from cars hitting the concrete barriers.",
+    body: "The FIA is not taking any chances on Formula 1's newest circuit. Active aero, known this season as Straight Mode, is restricted to just two zones for Sunday's Spanish Grand Prix at the new Madring in Madrid, according to Motorsport Week and PlanetF1.\n\nDrivers may only run the system on the start/finish straight and on the short straight immediately after Turn 3. For the rest of the lap, including the entire second and third sectors, cars stay in full downforce trim, both outlets report.\n\nThe restriction follows a Formula 3 test session at the circuit that produced 19 red flags, 11 of them from cars making heavy contact with the barriers, per Motorsport Week and PlanetF1. The Madring's unforgiving concrete walls are one reason the FIA is being cautious, per Motorsport Week, and Turn 12, the 500-metre banked corner known as La Monumental, falls inside the restricted second sector and has to be taken in full downforce, PlanetF1 reports.\n\nMcLaren team principal Andrea Stella compared the challenge to another street track: \"With these walls, it can be similar to Jeddah, but there's many more corners and many more high-speed chicanes,\" he said, per Motorsport Week. Ferrari's Fred Vasseur was blunter: \"I think it will be a tricky one for everybody, perhaps a bit difficult to overtake,\" he said, per the same report.\n\nThe Madring is hosting Formula 1 for the first time this weekend, with zero historical race data for the FIA or the teams to draw on, per PlanetF1. Qualifying runs on Saturday at 16:00 local, ahead of Sunday's race at 15:00, the first time a Formula 1 grid has been set at this circuit.",
+    status: "verified",
+    seoTitle: "FIA limits active aero at Madring after alarming F3 test",
+  },
+  {
     date: "2026-09-11",
     day: "Friday",
     headline: "When is the next F1 race?",

@@ -230,7 +230,12 @@ main, .footer { position: relative; z-index: 2; }
 .wordmark--lg .wordmark__archv { font-size: clamp(2.2rem, 6vw, 4rem); }
 .wordmark--lg .wordmark__the { font-size: clamp(1.1rem, 3vw, 1.8rem); }
 .masthead__tagline { font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--ink-soft); margin-right: auto; padding-left: 1.5rem; }
-@media (max-width: 720px) { .masthead__tagline { display: none; } }
+/* 2026-09-12 (founder, D-2026-09-12j): the tagline is the lead line, so phones show it too, on its own
+   full-width line under the wordmark and the search/menu row, instead of hiding it. */
+@media (max-width: 720px) {
+  .masthead { row-gap: 0.4rem; }
+  .masthead__tagline { order: 3; flex-basis: 100%; margin: 0; padding-left: 0; font-size: 0.9rem; }
+}
 /* The accent rule under the masthead: the one bar of colour at the top of the page. */
 .mast-rule { height: 3px; background: var(--accent); max-width: var(--maxw); margin: 0 auto; }
 

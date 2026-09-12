@@ -1,2788 +1,2804 @@
 {
- "schema": "archv.heads-hd/1",
- "size": 600,
- "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered 2026-09-11 on the founder's prompt, verbatim, from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters).",
- "entries": [
-  {
-   "out": "amad",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115404_09614411-969b-42ca-aafd-a9fc64c83ed0.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559906_102167030.jpg?fmt=jpg&f=CENTER&w=1200",
-    "job": "09614411-969b-42ca-aafd-a9fc64c83ed0",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "anderson",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_092639_1a1fde91-827e-4873-877d-7a6e0d99050c.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/anderson.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "andrey-santos",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260710_101315_20cc089e-d15a-4398-a06f-62cd964e89aa.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/andrey-santos.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "anton",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094445_6a751d14-7e6e-4be0-8f7a-5b981c2e6a12.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/anton.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "baleba",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_003940_80a0e913-7824-4e9c-bc08-2615ec11f5c3.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/baleba.webp",
-    "score": 0.906
-   },
-   "maxBottom": 0.66
-  },
-  {
-   "out": "balogun",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_024045_ec5e3e9f-9124-496d-b0c0-ac4d3628a495.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/balogun.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "barcola",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260618_091218_3f70cf29-4b5f-4d1d-bf78-714b47e3cf85_min.webp",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/barcola.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "bellingham",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091713_0c90be23-22d9-4166-9c83-6489bfddaffd.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/bellingham.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "bruno-fernandes",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091711_cd082cd5-5f66-4e95-9ed6-93a064cc873e.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/bruno-fernandes.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "camavinga",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260717_100622_bbc09623-fa9b-45e1-a0d4-959596cfdb92.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/camavinga.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "ederson",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091729_411d955e-b7cf-433a-8f5b-141997901c9e.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/ederson.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "enzo-fernandez",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260718_100430_5e504544-7f99-4a04-a1f8-3a33077bd7b0.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/enzo-fernandez.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "eustaquio",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_023802_66262fff-affb-4e37-8622-834b3b7d8526.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/eustaquio.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "fernandes",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112322_eb43058f-bd8c-4530-910c-0c32d68281b9.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/fernandes.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "ferran-torres",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100800_6e90738c-7355-4f78-b233-a023b8ea2f2c.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/ferran-torres.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "gomes",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_111915_f05a7405-65e5-4429-921a-453b0372ab0d.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/gomes.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "haaland-manchester-city",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154249_af24c6fb-4a72-404c-90e8-f451fe1d176e.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/haaland-manchester-city.webp",
-    "score": 0.947
-   }
-  },
-  {
-   "out": "haaland",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112350_859c091b-3ab8-4bc3-9d98-a603dc511447.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/haaland.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "hall",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_111923_cfdfec36-1603-432e-8e8a-87319a0eefc1.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/hall.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "jimenez-fulham",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154408_20016aa5-1f7c-4271-a5c0-25f7930d8ac4.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/jimenez-fulham.webp",
-    "score": 0.929
-   }
-  },
-  {
-   "out": "jimenez",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_092813_60546aae-0185-4155-85b6-f068f99202a9.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/jimenez.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "joao-gomes",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_060354_8909ae14-6b96-4f39-beca-0efa6f74ea48.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/joao-gomes.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "jonathan-david",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_081150_82683c81-0264-4c8d-a3fc-02fb0479beb2.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/jonathan-david.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "kane",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094456_dfae9063-2e6e-4643-a482-a8114b5e5348.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/kane.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "kone",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260717_100624_86237170-5ed8-4763-b6a4-909c79a0222b.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/kone.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "lewis-hall",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100805_a003edd4-1a14-4e6b-8c64-4dc1eda3ecb0.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/lewis-hall.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "mbappe",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112348_6149c50d-69af-4bc4-9127-419262697815.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/mbappe.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "messi",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112345_f71a65bb-d6b1-4b25-8913-958aeed69179.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/messi.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "oyarzabal",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_105047_3a1ee19d-6b66-4d75-9a17-0b7268355b7d.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/oyarzabal.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "rashford",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_004857_cfd26cbf-0ef7-442d-9a1a-eed892f2d195.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/rashford.webp",
-    "score": 0.944
-   },
-   "maxBottom": 0.72
-  },
-  {
-   "out": "rogers",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100803_b656a45c-4cfb-464b-8d07-8976d1ce42e0.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/rogers.webp",
-    "score": 0.997
-   }
-  },
-  {
-   "out": "ronaldo",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094503_e25f60a7-c7a4-4f21-912c-f406359288ed.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/ronaldo.webp",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "santos",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260710_101315_20cc089e-d15a-4398-a06f-62cd964e89aa.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "Entries using /heads/santos.webp name Andrey Santos in imageAlt, but that file is the June text-only generation (bank row 182, no photo reference). Rebuilt from the verified regen (bank row 183, genuine photo ref, founder QC approved 2026-07-10), the same master andrey-santos uses."
-   }
-  },
-  {
-   "out": "summerville",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_122854_546d75bd-d10d-4519-81fc-0b26028fcb48.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/summerville.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "tchouameni",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091701_74757162-783d-4cb0-8d2f-8f200d1e483a.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/tchouameni.webp",
-    "score": 0.997
-   }
-  },
-  {
-   "out": "tielemans",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260702_102500_dd34ec4a-3a10-4b38-bf94-5be2d5446140.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/tielemans.webp",
-    "score": 0.982
-   }
-  },
-  {
-   "out": "undav",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_092632_4c62aee8-eca9-4513-b6d2-6c54e58fc5c1.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/undav.webp",
-    "score": 1.0
-   }
-  },
-  {
-   "out": "vozinha",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_212943_783fb943-e8e2-4db4-96c8-cfd9681d807b.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/media/illustrated/head-vozinha.jpg",
-    "score": 0.998,
-    "note": "Serves /heads/vozinha.webp too: that file is a bracketed card crop of an earlier Vozinha cover (0.70 against its own master), so the clean registry master replaces it."
-   }
-  },
-  {
-   "out": "wharton-crystal-palace",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154500_b040c73c-fabd-4f0a-a093-92c6aec6a096.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/wharton-crystal-palace.webp",
-    "score": 0.992
-   }
-  },
-  {
-   "out": "yamal",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_105023_02ff0542-422b-423f-a4d4-add0b3bdfe48.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/yamal.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "youri-tielemans",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260702_102500_dd34ec4a-3a10-4b38-bf94-5be2d5446140.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/youri-tielemans.webp",
-    "score": 0.982
-   }
-  },
-  {
-   "out": "zirkzee",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100807_60601a93-2b44-4d23-82df-615c7d9a0f55.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/heads/zirkzee.webp",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "nilson-angulo",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211547_93f3e841-cb6b-44db-92c9-fce8879d0c4a.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/media/illustrated/head-angulo.jpg",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "elijah-just",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211548_a66d1878-c743-4689-b371-26903a44f4b2.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/media/illustrated/head-elijahjust.jpg",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "issa-diop",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211550_88ffe3ac-d2df-4d9b-b28a-3298634f01d2.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/media/illustrated/head-issadiop.jpg",
-    "score": 0.998
-   }
-  },
-  {
-   "out": "riyad-mahrez",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211552_e634dbb7-2f6f-45b0-8857-091056fdf712.png",
-   "identity": {
-    "method": "ncc",
-    "against": "/media/illustrated/head-mahrez.jpg",
-    "score": 0.999
-   }
-  },
-  {
-   "out": "diogo-dalot",
-   "source": "bank-local:headshot-dalot-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "noussair-mazraoui",
-   "source": "bank-local:headshot-mazraoui-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "matthijs-de-ligt",
-   "source": "bank-local:headshot-deligt-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "harry-maguire",
-   "source": "bank-local:headshot-maguire-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "lisandro-martinez",
-   "source": "bank-local:headshot-lisandromartinez-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "mason-mount",
-   "source": "bank-local:headshot-mount-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "patrick-dorgu",
-   "source": "bank-local:headshot-dorgu-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "leny-yoro",
-   "source": "bank-local:headshot-yoro-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "bryan-mbeumo",
-   "source": "bank-local:headshot-mbeumo-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "luke-shaw",
-   "source": "bank-local:headshot-shaw-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "manuel-ugarte",
-   "source": "bank-local:headshot-ugarte-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "benjamin-sesko",
-   "source": "bank-local:headshot-sesko-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "ayden-heaven",
-   "source": "bank-local:headshot-heaven-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "tyler-fletcher",
-   "source": "bank-local:headshot-tylerfletcher-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "senne-lammens",
-   "source": "bank-local:headshot-lammens-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "michael-carrick",
-   "source": "bank-local:headshot-carrick-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "tom-heaton",
-   "source": "bank-local:headshot-heaton-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "karl-darlow",
-   "source": "bank-local:headshot-darlow-2026.png",
-   "identity": {
-    "method": "squad-table",
-    "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
-   }
-  },
-  {
-   "out": "kobbie-mainoo",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115116_8a0128c3-f981-4fd3-ac8f-30ee1492f7a7.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896330/media_102559979_102167103.jpg?fmt=jpg&f=CENTER&w=1200",
-    "job": "8a0128c3-f981-4fd3-ac8f-30ee1492f7a7",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "matheus-cunha",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115236_78344fc4-2464-4de5-8a70-9cb8d4839014.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559903_102167027.jpg?fmt=jpg&f=CENTER&w=1200",
-    "job": "78344fc4-2464-4de5-8a70-9cb8d4839014",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "cristian-orozco",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_131101_e0c11e7c-48d3-4c9d-92b8-042b2e804e5f.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://scoreplay-mam-media.s3.amazonaws.com/472/5702995/media_118426046_118036182.jpg",
-    "job": "e0c11e7c-48d3-4c9d-92b8-042b2e804e5f",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "scott",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115535_170a0b62-98bc-464f-bdb5-85c000f515aa.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Alex_Scott_Interview_2023.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Alex_Scott_Interview_2023.jpg",
-    "job": "170a0b62-98bc-464f-bdb5-85c000f515aa",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "wayne-rooney",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115721_cbad8ae4-9344-4bbe-8414-c2f760681616.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/1/11/Rooney_CL.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Rooney_CL.jpg",
-    "job": "cbad8ae4-9344-4bbe-8414-c2f760681616",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "eddie-howe",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_ffa9875e-2d1f-4c7b-9f03-9e158598192b.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Eddie_Howe_24052026_%282%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Eddie_Howe_24052026_(2).jpg",
-    "job": "ffa9875e-2d1f-4c7b-9f03-9e158598192b",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "alejandro-balde",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_af893e7f-6555-4b8d-8946-321e2e436ac4.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/e6ad1688-d559-4991-a2a0-3c7fbfd1b14f/03-Balde.png?width=670&height=790",
-    "job": "af893e7f-6555-4b8d-8946-321e2e436ac4",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "matthias-jaissle",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_220e9a27-a343-441e-9ff4-91a3bad43ed8.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/b/b0/FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_%282023-05-28%29_05.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_(2023-05-28)_05.jpg",
-    "job": "220e9a27-a343-441e-9ff4-91a3bad43ed8",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "david-raum",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_01662a22-f37d-4130-a1c9-b9ca34a7c4c5.png",
-   "frame": "none",
-   "marks": [
-    [
-     1320,
-     1950,
-     1750,
-     2048
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/9/94/2023-10-04_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League%2C_RB_Leipzig_-_Manchester_City_FC_1DX_2658_%28cropped2%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2658_(cropped2).jpg",
-    "job": "01662a22-f37d-4130-a1c9-b9ca34a7c4c5",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "altay-bayindir",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_ca9ea6a5-e964-4da7-82a3-80f62644e124.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://rccelta.es/app/uploads/2026/08/Altay-Bayindir.png",
-    "job": "ca9ea6a5-e964-4da7-82a3-80f62644e124",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "ian-maatsen",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_d41d5951-b7af-4cbc-a155-4d190f5f0a5e.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://images.gc.avfcservices.co.uk/d013bd00-a79b-11f1-91b9-a70ca6456fb1.png",
-    "job": "d41d5951-b7af-4cbc-a155-4d190f5f0a5e",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "anthony-gordon",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_9106cc4d-13f1-405b-b635-a2ce914a514d.png",
-   "frame": "none",
-   "marks": [
-    [
-     1392,
-     1945,
-     1735,
-     2048,
-     "box"
-    ],
-    [
-     1388,
-     1945,
-     1526,
-     2048,
-     "box"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/8dfb11f8-dbb7-46e8-ab7e-4bb47f44d05e/00-Gordon.png?width=670&height=790",
-    "job": "9106cc4d-13f1-405b-b635-a2ce914a514d",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "tim-krul",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_135343_196ccb81-4750-444a-b7db-859fee3b9354.png",
-   "frame": "none",
-   "marks": [
-    [
-     1375,
-     1845,
-     1525,
-     2048
-    ],
-    [
-     900,
-     1985,
-     1190,
-     2048
-    ],
-    [
-     1415,
-     1925,
-     1505,
-     2015,
-     "box flat"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/d/de/Dutch_goalkeepers_%2815300666997%29_%28Krul_crop%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Dutch_goalkeepers_(15300666997)_(Krul_crop).jpg",
-    "job": "196ccb81-4750-444a-b7db-859fee3b9354",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, with the signage lettering behind him recoloured out of the reference. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "gordon-banks",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_9fcaa094-afe6-4de0-b482-721b8f8f563b.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/d/db/Gordon_Banks_en_1970.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Gordon_Banks_en_1970.jpg",
-    "job": "9fcaa094-afe6-4de0-b482-721b8f8f563b",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "alex-ferguson",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_04444659-2649-481d-988f-14646b0e90d6.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Alex_Ferguson_02_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Alex_Ferguson_02_(cropped).jpg",
-    "job": "04444659-2649-481d-988f-14646b0e90d6",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "arsene-wenger",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_7a3a7968-6424-43fa-bf82-3fbd4701813a.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Arsene_Wenger.JPG",
-    "page": "https://commons.wikimedia.org/wiki/File:Arsene_Wenger.JPG",
-    "job": "7a3a7968-6424-43fa-bf82-3fbd4701813a",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "mariano-navone",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115834_0bc81a9b-5b43-4706-9a27-1e2e874e371a.png",
-   "frame": "none",
-   "marks": [
-    [
-     66,
-     1928,
-     285,
-     2048
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Mariano_Navone_-_Roland-Garros_-_28.05.2024_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Mariano_Navone_-_Roland-Garros_-_28.05.2024_(cropped).jpg",
-    "job": "0bc81a9b-5b43-4706-9a27-1e2e874e371a",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "bianca-andreescu",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_b7e1287d-2f1e-4072-95a1-4376e7c6df6a.png",
-   "frame": "none",
-   "marks": [
-    [
-     890,
-     462,
-     1205,
-     548,
-     "box"
-    ]
-   ],
-   "face": [
-    463,
-    880,
-    850,
-    850
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/0/02/Bianca_Andreescu_%282026_US_Open%29_05.jpg",
-    "job": "b7e1287d-2f1e-4072-95a1-4376e7c6df6a",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "terence-atmane",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_9f43b011-3f64-423b-8388-ae47559f523b.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Terence_Atmane_%282024_DC_Open%29_01_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Terence_Atmane_(2024_DC_Open)_01_(cropped).jpg",
-    "job": "9f43b011-3f64-423b-8388-ae47559f523b",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "sofia-kenin",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_b154dcc9-2111-48f8-8b43-d4719aac1bc6.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Sofia_Kenin_%282025_DC_Open%29_05_%28edited_and_cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Sofia_Kenin_(2025_DC_Open)_05_(edited_and_cropped).jpg",
-    "job": "b154dcc9-2111-48f8-8b43-d4719aac1bc6",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "jack-draper",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_120621_d27a91b4-0745-41ab-9f1a-d5b5e6cc87dc.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/0/07/Draper_MCM23_%2855%29_%2852883527225%29_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Draper_MCM23_(55)_(52883527225)_(cropped).jpg",
-    "job": "d27a91b4-0745-41ab-9f1a-d5b5e6cc87dc",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "iga-swiatek",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_120751_35f31c25-84a7-46c7-94c3-dacfa5eb048b.png",
-   "frame": "none",
-   "marks": [
-    [
-     1222,
-     296,
-     1428,
-     448
-    ],
-    [
-     1226,
-     436,
-     1392,
-     516
-    ],
-    [
-     1236,
-     410,
-     1392,
-     460
-    ],
-    [
-     1250,
-     420,
-     1385,
-     458,
-     "box"
-    ]
-   ],
-   "face": [
-    534,
-    750,
-    890,
-    890
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/9/98/Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg",
-    "job": "35f31c25-84a7-46c7-94c3-dacfa5eb048b",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "elena-rybakina",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121601_0cea3da3-1de6-4567-aae7-17e1c1073690.png",
-   "frame": "none",
-   "marks": [
-    [
-     676,
-     312,
-     915,
-     478
-    ],
-    [
-     606,
-     388,
-     722,
-     492
-    ],
-    [
-     680,
-     352,
-     850,
-     428,
-     "box"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Elena_Rybakina_2023_US_Open_69_cropped.jpg",
-    "job": "0cea3da3-1de6-4567-aae7-17e1c1073690",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "coco-gauff",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121023_bc48928b-4add-4dc4-bfd2-a4275dee2caa.png",
-   "frame": "none",
-   "marks": [
-    [
-     1038,
-     218,
-     1270,
-     332
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Coco_Gauff_Miami_Open.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Coco_Gauff_Miami_Open.jpg",
-    "job": "bc48928b-4add-4dc4-bfd2-a4275dee2caa",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "jannik-sinner",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121144_a5e3d2c4-570f-4bee-8c33-186481be5435.png",
-   "frame": "none",
-   "marks": [
-    [
-     785,
-     125,
-     1040,
-     246
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/6/64/Jannik_Sinner_2025_US_Open.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Jannik_Sinner_2025_US_Open.jpg",
-    "job": "a5e3d2c4-570f-4bee-8c33-186481be5435",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "venus-williams",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121305_c1cf2b50-9677-4b8f-a9ea-6c355f9877ac.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/1/19/Venus_Williams_%282025_DC_Open%29_crop.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Venus_Williams_(2025_DC_Open)_crop.jpg",
-    "job": "c1cf2b50-9677-4b8f-a9ea-6c355f9877ac",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "carlos-alcaraz",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121415_f06a4eb3-d9eb-43dc-8531-dd1dad9a61ea.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d4/25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_(cropped).jpg",
-    "job": "f06a4eb3-d9eb-43dc-8531-dd1dad9a61ea",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "felix-auger-aliassime",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121722_9092c3f4-2b1a-4b33-b57a-e057804e0d6e.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/2/2c/F%C3%A9lix_Auger-Aliassime_%282023_DC_Open%29_01_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Auger-Aliassime_(2023_DC_Open)_01_(cropped).jpg",
-    "job": "9092c3f4-2b1a-4b33-b57a-e057804e0d6e",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "novak-djokovic",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_8706124a-dc9c-46bd-ada3-bf414d00094a.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Novak_Djokovic_Paris_2024_Olympic_Games_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Novak_Djokovic_Paris_2024_Olympic_Games_(cropped).jpg",
-    "job": "8706124a-dc9c-46bd-ada3-bf414d00094a",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "alexander-zverev",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122102_4bb2a6c5-a7a6-4a5f-9e8f-b75faf250b5d.png",
-   "frame": "none",
-   "marks": [
-    [
-     679,
-     288,
-     765,
-     452,
-     "flat"
-    ],
-    [
-     626,
-     326,
-     684,
-     452,
-     "flat"
-    ],
-    [
-     580,
-     372,
-     640,
-     452,
-     "flat"
-    ],
-    [
-     608,
-     338,
-     745,
-     448,
-     "box flat"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Alexander_Zverev.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Alexander_Zverev.jpg",
-    "job": "4bb2a6c5-a7a6-4a5f-9e8f-b75faf250b5d",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "katherine-sebov",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_db94342f-3885-4394-af8c-300f05828a21.png",
-   "frame": "none",
-   "marks": [
-    [
-     800,
-     332,
-     1000,
-     438
-    ],
-    [
-     765,
-     378,
-     806,
-     438
-    ],
-    [
-     782,
-     360,
-     942,
-     432,
-     "box"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Sebov_RGQ23.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Sebov_RGQ23.jpg",
-    "job": "db94342f-3885-4394-af8c-300f05828a21",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "jackson-koivun",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122103_7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7.png",
-   "frame": "none",
-   "marks": [
-    [
-     755,
-     30,
-     1465,
-     280
-    ],
-    [
-     1495,
-     290,
-     1560,
-     385
-    ],
-    [
-     640,
-     1255,
-     775,
-     1525
-    ],
-    [
-     1445,
-     1270,
-     1540,
-     1555
-    ],
-    [
-     1470,
-     1925,
-     1700,
-     2048
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_66701.png",
-    "job": "7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "wyndham-clark",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122103_a8ebee84-8da7-4bf4-a1b6-a8c6b69cb5b8.png",
-   "frame": "none",
-   "marks": [
-    [
-     730,
-     0,
-     930,
-     205
-    ],
-    [
-     925,
-     0,
-     1150,
-     215
-    ],
-    [
-     1145,
-     0,
-     1400,
-     225
-    ],
-    [
-     1395,
-     24,
-     1540,
-     200
-    ],
-    [
-     1480,
-     110,
-     1598,
-     160
-    ],
-    [
-     1480,
-     155,
-     1614,
-     288
-    ],
-    [
-     440,
-     205,
-     520,
-     305
-    ],
-    [
-     418,
-     290,
-     520,
-     495
-    ],
-    [
-     895,
-     0,
-     965,
-     210
-    ],
-    [
-     1115,
-     0,
-     1185,
-     220
-    ],
-    [
-     1365,
-     20,
-     1435,
-     230
-    ],
-    [
-     730,
-     0,
-     930,
-     205
-    ],
-    [
-     925,
-     0,
-     1150,
-     215
-    ],
-    [
-     1145,
-     0,
-     1400,
-     225
-    ],
-    [
-     1395,
-     24,
-     1540,
-     200
-    ],
-    [
-     1480,
-     110,
-     1598,
-     160
-    ],
-    [
-     1480,
-     155,
-     1614,
-     288
-    ],
-    [
-     428,
-     268,
-     522,
-     326
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/7/78/Wyndham_Clark_2023_01a_%28cropped%29.png",
-    "page": "https://commons.wikimedia.org/wiki/File:Wyndham_Clark_2023_01a_(cropped).png",
-    "job": "a8ebee84-8da7-4bf4-a1b6-a8c6b69cb5b8",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "tiger-woods",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_0b3095e3-a7aa-43e5-a70d-b478f2bb2d52.png",
-   "frame": "none",
-   "marks": [
-    [
-     1090,
-     304,
-     1428,
-     442
-    ]
-   ],
-   "face": [
-    819,
-    900,
-    910,
-    910
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Tiger_Woods_3.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Tiger_Woods_3.jpg",
-    "job": "0b3095e3-a7aa-43e5-a70d-b478f2bb2d52",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "rory-mcilroy",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_83a354f3-dc78-4f8c-ad49-fda21cd69e2a.png",
-   "frame": "none",
-   "marks": [
-    [
-     886,
-     190,
-     1214,
-     270
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/9/97/Rory_McIlroy_Travelers-077_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Rory_McIlroy_Travelers-077_(cropped).jpg",
-    "job": "83a354f3-dc78-4f8c-ad49-fda21cd69e2a",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "viktor-hovland",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_9ddb8175-ba2b-46a4-8dd9-a2975bff9656.png",
-   "frame": "none",
-   "marks": [
-    [
-     845,
-     112,
-     1100,
-     215
-    ],
-    [
-     832,
-     205,
-     1115,
-     262
-    ],
-    [
-     900,
-     255,
-     1060,
-     292
-    ],
-    [
-     845,
-     112,
-     1100,
-     215
-    ],
-    [
-     832,
-     205,
-     1115,
-     262
-    ],
-    [
-     900,
-     255,
-     1060,
-     292
-    ],
-    [
-     880,
-     122,
-     1075,
-     215,
-     "box"
-    ],
-    [
-     838,
-     252,
-     905,
-     278
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Viktor_Hovland_Ryder_Cup_2025-205_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg",
-    "job": "9ddb8175-ba2b-46a4-8dd9-a2975bff9656",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "chris-gotterup",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_b09fa3ee-4dda-4b6e-95b5-e2789c64d812.png",
-   "frame": "none",
-   "marks": [
-    [
-     893,
-     236,
-     985,
-     325,
-     "flat"
-    ],
-    [
-     980,
-     252,
-     1075,
-     308,
-     "flat"
-    ],
-    [
-     1070,
-     236,
-     1178,
-     290,
-     "flat"
-    ],
-    [
-     958,
-     264,
-     1002,
-     302,
-     "flat"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59095.png",
-    "job": "b09fa3ee-4dda-4b6e-95b5-e2789c64d812",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "sungjae-im",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_3181a786-43d8-4d93-961a-16a070e98191.png",
-   "frame": "none",
-   "marks": [
-    [
-     960,
-     228,
-     1300,
-     455
-    ],
-    [
-     525,
-     590,
-     680,
-     775
-    ],
-    [
-     515,
-     1605,
-     740,
-     1865,
-     "box"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Im_Sung-jae_2023.png",
-    "page": "https://commons.wikimedia.org/wiki/File:Im_Sung-jae_2023.png",
-    "job": "3181a786-43d8-4d93-961a-16a070e98191",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "sam-burns",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_87dfa6c4-9270-4800-87c1-444a24cadff5.png",
-   "frame": "none",
-   "marks": [
-    [
-     775,
-     400,
-     1285,
-     585
-    ],
-    [
-     1080,
-     262,
-     1250,
-     332
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/1/18/Sam_Burns_Ryder_Cup_2025-227_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg",
-    "job": "87dfa6c4-9270-4800-87c1-444a24cadff5",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "ryan-gerard",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_41d72a4f-ea5f-469e-a6c7-9d64cc1925da.png",
-   "frame": "none",
-   "marks": [
-    [
-     855,
-     195,
-     1110,
-     420
-    ],
-    [
-     625,
-     200,
-     860,
-     505
-    ],
-    [
-     1105,
-     230,
-     1362,
-     440
-    ],
-    [
-     1455,
-     498,
-     1497,
-     560
-    ],
-    [
-     1470,
-     555,
-     1512,
-     600
-    ],
-    [
-     527,
-     1585,
-     582,
-     1690
-    ],
-    [
-     545,
-     1675,
-     585,
-     1728
-    ],
-    [
-     790,
-     220,
-     900,
-     450
-    ],
-    [
-     1070,
-     220,
-     1150,
-     440
-    ],
-    [
-     800,
-     312,
-     885,
-     382
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59018.png",
-    "job": "41d72a4f-ea5f-469e-a6c7-9d64cc1925da",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "patrick-cantlay",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_803c875a-9853-4820-a563-a116da812737.png",
-   "frame": "none",
-   "marks": [
-    [
-     970,
-     262,
-     1200,
-     432
-    ],
-    [
-     790,
-     190,
-     1010,
-     470
-    ],
-    [
-     665,
-     262,
-     822,
-     440
-    ],
-    [
-     785,
-     250,
-     845,
-     440
-    ],
-    [
-     955,
-     250,
-     1015,
-     420
-    ],
-    [
-     670,
-     270,
-     815,
-     432
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/1/15/Patrick_Cantlay_Ryder_Cup_2025-146_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg",
-    "job": "803c875a-9853-4820-a563-a116da812737",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "michael-thorbjornsen",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_d04ecac3-a6fd-46dd-84a4-c737d2b160c8.png",
-   "frame": "none",
-   "marks": [
-    [
-     628,
-     255,
-     800,
-     462
-    ],
-    [
-     795,
-     240,
-     1000,
-     420
-    ],
-    [
-     995,
-     238,
-     1180,
-     400
-    ],
-    [
-     1175,
-     255,
-     1330,
-     420
-    ],
-    [
-     1325,
-     290,
-     1445,
-     470
-    ],
-    [
-     765,
-     280,
-     830,
-     420
-    ],
-    [
-     960,
-     250,
-     1030,
-     400
-    ],
-    [
-     1140,
-     260,
-     1210,
-     410
-    ],
-    [
-     1295,
-     300,
-     1365,
-     450
-    ],
-    [
-     598,
-     370,
-     650,
-     440
-    ],
-    [
-     486,
-     528,
-     526,
-     545
-    ],
-    [
-     477,
-     544,
-     525,
-     561
-    ],
-    [
-     473,
-     560,
-     517,
-     581
-    ],
-    [
-     470,
-     580,
-     515,
-     601
-    ],
-    [
-     468,
-     600,
-     515,
-     621
-    ],
-    [
-     464,
-     620,
-     511,
-     641
-    ],
-    [
-     461,
-     640,
-     509,
-     661
-    ],
-    [
-     458,
-     660,
-     505,
-     681
-    ],
-    [
-     457,
-     680,
-     498,
-     706
-    ],
-    [
-     480,
-     528,
-     522,
-     562
-    ],
-    [
-     472,
-     560,
-     515,
-     620
-    ],
-    [
-     464,
-     618,
-     508,
-     680
-    ],
-    [
-     458,
-     678,
-     500,
-     708
-    ],
-    [
-     1528,
-     560,
-     1577,
-     590
-    ],
-    [
-     1522,
-     588,
-     1588,
-     616
-    ],
-    [
-     1540,
-     614,
-     1590,
-     642
-    ],
-    [
-     1558,
-     640,
-     1590,
-     662
-    ],
-    [
-     1568,
-     660,
-     1592,
-     686
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_57364.png",
-    "job": "d04ecac3-a6fd-46dd-84a4-c737d2b160c8",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "gary-woodland",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_a36d65f9-5b5d-4151-a4cd-3a14df8a47cf.png",
-   "frame": "none",
-   "marks": [
-    [
-     1145,
-     170,
-     1330,
-     293
-    ],
-    [
-     1020,
-     90,
-     1150,
-     275
-    ],
-    [
-     835,
-     100,
-     1030,
-     275
-    ],
-    [
-     795,
-     110,
-     845,
-     297
-    ],
-    [
-     712,
-     130,
-     795,
-     313
-    ],
-    [
-     830,
-     270,
-     866,
-     296
-    ],
-    [
-     1255,
-     280,
-     1330,
-     322
-    ],
-    [
-     1145,
-     170,
-     1330,
-     293
-    ],
-    [
-     1020,
-     90,
-     1150,
-     275
-    ],
-    [
-     835,
-     100,
-     1030,
-     275
-    ],
-    [
-     795,
-     110,
-     845,
-     297
-    ],
-    [
-     712,
-     130,
-     795,
-     313
-    ],
-    [
-     830,
-     270,
-     866,
-     296
-    ],
-    [
-     1255,
-     280,
-     1330,
-     322
-    ],
-    [
-     1145,
-     170,
-     1330,
-     293
-    ],
-    [
-     1020,
-     90,
-     1150,
-     275
-    ],
-    [
-     835,
-     100,
-     1030,
-     275
-    ],
-    [
-     795,
-     110,
-     845,
-     297
-    ],
-    [
-     712,
-     130,
-     795,
-     313
-    ],
-    [
-     830,
-     270,
-     866,
-     296
-    ],
-    [
-     1255,
-     280,
-     1330,
-     322
-    ],
-    [
-     1478,
-     358,
-     1522,
-     420
-    ],
-    [
-     1492,
-     420,
-     1532,
-     470
-    ],
-    [
-     1508,
-     470,
-     1536,
-     494
-    ],
-    [
-     1518,
-     494,
-     1538,
-     520
-    ],
-    [
-     1527,
-     518,
-     1544,
-     562
-    ],
-    [
-     1478,
-     358,
-     1522,
-     420
-    ],
-    [
-     1492,
-     420,
-     1532,
-     470
-    ],
-    [
-     1508,
-     470,
-     1536,
-     494
-    ],
-    [
-     1518,
-     494,
-     1538,
-     520
-    ],
-    [
-     1527,
-     518,
-     1544,
-     562
-    ],
-    [
-     1528,
-     490,
-     1552,
-     525
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/b/be/Gary_Woodland_2019_US_Open.png",
-    "page": "https://commons.wikimedia.org/wiki/File:Gary_Woodland_2019_US_Open.png",
-    "job": "a36d65f9-5b5d-4151-a4cd-3a14df8a47cf",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "scottie-scheffler",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_b306699e-2787-49ea-9d1f-44a2aff9ea3e.png",
-   "frame": "none",
-   "marks": [
-    [
-     995,
-     218,
-     1205,
-     395
-    ],
-    [
-     815,
-     170,
-     1012,
-     420
-    ],
-    [
-     655,
-     225,
-     835,
-     415
-    ],
-    [
-     810,
-     230,
-     850,
-     400
-    ],
-    [
-     985,
-     225,
-     1020,
-     380
-    ],
-    [
-     848,
-     238,
-     948,
-     338,
-     "box"
-    ],
-    [
-     1068,
-     298,
-     1112,
-     338
-    ],
-    [
-     665,
-     238,
-     832,
-     405,
-     "box"
-    ],
-    [
-     828,
-     222,
-     1005,
-     368,
-     "box"
-    ],
-    [
-     1000,
-     230,
-     1198,
-     385,
-     "box"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg",
-    "job": "b306699e-2787-49ea-9d1f-44a2aff9ea3e",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "michael-brennan",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_94cb14ab-7a4d-4be9-ac37-6859c2d3436d.png",
-   "frame": "none",
-   "marks": [
-    [
-     728,
-     265,
-     900,
-     525,
-     "flat"
-    ],
-    [
-     895,
-     262,
-     1140,
-     470,
-     "flat"
-    ],
-    [
-     1135,
-     300,
-     1385,
-     480,
-     "flat"
-    ],
-    [
-     1460,
-     555,
-     1497,
-     612,
-     "flat"
-    ],
-    [
-     1474,
-     605,
-     1503,
-     668,
-     "flat"
-    ],
-    [
-     1452,
-     1390,
-     1560,
-     1672,
-     "flat"
-    ],
-    [
-     860,
-     290,
-     935,
-     450,
-     "flat"
-    ],
-    [
-     1100,
-     300,
-     1170,
-     450,
-     "flat"
-    ],
-    [
-     1466,
-     592,
-     1500,
-     622,
-     "flat"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_61522.png",
-    "job": "94cb14ab-7a4d-4be9-ac37-6859c2d3436d",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "kimi-antonelli",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_3fbb9c26-0647-4bc2-9b4d-6f8619fb2a94.png",
-   "frame": "none",
-   "marks": [
-    [
-     1045,
-     101,
-     1265,
-     135,
-     "flat"
-    ],
-    [
-     1000,
-     120,
-     1328,
-     212,
-     "flat"
-    ],
-    [
-     998,
-     190,
-     1126,
-     232,
-     "flat"
-    ],
-    [
-     1225,
-     192,
-     1300,
-     236,
-     "flat"
-    ],
-    [
-     1270,
-     222,
-     1300,
-     246,
-     "flat"
-    ],
-    [
-     0,
-     1794,
-     328,
-     1960
-    ],
-    [
-     630,
-     1785,
-     890,
-     2048,
-     "box"
-    ],
-    [
-     1334,
-     1714,
-     1581,
-     2048,
-     "box"
-    ],
-    [
-     1050,
-     1860,
-     1245,
-     1995,
-     "box"
-    ],
-    [
-     1828,
-     1686,
-     1930,
-     1784
-    ],
-    [
-     1928,
-     1783,
-     2048,
-     1874
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin%2C_TX_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin,_TX_(cropped).jpg",
-    "job": "3fbb9c26-0647-4bc2-9b4d-6f8619fb2a94",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "lando-norris",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_df5ae70a-cb55-4eae-a261-a218d4dccf8f.png",
-   "frame": "none",
-   "marks": [
-    [
-     1818,
-     1868,
-     2002,
-     1974
-    ],
-    [
-     210,
-     1686,
-     482,
-     1810
-    ],
-    [
-     0,
-     735,
-     95,
-     862
-    ],
-    [
-     90,
-     790,
-     150,
-     865
-    ],
-    [
-     0,
-     870,
-     95,
-     950
-    ],
-    [
-     80,
-     900,
-     175,
-     1010
-    ],
-    [
-     0,
-     975,
-     112,
-     1070
-    ],
-    [
-     100,
-     1025,
-     182,
-     1140
-    ],
-    [
-     395,
-     1568,
-     565,
-     1668
-    ],
-    [
-     550,
-     1605,
-     690,
-     1700
-    ],
-    [
-     600,
-     1680,
-     745,
-     1765
-    ],
-    [
-     1164,
-     1788,
-     1289,
-     1952,
-     "box"
-    ],
-    [
-     505,
-     1985,
-     592,
-     2048
-    ],
-    [
-     590,
-     2008,
-     665,
-     2048
-    ],
-    [
-     712,
-     1978,
-     775,
-     2048
-    ],
-    [
-     800,
-     2020,
-     875,
-     2048
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/7/70/2024-08-25_Motorsport%2C_Formel_1%2C_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_(cropped).jpg",
-    "job": "df5ae70a-cb55-4eae-a261-a218d4dccf8f",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "lewis-hamilton",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_42c69ab2-006a-4383-8087-3aba9b688cb6.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_%2854566928382%29_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_(54566928382)_(cropped).jpg",
-    "job": "42c69ab2-006a-4383-8087-3aba9b688cb6",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "max-verstappen",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_f55d93f3-ac0e-4228-912d-636bf876e5dc.png",
-   "frame": "none",
-   "marks": [
-    [
-     756,
-     1406,
-     812,
-     1460
-    ],
-    [
-     735,
-     1455,
-     812,
-     1510
-    ],
-    [
-     770,
-     1432,
-     858,
-     1535
-    ],
-    [
-     830,
-     1465,
-     920,
-     1568
-    ],
-    [
-     880,
-     1492,
-     1012,
-     1615
-    ],
-    [
-     690,
-     1825,
-     1140,
-     2048,
-     "box"
-    ],
-    [
-     492,
-     1686,
-     807,
-     1872
-    ],
-    [
-     1300,
-     1620,
-     1508,
-     1790,
-     "box"
-    ],
-    [
-     1715,
-     1800,
-     1960,
-     1958
-    ],
-    [
-     1645,
-     1918,
-     1962,
-     2048,
-     "box"
-    ],
-    [
-     210,
-     1790,
-     335,
-     1840,
-     "box"
-    ],
-    [
-     285,
-     1815,
-     372,
-     1882,
-     "box"
-    ],
-    [
-     335,
-     1848,
-     416,
-     1930,
-     "box"
-    ],
-    [
-     398,
-     1875,
-     440,
-     1925,
-     "box"
-    ],
-    [
-     378,
-     1922,
-     455,
-     1962,
-     "box"
-    ],
-    [
-     360,
-     1915,
-     466,
-     2048
-    ],
-    [
-     415,
-     1980,
-     528,
-     2048
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/5/52/2024-08-25_Motorsport%2C_Formel_1%2C_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_%28medium_crop%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_(medium_crop).jpg",
-    "job": "f55d93f3-ac0e-4228-912d-636bf876e5dc",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "oscar-piastri",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_a7ecada2-addf-4d43-be4f-e2c416c2e1ee.png",
-   "frame": "none",
-   "marks": [
-    [
-     872,
-     209,
-     1223,
-     384,
-     "flat"
-    ],
-    [
-     476,
-     425,
-     608,
-     650,
-     "flat"
-    ],
-    [
-     472,
-     480,
-     512,
-     610,
-     "box flat"
-    ],
-    [
-     757,
-     533,
-     924,
-     696,
-     "flat"
-    ],
-    [
-     478,
-     1882,
-     600,
-     1990
-    ],
-    [
-     588,
-     1878,
-     702,
-     2014
-    ],
-    [
-     478,
-     1882,
-     600,
-     1990
-    ],
-    [
-     1436,
-     1776,
-     1675,
-     1946,
-     "box"
-    ],
-    [
-     1395,
-     1600,
-     1545,
-     1765
-    ],
-    [
-     1395,
-     1600,
-     1545,
-     1765
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e5/2026_Chinese_GP_-_Oscar_Piastri_%28cropped%29_%28cropped%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped)_(cropped).jpg",
-    "job": "a7ecada2-addf-4d43-be4f-e2c416c2e1ee",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "nick-chubb",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_48c6e43e-6ea5-4d29-a189-a8920cc634b5.png",
-   "frame": "none",
-   "marks": [
-    [
-     90,
-     1630,
-     390,
-     1830
-    ],
-    [
-     1860,
-     1745,
-     2048,
-     2010,
-     "box"
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Nick_Chubb_%2853142361391%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Nick_Chubb_(53142361391).jpg",
-    "job": "48c6e43e-6ea5-4d29-a189-a8920cc634b5",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "chris-olave",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_81e5ede4-1ff4-4a88-8a49-570d0b848336.png",
-   "frame": "none",
-   "marks": [
-    [
-     1076,
-     356,
-     1170,
-     452
-    ],
-    [
-     1165,
-     372,
-     1206,
-     452
-    ],
-    [
-     634,
-     634,
-     672,
-     700
-    ],
-    [
-     628,
-     695,
-     668,
-     776
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://static.www.nfl.com/image/upload/t_headshot_desktop/league/onmxufsprtvglhejg94o",
-    "page": "https://commons.wikimedia.org/wiki/File:IX8A4137_(45339431234)_(cropped).jpg",
-    "job": "81e5ede4-1ff4-4a88-8a49-570d0b848336",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "bijan-robinson",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_e12c9a64-44fe-4573-9930-85ebd2bab8a3.png",
-   "frame": "none",
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/3/38/Atlanta_Falcons_Bijan_Robinson_MAY2023_%28cropped%29.png",
-    "page": "https://commons.wikimedia.org/wiki/File:Atlanta_Falcons_Bijan_Robinson_MAY2023_(cropped).png",
-    "job": "e12c9a64-44fe-4573-9930-85ebd2bab8a3",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "patrick-mahomes",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_7bf1ad73-aee7-440e-887d-8bb113da735a.png",
-   "frame": "none",
-   "marks": [
-    [
-     518,
-     920,
-     556,
-     962
-    ],
-    [
-     534,
-     952,
-     578,
-     1002
-    ]
-   ],
-   "identity": {
-    "method": "reference-render",
-    "reference": "https://upload.wikimedia.org/wikipedia/commons/9/92/Patrick_Mahomes_%2851615475056%29.jpg",
-    "page": "https://commons.wikimedia.org/wiki/File:Patrick_Mahomes_(51615475056).jpg",
-    "job": "7bf1ad73-aee7-440e-887d-8bb113da735a",
-    "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-   }
-  },
-  {
-   "out": "bruno-guimaraes",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_091740_c27f964e-3ca2-46ef-9506-443819795952.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 294, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "jose-mourinho",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260802_140539_a0843170-3ec0-447d-bc07-5d80c0ba9933.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 636, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "aryna-sabalenka",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260909_103826_4f9f778d-6302-4a58-b4be-13ef75702342.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 1161, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "frances-tiafoe",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260910_102605_f0c23a2f-8540-4e35-879c-cab2cf299117.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 1258, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "ben-shelton",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260910_102608_33a9f231-3aaa-425f-8338-e080b405a7d8.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 1259, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "sandro-tonali",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_124605_17c3bd91-d502-4fef-8c3f-9d3935f5a0cb.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 215, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "jessica-pegula",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260909_103833_12b90ef2-d2f6-4526-940b-5b7c0946a200.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 1162, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "iliman-ndiaye",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260803_105958_da86331a-ae8f-4ae6-b2c9-313d4c861a24.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 646, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "hugo-larsson",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260723_055900_4517769a-d7d5-47f0-a1c3-be87755f9e63.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 582, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "george-russell",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260908_115038_efc3da90-bb9b-45d4-9b57-120bddba951d.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 1049, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "vinicius-junior",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_075814_c82ca53a-ab92-448f-92ef-fbf29c24a57b.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 55, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "ruben-amorim",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260828_110552_0fa8c986-84dc-45cc-b501-225986389daa.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 1038, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "bukayo-saka",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091715_506fbd36-073d-44d7-80a5-13bd9310c433.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 195, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  },
-  {
-   "out": "bobby-charlton",
-   "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260614_130958_47544de6-c393-4549-9d72-ea59eb94e893.png",
-   "identity": {
-    "method": "bank-row",
-    "note": "fifa.archv/player-headshot-bank.md line 139, the banked portrait under this name, reused as it is (reuse-first rule)."
-   }
-  }
- ]
+  "schema": "archv.heads-hd/1",
+  "size": 600,
+  "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered 2026-09-11 on the founder's prompt, verbatim, from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters).",
+  "entries": [
+    {
+      "out": "amad",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115404_09614411-969b-42ca-aafd-a9fc64c83ed0.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559906_102167030.jpg?fmt=jpg&f=CENTER&w=1200",
+        "job": "09614411-969b-42ca-aafd-a9fc64c83ed0",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "anderson",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_092639_1a1fde91-827e-4873-877d-7a6e0d99050c.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/anderson.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "andrey-santos",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260710_101315_20cc089e-d15a-4398-a06f-62cd964e89aa.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/andrey-santos.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "anton",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094445_6a751d14-7e6e-4be0-8f7a-5b981c2e6a12.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/anton.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "baleba",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_003940_80a0e913-7824-4e9c-bc08-2615ec11f5c3.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/baleba.webp",
+        "score": 0.906
+      },
+      "maxBottom": 0.66
+    },
+    {
+      "out": "balogun",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_024045_ec5e3e9f-9124-496d-b0c0-ac4d3628a495.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/balogun.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "barcola",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260618_091218_3f70cf29-4b5f-4d1d-bf78-714b47e3cf85_min.webp",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/barcola.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "bellingham",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091713_0c90be23-22d9-4166-9c83-6489bfddaffd.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/bellingham.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "bruno-fernandes",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091711_cd082cd5-5f66-4e95-9ed6-93a064cc873e.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/bruno-fernandes.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "camavinga",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260717_100622_bbc09623-fa9b-45e1-a0d4-959596cfdb92.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/camavinga.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "ederson",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091729_411d955e-b7cf-433a-8f5b-141997901c9e.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/ederson.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "enzo-fernandez",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260718_100430_5e504544-7f99-4a04-a1f8-3a33077bd7b0.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/enzo-fernandez.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "eustaquio",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_023802_66262fff-affb-4e37-8622-834b3b7d8526.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/eustaquio.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "fernandes",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112322_eb43058f-bd8c-4530-910c-0c32d68281b9.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/fernandes.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "ferran-torres",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100800_6e90738c-7355-4f78-b233-a023b8ea2f2c.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/ferran-torres.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "gomes",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_111915_f05a7405-65e5-4429-921a-453b0372ab0d.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/gomes.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "haaland-manchester-city",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154249_af24c6fb-4a72-404c-90e8-f451fe1d176e.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/haaland-manchester-city.webp",
+        "score": 0.947
+      }
+    },
+    {
+      "out": "haaland",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112350_859c091b-3ab8-4bc3-9d98-a603dc511447.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/haaland.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "hall",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_111923_cfdfec36-1603-432e-8e8a-87319a0eefc1.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/hall.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "jimenez-fulham",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154408_20016aa5-1f7c-4271-a5c0-25f7930d8ac4.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/jimenez-fulham.webp",
+        "score": 0.929
+      }
+    },
+    {
+      "out": "jimenez",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_092813_60546aae-0185-4155-85b6-f068f99202a9.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/jimenez.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "joao-gomes",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260721_060354_8909ae14-6b96-4f39-beca-0efa6f74ea48.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/joao-gomes.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "jonathan-david",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_081150_82683c81-0264-4c8d-a3fc-02fb0479beb2.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/jonathan-david.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "kane",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094456_dfae9063-2e6e-4643-a482-a8114b5e5348.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/kane.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "kone",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260717_100624_86237170-5ed8-4763-b6a4-909c79a0222b.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/kone.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "lewis-hall",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100805_a003edd4-1a14-4e6b-8c64-4dc1eda3ecb0.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/lewis-hall.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "mbappe",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112348_6149c50d-69af-4bc4-9127-419262697815.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/mbappe.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "messi",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260613_112345_f71a65bb-d6b1-4b25-8913-958aeed69179.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/messi.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "oyarzabal",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_105047_3a1ee19d-6b66-4d75-9a17-0b7268355b7d.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/oyarzabal.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "rashford",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_004857_cfd26cbf-0ef7-442d-9a1a-eed892f2d195.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/rashford.webp",
+        "score": 0.944
+      },
+      "maxBottom": 0.72
+    },
+    {
+      "out": "rogers",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100803_b656a45c-4cfb-464b-8d07-8976d1ce42e0.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/rogers.webp",
+        "score": 0.997
+      }
+    },
+    {
+      "out": "ronaldo",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260615_094503_e25f60a7-c7a4-4f21-912c-f406359288ed.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/ronaldo.webp",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "santos",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260710_101315_20cc089e-d15a-4398-a06f-62cd964e89aa.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "Entries using /heads/santos.webp name Andrey Santos in imageAlt, but that file is the June text-only generation (bank row 182, no photo reference). Rebuilt from the verified regen (bank row 183, genuine photo ref, founder QC approved 2026-07-10), the same master andrey-santos uses."
+      }
+    },
+    {
+      "out": "summerville",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_122854_546d75bd-d10d-4519-81fc-0b26028fcb48.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/summerville.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "tchouameni",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091701_74757162-783d-4cb0-8d2f-8f200d1e483a.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/tchouameni.webp",
+        "score": 0.997
+      }
+    },
+    {
+      "out": "tielemans",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260702_102500_dd34ec4a-3a10-4b38-bf94-5be2d5446140.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/tielemans.webp",
+        "score": 0.982
+      }
+    },
+    {
+      "out": "undav",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_092632_4c62aee8-eca9-4513-b6d2-6c54e58fc5c1.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/undav.webp",
+        "score": 1.0
+      }
+    },
+    {
+      "out": "vozinha",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_212943_783fb943-e8e2-4db4-96c8-cfd9681d807b.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/media/illustrated/head-vozinha.jpg",
+        "score": 0.998,
+        "note": "Serves /heads/vozinha.webp too: that file is a bracketed card crop of an earlier Vozinha cover (0.70 against its own master), so the clean registry master replaces it."
+      }
+    },
+    {
+      "out": "wharton-crystal-palace",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260804_154500_b040c73c-fabd-4f0a-a093-92c6aec6a096.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/wharton-crystal-palace.webp",
+        "score": 0.992
+      }
+    },
+    {
+      "out": "yamal",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260612_105023_02ff0542-422b-423f-a4d4-add0b3bdfe48.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/yamal.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "youri-tielemans",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260702_102500_dd34ec4a-3a10-4b38-bf94-5be2d5446140.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/youri-tielemans.webp",
+        "score": 0.982
+      }
+    },
+    {
+      "out": "zirkzee",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260720_100807_60601a93-2b44-4d23-82df-615c7d9a0f55.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/heads/zirkzee.webp",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "nilson-angulo",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211547_93f3e841-cb6b-44db-92c9-fce8879d0c4a.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/media/illustrated/head-angulo.jpg",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "elijah-just",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211548_a66d1878-c743-4689-b371-26903a44f4b2.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/media/illustrated/head-elijahjust.jpg",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "issa-diop",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211550_88ffe3ac-d2df-4d9b-b28a-3298634f01d2.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/media/illustrated/head-issadiop.jpg",
+        "score": 0.998
+      }
+    },
+    {
+      "out": "riyad-mahrez",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260708_211552_e634dbb7-2f6f-45b0-8857-091056fdf712.png",
+      "identity": {
+        "method": "ncc",
+        "against": "/media/illustrated/head-mahrez.jpg",
+        "score": 0.999
+      }
+    },
+    {
+      "out": "diogo-dalot",
+      "source": "bank-local:headshot-dalot-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "noussair-mazraoui",
+      "source": "bank-local:headshot-mazraoui-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "matthijs-de-ligt",
+      "source": "bank-local:headshot-deligt-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "harry-maguire",
+      "source": "bank-local:headshot-maguire-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "lisandro-martinez",
+      "source": "bank-local:headshot-lisandromartinez-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "mason-mount",
+      "source": "bank-local:headshot-mount-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "patrick-dorgu",
+      "source": "bank-local:headshot-dorgu-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "leny-yoro",
+      "source": "bank-local:headshot-yoro-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "bryan-mbeumo",
+      "source": "bank-local:headshot-mbeumo-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "luke-shaw",
+      "source": "bank-local:headshot-shaw-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "manuel-ugarte",
+      "source": "bank-local:headshot-ugarte-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "benjamin-sesko",
+      "source": "bank-local:headshot-sesko-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "ayden-heaven",
+      "source": "bank-local:headshot-heaven-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "tyler-fletcher",
+      "source": "bank-local:headshot-tylerfletcher-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "senne-lammens",
+      "source": "bank-local:headshot-lammens-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "michael-carrick",
+      "source": "bank-local:headshot-carrick-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "tom-heaton",
+      "source": "bank-local:headshot-heaton-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "karl-darlow",
+      "source": "bank-local:headshot-darlow-2026.png",
+      "identity": {
+        "method": "squad-table",
+        "note": "player-headshot-bank.md, 2026-09-10 batch: Manchester United first team read from the FPL API and Wikipedia; local master is the named bank row's file, no kit flag."
+      }
+    },
+    {
+      "out": "kobbie-mainoo",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115116_8a0128c3-f981-4fd3-ac8f-30ee1492f7a7.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896330/media_102559979_102167103.jpg?fmt=jpg&f=CENTER&w=1200",
+        "job": "8a0128c3-f981-4fd3-ac8f-30ee1492f7a7",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "matheus-cunha",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115236_78344fc4-2464-4de5-8a70-9cb8d4839014.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559903_102167027.jpg?fmt=jpg&f=CENTER&w=1200",
+        "job": "78344fc4-2464-4de5-8a70-9cb8d4839014",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "cristian-orozco",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_131101_e0c11e7c-48d3-4c9d-92b8-042b2e804e5f.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://scoreplay-mam-media.s3.amazonaws.com/472/5702995/media_118426046_118036182.jpg",
+        "job": "e0c11e7c-48d3-4c9d-92b8-042b2e804e5f",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "scott",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115535_170a0b62-98bc-464f-bdb5-85c000f515aa.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Alex_Scott_Interview_2023.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Alex_Scott_Interview_2023.jpg",
+        "job": "170a0b62-98bc-464f-bdb5-85c000f515aa",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "wayne-rooney",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115721_cbad8ae4-9344-4bbe-8414-c2f760681616.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/1/11/Rooney_CL.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Rooney_CL.jpg",
+        "job": "cbad8ae4-9344-4bbe-8414-c2f760681616",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "eddie-howe",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_ffa9875e-2d1f-4c7b-9f03-9e158598192b.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Eddie_Howe_24052026_%282%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Eddie_Howe_24052026_(2).jpg",
+        "job": "ffa9875e-2d1f-4c7b-9f03-9e158598192b",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "alejandro-balde",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_af893e7f-6555-4b8d-8946-321e2e436ac4.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/e6ad1688-d559-4991-a2a0-3c7fbfd1b14f/03-Balde.png?width=670&height=790",
+        "job": "af893e7f-6555-4b8d-8946-321e2e436ac4",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "matthias-jaissle",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_220e9a27-a343-441e-9ff4-91a3bad43ed8.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/b/b0/FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_%282023-05-28%29_05.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_(2023-05-28)_05.jpg",
+        "job": "220e9a27-a343-441e-9ff4-91a3bad43ed8",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "david-raum",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_01662a22-f37d-4130-a1c9-b9ca34a7c4c5.png",
+      "frame": "none",
+      "marks": [
+        [
+          1320,
+          1950,
+          1750,
+          2048
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/9/94/2023-10-04_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League%2C_RB_Leipzig_-_Manchester_City_FC_1DX_2658_%28cropped2%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2658_(cropped2).jpg",
+        "job": "01662a22-f37d-4130-a1c9-b9ca34a7c4c5",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "altay-bayindir",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_ca9ea6a5-e964-4da7-82a3-80f62644e124.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://rccelta.es/app/uploads/2026/08/Altay-Bayindir.png",
+        "job": "ca9ea6a5-e964-4da7-82a3-80f62644e124",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "ian-maatsen",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_d41d5951-b7af-4cbc-a155-4d190f5f0a5e.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://images.gc.avfcservices.co.uk/d013bd00-a79b-11f1-91b9-a70ca6456fb1.png",
+        "job": "d41d5951-b7af-4cbc-a155-4d190f5f0a5e",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "anthony-gordon",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_9106cc4d-13f1-405b-b635-a2ce914a514d.png",
+      "frame": "none",
+      "marks": [
+        [
+          1392,
+          1945,
+          1735,
+          2048,
+          "box"
+        ],
+        [
+          1388,
+          1945,
+          1526,
+          2048,
+          "box"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/8dfb11f8-dbb7-46e8-ab7e-4bb47f44d05e/00-Gordon.png?width=670&height=790",
+        "job": "9106cc4d-13f1-405b-b635-a2ce914a514d",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "tim-krul",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_135343_196ccb81-4750-444a-b7db-859fee3b9354.png",
+      "frame": "none",
+      "marks": [
+        [
+          1375,
+          1845,
+          1525,
+          2048
+        ],
+        [
+          900,
+          1985,
+          1190,
+          2048
+        ],
+        [
+          1415,
+          1925,
+          1505,
+          2015,
+          "box flat"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/d/de/Dutch_goalkeepers_%2815300666997%29_%28Krul_crop%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Dutch_goalkeepers_(15300666997)_(Krul_crop).jpg",
+        "job": "196ccb81-4750-444a-b7db-859fee3b9354",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, with the signage lettering behind him recoloured out of the reference. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "gordon-banks",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_9fcaa094-afe6-4de0-b482-721b8f8f563b.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/d/db/Gordon_Banks_en_1970.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Gordon_Banks_en_1970.jpg",
+        "job": "9fcaa094-afe6-4de0-b482-721b8f8f563b",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "alex-ferguson",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_04444659-2649-481d-988f-14646b0e90d6.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Alex_Ferguson_02_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Alex_Ferguson_02_(cropped).jpg",
+        "job": "04444659-2649-481d-988f-14646b0e90d6",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "arsene-wenger",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_7a3a7968-6424-43fa-bf82-3fbd4701813a.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Arsene_Wenger.JPG",
+        "page": "https://commons.wikimedia.org/wiki/File:Arsene_Wenger.JPG",
+        "job": "7a3a7968-6424-43fa-bf82-3fbd4701813a",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "mariano-navone",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115834_0bc81a9b-5b43-4706-9a27-1e2e874e371a.png",
+      "frame": "none",
+      "marks": [
+        [
+          66,
+          1928,
+          285,
+          2048
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Mariano_Navone_-_Roland-Garros_-_28.05.2024_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Mariano_Navone_-_Roland-Garros_-_28.05.2024_(cropped).jpg",
+        "job": "0bc81a9b-5b43-4706-9a27-1e2e874e371a",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "bianca-andreescu",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_b7e1287d-2f1e-4072-95a1-4376e7c6df6a.png",
+      "frame": "none",
+      "marks": [
+        [
+          890,
+          462,
+          1205,
+          548,
+          "box"
+        ]
+      ],
+      "face": [
+        463,
+        880,
+        850,
+        850
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/0/02/Bianca_Andreescu_%282026_US_Open%29_05.jpg",
+        "job": "b7e1287d-2f1e-4072-95a1-4376e7c6df6a",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "terence-atmane",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_9f43b011-3f64-423b-8388-ae47559f523b.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Terence_Atmane_%282024_DC_Open%29_01_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Terence_Atmane_(2024_DC_Open)_01_(cropped).jpg",
+        "job": "9f43b011-3f64-423b-8388-ae47559f523b",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "sofia-kenin",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_b154dcc9-2111-48f8-8b43-d4719aac1bc6.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Sofia_Kenin_%282025_DC_Open%29_05_%28edited_and_cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Sofia_Kenin_(2025_DC_Open)_05_(edited_and_cropped).jpg",
+        "job": "b154dcc9-2111-48f8-8b43-d4719aac1bc6",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "jack-draper",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_120621_d27a91b4-0745-41ab-9f1a-d5b5e6cc87dc.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/0/07/Draper_MCM23_%2855%29_%2852883527225%29_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Draper_MCM23_(55)_(52883527225)_(cropped).jpg",
+        "job": "d27a91b4-0745-41ab-9f1a-d5b5e6cc87dc",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "iga-swiatek",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_120751_35f31c25-84a7-46c7-94c3-dacfa5eb048b.png",
+      "frame": "none",
+      "marks": [
+        [
+          1222,
+          296,
+          1428,
+          448
+        ],
+        [
+          1226,
+          436,
+          1392,
+          516
+        ],
+        [
+          1236,
+          410,
+          1392,
+          460
+        ],
+        [
+          1250,
+          420,
+          1385,
+          458,
+          "box"
+        ]
+      ],
+      "face": [
+        534,
+        750,
+        890,
+        890
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/9/98/Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg",
+        "job": "35f31c25-84a7-46c7-94c3-dacfa5eb048b",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "elena-rybakina",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121601_0cea3da3-1de6-4567-aae7-17e1c1073690.png",
+      "frame": "none",
+      "marks": [
+        [
+          676,
+          312,
+          915,
+          478
+        ],
+        [
+          606,
+          388,
+          722,
+          492
+        ],
+        [
+          680,
+          352,
+          850,
+          428,
+          "box"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Elena_Rybakina_2023_US_Open_69_cropped.jpg",
+        "job": "0cea3da3-1de6-4567-aae7-17e1c1073690",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "coco-gauff",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121023_bc48928b-4add-4dc4-bfd2-a4275dee2caa.png",
+      "frame": "none",
+      "marks": [
+        [
+          1038,
+          218,
+          1270,
+          332
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Coco_Gauff_Miami_Open.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Coco_Gauff_Miami_Open.jpg",
+        "job": "bc48928b-4add-4dc4-bfd2-a4275dee2caa",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "jannik-sinner",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121144_a5e3d2c4-570f-4bee-8c33-186481be5435.png",
+      "frame": "none",
+      "marks": [
+        [
+          785,
+          125,
+          1040,
+          246
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/6/64/Jannik_Sinner_2025_US_Open.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Jannik_Sinner_2025_US_Open.jpg",
+        "job": "a5e3d2c4-570f-4bee-8c33-186481be5435",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "venus-williams",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121305_c1cf2b50-9677-4b8f-a9ea-6c355f9877ac.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/1/19/Venus_Williams_%282025_DC_Open%29_crop.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Venus_Williams_(2025_DC_Open)_crop.jpg",
+        "job": "c1cf2b50-9677-4b8f-a9ea-6c355f9877ac",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "carlos-alcaraz",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121415_f06a4eb3-d9eb-43dc-8531-dd1dad9a61ea.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d4/25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_(cropped).jpg",
+        "job": "f06a4eb3-d9eb-43dc-8531-dd1dad9a61ea",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "felix-auger-aliassime",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_121722_9092c3f4-2b1a-4b33-b57a-e057804e0d6e.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/2/2c/F%C3%A9lix_Auger-Aliassime_%282023_DC_Open%29_01_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Auger-Aliassime_(2023_DC_Open)_01_(cropped).jpg",
+        "job": "9092c3f4-2b1a-4b33-b57a-e057804e0d6e",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "novak-djokovic",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_8706124a-dc9c-46bd-ada3-bf414d00094a.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Novak_Djokovic_Paris_2024_Olympic_Games_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Novak_Djokovic_Paris_2024_Olympic_Games_(cropped).jpg",
+        "job": "8706124a-dc9c-46bd-ada3-bf414d00094a",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "alexander-zverev",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122102_4bb2a6c5-a7a6-4a5f-9e8f-b75faf250b5d.png",
+      "frame": "none",
+      "marks": [
+        [
+          679,
+          288,
+          765,
+          452,
+          "flat"
+        ],
+        [
+          626,
+          326,
+          684,
+          452,
+          "flat"
+        ],
+        [
+          580,
+          372,
+          640,
+          452,
+          "flat"
+        ],
+        [
+          608,
+          338,
+          745,
+          448,
+          "box flat"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Alexander_Zverev.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Alexander_Zverev.jpg",
+        "job": "4bb2a6c5-a7a6-4a5f-9e8f-b75faf250b5d",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "katherine-sebov",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_db94342f-3885-4394-af8c-300f05828a21.png",
+      "frame": "none",
+      "marks": [
+        [
+          800,
+          332,
+          1000,
+          438
+        ],
+        [
+          765,
+          378,
+          806,
+          438
+        ],
+        [
+          782,
+          360,
+          942,
+          432,
+          "box"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Sebov_RGQ23.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Sebov_RGQ23.jpg",
+        "job": "db94342f-3885-4394-af8c-300f05828a21",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "jackson-koivun",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122103_7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7.png",
+      "frame": "none",
+      "marks": [
+        [
+          755,
+          30,
+          1465,
+          280
+        ],
+        [
+          1495,
+          290,
+          1560,
+          385
+        ],
+        [
+          640,
+          1255,
+          775,
+          1525
+        ],
+        [
+          1445,
+          1270,
+          1540,
+          1555
+        ],
+        [
+          1470,
+          1925,
+          1700,
+          2048
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_66701.png",
+        "job": "7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "wyndham-clark",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122103_a8ebee84-8da7-4bf4-a1b6-a8c6b69cb5b8.png",
+      "frame": "none",
+      "marks": [
+        [
+          730,
+          0,
+          930,
+          205
+        ],
+        [
+          925,
+          0,
+          1150,
+          215
+        ],
+        [
+          1145,
+          0,
+          1400,
+          225
+        ],
+        [
+          1395,
+          24,
+          1540,
+          200
+        ],
+        [
+          1480,
+          110,
+          1598,
+          160
+        ],
+        [
+          1480,
+          155,
+          1614,
+          288
+        ],
+        [
+          440,
+          205,
+          520,
+          305
+        ],
+        [
+          418,
+          290,
+          520,
+          495
+        ],
+        [
+          895,
+          0,
+          965,
+          210
+        ],
+        [
+          1115,
+          0,
+          1185,
+          220
+        ],
+        [
+          1365,
+          20,
+          1435,
+          230
+        ],
+        [
+          730,
+          0,
+          930,
+          205
+        ],
+        [
+          925,
+          0,
+          1150,
+          215
+        ],
+        [
+          1145,
+          0,
+          1400,
+          225
+        ],
+        [
+          1395,
+          24,
+          1540,
+          200
+        ],
+        [
+          1480,
+          110,
+          1598,
+          160
+        ],
+        [
+          1480,
+          155,
+          1614,
+          288
+        ],
+        [
+          428,
+          268,
+          522,
+          326
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/7/78/Wyndham_Clark_2023_01a_%28cropped%29.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Wyndham_Clark_2023_01a_(cropped).png",
+        "job": "a8ebee84-8da7-4bf4-a1b6-a8c6b69cb5b8",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "tiger-woods",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_0b3095e3-a7aa-43e5-a70d-b478f2bb2d52.png",
+      "frame": "none",
+      "marks": [
+        [
+          1090,
+          304,
+          1428,
+          442
+        ]
+      ],
+      "face": [
+        819,
+        900,
+        910,
+        910
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Tiger_Woods_3.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Tiger_Woods_3.jpg",
+        "job": "0b3095e3-a7aa-43e5-a70d-b478f2bb2d52",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "rory-mcilroy",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_83a354f3-dc78-4f8c-ad49-fda21cd69e2a.png",
+      "frame": "none",
+      "marks": [
+        [
+          886,
+          190,
+          1214,
+          270
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/9/97/Rory_McIlroy_Travelers-077_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Rory_McIlroy_Travelers-077_(cropped).jpg",
+        "job": "83a354f3-dc78-4f8c-ad49-fda21cd69e2a",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "viktor-hovland",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_9ddb8175-ba2b-46a4-8dd9-a2975bff9656.png",
+      "frame": "none",
+      "marks": [
+        [
+          845,
+          112,
+          1100,
+          215
+        ],
+        [
+          832,
+          205,
+          1115,
+          262
+        ],
+        [
+          900,
+          255,
+          1060,
+          292
+        ],
+        [
+          845,
+          112,
+          1100,
+          215
+        ],
+        [
+          832,
+          205,
+          1115,
+          262
+        ],
+        [
+          900,
+          255,
+          1060,
+          292
+        ],
+        [
+          880,
+          122,
+          1075,
+          215,
+          "box"
+        ],
+        [
+          838,
+          252,
+          905,
+          278
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Viktor_Hovland_Ryder_Cup_2025-205_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg",
+        "job": "9ddb8175-ba2b-46a4-8dd9-a2975bff9656",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "chris-gotterup",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_b09fa3ee-4dda-4b6e-95b5-e2789c64d812.png",
+      "frame": "none",
+      "marks": [
+        [
+          893,
+          236,
+          985,
+          325,
+          "flat"
+        ],
+        [
+          980,
+          252,
+          1075,
+          308,
+          "flat"
+        ],
+        [
+          1070,
+          236,
+          1178,
+          290,
+          "flat"
+        ],
+        [
+          958,
+          264,
+          1002,
+          302,
+          "flat"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59095.png",
+        "job": "b09fa3ee-4dda-4b6e-95b5-e2789c64d812",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "sungjae-im",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_3181a786-43d8-4d93-961a-16a070e98191.png",
+      "frame": "none",
+      "marks": [
+        [
+          960,
+          228,
+          1300,
+          455
+        ],
+        [
+          525,
+          590,
+          680,
+          775
+        ],
+        [
+          515,
+          1605,
+          740,
+          1865,
+          "box"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Im_Sung-jae_2023.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Im_Sung-jae_2023.png",
+        "job": "3181a786-43d8-4d93-961a-16a070e98191",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "sam-burns",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_87dfa6c4-9270-4800-87c1-444a24cadff5.png",
+      "frame": "none",
+      "marks": [
+        [
+          775,
+          400,
+          1285,
+          585
+        ],
+        [
+          1080,
+          262,
+          1250,
+          332
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/1/18/Sam_Burns_Ryder_Cup_2025-227_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg",
+        "job": "87dfa6c4-9270-4800-87c1-444a24cadff5",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "ryan-gerard",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_41d72a4f-ea5f-469e-a6c7-9d64cc1925da.png",
+      "frame": "none",
+      "marks": [
+        [
+          855,
+          195,
+          1110,
+          420
+        ],
+        [
+          625,
+          200,
+          860,
+          505
+        ],
+        [
+          1105,
+          230,
+          1362,
+          440
+        ],
+        [
+          1455,
+          498,
+          1497,
+          560
+        ],
+        [
+          1470,
+          555,
+          1512,
+          600
+        ],
+        [
+          527,
+          1585,
+          582,
+          1690
+        ],
+        [
+          545,
+          1675,
+          585,
+          1728
+        ],
+        [
+          790,
+          220,
+          900,
+          450
+        ],
+        [
+          1070,
+          220,
+          1150,
+          440
+        ],
+        [
+          800,
+          312,
+          885,
+          382
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59018.png",
+        "job": "41d72a4f-ea5f-469e-a6c7-9d64cc1925da",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "patrick-cantlay",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_803c875a-9853-4820-a563-a116da812737.png",
+      "frame": "none",
+      "marks": [
+        [
+          970,
+          262,
+          1200,
+          432
+        ],
+        [
+          790,
+          190,
+          1010,
+          470
+        ],
+        [
+          665,
+          262,
+          822,
+          440
+        ],
+        [
+          785,
+          250,
+          845,
+          440
+        ],
+        [
+          955,
+          250,
+          1015,
+          420
+        ],
+        [
+          670,
+          270,
+          815,
+          432
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/1/15/Patrick_Cantlay_Ryder_Cup_2025-146_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg",
+        "job": "803c875a-9853-4820-a563-a116da812737",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "michael-thorbjornsen",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_d04ecac3-a6fd-46dd-84a4-c737d2b160c8.png",
+      "frame": "none",
+      "marks": [
+        [
+          628,
+          255,
+          800,
+          462
+        ],
+        [
+          795,
+          240,
+          1000,
+          420
+        ],
+        [
+          995,
+          238,
+          1180,
+          400
+        ],
+        [
+          1175,
+          255,
+          1330,
+          420
+        ],
+        [
+          1325,
+          290,
+          1445,
+          470
+        ],
+        [
+          765,
+          280,
+          830,
+          420
+        ],
+        [
+          960,
+          250,
+          1030,
+          400
+        ],
+        [
+          1140,
+          260,
+          1210,
+          410
+        ],
+        [
+          1295,
+          300,
+          1365,
+          450
+        ],
+        [
+          598,
+          370,
+          650,
+          440
+        ],
+        [
+          486,
+          528,
+          526,
+          545
+        ],
+        [
+          477,
+          544,
+          525,
+          561
+        ],
+        [
+          473,
+          560,
+          517,
+          581
+        ],
+        [
+          470,
+          580,
+          515,
+          601
+        ],
+        [
+          468,
+          600,
+          515,
+          621
+        ],
+        [
+          464,
+          620,
+          511,
+          641
+        ],
+        [
+          461,
+          640,
+          509,
+          661
+        ],
+        [
+          458,
+          660,
+          505,
+          681
+        ],
+        [
+          457,
+          680,
+          498,
+          706
+        ],
+        [
+          480,
+          528,
+          522,
+          562
+        ],
+        [
+          472,
+          560,
+          515,
+          620
+        ],
+        [
+          464,
+          618,
+          508,
+          680
+        ],
+        [
+          458,
+          678,
+          500,
+          708
+        ],
+        [
+          1528,
+          560,
+          1577,
+          590
+        ],
+        [
+          1522,
+          588,
+          1588,
+          616
+        ],
+        [
+          1540,
+          614,
+          1590,
+          642
+        ],
+        [
+          1558,
+          640,
+          1590,
+          662
+        ],
+        [
+          1568,
+          660,
+          1592,
+          686
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_57364.png",
+        "job": "d04ecac3-a6fd-46dd-84a4-c737d2b160c8",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "gary-woodland",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_a36d65f9-5b5d-4151-a4cd-3a14df8a47cf.png",
+      "frame": "none",
+      "marks": [
+        [
+          1145,
+          170,
+          1330,
+          293
+        ],
+        [
+          1020,
+          90,
+          1150,
+          275
+        ],
+        [
+          835,
+          100,
+          1030,
+          275
+        ],
+        [
+          795,
+          110,
+          845,
+          297
+        ],
+        [
+          712,
+          130,
+          795,
+          313
+        ],
+        [
+          830,
+          270,
+          866,
+          296
+        ],
+        [
+          1255,
+          280,
+          1330,
+          322
+        ],
+        [
+          1145,
+          170,
+          1330,
+          293
+        ],
+        [
+          1020,
+          90,
+          1150,
+          275
+        ],
+        [
+          835,
+          100,
+          1030,
+          275
+        ],
+        [
+          795,
+          110,
+          845,
+          297
+        ],
+        [
+          712,
+          130,
+          795,
+          313
+        ],
+        [
+          830,
+          270,
+          866,
+          296
+        ],
+        [
+          1255,
+          280,
+          1330,
+          322
+        ],
+        [
+          1145,
+          170,
+          1330,
+          293
+        ],
+        [
+          1020,
+          90,
+          1150,
+          275
+        ],
+        [
+          835,
+          100,
+          1030,
+          275
+        ],
+        [
+          795,
+          110,
+          845,
+          297
+        ],
+        [
+          712,
+          130,
+          795,
+          313
+        ],
+        [
+          830,
+          270,
+          866,
+          296
+        ],
+        [
+          1255,
+          280,
+          1330,
+          322
+        ],
+        [
+          1478,
+          358,
+          1522,
+          420
+        ],
+        [
+          1492,
+          420,
+          1532,
+          470
+        ],
+        [
+          1508,
+          470,
+          1536,
+          494
+        ],
+        [
+          1518,
+          494,
+          1538,
+          520
+        ],
+        [
+          1527,
+          518,
+          1544,
+          562
+        ],
+        [
+          1478,
+          358,
+          1522,
+          420
+        ],
+        [
+          1492,
+          420,
+          1532,
+          470
+        ],
+        [
+          1508,
+          470,
+          1536,
+          494
+        ],
+        [
+          1518,
+          494,
+          1538,
+          520
+        ],
+        [
+          1527,
+          518,
+          1544,
+          562
+        ],
+        [
+          1528,
+          490,
+          1552,
+          525
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/b/be/Gary_Woodland_2019_US_Open.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Gary_Woodland_2019_US_Open.png",
+        "job": "a36d65f9-5b5d-4151-a4cd-3a14df8a47cf",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "scottie-scheffler",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_b306699e-2787-49ea-9d1f-44a2aff9ea3e.png",
+      "frame": "none",
+      "marks": [
+        [
+          995,
+          218,
+          1205,
+          395
+        ],
+        [
+          815,
+          170,
+          1012,
+          420
+        ],
+        [
+          655,
+          225,
+          835,
+          415
+        ],
+        [
+          810,
+          230,
+          850,
+          400
+        ],
+        [
+          985,
+          225,
+          1020,
+          380
+        ],
+        [
+          848,
+          238,
+          948,
+          338,
+          "box"
+        ],
+        [
+          1068,
+          298,
+          1112,
+          338
+        ],
+        [
+          665,
+          238,
+          832,
+          405,
+          "box"
+        ],
+        [
+          828,
+          222,
+          1005,
+          368,
+          "box"
+        ],
+        [
+          1000,
+          230,
+          1198,
+          385,
+          "box"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg",
+        "job": "b306699e-2787-49ea-9d1f-44a2aff9ea3e",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "michael-brennan",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_94cb14ab-7a4d-4be9-ac37-6859c2d3436d.png",
+      "frame": "none",
+      "marks": [
+        [
+          728,
+          265,
+          900,
+          525,
+          "flat"
+        ],
+        [
+          895,
+          262,
+          1140,
+          470,
+          "flat"
+        ],
+        [
+          1135,
+          300,
+          1385,
+          480,
+          "flat"
+        ],
+        [
+          1460,
+          555,
+          1497,
+          612,
+          "flat"
+        ],
+        [
+          1474,
+          605,
+          1503,
+          668,
+          "flat"
+        ],
+        [
+          1452,
+          1390,
+          1560,
+          1672,
+          "flat"
+        ],
+        [
+          860,
+          290,
+          935,
+          450,
+          "flat"
+        ],
+        [
+          1100,
+          300,
+          1170,
+          450,
+          "flat"
+        ],
+        [
+          1466,
+          592,
+          1500,
+          622,
+          "flat"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_61522.png",
+        "job": "94cb14ab-7a4d-4be9-ac37-6859c2d3436d",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "kimi-antonelli",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_3fbb9c26-0647-4bc2-9b4d-6f8619fb2a94.png",
+      "frame": "none",
+      "marks": [
+        [
+          1045,
+          101,
+          1265,
+          135,
+          "flat"
+        ],
+        [
+          1000,
+          120,
+          1328,
+          212,
+          "flat"
+        ],
+        [
+          998,
+          190,
+          1126,
+          232,
+          "flat"
+        ],
+        [
+          1225,
+          192,
+          1300,
+          236,
+          "flat"
+        ],
+        [
+          1270,
+          222,
+          1300,
+          246,
+          "flat"
+        ],
+        [
+          0,
+          1794,
+          328,
+          1960
+        ],
+        [
+          630,
+          1785,
+          890,
+          2048,
+          "box"
+        ],
+        [
+          1334,
+          1714,
+          1581,
+          2048,
+          "box"
+        ],
+        [
+          1050,
+          1860,
+          1245,
+          1995,
+          "box"
+        ],
+        [
+          1828,
+          1686,
+          1930,
+          1784
+        ],
+        [
+          1928,
+          1783,
+          2048,
+          1874
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin%2C_TX_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin,_TX_(cropped).jpg",
+        "job": "3fbb9c26-0647-4bc2-9b4d-6f8619fb2a94",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "lando-norris",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_df5ae70a-cb55-4eae-a261-a218d4dccf8f.png",
+      "frame": "none",
+      "marks": [
+        [
+          1818,
+          1868,
+          2002,
+          1974
+        ],
+        [
+          210,
+          1686,
+          482,
+          1810
+        ],
+        [
+          0,
+          735,
+          95,
+          862
+        ],
+        [
+          90,
+          790,
+          150,
+          865
+        ],
+        [
+          0,
+          870,
+          95,
+          950
+        ],
+        [
+          80,
+          900,
+          175,
+          1010
+        ],
+        [
+          0,
+          975,
+          112,
+          1070
+        ],
+        [
+          100,
+          1025,
+          182,
+          1140
+        ],
+        [
+          395,
+          1568,
+          565,
+          1668
+        ],
+        [
+          550,
+          1605,
+          690,
+          1700
+        ],
+        [
+          600,
+          1680,
+          745,
+          1765
+        ],
+        [
+          1164,
+          1788,
+          1289,
+          1952,
+          "box"
+        ],
+        [
+          505,
+          1985,
+          592,
+          2048
+        ],
+        [
+          590,
+          2008,
+          665,
+          2048
+        ],
+        [
+          712,
+          1978,
+          775,
+          2048
+        ],
+        [
+          800,
+          2020,
+          875,
+          2048
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/7/70/2024-08-25_Motorsport%2C_Formel_1%2C_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_(cropped).jpg",
+        "job": "df5ae70a-cb55-4eae-a261-a218d4dccf8f",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "lewis-hamilton",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_42c69ab2-006a-4383-8087-3aba9b688cb6.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_%2854566928382%29_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_(54566928382)_(cropped).jpg",
+        "job": "42c69ab2-006a-4383-8087-3aba9b688cb6",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "max-verstappen",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_f55d93f3-ac0e-4228-912d-636bf876e5dc.png",
+      "frame": "none",
+      "marks": [
+        [
+          756,
+          1406,
+          812,
+          1460
+        ],
+        [
+          735,
+          1455,
+          812,
+          1510
+        ],
+        [
+          770,
+          1432,
+          858,
+          1535
+        ],
+        [
+          830,
+          1465,
+          920,
+          1568
+        ],
+        [
+          880,
+          1492,
+          1012,
+          1615
+        ],
+        [
+          690,
+          1825,
+          1140,
+          2048,
+          "box"
+        ],
+        [
+          492,
+          1686,
+          807,
+          1872
+        ],
+        [
+          1300,
+          1620,
+          1508,
+          1790,
+          "box"
+        ],
+        [
+          1715,
+          1800,
+          1960,
+          1958
+        ],
+        [
+          1645,
+          1918,
+          1962,
+          2048,
+          "box"
+        ],
+        [
+          210,
+          1790,
+          335,
+          1840,
+          "box"
+        ],
+        [
+          285,
+          1815,
+          372,
+          1882,
+          "box"
+        ],
+        [
+          335,
+          1848,
+          416,
+          1930,
+          "box"
+        ],
+        [
+          398,
+          1875,
+          440,
+          1925,
+          "box"
+        ],
+        [
+          378,
+          1922,
+          455,
+          1962,
+          "box"
+        ],
+        [
+          360,
+          1915,
+          466,
+          2048
+        ],
+        [
+          415,
+          1980,
+          528,
+          2048
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/5/52/2024-08-25_Motorsport%2C_Formel_1%2C_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_%28medium_crop%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_(medium_crop).jpg",
+        "job": "f55d93f3-ac0e-4228-912d-636bf876e5dc",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "oscar-piastri",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_a7ecada2-addf-4d43-be4f-e2c416c2e1ee.png",
+      "frame": "none",
+      "marks": [
+        [
+          872,
+          209,
+          1223,
+          384,
+          "flat"
+        ],
+        [
+          476,
+          425,
+          608,
+          650,
+          "flat"
+        ],
+        [
+          472,
+          480,
+          512,
+          610,
+          "box flat"
+        ],
+        [
+          757,
+          533,
+          924,
+          696,
+          "flat"
+        ],
+        [
+          478,
+          1882,
+          600,
+          1990
+        ],
+        [
+          588,
+          1878,
+          702,
+          2014
+        ],
+        [
+          478,
+          1882,
+          600,
+          1990
+        ],
+        [
+          1436,
+          1776,
+          1675,
+          1946,
+          "box"
+        ],
+        [
+          1395,
+          1600,
+          1545,
+          1765
+        ],
+        [
+          1395,
+          1600,
+          1545,
+          1765
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e5/2026_Chinese_GP_-_Oscar_Piastri_%28cropped%29_%28cropped%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped)_(cropped).jpg",
+        "job": "a7ecada2-addf-4d43-be4f-e2c416c2e1ee",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "nick-chubb",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_48c6e43e-6ea5-4d29-a189-a8920cc634b5.png",
+      "frame": "none",
+      "marks": [
+        [
+          90,
+          1630,
+          390,
+          1830
+        ],
+        [
+          1860,
+          1745,
+          2048,
+          2010,
+          "box"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Nick_Chubb_%2853142361391%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Nick_Chubb_(53142361391).jpg",
+        "job": "48c6e43e-6ea5-4d29-a189-a8920cc634b5",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "chris-olave",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_81e5ede4-1ff4-4a88-8a49-570d0b848336.png",
+      "frame": "none",
+      "marks": [
+        [
+          1076,
+          356,
+          1170,
+          452
+        ],
+        [
+          1165,
+          372,
+          1206,
+          452
+        ],
+        [
+          634,
+          634,
+          672,
+          700
+        ],
+        [
+          628,
+          695,
+          668,
+          776
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://static.www.nfl.com/image/upload/t_headshot_desktop/league/onmxufsprtvglhejg94o",
+        "page": "https://commons.wikimedia.org/wiki/File:IX8A4137_(45339431234)_(cropped).jpg",
+        "job": "81e5ede4-1ff4-4a88-8a49-570d0b848336",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "bijan-robinson",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_e12c9a64-44fe-4573-9930-85ebd2bab8a3.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/3/38/Atlanta_Falcons_Bijan_Robinson_MAY2023_%28cropped%29.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Atlanta_Falcons_Bijan_Robinson_MAY2023_(cropped).png",
+        "job": "e12c9a64-44fe-4573-9930-85ebd2bab8a3",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "patrick-mahomes",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_7bf1ad73-aee7-440e-887d-8bb113da735a.png",
+      "frame": "none",
+      "marks": [
+        [
+          518,
+          920,
+          556,
+          962
+        ],
+        [
+          534,
+          952,
+          578,
+          1002
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/9/92/Patrick_Mahomes_%2851615475056%29.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Patrick_Mahomes_(51615475056).jpg",
+        "job": "7bf1ad73-aee7-440e-887d-8bb113da735a",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+      }
+    },
+    {
+      "out": "bruno-guimaraes",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_091740_c27f964e-3ca2-46ef-9506-443819795952.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 294, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "jose-mourinho",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260802_140539_a0843170-3ec0-447d-bc07-5d80c0ba9933.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 636, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "aryna-sabalenka",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260909_103826_4f9f778d-6302-4a58-b4be-13ef75702342.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 1161, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "frances-tiafoe",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260910_102605_f0c23a2f-8540-4e35-879c-cab2cf299117.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 1258, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "ben-shelton",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260910_102608_33a9f231-3aaa-425f-8338-e080b405a7d8.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 1259, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "sandro-tonali",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_124605_17c3bd91-d502-4fef-8c3f-9d3935f5a0cb.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 215, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "jessica-pegula",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260909_103833_12b90ef2-d2f6-4526-940b-5b7c0946a200.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 1162, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "iliman-ndiaye",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260803_105958_da86331a-ae8f-4ae6-b2c9-313d4c861a24.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 646, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "hugo-larsson",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260723_055900_4517769a-d7d5-47f0-a1c3-be87755f9e63.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 582, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "george-russell",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260908_115038_efc3da90-bb9b-45d4-9b57-120bddba951d.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 1049, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "vinicius-junior",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260611_075814_c82ca53a-ab92-448f-92ef-fbf29c24a57b.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 55, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "ruben-amorim",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260828_110552_0fa8c986-84dc-45cc-b501-225986389daa.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 1038, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "bukayo-saka",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260616_091715_506fbd36-073d-44d7-80a5-13bd9310c433.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 195, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "bobby-charlton",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260614_130958_47544de6-c393-4549-9d72-ea59eb94e893.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "fifa.archv/player-headshot-bank.md line 139, the banked portrait under this name, reused as it is (reuse-first rule)."
+      }
+    },
+    {
+      "out": "bill-belichick",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260912_113622_beb5e4ad-a7bf-4899-84e8-6b72fa7bb2bc.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "player-headshot-bank.md 2026-09-12 multisport Answer Desk row, job beb5e4ad. FOUNDER QC PENDING."
+      }
+    },
+    {
+      "out": "adam-scott",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260912_113504_5bb170bd-57fc-47d6-a005-644a45c998a7.png",
+      "identity": {
+        "method": "bank-row",
+        "note": "player-headshot-bank.md 2026-09-12 multisport Answer Desk row, job 5bb170bd. FOUNDER QC PENDING."
+      }
+    }
+  ]
 }

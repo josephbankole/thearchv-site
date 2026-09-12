@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-12",
+    day: "Saturday",
+    headline: "What would an Elena Rybakina US Open win complete?",
+    dek: "The Australian Open and US Open double in one season, done by only five women since 1988. Rybakina, the new world number one, plays Aryna Sabalenka in Saturday's final at 4pm ET.",
+    body: "Elena Rybakina can join one of tennis's smallest clubs if she wins Saturday's US Open final: only five women have won the Australian Open and the US Open in the same season since 1988, and Rybakina, who already has this year's Australian Open, would become the sixth, per Tennis365 and Bleacher Report.\n\nSteffi Graf did it twice, in 1988 and 1989. Monica Seles did it twice more, in 1991 and 1992. Martina Hingis managed it as a 16-year-old in 1997, Angelique Kerber in 2016, and Aryna Sabalenka, Rybakina's opponent on Saturday, most recently in 2024, according to both outlets.\n\nRybakina arrives at Arthur Ashe Stadium as the new world number one, per CBS Sports, and as the No. 2 seed. She faces Sabalenka, the two-time defending champion and top seed, at 4pm ET on Saturday 12 September, in the pair's second Grand Slam final of the season after Rybakina beat Sabalenka at the Australian Open in January.\n\nSabalenka is chasing history of her own. A win would make her only the third woman in the Open Era to take three straight US Open titles, after Chris Evert's run from 1975 to 1978 and Serena Williams' from 2012 to 2014, per ESPN and tennishead.net.\n\nOnly one of those two records gets made on Saturday.",
+    status: "verified",
+    seoTitle: "Rybakina US Open win would complete rare hardcourt double",
+  },
+  {
     date: "2026-09-11",
     day: "Friday",
     headline: "When is the 2026 US Open men's final, and who is playing?",

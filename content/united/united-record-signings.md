@@ -1,6 +1,7 @@
 ---
 title: "Every time United broke the British transfer record"
 slug: "united-record-signings"
+seoTitle: "United's British transfer records, Denis Law to Paul Pogba"
 section: "united"
 eyebrow: "Manchester United · History"
 datePublished: "2026-06-15"

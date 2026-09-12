@@ -5,7 +5,8 @@
      dist/desk/leagues/index.html       "Football Leagues"
    Same data source and page shell as scripts/build-article-pages.mjs (see scripts/shared/
    page-shell.mjs): masthead, three-desk nav, brand styles, footer. Every entry in a lane is
-   listed newest-first as a full-width whole-card link to its /desk/<lane>/<date>/ page. Runs
+   listed newest-first and links to its /desk/<lane>/<date>/ page: the newest ten as full-width
+   whole cards, the rest as a compact date-and-headline list (laneEntries(), 2026-09-12). Runs
    after build-day-pages.mjs and before build-article-pages.mjs (see package.json "build") —
    position doesn't matter for correctness (both scripts append their own URLs to whatever
    dist/sitemap.xml exists at that point), but this keeps the lane fronts building right after
@@ -66,6 +67,30 @@ function laneCard(entry, laneKey) {
   // that, a lane front was a wall of text on every day the desk filed no image field.
   const avatar = cardArt(entry);
   return `<li><a class="lane-card" href="/desk/${laneKey}/${entry.date}/">${avatar}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))} · ${esc(readLabel(entry.dek, entry.body))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`;
+}
+
+/* ---------- the lane list: ten cards, then a compact list (declutter, 2026-09-12) ----------
+   Every lane front used to render every entry it had ever filed as a full card. /desk/transfer/
+   reached 84 of them, 26,871px on a phone, and it is the page "Every Football Leagues story",
+   "All transfer stories" and every "Read another" pointed at. The newest LANE_CARDS keep the card
+   (art, kicker, headline, dek); everything older is one row of date and headline on the same
+   page. No pagination, so no new URL and nothing for the sitemap to learn. `cardFor` is the
+   caller's existing card markup, so football and the sport lanes keep their own hrefs. */
+const LANE_CARDS = 10;
+function laneEntries(days, label, cardFor, hrefFor) {
+  const cards = days.slice(0, LANE_CARDS);
+  const rest = days.slice(LANE_CARDS);
+  const list = `<ul class="lane-list" aria-label="${escAttr(label)} entries, newest first">
+        ${cards.map(cardFor).join("\n        ")}
+      </ul>`;
+  if (!rest.length) return list;
+  return `${list}
+      <section class="lane-older" aria-labelledby="lane-older-title">
+        <h2 class="lane-older__title" id="lane-older-title">Earlier entries</h2>
+        <ul class="lane-older__list">
+          ${rest.map((entry) => `<li><a class="lane-older__link" href="${escAttr(hrefFor(entry))}"><time class="lane-older__date" datetime="${escAttr(entry.date)}">${esc(longDate(entry.date))}</time><span class="lane-older__headline">${esc(entry.headline)}</span></a></li>`).join("\n          ")}
+        </ul>
+      </section>`;
 }
 
 // Compact "From the glossary" strip: the lane's 2-3 relevant terms, linked to their glossary
@@ -137,9 +162,7 @@ function render(laneKey, lane) {
       <p class="lane__eyebrow">${esc(lane.label)}</p>
       <h1>${esc(lane.label)}</h1>
       <p class="lane__lede">${esc(lane.intro)}</p>
-      <ul class="lane-list" aria-label="${escAttr(lane.label)} entries, newest first">
-        ${lane.days.map((entry) => laneCard(entry, laneKey)).join("\n        ")}
-      </ul>
+      ${laneEntries(lane.days, lane.label, (entry) => laneCard(entry, laneKey), (entry) => `/desk/${laneKey}/${entry.date}/`)}
     </section>
     ${glossaryStrip(lane)}
   </main>
@@ -172,9 +195,12 @@ function renderSportLane(sport, laneKey) {
   const socialTitle = `${sport.label} ${laneLabel} · The ARCHV`;
 
   const rail = days.length
-    ? `<ul class="lane-list" aria-label="${escAttr(`${sport.label} ${laneLabel}`)}, newest first">
-        ${days.map((entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${cardArt(entry)}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))} · ${esc(readLabel(entry.dek, entry.body))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`).join("\n        ")}
-      </ul>`
+    ? laneEntries(
+        days,
+        `${sport.label} ${laneLabel}`,
+        (entry) => `<li><a class="lane-card" href="/${sport.urlBase}/${laneKey}/${entry.date}/">${cardArt(entry)}<span class="lane-card__body"><span class="lane-card__kicker">${esc(entry.day)} · ${esc(longDate(entry.date))} · ${esc(readLabel(entry.dek, entry.body))}</span><span class="lane-card__headline">${esc(entry.headline)}</span><span class="lane-card__dek">${esc(entry.dek)}</span></span></a></li>`,
+        (entry) => `/${sport.urlBase}/${laneKey}/${entry.date}/`,
+      )
     : `<div class="sport-holding"><p>${esc(copy.holding)}</p></div>`;
 
   return `${documentShell({

@@ -273,6 +273,11 @@ export const SPORTS = [
   { key: "basketball", label: "Basketball", shortLabel: "Basketball", urlBase: "basketball", order: 5, live: true, lanes: ["questions"] },
 ];
 export const DEFAULT_SPORT = "football";
+// Pass to masthead() / sportNav() on a page that belongs to no one sport (the glossary, the long
+// reads, the finals front, the 404), so no tab claims "you are here". A default parameter only
+// fills in for undefined, so null reaches sportNav() intact and matches no sport key. Named
+// rather than written as a bare null so the call site says what it means (declutter, 2026-09-12).
+export const NO_SPORT = null;
 export const sportByKey = (key) => SPORTS.find((s) => s.key === key) || SPORTS[0];
 // URL root for a sport: "/" for football (it lives at the site root), "/<urlBase>/" otherwise.
 export const sportRoot = (sport) => (sport.urlBase ? `/${sport.urlBase}/` : "/");
@@ -372,8 +377,13 @@ export function cardArt(entry, { className = "lane-card__avatar", size = 64, loa
 // wrapping text links (not the masthead's button styling) so it stays collision-proof down to
 // 320px — verified in the build's interactive check. Now sport-aware: football keeps
 // /desk/<lane>/ (byte-identical to before); new sports emit /<urlBase>/<lane>/.
+// A sport with a single lane gets no desk nav at all (declutter, 2026-09-12): a one-link row
+// reading "Question Desk" pointed at /<sport>/questions/, which is canonical to the sport hub the
+// tab row already links, so it was a second route to the same page and 36px above every headline.
 export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
-  const links = lanesForSport(sportKey)
+  const lanes = lanesForSport(sportKey);
+  if (lanes.length < 2) return "";
+  const links = lanes
     .map(({ key, label, href }) => {
       const current = key === currentLane ? ' aria-current="page"' : "";
       return `<a class="desknav__link" href="${href}"${current}>${esc(label)}</a>`;
@@ -396,6 +406,8 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 // expects. currentSportKey defaults to football so existing football callers (masthead()) get
 // the tab row with Football current and every other byte unchanged; the single inline toggle
 // script is untouched, so MASTHEAD_SCRIPT_HASH and every football page's CSP stay identical.
+// Pages that belong to no sport pass NO_SPORT (null), which marks no tab current; the default
+// only applies when the argument is left out entirely.
 export function masthead(currentSportKey = DEFAULT_SPORT) {
   return `<header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
@@ -478,6 +490,61 @@ export function footer() {
     </div>
   </footer>`;
 }
+
+/* ---------- the inline email capture (phase 3; shared since the 2026-09-12 declutter) ----------
+   Until phase 3 the only place a reader could give the site an address was the /start page's
+   embedded form. Every article ended in a link to Substack instead, which asks somebody who has
+   just finished reading to leave the site, find the form and start again.
+
+   THE LANE DECIDES THE DESTINATION AND THIS IS FOOTBALL AND SITE CONTENT, SO IT IS THE DISPATCH.
+   thearchvdispatch.substack.com, from DISPATCH_SUBSCRIBE_URL above. The AI lane's list is a
+   different list on a different property and nothing on this site captures to it.
+
+   It is a plain GET form, which is the whole design. The address goes to Substack's own subscribe
+   page as a query parameter and the reader finishes there, so this site never receives it, never
+   stores it and needs no endpoint, no key and no JavaScript. It works with the bundle blocked and
+   with scripting off. Every page that carries it must pass `forms: [DISPATCH_URL]` to cspMeta(),
+   so form-action is narrowed to 'self' plus the Dispatch and the field cannot be repointed at
+   anything else by an injected attribute.
+
+   ONE PER PAGE, AND BEHIND THE CONTENT. Article and Answer Desk pages put it directly under the
+   last paragraph; glossary entries put it under the answer. It moved here from
+   build-article-pages.mjs on 2026-09-12 so the glossary could reuse it rather than copy it. The
+   hand-built /start page cannot import a module and carries a copy of the same markup; change one,
+   change both. CAPTURE_STYLES goes in the page head through documentShell's `extraHead`. */
+export const CAPTURE_ID = "inline-capture";
+export const captureBlock = () => `
+      <aside class="capture" id="${CAPTURE_ID}" aria-labelledby="capture-title">
+        <h2 class="capture__title" id="capture-title">Get the next one by email</h2>
+        <p class="capture__note">The ARCHV Dispatch goes out free on Substack. Put an address in below and you finish signing up over there, so it goes to Substack and never to us.</p>
+        <form class="capture__form" action="${escAttr(DISPATCH_SUBSCRIBE_URL)}" method="get" target="_blank" rel="noopener noreferrer">
+          <label class="vh" for="capture-email">Your email address</label>
+          <input class="capture__field" id="capture-email" name="email" type="email" required
+                 autocomplete="email" inputmode="email" spellcheck="false"
+                 placeholder="you@example.com" />
+          <button class="capture__go" type="submit">Join the Dispatch</button>
+        </form>
+        <p class="capture__fine">Every issue carries an unsubscribe link. This site is static files with no database, so there is nowhere here to keep an address anyway.</p>
+      </aside>`;
+
+/* Deliberately quiet: a hairline box on the sunken grey rather than a shadowed card, and the
+   accent kept to the submit button. White on --accent-ink measures 5.13:1, --ink-muted on the
+   sunken grey 5.16:1. */
+export const CAPTURE_STYLES = `<style>
+    .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+    .capture{margin:2rem 0 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:.75rem;background:var(--bg-sunken)}
+    .capture[hidden]{display:none}
+    .capture__title{margin:0 0 .5rem;color:var(--ink);font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3}
+    .capture__note{margin:0 0 1rem;font-size:.95rem;line-height:1.55;color:var(--ink-soft)}
+    .capture__form{display:flex;flex-wrap:wrap;gap:.6rem}
+    .capture__field{flex:1 1 14rem;min-width:0;min-height:44px;padding:.7rem .9rem;font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:.5rem;-webkit-appearance:none;appearance:none}
+    .capture__field::placeholder{color:var(--ink-muted)}
+    .capture__field:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px;border-color:var(--accent-ink)}
+    .capture__go{flex:0 0 auto;min-height:44px;padding:.7rem 1.15rem;font:inherit;font-weight:600;cursor:pointer;color:#FFFFFF;background:var(--accent-ink);border:1px solid var(--accent-ink);border-radius:.5rem}
+    .capture__go:hover{filter:brightness(1.06)}
+    .capture__fine{margin:.85rem 0 0;font-size:.8rem;line-height:1.5;color:var(--ink-muted)}
+    @media (max-width:480px){.capture__go{width:100%}}
+  </style>`;
 
 // PostHog pageview snippet. The `before_send` hook normalises the captured path towards its
 // trailing-slash form so /start and /start/ (and every other directory URL) stop being counted
@@ -851,9 +918,12 @@ export function pageStyles() {
        src/style.css and public/content.css; none of the three imports another. */
     .masthead__panel-sep { display: block; height: 1px; margin: .3rem .55rem; background: var(--cream-faint); }
 
-    /* three-desk text nav (W3.3): plain, wrapping, never collides at 320px */
-    .desknav { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem .9rem; display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
-    .desknav__link { color: var(--cream-faint-text); }
+    /* three-desk text nav (W3.3): plain, wrapping, never collides at 320px. Each link is a 44px
+       tap target (declutter, 2026-09-12): the height comes from the link itself as an inline-flex
+       box, so the row gap drops to zero and the bottom padding shrinks to keep the row about the
+       height it was, rather than adding space between the wrapped lines. */
+    .desknav { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem .35rem; display: flex; flex-wrap: wrap; gap: 0 1rem; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
+    .desknav__link { display: inline-flex; align-items: center; min-height: 44px; color: var(--cream-faint-text); }
     .desknav__link:hover { color: var(--gold); }
     .desknav__link[aria-current="page"] { color: var(--gold); }
 
@@ -892,27 +962,37 @@ export function pageStyles() {
        Shared by the sport section pages (build-sport-pages.mjs) and the new-sport lane fronts
        (build-lane-pages.mjs). */
     .sport-head { padding: 2.2rem 0 1rem; }
-    .sport-head__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
+    .sport-head__eyebrow { color: var(--gold); font-size: .875rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     .sport-head h1 { margin: 0 0 .6rem; }
     .sport-head__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 1.6rem; }
     .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: var(--bg-sunken); }
     .sport-holding p { margin: 0; color: var(--cream-dim); font-size: 1rem; }
 
     .share { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 1.75rem; }
-    .share .btn { font-size: .78rem; padding: .4rem .8rem; cursor: pointer; background: none; font-family: inherit; line-height: inherit; }
+    /* 44px tap targets (declutter, 2026-09-12). display is set here, BEFORE .share [hidden] below,
+       and at the same specificity, so the hidden native-share button stays hidden until the
+       script un-hides it. Do not move the display into .share button.btn: that selector outranks
+       [hidden] and would show a Share button on browsers with no navigator.share. */
+    .share .btn { display: inline-flex; align-items: center; min-height: 44px; font-size: .78rem; padding: .4rem .8rem; cursor: pointer; background: none; font-family: inherit; line-height: inherit; }
     .share button.btn { appearance: none; -webkit-appearance: none; }
     .share .btn:hover { border-color: var(--gold); text-decoration: none; }
     .share [hidden] { display: none; }
 
     .article { padding: 2rem 0 1rem; }
-    .breadcrumb { font-size: .8rem; letter-spacing: .04em; color: var(--cream-faint-text); text-transform: uppercase; margin: 0 0 1rem; }
+    /* Breadcrumb, eyebrow and byline lines went from 12.5-13.6px to 14px (.875rem) in the
+       2026-09-12 declutter. Colours unchanged: --ink-muted (via --cream-faint-text) and
+       --accent-ink (via --gold) are the text tokens; --ink-faint is never text. */
+    .breadcrumb { font-size: .875rem; letter-spacing: .04em; color: var(--cream-faint-text); text-transform: uppercase; margin: 0 0 1rem; }
     .breadcrumb a { color: var(--cream-faint-text); }
-    .article__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
+    .article__eyebrow { color: var(--gold); font-size: .875rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     h1 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.02; letter-spacing: .01em; margin: 0 0 .5rem; }
+    /* Under 400px the clamp floor (32px) set an 88-character headline in five lines of Anton.
+       28px takes a line off most of them. Body text size and line height are untouched. */
+    @media (max-width: 399px) { h1 { font-size: 1.75rem; } }
     /* named byline, sitting between the headline and the date. Deliberately quiet: same
        register as .article__meta below, with the author's name a touch brighter so the link
        reads as a link without becoming the loudest thing under the headline. */
-    .article__byline { color: var(--cream-faint-text); font-size: .85rem; margin: 0 0 .25rem; }
+    .article__byline { color: var(--cream-faint-text); font-size: .875rem; margin: 0 0 .25rem; }
     .article__byline a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
     .article__byline a:hover { color: var(--gold); }
     .article__meta { color: var(--cream-faint-text); font-size: .9rem; margin: 0 0 1.5rem; }
@@ -922,8 +1002,8 @@ export function pageStyles() {
     .article__body strong { color: var(--cream); }
     /* Long-read light markdown (src/lib/longreadMd.ts, 2026-09-11): the Dispatch issues copied
        onto /reads/ carry headings, quotes, dividers and lists. Scoped to UNCLASSED children of the
-       body, so the classed .answer__q H2 on the Answer Desk pages keeps its own rule. Accent-fill
-       is a bar here, never text, per the token rules. */
+       body so a classed heading placed there keeps its own rule. Accent-fill is a bar here, never
+       text, per the token rules. */
     .article__body > h2:not([class]), .article__body > h3:not([class]) { color: var(--ink); font-family: "Fraunces", Georgia, serif; font-weight: 500; line-height: 1.3; margin: 2rem 0 .5rem; }
     .article__body > h2:not([class]) { font-size: clamp(1.25rem, 2.8vw, 1.5rem); }
     .article__body > h3:not([class]) { font-size: 1.15rem; }
@@ -931,13 +1011,9 @@ export function pageStyles() {
     .article__body > hr:not([class]) { border: 0; border-top: 1px solid var(--rule); margin: 2rem 0; }
     .article__body > ul:not([class]) { margin: 1rem 0; padding-left: 1.25rem; }
     .article__body > ul:not([class]) li { margin: .35rem 0; }
-    /* Answer Desk question heading (SEO/AEO audit fix 3, 2026-07-28). The sport question lanes
-       are a question and its answer, so the answer now sits under a real H2 carrying the question
-       verbatim rather than floating in a bare div — the same shape as .glossary__q above the
-       glossary answer. Sized a step up from .glossary__q because it opens an article body rather
-       than following a definition, and given no top margin because it is the body's first child. */
-    .answer__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: clamp(1.2rem, 2.6vw, 1.4rem); line-height: 1.3; margin: 0 0 .35rem; }
-    .article__body .answer__q + p { margin-top: .6rem; }
+    /* The Answer Desk's visible question H2 (.answer__q) was removed in the 2026-09-12 declutter:
+       the h1 already asks the question word for word, and the FAQPage JSON-LD names the same
+       string, so the page still visibly asks exactly the question its schema claims. */
     /* The closing "Sources: ..." paragraph. Its named outlets are links now (see SOURCE_LINKS in
        scripts/build-article-pages.mjs), and the default gold anchor colour would turn the whole
        paragraph into a gold rash, so the links take the quieter underlined treatment
@@ -945,45 +1021,32 @@ export function pageStyles() {
     .article__sources { font-size: .92rem; color: var(--cream-dim); }
     .article__sources a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
     .article__sources a:hover { color: var(--gold); }
+    /* The long-read pages still carry this box. Article and Answer Desk pages dropped it on
+       2026-09-12 because the footer's legal line says the same thing word for word. */
     .article__rights { margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--cream-faint); border-radius: .6rem; font-size: .85rem; color: var(--cream-faint-text); }
-    .article__nav { margin: 2.2rem 0 1rem; display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; font-size: .95rem; }
-
-    /* prev/next chronological row (W3.2) */
-    .adjacent { margin: 1.6rem 0; padding: 1.2rem 0 0; border-top: 1px solid var(--cream-faint); display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem 1.5rem; }
-    .adjacent__link { max-width: 22rem; }
-    .adjacent__link--next { text-align: right; margin-left: auto; }
-    .adjacent__dir { display: block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-faint-text); margin-bottom: .3rem; }
-    .adjacent__headline { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.3; }
-    .adjacent__headline:hover { text-decoration: underline; }
 
     .related { margin: 2.5rem 0 1rem; }
     .related h2 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; font-size: 1.5rem; margin: 0 0 .6rem; padding-top: 1.4rem; border-top: 1px solid var(--cream-faint); }
     .related ul { list-style: none; padding: 0; margin: 0; }
     .related li { margin: .5rem 0; }
-
-    /* "More from the lane" whole-card links (W3.1) */
-    .more-cards { list-style: none; padding: 0; margin: 0; display: grid; gap: .9rem; }
-    .more-card { display: flex; gap: .85rem; align-items: flex-start; padding: 1rem 1.1rem; border: 1px solid var(--cream-faint); border-radius: .6rem; color: inherit; }
-    .more-card:hover { border-color: var(--gold-soft); text-decoration: none; }
-    .more-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-    .more-card__avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--gold-soft); }
-    .more-card__body { min-width: 0; }
-    .more-card__kicker { display: block; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: .3rem; }
-    /* display:block is load-bearing, not tidiness. These are <span>s inside a whole-card <a>
-       (a card cannot legally contain block-level children of an anchor's flow in the original
-       markup, hence spans), and an inline span silently drops the vertical margin below it. The
-       result was the dek running on from the end of the headline on the same line whenever the
-       headline did not happen to fill its last line. Live bug, fixed 2026-08-04, found when the
-       author page reused this component at a wider measure where it showed on every card. */
-    .more-card__headline { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.28; margin: 0 0 .6rem; }
-    .more-card__dek { display: block; font-size: .85rem; color: var(--cream-faint-text); margin: 0; }
     .related__all { display: inline-block; margin-top: 1.1rem; font-size: .9rem; }
+
+    /* "More from the lane" on article and Answer Desk pages, as three one-line links (declutter,
+       2026-09-12). It was three whole cards with an avatar and a dek, 1,022px on a phone, followed
+       by a prev/next row, a Home row and the read ladder; this block is all that remains of them.
+       The date kicker runs inline ahead of the headline, so each entry is one link and one run of
+       text, and the row padding makes every link a 44px target. */
+    .more-list li { margin: 0; border-top: 1px solid var(--rule-soft); }
+    .more-list li:first-child { border-top: 0; }
+    .more-link { display: block; padding: .7rem 0; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; line-height: 1.35; }
+    .more-link:hover { color: var(--gold); }
+    .more-link__kicker { margin-right: .5rem; font-family: var(--font-mono); font-size: .8rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
 
     /* lane index page: full-width whole-card list */
     .lane { padding: 1.5rem 0 1rem; }
     .lane h1 { margin-bottom: 1.1rem; }
     .lane__lede { margin-bottom: 2.4rem; }
-    .lane__eyebrow { color: var(--gold); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
+    .lane__eyebrow { color: var(--gold); font-size: .875rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
     .lane__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 2rem; }
     .lane-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
     .lane-card { display: flex; gap: 1.1rem; align-items: flex-start; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem;
@@ -993,7 +1056,10 @@ export function pageStyles() {
     .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
     .lane-card__body { min-width: 0; }
     .lane-card__kicker { display: block; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .4rem; }
-    /* Same inline-span margin bug as .more-card__headline above; see the note there. */
+    /* display:block is load-bearing, not tidiness. These are <span>s inside a whole-card <a>, and
+       an inline span silently drops the vertical margin below it: the dek used to run on from the
+       end of the headline whenever the headline did not fill its last line (live bug, fixed
+       2026-08-04 on the old .more-card, which shared this markup until 2026-09-12). */
     .lane-card__headline { display: block; color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.24; margin: 0 0 .75rem; }
     .lane-card__dek { display: block; font-size: .9rem; color: var(--cream-dim); margin: 0; }
     /* A lane card that is not a link. The Legends front (scripts/build-section-pages.mjs) lists
@@ -1006,6 +1072,23 @@ export function pageStyles() {
     .lane-card--compact { padding: .85rem 1.2rem; }
     .lane-card--compact .lane-card__headline { font-size: 1.1rem; margin: 0; }
 
+    /* Lane fronts past the newest ten (declutter, 2026-09-12). /desk/transfer/ had grown to 84
+       full cards, 33 screens on a phone, with no pagination. The newest ten keep the card; the
+       rest are a date and a headline per row, on the same page, so no URL is added or lost. */
+    .lane-older { margin: 2.6rem 0 0; }
+    .lane-older__title { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; font-size: 1.35rem; margin: 0 0 .5rem; padding-top: 1.4rem; border-top: 1px solid var(--cream-faint); }
+    .lane-older__list { list-style: none; padding: 0; margin: 0; }
+    .lane-older__list li { border-top: 1px solid var(--rule-soft); }
+    .lane-older__list li:first-child { border-top: 0; }
+    .lane-older__link { display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem 1rem; min-height: 44px; padding: .65rem 0; color: var(--cream); }
+    .lane-older__link:hover { color: var(--gold); text-decoration: none; }
+    .lane-older__date { flex: 0 0 11rem; font-family: var(--font-mono); font-size: .875rem; letter-spacing: .06em; color: var(--cream-faint-text); }
+    .lane-older__headline { flex: 1 1 20rem; min-width: 0; font-family: "Fraunces", Georgia, serif; font-size: 1.02rem; line-height: 1.35; }
+
+    /* Glossary entry: one "next term" link under the capture (declutter, 2026-09-12). */
+    .glossary__next { margin: 1.6rem 0 0; }
+    .glossary__next a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+
     /* "From the glossary" strip on lane index pages: a compact row of the lane's key terms,
        sitting above the footer. Inherits the enclosing main's width; no button styling. */
     .lane-glossary { margin: 2.75rem 0 0; padding-top: 1.6rem; border-top: 1px solid var(--cream-faint); }
@@ -1017,7 +1100,10 @@ export function pageStyles() {
 
     .footer { margin-top: 3rem; border-top: 1px solid var(--cream-faint); background: var(--navy-deep); }
     .footer .wrap { max-width: 72rem; padding-top: 2rem; padding-bottom: 2.5rem; }
-    .footer__links { display: flex; flex-wrap: wrap; gap: .9rem 1.5rem; font-size: .9rem; margin: 0 0 1rem; }
+    /* 44px tap targets on the footer links (declutter, 2026-09-12). The row gap goes to zero
+       because each link now carries its own height. */
+    .footer__links { display: flex; flex-wrap: wrap; gap: 0 1.5rem; font-size: .9rem; margin: 0 0 1rem; }
+    .footer__links a { display: inline-flex; align-items: center; min-height: 44px; }
     .footer__tag { color: var(--cream); margin: .5rem 0; }
     .footer__legal { color: var(--cream-faint-text); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
 
@@ -1053,7 +1139,7 @@ export function pageStyles() {
        face widened it enough to wrap to three lines at 375px. CLAUDE.md records it as verified
        collision-proof at 320px in its current form; leave it in Inter Tight. */
     .article__eyebrow, .lane__eyebrow, .sport-head__eyebrow,
-    .more-card__kicker, .lane-card__kicker, .adjacent__dir, .breadcrumb,
+    .lane-card__kicker, .breadcrumb,
     .author__role {
       font-family: var(--font-mono);
       letter-spacing: .12em;
@@ -1063,7 +1149,7 @@ export function pageStyles() {
     /* Quiet elevation on the card surfaces that previously had none. A soft ambient shadow does
        the work a border alone was doing; the hover state raises it rather than only nudging the
        card up, so the lift reads as depth instead of a jump. */
-    .lane-card, .glossary-card, .more-card, .sport-holding { box-shadow: var(--shadow-soft); }
+    .lane-card, .glossary-card, .sport-holding { box-shadow: var(--shadow-soft); }
     .lane-card, .glossary-card { transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
     .lane-card:hover, .glossary-card:hover { box-shadow: var(--shadow-lift); }
 
@@ -1089,7 +1175,7 @@ export function pageStyles() {
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .lane-card, .more-card, .glossary-card { transition: none; }
+      .lane-card, .glossary-card { transition: none; }
     }
   </style>`;
 }

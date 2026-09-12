@@ -148,21 +148,22 @@
     <a class="skip" href="#archive">Skip to the archive</a>
 
     <!-- ================= FRONT PAGE CHROME (phase 2A, 2026-08-09) =================
-         Masthead, dateline, sport tabs, wire. The hamburger panel's links are phase 1's
+         Masthead and sport tabs. The dateline strip above the masthead and the wire ticker
+         below the tabs were removed on 2026-09-12 (site declutter): the dateline repeated the
+         "Today at the desk" date, and the wire repeated nine stories the bands, the brief and
+         the today strip already carry, with a hidden duplicate track that held focusable links.
+         Their markers, renderers and CSS went with them. The hamburger panel's links are phase 1's
          (five internal destinations above the rule, the outbound four below it) and this
          markup is the reference copy: masthead() in scripts/shared/page-shell.mjs and the
          hand-built copy in scripts/build-content.mjs mirror it. Three copies, no shared
          import — change one, change all three. -->
-    <div class="topbar">
-      <div class="topbar__inner">
-        <span class="topbar__date"><!--archv:dateline--></span>
-        <span class="topbar__strap">Sports history, illustrated &middot; Est. 2026</span>
-      </div>
-    </div>
-
     <header class="masthead">
-      <a class="wordmark" href="/" aria-label="The ARCHV, home">
-        <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+      <!-- The link takes its name from its visible text (no aria-label), so the two can never
+           disagree (Lighthouse label-content-name-mismatch, 2026-09-12). The space after THE is
+           inside the flex item, where it collapses at the line end and draws nothing, but it
+           makes the name read "THE ARCHV" rather than one run-together word. -->
+      <a class="wordmark" href="/">
+        <span class="wordmark__the">THE </span><span class="wordmark__archv">ARCHV</span>
       </a>
       <p class="masthead__tagline">Football has a memory. We are the archive.</p>
       <div class="masthead__actions">
@@ -211,14 +212,6 @@
           <a class="sportnav__link" href="/basketball/">Basketball</a>
         </div>
       </nav>
-    </div>
-
-    <!-- The wire. Server-rendered from the same desk data as the cards below; the bundle only
-         pauses it on hover. Two identical tracks make the marquee seamless, and the second is
-         aria-hidden so a screen reader hears each line once. -->
-    <div class="wire" id="wire">
-      <span class="wire__label">The Wire</span>
-      <div class="wire__tracks"><!--archv:wire--></div>
     </div>
 
     <main id="top">
@@ -425,10 +418,12 @@
     <footer class="footer">
       <div class="wrap">
         <div class="footer__top">
-          <a class="footer__brand" href="#top" aria-label="The ARCHV">
+          <!-- Named by its content, as the masthead wordmark is: the crest's alt plus the visible
+               wordmark (no aria-label to fall out of step with them, 2026-09-12). -->
+          <a class="footer__brand" href="#top">
             <img class="footer__badge" src="/brand/crest-badge-216.webp" width="72" height="72" alt="The ARCHV monogram" loading="lazy" decoding="async" />
             <span class="wordmark wordmark--lg">
-              <span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span>
+              <span class="wordmark__the">THE </span><span class="wordmark__archv">ARCHV</span>
             </span>
           </a>
         </div>
@@ -466,11 +461,6 @@
         <a id="lightbox-shop" class="btn btn--gold lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Buy Now</a>
       </figure>
     </div>
-
-    <!-- Persistent mobile Follow bar -->
-    <a class="follow-bar" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>
-      Follow <strong>@thearchvfc</strong>
-    </a>
 
   </body>
 </html>

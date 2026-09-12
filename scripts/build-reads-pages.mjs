@@ -24,7 +24,7 @@ import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   masthead, footer, documentShell, ROBOTS_INDEXABLE,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -160,7 +160,7 @@ function renderRead(read) {
   },
 })}
 <body>
-  ${masthead()}
+  ${masthead(NO_SPORT)}
   <main class="wrap">
     <article class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${INDEX_PATH}">Long reads</a></p>
@@ -213,7 +213,7 @@ function renderIndex() {
   },
 })}
 <body>
-  ${masthead()}
+  ${masthead(NO_SPORT)}
   <main class="wrap wrap--wide">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Long reads</p>

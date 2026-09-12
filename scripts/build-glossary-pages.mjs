@@ -16,13 +16,16 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, answerTitle, answerTitleFlags, clampDescription, masthead, footer, documentShell, ROBOTS_INDEXABLE,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT, DISPATCH_URL, captureBlock, CAPTURE_STYLES,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 
 // Both inline scripts on this page family (masthead toggle + PostHog loader) are static, no
-// per-page interpolation, so one CSP works for the hub and every entry page.
+// per-page interpolation, so one CSP works for the hub and one for every entry page. The entry
+// pages carry the inline Dispatch capture (2026-09-12), so theirs narrows form-action to 'self'
+// plus the Dispatch, the same rule the article pages follow; the hub has no form and is unchanged.
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const ENTRY_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true, forms: [DISPATCH_URL] });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -59,6 +62,18 @@ function relatedList(currentSlug) {
             ${items}
           </ul>
       </nav>`;
+}
+
+// The one onward link an entry page carries besides its curated related terms (2026-09-12): the
+// next entry in glossary-data.mjs order, wrapping from the last back to the first so every page
+// has one. Search lands on these pages more than any other family, and before this they ended in
+// three related links and the footer.
+function nextTerm(currentSlug) {
+  const i = glossaryEntries.findIndex((e) => e.slug === currentSlug);
+  const next = glossaryEntries[(i + 1) % glossaryEntries.length];
+  if (!next || next.slug === currentSlug) return "";
+  return `
+      <p class="glossary__next"><a href="/glossary/${escAttr(next.slug)}/">Next term: ${esc(next.title)} &rarr;</a></p>`;
 }
 
 function entrySchema(entry, url) {
@@ -113,12 +128,13 @@ function renderEntry(entry) {
   ogUrl: url,
   ogType: "article",
   ogImage: `${SITE}/og.jpg`,
-  csp: PAGE_CSP,
+  csp: ENTRY_CSP,
   // entrySchema() already returns a serialised, <-escaped string.
   jsonLd: entrySchema(entry, url),
+  extraHead: [CAPTURE_STYLES],
 })}
 <body>
-  ${masthead()}
+  ${masthead(NO_SPORT)}
   <main class="wrap">
     <article class="glossary">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/glossary/">Glossary</a> / ${esc(entry.title)}</p>
@@ -129,6 +145,7 @@ function renderEntry(entry) {
         <p class="glossary__answer">${esc(entry.answer)}</p>
         ${depth}
       </div>
+      ${captureBlock()}${nextTerm(entry.slug)}
       ${relatedList(entry.slug)}
     </article>
   </main>
@@ -195,7 +212,7 @@ function renderHub() {
   jsonLd: schema,
 })}
 <body>
-  ${masthead()}
+  ${masthead(NO_SPORT)}
   <main class="wrap wrap--wide">
     <section class="glossary">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Glossary</p>

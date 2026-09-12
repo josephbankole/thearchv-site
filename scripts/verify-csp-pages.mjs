@@ -187,7 +187,8 @@ for (const lane of FOOTBALL_LANES) {
 }
 
 // The Answer Desk article pages, /<sport>/questions/<date>/. Same generator and the same per-page
-// share/ladder hashes as the football articles above, so the same failure mode applies. Added
+// share-row hash as the football articles above (the read-ladder script and its hash were removed
+// on 2026-09-12), so the same failure mode applies. Added
 // 2026-07-28 with the FAQPage + question-H2 change: locally these directories are usually empty,
 // because src/data/<sport>Days.ts is engine-owned and stale in any checkout (see CLAUDE.md), so
 // this loop is a no-op here and a real check wherever the current data is present.

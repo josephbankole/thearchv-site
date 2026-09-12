@@ -512,18 +512,9 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .lightbox__shop { margin-top: 0.25rem; }
 .lightbox__shop[hidden] { display: none; }
 
-/* ---------- mobile follow bar ---------- */
-.follow-bar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-  display: none; align-items: center; justify-content: center; gap: 0.4em;
-  background: var(--gold); color: var(--navy); font-weight: 600; font-size: 0.95rem;
-  padding: 1rem; padding-bottom: max(1rem, env(safe-area-inset-bottom));
-  transform: translateY(100%); transition: transform 0.5s var(--ease);
-}
-.follow-bar strong { font-weight: 700; }
-.is-mobile .follow-bar { display: flex; }
-.follow-bar.is-visible { transform: translateY(0); }
-.is-mobile .footer { padding-bottom: 7rem; }
+/* ---------- mobile follow bar: REMOVED 2026-09-12 (site declutter) ----------
+   The fixed 56px Follow bar and the 7rem of footer padding that cleared it on phones went with
+   its markup in index.html and its scroll handler (src/components/stickyFollow.ts, deleted). */
 
 /* ---------- manifesto bridge line ---------- */
 .manifesto__line { margin-top: 1.75rem; max-width: 40ch; color: var(--cream-dim); font-family: var(--serif); font-weight: 300; font-size: clamp(1.2rem, 2.4vw, 1.7rem); line-height: 1.45; }
@@ -685,9 +676,12 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .reduced-motion .spynav__link,
 .reduced-motion .spynav__tick,
 .reduced-motion .spynav__label { transition: none; }
+/* This list was left open (no declaration block) until 2026-09-12, so it ran on into the mono
+   micro-label rule below: the transition was never stripped from these three, and under reduced
+   motion they picked up the monospace face instead. Closed here; the label rule is untouched. */
 .reduced-motion .btn--gold,
 .reduced-motion .poster__frame,
-.reduced-motion .poster__frame img,
+.reduced-motion .poster__frame img { transition: none; }
 
 /* ============================================================
    Tier 0 pass (2026-08-04). Type, elevation, masking and one reveal.
@@ -769,54 +763,11 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    to become visible.
    ============================================================ */
 
-/* ---------- dateline strip ---------- */
-.topbar { border-bottom: 1px solid var(--rule); background: var(--bg); }
-.topbar__inner {
-  display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap;
-  max-width: var(--maxw); margin: 0 auto; padding: 0.65rem var(--gutter);
-  font-family: var(--grotesque); font-size: 0.72rem; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--ink-muted);
-}
-.topbar__inner strong { color: var(--ink-soft); font-weight: 600; }
-@media (max-width: 560px) { .topbar__strap { display: none; } }
-
-/* ---------- the wire ----------
-   A CSS marquee over two identical server-rendered tracks. It pauses on hover and on focus
-   inside, and under reduced motion it stops entirely and becomes a normal horizontal
-   scroller — the lines are still all there and still all reachable, which is the point. */
-.wire {
-  position: relative; overflow: hidden; white-space: nowrap;
-  background: var(--bg-sunken); border-bottom: 1px solid var(--rule);
-}
-.wire__label {
-  position: absolute; left: 0; top: 0; bottom: 0; z-index: 2;
-  display: flex; align-items: center; padding: 0 0.9rem;
-  background: var(--accent); color: var(--on-accent);
-  font-family: var(--grotesque); font-weight: 700; font-size: 0.66rem;
-  letter-spacing: 0.12em; text-transform: uppercase;
-}
-.wire__tracks { display: flex; width: max-content; padding-left: 7.5rem; animation: wire-run 62s linear infinite; }
-.wire__track { display: flex; }
-.wire:hover .wire__tracks, .wire:focus-within .wire__tracks { animation-play-state: paused; }
-.wire__item {
-  display: inline-flex; align-items: center; gap: 0.5em;
-  padding: 0.62rem 0; font-size: 0.8rem; color: var(--ink-soft);
-}
-.wire__item b { color: var(--accent-ink); font-weight: 700; font-size: 0.68rem; letter-spacing: 0.1em; }
-.wire__item:hover { color: var(--ink); }
-/* The separator is aria-hidden and purely decorative, but it is still a glyph the renderer
-   draws as text, so it takes --accent-ink (5.13:1) rather than the fill-only --accent (3.49:1).
-   That keeps the rule "no text is ever set in --accent" true without an exception to remember. */
-.wire__dot { color: var(--accent-ink); margin: 0 0.9rem; font-size: 0.5rem; }
-@keyframes wire-run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) {
-  .wire { overflow-x: auto; }
-  .wire__tracks { animation: none; }
-  .wire__track:nth-child(2) { display: none; }
-}
-.reduced-motion .wire { overflow-x: auto; }
-.reduced-motion .wire__tracks { animation: none; }
-.reduced-motion .wire__track:nth-child(2) { display: none; }
+/* ---------- dateline strip and the wire: REMOVED 2026-09-12 (site declutter) ----------
+   `.topbar` (the "Latest filed" strip) and `.wire` (the headline marquee) went with their markup
+   in index.html and their renderers in src/render/home.ts. The wire was one of the horizontal
+   scrollers trap 3 in CLAUDE.md guards; removing it leaves `.rail` and `.sportnav`, both still
+   carrying `overflow-y: hidden`. */
 
 /* ---------- shared front-page type ---------- */
 .kicker {

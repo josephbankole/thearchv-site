@@ -6,7 +6,6 @@ import { initFrontCards } from './components/frontCards';
 import { initLongReads } from './components/longReads';
 import { initArchiveRail } from './components/archiveRail';
 import { initContactForm } from './components/contactForm';
-import { initStickyFollow } from './components/stickyFollow';
 import { initChrome, initMastheadMenu } from './ui/chrome';
 import { initSportTabs } from './ui/sportTabs';
 import { initAnalytics } from './analytics';
@@ -17,7 +16,7 @@ const animate = !reducedMotion;
 
 function boot(): void {
   // Every block on this page is in the HTML before this file runs (src/render/home.ts, injected
-  // at build time): the bands, the lead, the wire, and as of phase 2B the legends wall and the
+  // at build time): the bands, the lead, and as of phase 2B the legends wall and the
   // long reads too. (The illustrated library band was here until 2026-08-24, when the founder
   // removed it along with the desk-in-numbers panel.) Nothing below creates front-page content; it
   // attaches behaviour to content that is already there. That is the whole point of the rebuild:
@@ -30,7 +29,9 @@ function boot(): void {
   initLongReads(animate);
   initArchiveRail();
   initContactForm();
-  initStickyFollow();
+  // The fixed mobile Follow bar and its scroll handler (initStickyFollow) were removed on
+  // 2026-09-12: 56px pinned over every phone screen of the front page for one follow click in
+  // 28 days, with four other Instagram links on the same page.
 
   // Masthead hamburger (internal destinations above the rule, outbound below). Runs in every
   // mode: it toggles a `hidden` attribute directly, no CSS transition to gate.

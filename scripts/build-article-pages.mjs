@@ -15,10 +15,10 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle, answerTitle, answerTitleFlags,
-  cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
   AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
-  DISPATCH_URL, DISPATCH_SUBSCRIBE_URL,
+  DISPATCH_URL, captureBlock, CAPTURE_STYLES,
 } from "./shared/page-shell.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
@@ -48,8 +48,8 @@ const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 /* ---------- the typed day data, through scripts/shared/day-data.mjs ----------
    That module is the one loader for src/data/*.ts and it owns the newest-first sort. Prev/next
-   nav and "more from the lane" below both assume newest-first, and a single out-of-order commit
-   from the desk engine would otherwise scramble both. `readTime` rides in on the same bundle:
+   "more from the lane" below assumes newest-first, and a single out-of-order commit from the desk
+   engine would otherwise scramble it. `readTime` rides in on the same bundle:
    src/lib/readTime.ts is the one copy of read-time on the site (see its header) rather than a
    reimplementation here in .mjs. */
 const {
@@ -58,8 +58,10 @@ const {
 } = await loadDayData({ extras: ["readTime"] });
 
 // A "section" is one sport+lane's article surface. `base` is the path prefix under which its
-// articles live (leading and trailing slash), `anchor` is what the breadcrumb and "more" link
-// point back at, `sportKey` scopes the masthead tab row and the deskNav. Football sections keep
+// articles live (leading and trailing slash) and is also the lane front the "More from" block
+// links to, `sportKey` scopes the masthead tab row and the deskNav. `anchor` is the homepage
+// section id; the page no longer links to it (the visible breadcrumb and the Home/More row that
+// did were removed on 2026-09-12), and it is kept only so the section shape is unchanged. Football sections keep
 // base "/desk/<lane>/" and the homepage anchors, so their emitted pages are byte-identical to
 // before bar the masthead sport tab row. New sports get "/<urlBase>/<lane>/" and their section
 // root as the anchor. Every downstream string in render() is built from these fields, so nothing
@@ -225,8 +227,9 @@ function schema(entry, url, label, faq, images) {
   // FAQPage, question lanes only (SEO/AEO audit fix 2, 2026-07-28). Same block the glossary
   // emits, and placed before BreadcrumbList for the same reason it is there: the question and
   // its answer are what the page is, the breadcrumb only says where it sits. `faq.question` is
-  // the entry headline verbatim, which is also the page's H1 and its answer H2, so the schema
-  // never claims a question the page does not visibly ask. Football lanes pass no faq and their
+  // the entry headline verbatim, which is also the page's H1, so the schema never claims a
+  // question the page does not visibly ask. (A second, visible copy of the question as an H2
+  // opened the body until 2026-09-12; it repeated the h1 word for word and was dropped.) Football lanes pass no faq and their
   // emitted JSON is byte-identical to before.
   if (faq) {
     graph.push({
@@ -378,138 +381,24 @@ function shareScriptTag(url, headline) {
   </script>`;
 }
 
-// The read ladder. Counts on OPEN (founder call 2026-07-21: whatever gets seen by the most
-// people) but dedupes by article url, so "three reads" means three different pieces rather
-// than three refreshes of one. Offers swapped 2026-07-25 (see inside): first ask is a FOLLOW,
-// escalating to the Dispatch at three reads. The iOS app is deliberately no longer in the
-// ladder at all; it stays on /app for people who go looking, because the measured audience is
-// mostly Android in markets where an App Store link is a dead end. Like the share row this embeds page-specific values, so its
-// CSP hash is computed per page at generation time.
-function ladderScriptTag(url, lanePath) {
-  return `<script>
-    (function () {
-      var url = ${JSON.stringify(url).replace(/</g, "\\u003c")};
-      var lane = ${JSON.stringify(lanePath).replace(/</g, "\\u003c")};
-      var KEY = 'archv.read';
-      var read = [];
-      try { read = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { read = []; }
-      if (!Array.isArray(read)) read = [];
-      if (read.indexOf(url) === -1) {
-        read.push(url);
-        try { localStorage.setItem(KEY, JSON.stringify(read.slice(-50))); } catch (e) {}
-      }
-      var count = read.length;
-      var box = document.getElementById('read-ladder');
-      var note = document.getElementById('ladder-note');
-      var cta = document.getElementById('ladder-cta');
-      var alt = document.getElementById('ladder-alt');
-      if (!box || !note || !cta || !alt) return;
+/* ---------- after the story (declutter, 2026-09-12) ----------
+   Two modules follow the last paragraph and nothing else: the inline Dispatch capture, then one
+   "More from" block of three one-line links. The capture itself (captureBlock() and its styles)
+   lives in scripts/shared/page-shell.mjs so the glossary can reuse it rather than copy it.
 
-      // Offer swap, 2026-07-25. The ladder used to lead with the iOS app and got 1 click
-      // from 194 impressions. PostHog says why: 57% of this traffic is India, Indonesia and
-      // Nigeria arriving from TikTok, largely on Android, so the app was an ask most of them
-      // could not physically take. Both asks are now free, instant and device-agnostic.
-      // Referrer-aware, because asking a TikTok visitor to follow on TikTok is a wasted ask.
-      var from = document.referrer || '';
-      var viaTikTok = from.indexOf('tiktok.') !== -1;
-      var social = viaTikTok
-        ? { name: 'Instagram', url: 'https://instagram.com/thearchvfc', key: 'instagram' }
-        : { name: 'TikTok', url: 'https://www.tiktok.com/@thearchvfc', key: 'tiktok' };
-
-      function external(el, href) {
-        el.href = href;
-        el.setAttribute('target', '_blank');
-        el.setAttribute('rel', 'noopener noreferrer');
-      }
-
-      var variant;
-      if (count >= 3) {
-        // Three pieces in means real intent, so escalate to the owned channel. Email, not
-        // the app: a Substack subscription works on any device in any country.
-        variant = 'dispatch';
-        note.textContent = 'That is three you have read. The Dispatch brings the archive to you.';
-        cta.textContent = 'Join the Dispatch';
-        // Phase 3: the page now carries an inline capture form higher up, and the escalated
-        // ask should not be a second, weaker copy of it. Send the reader to the field instead
-        // of off-site, and put the caret in it. The external link stays as the fallback for
-        // any page without the block, so the behaviour before this change is what happens if
-        // the form is ever removed. Event names and payloads are untouched either way.
-        var capture = document.getElementById('inline-capture');
-        var field = document.getElementById('capture-email');
-        if (capture) {
-          cta.href = '#inline-capture';
-          cta.removeAttribute('target');
-          cta.removeAttribute('rel');
-          cta.addEventListener('click', function () {
-            if (field) setTimeout(function () { field.focus({ preventScroll: true }); }, 0);
-          });
-        } else {
-          external(cta, 'https://thearchvdispatch.substack.com');
-        }
-        alt.textContent = 'Or follow on ' + social.name;
-        external(alt, social.url);
-      } else {
-        variant = 'follow';
-        note.textContent = 'One football story a day, drawn and checked. Follow so tomorrow finds you.';
-        cta.textContent = 'Follow on ' + social.name;
-        external(cta, social.url);
-        alt.textContent = 'Read another';
-        alt.href = lane;
-        alt.removeAttribute('target');
-        alt.removeAttribute('rel');
-      }
-      box.hidden = false;
-      if (window.posthog) posthog.capture('read_ladder_shown', { variant: variant, reads: count, platform: social.key, via_tiktok: viaTikTok });
-      function tap(el, target) {
-        el.addEventListener('click', function () {
-          if (window.posthog) posthog.capture('read_ladder_click', { target: target, variant: variant, reads: count, platform: social.key, via_tiktok: viaTikTok });
-        });
-      }
-      tap(cta, 'primary');
-      tap(alt, 'secondary');
-    })();
-  </script>`;
-}
-
-/* ---------- the inline email capture (phase 3) ----------
-   Until this pass the only place a reader could give the site an address was the /start page's
-   embedded form. Every article ended in a link to Substack instead, which asks somebody who has
-   just finished reading to leave the site, find the form and start again.
-
-   THE LANE DECIDES THE DESTINATION AND THIS IS FOOTBALL AND SITE CONTENT, SO IT IS THE DISPATCH.
-   thearchvdispatch.substack.com, from DISPATCH_SUBSCRIBE_URL in page-shell.mjs. The AI lane's
-   list is a different list on a different property and nothing on this site captures to it.
-
-   It is a plain GET form, which is the whole design. The address goes to Substack's own subscribe
-   page as a query parameter and the reader finishes there, so this site never receives it, never
-   stores it and needs no endpoint, no key and no JavaScript. It works with the bundle blocked and
-   with scripting off. form-action on this page family is narrowed to 'self' plus the Dispatch
-   (see cspMeta), so the field cannot be repointed at anything else by an injected attribute.
-
-   ONE PER PAGE, AND BEHIND THE CONTENT. It sits after the body and before the rights notice, at
-   the point a reader has finished rather than in the middle of the piece. See the read ladder
-   below for how the two coordinate: this is the quiet standing ask, the ladder is the escalation,
-   and at three reads the ladder points at this form rather than repeating it. */
-const CAPTURE_ID = "inline-capture";
-const captureBlock = () => `
-      <aside class="capture" id="${CAPTURE_ID}" aria-labelledby="capture-title">
-        <h2 class="capture__title" id="capture-title">Get the next one by email</h2>
-        <p class="capture__note">The ARCHV Dispatch goes out free on Substack. Put an address in below and you finish signing up over there, so it goes to Substack and never to us.</p>
-        <form class="capture__form" action="${escAttr(DISPATCH_SUBSCRIBE_URL)}" method="get" target="_blank" rel="noopener noreferrer">
-          <label class="vh" for="capture-email">Your email address</label>
-          <input class="capture__field" id="capture-email" name="email" type="email" required
-                 autocomplete="email" inputmode="email" spellcheck="false"
-                 placeholder="you@example.com" />
-          <button class="capture__go" type="submit">Join the Dispatch</button>
-        </form>
-        <p class="capture__fine">Every issue carries an unsubscribe link. This site is static files with no database, so there is nowhere here to keep an address anyway.</p>
-      </aside>`;
-
-function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry) {
+   Removed in the same pass, with the reasons, so nobody puts them back by accident:
+   - the read ladder and its per-page inline script (shown 148 times in 28 days, clicked twice in
+     90; its CSP hash went with it);
+   - the rights notice box, which repeated the footer's legal line word for word;
+   - the previous/next row and the Home / "More <lane>" row, the fourth and fifth routes on the
+     page to the lane front;
+   - the visible breadcrumb above the eyebrow, which named the lane a third time and on football
+     pages linked a homepage anchor rather than the lane. BreadcrumbList stays in the JSON-LD. */
+function render(entry, section, hasCard, hasWide, moreFrom) {
   const lane = section; // section carries label/seoSuffix/anchor/base/sportKey/laneKey
-  // The Answer Desk lanes (NFL, F1, tennis, golf) file a question as the headline and its answer
-  // as the body. Those two facts drive both the FAQPage block and the question H2 below; the
-  // three football lanes file news and take neither.
+  // The Answer Desk lanes (NFL, F1, tennis, golf, basketball) file a question as the headline and
+  // its answer as the body. Those two facts drive the FAQPage block; the three football lanes file
+  // news and take none.
   const faq = section.laneKey === "questions"
     ? { question: entry.headline, answer: questionAnswer(entry.dek, entry.body) }
     : null;
@@ -523,9 +412,8 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
     : [`${SITE}/og.jpg`];
   const xIntent = `https://x.com/intent/post?text=${encodeURIComponent(entry.headline)}&url=${encodeURIComponent(url)}&via=thearchvfc`;
   const shareScript = shareScriptTag(url, entry.headline);
-  const ladderScript = ladderScriptTag(url, section.base);
   const pageCsp = cspMeta({
-    scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript)), scriptHash(extractScriptBody(ladderScript))],
+    scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript))],
     posthog: true,
     googleFonts: true,
     // The one form on this page family is the inline capture, and it posts to the Dispatch.
@@ -543,67 +431,19 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
         <img src="${escAttr(art.src)}" alt="${escAttr(art.alt)}" width="${art.width}" height="${art.height}" loading="eager" decoding="async" />
       </figure>` : "";
 
-  const ladder = `
-      <aside class="ladder" id="read-ladder" hidden>
-        <p class="ladder__note" id="ladder-note"></p>
-        <a class="ladder__cta" id="ladder-cta" href="/app/"></a>
-        <a class="ladder__alt" id="ladder-alt" href="/"></a>
-      </aside>
-      <style>
-        /* The one block on this page family that still carried navy hex codes after the phase 2A
-           flip (found by the 2B sweep). It resolves through the same tokens as everything else
-           now: white on --accent-ink measures 5.13:1, --ink-muted on the sunken grey 5.16:1. */
-        .ladder{margin:44px 0 8px;padding:28px 24px;border:1px solid var(--rule);border-radius:16px;background:var(--bg-sunken);box-shadow:var(--shadow-soft);text-align:center}
-        .ladder__note{margin:0 0 18px;font-size:1rem;line-height:1.55;color:var(--ink)}
-        .ladder__cta{display:inline-block;padding:14px 26px;border-radius:12px;background:var(--accent-ink);color:#FFFFFF;text-decoration:none;font-weight:600}
-        .ladder__cta:hover{filter:brightness(1.06)}
-        .ladder__alt{display:block;margin-top:14px;font-size:.9rem;color:var(--ink-muted);text-decoration:underline;text-underline-offset:3px}
-        .ladder__alt:hover{color:var(--accent-ink)}
-
-        /* The inline capture. Deliberately quieter than the ladder: a hairline box on the sunken
-           grey rather than a shadowed card, and the accent kept to the submit button. It is the
-           standing ask, not the escalated one. */
-        .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
-        .capture{margin:2.4rem 0 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:.75rem;background:var(--bg-sunken)}
-        .capture[hidden]{display:none}
-        .capture__title{margin:0 0 .5rem;color:var(--ink);font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3}
-        .capture__note{margin:0 0 1rem;font-size:.95rem;line-height:1.55;color:var(--ink-soft)}
-        .capture__form{display:flex;flex-wrap:wrap;gap:.6rem}
-        .capture__field{flex:1 1 14rem;min-width:0;padding:.7rem .9rem;font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:.5rem;-webkit-appearance:none;appearance:none}
-        .capture__field::placeholder{color:var(--ink-muted)}
-        .capture__field:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px;border-color:var(--accent-ink)}
-        .capture__go{flex:0 0 auto;padding:.7rem 1.15rem;font:inherit;font-weight:600;cursor:pointer;color:#FFFFFF;background:var(--accent-ink);border:1px solid var(--accent-ink);border-radius:.5rem}
-        .capture__go:hover{filter:brightness(1.06)}
-        .capture__fine{margin:.85rem 0 0;font-size:.8rem;line-height:1.5;color:var(--ink-muted)}
-        @media (max-width:480px){.capture__go{width:100%}}
-      </style>`;
-
-  // W3.1 — "More from the <lane>": whole-card links to the previous 3 entries in this lane.
-  const moreCards = moreFrom.length
+  // "More from the <lane>": the three nearest entries in this lane as one-line links, a date
+  // kicker and the headline. No dek and no avatar (declutter, 2026-09-12).
+  const moreLinks = moreFrom.length
     ? `
       <section class="related" aria-label="More from ${esc(lane.label)}">
         <h2>More from ${esc(lane.label)}</h2>
-        <ul class="more-cards">
+        <ul class="more-list">
           ${moreFrom
-            .map((e) => {
-              // Same resolution chain as the article's own figure, at the smaller card size.
-              // The alt is never empty: these are content headshots inside a link, not chrome.
-              const avatar = cardArt(e, { className: "more-card__avatar", size: 44 });
-              return `<li><a class="more-card" href="${section.base}${e.date}/">${avatar}<span class="more-card__body"><span class="more-card__kicker">${esc(e.day)} · ${esc(longDate(e.date))} · ${esc(readLabel(e.dek, e.body))}</span><span class="more-card__headline">${esc(e.headline)}</span><span class="more-card__dek">${esc(e.dek)}</span></span></a></li>`;
-            })
+            .map((e) => `<li><a class="more-link" href="${section.base}${e.date}/"><span class="more-link__kicker">${esc(e.day)} · ${esc(longDate(e.date))}</span>${esc(e.headline)}</a></li>`)
             .join("\n          ")}
         </ul>
         <a class="related__all" href="${section.base}">All ${esc(lane.label)} stories &rarr;</a>
       </section>` : "";
-
-  // W3.2 — prev/next chronological links within the lane.
-  const adjacent =
-    prevEntry || nextEntry
-      ? `
-      <nav class="adjacent" aria-label="More entries">
-        ${prevEntry ? `<a class="adjacent__link adjacent__link--prev" href="${section.base}${prevEntry.date}/"><span class="adjacent__dir">&larr; Previous</span><span class="adjacent__headline">${esc(prevEntry.headline)}</span></a>` : "<span></span>"}
-        ${nextEntry ? `<a class="adjacent__link adjacent__link--next" href="${section.base}${nextEntry.date}/"><span class="adjacent__dir">Next &rarr;</span><span class="adjacent__headline">${esc(nextEntry.headline)}</span></a>` : ""}
-      </nav>` : "";
 
   return `${documentShell({
   // Search-only title: the entry's seoTitle (the answer) when the desk filed one, else the old
@@ -622,18 +462,17 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
   // This entry's OWN 1200x630 card when satori made one, the site-wide /og.jpg when it did
   // not. A card failure logs and falls back rather than failing the build, so both are live.
   ogImage,
-  // Per-page CSP: the share row and the read-ladder scripts both embed this page's url, so
-  // neither hash is constant across the family, and form-action names the Dispatch because
-  // of the inline email capture.
+  // Per-page CSP: the share-row script embeds this page's url, so its hash is not constant
+  // across the family, and form-action names the Dispatch because of the inline email capture.
   csp: pageCsp,
   jsonLd: schema(entry, url, lane.label, faq, schemaImages),
+  extraHead: [CAPTURE_STYLES],
 })}
 <body>
   ${masthead(section.sportKey)}
   ${deskNav(section.laneKey, section.sportKey)}
   <main class="wrap">
     <article class="article">
-      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${lane.anchor}">${esc(lane.label)}</a></p>
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
       <p class="article__byline">By <a href="${escAttr(AUTHOR_URL)}" rel="author">${esc(AUTHOR_NAME)}</a></p>
@@ -644,22 +483,14 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
         <button class="btn btn--ghost" id="share-copy" type="button">Copy link</button>
       </div>${figure}
       <div class="article__body">
-        ${faq ? `<h2 class="answer__q">${esc(faq.question)}</h2>\n        ` : ""}<p><strong>${esc(entry.dek)}</strong></p>
+        <p><strong>${esc(entry.dek)}</strong></p>
         ${bodyHtml(entry.body)}${evergreenLink(entry, `${section.base}${entry.date}/`)}
       </div>
-      ${captureBlock()}
-      <p class="article__rights">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.</p>
-      ${adjacent}
-      <nav class="article__nav" aria-label="More from this section">
-        <a href="/">Home</a>
-        <a href="/${lane.anchor}">More ${esc(lane.label)}</a>
-      </nav>${moreCards}
-      ${ladder}
+      ${captureBlock()}${moreLinks}
     </article>
   </main>
   ${footer()}
   ${shareScript}
-  ${ladderScript}
 </body>
 </html>
 `;
@@ -704,16 +535,14 @@ for (const section of sections) {
       }
     }
 
-    // W3.1 — "more from the lane": lane.days is newest-first (see src/data/*.ts), so entries at
-    // higher indices are chronologically earlier ("previous"). Pad from the newer side if the
-    // current entry is near the end of the array so the block is never empty/short.
+    // "More from the lane": lane.days is newest-first (see src/data/*.ts), so entries at higher
+    // indices are chronologically earlier. Pad from the newer side if the current entry is near
+    // the end of the array so the block is never empty/short.
     const older = lane.days.slice(i + 1, i + 4);
     const newer = lane.days.slice(Math.max(0, i - (3 - older.length)), i).reverse();
     const moreFrom = [...older, ...newer].slice(0, 3);
-    const prevEntry = lane.days[i + 1] ?? null; // older
-    const nextEntry = lane.days[i - 1] ?? null; // newer
 
-    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry));
+    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom));
     urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: entry.date, changefreq: "monthly", priority: "0.6" });
     count++;
   }

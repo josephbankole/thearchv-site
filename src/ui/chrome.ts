@@ -79,7 +79,7 @@ export function initChrome(): void {
     fill.style.transform = `scaleX(${p})`;
 
     // Reveal the nav once the lead block is mostly behind us. Keeps the top of the front
-    // page clean, where the masthead and the wire are already doing the orienting. The old
+    // page clean, where the masthead and the sport tabs are already doing the orienting. The old
     // reference point was the full-viewport hero, which the phase 2A rebuild removed.
     const shouldShow = scrollTop > window.innerHeight * 0.6;
     if (shouldShow !== navShown) {

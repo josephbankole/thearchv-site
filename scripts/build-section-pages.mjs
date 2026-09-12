@@ -26,7 +26,7 @@ import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate,
   masthead, footer, documentShell, ROBOTS_INDEXABLE, ROBOTS_NOINDEX_FOLLOW,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, DEFAULT_SPORT, NO_SPORT,
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
 
@@ -115,6 +115,8 @@ function contentCard(section, page) {
   }</span></a></li>`;
 }
 
+// The sport tab row marks no tab current on /finals/ and on the 404 (declutter, 2026-09-12, item
+// 13 of the site review); /united/, /explainers/ and /legends/ keep Football current.
 function renderSection(section, front, pages) {
   const url = `${SITE}/${section}/`;
   return `${head({
@@ -145,7 +147,7 @@ function renderSection(section, front, pages) {
   },
 })}
 <body>
-  ${masthead()}
+  ${masthead(section === "finals" ? NO_SPORT : DEFAULT_SPORT)}
   <main class="wrap wrap--wide">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(front.label)}</p>
@@ -240,7 +242,7 @@ function renderNotFound() {
   robots: ROBOTS_NOINDEX_FOLLOW,
 })}
 <body>
-  ${masthead()}
+  ${masthead(NO_SPORT)}
   <main class="wrap">
     <section class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Not found</p>

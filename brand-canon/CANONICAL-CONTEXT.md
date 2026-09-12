@@ -1931,6 +1931,13 @@ The claim is about BETTING advertising only and stays true by policy (the values
 CTA pool, founder 2026-08-07); it never widens into "no ads" on a site surface, because the site's
 monetisation ladder plans other advertising (D92, D-2026-08-13a). Old appearances of the retired line in
 archived CTA sets and history stay as history.
+**Scope, chosen by the founder the same session from options put to him:** (1) the tagline SHOWS ON PHONES
+too (it had been hidden under 720px; `src/style.css` commit c666904 puts it on its own line under the
+wordmark, verified live at 375px and 1280px); (2) "lead with it" means the WEBSITE, PROFILE BIOS and BRAND
+PAGES. Posts keep the rotating CTA pool unchanged: the Dispatch ask stays the @thearchvfc primary
+(D-2026-09-08g) and the no-gambling-ads values variant keeps its once-a-week-per-account cap. Bios are edited
+by the founder in each app (the desks have no bio route, and the Instagram web account switcher is off
+limits); the lines are in the 2026-09-12 football desk report.
 
 **5A and 6A, recorded:** the hook bank of D-2026-09-12a is "the new hooks" (no other file); the three
 1956 Manchester United faces (Busby, Viollet, Taylor) are generated for future nostalgia decks from

@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-12",
+    day: "Saturday",
+    headline: "Why has Adam Scott never won a Presidents Cup?",
+    dek: "His place on the 2026 International team ties Phil Mickelson's record of 12 Presidents Cup appearances. In the previous eleven, since a tied 2003 debut, Scott has never been on a winning team.",
+    body: "Phil Mickelson's Presidents Cup appearance record has a new co-holder. Adam Scott's place on the International team for 2026 matches Mickelson's mark of 12 appearances, the most by anyone in the event's history, per Yahoo Sports and Sportskeeda.\n\nScott, 46, qualified automatically as the sixth-ranked International player in the standings, Yahoo Sports reports, sealing a place at Medinah Country Club from 24 to 27 September. He made his Presidents Cup debut in 2003 and has played every edition since, an ever-present run that only Mickelson, on the American side, can match.\n\nThe record arrives without the trophy attached. In eleven previous appearances stretching back to a tied debut in 2003, Scott has never been part of a winning International team, per SI.com and the Washington Post. He does hold one record of his own: the International team's all-time points total, set in 2024 at Royal Montreal when he claimed his 22nd career point, per PGA Tour reporting from that event.\n\nThe United States hold a 13-1-1 record across the 15 Presidents Cups played, per presidentscup.com's official history, the tie being Scott's own 2003 debut.\n\nScott will try to end the wait at Medinah Country Club in Illinois, from 24 to 27 September, on an International team that also carries fellow automatic qualifier Hideki Matsuyama and six captain's picks Geoff Ogilvy named this month.",
+    status: "verified",
+    seoTitle: "Adam Scott ties Presidents Cup record, still winless: why",
+  },
+  {
     date: "2026-09-10",
     day: "Thursday",
     headline: "How many points does Europe need to win back the Solheim Cup in 2026?",

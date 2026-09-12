@@ -53,7 +53,7 @@ section marker now.*
   @thearchv.ai deck was leaving the founder a comment to paste by hand, daily. He traded the send
   gate for that. **The premise was VERIFIED on 2026-09-10:** the founder's automatic explainer post
   `6aa204c35585ae60f04a612e` showed its stored first comment live under the post, posted by thearchv.ai.
-  The lane's slot moved to 15:00 ET the same day (D-2026-09-10b).
+  The lane's slot moved to 15:00 ET the same day (D-2026-09-10b), then onto the 13/16/19/22 ET grid (D-2026-09-12c).
   @thearchv.ai carries no music, which is why this lane and not the others can give up the gate.
   **`mode: "customScheduled"` with an explicit ISO `dueAt` remains mandatory:** the 2026-08-15
   incident that published three decks between 00:03 and 00:07 ET was caused by `addToQueue`, never by
@@ -85,7 +85,8 @@ section marker now.*
 
 ### Verification
 - **Two sources** for news, transfers, quotes and team news. An unverifiable claim kills the unit; it never
-  ships hedged.
+  ships hedged. **CAROUSELS: ONE named source is enough since D-2026-09-12i (founder, 2026-09-12); Threads,
+  site, app and Dispatch keep two.**
 - **Opta / Stats Perform statistical measurements may ship on one source**, pinned "OPTA" on screen and in
   copy. Does not extend to news, transfers, quotes or qualitative claims. A conflicting figure from another
   reputable provider means provider-pinned or not at all (D-2026-07-28e).
@@ -257,7 +258,8 @@ section marker now.*
   ever hardcoded**. **`archv-football-desk`**, cron `0 6 * * *`, is the PUBLISH node and owns everything
   time-coupled to the morning: the Manchester United Threads thread, the @thearchvfc carousel ladder,
   the @thearchv.ca slate, site and app content, the TikTok stage. **`archv-ai-desk`**, cron `0 12 * * *`,
-  owns the josephbankole.ca brief and the next free 15:00 ET @thearchv.ai carousel (D-2026-09-10b); its
+  owns the josephbankole.ca brief and the @thearchv.ai news decks on the 13:00/16:00/19:00/22:00 ET grid slots
+  (D-2026-09-12c, replacing D-2026-09-10b's 15:00) plus the Lane C threads; its
   yt-community lane was DROPPED on 2026-09-10 (D-2026-09-10d).
   **`archv-metrics-desk`**, cron `30 13 * * *`, owns per-post metrics, the rotation audit and the
   end-of-day roll-call, with Buffer READ-ONLY. **`josephbankole-site-desk`**, cron `0 15 * * *`, owns the
@@ -402,7 +404,14 @@ section marker now.*
 
 ### Cadence (D-2026-08-03, on Tom's feedback) — EVERY NUMERIC DAY-CAP BELOW IS SUPERSEDED 2026-09-08 by D-2026-09-08a (no cap; 3-hour spacing). Displacement ladders, slates and formats survive as editorial workflow, not ceilings.
 
-**D-2026-09-08b (founder, evening of 2026-09-08) puts ONE cap back, on one account.** Instagram
+**SPACING IS NOW D-2026-09-12c (founder, 2026-09-12), which supersedes D-2026-09-08a's wording.** At least three hours
+between any two units on one CHANNEL (one account on one surface; an account's IG and its Threads are separate),
+measured `dueAt` to `dueAt`, checked against the channel's live schedule before every queue call, a blocked slot
+moving to three hours after the blocking post and never earlier. More units a day than a lane's usual count is fine.
+IG @thearchv.ai runs on the 07/10/13/16/19/22 ET grid; Threads @thearchv.ai keeps fola's 14:00 and puts every other
+thread on 08/11/17/20/23. Full text and procedure in RATIFIED 2026-09-12.
+
+**D-2026-09-08b (founder, evening of 2026-09-08) puts ONE cap back, on one account.** *(LIFTED 2026-09-12 by D-2026-09-12d: IG @thearchvfc may run more than one unit a day, three hours apart.)* Instagram
 @thearchvfc ships **ONE unit a day**, and the lanes compete for that single slot. This does not
 restore any other numeric cap: D-2026-09-08a still governs every other surface, no per-day cap and
 3-hour minimum spacing per platform. The reason is measured, not stylistic. Four desk carousels on
@@ -421,7 +430,7 @@ Every other day of the week stays at one unit.
   the other and the question carousel stands down. On days without one, the question carousel runs as
   now. The cap does not move, which keeps Tom's post-less-and-space-it note intact. *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a: no per-day cap, 3-hour minimum spacing per platform)* The
   standdown itself survives as the ladder's rung-1 editorial precedence.
-- **Instagram @thearchvfc: max TWO units a day, four hours apart.** *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a, then RE-CAPPED THE SAME DAY at ONE unit a day by D-2026-09-08b, which is the live number for this account; the 3-hour spacing rule is moot at one unit)* Was four or more. **The daily reel
+- **Instagram @thearchvfc: max TWO units a day, four hours apart.** *(cap SUPERSEDED 2026-09-08 by D-2026-09-08a, then RE-CAPPED THE SAME DAY at ONE unit a day by D-2026-09-08b, then LIFTED 2026-09-12 by D-2026-09-12d (no daily cap, three hours apart); the 3-hour spacing rule is moot at one unit)* Was four or more. **The daily reel
   counts as one of the two and REPLACES a carousel** (D-2026-08-04a, founder, resolved mid-run when the
   desk hit the ambiguity on day one). A reel plus one carousel is a full slate, not a shortfall.
 - **TikTok @thearchvfc: ONE a day.** **@thearchv.ca: max TWO a day, four hours apart, and the day's
@@ -1405,7 +1414,8 @@ edit per the same-run rule.*
   founder pause (D-2026-08-13d), which is a pause, not a cap. Ruled the day the founder retired
   ~/archv-pipeline back to the desks, after the roll-call flagged seven pipeline units on
   @thearchvfc against the old cap. Roll-calls and audits stop flagging unit counts; **under-3-hour
-  spacing on one platform is now the only volume flag.**
+  spacing on one platform is now the only volume flag.** *(Spacing wording SUPERSEDED 2026-09-12 by D-2026-09-12c:
+  per channel, one account on one surface, dueAt to dueAt, checked before every queue. The cap lift stands.)*
 
 
 ### RATIFIED 2026-09-09 (founder, in session with the football desk): THE CAROUSEL BUILD RULES MOVE INTO CANON
@@ -1535,7 +1545,8 @@ or explicitly overruled in the run report.
   automated X route exists anywhere; @thearchvfc X stays a manual founder route (D-2026-08-24d). Posts already
   queued on channel `6a4f1a9e404834462886dd5d` before the stop are the founder's to clear in Buffer (the desk
   connector gets HTTP 403 on that channel). Restarting X needs a founder ruling.
-- **D-2026-09-10b (founder): the @thearchv.ai daily carousel posts at 15:00 ET**, moved from 08:00. It
+- **D-2026-09-10b (founder): the @thearchv.ai daily carousel posts at 15:00 ET**, moved from 08:00. *(Slot SUPERSEDED
+  2026-09-12 by D-2026-09-12c: Lane B takes 13:00, 16:00, 19:00 and 22:00 ET.)* It
   clears the founder's 10:00 ET explainer series by five hours under D-2026-09-08a. Applied the same day to the
   queued 12 September deck (`6aa2dafd866944bb2aebc94d`).
 - **D-2026-09-10c (founder): "no more source on each slide, only on the last slide at the bottom."** Scoped
@@ -1632,7 +1643,8 @@ a single static stat card as a reel at 25x to 63x their own medians (`competitor
   handle on the card, a third-person caption with a D-2026-07-22 pool CTA, and **21:00 ET by default**
   so the day's Instagram units run 09:00, 12:00, 15:00, 18:00 and 21:00 across both accounts. NFL.com and
   Formula1.com may stand alone under D-2026-08-28b. New lane `ig-ca-reel`, Platform `IG Reel @thearchv.ca`
-  (added to the closed Platform list the same day), football desk step 8b.
+  (added to the closed Platform list the same day), football desk step 8b. `IG MLS Weekly @thearchvfc` joined
+  the closed list on 2026-09-12 (D-2026-09-12g).
 
 **D-2026-09-11c (founder, in session): THE MULTISPORT ANSWER DESK IS REVIVED AND OWNS EVERY SPORT ARTICLE,
 AND BASKETBALL JOINS AS ITS FIFTH SPORT.** Founder wording: "restart the multisport desk, include the new
@@ -1733,8 +1745,8 @@ also write stories for all sports, do a deep dive of reddit".
 SANCTIONED OWNER OF @thearchv.ai.** The founder's 5 Sep series (50 AI-impact companies, one a day from
 2026-09-06) moved off the cloud onto the local scheduled task `ai-company-feature`, spec at
 `routines-v2/ai-company-feature.md`, toolkit at `ai-company-feature/tools/`. Rulings made in the session:
-- **@thearchv.ai now has TWO owners, both named:** `archv-ai-desk` STEP 2 (the 15:00 ET AI-news carousel,
-  D-2026-09-10b) and `ai-company-feature` (the 07:00 ET company carousel). This amends the single-owner
+- **@thearchv.ai now has TWO owners, both named:** `archv-ai-desk` STEP 2 (the AI-news carousels, now on the 13/16/19/22 ET grid,
+  D-2026-09-12c) and `ai-company-feature` (the 07:00 ET company carousel). This amends the single-owner
   lines in §0 Handles and in RATIFIED 2026-08-04. Anything else still stands down on the channel.
 - **Automatic mode** on the GraphQL `createPost` route with `mode: customScheduled`, consistent with
   D-2026-09-08c for this channel. The founder chose it over notification knowing it goes live without a press.
@@ -1765,12 +1777,14 @@ answers in session: single-story deck, up to three a day, the desk queues thread
   worked around.
 - **Lane B format:** the builder roundup header is retired. One story per deck, D-2026-09-09a build rules,
   sources on the last slide (D-2026-09-10c).
-- **Lane B volume:** up to three decks a day on IG @thearchv.ai at **15:00, 18:00 and 21:00 ET**. This widens the
+- **Lane B volume:** up to three decks a day on IG @thearchv.ai at **15:00, 18:00 and 21:00 ET** *(SUPERSEDED 2026-09-12
+  by D-2026-09-12c: the news-deck grid slots are 13:00, 16:00, 19:00 and 22:00 ET)*. This widens the
   desk's share of the channel named in D-2026-09-11g; `ai-company-feature` keeps 07:00 and the founder's explainers
   keep 10:00. A slot is free only if nothing on the channel sits within three hours of it (D-2026-09-08a).
   First-comment shapes: none twice in a day, none repeated within the desk's last six units.
 - **Lane C, new, `threads-ai-desk`:** up to three @thearchv.ai threads a day through Content360 in the founder's
-  logged-in Chrome, at **08:00, 17:00 and 20:00 ET**, three hours clear of `fola-personal-daily`'s 14:00 AI thread,
+  logged-in Chrome, at **08:00, 17:00 and 20:00 ET** *(extras take 11:00 or 23:00, never 14:00, D-2026-09-12c)*,
+  three hours clear of `fola-personal-daily`'s 14:00 AI thread,
   which stays. Auto-publish is approved for this lane as it is for that one. @thearchv.ai Threads now has two
   owners, `fola-personal-daily` unit 3 and `archv-ai-desk` Lane C; fola's unit 3 skips any story the desk has
   threaded (rows in `archv-ai-covered.md`, lane `threads-ai-desk`). Platform cell `Threads @thearchv.ai desk`. Lane C
@@ -1809,6 +1823,139 @@ these hooks as part of their rotation".
   `Scheduled/archv-weekly-match-covers/SKILL.md`, `routines-v2/archv-metrics-desk.md` (STEP 2c, report 3c),
   `REEL-CARD-BANK.md` (pointer) and this file. No scheduled task was created, re-registered or re-enabled.
 
+**D-2026-09-12b (founder, in session): REBUILD THE PRE-BANK QUEUE ON THE HOOK BANK, AND RULE 5 RELAXES.** Founder
+wording: "i want to rebuild our carousels and threads using those hooks", then, asked for scope, "Pre-bank +
+explainers" and "Relax rule 5".
+- **Rule 5 relaxed.** `HOOK-BANK.md` rotation rule 5 no longer bars one account from running the same id on two
+  surfaces on the same day; each surface is its own channel and the four-unit per-channel cooldown still binds. Reason:
+  @thearchv.ai ships about ten units a day across IG and Threads and the bank holds eight @thearchv.ai ids.
+- **The rebuild.** Every unit queued before the bank landed and not yet published is re-hooked from the bank under its
+  rotation: the @thearchv.ai IG news decks and the 25-part explainer series in Buffer, the @thearchv.ai Threads in
+  Content360, and the four folabankole remixes (notification mode unchanged). Story and verified facts stay; the hook,
+  slide 1, caption line 1 and Threads post 1 are rebuilt, and every rebuilt unit re-clears the full gate chain and logs
+  `hookid:<id> hookfam:<family>`. Units that were already built on the bank (the 12 September @thearchvfc, @thearchv.ca
+  and film.joey queue) and the two 08:00 ET 12 September @thearchv.ai units, too close to rebuild, stay as queued.
+
+**D-2026-09-12c (founder, in session): THREE HOURS BETWEEN ANY TWO UNITS ON ONE CHANNEL, CHECKED BEFORE EVERY QUEUE.
+MORE UNITS A DAY IS FINE.** Founder wording: "spread posts out by 3 hours, i dont mind if we have more than the alloted
+a day, just space them out". He then chose, from options put to him, the per-surface scope, the @thearchv.ai
+Instagram grid and the @thearchv.ai Threads arrangement below. **This supersedes the spacing wording of D-2026-09-08a**
+("posts on ONE platform sit at least THREE HOURS apart") and every lane-level spacing line that cites it, which now
+read as this ruling. D-2026-09-08a's cap lift stands.
+- **A channel is one account on one surface**, the list in `HOOK-BANK.md` rotation rule 3, with one difference for
+  spacing: every unit on one account's Instagram shares a channel whatever its format, because they share one Buffer
+  channel and one feed. So: IG @thearchvfc (step 7 carousel, match carousel, MLS Weekly, stat card reel), Threads
+  @thearchvfc, IG @thearchv.ca (carousels, repost, stat card reel), Threads @thearchv.ca, IG @thearchv.ai (company
+  feature, explainer series, Lane B), Threads @thearchv.ai (Lane C and `fola-personal-daily` unit 3), IG folabankole
+  (unit 1 and the remixes), personal LinkedIn, IG film.joey. An account's Instagram and its Threads are separate
+  channels, so IG @thearchv.ai and Threads @thearchv.ai may post in the same hour. Gaps across accounts are not ruled.
+- **The rule: at least three hours between any two units on one channel, measured `dueAt` to `dueAt`.** Exactly three
+  hours clears. A founder-queued post, a post scheduled natively and a draft carrying a slot all count.
+- **Volume: more units a day than a lane's usual count is fine.** Spacing is the only volume constraint this ruling
+  sets. D-2026-09-08b's one-unit-a-day cap on IG @thearchvfc is LIFTED by D-2026-09-12d.
+- **IG @thearchv.ai runs on a fixed grid: 07:00, 10:00, 13:00, 16:00, 19:00, 22:00 ET.** 07:00 is `ai-company-feature`.
+  10:00 is the founder's explainer series (to 9 October). 13:00, 16:00, 19:00 and 22:00 are `archv-ai-desk` Lane B's
+  news decks, replacing the 15:00, 18:00 and 21:00 of D-2026-09-11h (and D-2026-09-10b's 15:00). No unit on this
+  channel is queued off the grid, except `ai-company-feature`'s earlier move below. Overflow takes the next free grid slot, and the grid runs on through 01:00 and 04:00 ET when the day is full
+  (AMENDED by D-2026-09-12d: overnight is allowed; 07:00 and 10:00 are open to a news deck on any day their owner
+  has nothing queued).
+- **Threads @thearchv.ai:** `fola-personal-daily` unit 3 keeps its daily 14:00 ET slot. Every other thread on the
+  channel, `archv-ai-desk` Lane C and any batch extra, takes the grid 08:00, 11:00, 17:00, 20:00, 23:00 ET and never
+  14:00. Lane C's standing slots stay 08:00, 17:00 and 20:00; extras take 11:00 or 23:00.
+- **Procedure, every desk that queues or schedules, BEFORE the queue call.** List the channel's scheduled posts and
+  slotted drafts within three hours either side of the intended slot: Buffer GraphQL `posts` filtered by `channelIds`
+  and a `dueAt` window (slot minus 3h to slot plus 3h); for Threads @thearchv.ai, Content360's `posts?status=scheduled`
+  list in the founder's Chrome. Nothing inside the window: queue. Anything inside: move to three hours after the latest
+  blocking post and run the check again; on IG @thearchv.ai take the next free grid slot instead, and on Threads
+  @thearchv.ai the next free slot on its grid. Name the move and the blocking post id in the report and the row's
+  `Note`. **A slot never moves EARLIER than the lane's stated time, except where a spec already says so:**
+  `ai-company-feature` moves earlier in 30-minute steps, not before 05:00 ET, and if nothing clears it takes the next
+  free grid slot. A push may land at any hour, overnight included (AMENDED by D-2026-09-12d). Buffer cannot see posts the founder schedules natively (D-2026-08-08b),
+  so an empty listing is the best evidence available, not proof.
+- **Already queued units stay where they are.** A pair under three hours on one channel is a flag in the owning desk's
+  next report and in `archv-metrics-desk`'s roll-call, which audits spacing by this channel definition; a desk re-times
+  only its own unit, never another owner's.
+- **Files changed, each backed up as `<file>.bak-2026-09-12c`:** `routines-v2/archv-ai-desk.md` (Lane B slots to the grid,
+  Lane C extras, STEP 2), `routines-v2/ai-company-feature.md` (spacing step), `routines-v2/archv-football-desk.md` (standing
+  rules, 7b, 7c, 8, 8b; Sunday stat card reel 18:00 to 17:00), `routines-v2/archv-metrics-desk.md` (STEP 3 spacing audit),
+  `lanes.tsv` (comments), and the pointer paragraph in `~/.claude/scheduled-tasks/` `archv-ai-desk`, `ai-company-feature`,
+  `archv-football-desk`, `threads-ca-daily`, `fola-personal-daily`, `fola-personal-remix-weekly`, `film-joey-daily`, plus
+  `film.joey/RUNBOOK.md`, `Scheduled/archv-weekly-desk/SKILL.md`, `Scheduled/archv-weekly-match-covers/SKILL.md` and
+  `Scheduled/linkedin-weekly-idea-refill/SKILL.md`. No scheduled task was created, re-registered, enabled or disabled.
+
+
+### RATIFIED 2026-09-12, football desk session (founder, in chat with the football desk: "1A, 2A you do the update now, 3C, 4 loosen this rule in canon one source is fine for carousels, 5A, 6A 7A 8B")
+
+*(Numbered f to i because another session recorded D-2026-09-12b and D-2026-09-12c the same morning.)*
+
+**D-2026-09-12f (founder, 1A): @thearchv.ca QUESTION SHAPES REPEAT BY DAY, NOT BY THREE DAYS.** The
+account runs three Instagram units a day and D-2026-09-11a requires captions to name options, so the
+eight sanctioned shapes could not also stay unrepeated for three days. On IG @thearchv.ca (carousels and
+stat card reel together) no question shape repeats WITHIN THE SAME DAY; the three-day no-repeat rule no
+longer applies there. @thearchvfc and every other channel keep the three-day rule unchanged.
+
+**D-2026-09-12g (founder, 2A): MLS WEEKLY GETS ITS OWN PLATFORM CELL, `IG MLS Weekly @thearchvfc`.** The
+Sunday step 7b unit logged `IG @thearchvfc`, the daily carousel's key, so it had no liveness surface since
+2026-08-24 (plan 6e, GRAPH-ARCHITECTURE guardrail 1). It now logs `Platform` `IG MLS Weekly @thearchvfc`,
+added to the closed Platform list, and `lanes.tsv` keys the `mls-weekly` row on that exact string. It
+still posts to the same Instagram account and channel; only the log cell changes. This closes plan 6e.
+
+**D-2026-09-12h (founder, 3C): THE MORNING THREADS THREAD MAY COVER ANY CLUB WHEN IT IS THE STRONGEST
+STORY.** Supersedes the "Non-United material does not go to Threads" line of D-2026-07-24d for the
+@thearchvfc Threads thread. The evidence was the Tzolis thread about Arsenal, which out-drew most
+Manchester United threads (Threads review, 2026-09-10). Manchester United stays the default and the
+tiebreak; a rival-club thread runs when its argument is genuinely the day's best, never as bait. Every
+other Threads rule stands: status labels, sourcing, one thread a day, the topic tag per memory
+`archv-threads-topic.md` ("Manchester United" when the thread touches United at all, otherwise "Football").
+
+**D-2026-09-12i (founder, 4): ONE NAMED SOURCE IS ENOUGH FOR A FACT ON A CAROUSEL.** Loosens the
+two-source rule (the Verification digest above, EDITOR_STANDARDS, DESK-LESSONS 32) for CAROUSELS: every
+Instagram carousel on every account, match covers and pre-match decks included, plus that carousel's own
+caption and first comment. A fact on a carousel may ship on ONE source when all of these hold: the source
+is NAMED on the card or in the caption; it is a dated page from a reputable outlet, an official body or a
+data provider, read live at build (freshness gate D-2026-08-03c unchanged); it is the originating report,
+not an aggregator re-carrying someone else's story; quotes stay verbatim from that source. Where two
+reputable sources conflict, pin the provider or drop the fact, as before. It directly answers the
+match-cover blocker (the head-to-head slide that failed 4 of 5 fixtures on 2026-09-03): one named source
+now clears it. **Unchanged, still two sources:** the Threads threads, site and app articles (Answer Desk
+included), the Dispatch, and the stat card reel's number (which already allows a single pinned Opta
+measurement). Transfer status labels, the shut-window rule (D-2026-09-09d), the highest-named-fee rule
+and "a search-result AI summary is never a source" all stand. A founder word can narrow this later.
+
+**D-2026-09-12j (founder, in chat, same session): THE LEAD LINE IS "Football with no betting ads. Ever."**
+Founder wording: 'on the website, update "Football has a memory. We are the archive." to "Football with no
+betting ads. Ever" / we will lead with that going forward'. It replaces "Football has a memory. We are the
+archive." as the brand's positioning and lead line: the thearchv.ca masthead tagline carries it from
+2026-09-12 (index.html, commit cddc7bd), and `brand-voice-guidelines.md` names it as the positioning line.
+The claim is about BETTING advertising only and stays true by policy (the values variant 8 of the D-2026-07-22
+CTA pool, founder 2026-08-07); it never widens into "no ads" on a site surface, because the site's
+monetisation ladder plans other advertising (D92, D-2026-08-13a). Old appearances of the retired line in
+archived CTA sets and history stay as history.
+
+**5A and 6A, recorded:** the hook bank of D-2026-09-12a is "the new hooks" (no other file); the three
+1956 Manchester United faces (Busby, Viollet, Taylor) are generated for future nostalgia decks from
+public-domain photos whose own descriptions name each man, then sent for the founder's likeness check.
+**7A:** the scheduled tasks that run without writing their brain row get their one-line
+`append_log.sh` step added. **8B:** the benched Bruno v Haaland match cover draft
+6aa4f27db14561684f7c318f was deleted from Buffer (never published).
+
+
+**D-2026-09-12d (founder, in session): THREE ANSWERS THAT FINISH D-2026-09-12c.** Put to him as multiple choice the
+same morning:
+- **The @thearchvfc cap is lifted.** Asked whether "more than the alloted a day" lifts D-2026-09-08b's one-unit-a-day
+  cap on IG @thearchvfc, he chose "Lift it". IG @thearchvfc may run more than one unit a day; the three-hour spacing of
+  D-2026-09-12c is the only volume constraint on it. D-2026-09-08b's cap is superseded; its Sunday and reel carve-outs
+  are moot.
+- **Overnight is allowed.** Asked whether a post pushed later may land overnight (after 23:00 or before 07:00 ET), he
+  answered "yes, thats fine". A three-hour push may land at any hour on every channel. On IG @thearchv.ai the grid runs
+  on through 01:00 and 04:00 ET before a deck rolls to the next day. "Never overnight" wording in any spec is void.
+- **07:00 and 10:00 on IG @thearchv.ai are open when free.** He chose "Open when free": on a day with no
+  `ai-company-feature` or explainer queued, a Lane B news deck may take the empty 07:00 or 10:00 grid slot.
+- Files amended, each backed up as `<file>.bak-2026-09-12d`: this file (D-2026-09-12c amended in place, D-2026-09-08b
+  noted) and the spacing lines in `routines-v2/archv-ai-desk.md`, `routines-v2/ai-company-feature.md`,
+  `routines-v2/archv-football-desk.md`, `film.joey/RUNBOOK.md`, the `~/.claude/scheduled-tasks/` SKILL.md files of
+  `ai-company-feature`, `archv-ai-desk`, `archv-football-desk`, `fola-personal-remix-weekly`, `film-joey-daily` and
+  `fola-personal-daily`, and `Scheduled/` `archv-weekly-desk`, `archv-weekly-match-covers`, `linkedin-weekly-idea-refill`.
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)
 1. **brand-voice-CHEATSHEET.md** — the daily operating reference (voice, the loops, pillar mix, format doctrine, visual identity, credit reality, handle lock). Open the full brand-voice-guidelines.md ONLY for a specific edge case, one § at a time.
 2. **business-review-and-goals.md** — the RATIFIED plan. Its calls override any OLDER conflicting document, but **§0 outranks it**: where the two disagree, §0 is the operative version and the plan line is stale. (United-core ~40%, comment-CTA fix, Tue/Fri LinkedIn, illustrated-only, verify-first, newsletter REVIVED on Substack 2026-06-20 [supersedes the old "KILLED D78"], owned asset = thearchv.ca D79.) Its **"carousels 1–2/wk" line is superseded** by the daily cadence in §0 (D-2026-08-03, D-2026-08-04a, D-2026-08-04m).
@@ -2425,7 +2572,8 @@ Supersedes D-2026-07-15c in part. Threads is no longer a verbatim mirror of ever
 It is now a Manchester United surface running a deliberate mix of image posts and text-only
 posts, alternating so the same format never ships twice in a row. The daily United thread still
 duplicates from X; the mix governs everything Threads carries beyond that. Non-United material
-does not go to Threads. Implements the social side of D-2026-07-24c.
+does not go to Threads. **SUPERSEDED for the @thearchvfc morning thread by D-2026-09-12h (2026-09-12): any club
+when it is the strongest story.** Implements the social side of D-2026-07-24c.
 
 ## D-2026-07-24e: TikTok statics become British-VO video, built for CRP length (founder)
 

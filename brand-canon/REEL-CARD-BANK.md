@@ -8,6 +8,8 @@ build: the FIRST card makes a claim and withholds the number, the highlights car
 middle, the LAST card lands the number. The answer never appears before the last card.
 That is REEL-ARC's open-loop rule applied to the phone lane.
 
+> Hook templates and their rotation live in `HOOK-BANK.md` (canon D-2026-09-12a); this file keeps the build rules, hook doctrine v3 and the ten pairs.
+
 ## Templates (render-ready)
 
 In `brand/reel-first-frame/`:

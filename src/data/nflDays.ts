@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-12",
+    day: "Saturday",
+    headline: "Why has the Hall of Fame rewritten its voting rules?",
+    dek: "The Pro Football Hall of Fame cut its selection committee from 50 members to 25, plus three alternates, seven months after Bill Belichick was left off the 2026 induction class in his first year of eligibility.",
+    body: "The Pro Football Hall of Fame has torn up its own rulebook. The selection committee is cut from 50 members to 25 voters, plus three rotating alternates, the most sweeping change to how it picks inductees in years, per ESPN and Fox Sports.\n\nGone is the old requirement that each of the 32 NFL markets supply its own selector, a structure the Hall said had produced \"unintended biases.\" The separate seniors category folds into one pool for every eligible player. In-person deliberation returns for the first time since the pandemic, according to both outlets. The new system takes effect with the Class of 2027.\n\nHall of Fame President Jim Porter framed it as routine housekeeping: \"The Hall continually reviews its bylaws to ensure the selection process reflects the highest standards of integrity,\" he said, per Fox Sports.\n\nThe timing points elsewhere. Bill Belichick, the six-time Super Bowl-winning head coach, was left off the 2026 induction class in his first year of eligibility, announced 6 February, a snub ESPN and Fox Sports both report drew public scrutiny and helped prompt the review. Neither outlet quotes the Hall connecting the two directly.\n\nFox Sports reports the overhaul also drops the \"finalist\" designation and sets an 80 per cent voting threshold, meaning 20 of the 25 selectors must now agree on a candidate.\n\nWhether the smaller room changes the outcome for Belichick himself will not be known until the Class of 2027 is announced.",
+    status: "verified",
+    seoTitle: "Belichick snub: Hall of Fame cuts voting panel 50 to 25",
+  },
+  {
     date: "2026-09-11",
     day: "Friday",
     headline: "Who won the NFL season opener in 2026?",

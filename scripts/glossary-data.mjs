@@ -1,4 +1,4 @@
-/* scripts/glossary-data.mjs — the evergreen glossary entries (sixty-one as of 2026-09-11), read by
+/* scripts/glossary-data.mjs — the evergreen glossary entries (sixty-two as of 2026-09-12), read by
    scripts/build-glossary-pages.mjs. Each entry:
      slug     URL segment under /glossary/
      title    the term as it reads as an <h1> (e.g. "xG (expected goals)")
@@ -849,5 +849,19 @@ export const glossaryEntries = [
       "Because the criteria are published fresh each cycle and often close to the qualifying period beginning, the safest thing to say about any particular edition is what has been confirmed for it rather than what applied last time. A player asking how to make the team is really asking about that cycle's published rules.",
     ],
     related: ["liv-and-dp-world-tour", "fedex-cup", "cut-line"],
+  },
+  {
+    slug: "manchester-derby",
+    title: "The Manchester derby",
+    question: "What is the Manchester derby?",
+    seoTitle: "Manchester derby: Manchester United v Manchester City",
+    answer:
+      "The Manchester derby is the football match between Manchester United and Manchester City, the two big clubs of the same city. The first recorded meeting was a friendly on 12 November 1881, when Newton Heath, later Manchester United, won 3-0 at St. Mark's (West Gorton), later Manchester City.",
+    depth: [
+      "Neither club carried its modern name when the fixture began. Newton Heath and St. Mark's (West Gorton) were two of many young sides in the Manchester area in 1881, and the first meeting had no special significance at the time. A local paper, the Ashton Reporter, called it a pleasant game.",
+      "The two grounds sit about four miles apart. Manchester United play at Old Trafford, and Manchester City moved to the City of Manchester Stadium, now known as the Etihad Stadium, for the 2003-04 season and won the first derby played there 4-1, on 14 March 2004.",
+      "The fixture has produced some lopsided scores. On 23 October 2011 Manchester City won 6-1 at Old Trafford in the Premier League, with Mario Balotelli and Edin Dzeko scoring twice each.",
+    ],
+    related: ["var", "xg", "pressing"],
   },
 ];

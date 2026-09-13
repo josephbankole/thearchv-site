@@ -2005,6 +2005,34 @@ session. Stat card reels are single cards and are not carousels; they are unchan
   `~/.claude/scheduled-tasks/archv-football-desk/SKILL.md` (pointer), `scripts/carousel_structure_lint.py`. The
   `archv-weekly-match-covers` and `archv-archive-marketing-desk` specs are NOT edited by this desk (one writer); they
   inherit this through canon, flagged in the 2026-09-13 football desk report.
+- **Confirmed by the founder the same session: "ok for the mls weekly drop to four or five".** MLS Weekly's future
+  editions are four or five slides. (The pre-match deck's fold from 8 to 10 to four or five is this desk's reading
+  of "four or five by story" and was put to him in the same report; a founder word can reverse it.)
+
+**D-2026-09-13b (founder, same session): MATCH COVERS ARE DROPPED FOR NOW.** Founder wording: "lets drop match
+covers for now, people are not engaging with it". The `archv-weekly-match-covers` lane is PAUSED: the Thursday
+slot of `archv-weekly-desk` builds and queues nothing, its SKILL.md carries a PAUSED banner, and the `match-covers`
+row in `lanes.tsv` is commented out so no roll-call reads it FAILED. The step 7 match-day standdown (lane 1) can
+no longer fire while the lane is paused, so on a Manchester United match day step 7's predicted-lineups lane takes
+the slot as usual. The one draft the lane left in Buffer (Manchester United v Brighton and Hove Albion, League
+Cup, 16 September, 6aa4f3816de2aa21d8b789b4) stays a DRAFT and publishes nothing; it was not deleted. The
+football desk's own pre-match carousel (`PREMATCH-CAROUSEL.md`, Premier League and Champions League eves) is a
+different lane and is NOT paused by this ruling unless the founder says so. Resumes only on a founder word.
+Files changed, backed up `<file>.bak-2026-09-13b`: this file, `Scheduled/archv-weekly-match-covers/SKILL.md`,
+`Scheduled/archv-weekly-desk/SKILL.md`, `fifa.archv/lanes.tsv`, `routines-v2/archv-football-desk.md`.
+
+**D-2026-09-13c (founder, same session): THE STAT CARD REELS CARRY A LARGE IMAGE OF THE PLAYER.** Founder wording: "i
+also want the same update for our stat reels, they should also include a large image of the player, to trigger
+engagement". Every stat card reel on @thearchvfc and @thearchv.ca (D-2026-09-11b, steps 7c and 8b) carries one of our
+illustrated portraits as a FULL-BLEED band across the top 1000px of the 1080x1920 card, fading into the pair's ground,
+with the claim, number, label, context and source moved into y=760 to 1470, inside the Reels safe zone. The 190px
+corner roundel is retired. **A reel without a face does not ship:** `scripts/stat_card_reel.py` now fails its gate
+with no `art` (the old `head` key maps onto the band), so the pick is a number whose subject has, or can get, an
+identity-proven, era-correct, club-correct face. Template `brand/stat-card-reel/stat-card.html`, both files backed up
+`.bak-2026-09-13c`. Applied the same day: the 17:00 @thearchvfc reel moved from a typographic George Best card (no
+era-correct face provable: the 1965 Commons photo is too small, the 1976 one shows him at 30 in Northern Ireland
+colours) to Wayne Rooney's 253, the club record (Goal; Wikipedia; ESPN), on his banked face, which the founder
+passed in session; the 21:00 @thearchv.ca Sabalenka reel was re-rendered with the large portrait.
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)
 1. **brand-voice-CHEATSHEET.md** — the daily operating reference (voice, the loops, pillar mix, format doctrine, visual identity, credit reality, handle lock). Open the full brand-voice-guidelines.md ONLY for a specific edge case, one § at a time.
 2. **business-review-and-goals.md** — the RATIFIED plan. Its calls override any OLDER conflicting document, but **§0 outranks it**: where the two disagree, §0 is the operative version and the plan line is stale. (United-core ~40%, comment-CTA fix, Tue/Fri LinkedIn, illustrated-only, verify-first, newsletter REVIVED on Substack 2026-06-20 [supersedes the old "KILLED D78"], owned asset = thearchv.ca D79.) Its **"carousels 1–2/wk" line is superseded** by the daily cadence in §0 (D-2026-08-03, D-2026-08-04a, D-2026-08-04m).

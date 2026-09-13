@@ -1438,7 +1438,8 @@ application, not access. A louder note fixes nothing, which is the same finding 
 
 **THE BUILD RULES, binding on every carousel this operation ships.**
 
-- **Four slides.** Slide 2 must stand alone as its own hook, because Instagram re-serves an
+- **Four slides.** *(On @thearchvfc and @thearchv.ca: four or five by story, a full-bleed
+  illustration on every slide, at most 24 words a card, D-2026-09-13a.)* Slide 2 must stand alone as its own hook, because Instagram re-serves an
   unswiped carousel starting from the second slide. Withhold the payoff NUMBER to the last card,
   never the subject. Sanctioned slide-count exceptions are unchanged (D-2026-08-24e).
 - **LESS WORDY. The word budgets are the ceiling, not the target:** claim 8 words, body 12.
@@ -1963,6 +1964,47 @@ same morning:
   `routines-v2/archv-football-desk.md`, `film.joey/RUNBOOK.md`, the `~/.claude/scheduled-tasks/` SKILL.md files of
   `ai-company-feature`, `archv-ai-desk`, `archv-football-desk`, `fola-personal-remix-weekly`, `film-joey-daily` and
   `fola-personal-daily`, and `Scheduled/` `archv-weekly-desk`, `archv-weekly-match-covers`, `linkedin-weekly-idea-refill`.
+
+
+### RATIFIED 2026-09-13 (founder, in chat with the football desk)
+
+**D-2026-09-13a (founder): EVERY CAROUSEL ON @thearchvfc AND @thearchv.ca IS BUILT THE SHELTON x RODMAN WAY.**
+Founder wording: "the Trinity Rodman x Ben Shelton carousel did really well / i want all future carousels from now on
+to use the same workflow, add illustrated pictures to very slide, minimal words and the same structure", then "most
+important the player illustrations should cover as much space as they did for Shelton x Rodman, the small circular
+portraits are having no impact". Evidence: the 2026-09-09 unit is the account's most-shared post (44 shares,
+D-2026-09-11a) against a desk median of 0 saves and 0 shares (1 to 7 September). Scope and count chosen by him from
+options put to him the same session: **@thearchvfc and @thearchv.ca only** (IG @thearchv.ai, folabankole and LinkedIn
+documents keep their own looks), **four or five slides by story**, and the already-queued 13 September predicted XI
+left as built. Binds every builder on those two accounts, not only this desk: `archv-football-desk` (steps 7, 7b, 8,
+the bench repost), `archv-weekly-match-covers`, `archv-archive-marketing-desk` promo carousels, and any founder
+session. Stat card reels are single cards and are not carousels; they are unchanged.
+- **THE PICTURE IS THE SLIDE.** Every slide carries one of our illustrated portraits as a FULL-BLEED band across the
+  top of the frame, edge to edge, fading into flat ground under the copy. **Band depth at least 1080px of a 2700px
+  frame (40%), 1540px (57%) on the hook slide**, the Shelton x Rodman geometry (`scripts/render_shelton_rodman.py`,
+  `art_band()`, 520px scrim). **Small circular portraits, discs and roundels are RETIRED on these two accounts.** The
+  standing "one mark per slide, top-right" disc rule now means ARCHV typographic discs only, never a face.
+- **A face on every slide, including the table, the read and the last card.** Build-rule slide 3's real thing (the
+  live table, the stat stack) sits UNDER the band, compact. The last card carries the subject again, or the pair, with
+  the question and the send cue. Faces come from the bank, era-correct and club-correct kit, generated to
+  `headshot-guidelines.md` and the GPT Image 2 verbatim prompt when missing; identity checked on the reference per
+  memory `headshot-reference-identity-check`. Never a Wikimedia photograph (D-2026-09-09a). **A 1024px square bank face
+  goes soft at 2160px wide: upscale it or generate a wide painted scene** (Shelton x Rodman used 3504x2336 art).
+- **Minimal words.** Budgets unchanged as ceilings (claim 8, body 12), and **at most 24 words of copy a reader meets on
+  any one card** (claim, body, stat rows and quotes counted; kicker, handle and source line not). No paragraph subs.
+- **Same structure, people first.** Slide 1: the name lockup or a story claim over the hero portrait. Middle slides:
+  one person or one piece of evidence each, their face above their fact. Last: the desk's read or the payoff, face
+  above, the question and the send cue. Four slides for one subject, five when two people each earn a slide. Every
+  D-2026-09-09a build rule, the withheld payoff, the D-2026-09-11a caption and the full gate chain still bind.
+- **ENFORCED IN CODE:** `carousel_structure_lint.py --art-rules archv` (added 2026-09-13) fails a slide with no `art`,
+  a band under 1080px, a disc layout, over 24 words of card copy, or a deck outside four to five slides. Every
+  @thearchvfc and @thearchv.ca carousel runs it; exit 0 or nothing queues. The longer sanctioned counts on these two
+  accounts fold to four or five for future editions: MLS Weekly's up-to-seven (R5), one scorer per slide and the rest
+  on a roll-call card, and the pre-match deck's 8 to 10 (`PREMATCH-CAROUSEL.md`), the top fixtures only.
+- Files changed, each backed up `<file>.bak-2026-09-13a`: this file, `routines-v2/archv-football-desk.md`,
+  `~/.claude/scheduled-tasks/archv-football-desk/SKILL.md` (pointer), `scripts/carousel_structure_lint.py`. The
+  `archv-weekly-match-covers` and `archv-archive-marketing-desk` specs are NOT edited by this desk (one writer); they
+  inherit this through canon, flagged in the 2026-09-13 football desk report.
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)
 1. **brand-voice-CHEATSHEET.md** — the daily operating reference (voice, the loops, pillar mix, format doctrine, visual identity, credit reality, handle lock). Open the full brand-voice-guidelines.md ONLY for a specific edge case, one § at a time.
 2. **business-review-and-goals.md** — the RATIFIED plan. Its calls override any OLDER conflicting document, but **§0 outranks it**: where the two disagree, §0 is the operative version and the plan line is stale. (United-core ~40%, comment-CTA fix, Tue/Fri LinkedIn, illustrated-only, verify-first, newsletter REVIVED on Substack 2026-06-20 [supersedes the old "KILLED D78"], owned asset = thearchv.ca D79.) Its **"carousels 1–2/wk" line is superseded** by the daily cadence in §0 (D-2026-08-03, D-2026-08-04a, D-2026-08-04m).
@@ -3485,3 +3527,19 @@ website and blog posts as well." Encoded as:
   changes only through the appended-correction mechanism in EDITOR_STANDARDS.md; silent rewrites
   of live articles stay prohibited. The in-flight Amorim feature (drafts ~11 Aug) writes in the
   new voice from the start.
+
+**D-2026-09-12k (founder, in session, 2026-09-12): THE ARCHIVE PACKS, THE STORE RULES AND THE ARCHIVE MARKETING DESK.**
+- Six packs of ten plates, all code-rendered, launching together on 1 Nov 2026 in one cart: Every Four Years (men's and women's tournament), The Red Half (Manchester United men and women), Canada, Minute by Minute (men and women). Gumroad thearchv.gumroad.com: US$29 digital, US$49 collector, bundle Sixty Moments US$119/US$199. Etsy TheARCHVCA Printful prints list 6 Nov. Build root `fifa.archv/ARCHIVE-PACKS/`.
+- Sold plates: no faces, no marks. The founder kept three faceless figures. The storefront is MARK-FREE: no competition, club, stadium, federation or player names; stadiums appear as city + coordinates. Names live only in PDF passages and Substack editorial.
+- STORES NEVER MENTION AI (founder: "dont mention AI anywhere in our stores"). They also never claim the opposite ("no AI", hand-drawn). AI declaration fields stay as found. Store lead claims: "No photography lifted from anyone." and "Every design original."
+- Etsy, 2026-09-12:
+  - retitled mark-free;
+  - FAQ "licensed by FIFA" answer replaced;
+  - 7 listings paused (2 portrait magazine covers, Tapstitch portrait tee, Moscow 2018 tee, and 3 posters whose print file is a framed-on-wall photo).
+  - The v1 poster images get swapped for the v2 plates after founder QC (pre-authorised).
+- Munich 1958 memorial plate: pack only, never listed alone.
+- ARCHIVE MARKETING DESK `archv-archive-marketing-desk` (spec `routines-v2/archv-archive-marketing-desk.md`): daily 07:30 ET, local, Opus 5, caveman.
+  - May AUTO-PUBLISH: Threads and Facebook via Buffer, Instagram @thearchvfc promo units (automatic), and Substack Notes.
+  - Reddit stays drafts only. Nothing ever goes to @folabankole Threads, and folabankole Instagram stays manual.
+  - Obeys D-2026-09-12c spacing and the full gate chain.
+  - Flags boost-worthy organic posts to the founder by push notification plus a log line; never spends money.

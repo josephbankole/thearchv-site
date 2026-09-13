@@ -421,6 +421,16 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .poster__host { font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-dim); text-align: right; }
 .poster__title { margin-top: 0.35rem; font-size: 0.95rem; color: var(--cream-dim); }
 .archive__hint { margin-top: 2.5rem; }
+/* The archive, grouped by pack: one head (name, line, "Get the pack") and one rail per pack. */
+.archive__packs { margin-top: 3rem; display: grid; gap: clamp(3rem, 7vw, 5rem); }
+.archive__pack .rail { margin-top: 1.5rem; }
+.archive__pack .archive__hint { margin-top: 1.5rem; }
+.archive__pack .poster { width: clamp(180px, 22vw, 280px); }
+.archive__pack-head { display: grid; gap: 0.35rem; }
+.archive__pack-name { font-family: var(--serif); font-weight: 360; font-size: clamp(1.3rem, 2.4vw, 1.75rem); color: var(--cream); margin: 0; }
+.archive__pack-line { color: var(--cream-dim); max-width: 60ch; margin: 0; }
+.archive__pack-cta { justify-self: start; }
+.archive__bundle { margin-top: 0.5rem; }
 .rail__progress { display: block; height: 1px; background: var(--cream-faint); position: relative; }
 .rail__progress::after { content: ''; position: absolute; left: 0; top: 0; height: 1px; width: var(--p, 10%); background: var(--gold); transition: width 0.1s linear; }
 
@@ -510,6 +520,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .lightbox__fig figcaption { text-align: center; color: var(--cream-dim); font-size: 0.95rem; max-width: 50ch; }
 .lightbox__fig figcaption strong { color: var(--cream); font-family: var(--serif); font-weight: 360; display: block; font-size: 1.2rem; margin-bottom: 0.3rem; }
 .lightbox__shop { margin-top: 0.25rem; }
+.lightbox__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
+.lightbox__pack { display: block; margin-top: 0.4rem; font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase; }
 .lightbox__shop[hidden] { display: none; }
 
 /* ---------- mobile follow bar ---------- */

@@ -267,10 +267,10 @@
         <div class="wrap">
           <p class="section-index">05 / The archive</p>
           <h2 class="archive__title" data-reveal>From the archive.</h2>
-          <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it. Every final, Mexico 1970 through Lusail 2022. Drag to explore.</p>
+          <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it. Sixty moments across six archives, each one drawn as a plate for the wall. Drag to explore.</p>
         </div>
-        <div class="rail" id="rail" role="list" aria-label="Poster archive"></div>
-        <div class="wrap archive__hint"><span id="rail-progress" class="rail__progress" aria-hidden="true"></span></div>
+        <!-- One rail per archive pack, built by src/components/archiveRail.ts from src/data/posters.ts. -->
+        <div class="archive__packs" id="archive-packs"></div>
         <!-- The finals cover line: magazine-cover matte posters, linked to their Etsy listings. -->
         <div class="wrap archive__covers">
           <h3 class="archive__reads-title">New &middot; The finals cover line</h3>
@@ -463,7 +463,10 @@
       <figure class="lightbox__fig">
         <img id="lightbox-img" alt="ARCHV poster preview" />
         <figcaption id="lightbox-cap"></figcaption>
-        <a id="lightbox-shop" class="btn btn--gold lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Buy Now</a>
+        <div class="lightbox__ctas">
+          <a id="lightbox-pack" class="btn btn--gold lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Get the pack</a>
+          <a id="lightbox-shop" class="btn btn--ghost lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Buy the print</a>
+        </div>
       </figure>
     </div>
 

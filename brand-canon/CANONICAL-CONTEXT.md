@@ -2033,6 +2033,43 @@ identity-proven, era-correct, club-correct face. Template `brand/stat-card-reel/
 era-correct face provable: the 1965 Commons photo is too small, the 1976 one shows him at 30 in Northern Ireland
 colours) to Wayne Rooney's 253, the club record (Goal; Wikipedia; ESPN), on his banked face, which the founder
 passed in session; the 21:00 @thearchv.ca Sabalenka reel was re-rendered with the large portrait.
+
+**D-2026-09-13d (founder, same session): EVERY HEADSHOT IS MADE EXACTLY THE WAY THE SHELTON x RODMAN ART WAS MADE. THAT
+ART IS THE QUALITY BAR; ANYTHING BELOW IT FAILS.** Founder wording: "i dont like some of the headshots, replace all with
+the same style and prompt i used for shelton x rodman. same model, and prompt, i want consistent results always in the
+same style", then "the bar is the shelton and rodman images, if they are not of that quality, they fail".
+- **The exact job settings, read from the three Shelton x Rodman Higgsfield jobs (0bd4f4ea, 0575931d, 44704700,
+  9 September 2026):** model `gpt_image_2`; prompt, verbatim and nothing added, "High-realism illustrated portrait,
+  cinematic and painterly, lifelike but not a photograph, based on the supplied reference photo for accurate likeness.
+  Not photoreal. "; `aspect_ratio` **3:2**; `resolution` **4k**; `quality` **high** (output 3504x2336); the reference
+  photo in `medias` with role `image`. About 11 credits a face. **This supersedes the 2026-09-11 headshot order's
+  "1:1, 2k, quality medium"**, which is where today's thinner faces came from. Check the job echo every time.
+- **The reference does the work.** Same as Shelton x Rodman: a sharp, upper-body 3:2 crop of an identity-proven photo
+  (memory `headshot-reference-identity-check`: the file's own description names the person, plus an eye cross-check),
+  era- and club-correct where one exists. Crests, sponsors, maker's marks and lettering are painted out of the
+  REFERENCE before generation (never by adding to the prompt). A reference whose face is too small or soft to reach the
+  bar is rejected, not upscaled.
+- **No substitutes for the real generation:** no outpaint, local widening, upscaling of an old face, or reuse of a bank
+  face made any other way (earlier 1:1/2k/medium jobs, nano_banana, the navy-gold style, the multisport staging
+  squares). Such a face is regenerated at these settings on its next use. Carousel bands and reel bands crop the one
+  3:2 image; two-up bands use two 3:2 images.
+- **The bar is judged by eye against the Shelton x Rodman slides before anything queues.** A face that does not reach
+  it fails: regenerate or hold the unit. Brand marks that still appear in the output are painted out at build.
+- Applied the same session to every face in the day's queued units (Zverev, Warner, Rooney, Griezmann, Lewandowski,
+  Son, Sabalenka). Files changed, backed up `.bak-2026-09-13d`: this file, `routines-v2/archv-football-desk.md`,
+  `headshot-guidelines.md` (pointer). Memory `headshot-prompt-gpt-image-2-verbatim` updated to these settings.
+- **APPROVED AND APPLIED, same session.** The founder reviewed the rebuilt set and answered "good, update memory and
+  canon". Eight new jobs at these settings (Zverev b29f6a94, Rooney caa89937, Griezmann 854d1f07, Lewandowski 56bd11d5,
+  Son e8ddff02, Sabalenka a7e84794, Warner 683348fe; Shelton kept the Shelton x Rodman original) went into every queued
+  unit of the day by `editPost` (media commit e3fe2b1, `*-sr` files), read back with first comments intact:
+  6aa6834f7da3ee968d13e0d6, 6aa689ceef4d6e3778c9cb9e, 6aa68359bcabda92e1ac8285, 6aa687f97da3ee968d145458,
+  6aa68360bcabda92e1ac8396. Bank rows under "2026-09-13 SHELTON x RODMAN RECIPE" in `player-headshot-bank.md`.
+- **Reference-prep practice learned applying it (binding):** crop the reference to 3:2 upper body first; paint crests,
+  sponsors, maker's marks and stripes out of the REFERENCE; where a background carries a mark (the Champions League
+  starball behind Rooney), blur the whole background of the reference, because the model repaints what it sees and
+  patching the output afterwards leaves a visible block (tried and rejected the same session, job 3db5a003 unused).
+  A reference whose own description does not name the person is replaced (Son's BFA 2023 file), and one too small to
+  carry a likeness is replaced by its larger original (Lewandowski's 321px crop by the 1600px source).
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)
 1. **brand-voice-CHEATSHEET.md** — the daily operating reference (voice, the loops, pillar mix, format doctrine, visual identity, credit reality, handle lock). Open the full brand-voice-guidelines.md ONLY for a specific edge case, one § at a time.
 2. **business-review-and-goals.md** — the RATIFIED plan. Its calls override any OLDER conflicting document, but **§0 outranks it**: where the two disagree, §0 is the operative version and the plan line is stale. (United-core ~40%, comment-CTA fix, Tue/Fri LinkedIn, illustrated-only, verify-first, newsletter REVIVED on Substack 2026-06-20 [supersedes the old "KILLED D78"], owned asset = thearchv.ca D79.) Its **"carousels 1–2/wk" line is superseded** by the daily cadence in §0 (D-2026-08-03, D-2026-08-04a, D-2026-08-04m).

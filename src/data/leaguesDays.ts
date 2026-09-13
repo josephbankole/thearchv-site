@@ -7,6 +7,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-13",
+    day: "Sunday",
+    headline: "Arsenal went top on Saturday night, and the Manchester derby decides how far clear they stay",
+    dek: "Arsenal won 2-0 at Sunderland to go three points clear of Manchester City, who play Manchester United at Old Trafford on Sunday. Benjamin Sesko says his shin has healed.",
+    body: "Arsenal lead the Premier League after four games. They won 2-0 at Sunderland on Saturday night through Bruno Guimaraes and a stoppage-time Bukayo Saka penalty, after David Raya had saved Enzo Le Fee's penalty with the score at 0-0, per Sky Sports and Premier League data. That takes Arsenal to 12 points, three clear of Manchester City, who have a game in hand.\n\nThat game is the Manchester derby at Old Trafford on Sunday, kick-off 16:30 BST. Manchester United are 13th with four points from three games, per the Sky Sports table and Premier League data. Only two Manchester United managers have won their first two league derbies, A.H. Albut in 1895 and John Bentley in 1913, per BBC Sport and AllFootball. Michael Carrick won his first, 2-0 in January.\n\nBenjamin Sesko says the shin injury that kept him out for about 16 weeks has healed and he is ready to play, per BBC Sport and PA via Yahoo Sports. \"Now it's healed, so it's perfect,\" he told BBC Sport. Luke Shaw faced a late fitness test, Carrick said on Friday, per ESPN and GiveMeSport, and there has been no update since.\n\nElsewhere on Saturday, promoted Hull City drew 2-2 at Chelsea and sit third, still unbeaten. Tottenham Hotspur have not scored in four league games after a 0-0 draw with Everton, and Liverpool were held 0-0 by Fulham, per Sky Sports and Premier League data.",
+    status: "verified",
+    seoTitle: "Arsenal top the Premier League after a 2-0 win at Sunderland",
+    evergreen: "manchester-derby",
+  },
+  {
     date: "2026-09-12",
     day: "Saturday",
     headline: "Elliot Anderson called Manchester City the kings of Manchester, and Michael Carrick will not use the phrase",

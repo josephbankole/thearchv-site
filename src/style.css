@@ -422,7 +422,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .poster__title { margin-top: 0.35rem; font-size: 0.95rem; color: var(--cream-dim); }
 .archive__hint { margin-top: 2.5rem; }
 /* The archive, grouped by pack: one head (name, line, "Get the pack") and one rail per pack. */
-.archive__packs { margin-top: 3rem; display: grid; gap: clamp(3rem, 7vw, 5rem); }
+.archive__packs { margin-top: 3rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(3rem, 7vw, 5rem); }
+.archive__pack { min-width: 0; }
 .archive__pack .rail { margin-top: 1.5rem; }
 .archive__pack .archive__hint { margin-top: 1.5rem; }
 .archive__pack .poster { width: clamp(180px, 22vw, 280px); }

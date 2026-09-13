@@ -17,7 +17,7 @@
        2026-09-12: the Substack iframe is gone (frame-src is 'none' again) and the page's own
        email form posts to the Dispatch, so form-action names 'self' and the Dispatch only, the
        same rule the article pages follow. Neither script changed, so neither hash did. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-YUohzV260BRDOFt2x+jcE3nj0Rap/wkZqNXokCSPfms=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self' https://thearchvdispatch.substack.com" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-SXUNu5dzLW+HOBxVjfwWVgbB96MlQrYo+pIPjmW+MYw=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self' https://thearchvdispatch.substack.com" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
   <meta property="og:description" content="Every final since 1970, drawn." />
@@ -320,7 +320,7 @@
       <a class="alsoiphone" id="app-store-link" href="https://apps.apple.com/app/id6786508653">Also on iPhone</a>
 
       <nav class="linkrow" aria-label="More from The ARCHV">
-        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a><span class="sep">·</span><a class="quiet" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Store</a>
+        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a><span class="sep">·</span><a class="quiet" href="https://thearchv.gumroad.com" target="_blank" rel="noopener noreferrer">Store</a>
       </nav>
 
       <div class="strip" aria-label="From the poster archive">
@@ -393,7 +393,7 @@
       bindCta(document.getElementById('today-card'), 'today_card');
       bindCta(document.getElementById('today-cta'), 'today_cta');
       document.querySelectorAll('.linkrow .quiet').forEach(function (a) {
-        bindCta(a, a.href.indexOf('substack') > -1 ? 'dispatch' : a.href.indexOf('etsy') > -1 ? 'store' : 'archive');
+        bindCta(a, a.href.indexOf('substack') > -1 ? 'dispatch' : a.href.indexOf('gumroad') > -1 ? 'store' : 'archive');
       });
 
       // Today's lead, from the same feed the iOS app reads. Point the card and the gold

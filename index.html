@@ -84,7 +84,7 @@
               "https://thearchvdispatch.substack.com",
               "https://www.linkedin.com/company/thearchvfc/",
               "https://x.com/thearchvfc",
-              "https://www.etsy.com/shop/TheARCHVCA",
+              "https://thearchv.gumroad.com",
               "https://apps.apple.com/app/id6786508653",
               "https://flipboard.com/@thearchv"
             ]
@@ -189,7 +189,7 @@
           <span class="masthead__panel-sep" role="separator"></span>
           <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
           <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
-          <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
+          <a class="masthead__panel-link" href="https://thearchv.gumroad.com" target="_blank" rel="noopener noreferrer" data-shop="masthead">Shop</a>
           <a class="masthead__panel-link masthead__app" href="https://apps.apple.com/app/id6786508653">App</a>
         </nav>
         </div>
@@ -260,10 +260,10 @@
         <div class="wrap">
           <p class="section-index">05 / The archive</p>
           <h2 class="archive__title" data-reveal>From the archive.</h2>
-          <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it. Every final, Mexico 1970 through Lusail 2022. Drag to explore.</p>
+          <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it. Sixty moments across six archives, each one drawn as a plate for the wall. Drag to explore.</p>
         </div>
-        <div class="rail" id="rail" role="list" aria-label="Poster archive"></div>
-        <div class="wrap archive__hint"><span id="rail-progress" class="rail__progress" aria-hidden="true"></span></div>
+        <!-- One rail per archive pack, built by src/components/archiveRail.ts from src/data/posters.ts. -->
+        <div class="archive__packs" id="archive-packs"></div>
         <!-- The finals cover line: magazine-cover matte posters, linked to their Etsy listings. -->
         <div class="wrap archive__covers">
           <h3 class="archive__reads-title">New &middot; The finals cover line</h3>
@@ -272,7 +272,7 @@
             <li><a href="https://www.etsy.com/listing/4539743978" target="_blank" rel="noopener noreferrer"><img src="/shop/lusail-2022-cover.webp" alt="Lusail 2022 finals cover poster, two illustrated portraits face to face over a gold engraved stadium." loading="lazy" width="680" height="907" /><span>Lusail 2022</span></a></li>
             <li><a href="https://www.etsy.com/listing/4539731211" target="_blank" rel="noopener noreferrer"><img src="/shop/moscow-2018-cover.webp" alt="Moscow 2018 finals cover poster, two illustrated portraits face to face over a gold engraved stadium." loading="lazy" width="680" height="907" /><span>Moscow 2018</span></a></li>
           </ul>
-          <a class="archive__covers-all" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">All prints in the store</a>
+          <a class="archive__covers-all" href="https://thearchv.gumroad.com" target="_blank" rel="noopener noreferrer" data-shop="covers">All prints in the store</a>
         </div>
         <!-- Static, crawlable links to the finals long-form pages. The SEO agent adds one line per final as it publishes. -->
         <div class="wrap archive__reads">
@@ -430,7 +430,7 @@
         <nav class="footer__cta" aria-label="Follow the archive" data-stagger>
           <a class="btn btn--gold" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow on Instagram</a>
           <a class="btn btn--ghost" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
-          <a class="btn btn--ghost" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop the store</a>
+          <a class="btn btn--ghost" href="https://thearchv.gumroad.com" target="_blank" rel="noopener noreferrer" data-shop="footer">Shop the store</a>
           <a class="btn btn--ghost" href="#partnerships">Partner with us</a>
         </nav>
         <nav class="footer__links" aria-label="More" data-stagger>
@@ -458,7 +458,10 @@
       <figure class="lightbox__fig">
         <img id="lightbox-img" alt="ARCHV poster preview" />
         <figcaption id="lightbox-cap"></figcaption>
-        <a id="lightbox-shop" class="btn btn--gold lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Buy Now</a>
+        <div class="lightbox__ctas">
+          <a id="lightbox-pack" class="btn btn--gold lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Get the pack</a>
+          <a id="lightbox-shop" class="btn btn--ghost lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Buy the print</a>
+        </div>
       </figure>
     </div>
 

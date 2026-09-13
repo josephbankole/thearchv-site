@@ -186,12 +186,12 @@ console.log(
   `[build-feed] ${manifestFeeds.length} feeds → ${OUT}  (lastUpdated ${lastUpdated}, build ${manifest.buildHash})`
 );
 
-/* ---------- storefront feed (Etsy merch, additive-only, standalone file) ----------
+/* ---------- storefront feed (merch items, additive-only, standalone file) ----------
    Sourced from scripts/storefront-items.json (NOT src/data/*.ts — that dir is engine-owned
    and committed by the daily desk job; this is hand-curated shop merch, a different lifecycle).
    Deliberately NOT folded into the `feeds` loop above so the existing feed files and
    index.json manifest/buildHash stay byte-identical to before this feed existed. */
-const SHOP_URL = "https://www.etsy.com/shop/TheARCHVCA";
+const SHOP_URL = "https://thearchv.gumroad.com";
 const storefrontItemsRaw = JSON.parse(
   readFileSync(join(ROOT, "scripts", "storefront-items.json"), "utf8")
 );

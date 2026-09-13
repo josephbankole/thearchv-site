@@ -117,11 +117,18 @@ function setupArticleLinkTracking(): void {
   });
 }
 
-// Track outbound clicks to the Etsy shop/listings (the poster-funnel KPI).
+// Track outbound clicks to the Etsy listings (the poster-funnel KPI), and to the Gumroad store
+// behind every Shop link. Those carry data-shop (2026-09-13, when Shop moved off the Etsy shop
+// page) so the pack links the archive rail already tracks as pack_click are not counted twice.
 function setupOutboundTracking(): void {
   document.querySelectorAll<HTMLAnchorElement>('a[href*="etsy.com"]').forEach((el) => {
     el.addEventListener('click', () => {
       track('etsy_click', { href: el.href, location: el.closest('section')?.id || el.className });
+    });
+  });
+  document.querySelectorAll<HTMLAnchorElement>('a[data-shop]').forEach((el) => {
+    el.addEventListener('click', () => {
+      track('shop_click', { href: el.href, store: 'gumroad', location: el.dataset.shop || el.className });
     });
   });
 }

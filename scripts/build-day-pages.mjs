@@ -141,7 +141,7 @@ function render(entry, sectionKey) {
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
         <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
-        <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a href="https://thearchv.gumroad.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
       </nav>
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>

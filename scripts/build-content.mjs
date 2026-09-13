@@ -203,7 +203,7 @@ function render(p, allPages) {
   const fig = p.posterImage ? `
         <figure class="article__fig">
           <img src="${escAttr(p.posterImage)}" alt="${escAttr(p.posterAlt || p.title)}" width="1080" height="1350" loading="eager" />
-          <figcaption>Original ARCHV illustration. Prints in the <a href="${escAttr(p.posterEtsy || "https://www.etsy.com/shop/TheARCHVCA")}">shop</a>.</figcaption>
+          <figcaption>Original ARCHV illustration. Prints in the <a href="${escAttr(p.posterEtsy || "https://thearchv.gumroad.com")}">shop</a>.</figcaption>
         </figure>` : "";
   const qa = p.quickAnswer ? `
         <div class="quick-answer">
@@ -273,7 +273,7 @@ function render(p, allPages) {
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
-        <a class="masthead__panel-link" href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a class="masthead__panel-link" href="https://thearchv.gumroad.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a class="masthead__panel-link" href="${APP_STORE_URL}">App</a>
       </nav>
       </div>
@@ -297,7 +297,7 @@ function render(p, allPages) {
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
         <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
-        <a href="https://www.etsy.com/shop/TheARCHVCA" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a href="https://thearchv.gumroad.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>

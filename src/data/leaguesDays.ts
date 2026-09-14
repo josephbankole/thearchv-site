@@ -7,6 +7,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-14",
+    day: "Monday",
+    headline: "The referees say Haaland's derby winner should not have stood, and Manchester United still have four points",
+    dek: "Pro Ref admits an error of judgement on Erling Haaland's winner in Manchester City's 1-0 win at Old Trafford. Manchester United are 13th with four points.",
+    body: "Manchester City won the Manchester derby 1-0 at Old Trafford on Sunday with ten men for more than an hour. Phil Foden was sent off in the 23rd minute for kicking out at Bruno Fernandes, and Erling Haaland scored in the 60th minute from Josko Gvardiol's deflected cross, per ESPN (PA) and Football365. Marcus Rashford and Kobbie Mainoo both hit the post while Manchester United had the extra man, per ESPN (PA) and Sky Sports.\n\nThe goal was first given offside. Michael Oliver disallowed it and the VAR, Matt Donohue, overruled him, per ESPN (PA) and The Independent. The Premier League's match centre said Haaland was onside and that Enzo Fernandez, although in an offside position, did not play the ball, per ESPN (PA) and Football365.\n\nBy Sunday evening the referees' body had changed its mind. Pro Ref said the VAR \"did not recognise the likely impact of his position and should have recommended an on-field review\", and that it had contacted Manchester United \"to acknowledge what we deem is an error of judgement\", per ESPN and NBC Sports. Michael Carrick had already called it \"a staggering explanation\", per The Independent and Football365.\n\nThe admission does not change the result. Manchester United are 13th with four points from four games; Arsenal and Manchester City both have 12, per the ESPN and Sky Sports tables, with Leeds United and Newcastle United still to play on Monday. The goal was Haaland's ninth in Premier League Manchester derbies, the outright record, one clear of Wayne Rooney and Sergio Agüero, per AP and ESPN (PA).\n\nPatrick Dorgu started at left-back with Luke Shaw not in the squad, per ESPN and Sports Illustrated. Manchester United play Brighton and Hove Albion in the League Cup third round at Old Trafford on Wednesday 16 September, kick-off 20:00 BST, per Brighton and Hove Albion and Sky Sports.",
+    status: "verified",
+    seoTitle: "Pro Ref admits error on Haaland's Manchester derby winner",
+    evergreen: "manchester-derby",
+  },
+  {
     date: "2026-09-13",
     day: "Sunday",
     headline: "Arsenal went top on Saturday night, and the Manchester derby decides how far clear they stay",

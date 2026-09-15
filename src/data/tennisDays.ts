@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-15",
+    day: "Tuesday",
+    headline: "Who won the 2026 US Open men's singles title?",
+    dek: "Zverev won his first US Open and second Grand Slam of the year, beating Ben Shelton in four sets on 13 September.",
+    body: "Alexander Zverev beat Ben Shelton 6-3, 7-6(2), 5-7, 6-2 in the 2026 US Open men's singles final on 13 September, winning his first US Open title, per ESPN and the US Open's official report.\n\nIt was Zverev's second Grand Slam of the season after his French Open win in June, making him the fourth man in the Open era to win his first two major titles in the same calendar year, according to the ATP Tour. The match lasted three hours and 33 minutes.\n\nZverev thanked his team afterwards: \"We went thirty years without winning a Grand Slam, and now we won two in two months,\" he said, per CNN. The win also avenged his 2020 US Open final loss to Dominic Thiem, when he served for the match from two sets up in front of empty pandemic-era stands.\n\nShelton had beaten Carlos Alcaraz earlier in the tournament, a result this desk covered on 10 September, but fell short of ending the American men's title drought that has run since Andy Roddick in 2003.",
+    status: "verified",
+    seoTitle: "Alexander Zverev beats Ben Shelton to win 2026 US Open",
+  },
+  {
     date: "2026-09-12",
     day: "Saturday",
     headline: "What would an Elena Rybakina US Open win complete?",

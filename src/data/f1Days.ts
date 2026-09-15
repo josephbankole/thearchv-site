@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-15",
+    day: "Tuesday",
+    headline: "How big is Kimi Antonelli's championship lead after the Spanish Grand Prix?",
+    dek: "Antonelli's win at the new Madring circuit stretched his championship lead over Mercedes team-mate George Russell to 81 points.",
+    body: "Kimi Antonelli's Formula 1 drivers' championship lead is 81 points after his eighth win of the season, at the new Madring circuit's Spanish Grand Prix on 13 September, per Formula1.com and Crash.net's post-race standings.\n\nLando Norris led from pole until a mistimed McLaren pit stop on lap 16 of 57 cost him track position during a virtual safety car period, handing the lead to Antonelli, per ESPN and RACER. Max Verstappen finished second and Norris third; Charles Leclerc was fourth, and George Russell, Antonelli's Mercedes team-mate and closest championship rival, finished fifth.\n\nFormula1.com reported Antonelli became the first winner at Madring, which replaces the Circuit de Barcelona-Catalunya as Spain's round on the calendar this year. Crash.net's standings after the race have Antonelli's tally 81 points clear of Russell, with nine races left in the season.\n\nAntonelli called it a win Norris \"deserved,\" but said his team would \"take it,\" per Formula1.com and Al Jazeera.",
+    status: "verified",
+    seoTitle: "Antonelli leads F1 by 81 points after Spanish GP win",
+  },
+  {
     date: "2026-09-12",
     day: "Saturday",
     headline: "Why has the FIA restricted active aero at the Madring?",

@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-15",
+    day: "Tuesday",
+    headline: "How did the Bears and Panthers set an NFL Week 1 scoring record?",
+    dek: "Chicago's 59-37 win over Carolina produced 96 combined points, breaking the Week 1 scoring record set in 2018.",
+    body: "Chicago beat Carolina 59-37 on 13 September, and the 96 combined points made it the highest-scoring Week 1 game in NFL history, per NFL.com and CBS Sports. The previous mark was 88 points, set in a 48-40 Tampa Bay win over New Orleans in 2018.\n\nCaleb Williams threw for two touchdowns and ran for two more, the first player in Bears history to reach 200 passing yards, two passing touchdowns, 50 rushing yards and two rushing touchdowns in one game, per NFL.com. D'Andre Swift scored three rushing touchdowns and gained 124 yards on 18 carries; Kyle Monangai also passed 100 rushing yards.\n\nThe 59 points were Chicago's highest in a regular-season game since 1980, when the Bears beat Green Bay 61-7; the only other 61-point game in franchise history came against San Francisco in 1965, according to CBS Sports and StatMuse. The team has scored more only once, the 73 points of the 1940 NFL championship game.\n\nCarolina's 37 points were not enough to keep pace with a Chicago offence that controlled the game from the opening drive.",
+    status: "verified",
+    seoTitle: "Bears 59, Panthers 37: NFL's highest-scoring Week 1 ever",
+  },
+  {
     date: "2026-09-12",
     day: "Saturday",
     headline: "Why has the Hall of Fame rewritten its voting rules?",

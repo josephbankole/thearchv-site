@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-15",
+    day: "Tuesday",
+    headline: "Why is the Biltmore Championship a first for the PGA Tour?",
+    dek: "The Biltmore Championship Asheville, running 17-20 September, is the PGA Tour's first competitive event in the Asheville area and its first FedEx Cup Fall stop.",
+    body: "The Biltmore Championship Asheville tees off on 17 September as the PGA Tour's first event at The Cliffs at Walnut Cove, marking the tour's return to the Asheville area for the first time in more than 80 years, according to Golf Channel and the PGA Tour's own preview.\n\nThe event opens the FedEx Cup Fall, the seven-tournament stretch that sets eligibility for the 2027 season. It is the 38th tournament on the 2026 PGA Tour calendar, carries a 5 million dollar purse, and offers the winner 500 FedEx Cup Fall points and 25 Official World Golf Ranking points, per the PGA Tour.\n\nThe 144-player field is led by Justin Thomas, the highest-ranked player in the field and one of eight players also competing at the Presidents Cup later this month. Jackson Koivun and JT Poston also headline the field, per Golf Channel.\n\nThe Jack Nicklaus-designed course sits in the Blue Ridge Mountains, with rolling terrain and wooded corridors that the PGA Tour says will put a premium on club selection over raw distance.",
+    status: "verified",
+    seoTitle: "Biltmore Championship: PGA Tour's first Asheville event",
+  },
+  {
     date: "2026-09-12",
     day: "Saturday",
     headline: "Why has Adam Scott never won a Presidents Cup?",

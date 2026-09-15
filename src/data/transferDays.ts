@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-09-15",
+    day: "Tuesday",
+    headline: "JJ Gabriel was in line to face Brighton and Hove Albion, and now the 15-year-old wants to leave Manchester United",
+    dek: "Gabriel's side has sent formal notice that he wants to leave with immediate effect. Manchester United say he is under contract and the situation is rectifiable.",
+    body: "JJ Gabriel, the 15-year-old from the Manchester United academy, has sent the club formal notice that he wants to leave with immediate effect, per ESPN and Sky Sports. His side wants his registration cancelled, per Sky Sports and Football365.\n\nMichael Carrick had planned to include him in the squad for Wednesday's League Cup third-round tie against Brighton and Hove Albion at Old Trafford, per ESPN and Sky Sports.\n\nManchester United's position is that he remains under contract and that the situation is \"rectifiable\", per ESPN, Sky Sports and Football365. ESPN's sources say club bosses insist he cannot be de-registered, and Football365 says the club can challenge the request. BBC Sport's Simon Stone says the club has not given up hope of turning it round.\n\nWhy he wants out is contested. Sky Sports reports that part of the reasoning is game time, in pre-season and since the season started. Stone describes a breakdown in the relationship between the family and the club. Inside the club, per Sky Sports, people are \"mystified\" and feel \"not much more could have been done to show a pathway through to the senior team\"; ESPN's sources say club bosses are surprised by the decision.\n\nGabriel scored a hat-trick on his UEFA Youth League debut against Sabah last week and turns 16 in October, per ESPN and Sky Sports. Sky Sports lists Manchester City, Arsenal, Real Madrid and Bayern Munich among the clubs linked with him (RUMOUR). The transfer window is shut until January, and for now this is a registration dispute between the club and the family rather than a transfer.",
+    status: "verified",
+    seoTitle: "JJ Gabriel, 15, has asked to leave Manchester United",
+    evergreen: "transfer-request",
+  },
+  {
     date: "2026-09-09",
     day: "Wednesday",
     headline: "Lewis Hall agrees a new five-year Newcastle United contract, and Manchester United's left-back search moves on",

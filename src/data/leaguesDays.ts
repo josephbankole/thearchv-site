@@ -7,6 +7,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-15",
+    day: "Tuesday",
+    headline: "Howard Webb says the VAR had tunnel vision on Haaland's derby winner, and the officials sit out until after the break",
+    dek: "Pro Ref's chief refereeing officer says the VAR focused on Erling Haaland and missed Enzo Fernandez. The VAR team will not officiate again until after the international break.",
+    body: "Howard Webb, Pro Ref's chief refereeing officer, has explained why Erling Haaland's winner for Manchester City at Old Trafford on Sunday was allowed to stand. The VAR, Matt Donohue, checked Haaland and found him onside but did not properly weigh Enzo Fernandez, who was in an offside position, per Sky Sports and PA. \"In that moment, he gets tunnel vision,\" Webb said, adding that it was down to the rest of the VAR team to pull Donohue out of it, per Sky Sports and PA.\n\nThe VAR team has been stood down. They will not officiate again until after the international break, per Sky Sports and PA.\n\nPro Ref had already admitted the mistake on Sunday evening. It said the VAR \"did not recognise the likely impact of his position and should have recommended an on-field review\", and that it had contacted Manchester United \"to acknowledge what we deem is an error of judgement\", per ESPN and NBC Sports.\n\nThe admission does not change the result. Manchester City won 1-0 with ten men after Phil Foden's 23rd-minute red card, per ESPN (PA) and Sky Sports, and Manchester United have four points from four Premier League games. Michael Carrick's side host Brighton and Hove Albion in the League Cup third round at Old Trafford on Wednesday 16 September.",
+    status: "verified",
+    seoTitle: "Webb: VAR had tunnel vision on Haaland's derby winner",
+    evergreen: "var",
+  },
+  {
     date: "2026-09-14",
     day: "Monday",
     headline: "The referees say Haaland's derby winner should not have stood, and Manchester United still have four points",

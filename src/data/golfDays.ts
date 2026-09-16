@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-16",
+    day: "Wednesday",
+    headline: "How will players qualify for the PGA Tour Championship Series?",
+    dek: "The top 90 players keep their places and 20 more come up from the Challenger Series, under PGA Tour rules that begin in 2028.",
+    body: "Two routes will carry most players into the PGA Tour Championship Series when the tour's new structure begins in 2028. The top 90 players on the previous season's Championship Series points list keep their membership. Twenty more are promoted from the second tier, the PGA Tour Challenger Series.\n\nThe PGA Tour published the membership criteria on Tuesday 15 September 2026. The Associated Press reported that the tour's boards had approved the plan, and that the eligibility system it replaces ran to 34 separate categories. The new one has seven.\n\nThe two-tier model itself was announced in June 2026. Missing until this week was how players move between the tiers. Tuesday's announcement sets that out.\n\nA player who wins twice in a Challenger Series season is promoted immediately and holds membership for the rest of that season, per the PGA Tour. A win in a Championship Series event, including a major or The Players Championship, holds membership for that season and the two that follow. A non-member who wins a major is promoted immediately. The No. 1 player from PGA Tour University after the NCAA Championship earns a place for that season and the next.\n\nEveryone else starts in the Challenger Series, which will run a minimum of 20 events a season with fields of 144 players, according to Golf Monthly and the PGA Tour. Its ranks will include players relegated from the top tier and the top five from Qualifying School. In the system's first year, the top 10 finishers on the 2027 Korn Ferry Tour list move straight to the Championship Series instead, with Nos. 11 to 40 joining the Challenger Series.\n\nThe Championship Series itself will run 23 to 24 events across the season, per the PGA Tour, counting the four majors, The Players Championship, the play-offs and international team events such as the Ryder Cup and Presidents Cup. Fields will average roughly 120 players.\n\nA player who finishes outside the top 90 loses Championship Series membership. Golf Monthly reports one more chance before the drop: a short autumn series of at least four events offering three cards back into the top tier. Miss that, and the Challenger Series is next season's home.",
+    status: "verified",
+    seoTitle: "Top 90 stay, top 20 promoted in PGA Tour's 2028 system",
+  },
+  {
     date: "2026-09-15",
     day: "Tuesday",
     headline: "Why is the Biltmore Championship a first for the PGA Tour?",

@@ -1664,7 +1664,9 @@ basketball lane" and "move the multisport from the football desk to the multi sp
   golf need two independent named sources.
 - **Basketball** is a new sport with feed and section key `basketball` and pages at
   `/basketball/questions/<date>/`. One lane covers the NBA and the WNBA EQUALLY: ONE article on MONDAYS only,
-  the league alternating week to week by calendar, the WNBA on Monday 14 September 2026 (founder: its
+  the league alternating week to week by calendar, *(re-anchored 2026-09-15, D-2026-09-15a: the WNBA on Monday
+  21 September 2026, the NBA on 28 September, and so on; the original 14 September WNBA Monday shipped nothing)*
+  the WNBA on Monday 14 September 2026 (founder: its
   playoffs are live), the NBA on Monday 21 September, and so on. One article per date is a hard limit. If
   the due league has no honest verified question that Monday, basketball ships nothing that day and the desk
   does NOT switch leagues, so equality holds over time. The ledger records which league each Monday used.
@@ -2070,6 +2072,51 @@ same style", then "the bar is the shelton and rodman images, if they are not of 
   patching the output afterwards leaves a visible block (tried and rejected the same session, job 3db5a003 unused).
   A reference whose own description does not name the person is replaced (Son's BFA 2023 file), and one too small to
   carry a likeness is replaced by its larger original (Lewandowski's 321px crop by the 1600px source).
+### RATIFIED 2026-09-15 (founder, in chat with the nightly review session)
+
+**D-2026-09-15a (founder): THE BASKETBALL MONDAY ALTERNATION IS RE-ANCHORED, WNBA ON 21 SEPTEMBER.** Founder wording:
+"WNBA on 21 Sep". The first WNBA Monday, 14 September 2026, shipped nothing because `archv-multisport-answer-desk`
+never ran (the Mac was asleep, lid shut on battery, 14 Sep 21:46 to 15 Sep 17:00), so the 2026-09-15 nightly asked
+which league 21 September should carry. The WNBA takes Monday 21 September and the week-to-week alternation restarts
+from there: 28 September the NBA, 5 October the WNBA, and on. The desk's calendar one-liner now counts weeks from
+2026-09-21 (even = WNBA). Everything else in D-2026-09-11c stands: one article per Monday, never switch league on a
+thin Monday, two independent named sources. Files changed, each backed up `<file>.bak-2026-09-15a`: this file,
+`Scheduled/archv-multisport-answer-desk/SKILL.md`, `~/.claude/scheduled-tasks/archv-multisport-answer-desk/SKILL.md`
+(pointer), `multisport/desk/answered-questions.md` (header).
+
+**D-2026-09-15b (founder, in chat with the archive marketing desk): ARCHIVE CAROUSELS TAKE THE PORTRAIT RULE, PRODUCT
+DECKS STAY PLATE-LED, FACES MAY BE GENERATED, AND FACEBOOK IS SERVED BY THE INSTAGRAM CROSS-POST.** Four answers to
+the questions the 2026-09-14 and 2026-09-15 runs of `archv-archive-marketing-desk` pushed. Founder wording: "Yes",
+"Instagram auto posts to facebook", "clear steps for the json", plus "Plate-led, no faces" and "generate, no limits on
+credits" chosen from options put to him the same session.
+
+- **Editorial archive carousels on @thearchvfc obey D-2026-09-13a in full.** Full-bleed illustrated portrait band on
+  every slide at the Shelton x Rodman geometry, four or five slides, 24 words of card copy at most, no discs or
+  roundels, `carousel_structure_lint.py --art-rules archv` exit 0 before anything queues. The archive desk is a
+  builder on that account and inherits the rule like every other.
+- **PRODUCT carousels carry no player likeness, ever.** A unit with a buy link, a pack or bundle name, a price, a code
+  or a sale date is mark-free under the store rules, so it cannot name or show a player, and no real person's face is
+  used to sell a product. Those decks are plate-led: the plate art full-bleed, house cards around it, the portrait
+  requirement not applicable. The lint's art rules are overruled by name in the run report for a product deck, with
+  `class:product` as the reason. This covers the waitlist decks from 18 October and every cart deck from 1 November.
+- **Missing faces are generated, and the credit cap is lifted for this desk.** The recipe is D-2026-09-13d exactly:
+  `gpt_image_2`, the verbatim prompt, 3:2, 4k, quality high, an identity-proven era-correct and club-correct
+  reference prepared per the reference-prep practice. About 11 credits a face, no daily limit, and every run reports
+  the jobs and the credits spent. This narrows the desk spec's rule 13 to what it was written for: no paid engine for
+  plates, cards or motion, which stay local at $0 per `ENGINE-PRIORITY.md`. Portraits are the exception.
+- **There is no Facebook channel in Buffer and none is needed.** Instagram @thearchvfc cross-posts to the Facebook
+  page automatically, so the Facebook row on the desk's surface table, calendar and cap table is served by that day's
+  Instagram unit. The desk queues nothing to Facebook, opens no Facebook composer, and stops logging FB HELD channel
+  missing rows and the missing-channel push. The 11 to 25 October comment-to-DM tracker still reads the Facebook page,
+  because the cross-posted units land there.
+- **`routine/links.json` schema, founder-owned.** Keys: `dispatch_start`, `sampler`, `waitlist`, the six pack slugs,
+  `sixty_moments`, `sixty_moments_collector`, `etsy_shop`, `support_email`. Each value is `{"url": "...",
+  "live_from": "YYYY-MM-DD"}`, empty string until it exists. The desk fetches every URL a unit needs on the run and
+  holds that unit on a missing key, an empty url, a `live_from` after today, or anything other than HTTP 200. It never
+  writes the file. A template with every key and the known dates sits at `routine/links.template.json`.
+- Files changed, each backed up `<file>.bak-2026-09-15b`: this file, `routines-v2/archv-archive-marketing-desk.md`.
+  `ARCHIVE-PACKS/routine/links.template.json` added.
+
 ## 1. CANONICAL BRAND REFERENCES — read in this order, every run (slim, D38)
 1. **brand-voice-CHEATSHEET.md** — the daily operating reference (voice, the loops, pillar mix, format doctrine, visual identity, credit reality, handle lock). Open the full brand-voice-guidelines.md ONLY for a specific edge case, one § at a time.
 2. **business-review-and-goals.md** — the RATIFIED plan. Its calls override any OLDER conflicting document, but **§0 outranks it**: where the two disagree, §0 is the operative version and the plan line is stale. (United-core ~40%, comment-CTA fix, Tue/Fri LinkedIn, illustrated-only, verify-first, newsletter REVIVED on Substack 2026-06-20 [supersedes the old "KILLED D78"], owned asset = thearchv.ca D79.) Its **"carousels 1–2/wk" line is superseded** by the daily cadence in §0 (D-2026-08-03, D-2026-08-04a, D-2026-08-04m).

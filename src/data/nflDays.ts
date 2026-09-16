@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-16",
+    day: "Wednesday",
+    headline: "Where does Travis Kelce rank among tight ends in receiving yards?",
+    dek: "Travis Kelce moved past Jason Witten on Monday night and now sits second on the all-time list for receiving yards by a tight end, behind Tony Gonzalez.",
+    body: "Travis Kelce now ranks second on the all-time list for receiving yards by a tight end. Only Tony Gonzalez has more.\n\nKelce passed Jason Witten during the Kansas City Chiefs' 31-10 win over the Denver Broncos at Arrowhead Stadium on Monday 14 September 2026, in Week 1 of the season.\n\nThe milestone came on a 59-yard reception late in the third quarter. Per NFL.com, Kelce caught a short pass from Patrick Mahomes against a Denver blitz, broke a tackle and ran up the field. NFL.com also reported that it was his longest catch since Week 15 of the 2021 season, when he gained 69 yards against the Los Angeles Chargers.\n\nWitten finished his 17-season career, almost all of it with the Dallas Cowboys, on 13,046 receiving yards, a figure carried by both ESPN and NFL.com. Gonzalez still leads the list with 15,127 yards, per NFL.com, ESPN and Pro Football Talk.\n\nKelce's own running total is reported differently by outlets that published their counts while the game was still being played. ESPN had him finishing the night on 13,073 career receiving yards, 2,054 short of Gonzalez. Pro Football Talk and theScore each had him on 13,067 during the game itself.\n\nAccording to the ESPN box score, Kelce caught three passes for 71 yards against Denver, leading the Chiefs in receiving. Kenneth Walker III rushed for 173 yards and scored twice, once on the ground and once through the air, in his first game for Kansas City.\n\nNFL.com put Kelce on 13,002 yards going into the game, 45 short of passing Witten.\n\nNFL.com also credits Kelce with 1,083 career receptions, third among tight ends, 82 receiving touchdowns, and 38 career games of 100 or more receiving yards, the most by any player at the position. His 1,416 yards in 2020 remain the single-season record for a tight end.",
+    status: "verified",
+    seoTitle: "Travis Kelce now 2nd in tight end receiving yards",
+  },
+  {
     date: "2026-09-15",
     day: "Tuesday",
     headline: "How did the Bears and Panthers set an NFL Week 1 scoring record?",

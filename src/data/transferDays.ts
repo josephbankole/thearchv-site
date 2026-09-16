@@ -6,6 +6,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-09-16",
+    day: "Wednesday",
+    headline: "JJ Gabriel has stopped training at Manchester United, and at 16 an Irish passport opens a route to the European Union",
+    dek: "The 15-year-old has not trained for days after asking to leave. Manchester United say he is under contract, but his Irish heritage makes an EU move possible once he turns 16 in October.",
+    body: "JJ Gabriel has stopped training at Manchester United. Fabrizio Romano says the academy forward has not trained for the last two or three days, per Football365, and NBC Sports, citing the BBC and The Telegraph, says he refused to train at the end of last week. His side has already sent the club formal notice that he wants to leave with immediate effect, per ESPN and Sky Sports.\n\nManchester United's position has not moved. He is under contract until the end of the season and the club will not cancel his registration, per ESPN and the Daily Mail's Nathan Salt, and ESPN and Sky Sports report that the club sees the situation as \"rectifiable\". Michael Carrick had him in line for tonight's League Cup third-round tie against Brighton and Hove Albion at Old Trafford, which kicks off at 20:00 BST, per ESPN and Sky Sports.\n\nThe route out runs through his age. FIFA's rules on the international transfer of minors carry an exception for moves within the European Union, and Sports Illustrated says Gabriel's Irish heritage means an EU move \"would be possible once he turns 16 next month\". Salt reported the same route for the Daily Mail on Tuesday. He turns 16 in October, per ESPN and Sports Illustrated.\n\nWhy he wants out is still contested: The Telegraph's Matt Law points to game time, per Football365, and BBC Sport's Simon Stone to a breakdown between the family and the club, per NBC Sports. Romano puts Manchester United's chances of keeping him below 50 per cent (RUMOUR). The transfer window is shut until January.",
+    status: "verified",
+    seoTitle: "JJ Gabriel could join an EU club at 16 on an Irish passport",
+    evergreen: "transfer-request",
+  },
+  {
     date: "2026-09-15",
     day: "Tuesday",
     headline: "JJ Gabriel was in line to face Brighton and Hove Albion, and now the 15-year-old wants to leave Manchester United",

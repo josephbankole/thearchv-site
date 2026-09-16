@@ -8,6 +8,17 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-16",
+    day: "Wednesday",
+    headline: "Is Elena Rybakina the new world number one in tennis?",
+    dek: "Elena Rybakina of Kazakhstan took over as WTA world number one in the rankings published on Monday 14 September 2026, moving ahead of Aryna Sabalenka.",
+    body: "Elena Rybakina is the WTA world number one. She reached the top of the women's singles rankings in the list published on Monday 14 September 2026, the first update after the US Open.\n\nThe WTA reported that Rybakina rose from second place to first. Tennis Abstract's rankings table, dated the same day, shows the same order: Rybakina first, Aryna Sabalenka second.\n\nRybakina secured the ranking before the final even started. The US Open's official site reported that she clinched top spot by beating Zheng Qinwen in the quarter-finals.\n\nShe went on to win the title too, beating Sabalenka 6-4, 5-7, 6-2 in Saturday's final in New York. The US Open printed that scoreline in its official women's singles draw. Sabalenka had been the two-time defending champion.\n\nThe WTA reports that Rybakina is the first player from Kazakhstan, man or woman, to hold the top ranking.\n\nThe US Open was her third Grand Slam singles title. She won Wimbledon in 2022 and the Australian Open in January 2026, beating Sabalenka in that final too, according to the Australian Open's official site. Roland Garros is the only one of the four majors she has not won.\n\nRybakina had already beaten Sabalenka to win the 2025 WTA Finals, a result recorded by the WTA.\n\nThe WTA next updates the rankings on Monday, with the season's remaining tournaments still to hand out points.",
+    status: "verified",
+    image: "/heads/hd/elena-rybakina.webp",
+    imageAlt: "Illustrated ARCHV portrait of Elena Rybakina",
+    seoTitle: "Elena Rybakina is WTA world No. 1, ahead of Sabalenka",
+  },
+  {
     date: "2026-09-15",
     day: "Tuesday",
     headline: "Who won the 2026 US Open men's singles title?",

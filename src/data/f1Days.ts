@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-16",
+    day: "Wednesday",
+    headline: "Why did Max Verstappen give back two places in Madrid?",
+    dek: "Red Bull told Max Verstappen to hand two places back at the Spanish Grand Prix to head off a stewards' penalty for leaving the track at Turn 1.",
+    body: "Red Bull ordered Max Verstappen to hand two places back to head off a stewards' penalty for leaving the track and gaining an advantage.\n\nThe incident came on the opening lap of the Spanish Grand Prix at the Madring in Madrid on 13 September 2026. Verstappen ran wide at Turn 1 after contact with Lewis Hamilton, rejoined ahead of the Ferrari and then passed Kimi Antonelli. Red Bull told him over the radio to let both cars back through. Motorsport.com reports that he complied on lap 4.\n\nRed Bull team principal Laurent Mekies set out the reasoning after the race. Per Formula1.com, he said the team would have faced a penalty of either five or 10 seconds at the stewards' discretion had Verstappen stayed where he was. Motorsport.com carries the same explanation. Mekies said the pit wall analysed the footage quickly and judged it better \"to take the pain at that moment and to fight back after\" than to risk a heavier sanction later in the race. He noted that a time penalty can cost far more than two places if a safety car follows.\n\nVerstappen gave his own account afterwards. He said Hamilton bottomed out over the kerb and came back onto the track in front of him, leaving him no choice but to go off. \"I would have had damage at the start if I would have stayed on track,\" Verstappen said, according to Motorsport.com. He added that he was certain a penalty would have followed had he ignored the instruction.\n\nHamilton retired on lap 7 with a brake problem on his Ferrari, and Verstappen recovered to finish second.\n\nAntonelli won the race for Mercedes, his eighth victory of the 2026 season, per Formula1.com. Lando Norris took third for McLaren, ahead of Charles Leclerc and George Russell. The result moved Antonelli's championship lead to 81 points, a figure carried by both Formula1.com and RacingNews365.\n\nVerstappen was not penalised over the Turn 1 incident. Fans voted him Driver of the Day, his fifth of 2026, despite the laps he spent handing places back.",
+    status: "verified",
+    seoTitle: "Red Bull ordered Verstappen to avoid a time penalty",
+  },
+  {
     date: "2026-09-15",
     day: "Tuesday",
     headline: "How big is Kimi Antonelli's championship lead after the Spanish Grand Prix?",

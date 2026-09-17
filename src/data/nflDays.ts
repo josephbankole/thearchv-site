@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-17",
+    day: "Thursday",
+    headline: "Will Sam Darnold play for the Seahawks against the Cardinals?",
+    dek: "No. The Seattle Seahawks have ruled Sam Darnold out of Sunday's Week 2 game at the Arizona Cardinals with a glute injury, and Drew Lock starts.",
+    body: "No. The Seattle Seahawks ruled quarterback Sam Darnold out of Sunday's game at the Arizona Cardinals on Wednesday 16 September, per ESPN and CBS Sports. Drew Lock starts in his place.\n\nDarnold was hurt on the opening drive of the season opener against the New England Patriots. ESPN's Brady Henderson reported that it happened on the fifth play, when Darnold's right knee hit the turf as he was sacked from behind, and that he spent the night at Harborview Medical Center for tests.\n\nThe Seahawks first listed it as a hip injury. The team now describes a soft-tissue injury in the glute area, and CBS Sports reported the team's word that the hip joint itself is unaffected.\n\nHead coach Mike Macdonald said the team does not plan to put Darnold on injured reserve, which would rule him out for at least four games, per ESPN. \"Don't anticipate putting him on IR or anything like that, but we'll just kind of re-evaluate every day,\" Macdonald said, per ESPN.\n\nThe length of the absence is not settled. Multiple sources told ESPN's Jeremy Fowler that Darnold could miss roughly four weeks from the date of the injury, with hope of an earlier return.\n\nLock already has a win this season. After Darnold went off in the opener, Lock completed 16 of 22 passes for 187 yards and one touchdown in the 13-10 win over the Patriots, per ESPN and CBS Sports.\n\nSunday's game kicks off at 4:25pm ET at State Farm Stadium, per the NFL.com schedule. Seattle then plays at the Washington Commanders before home games against the Los Angeles Chargers and, on 11 October, the San Francisco 49ers. One source told ESPN that a Darnold return for that 49ers game \"feels like a possibility.\"",
+    status: "verified",
+    seoTitle: "Sam Darnold out for Seahawks at Cardinals with glute injury",
+  },
+  {
     date: "2026-09-16",
     day: "Wednesday",
     headline: "Where does Travis Kelce rank among tight ends in receiving yards?",

@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-17",
+    day: "Thursday",
+    headline: "Who is playing at the 2026 Laver Cup in London?",
+    dek: "Carlos Alcaraz and Alexander Zverev lead Team Europe against Taylor Fritz, Ben Shelton and Team World at the O2 in London from 25 to 27 September, with Francisco Cerúndolo in for Tommy Paul.",
+    body: "Carlos Alcaraz and Alexander Zverev lead Team Europe at the 2026 Laver Cup, which runs at the O2 in London from 25 to 27 September, per the Laver Cup and Sky Sports.\n\nTeam Europe, captained by Yannick Noah with Tim Henman as vice-captain, is Alcaraz, Zverev, Flavio Cobolli, Rafael Jodar, Jakub Mensik and Casper Ruud.\n\nTeam World, captained by Andre Agassi with Pat Rafter as vice-captain, is Taylor Fritz, Ben Shelton, Alex de Minaur, Alexander Bublik, Learner Tien and Francisco Cerúndolo. Both line-ups match on the Laver Cup's own team pages and in Sky Sports' 16 September guide.\n\nCerúndolo came in late for Tommy Paul, who withdrew with an elbow injury picked up at the US Open, per The Sporting News and Tennis Up To Date. Both outlets report that London will be the Argentine's fourth Laver Cup in a row.\n\nPoints rise over the weekend. A match on Friday is worth one point, a match on Saturday two and a match on Sunday three, and the first team to 13 points wins, per Sky Sports and The Sporting News.\n\nTeam World arrives as the holder after beating Team Europe 15-9 in San Francisco in 2025, per the Laver Cup's official record and Sky Sports. That was Team World's third title, and Team Europe has won five of the eight editions played since 2017, per the Laver Cup and The Sporting News.",
+    status: "verified",
+    seoTitle: "Alcaraz and Zverev lead Europe at 2026 Laver Cup in London",
+  },
+  {
     date: "2026-09-16",
     day: "Wednesday",
     headline: "Is Elena Rybakina the new world number one in tennis?",

@@ -3655,3 +3655,8 @@ website and blog posts as well." Encoded as:
   - Reddit stays drafts only. Nothing ever goes to @folabankole Threads, and folabankole Instagram stays manual.
   - Obeys D-2026-09-12c spacing and the full gate chain.
   - Flags boost-worthy organic posts to the founder by push notification plus a log line; never spends money.
+
+**D-2026-09-16a (founder, in session): ARCHIVE LAUNCH, TWO LEDGER TASKS DROPPED; INSTAGRAM RECONNECTED.** Founder wording: "Instagram reconnected in Buffer" and "we will skip the recommendation notes and reddit giveaway".
+- The Reddit free-plate giveaway is dropped. No desk drafts, queues or reminds about it; `launch/social/reddit-plan.md` stays on file unused.
+- The personal approach notes to recommended Substacks are dropped. Recommendations themselves stay switched on.
+- @thearchvfc Instagram is reconnected in Buffer as of 2026-09-16, so `archv-archive-marketing-desk` resumes Instagram units. Facebook stays served by the Instagram cross-post (D-2026-09-15b).

@@ -7,6 +7,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-17",
+    day: "Thursday",
+    headline: "Manchester United led Brighton and Hove Albion 2-0 inside ten minutes and lost 3-2, and Michael Carrick says that is on him",
+    dek: "Out of the League Cup in the third round, and beaten at Old Trafford from two goals up for the first time since 1976.",
+    body: "Manchester United are out of the League Cup. They led Brighton and Hove Albion 2-0 inside ten minutes at Old Trafford on Wednesday night and lost 3-2, per Sky Sports and ESPN. Shea Lacey, 19, scored on his first start, the first teenager to do that for Manchester United since Marcus Rashford, per ESPN and Goal, which cites Opta. Mason Mount scored the second.\n\nBrighton and Hove Albion scored the next three. Charalampos Kostoulas pulled one back in first-half stoppage time, and Pascal Gross and Maxim De Cuyper scored in the second half, per Sky Sports and ESPN. ESPN says it was the first home game Manchester United have lost from two goals up since a 3-2 defeat by Tottenham Hotspur in 1976, and Sky Sports puts the gap at 50 years.\n\nOld Trafford booed at full time. Michael Carrick told Sky Sports: \"I take responsibility for it. The performance towards the end of the second half, that's on me.\" ESPN carries the same words. Asked about the boos, he told Sky Sports: \"I totally understand the feelings of the supporters.\" He also told reporters, per ESPN's Rob Dawson: \"I don't feel under pressure.\"\n\nManchester United play Fulham at Craven Cottage in the Premier League on Sunday, per Sky Sports and Goal.",
+    status: "verified",
+    seoTitle: "Manchester United lost 3-2 to Brighton from 2-0 up",
+  },
+  {
     date: "2026-09-15",
     day: "Tuesday",
     headline: "Howard Webb says the VAR had tunnel vision on Haaland's derby winner, and the officials sit out until after the break",

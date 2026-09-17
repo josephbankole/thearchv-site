@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-17",
+    day: "Thursday",
+    headline: "Why is the 2026 Azerbaijan Grand Prix on a Saturday?",
+    dek: "The Formula 1 race in Baku runs on Saturday 26 September because Sunday 27 September is Azerbaijan's Remembrance Day, a national day of mourning.",
+    body: "Sunday 27 September is Azerbaijan's Remembrance Day, so the 2026 Azerbaijan Grand Prix runs a day early, at 15:00 local time on Saturday 26 September, per Motorsport.com and The Sunday Guardian.\n\nAzerbaijan marks Remembrance Day every year on 27 September, when the country goes into a day of mourning, per Motorsport.com. The day honours those who died in the 2020 Nagorno-Karabakh war, according to both outlets.\n\nFormula 1 and the FIA made the change after a request from the Azerbaijan promoter and government stakeholders, per Motorsport.com and The Sunday Guardian. Motorsport.com reports that the race was first scheduled for Sunday 27 September.\n\nThe whole weekend moves forward by one day. The official Formula1.com timetable puts first and second practice on Thursday 24 September and third practice and qualifying on Friday 25 September. The 51-lap race on the 6.003km Baku City Circuit follows on Saturday. Baku is four hours ahead of UTC, so the 15:00 start is 11:00 UTC.\n\nSaturday racing is not new to Formula 1. The Las Vegas Grand Prix has run on a Saturday every year since it returned to the calendar in 2023, per Motorsport.com and The Sunday Guardian.\n\nIn Baku, the lights go out at 15:00 on the Saturday, and the Sunday stays clear for the day of mourning.",
+    status: "verified",
+    seoTitle: "Azerbaijan GP is on Saturday 26 Sept for Remembrance Day",
+  },
+  {
     date: "2026-09-16",
     day: "Wednesday",
     headline: "Why did Max Verstappen give back two places in Madrid?",

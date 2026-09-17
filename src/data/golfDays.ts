@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-17",
+    day: "Thursday",
+    headline: "Who won the 2026 Solheim Cup?",
+    dek: "Europe won the 2026 Solheim Cup 15-13 against the United States at Bernardus Golf in the Netherlands, taking the trophy back from the Americans.",
+    body: "Europe won the 2026 Solheim Cup, beating the United States 15-13 at Bernardus Golf in the Netherlands on Sunday 13 September, per CBS Sports and Sky Sports.\n\nEurope needed 14 1/2 of the 28 points to take the Cup back from the Americans, per CBS Sports and Sky Sports.\n\nThe match stood level at 8-8 going into the Sunday singles, per CBS Sports and Golfmagic. Europe took seven of the 12 singles points to finish two clear.\n\nLottie Woad's win took Europe to the 14 1/2 points it needed, per CBS Sports and Golfmagic. Carlota Ciganda sealed it with a 4 and 2 win over Jennifer Kupcho, per the same two outlets.\n\nAnna Nordqvist captained Europe and Angela Stanford captained the United States, per CBS Sports and Sky Sports.\n\n\"I think it's been one of the best teams that we've had in the last few years. Everyone just a unit, a team,\" Ciganda said, per CBS Sports.",
+    status: "verified",
+    seoTitle: "Europe beat USA 15-13 to win back the 2026 Solheim Cup",
+  },
+  {
     date: "2026-09-16",
     day: "Wednesday",
     headline: "How will players qualify for the PGA Tour Championship Series?",

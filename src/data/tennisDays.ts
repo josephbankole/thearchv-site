@@ -8,6 +8,17 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-18",
+    day: "Friday",
+    headline: "Why was Aryna Sabalenka fined after the US Open final?",
+    dek: "The USTA fined Aryna Sabalenka $7,500 for her conduct in the 2026 US Open women's final, which she lost to Elena Rybakina 6-4, 5-7, 6-2.",
+    body: "The United States Tennis Association fined Aryna Sabalenka $7,500 for her conduct in the 2026 US Open women's final, per Sports Illustrated and Just Women's Sports. She lost the final to Elena Rybakina 6-4, 5-7, 6-2. Sabalenka had won the two previous US Open titles.\n\nBoth outlets list three offences. She was warned for ball abuse after hitting a ball into the stands. She then received code violations for racket abuse and for an audible obscenity. She smashed her racket against the ground, and Just Women's Sports reports that came at her bench after match point.\n\nSabalenka said afterwards that it is really tough to control your emotions when you lose a final. Sports Illustrated and Just Women's Sports both quote that line.\n\nThe runner-up prize was $2.8 million, per CBS Sports and Just Women's Sports. Rybakina took $5.5 million as champion, per CBS Sports. Against the runner-up cheque, the fine is a little over a quarter of 1 per cent.\n\nThe fine has split opinion. A Last Word on Sports column called tennis fines a joke. A Sports Illustrated column argued she deserved the fine but not the criticism that followed.\n\nSo is $7,500 a punishment, or just a fee?",
+    status: "verified",
+    image: "/heads/hd/aryna-sabalenka.webp",
+    imageAlt: "Illustrated ARCHV portrait of Aryna Sabalenka",
+    seoTitle: "Aryna Sabalenka fined $7,500 for US Open final outbursts",
+  },
+  {
     date: "2026-09-17",
     day: "Thursday",
     headline: "Who is playing at the 2026 Laver Cup in London?",

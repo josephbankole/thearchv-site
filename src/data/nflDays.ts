@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-18",
+    day: "Friday",
+    headline: "How did the Bills open their new Highmark Stadium?",
+    dek: "The Buffalo Bills beat the Detroit Lions 41-31 on Thursday night, and Josh Allen scored 5 touchdowns in the first regular-season game at the new Highmark Stadium.",
+    body: "The Buffalo Bills opened their new Highmark Stadium with a 41-31 win over the Detroit Lions on Thursday 17 September. It was the first regular-season game in the building and the first official Bills home game there, per NFL.com. Buffalo had played Week 1 away, a 36-31 win at the Houston Texans.\n\nJosh Allen scored 5 of the touchdowns. He completed 20 of 31 passes for 248 yards and 3 touchdowns, and ran for 69 yards and 2 more, per NFL.com. ESPN and CBS Sports also credit him with 3 passing and 2 rushing touchdowns. James Cook III added 135 rushing yards and a touchdown.\n\nFor Detroit, Jared Goff threw for 327 yards and 4 touchdowns in the loss, and Amon-Ra St. Brown caught 9 passes for 142 yards and 2 touchdowns, per CBS Sports and ESPN. Buffalo are 2-0. Detroit are 1-1.\n\nESPN, citing the Elias Sports Bureau, reports that Allen has 9 touchdowns and no turnovers across the Bills' first 2 games, and is the third player to reach that mark to start a season. The other two won the MVP award that year.\n\nIt was Allen's fourth career game with at least 3 passing touchdowns and 2 rushing touchdowns. Only one other player in NFL history has more than one such game: Kordell Steward, per NFL.com.",
+    status: "verified",
+    seoTitle: "Bills beat Lions 41-31 in first regular-season Highmark game",
+  },
+  {
     date: "2026-09-17",
     day: "Thursday",
     headline: "Will Sam Darnold play for the Seahawks against the Cardinals?",

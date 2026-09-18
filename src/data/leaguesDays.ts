@@ -7,6 +7,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-18",
+    day: "Friday",
+    headline: "Fabrizio Romano says Manchester United trust Michael Carrick, and Ben Jacobs says the club is doing its due diligence",
+    dek: "Two reporters, three days apart, with a League Cup collapse in between. Fulham away on Sunday is the next piece of evidence.",
+    body: "Fabrizio Romano and Ben Jacobs do not agree about Michael Carrick. On Monday 14 September, the day after the 1-0 Manchester derby defeat, Romano said Manchester United \"maintain total faith and confidence in Michael Carrick\" and that \"Carrick remains absolutely convinced too\", per TEAMtalk and Yahoo Sports.\n\nOn Thursday Jacobs told The United Stand he was \"not sure if there is universal backing, to be perfectly honest\", and that \"Manchester United are doing their due diligence in case they have to make a change.\" Sports Mole and Football365 both carry the quotes, along with the five names he mentioned: Julian Nagelsmann, Thomas Tuchel, Eddie Howe, Kieran McKenna and Unai Emery. Both men are reporting the club's thinking second-hand, and neither quote comes from Manchester United.\n\nIn between came Wednesday night. Manchester United led Brighton and Hove Albion 2-0 inside ten minutes at Old Trafford and lost 3-2 in the League Cup third round, their first home defeat from two goals up since Tottenham Hotspur won 3-2 in 1976, per Sky Sports and ESPN. Afterwards Carrick said \"I don't feel under pressure\", per ESPN and Goal.\n\nFour games into the Premier League season Manchester United are 13th on 4 points, per ESPN and NBC Sports. Fulham, 18th on 1 point, are next, at Craven Cottage on Sunday.",
+    status: "verified",
+    seoTitle: "Romano says Manchester United back Carrick; Jacobs is unsure",
+  },
+  {
     date: "2026-09-17",
     day: "Thursday",
     headline: "Manchester United led Brighton and Hove Albion 2-0 inside ten minutes and lost 3-2, and Michael Carrick says that is on him",

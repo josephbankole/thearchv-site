@@ -8,6 +8,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-18",
+    day: "Friday",
+    headline: "When does the 2027 Formula 1 season start?",
+    dek: "The 2027 Formula 1 season starts at the Bahrain Grand Prix on Sunday 14 March and ends in Abu Dhabi on 12 December, with 24 races and 10 Sprints.",
+    body: "The 2027 Formula 1 season starts at the Bahrain Grand Prix on Sunday 14 March, per Sky Sports and The Race. Formula 1 published the calendar on 16 September. It has 24 Grands Prix in 22 countries and ends in Abu Dhabi on 12 December, per Formula1.com and Sky Sports.\n\nSaudi Arabia is round 2. Then the season moves to Australia, Japan and China, per Formula1.com.\n\nThe number of Sprint weekends rises from 6 to 10: Bahrain, Australia, Japan, Canada, Monaco, Great Britain, Italy, Brazil, Qatar and Abu Dhabi. Bahrain, Australia, Japan, Monaco and Abu Dhabi host a Sprint for the first time, per Formula1.com.\n\nTwo old venues return. Portugal comes back at Portimão in June, and Turkey comes back at Istanbul Park in October, between Azerbaijan and Singapore, per Formula1.com and PlanetF1. The Dutch Grand Prix has gone after its last race in 2026, and Barcelona is off the 2027 calendar, expected back in 2028 in a rotation with Spa, per Sky Sports and PlanetF1. Madrid keeps its race, paired with Monza in September, per Formula1.com.\n\nThe calendar comes with a backup plan. Sky Sports reports that F1 delayed the announcement because of the conflict in the Middle East. The Race reports that if Bahrain and Saudi Arabia cannot run on their dates, F1 would look to bring the Australian, Chinese and Japanese races forward.\n\nThe cars run first at pre-season testing in Bahrain, from 24 to 27 February, per Formula1.com and PlanetF1.",
+    status: "verified",
+    seoTitle: "2027 F1 season starts in Bahrain on 14 March",
+    evergreen: "f1-sprint",
+  },
+  {
     date: "2026-09-17",
     day: "Thursday",
     headline: "Why is the 2026 Azerbaijan Grand Prix on a Saturday?",

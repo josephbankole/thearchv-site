@@ -8,6 +8,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-18",
+    day: "Friday",
+    headline: "Who leads the 2026 Biltmore Championship after round one?",
+    dek: "Max Greyserman and Eric Cole share the lead at the 2026 Biltmore Championship Asheville after first rounds of 64, 7 under par.",
+    body: "Max Greyserman and Eric Cole share the lead at the Biltmore Championship Asheville after the first round. Both shot 64, 7 under par, at The Cliffs at Walnut Cove on Thursday 17 September, per AP and Field Level Media. The round finished the same day, per AP and ESPN's leaderboard.\n\nSix players are one shot back on 65, on ESPN's leaderboard: Ben Kohles, Chris Kirk, Mackenzie Hughes, Jackson Suber, Peter Malnati and Neal Shipley.\n\nGreyserman had not played since the Wyndham Championship five weeks earlier, AP reports, and spent two of those weeks at home with his 8-month-old son and two on holiday in Italy. \"Don't practice and just have a good time and just show up here,\" he told AP.\n\nThis is the first PGA Tour event at the course and the first of the FedEx Cup Fall events, which decide who keeps full PGA Tour status for 2027. AP puts that line at the top 100.\n\nGreyserman started the week at No. 103 in the FedEx Cup standings, per AP and Field Level Media.",
+    status: "verified",
+    seoTitle: "Max Greyserman and Eric Cole lead Biltmore Championship",
+    evergreen: "fedex-cup",
+  },
+  {
     date: "2026-09-17",
     day: "Thursday",
     headline: "Who won the 2026 Solheim Cup?",

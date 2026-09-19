@@ -7,6 +7,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-19",
+    day: "Saturday",
+    headline: "Michael Carrick calls his Manchester United future 'not on the radar' before Fulham, as Luke Shaw and Carlos Baleba get 'a chance'",
+    dek: "Two days after the boos at Old Trafford, the Manchester United head coach talked about the job, the crowd and the team for Craven Cottage.",
+    body: "Michael Carrick was asked on Friday how long he has left as Manchester United head coach. \"In terms of future and ownership and how long I've got, it's totally nothing,\" he said, per BBC Sport. \"It's ridiculous to think that way in the position I'm in, it's just not on the radar.\" The Peoples Person's full transcript of the press conference carries the same answer.\n\nThe question followed Wednesday's League Cup third-round defeat by Brighton and Hove Albion, 3-2 at Old Trafford after Manchester United had led 2-0, and the boos from the Stretford End at the end. Asked about the boos, Carrick told reporters: \"It's not that I don't feel the emotion of losing matches, but it doesn't affect how I think about what we need to do next.\" He added that he had been \"expecting a spell we had to work through\", per BBC Sport.\n\nOn team news, Carrick said \"there is a chance\" for Luke Shaw and Carlos Baleba to feature on Sunday, though he was not \"100%\", per BBC Sport and The Peoples Person. Baleba has yet to play for the club. Asked about 15-year-old JJ Gabriel, he said: \"He's a young boy, it's important we don't play anything out here.\"\n\nThe press conference came a day after Ben Jacobs told The United Stand that Manchester United are \"doing their due diligence in case they have to make a change\", per Sports Mole and Football365. That is Jacobs's reading of the club's thinking, not a statement from the club.\n\nManchester United are 13th in the Premier League on 4 points, per ESPN and NBC Sports. Fulham, under Álvaro Arbeloa, are 18th on 1 point with no league win yet, per Sports Mole and Playmakerstats. Fulham have not beaten Manchester United in the league at Craven Cottage since a 3-0 win on 19 December 2009, per Sports Mole and RotoWire. Kick-off on Sunday is 16:30 in the UK, 11:30 in Toronto.",
+    status: "verified",
+    seoTitle: "Carrick says his future is not on the radar before Fulham",
+  },
+  {
     date: "2026-09-18",
     day: "Friday",
     headline: "Fabrizio Romano says Manchester United trust Michael Carrick, and Ben Jacobs says the club is doing its due diligence",

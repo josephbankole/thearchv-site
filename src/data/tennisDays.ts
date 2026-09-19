@@ -8,6 +8,17 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-19",
+    day: "Saturday",
+    headline: "How did Canada take a 2-0 Davis Cup lead over France?",
+    dek: "Liam Draxl and Félix Auger-Aliassime won Friday's singles in Quebec City, leaving Canada one win from the Davis Cup Final 8 against France.",
+    body: "Liam Draxl beat Arthur Rinderknech 6-2, 7-5 in the opening match. Félix Auger-Aliassime followed by beating Quentin Halys 7-6(5), 4-6, 6-3. Those two singles wins on Friday 18 September gave Canada a 2-0 lead over France in their Davis Cup Qualifiers second-round tie at the Videotron Centre in Quebec City, per the ATP Tour and The Canadian Press. No Saturday match had started when this was filed early on Saturday morning.\n\nThe tie is best of five, so Canada needs one more win, per The Canadian Press and Tennis Canada. The winner goes to the Davis Cup Final 8 in Bologna, Italy, in November. The loser drops into the first round of qualifying in February 2027, per The Canadian Press.\n\nThe Canadian Press called Draxl's win an upset. Auger-Aliassime, the world No. 5 on the ATP rankings, needed three sets to beat Halys. \"It's a dream to play here, I've said it many times,\" he said, per The Canadian Press. The crowd was 10,633, per the same report.\n\nFrance captain Paul-Henri Mathieu said there was \"disappointment in trailing 2-0\", per The Canadian Press. Canada has never beaten France in the Davis Cup, per The Canadian Press, which described this tie as Canada's chance at a first-ever win over France.\n\nSaturday starts with the doubles. Auger-Aliassime and Duncan Chan face Benjamin Bonzi and Pierre-Hugues Herbert, per Tennis Canada and The Canadian Press. If France win it, Auger-Aliassime plays Rinderknech next.",
+    status: "verified",
+    image: "/heads/hd/felix-auger-aliassime.webp",
+    imageAlt: "Illustrated ARCHV portrait of Félix Auger-Aliassime",
+    seoTitle: "Draxl and Auger-Aliassime put Canada 2-0 up on France",
+  },
+  {
     date: "2026-09-18",
     day: "Friday",
     headline: "Why was Aryna Sabalenka fined after the US Open final?",

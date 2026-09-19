@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-19",
+    day: "Saturday",
+    headline: "Is Fernando Alonso racing in Formula 1 in 2027?",
+    dek: "Fernando Alonso has not announced whether he will race for Aston Martin in 2027, and he told the FIA press conference in Madrid that news would come \"Not soon\".",
+    body: "Not yet. Fernando Alonso has announced no decision on 2027, and Aston Martin has announced no driver line-up for that season.\n\nAt the FIA press conference before the Spanish Grand Prix in Madrid on Thursday 10 September, Alonso was asked when news on his 2027 plans would come. \"Not soon,\" he said, per the FIA's official transcript. Asked why the delay, he replied: \"Because I think it's nice, no?\"\n\nHis contract with Aston Martin runs to the end of the 2026 season, per Sky Sports and MotorBiscuit.\n\nHe gave one more answer that day. Asked whether an Aston Martin programme in another series, such as the World Endurance Championship, could replace Formula 1 in 2027, he answered \"Yes\", per the FIA transcript. He also said the decision depends on what the 2027 rules do \"on the racing and on the driving side of things\". The current cars, he said, \"are not the best cars to drive and to enjoy\". Other drivers visited Aston Martin's Lawrence Stroll over the summer, he said, \"so no urgency\".\n\nAston Martin is not naming alternatives. \"I will not give you any names,\" Mike Krack, the team's chief trackside officer, said, per Motorsport Week and MotorBiscuit.\n\nAlonso is 45, born on 29 July 1981, and his record lists 2 world titles, 32 wins and 441 Grands Prix entered, per Formula1.com. Aston Martin's 2026 has been thin. He has scored all 3 of the team's points, per the official Formula1.com standings and RacingNews365.\n\nHe has already given his reason for the wait. He thinks it is nice.",
+    status: "verified",
+    seoTitle: "Fernando Alonso has not decided on F1 in 2027 yet",
+  },
+  {
     date: "2026-09-18",
     day: "Friday",
     headline: "When does the 2027 Formula 1 season start?",

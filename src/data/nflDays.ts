@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-19",
+    day: "Saturday",
+    headline: "Which quarterbacks are ruled out of NFL Week 2?",
+    dek: "Kyler Murray of the Minnesota Vikings, Michael Penix Jr. of the Atlanta Falcons and Sam Darnold of the Seattle Seahawks are all ruled out of Sunday's Week 2 games.",
+    body: "Three quarterbacks are ruled out of Sunday's Week 2 games: Kyler Murray of the Minnesota Vikings, Michael Penix Jr. of the Atlanta Falcons and Sam Darnold of the Seattle Seahawks. Teams filed their final injury reports for Sunday's games on Friday 18 September.\n\nThe Vikings ruled Murray out of Sunday's game at the Chicago Bears, per the team's final injury report on vikings.com. He is in the concussion protocol. Carson Wentz starts at Soldier Field, per vikings.com and the Chicago Sun-Times. Murray was hurt in the first quarter of the Week 1 win over the Green Bay Packers, when Packers safety Javon Bullard hit him late at the end of a slide, per NFL.com. Wentz came on and completed 12 of 19 passes for 133 yards and 3 touchdowns.\n\nPenix misses a second straight game with a knee injury, per atlantafalcons.com and NFL.com. \"I'm close. I'm working extremely hard,\" he told the club's website. The Falcons host the Carolina Panthers. Tua Tagovailoa is listed as doubtful with an oblique injury, so Cooper Rush starts for the second week running, per the Falcons and NFL.com.\n\nDarnold was ruled out on Wednesday with a glute injury, per seahawks.com and NFL.com. Drew Lock starts for Seattle at the Arizona Cardinals.\n\nJoe Burrow of the Cincinnati Bengals is not ruled out. He is listed as questionable with a back injury for the game at the Houston Texans, per NFL.com and CBS Sports. He practised in full on Friday, and head coach Zac Taylor said he is good to go. The report still says questionable.\n\nThe Los Angeles Rams and the New York Giants play on Monday night, so their game statuses come later. Aaron Donald, who came out of retirement to rejoin the Rams on 30 August, was asked on Friday whether he would play. \"That's the plan,\" he said, per therams.com and NFL.com.",
+    status: "verified",
+    seoTitle: "Kyler Murray and Michael Penix Jr. out for NFL Week 2",
+  },
+  {
     date: "2026-09-18",
     day: "Friday",
     headline: "How did the Bills open their new Highmark Stadium?",

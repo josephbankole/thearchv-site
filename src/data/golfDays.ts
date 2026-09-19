@@ -8,6 +8,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-19",
+    day: "Saturday",
+    headline: "How did Neal Shipley take the Biltmore Championship lead?",
+    dek: "Neal Shipley shot a 9-under 62 in round two to lead the 2026 Biltmore Championship Asheville by one shot from Ben Kohles, at 15 under par.",
+    body: "Neal Shipley went out in 29. He started birdie, birdie, then an eagle at the par-5 3rd, per AP and Field Level Media, and finished Friday's second round of the Biltmore Championship Asheville with a bogey-free 9-under 62.\n\nThat put the PGA Tour rookie on 15-under 127, one shot clear after 36 holes at The Cliffs at Walnut Cove in Asheville, North Carolina, per the PGA Tour's official leaderboard and AP. The second round was completed on Friday 18 September. Field Level Media called the 62 a career low.\n\nBen Kohles is second on 14 under after a 63 that finished eagle-birdie, per AP and the PGA Tour leaderboard. Ricky Castillo, who also shot 62, and Max Greyserman, a joint leader after round one, share third on 11 under, per the leaderboard and Field Level Media. Eric Cole, the other first-round leader, is fifth on 10 under after a 68.\n\nThe cut fell at 3 under, per the PGA Tour leaderboard and Field Level Media. Tony Finau missed it at 7 over.\n\nShipley came into the week well down the season list. He is 183rd in the FedEx Cup standings and had missed 11 cuts in 19 starts, per AP and the PGA Tour. A win would bring a two-year exemption, Field Level Media reported. \"Golf is one of those sports where you don't get instant gratification,\" Shipley said, per AP.\n\nRound three is on Saturday. Can a rookie ranked 183rd hold a one-shot lead for 36 more holes?",
+    status: "verified",
+    seoTitle: "Neal Shipley leads Biltmore Championship at 15 under",
+    evergreen: "cut-line",
+  },
+  {
     date: "2026-09-18",
     day: "Friday",
     headline: "Who leads the 2026 Biltmore Championship after round one?",

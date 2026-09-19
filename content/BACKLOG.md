@@ -16,7 +16,8 @@ Status key: todo / drafted / live
 - [drafted] finals/lusail-2022 — Argentina 3-3 France (Argentina on pens), 2022 (hand-built 2026-06-15)
 
 ## C3 — ARCHV explainers (history-angled; start with 6)
-- [todo] explainers/false-9-hidegkuti-to-messi — the false 9, from Hidegkuti to Messi
+- [drafted] explainers/false-9-hidegkuti-to-messi — the false 9, from Hidegkuti to Messi (drafted 2026-09-12 by the Saturday SEO run: D92 September phase C3, first [todo] in order, Profound theme 1 "illustrated football history storytelling"; no GSC override, the site's football queries in the 28 days to 10 Sep had no bigger unserved history opportunity. Stub-to-long-form off /glossary/false-9/. Homepage-linked under "The ARCHV explains", glossary cross-links wired in build-content.mjs to false-9 and half-space. seoTitle set. Needs art: see run report)
+- [drafted] explainers/illustrated-football-portraits-history — illustrated football portraits, from cigarette cards to the Panini album (ADDED and drafted 2026-09-19 by the Saturday SEO run: D92 September phase C3 history, added rather than taken from the list because the Profound standing rule points this week at theme 2 "illustrated player & club portraits" (0% visibility, no dedicated page; theme 1 got the false-9 draft on 2026-09-12) and no listed C3 item serves it. No GSC override: the biggest page-2 opportunities this week are refreshes of live pages, not new ones. Homepage-linked under "The ARCHV explains"; links /legends/, /notes/the-archv-method/, /finals/mexico-1970/. No glossary cross-links. Needs art: see run report)
 - [todo] explainers/world-cup-final-formations — every World Cup final formation, explained
 - [todo] explainers/what-xg-really-measures — what xG really measures (and what it doesn't)
 - [todo] explainers/offside-rule-history — the offside rule, and why it keeps changing

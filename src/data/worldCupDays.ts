@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-20",
+    day: "Sunday",
+    headline: "Kaylee Hunter scored three against France in 42 minutes, and no player had done that in a U-20 Women's World Cup knockout tie for four editions",
+    dek: "Canada went into the round of 16 as a third-placed qualifier against the team that won Group C. An 18-year-old forward from Calgary settled it before the hour.",
+    body: "Canada beat France 3-1 in the round of 16 of the 2026 FIFA U-20 Women's World Cup on Thursday 17 September 2026, at the Stadion Miejski LKS Lodz in Lodz, Poland. Kaylee Hunter scored all three, in the 28th, 33rd and 70th minutes. Kenza Dufour pulled one back for France on 81. Concacaf's own match report and TSN, who carried the match in Canada, agree on the scoreline and on all four minutes.\n\nThe number underneath it is the one worth keeping. Concacaf's report puts Hunter as \"the first player to score three or more goals in a FIFA U-20 Women's World Cup knockout match\" counting the last four editions of the tournament. She took three shots on target and scored three times.\n\nCanada had not arrived in the last 16 with any momentum. They opened Group B on 5 September with a 1-1 draw against England at the Bielsko-Biala Stadium, Annabelle Chukwu scoring on 52 before England equalised from the penalty spot, per Concacaf. They came out of the group in third. France came out of Group C in first. Just Women's Sports called the result the day's biggest upset, which is a fair reading of the seedings and a poor one of the 42 minutes between Hunter's first goal and her third.\n\nHunter is 18 and from Calgary, Alberta, and plays her club football for AFC Toronto in the Northern Super League, per TSN. That detail has one carrier and is offered as background rather than as a verified fact.\n\nThe quarter-final against DPR Korea, the defending champions, is scheduled and had not kicked off when this page was written. This desk carries no result on it and will not until two named sources report a finished match.",
+    status: "verified",
+    seoTitle: "Kaylee Hunter hat-trick: Canada beat France 3-1 at the U-20s",
+  },
+  {
     date: "2026-07-29",
     day: "Wednesday",
     headline: "Malawi beat Nigeria 3-1 on their Women's Africa Cup of Nations debut.",

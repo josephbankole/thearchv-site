@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-20",
+    day: "Sunday",
+    headline: "How did Canada reach the Davis Cup Final 8?",
+    dek: "Félix Auger-Aliassime won his third rubber in 2 days, beating Arthur Rinderknech in 3 sets, and Canada took the tie 3-1 in Quebec City.",
+    body: "Félix Auger-Aliassime beat Arthur Rinderknech 4-6, 7-6 (5), 6-4 in the fourth rubber at the Videotron Centre on Saturday, and that was the tie. Canada took it 3-1 and travel to the Davis Cup Final 8 in Bologna in November.\n\nIt was his third match of the weekend. The Canadian Press has Liam Draxl beating Rinderknech 6-2, 7-5 on Friday and Auger-Aliassime beating Quentin Halys 7-6 (5), 4-6, 6-3 to put Canada 2-0 up, then Benjamin Bonzi and Pierre-Hugues Herbert beating Auger-Aliassime and Duncan Chan 7-6 (4), 6-3 in Saturday's doubles. That sent the tie back to the singles court with France still alive.\n\nFrance captain Paul-Henri Mathieu, quoted by the Canadian Press, put the load plainly: \"It's not easy to play singles Friday, commit to playing doubles and then returning to play singles afterward.\" Canada captain Frank Dancevic called it incredible for the country to have a player who could carry singles and doubles in the same weekend.\n\nThe Canadian Press reported 22,340 spectators across the 2 days, a Canadian Davis Cup record, with 10,633 in on the Friday. Auger-Aliassime heard them. \"I told myself to stay calm,\" he told the Canadian Press. \"The fans were celebrating as if the match was already over.\"",
+    status: "verified",
+    seoTitle: "Canada beat France 3-1 to reach Davis Cup Final 8",
+  },
+  {
     date: "2026-09-19",
     day: "Saturday",
     headline: "How did Canada take a 2-0 Davis Cup lead over France?",

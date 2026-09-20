@@ -402,6 +402,65 @@ section marker now.*
 - **A fixture that fails verification does not ship.** Publishing on a schedule never means shipping
   a slot that came up empty. Fewer carousels is the correct output of a thin week.
 
+### INSTAGRAM IS REELS ONLY, D-2026-09-19c (founder, 2026-09-19, in session). THIS WINS OVER D-2026-09-19a AND 19b BELOW
+### WHEREVER THEY SAY "CAROUSEL".
+Founder, verbatim: "for all posts i want it to be single card reels, what would normally be a carousel, lets put into
+a 1 card reel for all, and all accounts can post up to 2 a day."
+- **IG @thearchvfc, IG @thearchv.ca and IG @thearchv.ai publish NO carousels.** Every unit is a single-card reel made
+  with `fifa.archv/scripts/stat_card_reel.py` (1080x1920, 7 seconds, silent, one framed number, a large image per
+  D-2026-09-13c). Whatever would have been a carousel (predicted lineups, interview quotes, Fantasy Premier League,
+  nostalgia, MLS Weekly, the @thearchv.ca new unit, the @thearchv.ai explainers and news decks, the company feature)
+  is cut to its ONE strongest number and claim on ONE card. Quotes ride in the claim or the context line.
+- **Up to TWO reels a day per account**, 3-hour `dueAt` spacing (D-2026-09-12c). The desks keep their lane precedence
+  to choose WHICH stories become the two; the lanes and Platform cells are unchanged (the step 7 unit still logs
+  `IG @thearchvfc`, now with Format `Reel`), so liveness and metrics keep working.
+- **ONE EXCEPTION, founder's call: the archive-marketing desk's IG Archive @thearchvfc product unit stays a CAROUSEL**
+  and stays outside the two-a-day count. folabankole and film.joey are out of scope.
+- **The founder's @thearchv.ai explainer series becomes reels.** The queued explainer carousels (10:00 ET, to 9 October)
+  are converted to one-card reels, the carousel moved to Buffer Drafts only once its reel is queued. 20 to 23
+  September converted in session; `archv-ai-desk` converts each later explainer the night before its slot (its
+  STEP 0), and if it cannot make the reel, the carousel stays queued rather than leaving the day empty and the run
+  says so.
+- **Carousel-only rules go dormant** (4-to-5-slide counts, slide-2 standalone, `--art-rules`, the Shelton x Rodman
+  slide bands). The card, caption and gate rules still bind: `stat_card_reel.py`'s own copy gate, the caption rules
+  and `carousel_structure_lint.py --caption-only --caption-rules archv`, the humanizer, detector, banned-moves and
+  strip chain, the one-source-on-a-card rule of D-2026-09-12i, full entity names, no hashtags.
+- Today, 19 September: the @thearchvfc 09:00 Carrick and @thearchv.ca 12:00 Auger-Aliassime carousels were rebuilt as
+  reels in the same slots and the carousels moved to Drafts.
+
+### INSTAGRAM CADENCE, D-2026-09-19a (founder, 2026-09-19, in session). THIS WINS OVER EVERY OLDER CADENCE LINE BELOW.
+Founder, verbatim: "Going forward i want fewer carousels and more of the single image stat cards as reels, they are
+doing well. I would like to reduce our release cadence as well for instagram to 2 posts per account per day. 1
+carousel and 1 single image reel." Scope and conflicts ruled by the founder the same session:
+- **IG @thearchvfc, IG @thearchv.ca and IG @thearchv.ai: at most TWO units a day each, exactly ONE carousel and ONE
+  single-image stat card reel** (the D-2026-09-11b / D-2026-09-13c `stat_card_reel.py` format). This restores a
+  numeric cap on Instagram and SUPERSEDES, for these three accounts, D-2026-09-08a's no-cap line and D-2026-09-12d's
+  "more than one unit a day". The 3-hour `dueAt` spacing of D-2026-09-12c still binds the pair.
+- **folabankole and film.joey are OUT of scope** (personal and separate; unchanged). Threads, Substack and the site
+  are unaffected.
+- **Carousels are the scarce unit, the stat card reel is the growth format.** When a story could go either way,
+  prefer the reel. A desk that has two carousel-worthy stories ships the stronger one and holds the other.
+- **@thearchvfc Sunday: MLS Weekly IS Sunday's carousel.** The step 7 carousel stands down on Sundays; the Sunday stat
+  card reel still ships. This ends the two-units-on-Sunday exception of D-2026-09-08b (Sunday was three units with
+  the reel).
+- **The archive-marketing desk's IG Archive @thearchvfc unit is EXEMPT** from the cap (founder ruling) and keeps its
+  own slot; spacing still binds it.
+- **@thearchv.ca: the EVERGREEN-BENCH repost half is RETIRED** (it was the account's second carousel). One new
+  carousel plus the stat card reel.
+- **@thearchv.ai: the founder's 10:00 ET explainer is the day's carousel until the series ends on 9 October.** Until
+  then `archv-ai-desk` Lane B builds NO news carousel and instead builds the account's daily stat card reel; from
+  10 October Lane B builds ONE news carousel a day plus the reel. `ai-company-feature` stops queuing to Instagram
+  from 2026-09-20 (its build may continue to the site or be paused; its IG units no longer ship). **AMENDED THE SAME
+  SESSION by D-2026-09-19b (founder: "ai-company-feature should create a single image reel instead of a carousel"):
+  `ai-company-feature` now ships @thearchv.ai's daily stat card reel at 07:00 ET (one 3:2 story image, Higgsfield
+  when credits allow, local mflux otherwise; spec REEL MODE). `archv-ai-desk` Lane B-R is the FALLBACK only: it
+  builds a reel on a day with no company-feature reel already queued, and takes the lane outright when the
+  50-company series ends.**
+- **Applied from 2026-09-19.** Six @thearchv.ai decks already queued past the cap (19 Sep 13/16/19 ET, 20 Sep 13/16/19
+  ET) were moved to Buffer Drafts the same session, every field carried, nothing deleted: 6aacc09f23c4dc143904e5f4,
+  6aacc09f44d06795d69a00cd, 6aacc0a044d06795d69a00f5, 6aae14c465e5b8cd5b28f732, 6aae14c45fe629aa266a7e71,
+  6aae14c55fe629aa266a7e9c. The founder clears drafts.
+
 ### Cadence (D-2026-08-03, on Tom's feedback) — EVERY NUMERIC DAY-CAP BELOW IS SUPERSEDED 2026-09-08 by D-2026-09-08a (no cap; 3-hour spacing). Displacement ladders, slates and formats survive as editorial workflow, not ceilings.
 
 **SPACING IS NOW D-2026-09-12c (founder, 2026-09-12), which supersedes D-2026-09-08a's wording.** At least three hours

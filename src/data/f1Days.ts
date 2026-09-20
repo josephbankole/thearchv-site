@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-20",
+    day: "Sunday",
+    headline: "Why is the Bahrain Grand Prix being held in Malaysia?",
+    dek: "Bahrain lost the race and kept the name. Conflict in the Middle East forced the round out of the country in April, and Sepang took it for 4 October.",
+    body: "The 2026 Bahrain Grand Prix runs at the Sepang International Circuit in Malaysia on Sunday 4 October, under the official title Formula 1 Gulf Air Bahrain Grand Prix in Malaysia. The race was originally set for the Bahrain International Circuit in April, and conflict in the Middle East made that impossible.\n\nFormula 1 and the FIA confirmed the switch on 26 July. The arrangement was agreed between Formula 1, the FIA and the governments of Bahrain and Malaysia, and Bahrain held on to the race name and its title sponsorship. Formula 1 president Stefano Domenicali said the sport had \"demonstrated its ability to adapt, find solutions, and deliver\".\n\nThe Bahrain and Saudi Arabian rounds had both been dropped earlier in the year, cutting the calendar from 24 races to 22, PlanetF1's Michelle Foster reported. Bahrain had hoped to rearrange its own event for 4 October before the situation worsened. That date is the one Sepang now holds.\n\nSepang last held a Formula 1 race on 1 October 2017, the Malaysian Grand Prix, won by Max Verstappen. It comes back as round 16 of 23, the middle weekend of 3 in a row: Baku on Saturday 26 September, Malaysia on 4 October, Singapore the weekend after.",
+    status: "verified",
+    seoTitle: "Bahrain Grand Prix moved to Sepang, Malaysia, on 4 October",
+  },
+  {
     date: "2026-09-19",
     day: "Saturday",
     headline: "Is Fernando Alonso racing in Formula 1 in 2027?",

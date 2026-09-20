@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-20",
+    day: "Sunday",
+    headline: "Who is playing in the 2026 Presidents Cup at Medinah?",
+    dek: "Brandt Snedeker and Geoff Ogilvy have their 12-man teams. The Presidents Cup runs at Medinah Country Club from 24 to 27 September.",
+    body: "Jackson Koivun is 21, turned professional out of Auburn in June, and will tee off for the United States at Medinah on Thursday. He is one of 6 players Snedeker picked on 1 September, alongside Patrick Cantlay, Xander Schauffele, Justin Thomas, Chris Gotterup and Jacob Bridgeman. Bridgeman, Gotterup and Koivun have never played the match before.\n\nThe 6 who qualified automatically for the United States are Scottie Scheffler, Cameron Young, Wyndham Clark, Sam Burns, Russell Henley and Collin Morikawa.\n\nGeoff Ogilvy's International team takes Adam Scott, Hideki Matsuyama, Ryan Fox, Si Woo Kim, Tom Kim and Min Woo Lee through automatic qualification, with Sungjae Im, Corey Conners, Nick Taylor, Christiaan Bezuidenhout, Nico Echavarria and Ryo Hisatsune as the captain's picks. Echavarria, Hisatsune and Taylor are debutants too.\n\nBoth sets of picks are carried by presidentscup.com and the PGA Tour. CBS Sports has the competition running from Thursday 24 September to Sunday 27 September at Medinah Country Club's Course No. 3, outside Chicago.\n\nPer presidentscup.com, the United States has won the last 10. The International team's single win came in 1998, at Royal Melbourne, and Golf Monthly and Golfweek both record it as the only one.",
+    status: "verified",
+    seoTitle: "US and International teams set for Presidents Cup, Medinah",
+  },
+  {
     date: "2026-09-19",
     day: "Saturday",
     headline: "How did Neal Shipley take the Biltmore Championship lead?",

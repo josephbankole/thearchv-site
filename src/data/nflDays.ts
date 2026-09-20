@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-20",
+    day: "Sunday",
+    headline: "Which NFL players were fined under the new suspension rule?",
+    dek: "Sam Franklin, Evan Williams and Chris Johnson were fined after Week 1 for fouls that now count towards an automatic one-game ban.",
+    body: "Buffalo Bills defensive back Sam Franklin was fined $9,425 for a blindside block, Green Bay Packers defensive back Evan Williams $7,087 for a hit on a defenceless player, and Miami Dolphins cornerback Chris Johnson $17,911 for a hip-drop tackle. Those are the first fouls of the 2026 season to count towards an automatic suspension. Fox Sports and Pro Football Talk both published the amounts on 19 September.\n\nThe NFL and the NFL Players Association agreed the rule before the season started. It covers 5 fouls: the hip-drop tackle, the horse-collar tackle, launching, a hit on a defenceless player and the blindside block. A player who commits 3 offences in those categories in a season is suspended for one game, per the joint announcement on NFL.com. Fox Sports and Pro Football Talk both read that threshold as 3 fouls under the same rule rather than 3 spread across the 5.\n\nA player who ends the season with a single violation gets half the fine back. Violations carry forward into later seasons, although every player opened 2026 on a clean slate, and coaches now have to sit in on the league meetings once a player is near the number.\n\nFox Sports reported 20 fines in all after Week 1, among them Stefon Diggs at $14,926 for unsportsmanlike conduct and Jahmyr Gibbs at $23,027 for use of the helmet. Neither of those fouls is on the list that ends in a ban. Franklin, Williams and Johnson are each 2 fouls away.",
+    status: "verified",
+    seoTitle: "Franklin, Williams and Johnson fined under new NFL rule",
+  },
+  {
     date: "2026-09-19",
     day: "Saturday",
     headline: "Which quarterbacks are ruled out of NFL Week 2?",

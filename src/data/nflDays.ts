@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-21",
+    day: "Monday",
+    headline: "What injury did Jayden Daniels suffer against the Cowboys?",
+    dek: "The Washington Commanders quarterback dislocated his left elbow in the first half against the Dallas Cowboys, and X-rays showed no fracture.",
+    body: "Jayden Daniels dislocated his left elbow on the final play of the first half of Washington's 37-20 defeat by the Dallas Cowboys on Sunday. X-rays showed no fracture.\n\nCBS Sports and NBC4 Washington described the same sequence. Washington had first and goal at the Dallas 1-yard line with 3 seconds left in the half. Daniels took the snap from under centre, his foot was stepped on by left guard Chris Paul, and he put his left arm down to break his fall as he was taken to the ground.\n\n\"He did injure his left elbow, it was a dislocation. X-rays showed no fracture. He'll travel back home with the team. More imaging tomorrow,\" head coach Dan Quinn said, per NBC4 Washington. Quinn added that he was disappointed for Daniels, who he thought had been playing well.\n\nIt is the same elbow Daniels dislocated in Week 9 of the 2025 season. He played 7 games that year.\n\nMarcus Mariota finished the game, completing 11 of 16 passes for 111 yards and a touchdown. Washington are 0-2.\n\nDaniels travelled home with the squad on Sunday night, and the imaging is on Monday.",
+    status: "verified",
+    seoTitle: "Jayden Daniels dislocated his left elbow, no fracture",
+  },
+  {
     date: "2026-09-20",
     day: "Sunday",
     headline: "Which NFL players were fined under the new suspension rule?",

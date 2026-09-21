@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-21",
+    day: "Monday",
+    headline: "When do the 2026 Billie Jean King Cup Finals begin?",
+    dek: "The 8-nation finals start on Tuesday 22 September in Shenzhen, where Italy are defending the title they have won twice in a row.",
+    body: "The 2026 Billie Jean King Cup Finals begin on Tuesday 22 September at the Shenzhen Bay Sports Centre Arena in Shenzhen, China, and finish on Sunday 27 September.\n\nCzechia against Great Britain opens the week, at 17:00 local time on Tuesday. Spain play Kazakhstan on Wednesday 23 September. Thursday 24 September carries both Ukraine against Belgium and China against Italy.\n\nThe field is Belgium, China, Czechia, Great Britain, Italy, Kazakhstan, Spain and Ukraine, and it is a straight knockout on indoor hard courts. Each tie is decided over 2 singles rubbers and a doubles if one is needed, and the first nation to win 2 matches takes the tie.\n\nItaly arrive as holders and have won the last two. They beat the United States 2-0 in last year's final, also in Shenzhen, with Elisabetta Cocciaretto beating Emma Navarro 6-4, 6-4 and Jasmine Paolini beating Jessica Pegula 6-4, 6-2. Roland-Garros reported it as Italy's sixth title. Tennis Up To Date noted that no nation has won three in a row since Czechia between 2014 and 2016.\n\nCan anyone stop a third Italian title? China get the first go at them, on Thursday.",
+    status: "verified",
+    seoTitle: "Billie Jean King Cup Finals begin 22 September, Shenzhen",
+  },
+  {
     date: "2026-09-20",
     day: "Sunday",
     headline: "How did Canada reach the Davis Cup Final 8?",

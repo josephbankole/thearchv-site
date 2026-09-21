@@ -7,6 +7,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-21",
+    day: "Monday",
+    headline: "Twenty-six shots and no goal before half time, and two men who were both at Craven Cottage cannot agree what they watched",
+    dek: "Lisandro Martinez put through his own net on 63 and Matheus Cunha equalised on 89 off a deflection. Manchester United have five points from five games, their joint-fewest at this stage of a Premier League season.",
+    body: "Fulham drew 1-1 with Manchester United at Craven Cottage on Sunday 20 September 2026, in matchweek five of the Premier League. Lisandro Martinez put through his own net on 63 minutes. Matheus Cunha equalised on 89 with a shot from outside the box that took a heavy deflection. Sky Sports, ESPN and Fulham Football Club's own report agree on the scoreline and both minutes.\n\nThe first half was the statistical oddity. The two sides took 26 shots between them and scored none, which Opta records as a Premier League record for a first half that did not produce a goal, measured since Opta's shot data begins in 2003-04. Opta also has Manchester United hitting the woodwork six times this season, more than any other club in the division.\n\nThe result leaves Manchester United twelfth on five points from five games, which Opta records as their joint-fewest at this stage of a Premier League season, level with 2014-15. Fulham are nineteenth on two.\n\nThe argument after it was louder than the match. Gary Neville, working for Sky Sports, said he had never seen a Manchester United team walk out of possession as much as that, called the first fifteen minutes of the second half a genuine disgrace, and added that Michael Carrick has got to stop defending the players. Neville was careful about the charge he was making: not running, he said, is the only thing he would call a disgrace.\n\nCarrick described a different afternoon. He told BBC Sport he thought his side did enough to win the game and that a point was the least they should take, and gave the rest of it to the Fulham goalkeeper, who he said had made top saves. Asked about being passive, he did not accept the word, telling Sky Sports that not having control of a match is not the same thing.\n\nThe international break now begins, which means both readings of Sunday sit unresolved for a fortnight.",
+    status: "verified",
+    seoTitle: "Fulham 1-1 Manchester United: Cunha rescues a late point",
+  },
+  {
     date: "2026-09-20",
     day: "Sunday",
     headline: "Manchester United go to Craven Cottage with seven conceded in four and a head coach who says the back line is not the problem",

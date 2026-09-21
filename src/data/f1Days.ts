@@ -8,6 +8,17 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-21",
+    day: "Monday",
+    headline: "Who was the last Italian Formula 1 world champion?",
+    dek: "Alberto Ascari won the drivers' title in 1952 and 1953, and Kimi Antonelli leads the 2026 championship with 9 rounds left.",
+    body: "Alberto Ascari was the last Italian to win the Formula 1 drivers' championship, in 1953. He had won it in 1952 as well, both times for Ferrari.\n\nItaly has produced 2 world champions. Giuseppe Farina took the first title in 1950 and Ascari took the next two, per PlanetF1.\n\nKimi Antonelli leads the 2026 championship. Formula1.com listed him on 292 points on 21 September, ahead of his Mercedes team mate George Russell on 211 and Ferrari's Lewis Hamilton on 191. The season has 9 of its 23 rounds still to run, starting with the Azerbaijan Grand Prix at Baku on Saturday 26 September.\n\nAntonelli won at Monza on 6 September from 19th on the grid, after penalties for exceeding his power unit allocation. AFP reported that he was the first Italian to win the Italian Grand Prix since Ludovico Scarfiotti in 1966.\n\nThe answer is still Alberto Ascari, and it has been since 1953.",
+    status: "verified",
+    image: "/heads/hd/kimi-antonelli.webp",
+    imageAlt: "Illustrated ARCHV portrait of Kimi Antonelli",
+    seoTitle: "Alberto Ascari, 1953: last Italian F1 world champion",
+  },
+  {
     date: "2026-09-20",
     day: "Sunday",
     headline: "Why is the Bahrain Grand Prix being held in Malaysia?",

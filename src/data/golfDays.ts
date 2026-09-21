@@ -8,6 +8,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-21",
+    day: "Monday",
+    headline: "How did Jacob Bridgeman win the Biltmore Championship?",
+    dek: "A closing 10-under 61 took Bridgeman to 26-under 258 and a 2-shot win over Ben James at The Cliffs at Walnut Cove.",
+    body: "Jacob Bridgeman shot 10-under 61 in the final round to win the inaugural Biltmore Championship Asheville on Sunday. He finished on 26-under 258, 2 shots clear of Ben James on 260.\n\nBridgeman birdied 3 of his first 4 holes, eagled the eighth, and added birdies at the 10th, 13th, 14th and 15th, per GOLF.com, which has him as the leading putter on the PGA Tour this season.\n\nRicky Castillo and Neal Shipley tied third on 261 at The Cliffs at Walnut Cove. Shipley had led after 54 holes. J.T. Poston and Jackson Koivun tied fifth on 263.\n\nThe Biltmore is the opening event of the FedEx Cup Fall, the run of tournaments that decides which players keep full cards for 2027. The Associated Press reported that Shipley moved from 183rd to 135th in those standings.\n\nIt was Bridgeman's second PGA Tour title of the year. The first came at the Genesis Invitational at Riviera in February.",
+    status: "verified",
+    seoTitle: "Jacob Bridgeman won the Biltmore Championship with a 61",
+    evergreen: "fedex-cup",
+  },
+  {
     date: "2026-09-20",
     day: "Sunday",
     headline: "Who is playing in the 2026 Presidents Cup at Medinah?",

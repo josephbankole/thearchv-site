@@ -402,6 +402,68 @@ section marker now.*
 - **A fixture that fails verification does not ship.** Publishing on a schedule never means shipping
   a slot that came up empty. Fewer carousels is the correct output of a thin week.
 
+### RATIFIED 2026-09-20 (founder, in session with the football desk). THIS WINS OVER D-2026-09-19a, 19b AND 19c BELOW.
+
+**D-2026-09-20a (founder): ONE STAT CARD REEL A DAY PER ACCOUNT, AND CAROUSELS COME BACK ON TUESDAY AND
+THURSDAY ONLY.** Founder wording: "1 stat image reel a day, they are currently performing the best" and
+"2 carousels a week tuesday and thursday". Scope and readings chosen by him the same session from options
+put to him: the change is **PERMANENT from 2026-09-20**, not break-scoped; the reel count is **per account
+per day**, not one across the operation; and it binds **IG @thearchvfc and IG @thearchv.ca only**.
+- **Every day: exactly ONE stat card reel per account**, `scripts/stat_card_reel.py`, the D-2026-09-13c
+  large-portrait format. This SUPERSEDES D-2026-09-19c's "up to TWO reels a day per account" and cuts the
+  football desk from two reels an account to one. Steps 7c and 8b keep the lane; the second reel goes.
+- **Carousels return on TUESDAY and THURSDAY ONLY, one per account on each of those two days**, and are
+  built the Shelton x Rodman way under D-2026-09-13a in full, whose art rules, four-to-five-slide count,
+  24-word cap and `carousel_structure_lint.py --art-rules archv` gate come back out of the dormancy
+  D-2026-09-19c put them in. This REVERSES the "IG @thearchvfc and IG @thearchv.ca publish NO carousels"
+  half of D-2026-09-19c. Every other day of the week is the reel alone.
+- **So the week, per account:** Monday reel; Tuesday reel + carousel; Wednesday reel; Thursday reel +
+  carousel; Friday reel; Saturday reel; Sunday reel. The 3-hour `dueAt` spacing of D-2026-09-12c binds the
+  pair on a Tuesday and a Thursday.
+- **Sunday MLS Weekly is now the Sunday REEL on @thearchvfc**, not a second unit and not a carousel: the
+  account ships one unit on a Sunday and MLS Weekly is it. This ends the protected-second-slot half of
+  D-2026-09-19a and the two-unit Sunday of D-2026-09-08b. Step 7c builds nothing on a Sunday.
+- **What does NOT move:** IG @thearchv.ai keeps its own grid under `archv-ai-desk` and `ai-company-feature`
+  (founder scoped this ruling to the two football-desk accounts); the archive-marketing IG Archive unit
+  keeps its exemption and its own slot; folabankole and film.joey are out of scope as ever. Threads, the
+  site, the app and the Dispatch are untouched.
+- **Applied from 2026-09-20.** The four reels already queued that morning under D-2026-09-19c (two per
+  account) were built and verified before the ruling landed and were LEFT AS QUEUED rather than re-cut;
+  the two surplus ids are named in that day's run report for the founder to drop in Buffer if he wants the
+  day itself brought into line. The new shape runs from Monday 21 September.
+
+**D-2026-09-20b (founder): THE INTERNATIONAL BREAK LEANS ON WOMEN'S FOOTBALL, THE NWSL AND MANCHESTER
+UNITED NOSTALGIA, AND CANADIAN WOMEN GET THE LIGHT.** Founder wording: "During the upcoming international
+break i want to focus on the NWSL, womens international football and manchester united nostalgia, lets
+shine a light on women, especially canadian women.. the U20women did well but got knocked out, i would
+like a few posts about them this week".
+- **Editorial focus for the break window, on @thearchvfc and @thearchv.ca:** the NWSL, women's
+  international football, and Manchester United history and nostalgia. Canadian women are the priority
+  inside the women's half, and the ask is explicitly to shine a light rather than to cover a result.
+- **A few posts on the Canada Under-20 women this week**, off the 2026 FIFA U-20 Women's World Cup in
+  Poland. This is a named founder ask with a deadline of the week of 2026-09-20 and is tracked as such.
+- **Scope note, recorded because it is the whole point:** this is an editorial FOCUS, not a new lane and
+  not a cap change. It rides inside D-2026-09-20a's one-reel-a-day plus Tuesday and Thursday carousels,
+  and every standing rule still binds: two named sources on a reel number, one named source on a carousel
+  card (D-2026-09-12i), no hashtags, the full gate chain, the D-2026-09-13a art standard and the
+  D-2026-09-13d headshot recipe.
+- **THE BLOCKER, NAMED ON THE DAY IT WAS RULED:** this desk holds NO women's face that may lawfully be
+  used under D-2026-09-13d. The women's portraits in `player-headshot-bank.md` (the 2026-07-15 NWSL batch,
+  the 2026-07-26 WAFCON batch, the tennis pair) were all made at 1:1 on nano_banana or nano_banana_2, and
+  D-2026-09-13d bars reuse of any face made by another recipe, requiring regeneration at `gpt_image_2`,
+  3:2, 4k, quality high, about 11 credits each. Higgsfield read **1.35 credits** live on 2026-09-20, and
+  `stat_card_reel.py` refuses a reel with no art (D-2026-09-13c), so **the women's units cannot be built
+  until the founder tops up Higgsfield**. The facts are verified and banked in `daily-intel.md` so the
+  units are one render away. Local generation is not a route: memory
+  `archv-local-headshot-generation-limits` records that mflux cannot clear the faces gate.
+- **CREDITS DO NOT RETURN UNTIL 30 SEPTEMBER (founder, 2026-09-20, in session: "credits reset on
+  september 30th for higgsfield, not before").** So the hold runs the whole of the break week, and a
+  top-up is not available to be asked for. **The women's focus therefore ships on the surfaces that need
+  no illustrated portrait**: the daily `Site thearchv.ca` entry and the daily `Threads @thearchvfc`
+  thread, neither of which is bound by D-2026-09-13a or D-2026-09-13c. Instagram carries men's and
+  archive numbers on banked faces until 30 September unless the founder waives a rule by name. First
+  unit shipped 2026-09-20 under the `worldcup` key: Kaylee Hunter's hat-trick against France.
+
 ### INSTAGRAM IS REELS ONLY, D-2026-09-19c (founder, 2026-09-19, in session). THIS WINS OVER D-2026-09-19a AND 19b BELOW
 ### WHEREVER THEY SAY "CAROUSEL".
 Founder, verbatim: "for all posts i want it to be single card reels, what would normally be a carousel, lets put into

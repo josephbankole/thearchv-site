@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-21",
+    day: "Monday",
+    headline: "Canada led the U-20 World Cup quarter-final into injury time, then lost it in four minutes",
+    dek: "Canada reached the last eight as a third-placed qualifier and were still level with the defending champions at ninety minutes. Noelle Henning made seven saves. Two goals in added time ended the run.",
+    body: "DPR Korea beat Canada 2-0 in the quarter-final of the 2026 FIFA U-20 Women's World Cup on Sunday 20 September 2026, at the Stadion Miejski LKS Lodz in Lodz, Poland. Choe Rim-jong scored in the 92nd minute and Ho Kyong in the 96th. Concacaf's own match report and Canadian Soccer Daily agree on the scoreline and on both scorers.\n\nThe scoreline does not describe the match. DPR Korea had 29 shots to Canada's four. Noelle Henning, the Michigan State goalkeeper, made seven saves, her highest of the tournament, and a DPR Korea free-kick on 74 minutes was ruled out for offside after a video review. Canada were level until the second minute of added time. Jeneva Hernandez Gray was carried off injured on 85.\n\nCanada finished the tournament with two wins, one draw and two defeats, ten goals scored and seven conceded. They drew 1-1 with England, lost 3-0 to Brazil with ten players after Stephanie Schoeley was sent off, and beat Tanzania 6-0. They finished level with England on points, goal difference, goals scored and head-to-head, and were separated only by the tournament's disciplinary tiebreaker, which the red card decided. They advanced anyway as one of the four best third-placed teams.\n\nKaylee Hunter ends the tournament on four goals, three of them in the round of 16 against France. Concacaf records her as the first player to score three or more in a U-20 Women's World Cup knockout match across the last four editions of the tournament. Hernandez Gray finished with four assists, the tournament lead at the time Canada went out.\n\nOne correction worth making, because it has been printed elsewhere this week: the quarter-final did not match Canada's best finish at this tournament. Canada were runners-up in 2002, when the event was the U-19 World Championship and the final was played in front of 47,784 people at Commonwealth Stadium in Edmonton. This was Canada's third quarter-final, after 2004 and 2014.\n\nDPR Korea are the defending champions and had conceded nothing in five matches before Sunday. They play Colombia in the semi-final on Wednesday 23 September.",
+    status: "verified",
+    seoTitle: "Canada out of U-20 Women's World Cup, 2-0 to DPR Korea",
+  },
+  {
     date: "2026-09-20",
     day: "Sunday",
     headline: "Kaylee Hunter scored three against France in 42 minutes, and no player had done that in a U-20 Women's World Cup knockout tie for four editions",

@@ -8,6 +8,17 @@ import type { DayEntry } from './worldCupDays';
 
 export const tennisDays: DayEntry[] = [
   {
+    date: "2026-09-22",
+    day: "Tuesday",
+    headline: "Why are the United States out of the Davis Cup?",
+    dek: "Czechia won the qualifying tie 3-2 at the O2 Arena in Prague, taking the last two singles rubbers, with Jiri Lehecka beating Learner Tien in the decider.",
+    body: "The United States lost 3-2 to Czechia in Prague on 19 September. Jiri Lehecka beat Learner Tien 6-3, 7-5 in the deciding rubber. AFP and the Associated Press both carried the result.\n\nThe Americans were one point away. Christian Harrison and Austin Krajicek won the doubles 5-7, 6-3, 7-6 to put them 2-1 up with two singles left. Jakub Mensik took the first of those from Ben Shelton, 5-7, 6-4, 6-3, and Lehecka closed the tie out.\n\nShelton lost both of his singles matches across the two days.\n\nAFP notes that this is the second year running Czechia have come from 2-1 down to beat the United States at this stage, after doing the same in Delray Beach last year.\n\nCzechia go through to the Final 8, which runs in Bologna from 24 to 29 November.",
+    status: "verified",
+    image: "/heads/hd/ben-shelton.webp",
+    imageAlt: "Illustrated ARCHV portrait of Ben Shelton",
+    seoTitle: "Czechia beat USA 3-2 in Prague, Lehecka won the decider",
+  },
+  {
     date: "2026-09-21",
     day: "Monday",
     headline: "When do the 2026 Billie Jean King Cup Finals begin?",

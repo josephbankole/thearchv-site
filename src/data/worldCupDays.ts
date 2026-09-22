@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-22",
+    day: "Tuesday",
+    headline: "Canada went out of the Under-20 World Cup with four shots and a goalkeeper who kept them in it.",
+    dek: "Korea DPR beat Canada 2-0 in the quarter-final of the FIFA Under-20 Women's World Cup in Lodz on Sunday, with both goals in stoppage time, and the shot count read 29 to 4.",
+    body: "Canada reached the last eight of the FIFA Under-20 Women's World Cup in Poland and lost to Korea DPR 2-0 in Lodz on Sunday. Both goals arrived in stoppage time, in the 92nd minute and the 96th. Until then it was goalless, which the shot count makes hard to explain: Korea DPR had 29 attempts, Canada had four.\n\nNoelle Henning made seven saves, the most by a Canada goalkeeper at the tournament and her own best across two of them. She was losing the match on every other measure for ninety minutes and did not concede in any of them.\n\nThe run has been written up generously since. Canada were runners-up at this competition in 2002, beaten 1-0 by the United States on a golden goal in front of 47,784 at Commonwealth Stadium in Edmonton, with Christine Sinclair taking both the Golden Ball and the Golden Shoe. That is still the ceiling. Sunday was Canada's first quarter-final since 2014 and their fourth appearance in the last eight.\n\nKaylee Hunter, 18, of Calgary and AFC Toronto, finished on four goals, three of them in one afternoon against France in the round of 16. Annabelle Chukwu, 19, born in Gravesend and raised in Ottawa, scored three from 14 shots and now has 39 goals for Canada's women's youth national teams, past Sinclair's 27. Jeneva Hernandez Gray made 36 possession recoveries before she was carried off on 85 minutes on Sunday.\n\nFifteen of the 21 go back into the American college season this week. Hunter and Olivia Chisholm return to AFC Toronto with four Northern Super League games left and a playoff place to settle.",
+    status: "verified",
+    seoTitle: "Korea DPR beat Canada 2-0 in the U-20 Women's World Cup",
+  },
+  {
     date: "2026-09-21",
     day: "Monday",
     headline: "Canada led the U-20 World Cup quarter-final into injury time, then lost it in four minutes",

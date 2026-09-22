@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const nflDays: DayEntry[] = [
   {
+    date: "2026-09-22",
+    day: "Tuesday",
+    headline: "What did Aaron Donald do in his first game back?",
+    dek: "Three tackles, 1 of them for a loss, and no sacks, as the Los Angeles Rams beat the New York Giants 28-6 in his first appearance for 982 days.",
+    body: "Aaron Donald finished Monday night with 3 tackles, 1 for a loss, and no sacks, as the Los Angeles Rams beat the New York Giants 28-6 at SoFi Stadium. ESPN's box score and the Associated Press both carry that line. The Rams put the gap since his last NFL appearance at 982 days.\n\nThe tackle for loss came on Najee Harris and ended a Giants drive on third down. The Associated Press reported that Donald was introduced last in the pregame line-up and played on the defensive front through the night.\n\nHe retired in March 2024 and announced his return on 30 August. NFL Network and ESPN both reported a one-year deal worth 20 million dollars, with incentives on top.\n\nMatthew Stafford threw for 327 yards and 4 touchdowns. Davante Adams caught 8 passes for 195 yards and 2 of those scores, and Los Angeles outgained New York 481 yards to 182. The Giants lost Jaxson Dart to a left knee injury on their first drive and Jameis Winston finished the game. Both teams are 1-1.\n\nAfterwards, Donald told the Associated Press that the tackle on Harris \"felt good. It would have felt better if I'd been able to slam him.\" He said the game was slower than he had expected, and that he was a little sore.\n\n982 days away, and the complaint was about the sack that did not come.",
+    status: "verified",
+    seoTitle: "Aaron Donald: 3 tackles, 1 for loss in Rams return",
+  },
+  {
     date: "2026-09-21",
     day: "Monday",
     headline: "What injury did Jayden Daniels suffer against the Cowboys?",

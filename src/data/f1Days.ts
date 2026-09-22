@@ -8,6 +8,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const f1Days: DayEntry[] = [
   {
+    date: "2026-09-22",
+    day: "Tuesday",
+    headline: "Why are Formula 1 races getting shorter in 2027?",
+    dek: "The Formula 1 Commission agreed on Monday to cut a standard grand prix from 305km to 290km, because the 2027 power units will burn more fuel.",
+    body: "A standard grand prix is set to drop from 305km to 290km in 2027, which is 2 or 3 laps shorter depending on the circuit. The Formula 1 Commission agreed it at a meeting in London on Monday. Reuters and Sky Sports both reported the decision.\n\nThe cause is the engine. The 2027 power unit regulations move more of the work back to the internal combustion engine and take some away from the electrical side, and per Motorsport.com the fuel flow to the combustion engine rises by 5 per cent to pay for it. More fuel burned over a race means more fuel to carry. Teams have already designed their tanks around the 2026 specification, so the choice was a bigger tank and a new car, or a shorter race. They took the shorter race.\n\nThe change still has to go to the FIA World Motor Sport Council, which Sky Sports reports the FIA expects to be a formality.\n\nThe 3-hour window from the start of a race to its finish goes, replaced by a hard stop time for the end of track activity, while the 2-hour limit on actual racing stays. Race directors get more room to extend practice sessions after a long red flag. Gearbox homologation is dropped for 2027 as well.",
+    status: "verified",
+    seoTitle: "F1 cuts races from 305km to 290km for 2027 engines",
+  },
+  {
     date: "2026-09-21",
     day: "Monday",
     headline: "Who was the last Italian Formula 1 world champion?",

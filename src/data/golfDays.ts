@@ -8,6 +8,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const golfDays: DayEntry[] = [
   {
+    date: "2026-09-22",
+    day: "Tuesday",
+    headline: "How did JJ Spaun win the BMW PGA Championship?",
+    dek: "Spaun closed with a 67 and birdied 4 of his last 5 holes at Wentworth, then won by two when Manuel Elvira made double bogey at the last.",
+    body: "Manuel Elvira made double bogey at the last, and JJ Spaun won the 2026 BMW PGA Championship by two shots at 17 under par. Spaun had closed with a 67 on Sunday at Wentworth, birdieing 4 of his final 5 holes. The DP World Tour and CBS Sports both record the finish.\n\nElvira stood on the 18th tee level with Spaun, who was already in the clubhouse. The DP World Tour's report has him holing a 9-foot eagle putt at the 17th to get there. At the par-5 last he found sand with his second, flew the green with his third and found sand again. He finished on 15 under with Rory McIlroy, Adam Scott and Aaron Rai.\n\nSpaun was not picked for the United States Presidents Cup team. Brandt Snedeker's six selections were announced on 1 September and Spaun, 10th on the points list, was not among them. \"I played with a huge chip on my shoulder,\" he said afterwards, in quotes carried by GOLF.com and CBS Sports. \"I definitely had something to prove this week.\"\n\nHe is the third American to win the title, after Arnold Palmer and Billy Horschel. The DP World Tour counts it as his second win on the circuit, after the 2025 US Open.\n\nThe United States team tees off at Medinah on Thursday. Which of Snedeker's six picks would you have left at home for the man who just won at Wentworth?",
+    status: "verified",
+    seoTitle: "JJ Spaun won the BMW PGA at 17 under, by two shots",
+    evergreen: "liv-and-dp-world-tour",
+  },
+  {
     date: "2026-09-21",
     day: "Monday",
     headline: "How did Jacob Bridgeman win the Biltmore Championship?",

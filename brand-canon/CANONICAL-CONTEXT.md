@@ -402,6 +402,34 @@ section marker now.*
 - **A fixture that fails verification does not ship.** Publishing on a schedule never means shipping
   a slot that came up empty. Fewer carousels is the correct output of a thin week.
 
+### RATIFIED 2026-09-22 (founder, in session with the football desk)
+
+**D-2026-09-22a (founder): CAPTIONS GET SHORTER AND SEO-LED, AND THE FIRST COMMENT BECOMES A SINGLE ASK.**
+Founder wording: "reduce the working of the caption, remove the source from the caption, make sure its SEO and
+mentions the key words", and "reduce the wording on the first comment, it should be just a question or an ask to
+forward to a fellow united fan".
+- **CAPTION.** Shorter than the D-2026-09-11a shape, and built for search FIRST. Line 1 names the subject in the
+  words a person actually types, with full entity names, the season or year, and the keywords the unit is about.
+  Then at most one short line of substance. Then the CTA. Then the question. **NO SOURCE IS NAMED IN THE CAPTION.**
+  This NARROWS D-2026-09-11a, which allowed one named source there. It does NOT touch the verification bar: the
+  sourcing still has to exist, still has to be read on an originating page, and is recorded in the
+  `performance-log.md` row instead of on the surface.
+- **FIRST COMMENT. One line, and one line only: a question, or an ask to forward the unit to a fellow supporter.**
+  **The second fact block is RETIRED.** D-2026-07-28g's "different angle from the caption" survives only as "do
+  not repeat the caption's question"; it no longer means "carry another statistic".
+- Unchanged: no hashtags anywhere, the caption still ends on a question, the eight sanctioned question shapes and
+  the three-day no-repeat per channel, the Dispatch ask as the @thearchvfc CTA, the bare `thearchv.ca/start`
+  read-back assertion, and `carousel_structure_lint.py --caption-rules archv`.
+
+**D-2026-09-22b (founder, same session): TWO ONE-UNIT OVERRIDES, RECORDED SO THEY ARE NOT READ AS DEFECTS.**
+On the 22 September @thearchvfc managers carousel the founder overrode two standing rules by name. Neither is
+stated as standing, and each needs his word again before a second unit uses it.
+- **SEVEN SLIDES** against the four-or-five cap of D-2026-09-13a. Asked whether to proceed, he replied "override".
+- **NO SOURCE LINE ON ANY CARD**, against D-2026-08-04g (the source is NAMED on the surface the number appears
+  on) and D-2026-09-12i. **OPEN QUESTION, FLAGGED:** combined with the source-free caption of D-2026-09-22a, a
+  published unit now carries NO attribution on any visible surface. Whether that stands for future carousels is
+  NOT yet ruled. Until it is, the desk records every source in the performance-log row and the staged build file.
+
 ### RATIFIED 2026-09-20 (founder, in session with the football desk). THIS WINS OVER D-2026-09-19a, 19b AND 19c BELOW.
 
 **D-2026-09-20a (founder): ONE STAT CARD REEL A DAY PER ACCOUNT, AND CAROUSELS COME BACK ON TUESDAY AND

@@ -336,11 +336,12 @@ export const glossaryEntries = [
     title: "Work permits",
     question: "What is a work permit in football and who needs one?",
     answer:
-      "A work permit is the immigration clearance a player from outside the host country needs before they can be registered. In England the Football Association operates a points system, awarding points for international appearances, the standard of the selling league and the size of the fee and wages.",
+      "A work permit is the immigration clearance a player from outside the host country needs before they can be registered. In England the Football Association issues a Governing Body Endorsement on points: a player needs 15, scored from international appearances, the quality of the selling club and its league, and minutes played in domestic and continental competition.",
     depth: [
-      "The points approach replaced a simpler rule that asked only how often a player had played for their country. Under the current system a player can qualify without international caps if they are moving from a strong league, playing regularly, and being bought and paid at a level that signals quality.",
-      "A player who falls short can still be signed through an exceptions panel, which weighs the case on its merits. That route is how clubs sign talented players from leagues that score badly in the tables, and it is discretionary rather than automatic.",
+      "The points approach replaced a simpler rule that asked only how often a player had played for their country. Under the current system, in place since January 2021, a player can qualify without international caps if they are moving from a strong club in a highly ranked league and have been playing regularly there. The transfer fee and wages no longer score.",
+      "A player who scores 10 to 14 points can still be signed through an exceptions panel, if the club shows that exceptional circumstances kept the player below 15. That route is discretionary rather than automatic. Since June 2023 clubs have also had Elite Significant Contribution places, up to four a season in the Premier League, for players who fall short of the points.",
       "The system reshaped English recruitment after freedom of movement ended, because European players who could once sign without any clearance now have to clear the same bar. It made teenage signings from Europe far harder. Young players rarely have the caps or the league minutes to score.",
+      "Revised, 22 September 2026: this page said points came partly from the size of the fee and wages. The FA dropped those criteria in January 2021, and the answer above now gives the current ones (The FA, points-based system launch, 1 December 2020; Mills and Reeve, The FA's Governing Body Endorsement requirements; Mills and Reeve, July 2023, and Fragomen, 29 June 2023, on Elite Significant Contribution places).",
     ],
     related: ["homegrown-quota", "domestic-and-international-windows", "pre-contract"],
   },

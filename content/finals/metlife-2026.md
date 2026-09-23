@@ -21,7 +21,7 @@ The 2026 final was decided by a substitute, in the second period of extra time, 
 
 ## The match
 
-Spain had the ball and Argentina had Emiliano Martínez. Spain finished with 20 shots to Argentina's three, and the Argentina goalkeeper made 12 saves, the most recorded in a World Cup final, per CBS News. For ninety minutes it was a goalkeeper against a system, and the goalkeeper was winning.
+Spain had the ball and Argentina had Emiliano Martínez. Spain finished with 20 shots to Argentina's three, and the Argentina goalkeeper made 11 saves by Yahoo Sports' count and 12 by CBS News', the most recorded in a World Cup final either way. For ninety minutes it was a goalkeeper against a system, and the goalkeeper was winning.
 
 The game turned on a card rather than a save. Enzo Fernández, already booked, caught Pau Cubarsí late and was sent off for a second yellow, per ESPN and CBS News. Argentina went into extra time a man short, defending a goalless draw they had spent the night earning.
 
@@ -33,10 +33,14 @@ Ferran Torres had come on in the 62nd minute for Mikel Oyarzabal and had not sco
 
 ## Why it mattered
 
-Spain conceded one goal in the entire tournament, the fewest by any champion, and did it across eight matches, more than any previous winner had to play, per ESPN. The expanded 48-team format was supposed to dilute the thing. Spain answered it by conceding once in two months.
+Spain conceded one goal in the entire tournament, the fewest by any champion, and did it across eight matches, more than any previous winner had to play, per ESPN. The expanded 48-team format was supposed to dilute the thing. Spain answered it by conceding once in six weeks.
 
-Rodri took the Golden Ball ahead of Lionel Messi, having completed around 650 passes at roughly 93 per cent accuracy, the highest passing volume recorded by a player in a single World Cup, per FIFA and Sky Sports. It was a final that a striker won and a holding midfielder was named best player of, which tells you most of what Spain had become.
+Rodri took the Golden Ball ahead of Lionel Messi, having completed around 650 passes at roughly 93 per cent accuracy, the highest passing volume recorded by a player in a single World Cup, per FIFA and Sky Sports. It was a final that a striker won and a holding midfielder was named best player of.
 
-For Argentina it ends the other way round from 2022. Messi played, Argentina lost a final they had a plan for, and the plan survived until a defender's tackle in first-half stoppage time.
+For Argentina it ends the other way round from 2022. Messi played, Argentina lost a final they had a plan for, and the plan survived until the 93rd minute, when Enzo Fernández, a midfielder already booked, caught Pau Cubarsí late.
 
 Sources: ESPN match report and analysis, 19 and 20 July 2026; CBS News, 20 July 2026; Al Jazeera, 19 July 2026; FIFA official award report and Sky Sports, 22 July 2026.
+
+Correction, 22 September 2026: this page said Argentina's plan survived until a defender's tackle in first-half stoppage time. Enzo Fernández, a midfielder booked in the 82nd minute, was sent off for a second yellow card in the 93rd minute, in stoppage time at the end of the second half (NBC News and Yahoo Sports, 19 July 2026). The page also said Martínez made 12 saves, per CBS News, and that Spain conceded once in two months. Yahoo Sports and Wikipedia's record of the final count 11, and the tournament ran from 11 June to 19 July, about six weeks (Yahoo Sports, 19 July 2026; Wikipedia).
+
+Revised, 22 September 2026: a line saying the result told you most of what Spain had become was cut from the section on Rodri's Golden Ball.

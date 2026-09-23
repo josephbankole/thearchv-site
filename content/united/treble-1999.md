@@ -4,13 +4,13 @@ slug: "treble-1999"
 section: "united"
 eyebrow: "Manchester United · History"
 datePublished: "2026-06-15"
-description: "The only English men's treble: how Manchester United won the league, FA Cup and Champions League in 1998-99, sealed by two late goals at Camp Nou."
-quickAnswer: "Manchester United won the Premier League, FA Cup and Champions League in 1998-99, the only English men's club to complete the treble. They sealed it on 26 May 1999, beating Bayern Munich 2-1 in the Champions League final at Camp Nou with stoppage-time goals from Teddy Sheringham and Ole Gunnar Solskjær."
+description: "The first English men's treble: how Manchester United won the league, FA Cup and Champions League in 1998-99, sealed by two late goals at Camp Nou."
+quickAnswer: "Manchester United won the Premier League, FA Cup and Champions League in 1998-99, the first English men's club to complete the treble, and Manchester City matched it in 2022-23. United sealed theirs on 26 May 1999, beating Bayern Munich 2-1 in the Champions League final at Camp Nou with stoppage-time goals from Teddy Sheringham and Ole Gunnar Solskjær."
 ogImage: "/og.jpg"
 related: []
 ---
 
-No English men's club had ever won the league, the FA Cup and the European Cup in a single season. None has done it since. For eleven days in May 1999, Manchester United won all three, and the way they finished it has never stopped being told.
+No English men's club had ever won the league, the FA Cup and the European Cup in a single season. None did it again until Manchester City in 2022-23. For eleven days in May 1999, Manchester United won all three, and the way they finished it has never stopped being told.
 
 ## The league, on the last day
 
@@ -26,4 +26,6 @@ The Champions League final against Bayern Munich looked lost. Bayern led from a 
 
 ## Why it mattered
 
-The treble crowned Ferguson's first great team and remains the high-water mark of English club football. It was won without two of its best midfielders in the biggest game, off the back of a season of comebacks, by a side built around the academy graduates of the Class of '92 and a spine of Schmeichel, Keane and Cantona's successors. Real Madrid and a handful of European giants have since matched the treble. In English football it stands alone.
+The treble crowned Ferguson's first great team and remains the high-water mark of English club football. It was won without two of its best midfielders in the biggest game, off the back of a season of comebacks, by a side built around the academy graduates of the Class of '92 and a spine of Schmeichel, Keane and Cantona's successors. Barcelona, Inter Milan, Bayern Munich and Paris Saint-Germain have all won a treble since. In English football only Manchester City, in 2022-23, has matched it.
+
+Correction, 22 September 2026: this page said no English men's club had won the treble since 1999 and that Real Madrid had since matched it. Manchester City won the Premier League, FA Cup and Champions League in 2022-23, and Real Madrid have never won a treble (ESPN and Manchester City, 10 June 2023; ESPN, 2023, and Wikipedia's Treble (association football) list on Real Madrid).

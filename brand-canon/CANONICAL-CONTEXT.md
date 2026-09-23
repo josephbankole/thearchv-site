@@ -402,6 +402,77 @@ section marker now.*
 - **A fixture that fails verification does not ship.** Publishing on a schedule never means shipping
   a slot that came up empty. Fewer carousels is the correct output of a thin week.
 
+### RATIFIED 2026-09-22, evening (founder, in session: site reviews, search collapse, slim-down). THIS WINS OVER EVERY CADENCE LINE BELOW.
+
+**D-2026-09-22c (founder): FEWER UNITS, HIGHER BAR.** Founder wording: "i would like to reduce the volume of content
+we post, and increase the quality", "you have my approval to update and slim down routines as well", "once you have a
+plan for thearchv, implement it". Evidence: `AUDIT-2026-09-01/content-review-2026-09-22/CONTENT-REVIEW-AND-SLIM-PLAN.md`
+(90 days, every channel; about 69% of @thearchvfc per-post reach and about 97% of site pageviews trace to paid).
+Target: about 60 routine units a week, down from about 170 planned. Effective with each desk's next run.
+- **Skipping is allowed.** AMENDS D-2026-08-28a: a desk may skip or hold a unit when nothing passes the bar below. A
+  skip is logged as `SKIPPED (bar, D-2026-09-22c)`, never escalated, never filled with a weaker unit. Accuracy and
+  verification holds keep working as before.
+- **archv-ai-desk.** Lane A (josephbankole.ca brief) ships on Tuesday and Friday only, and only with at least three
+  genuinely new items, each with a deep URL; any other day publishes nothing. Lane B: no carousels, now or from 10
+  October (cancels that part of D-2026-09-19a); the 10:00 explainer conversion runs to 9 October as ruled; Lane B-R
+  fallback reel OFF. Lane C: ZERO threads (supersedes D-2026-09-11h). @thearchv.ai Threads keeps one thread a day,
+  `fola-personal-daily`'s 14:00. From 10 October a @thearchv.ai reel trial runs: one news stat card reel
+  (`stat_card_reel.py`) on Tuesday, Thursday and Saturday at 13:00 ET, judged on 15 November.
+- **ai-company-feature.** Monday, Wednesday and Friday only (supersedes the daily cadence of D-2026-09-11g and
+  D-2026-09-19b). That is also archvai.substack.com's cadence; no other routine posts there daily.
+- **fola-personal-daily.** Career carousel once a week, Monday, Buffer notification as always. The 14:00 @thearchv.ai
+  thread stays daily. D-2026-08-23a (manual folabankole) and the no-personal-Threads line are untouched.
+- **fola-personal-remix-weekly.** PAUSED. The 17 Sep batch is read on 30 Sep; median reach under 200 retires the lane.
+- **archv-multisport-answer-desk.** PAUSED (supersedes D-2026-09-11c; basketball Mondays of D-2026-09-15a retired).
+  No new dated sport pages. It returns only as living answer pages updated in place, once the site build supports them
+  (search plan G7, D-2026-09-22d).
+- **@thearchv.ca Instagram.** No carousels. The stat reel mirror stays through an 18 October read.
+- **archv-football-desk.** TikTok stage RETIRED (formalises D-2026-08-14c; no daily PAUSED row). @thearchv.ca carousel
+  mirror OFF. @thearchvfc Threads: one morning thread a day; a second only for a live named saga (named person, a clock
+  or deadline, a quotable line). The daily stat reel and D-2026-09-20a's Tuesday and Thursday carousels stand until the
+  18 October read. The daily site entry continues, because it feeds the app.
+- **josephbankole-site-desk.** Weekly, not daily (D-2026-08-15a's daily auto-fix becomes weekly): one Field Notes
+  essay and one SEO pass a week; no new answers pages (upgrade the two cornerstone answers instead); recipes frozen.
+- **archv-weekly-desk.** Monday ai-weekly-posts bank DROPPED; Sunday ig-dm-setter drafts DROPPED; the Sunday archvai
+  draft is folded into ai-company-feature's Friday issue; Saturday seo-weekly makes at most one evergreen story page a
+  fortnight and treats the protected core (`/united/`, explainers, top 20 glossary) as correction-only until 21 Dec.
+- **archv-app-weekly-update.** Monthly maintenance build, no auto-submit; the founder says when to submit.
+- **archv-pipeline-nightly-review.** Exception report only: the search-health line first, then what failed, was held
+  or breached a cap, under 600 words, no subagent fan-out. Full review on Sundays only.
+- **Goal-archive.** The daily launchd cutter is unloaded; `youtube-goal-archive-weekly` keeps one upload a week.
+- **Untouched:** `threads-ca-daily` (pending the metrics desk's distribution check), `archv-archive-marketing-desk`
+  (until its 3 October review), the Dispatch (until cart close on 5 November), `film-joey-daily` (not ARCHV, founder's
+  call), accuracy, verification, voice, rights, handles and every manual lane.
+- **The bar, per format.** fc reel: founder-shot footage, or a code-rendered stat card pegged to a result in the last
+  72 hours with the record number held to the last beat. Carousel: one screenshot-able fact per slide, payoff on the
+  last card, lint clean, a use that earns a save; judged on saves plus shares per 1k reach. Thread: passes the saga test
+  or a broad-event record angle, otherwise skip the day. Site page: evergreen, named cases, answer-first title under 60
+  characters, sourced by deep URL, updated in place. Newsletter issue: built from a unit that already proved itself.
+- **Kill or keep.** Every lane carries a threshold and a judge date. Two consecutive 4-week misses pause it; a paused
+  lane returns only with a changed format. IG lane: organic median reach under 100 over 20 posts with a flat account.
+  Threads lane: settled median under 300 over 20 threads. Site lane: under 0.5 clicks per page at 28 days.
+- **Measurement.** `archv-metrics-desk` adds: Threads views for fc and .ca from Buffer with permalinks stored at
+  publish, the .ca Buffer-era distribution check, and a paid flag once the founder hands over the boost list.
+
+**D-2026-09-22d (founder, same session): KEEP THEARCHV.CA IN GOOGLE.** Google impressions fell from 1,359 on 16 Sep
+to single digits from 18 Sep, sitewide, pages still indexed, no manual action (founder checked the GSC UI). The plan
+is `AUDIT-2026-09-01/thearchv-review-2026-09-22/PREVENTION-PLAN.md`, adopted with its recommended options, one dated
+batch a week, every gate warn-only for 7 days first, changes logged in `CHANGELOG.md` beside it.
+- **Now:** the seven live factual errors corrected with dated notes; the daily search-health monitor (tools/seo-audit
+  `npm run health`) runs first in the nightly and pushes on an alert.
+- **Index policy (Decision 2):** new dated site entries default to `noindex,follow` once gate G1 ships, unless the
+  entry carries measured demand, at least 300 verified words and a link to a living page; at most 2 new indexable
+  dated URLs a day site-wide, one reserved for football. Existing dated pages: staged `noindex,follow` from 27 Oct, 50 a
+  week, only under the plan's §1.2 criteria. No 301, merge or delete while suppressed (Decision 3).
+- **Byline and disclosure (Decision 1, week 2), PENDING THE FOUNDER'S EXPLICIT YES (not yet scheduled; until he
+  answers, bylines stay as they are):** routine desk and question pages are bylined "The ARCHV Desk" with an
+  Organization author; the Person byline stays only on pieces Joseph wrote; a plain "how the daily desks are made"
+  line on dated pages and /standards/, naming no model or vendor and never on store surfaces. This supersedes the
+  2026-07-21 named-author byline for automated pages only.
+- **josephbankole.ca (Decision 5a):** a quiet day publishes nothing (see D-2026-09-22c Lane A).
+- **Still the founder's (OPEN):** stopping the public brand-canon mirror and moving public/media off GitHub Pages
+  (Decision 4); the Field Notes voice (Decision 5b); the privacy rewrite; the corrections@thearchv.ca mailbox.
+
 ### RATIFIED 2026-09-22 (founder, in session with the football desk)
 
 **D-2026-09-22a (founder): CAPTIONS GET SHORTER AND SEO-LED, AND THE FIRST COMMENT BECOMES A SINGLE ASK.**

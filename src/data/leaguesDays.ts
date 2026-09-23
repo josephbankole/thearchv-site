@@ -7,6 +7,15 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-23",
+    day: "Wednesday",
+    headline: "Two NWSL records can fall in one match on Sunday, and Canada's Cloé Lacasse holds half of the chance",
+    dek: "Ashley Sanchez has 19 goals for the North Carolina Courage, one short of the league's single-season record. Cloé Lacasse shares the assists record on 10. Utah Royals host North Carolina on 27 September.",
+    body: "Ashley Sanchez has 19 goals in the National Women's Soccer League this season. The single-season record is 20, set by Temwa Chawinga in 2024. The North Carolina Courage put the figure in their own preview of Saturday's match, and the Associated Press carried it the same week. Her hat-trick at the Chicago Stars on 6 September had already made it the highest-scoring NWSL season by an American, per the Courage and The Equalizer.\n\nShe did not score on Saturday. Gotham FC won 2-1 in Cary with a stoppage-time goal from Jordynn Dudley, per the Associated Press and Goal.com. Speaking to AP's Drew Renner on 17 September, Sanchez said: \"This is my first year playing this position. I do think that I could do even more.\"\n\nCloé Lacasse, the Canada forward, has 7 goals and 10 assists in 24 starts for the Utah Royals, per the club on 16 September. Her tenth assist, at Orlando on 29 August, drew her level with Tobin Heath (2016) and Croix Bethune (2024) on the single-season record, per the Royals and The Equalizer. Utah have played three league matches since without her adding an eleventh. The club extended her contract through 2028 on 16 September.\n\nUtah lost 3-0 at home to Angel City FC on Sunday after two first-half red cards, per the Royals and Angel City FC. The two clubs' own reports name different players for the second dismissal, so this page names neither.\n\nUtah Royals host North Carolina Courage at America First Field in Sandy, Utah, on Sunday 27 September at 17:00 local time, 19:00 ET, per the Royals. Both clubs have five league matches left, and the regular season ends on 1 November.",
+    status: "verified",
+    seoTitle: "Ashley Sanchez is one goal off the NWSL scoring record",
+  },
+  {
     date: "2026-09-21",
     day: "Monday",
     headline: "Twenty-six shots and no goal before half time, and two men who were both at Craven Cottage cannot agree what they watched",

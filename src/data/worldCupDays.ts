@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-24",
+    day: "Thursday",
+    headline: "The team that knocked Canada out is one win from a title nobody has ever defended.",
+    dek: "Korea DPR beat Colombia 3-0 and Spain beat Italy 2-0 in Lodz on Wednesday, so the FIFA Under-20 Women's World Cup final on Sunday is Spain against the holders.",
+    body: "The FIFA Under-20 Women's World Cup final is set for Sunday 27 September in Lodz, at 18:00 local time and 12:00 in Toronto. Spain play Korea DPR, and both got there on Wednesday without conceding.\n\nKorea DPR beat Colombia 3-0, with Pak Ok-I opening the scoring after 28 minutes and two more goals from two different players to follow. They are the holders. They won this tournament in 2006, 2016 and 2024, and the Asian Football Confederation's own report says they are one match from becoming the first team to retain it. Nobody has won it twice in a row since the competition began.\n\nSpain beat Italy 2-0. An Italian own goal came five minutes before half-time and Pau Comendador scored the second after 56 minutes. It was her sixth goal of the tournament, which leads the scoring, and it put Spain into their third final in the last four editions. Italy had never reached a semi-final at this level before. Italy and Colombia play for third place on Saturday.\n\nCanada's part in this ended on Sunday 20 September, when Korea DPR beat them 2-0 in the quarter-final with two goals in stoppage time. Two days later one of that squad moved up. Kaylee Hunter, 18, who scored four goals in Poland, is in Casey Stoney's senior squad for the friendlies against Denmark at Stade Saputo in Montreal on 9 October and BMO Field in Toronto on 12 October. It is not her first call. She already has two senior caps. She is one of six Northern Super League players in the group, the most the league has had in a Canada squad.\n\n\"There's genuine competition for places in this squad,\" Stoney said when the squad was named.",
+    status: "verified",
+    seoTitle: "Spain play Korea DPR in the U-20 Women's World Cup final",
+  },
+  {
     date: "2026-09-22",
     day: "Tuesday",
     headline: "Canada went out of the Under-20 World Cup with four shots and a goalkeeper who kept them in it.",

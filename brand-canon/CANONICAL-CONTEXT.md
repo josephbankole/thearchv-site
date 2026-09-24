@@ -452,7 +452,9 @@ Target: about 60 routine units a week, down from about 170 planned. Effective wi
   lane returns only with a changed format. IG lane: organic median reach under 100 over 20 posts with a flat account.
   Threads lane: settled median under 300 over 20 threads. Site lane: under 0.5 clicks per page at 28 days.
 - **Measurement.** `archv-metrics-desk` adds: Threads views for fc and .ca from Buffer with permalinks stored at
-  publish, the .ca Buffer-era distribution check, and a paid flag once the founder hands over the boost list.
+  publish, the .ca Buffer-era distribution check, and a paid flag. **Paid flag rule (founder, 2026-09-23: "anything
+  over 3k is boosted"):** any Instagram unit with reach above 3,000 is treated as boosted and left out of every organic
+  median, threshold and kill-or-keep read; no boost list is kept.
 
 **D-2026-09-22d (founder, same session): KEEP THEARCHV.CA IN GOOGLE.** Google impressions fell from 1,359 on 16 Sep
 to single digits from 18 Sep, sitewide, pages still indexed, no manual action (founder checked the GSC UI). The plan
@@ -464,8 +466,8 @@ batch a week, every gate warn-only for 7 days first, changes logged in `CHANGELO
   entry carries measured demand, at least 300 verified words and a link to a living page; at most 2 new indexable
   dated URLs a day site-wide, one reserved for football. Existing dated pages: staged `noindex,follow` from 27 Oct, 50 a
   week, only under the plan's §1.2 criteria. No 301, merge or delete while suppressed (Decision 3).
-- **Byline and disclosure (Decision 1, week 2), PENDING THE FOUNDER'S EXPLICIT YES (not yet scheduled; until he
-  answers, bylines stay as they are):** routine desk and question pages are bylined "The ARCHV Desk" with an
+- **Byline and disclosure (Decision 1, week 2), APPROVED by the founder on 2026-09-23 ("yes"), batch scheduled for
+  Sunday 27 September:** routine desk and question pages are bylined "The ARCHV Desk" with an
   Organization author; the Person byline stays only on pieces Joseph wrote; a plain "how the daily desks are made"
   line on dated pages and /standards/, naming no model or vendor and never on store surfaces. This supersedes the
   2026-07-21 named-author byline for automated pages only.

@@ -402,6 +402,167 @@ section marker now.*
 - **A fixture that fails verification does not ship.** Publishing on a schedule never means shipping
   a slot that came up empty. Fewer carousels is the correct output of a thin week.
 
+### RATIFIED 2026-09-24 (founder, in session with the football desk)
+
+**D-2026-09-24a (founder): THE FOOTBALL DESK WATCHES ITS OWN SAVES, COMMENTS AND LIKES, AND STEERS BY THEM.**
+Founder wording: "I would like this routine to monitor saves, comments and likes. the goal is to increase those
+numbers".
+- **What is watched.** On every unit `archv-football-desk` ships: likes, comments and saves, each per 1,000 reach
+  on Instagram (IG @thearchvfc carousel, stat card reel and MLS Weekly; IG Reel @thearchv.ca), and likes and
+  outside replies per 1,000 views on Threads @thearchvfc. Threads has no saves, so saves are never estimated
+  there. Shares are read alongside because the tie-break in HOOK-BANK rule 6 uses them.
+- **Where it is read.** Buffer per-post metrics (`get_post` with `includeMetrics`), resolving a notification
+  post to its `via:network` twin under DESK-LESSONS 15. A reading whose `metricsUpdatedAt` is within five
+  minutes of `sentAt` has never been refreshed and is not a zero. Reach above 3,000 is treated as boosted and
+  left out of every median (paid flag rule, D-2026-09-22c).
+- **Threads comments include the thread's own chain.** On the 23 September five-post thread Buffer reported 4
+  comments with no outside reply visible in the numbers, which is exactly the four follow-on posts. Until
+  `archv-metrics-desk` STEP 2b records the relation from a page count, outside replies are read as Buffer
+  `comments` minus (`threadCount` minus 1), floored at zero, and labelled as derived.
+- **Where it is written.** `fifa.archv/engagement-scoreboard.md`, whose only writer is the football desk. The
+  `performance-log.md` metric cells stay `archv-metrics-desk`'s edge; this ruling does not move them.
+- **What it changes.** Each run starts from the scoreboard: the top and bottom units of the last 14 days, and
+  what the top ones share (format, hook family, question shape, closer, subject, pair). The day's units LEAN
+  toward that shape. The lean never overrides verification, the bar of D-2026-09-22c, the rotation rules, the
+  art standard or any gate; a winning shape that a rotation rule blocks today waits.
+- **The goal and how it is judged.** Each channel's 7-day median of likes, comments and saves per 1,000 reach
+  (Threads: likes and outside replies per 1,000 views) against its own prior 28-day median, reported UP, FLAT
+  (within 10 per cent) or DOWN every run. Under five scored units in a window, the desk gives the count and draws
+  no conclusion. Targets: see D-2026-09-24b.
+- **Comments on Instagram** count the founder's hand-posted first comment when he posts it; the desk records the
+  raw figure and names the first-comment state beside it rather than adjusting it.
+
+**D-2026-09-24b (founder, same session: "once done, apply a growth plan, update the task and canon"): THE
+FOOTBALL DESK'S GROWTH PLAN FOR SAVES, COMMENTS AND LIKES.** Built on the first 28-day read of
+`engagement-scoreboard.md` (87 units, 60 scored, 46 Instagram units with reach of 50 or more; 2026-08-27 to 09-22).
+- **What the read says.**
+  - The @thearchvfc CAROUSEL is the best unit on every measure. Median per 1,000 reach: 46.5 likes, 8.4 comments,
+    11.6 saves (n 15, median reach 126).
+  - The @thearchvfc STAT REEL reaches further but converts worse: 21.4 likes, 5.0 comments, 4.5 saves, 0 shares
+    (n 11, median reach 220). Fewer total actions per unit than a carousel, despite the extra reach.
+  - The bottom of the table is three Carrick and Dalot stat reels (10 to 14 per 1,000, all actions together). The
+    same Carrick face ran on four fc units in eight days.
+  - @thearchv.ca reels save well (10.8 per 1,000). NFL subjects lead that account; the two F1 reels sit near the
+    bottom.
+  - Top carousels are predicted lineups, live Manchester United news built on a press conference, and nostalgia
+    with a callback or cold-fact last card. Cold-fact last cards carry the most saves (24.4 per 1,000, n 6).
+  - Caption questions that name two options (this-or-that, call-it) lead both fc surfaces. "Defend it in one line"
+    and "correct the list" sit on the bottom reels. Every group here is under five, so these are leads, not rulings.
+  - Threads @thearchvfc: 0 to 8 likes a thread and, on derived counts, 0 outside replies on 8 of the last 12. Only
+    the JJ Gabriel saga (15 Sep) and the derby VAR argument (14 Sep) drew outside replies. Carrick-job threads drew
+    views and no replies.
+- **The levers, applied from the 2026-09-25 run, all inside every existing rule:**
+  1. **Face rotation.** No face on more than one @thearchvfc Instagram unit in any seven days, and no manager face
+     on a stat reel when a player face with a verified number exists. Name the face's last use in the report.
+  2. **Save-shaped last cards.** A carousel ends on the numbered reference grid or a cold-fact card, with the
+     question in the caption. Every stat reel's context line carries a frame worth keeping, such as a record, a
+     since-gap or a ranked place.
+  3. **Named-option questions first.** On Instagram captions, this-or-that and call-it with two or three named
+     options are the default shapes. Other sanctioned shapes still rotate in so the three-day rule holds, and each
+     is re-judged at five scored units.
+  4. **Story priority inside the lanes.** On a Tuesday or Thursday carousel day, a verified live Manchester United
+     story with a verbatim quote (lane 4) outranks nostalgia (lane 5), as the lane order already says. Nostalgia
+     ships with a callback or cold-fact last card.
+  5. **@thearchv.ca reel subject.** NFL and tennis ahead of Formula 1 unless the F1 number is record-grade. The
+     subject must pass the 72-hour bar either way.
+  6. **Threads for replies.** Post 1 carries the question the thread argues, as well as the last post, so a
+     reader can reply without expanding. The saga test stays the gate. A thread about a manager's job security
+     runs only with two named sides on the record.
+  7. **Send cue.** Every Instagram first comment stays one line (D-2026-09-22a) and names who to send it to.
+- **Targets, APPROVED by the founder 2026-09-24 ("sounds good, approved"), with the whole plan.** Each channel's 7-day
+  median against its 28-day median must read UP. Stretch targets to reach by the 18 October read:
+  - fc carousel: saves at 15 or more per 1,000 reach (from 11.6), comments at 10 (from 8.4).
+  - fc stat reel: saves at 8 (from 4.5), comments at 7 (from 5.0).
+  - .ca stat reel: holds saves at 10 or more.
+  - Threads: at least 1 outside reply a thread, with likes at 5 or more per 1,000 views (from 2.0).
+- **Weekly review.** Every Monday run adds a WEEKLY block to the scoreboard: each channel UP, FLAT or DOWN; the
+  week's best and worst unit; one experiment for the coming week, such as alternating two question shapes on one
+  surface. The following Monday reports the experiment's result.
+- **A founder call this plan does not make (CLOSED 2026-09-24 by D-2026-09-24c: cadence unchanged).** The read says carousels out-earn stat reels on
+  saves, comments and likes, per 1,000 and in total. Adding a carousel day, or trading a reel day for one, would
+  change D-2026-09-20a's cadence and D-2026-09-22c's volume cut. That is his decision, and it is put to him with
+  these numbers, alongside the 18 October read.
+
+**D-2026-09-24c (founder, same session, answering four open questions): CADENCE STAYS, NO SOURCE ON CARDS, OLD
+CORRECTIONS CLOSED, CURRENT FACES ON NOSTALGIA.**
+- **Cadence (1A): unchanged.** @thearchvfc keeps one stat card reel a day plus carousels on Tuesday and Thursday
+  (D-2026-09-20a). The carousel-versus-reel question D-2026-09-24b flagged is CLOSED; the desk stops raising it.
+  The 18 October read still happens as scheduled.
+- **Sources on carousel cards (2B): none.** Carousel cards on @thearchvfc and @thearchv.ca carry no source line.
+  This RESOLVES the open question in D-2026-09-22b and makes its no-source-on-cards override standing, superseding
+  D-2026-08-04g and the "named on the card" half of D-2026-09-12i for carousels. The verification bar does not
+  move: every fact is still read on a dated originating page, and every source is recorded in the unit's
+  `performance-log.md` row and its staged build file. Captions stay source-free (D-2026-09-22a). Threads, the
+  site and stat card reels are not covered by this ruling and keep their attribution rules.
+- **The 2026-09-09 and 2026-09-14 Threads corrections (3): closed.** Founder: "dont worry, just dont repeat it."
+  The corrections carried in later threads stand; no native reply is expected. The standing lesson is
+  D-2026-09-09c: every named subject gets its own live topic search before the unit ships, and that search runs
+  BEFORE the queue call, never after.
+- **Faces on nostalgia units (4A): a current portrait is fine** when the subject is clearly recognisable. This
+  relaxes the era-correct half of D-2026-09-13c and the era checks in the headshot bank for nostalgia and archive
+  units only. Identity, club-correct kit and the D-2026-09-13d recipe still bind; a face in national colours never
+  goes on a Manchester United label.
+
+**D-2026-09-24e (founder, 2026-09-24, in session with fola-personal-daily: "reduce our carousel cadence to just one a
+week, on the day they get the most engagement" ... "for my personal folabankole"): ONE PERSONAL CAROUSEL A WEEK, FRIDAY.**
+- **Scope.** IG @folabankole only. Every ARCHV-brand cadence (D-2026-09-20a, D-2026-09-24c) is untouched.
+- **Day.** `fola-personal-daily` unit 1 ships on FRIDAY at 08:00 ET, replacing D-2026-09-22c's Monday. Chosen from Buffer
+  per-post metrics on the 34 desk-slot folabankole carousels, 16 Aug to 23 Sep: Friday led on median likes (6), median
+  reach (94) and mean likes plus saves plus shares (11.0; other days 5.3 to 7.5). Monday was among the weakest.
+  Comments are excluded because each unit carries the founder's own first comment. At 3 to 7 posts a day this is a lean;
+  the first Monday run of each month re-reads the split and reports it, and a change of day goes to the founder.
+- **Format.** A CAROUSEL again (5 to 7 slides, the pre-2026-09-20 spec), because the founder named carousels; the
+  2026-09-20 static reel is parked, not deleted. Manual always, Buffer notification, first comment by hand: unchanged.
+- **Other days.** Saturday to Thursday, unit 1 logs `SKIPPED (cadence, D-2026-09-24e)`. Unit 3, the daily 14:00
+  @thearchv.ai thread, is unaffected. First Friday 2026-09-25.
+
+**D-2026-09-24d (founder, in session with the archive marketing desk): ARCHIVE CAROUSELS NAME THE TEAMS, AND SLIDE 1
+MUST MAKE SENSE COLD.** Founder wording: "when posting the marketing content, make sure the first slide makes sense, a
+few of them are a bit confusing.. you can mention manchester united and canada in the carousels, the products
+themselves are safe, but use the team names for marketing in the carousels".
+- **Team names on carousels.** `archv-archive-marketing-desk` carousels, PRODUCT carousels included, name the teams
+  in the plate's moment in full entity names ("Manchester United", never "United" alone; "Canada"; the opponent by
+  its full name). This amends the mark-free rule of D-2026-09-12k and D-2026-09-15b for carousel slides, caption,
+  first comment and alt text only. Product carousels run `ip_lint.py --mode storefront` with
+  `--allow "club_marks=<team>"` (and `--allow "club_marks=United (as a club)"` where needed) for those team names
+  only, each named in the run report.
+- **What does not move.** The products stay mark-free: plates, PDFs, Gumroad and Etsy listings, store images and
+  storefront copy are untouched by this ruling. Competition, stadium, trophy, federation and sponsor names, and
+  player likenesses, stay off product carousels. The buy line (pack name, price, link) stays its own sentence with
+  no team name in it (bible §6.3 separation). Threads and Notes product units keep the old mark-free rule until the
+  founder widens this.
+- **Slide 1 stands alone.** A reader who sees only slide 1 must know who played, roughly when, and what the claim
+  is: the team name, the occasion in plain words, the date, then the claim. No bare riddle ("Not one seat was filled
+  that day"), no pronoun or opponent without its subject ("France hit the post, then the bar" with no Canada). A
+  withheld number is still allowed as long as the subject is plain. The slide 1 read-back in the build report
+  answers "who, when, what" in one line; a slide that cannot is rewritten before any gate. Founder, same session:
+  "otherwise its confusing, noone knows what it is".
+- **Say what the product is and who it is for (founder, same session: "make it very clear in the marketing what the
+  product is and who its for").** Every PRODUCT unit on every surface states, in plain words and before the link:
+  (1) what it is: a digital pack of ten printable football posters, each with a page on the moment behind it,
+  delivered as a PDF plus PNG files (Collector adds the high-resolution print files), or for the bundle, all six
+  packs, sixty posters; and (2) who it is for, named as a person: Manchester United fans, Canada supporters, fans
+  of the women's game, World Cup obsessives, or someone buying a gift for one. On carousels this lives on the last
+  card and in the caption, using the team names above. On Threads and Notes it uses the same words, with the club
+  named only where that surface's mark rule allows it. A product unit whose copy does not answer "what do I get,
+  and is it for me" is rewritten before any gate. Format and file claims are read from `_system/product-bible.json`
+  each run; the JSON wins over this wording.
+- **Keywords, named customers, spoken to directly (founder, same session: "make sure descriptions have key words,
+  identify our target customers and talk directly to them").** Every product unit's caption or description:
+  - **Names one target customer per unit from the map below and talks to them in the second person** ("If you
+    were in the stands for...", "If you've got a Canada supporter to buy for..."). One customer per unit, never a
+    list of everyone. The ARCHV still never speaks in the first person singular and invents no story.
+  - **Carries two or three search keywords** a buyer would type, taken from the plate spec's
+    `search_phrases_storefront` (plus `editorial_search_phrases` on carousels, where team names are now allowed),
+    woven into sentences: "football poster", "soccer wall art", "printable poster", "gift for a football fan", the
+    team, the city and the year. It reads as a sentence a person wrote, never a keyword string. No hashtags.
+  - **Customer map** (per pack; the desk may add a type only from evidence in `feedback-log.md` or the market
+    notes): p1 men's tournament fans, the ones who still argue about a final; p2 fans of the women's game and
+    women's national-team followers; p3 Manchester United fans, especially those who remember the moment; p4
+    Manchester United Women supporters; p5 Canada men's national team supporters; p6 Canada women's national team
+    supporters; Sixty Moments the collector who wants the whole wall. Across every pack: someone buying a gift for
+    one of those fans, and the fan decorating a room, office or kid's bedroom.
+
 ### RATIFIED 2026-09-22, evening (founder, in session: site reviews, search collapse, slim-down). THIS WINS OVER EVERY CADENCE LINE BELOW.
 
 **D-2026-09-22c (founder): FEWER UNITS, HIGHER BAR.** Founder wording: "i would like to reduce the volume of content

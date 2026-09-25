@@ -1,6 +1,6 @@
 {
   "_comment": [
-    "KIT REGISTRY \u2014 the machine-readable half of the `kit` field in player-headshot-bank.md.",
+    "KIT REGISTRY — the machine-readable half of the `kit` field in player-headshot-bank.md.",
     "",
     "WHY THIS EXISTS (founder ruling 2026-08-04). The headshot bank was built for the World Cup",
     "lane, so most banked faces wear a NATIONAL kit. The moment one of those heads sits under a",
@@ -36,7 +36,7 @@
     "A prompt records what was asked for; only the pixels record what arrived."
   ],
   "schemaVersion": 1,
-  "updated": "2026-08-20",
+  "updated": "2026-09-12",
   "colour_aliases": {
     "navy": "navy blue",
     "claret": "dark red",
@@ -147,14 +147,14 @@
         "white"
       ],
       "note": "Red and white striped home shirt, black shorts. Striped since the 1925-26 season. Black is shorts and trim, never the body colour.",
-      "source": "Wikipedia, \u201cBrentford F.C.\u201d (retrieved 2026-08-20)"
+      "source": "Wikipedia, “Brentford F.C.” (retrieved 2026-08-20)"
     },
     "TOTTENHAM HOTSPUR": {
       "colours": [
         "white"
       ],
       "note": "White home shirt, navy blue shorts. Navy is the SHORTS colour and is deliberately not listed: admitting it would let a navy head pass under this label.",
-      "source": "Wikipedia, \u201cTottenham Hotspur F.C.\u201d (retrieved 2026-08-20)"
+      "source": "Wikipedia, “Tottenham Hotspur F.C.” (retrieved 2026-08-20)"
     },
     "CHELSEA": {
       "colours": [
@@ -203,6 +203,161 @@
       ],
       "note": "All-red home kit.",
       "source": "Club colours, unchanged"
+    },
+    "EVERTON": {
+      "colours": [
+        "blue"
+      ],
+      "note": "Royal blue home shirt, white shorts.",
+      "source": "Club colours, unchanged; Everton F.C. (Wikipedia) home kit description"
+    },
+    "REAL MADRID": {
+      "colours": [
+        "white",
+        "blue"
+      ],
+      "note": "All-white home shirt; the ARCHV disc uses the crest blue, not the shirt.",
+      "source": "Club colours, unchanged; Real Madrid CF (Wikipedia)"
+    },
+    "INTER MILAN": {
+      "colours": [
+        "blue",
+        "black"
+      ],
+      "note": "Blue and black stripes.",
+      "source": "Club colours, unchanged; Inter Milan (Wikipedia)"
+    },
+    "ATLETICO MADRID": {
+      "colours": [
+        "red",
+        "white",
+        "blue"
+      ],
+      "note": "Red and white stripes with blue shorts.",
+      "source": "Club colours, unchanged; Atletico Madrid (Wikipedia)"
+    },
+    "FC PORTO": {
+      "colours": [
+        "blue",
+        "white"
+      ],
+      "note": "Blue and white stripes.",
+      "source": "Club colours, unchanged; FC Porto (Wikipedia)"
+    },
+    "SSC NAPOLI": {
+      "colours": [
+        "sky blue",
+        "blue"
+      ],
+      "note": "Sky blue home shirt.",
+      "source": "Club colours, unchanged; SSC Napoli (Wikipedia)"
+    },
+    "COVENTRY CITY": {
+      "colours": [
+        "sky blue"
+      ],
+      "note": "Sky blue home shirt.",
+      "source": "Club colours, unchanged; Coventry City F.C. (Wikipedia)"
+    },
+    "AFC BOURNEMOUTH": {
+      "colours": [
+        "red",
+        "black"
+      ],
+      "note": "Red and black stripes.",
+      "source": "Club colours, unchanged; AFC Bournemouth (Wikipedia)"
+    },
+    "HULL CITY": {
+      "colours": [
+        "amber",
+        "black"
+      ],
+      "note": "Amber and black home shirt.",
+      "source": "Club colours, unchanged; Hull City A.F.C. (Wikipedia)"
+    },
+    "SABAH FK": {
+      "colours": [
+        "black",
+        "pink"
+      ],
+      "note": "Black and pink home shirt; nicknamed the Black-pinks after Lake Masazir. Changed from blue and white in 2023-24.",
+      "source": "ESPN, 'Who are Sabah FK, Champions League debutants?'; Wikipedia, Sabah FK (Azerbaijan)"
+    },
+    "LEEDS UNITED": {
+      "colours": [
+        "white"
+      ],
+      "note": "White home shirt. The 2026-27 shirt carries thin blue and yellow horizontal stripes on the white body; those are trim, not the body colour.",
+      "source": "Leeds United (official) 2026-27 home kit launch, \"The traditional white jersey\" with \"subtle horizontal blue and yellow stripes\" (retrieved 2026-09-12)"
+    },
+    "BENFICA": {
+      "colours": [
+        "red"
+      ],
+      "note": "Red home shirt.",
+      "source": "Footy Headlines, Benfica 26-27 home kit, \"the club's traditional red base color\" (retrieved 2026-09-12)"
+    },
+    "MANCHESTER UNITED WOMEN": {
+      "colours": [
+        "red"
+      ],
+      "note": "Same home shirt as the men's side.",
+      "source": "manutd.com 2026-27 home kit, \"a clean red base\"; manutd.com: Manchester United Women debuted the 2026/27 home kit in the WSL (retrieved 2026-09-12)"
+    },
+    "CHELSEA WOMEN": {
+      "colours": [
+        "blue"
+      ],
+      "note": "Same royal blue home shirt as the men's side. Not sky blue, same exact-token rule as CHELSEA.",
+      "source": "chelseafc.com 2026-27 kit launch, modelled by the men's and women's teams; Goal.com, \"Bright Blue\" (retrieved 2026-09-12)"
+    },
+    "LEVANTE": {
+      "colours": [
+        "navy blue",
+        "dark red",
+        "navy blue and dark red"
+      ],
+      "note": "Navy and maroon (blaugrana) vertical stripes; maroon recorded as dark red. The ARCHV disc uses the maroon.",
+      "source": "Footy Headlines, Levante 26-27 home kit, \"iconic vertical blaugrana (navy and maroon) stripes\" (retrieved 2026-09-12)"
+    },
+    "BARCELONA": {
+      "colours": [
+        "blue",
+        "dark red",
+        "blue and dark red"
+      ],
+      "note": "Blue and garnet vertical stripes; garnet recorded as dark red. Not plain red: a national-team red head must not pass here, the same defect the PSG row guards against.",
+      "source": "SoccerBible, FC Barcelona 2026/27 home kit, \"Deep Garnet, Noble Red and Cardinal Red\" with blue (retrieved 2026-09-12)"
+    },
+    "STADE BRESTOIS 29": {
+      "colours": [
+        "red"
+      ],
+      "note": "All-red home shirt.",
+      "source": "Stade Brestois 29 (official) sb29.bzh, 2026-27 kit, \"Entierement rouge, ce maillot\" (retrieved 2026-09-12)"
+    },
+    "ELCHE": {
+      "colours": [
+        "white"
+      ],
+      "note": "White shirt with a horizontal green band; the band is not listed, so a green head does not pass.",
+      "source": "Elche CF (official) elchecf.es 2026/27 kit, \"Sobre un fondo blanco limpio\" and \"la franja horizontal verde\" (retrieved 2026-09-12)"
+    },
+    "NORWICH CITY": {
+      "colours": [
+        "yellow"
+      ],
+      "note": "Yellow body; green and yellow sleeves.",
+      "source": "Footy Headlines, Norwich City 26-27 home kit, \"tonal yellow marble effect across the main body\" (retrieved 2026-09-12)"
+    },
+    "REAL SOCIEDAD": {
+      "colours": [
+        "blue",
+        "white",
+        "blue and white"
+      ],
+      "note": "Blue and white vertical stripes.",
+      "source": "Footy Headlines, Real Sociedad 26-27 home kit (Joma), \"the club's traditional blue and white vertical stripes\" (retrieved 2026-09-12)"
     }
   },
   "heads": {
@@ -344,7 +499,7 @@
       "kit_hex": "#943D42",
       "kit_of": "Portugal",
       "measured": "2026-08-13",
-      "note": "A NATIONAL kit that legitimately clears a Manchester United label, because Portugal red and Manchester United red are the same colour. Kept as-is rather than regenerated: it passes the check on its merits."
+      "note": "A NATIONAL kit that legitimately clears a Manchester United label, because Portugal red and Manchester United red are the same colour. Kept as-is rather than regenerated: it passes the check on its merits. Re-normalised 2026-09-12 from assets/headshots/headshot-brunofernandes-2026.png to pair-10 navy; kit re-measured #953B3D, still red."
     },
     "igor-thiago": {
       "player": "Igor Thiago",
@@ -472,6 +627,171 @@
       "kit_hex": "#0057B8",
       "kit_of": "Brighton and Hove Albion",
       "measured": "2026-08-27"
+    },
+    "everton-disc": {
+      "player": "ARCHV typographic club disc, Everton (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#003399",
+      "kit_of": "Everton",
+      "measured": "2026-09-03"
+    },
+    "real-madrid-disc": {
+      "player": "ARCHV typographic club disc, Real Madrid (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#00529F",
+      "kit_of": "Real Madrid",
+      "measured": "2026-09-03"
+    },
+    "inter-milan-disc": {
+      "player": "ARCHV typographic club disc, Inter Milan (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#0068A8",
+      "kit_of": "Inter Milan",
+      "measured": "2026-09-03"
+    },
+    "atletico-madrid-disc": {
+      "player": "ARCHV typographic club disc, Atletico Madrid (bank-only stand-down fallback, ruling R6)",
+      "kit": "red",
+      "kit_hex": "#CB3524",
+      "kit_of": "Atletico Madrid",
+      "measured": "2026-09-03"
+    },
+    "fc-porto-disc": {
+      "player": "ARCHV typographic club disc, FC Porto (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#00428C",
+      "kit_of": "FC Porto",
+      "measured": "2026-09-03"
+    },
+    "ssc-napoli-disc": {
+      "player": "ARCHV typographic club disc, SSC Napoli (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#12A0D7",
+      "kit_of": "SSC Napoli",
+      "measured": "2026-09-03"
+    },
+    "manchester-city-disc": {
+      "player": "ARCHV typographic club disc, Manchester City (bank-only stand-down fallback, ruling R6)",
+      "kit": "sky blue",
+      "kit_hex": "#6CABDD",
+      "kit_of": "Manchester City",
+      "measured": "2026-09-03"
+    },
+    "coventry-city-disc": {
+      "player": "ARCHV typographic club disc, Coventry City (bank-only stand-down fallback, ruling R6)",
+      "kit": "sky blue",
+      "kit_hex": "#059DD9",
+      "kit_of": "Coventry City",
+      "measured": "2026-09-03"
+    },
+    "afc-bournemouth-disc": {
+      "player": "ARCHV typographic club disc, AFC Bournemouth (bank-only stand-down fallback, ruling R6)",
+      "kit": "red",
+      "kit_hex": "#B50E12",
+      "kit_of": "AFC Bournemouth",
+      "measured": "2026-09-03"
+    },
+    "hull-city-disc": {
+      "player": "ARCHV typographic club disc, Hull City (bank-only stand-down fallback, ruling R6)",
+      "kit": "amber",
+      "kit_hex": "#F18A01",
+      "kit_of": "Hull City",
+      "measured": "2026-09-03"
+    },
+    "sabah-fk-disc": {
+      "player": "ARCHV typographic club disc, Sabah FK (bank-only stand-down fallback, ruling R6)",
+      "kit": "black",
+      "kit_hex": "#14100E",
+      "kit_of": "Sabah FK",
+      "measured": "2026-09-03"
+    },
+    "haaland-manchester-city-tile": {
+      "player": "Erling Haaland",
+      "kit": "sky blue",
+      "kit_hex": "#87BCDF",
+      "kit_of": "Manchester City",
+      "measured": "2026-09-12",
+      "note": "Square-tile cut of the 2026-09-12 localised bank head (assets/headshots/headshot-haaland-2026.png), normalised to pair-10 navy with --no-ring. Kit measured off the pixels this run."
+    },
+    "calvert-lewin": {
+      "player": "Dominic Calvert-Lewin",
+      "kit": "white",
+      "kit_hex": "#DAD4C7",
+      "kit_of": "Leeds United",
+      "measured": "2026-09-12",
+      "note": "Plain off-white crew neck, median of two shoulder patches either side of the neck. White is the Leeds United body colour. Club re-checked 2026-09-12: ESPN Leeds 2026-27 squad, Wikipedia infobox, FPL API."
+    },
+    "bellingham": {
+      "player": "Jude Bellingham",
+      "kit": "white",
+      "kit_hex": "#DCD2C5",
+      "kit_of": "England",
+      "measured": "2026-09-12",
+      "note": "Plain white England crew neck (bank row 2026-07-15, 4:5 render top-square-cropped and normalised this run; the 2026-06-16 square render refused normalisation, fill reached the shirt zone). White is also the Real Madrid body colour. Club re-checked 2026-09-12: ESPN Real Madrid 2026-27 squad, Wikipedia infobox."
+    },
+    "pavlidis": {
+      "player": "Vangelis Pavlidis",
+      "kit": "red",
+      "kit_hex": "#A51C19",
+      "kit_of": "Benfica",
+      "measured": "2026-09-12",
+      "note": "Plain red collared shirt, lit-side shoulder patch. Red is the Benfica body colour. Painterly off-white brush marks sit in the background either side of the head and survive the circular crop. Club re-checked 2026-09-12: ESPN Benfica 2026-27 squad, Wikipedia infobox."
+    },
+    "manchester-united-disc": {
+      "player": "ARCHV typographic club disc, Manchester United (bank-only stand-down fallback, ruling R6)",
+      "kit": "red",
+      "kit_hex": "#DA291C",
+      "kit_of": "Manchester United",
+      "measured": "2026-09-12"
+    },
+    "chelsea-disc": {
+      "player": "ARCHV typographic club disc, Chelsea (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#034694",
+      "kit_of": "Chelsea",
+      "measured": "2026-09-12"
+    },
+    "levante-disc": {
+      "player": "ARCHV typographic club disc, Levante (bank-only stand-down fallback, ruling R6)",
+      "kit": "dark red",
+      "kit_hex": "#B4053F",
+      "kit_of": "Levante",
+      "measured": "2026-09-12"
+    },
+    "barcelona-disc": {
+      "player": "ARCHV typographic club disc, Barcelona (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#004D98",
+      "kit_of": "Barcelona",
+      "measured": "2026-09-12"
+    },
+    "stade-brestois-29-disc": {
+      "player": "ARCHV typographic club disc, Stade Brestois 29 (bank-only stand-down fallback, ruling R6)",
+      "kit": "red",
+      "kit_hex": "#ED1C24",
+      "kit_of": "Stade Brestois 29",
+      "measured": "2026-09-12"
+    },
+    "elche-disc": {
+      "player": "ARCHV typographic club disc, Elche (bank-only stand-down fallback, ruling R6)",
+      "kit": "white",
+      "kit_hex": "#FFFFFF",
+      "kit_of": "Elche",
+      "measured": "2026-09-12"
+    },
+    "norwich-city-disc": {
+      "player": "ARCHV typographic club disc, Norwich City (bank-only stand-down fallback, ruling R6)",
+      "kit": "yellow",
+      "kit_hex": "#FFF200",
+      "kit_of": "Norwich City",
+      "measured": "2026-09-12"
+    },
+    "real-sociedad-disc": {
+      "player": "ARCHV typographic club disc, Real Sociedad (bank-only stand-down fallback, ruling R6)",
+      "kit": "blue",
+      "kit_hex": "#0067B1",
+      "kit_of": "Real Sociedad",
+      "measured": "2026-09-12"
     }
   }
 }

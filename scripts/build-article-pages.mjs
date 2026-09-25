@@ -101,40 +101,50 @@ function bodyHtml(text) {
     .join("\n        ");
 }
 
-/* ---------- meta description: "<dek> <first sentence of body>", trimmed at a word boundary so
-   the whole string stays <=155 chars. Search-only; the visible page and og/twitter copy are
-   untouched. Throws if the result ever exceeds 160, so a bad edit fails the build loudly. */
-const DESC_TARGET = 155;
-function firstSentence(text) {
-  const s = String(text).trim();
-  const m = s.match(/^.*?[.!?](?=\s|$)/);
-  return (m ? m[0] : s).trim();
-}
-function truncateAtWord(str, maxLen) {
-  if (str.length <= maxLen) return str;
-  const cut = str.slice(0, maxLen);
-  const lastSpace = cut.lastIndexOf(" ");
-  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?]+$/, "");
-}
-function metaDescription(dek, body) {
-  const d = String(dek).trim();
-  const sentence = firstSentence(body);
-  const full = sentence ? `${d} ${sentence}` : d;
-  const out = full.length > DESC_TARGET ? `${truncateAtWord(full, DESC_TARGET - 1)}…` : full;
-  if (out.length > 160) throw new Error(`meta description exceeds 160 chars (${out.length}): ${out}`);
+/* ---------- meta description: the standfirst, the same clean string og:description carries.
+   E19 (2026-09-24): this used to stitch "<dek> <first sentence of body>" and cut the join at ~155
+   with an ellipsis, so short deks were padded out with the head of the next sentence and cut
+   mid-word ("... Jayden…"), and long ones stopped mid-clause. Now: <=160 passes through unchanged;
+   over 160 it ends on the last full sentence that fits, else a clause break or whole word, never borrows
+   text from the body. Throws if the result ever exceeds 160, so a bad edit fails the build loudly. */
+const DESC_MAX = 160;
+function metaDescription(dek) {
+  const d = String(dek ?? "").trim().replace(/\s+/g, " ");
+  if (d.length <= DESC_MAX) return d;
+  const window = d.slice(0, DESC_MAX + 1); // +1 so a terminator at 160 is seen with its trailing space
+  let sentenceEnd = -1;
+  for (const m of window.matchAll(/[.!?]["'\u2019\u201d)]?(?=\s)/g)) {
+    const end = m.index + m[0].length;
+    if (end <= DESC_MAX) sentenceEnd = end;
+  }
+  let out;
+  if (sentenceEnd > 0) {
+    out = d.slice(0, sentenceEnd);
+  } else {
+    // No sentence fits: prefer the last clause break (comma, semicolon, colon, dash) past 60% of the
+    // cap, else the last whole word, then drop a trailing connective so it never ends "... and…".
+    const cut = d.slice(0, DESC_MAX); // reserve one char for the ellipsis
+    const clause = Math.max(...[",", ";", ":", " \u2014", " \u2013"].map((c) => cut.lastIndexOf(c)));
+    const lastSpace = cut.lastIndexOf(" ");
+    const stem = clause > DESC_MAX * 0.6 ? cut.slice(0, clause) : lastSpace > 0 ? cut.slice(0, lastSpace) : cut.slice(0, DESC_MAX - 1);
+    out = `${stem.replace(/[\s.,;:!?\u2014\u2013-]+$/, "").replace(/\s+(?:and|or|but|the|a|an|of|to|in|on|at|for|with|from|by|as|than|then|so|nor)$/i, "")}…`;
+  }
+  if (out.length > DESC_MAX) throw new Error(`meta description exceeds ${DESC_MAX} chars (${out.length}): ${out}`);
   return out;
 }
 
 // tests-by-assertion: exercise the helper at module load so a regression fails the build.
 (function selfTestMetaDescription() {
-  const long = "word ".repeat(80).trim(); // 400+ chars, all word boundaries
-  const truncated = metaDescription("A short standfirst.", long);
-  if (truncated.length > DESC_TARGET) throw new Error(`metaDescription self-test: long input produced ${truncated.length} chars`);
-  if (!truncated.endsWith("…")) throw new Error("metaDescription self-test: expected an ellipsis on truncation");
   const shortDek = "Fernandes the name. Not the only one.";
-  const shortBody = "The move building steam is Mateus Fernandes. And more.";
-  const kept = metaDescription(shortDek, shortBody);
-  if (kept !== `${shortDek} The move building steam is Mateus Fernandes.`) throw new Error("metaDescription self-test: short input should pass through untruncated");
+  if (metaDescription(shortDek) !== shortDek) throw new Error("metaDescription self-test: a dek <=160 must pass through unchanged");
+  const s1 = "First sentence runs to a sensible length and stops cleanly here.";
+  const s2 = "Second sentence also stops cleanly and still fits under the cap.";
+  const s3 = "Third sentence would push the whole thing well past one hundred and sixty characters.";
+  const bySentence = metaDescription(`${s1} ${s2} ${s3}`);
+  if (bySentence !== `${s1} ${s2}`) throw new Error(`metaDescription self-test: long dek should end on the last full sentence, got ${JSON.stringify(bySentence)}`);
+  const long = "word ".repeat(80).trim(); // 400 chars, no sentence end at all
+  const byWord = metaDescription(long);
+  if (byWord.length > DESC_MAX || !byWord.endsWith("word…")) throw new Error(`metaDescription self-test: no-sentence dek should cut at a whole word, got ${JSON.stringify(byWord)}`);
 })();
 
 /* ---------- Answer Desk: the direct answer, used verbatim in both the page and the schema ----------
@@ -609,10 +619,9 @@ function render(entry, section, hasCard, hasWide, moreFrom, prevEntry, nextEntry
   // Search-only title: the entry's seoTitle (the answer) when the desk filed one, else the old
   // headline + entity suffix path, byte-identical for every entry filed before 2026-09-11.
   title: answerTitle(entry.seoTitle, [entry.headline, lane.seoSuffix, "The ARCHV"]),
-  // NOT clampDescription: this family has its own metaDescription(), which stitches the
-  // standfirst to the body's first sentence and throws above 160 characters. og:description
-  // and twitter:description stay on the bare standfirst, as they always have.
-  metaDescription: metaDescription(entry.dek, entry.body),
+  // NOT clampDescription: this family has its own metaDescription(), which returns the same
+  // standfirst og:description and twitter:description carry, cut at a sentence only past 160.
+  metaDescription: metaDescription(entry.dek),
   description: entry.dek,
   socialTitle: entry.headline,
   robots: ROBOTS_INDEXABLE,

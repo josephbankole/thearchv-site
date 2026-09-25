@@ -106,28 +106,52 @@ function bodyHtml(text) {
    with an ellipsis, so short deks were padded out with the head of the next sentence and cut
    mid-word ("... Jayden…"), and long ones stopped mid-clause. Now: <=160 passes through unchanged;
    over 160 it ends on the last full sentence that fits, else a clause break or whole word, never borrows
-   text from the body. Throws if the result ever exceeds 160, so a bad edit fails the build loudly. */
+   text from the body. Throws if the result ever exceeds 160, so a bad edit fails the build loudly.
+
+   Three guards on the cut (code review 2026-09-25), each found on a dek already filed:
+   - a full stop after an abbreviation or an initial is not a sentence end. Without this the golf
+     lane's descriptions ended "at the FedEx St." (St. Jude) and "Wyndham Clark, J.J." (J.J. Spaun);
+   - a last sentence shorter than DESC_MIN_SENTENCE is a fragment ("A right knee injury.") that
+     throws away most of the standfirst, so the cut falls through to a clause or a word instead;
+   - a clause break needs a space after it, so the comma inside "74,310" never cuts a number. */
 const DESC_MAX = 160;
+const DESC_MIN_SENTENCE = 50;
+// Short forms that take a full stop without ending a sentence. Initials and dotted runs ("J.J.",
+// "p.m.", "U.S.") are caught by shape; this list is the titles and short forms the desks file.
+const DESC_ABBREVIATIONS = new Set(["st", "mr", "mrs", "ms", "dr", "jr", "sr", "no", "nos", "vs", "v", "mt", "ft", "prof", "gen", "capt", "rev", "co", "inc", "ltd", "etc", "approx", "est"]);
+function endsInAbbreviation(textBeforeStop) {
+  const token = textBeforeStop.split(" ").pop().replace(/^["'‘“(]+/, "");
+  return /^(?:[A-Za-z]\.)*[A-Za-z]$/.test(token) || DESC_ABBREVIATIONS.has(token.toLowerCase());
+}
 function metaDescription(dek) {
   const d = String(dek ?? "").trim().replace(/\s+/g, " ");
   if (d.length <= DESC_MAX) return d;
-  const window = d.slice(0, DESC_MAX + 1); // +1 so a terminator at 160 is seen with its trailing space
+  const window = d.slice(0, DESC_MAX + 1); // +1 so a mark at the cap is seen with the space after it
   let sentenceEnd = -1;
-  for (const m of window.matchAll(/[.!?]["'\u2019\u201d)]?(?=\s)/g)) {
+  for (const m of window.matchAll(/[.!?]["'’”)]?(?=\s)/g)) {
     const end = m.index + m[0].length;
-    if (end <= DESC_MAX) sentenceEnd = end;
+    if (end > DESC_MAX) continue;
+    if (m[0][0] === "." && endsInAbbreviation(window.slice(0, m.index))) continue;
+    sentenceEnd = end;
   }
   let out;
-  if (sentenceEnd > 0) {
+  if (sentenceEnd >= DESC_MIN_SENTENCE) {
     out = d.slice(0, sentenceEnd);
   } else {
-    // No sentence fits: prefer the last clause break (comma, semicolon, colon, dash) past 60% of the
-    // cap, else the last whole word, then drop a trailing connective so it never ends "... and…".
-    const cut = d.slice(0, DESC_MAX); // reserve one char for the ellipsis
-    const clause = Math.max(...[",", ";", ":", " \u2014", " \u2013"].map((c) => cut.lastIndexOf(c)));
+    // No usable sentence fits: prefer the last clause break (comma, semicolon, colon or dash, each
+    // followed by a space) past 60% of the cap, else the last whole word, keeping one char for the
+    // ellipsis. Then drop trailing connectives until none is left, so it never ends "... in the…".
+    let clause = -1;
+    for (const m of window.matchAll(/[,;:](?=\s)|\s[—–](?=\s)/g)) if (m.index < DESC_MAX) clause = m.index;
+    const cut = d.slice(0, DESC_MAX);
     const lastSpace = cut.lastIndexOf(" ");
-    const stem = clause > DESC_MAX * 0.6 ? cut.slice(0, clause) : lastSpace > 0 ? cut.slice(0, lastSpace) : cut.slice(0, DESC_MAX - 1);
-    out = `${stem.replace(/[\s.,;:!?\u2014\u2013-]+$/, "").replace(/\s+(?:and|or|but|the|a|an|of|to|in|on|at|for|with|from|by|as|than|then|so|nor)$/i, "")}…`;
+    let stem = clause > DESC_MAX * 0.6 ? cut.slice(0, clause) : lastSpace > 0 ? cut.slice(0, lastSpace) : cut.slice(0, DESC_MAX - 1);
+    for (let prev; prev !== stem; ) {
+      prev = stem;
+      // Lower case only: "Group A" and "AS Roma" are names, not connectives.
+      stem = stem.replace(/[\s.,;:!?—–-]+$/, "").replace(/\s+(?:and|or|but|the|a|an|of|to|in|on|at|for|with|from|by|as|than|then|so|nor)$/, "");
+    }
+    out = `${stem || cut.slice(0, DESC_MAX - 1)}…`;
   }
   if (out.length > DESC_MAX) throw new Error(`meta description exceeds ${DESC_MAX} chars (${out.length}): ${out}`);
   return out;
@@ -145,6 +169,15 @@ function metaDescription(dek) {
   const long = "word ".repeat(80).trim(); // 400 chars, no sentence end at all
   const byWord = metaDescription(long);
   if (byWord.length > DESC_MAX || !byWord.endsWith("word…")) throw new Error(`metaDescription self-test: no-sentence dek should cut at a whole word, got ${JSON.stringify(byWord)}`);
+  // The three guards, each on the shape of a dek that tripped it.
+  const abbrev = metaDescription("The 2026 FedEx Cup playoffs begin on Thursday 13 August at the FedEx St. Jude Championship in Memphis, with the top 70 in the standings and one withdrawal already");
+  if (/\bSt\.$/.test(abbrev)) throw new Error(`metaDescription self-test: a full stop after "St" is not a sentence end, got ${JSON.stringify(abbrev)}`);
+  const fragment = metaDescription(`A right knee injury. ${"Jannik Sinner has withdrawn from the Cincinnati Open ".repeat(3).trim()}`);
+  if (fragment === "A right knee injury.") throw new Error("metaDescription self-test: a sentence under DESC_MIN_SENTENCE must not stand as the whole description");
+  const number = metaDescription("Manchester United announced the highest attendance anywhere in English football this season when the club counted 74,310 people through the turnstiles for the derby");
+  if (/\b74…$/.test(number)) throw new Error(`metaDescription self-test: the comma inside a number is not a clause break, got ${JSON.stringify(number)}`);
+  const connectives = metaDescription(`${"Arsenal chased a striker all summer ".repeat(4)}and settled in the end for the one in the`);
+  if (/\s(?:in|the|and)…$/.test(connectives)) throw new Error(`metaDescription self-test: trailing connectives must all be dropped, got ${JSON.stringify(connectives)}`);
 })();
 
 /* ---------- Answer Desk: the direct answer, used verbatim in both the page and the schema ----------

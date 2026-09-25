@@ -18,6 +18,17 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-25",
+    day: "Friday",
+    headline: "Erling Haaland passes Ronaldo and Zlatan Ibrahimovic with his 64th goal for Norway",
+    dek: "Two goals in Norway's 3-2 Nations League win over Denmark in Oslo on Thursday took Erling Haaland to 64 international goals in 56 games. Ronaldo Nazário and Zlatan Ibrahimovic both finished on 62.",
+    body: "Erling Haaland scored twice as Norway beat Denmark 3-2 in the UEFA Nations League at the Ullevaal Stadium in Oslo on Thursday 24 September. The goals took him to 64 for Norway in 56 appearances, per beIN Sports and Goal. Ronaldo Nazário of Brazil and Zlatan Ibrahimovic of Sweden both ended their international careers on 62. Haaland is 26.\n\nOscar Bobb gave Norway the lead and Haaland made it 2-0 after 18 minutes. Denmark levelled through Mikkel Damsgaard and Rasmus Højlund, the former Manchester United striker, before Haaland's second, a left-footed finish, won the match, per Sofascore and beIN Sports. The two reports give different minutes for the winner, so this page prints neither.\n\nNorway finished with ten men after David Møller Wolfe was sent off for a second yellow card in stoppage time, per Sofascore and beIN Sports.\n\nThe club half of the record is familiar in Manchester. Haaland has nine Premier League goals in Manchester derbies, more than Wayne Rooney or Sergio Agüero, per AP and ESPN after the derby on 13 September.",
+    status: "verified",
+    image: "/heads/hd/haaland.webp",
+    imageAlt: "Illustrated portrait of Erling Haaland",
+    seoTitle: "Erling Haaland scores his 64th Norway goal in 56 games",
+  },
+  {
     date: "2026-09-24",
     day: "Thursday",
     headline: "The team that knocked Canada out is one win from a title nobody has ever defended.",

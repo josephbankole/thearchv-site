@@ -30,10 +30,18 @@
    whatever it finds — in Actions, in a job holding pages:write. Every data module named below is
    therefore checked against a pure-data grammar first, and a file that has grown a runtime import
    or a top-level call stops the build instead of running. scripts/shared/data-shape.mjs carries
-   the grammar and the reasoning. The guard sits HERE, at the bundle, rather than in a
-   front-of-chain script, because half the generators are also run on their own through their
-   package.json aliases (`npm run articles`, `npm run feed`), where a front-of-chain check never
-   fires at all.
+   the grammar and the reasoning.
+
+   The guard runs in TWO places, and neither is enough alone (code review 2026-09-25). HERE, at
+   the bundle, because half the generators are also run on their own through their package.json
+   aliases (`npm run articles`, `npm run feed`), where a front-of-chain check never fires at all.
+   And FIRST in the chain, in scripts/check-data-shape.mjs, because this bundle is not the first
+   thing to execute the data: vite.config.ts statically imports src/render/home.ts, which imports
+   the day lanes, legends and longReads, so `vite build`, `vite` and `vite preview` all run those
+   modules while loading their config, before any generator has called loadDayData(). Until that
+   date the guard lived only here and was simply too late for Vite. The front-of-chain check reads
+   its module list from REGISTERED_MODULES below rather than keeping a second copy, so a module
+   added to DAY_LANES or EXTRAS is covered in both places by the same edit.
 
    USAGE
      const { transferDays, worldCupDays, leaguesDays, sportDays } = await loadDayData();
@@ -72,7 +80,7 @@ const DAY_LANES = [
 
    `kind` is the only load-bearing addition: "data" means engine-written and checked against the
    pure-data grammar before it is bundled, "code" means a repo-owned module that reaches the
-   bundle through a reviewed branch like any other source file. Two of these are code and running
+   bundle through a reviewed branch like any other source file. Three of these are code and running
    the data grammar over them would fail the build on the first `function` keyword. */
 const EXTRAS = {
   posters: { module: "data/posters.ts", kind: "data", line: `export { posters } from "./data/posters.ts";` },
@@ -91,10 +99,33 @@ const EXTRAS = {
   longreadMd: { module: "lib/longreadMd.ts", kind: "code", line: `export { longreadHtml, longreadPlain, longreadParagraphs } from "./lib/longreadMd.ts";` },
 };
 
-/* Checked once per process. The scan is a single pass and the whole data set is ~390 kB, so this
-   costs single-digit milliseconds per generator; the memo is here so the second loadDayData call
-   in one process does not pay it twice. A file is checked when it is about to be BUNDLED, which
-   is what keeps this list from drifting away from what actually gets executed. */
+/* A day lane in the same shape as an EXTRAS entry. Every lane is engine-written DATA. */
+const laneModule = (lane) => ({
+  module: `data/${lane.file}.ts`,
+  kind: "data",
+  line: `export { ${lane.name} } from "./data/${lane.file}.ts";`,
+});
+
+/* Every module this loader can bundle, with its kind, paths relative to src/. The export
+   scripts/check-data-shape.mjs reads (code review 2026-09-25): it runs the pure-data guard over
+   every "data" entry before Vite loads its config, and it refuses the build if src/data/ holds any
+   file at all, with or without a source extension, that is neither a "data" entry here nor on its
+   own short allowlist of repo-authored code. Every file rather than every module, because an import
+   written without an extension resolves to a file of exactly that name before it tries .ts (that
+   script's header has the measurement). This loader's own bundle is not open to that: the entry
+   source below names every module with its .ts extension, so esbuild opens the file that was checked.
+   Derived from DAY_LANES and EXTRAS, never listed separately, so the two checks cannot drift. */
+export const REGISTERED_MODULES = Object.freeze(
+  [...DAY_LANES.map(laneModule), ...Object.values(EXTRAS)].map(({ module, kind }) => Object.freeze({ module, kind })),
+);
+
+/* Checked once per process. Since 2026-09-25 the check reads each file twice rather than hand
+   scanning it once: a TypeScript parse, then an esbuild transform whose output is what esbuild
+   would actually run (data-shape.mjs says why both). Over the whole data set, about 700 kB today,
+   that is about 50 milliseconds per generator, on top of roughly 150 to load the guard and run its
+   self-tests, and the memo is here so the second loadDayData call in one process does not pay it
+   twice. A file is checked when it is about to be BUNDLED, which is what keeps this list from
+   drifting away from what actually gets executed. */
 const checkedModules = new Set();
 function guardDataModules(entries) {
   for (const entry of entries) {
@@ -146,7 +177,7 @@ export async function loadDayData({ days = true, extras = [] } = {}) {
   // One list, two readings: the entry-module source esbuild bundles, and the modules the shape
   // guard checks. Derived from the same place so neither can quietly stop covering the other.
   const requested = [
-    ...(days ? DAY_LANES.map((l) => ({ module: `data/${l.file}.ts`, kind: "data", line: `export { ${l.name} } from "./data/${l.file}.ts";` })) : []),
+    ...(days ? DAY_LANES.map(laneModule) : []),
     ...wanted.map((k) => EXTRAS[k]),
   ];
   const lines = requested.map((r) => r.line);

@@ -25,9 +25,9 @@ const MAX_ITEMS = 30;
 // Named author and editor of the publication (founder decision, 2026-07-21). Emitted per item
 // as dc:creator, which is the field syndication platforms read for a byline.
 const AUTHOR = "Joseph Bankole";
-// The standing rights notice every canonical article page carries (see the article__rights
-// paragraph in build-article-pages.mjs). Syndicated full text travels away from the site, so
-// it carries the same notice with it. Kept byte-identical to the page copy.
+// The standing rights notice. On the site it is the footer's legal line (article pages carried a
+// separate article__rights box until the 2026-09-12 declutter). Syndicated full text travels away
+// from the site, so it carries the notice with it. Kept byte-identical to the old page copy.
 const RIGHTS =
   "The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs.";
 

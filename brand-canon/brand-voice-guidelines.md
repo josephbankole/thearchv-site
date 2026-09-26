@@ -27,7 +27,7 @@
 - Twitter/X: `@thearchvfc`
 - YouTube: `thearchvca`
 
-**Positioning line:** *Football has a memory. We are the archive.*
+**Positioning line:** *Football with no betting ads. Ever.* (founder, 2026-09-12, D-2026-09-12j: "we will lead with that going forward". Replaces *Football has a memory. We are the archive.*, which is retired as the lead line.)
 
 **Why we win:** Most football pages chase results, clips, and team news. We chase *stories* — because people follow stories, not fixtures.
 

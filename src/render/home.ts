@@ -5,7 +5,7 @@
 // full text of every desk entry (12,000-plus words, growing daily) rode into a content-hashed
 // bundle that therefore re-hashed and re-downloaded every morning. This module renders the same
 // data into the built HTML instead. The bundle now enhances what is already on the page —
-// analytics, the wire's pause-on-hover — rather than creating it.
+// analytics, the poster rail, the long-reads animation — rather than creating it.
 //
 // It runs inside vite.config.ts (the archvHome() plugin, transformIndexHtml), which means it
 // runs in dev AND in build, so what a developer sees is what ships. It imports the same
@@ -113,7 +113,7 @@ function allItems(): Item[] {
 }
 
 // A front page is not a reverse-chronological dump. Sorting the three desks by date alone puts
-// whichever desk filed most recently at the top of the wire and the brief seven times in a row
+// whichever desk filed most recently at the top of the brief six times in a row
 // (the transfer desk files daily in a window; the leagues desk does not). Round-robin takes the
 // newest unused entry from each lane in turn, so a reader always sees all three desks, and
 // within a lane the order is still newest first.
@@ -180,18 +180,12 @@ function cardArt(entry: DayEntry): string {
   return `<img class="fcard__art" src="${esc(art.src)}" alt="${esc(art.alt)}" width="72" height="72" loading="lazy" decoding="async" />`;
 }
 
-/* ---------- the wire ----------
-   A CSS marquee, so the track is duplicated in the markup for a seamless loop. The duplicate is
-   aria-hidden: a screen reader should hear each line once. */
-export function renderWire(): string {
-  const lines = roundRobin(9)
-    .map(({ entry, lane }) => {
-      const tag = lane.key === 'worldcup' ? 'INTERNATIONAL' : lane.label.toUpperCase();
-      return `<a class="wire__item" href="${esc(articleUrl(lane, entry))}"><b>${esc(tag)}</b> ${esc(entry.headline)}<span class="wire__dot" aria-hidden="true">&#9679;</span></a>`;
-    })
-    .join('');
-  return `<div class="wire__track">${lines}</div><div class="wire__track" aria-hidden="true">${lines}</div>`;
-}
+/* ---------- the wire: REMOVED 2026-09-12 (site declutter) ----------
+   `renderWire()` built a CSS marquee of nine round-robin headlines, duplicated for the loop with
+   the second track aria-hidden. The same stories were already in the bands, the brief and the
+   today strip, and the hidden track still held focusable links (the one accessibility audit the
+   front page failed). Its `<!--archv:wire-->` marker, the `#wire` markup and the `.wire` CSS went
+   in the same commit, since the archvHome() plugin throws on a marker with no renderer. */
 
 /* ---------- the lead ---------- */
 export function renderLead(): string {
@@ -457,9 +451,7 @@ export function renderToday(): string {
         </ul>`;
 }
 
-/* ---------- the dateline ---------- */
-export function renderDateline(): string {
-  const top = allItems()[0];
-  if (!top) return 'Sports history, illustrated';
-  return `Latest filed <strong>${esc(longDate(top.entry.date))}</strong>`;
-}
+/* ---------- the dateline: REMOVED 2026-09-12 (site declutter) ----------
+   `renderDateline()` filled a strip above the masthead reading "Latest filed <date>", which the
+   "Today at the desk" block already states lower down. Marker, markup and `.topbar` CSS went with
+   it. */

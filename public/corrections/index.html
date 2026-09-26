@@ -32,7 +32,7 @@
   <meta name="twitter:title" content="Corrections · The ARCHV" />
   <meta name="twitter:description" content="The archive is append-only. An entry is never silently rewritten: corrections are added to the piece and dated." />
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://thearchv.ca/corrections/#webpage","url":"https://thearchv.ca/corrections/","name":"Corrections","description":"The ARCHV corrections policy: the archive is append-only. An entry is never silently rewritten. Corrections are added to the piece and dated.","inLanguage":"en-GB","isPartOf":{"@type":"WebSite","name":"The ARCHV","url":"https://thearchv.ca/"},"publisher":{"@id":"https://thearchv.ca/#organization"}},{"@type":"NewsMediaOrganization","@id":"https://thearchv.ca/#organization","name":"The ARCHV","url":"https://thearchv.ca/","logo":{"@type":"ImageObject","url":"https://thearchv.ca/brand/logo-badge@192.png","width":192,"height":192},"email":"partnerships@josephbankole.ca","founder":{"@type":"Person","name":"Joseph Bankole","url":"https://josephbankole.ca","sameAs":["https://josephbankole.ca"]},"publishingPrinciples":"https://thearchv.ca/standards/","correctionsPolicy":"https://thearchv.ca/corrections/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"The ARCHV","item":"https://thearchv.ca/"},{"@type":"ListItem","position":2,"name":"Corrections","item":"https://thearchv.ca/corrections/"}]}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://thearchv.ca/corrections/#webpage","url":"https://thearchv.ca/corrections/","name":"Corrections","description":"The ARCHV corrections policy: the archive is append-only. An entry is never silently rewritten. Corrections are added to the piece and dated.","inLanguage":"en-GB","dateModified":"2026-09-22","isPartOf":{"@type":"WebSite","name":"The ARCHV","url":"https://thearchv.ca/"},"publisher":{"@id":"https://thearchv.ca/#organization"}},{"@type":"NewsMediaOrganization","@id":"https://thearchv.ca/#organization","name":"The ARCHV","url":"https://thearchv.ca/","logo":{"@type":"ImageObject","url":"https://thearchv.ca/brand/logo-badge@192.png","width":192,"height":192},"email":"partnerships@josephbankole.ca","founder":{"@type":"Person","name":"Joseph Bankole","url":"https://josephbankole.ca","sameAs":["https://josephbankole.ca"]},"publishingPrinciples":"https://thearchv.ca/standards/","correctionsPolicy":"https://thearchv.ca/corrections/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"The ARCHV","item":"https://thearchv.ca/"},{"@type":"ListItem","position":2,"name":"Corrections","item":"https://thearchv.ca/corrections/"}]}]}</script>
 
   <!-- PostHog: pageview only on this static surface. Same project as the website. -->
   <script>
@@ -152,6 +152,22 @@
       background: var(--gold);
     }
 
+    .log { margin: 14px 0 0; padding: 0; list-style: none; }
+    .log li {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border-left: 2px solid var(--gold);
+      background: rgba(30, 34, 61, 0.04);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+    }
+    .log p { margin: 0 0 8px; }
+    .log p:last-child { margin-bottom: 0; }
+    .log .meta { font-size: 0.82rem; letter-spacing: 0.04em; color: var(--cream-dim); }
+    .log .was { color: var(--cream-dim); }
+    .log strong { color: var(--cream); font-weight: 600; }
+    .log .src { font-size: 0.85rem; color: var(--cream-dim); }
+
     .footer {
       margin-top: 52px;
       padding-top: 20px;
@@ -203,7 +219,7 @@
       which one we meant.</li>
     </ul>
 
-    <h2>How to report an error</h2>
+    <h2 id="report">How to report an error</h2>
     <p>Email <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>.
     Say which page you are reading and which line looks wrong, and what you believe the right
     version is. A link to a source makes it quicker to check.</p>
@@ -215,6 +231,74 @@
     named reporter is enough on their own, is set out in
     <a href="/standards/">how we verify</a>. More about the publication and who writes it is
     on the <a href="/about/">about page</a>.</p>
+
+    <h2 id="log">The corrections log</h2>
+    <p>Each correction, update or revision note is listed here as well as on its page, newest
+    first. An entry quotes what the page first said, then gives what is right and where we
+    checked it. The log starts with the notes added on 22 September 2026. Notes added to pages
+    before that date are on the pages themselves and are not listed here yet.</p>
+    <ul class="log">
+      <li>
+        <p class="meta">22 September 2026 · Correction · <a href="/united/treble-1999/">The 1999 treble</a></p>
+        <p class="was"><strong>Was:</strong> "The only English men's treble"; "None has done it since"; "Real Madrid and a handful of European giants have since matched the treble. In English football it stands alone."</p>
+        <p><strong>Now:</strong> Manchester United's treble was the first by an English men's club. Manchester City won the Premier League, FA Cup and Champions League in 2022-23. Real Madrid have never won a treble.</p>
+        <p class="src">Sources: ESPN and Manchester City, 10 June 2023; Wikipedia, Treble (association football).</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Correction · <a href="/explainers/most-world-cup-titles/">Most World Cup titles</a></p>
+        <p class="was"><strong>Was:</strong> Spain on one title; "the 22 tournaments held from 1930 to 2022"; "France reached a third straight final in 2022"; "Whoever lifts it on 19 July, the record above moves"; and an editor's note that the semi-final results "should be re-confirmed on publish day, with the final result added after 19 July"; "Argentina, the modern holders"; "Argentina hold the trophy now"; "the only nation on the four-and-below tier still adding to its count"; "France and Uruguay share second-from-bottom of the multiple-winners, two apiece"; "seven knockout wins in a month".</p>
+        <p><strong>Now:</strong> Spain beat Argentina 1-0 after extra time on 19 July 2026 for their second title, which makes 23 tournaments from 1930 to 2026. Argentina beat England 2-1 in the Atlanta semi-final. France's finals were 1998, 2006, 2018 and 2022, with a quarter-final exit in 2014, so 2022 was their second straight final. The editor's note is gone. Argentina held the trophy until the 2026 final, and Spain sit on two titles with France and Uruguay. A champion played seven matches, four of them knockouts, from 1998 to 2022, and eight, five of them knockouts, in 2026.</p>
+        <p class="src">Sources: CBS News and Yahoo Sports, 19 July 2026; FIFA; Olympics.com; ESPN.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Correction · <a href="/united/united-record-signings/">Every time Manchester United broke the British transfer record</a></p>
+        <p class="was"><strong>Was:</strong> "Manchester United have broken the British transfer record several times: Denis Law (£115,000, 1962), Bryan Robson (£1.5m, 1981), Roy Keane (£3.75m, 1993), Juan Sebastián Verón (around £28m, 2001) and Rio Ferdinand (£29.1m, 2002)."; "It started with Denis Law"; "From Denis Law in 1962"; and the search title "United's British transfer records, Denis Law to Paul Pogba".</p>
+        <p><strong>Now:</strong> The run started with Albert Quixall, £45,000 from Sheffield Wednesday in September 1958. The list also takes in Gordon McQueen, £495,000 from Leeds United on 9 February 1978; Andy Cole, £7m from Newcastle United on 10 January 1995, made up of £6m and Keith Gillespie; Ruud van Nistelrooy, £19m from PSV Eindhoven in 2001; and Ángel Di María, £59.7m from Real Madrid on 26 August 2014. Roy Keane's £3.75m on 19 July 1993 held the British record only for days, until Rangers paid Dundee United £4m for Duncan Ferguson.</p>
+        <p class="src">Sources: Manchester United; Wikipedia; GiveMeSport; Fox News; Al Jazeera, 26 August 2014; The42.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Correction and revision · <a href="/finals/metlife-2026/">MetLife 2026: the World Cup final</a></p>
+        <p class="was"><strong>Was:</strong> "the plan survived until a defender's tackle in first-half stoppage time"; "made 12 saves, the most recorded in a World Cup final, per CBS News"; "conceding once in two months"; and, cut as a revision, "which tells you most of what Spain had become".</p>
+        <p><strong>Now:</strong> Enzo Fernández, a midfielder booked in the 82nd minute, was sent off for a second yellow card in the 93rd minute, in stoppage time at the end of the second half. Martínez made 11 saves by the count of Yahoo Sports and Wikipedia, 12 by CBS News', and the page now gives both. The tournament ran from 11 June to 19 July, about six weeks.</p>
+        <p class="src">Sources: NBC News and Yahoo Sports, 19 July 2026; Wikipedia.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Revised · <a href="/glossary/work-permit/">Work permits</a></p>
+        <p class="was"><strong>Was:</strong> the Football Association awards points for "international appearances, the standard of the selling league and the size of the fee and wages".</p>
+        <p><strong>Now:</strong> a player needs 15 points for a Governing Body Endorsement, scored from international appearances, the quality of the selling club and its league, and minutes played. The fee and wages stopped scoring in January 2021. Players on 10 to 14 points can go to an exceptions panel, and since June 2023 Premier League clubs have had up to four Elite Significant Contribution places a season.</p>
+        <p class="src">Sources: The FA, 1 December 2020; Mills and Reeve; Fragomen, 29 June 2023.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Correction · <a href="/desk/world-cup/2026-09-21/">World Cup desk, 21 September 2026</a></p>
+        <p class="was"><strong>Was:</strong> "Canada led the U-20 World Cup quarter-final into injury time, then lost it in four minutes"; "This was Canada's third quarter-final, after 2004 and 2014."; "Ho Kyong in the 96th".</p>
+        <p><strong>Now:</strong> Canada never led. DPR Korea won 2-0 and the match was goalless until the 92nd minute. It was Canada's fourth quarter-final, after 2002, 2004 and 2014. The 96th minute for the second goal is Concacaf's count. The AFC puts it two minutes after the 92nd-minute opener, and the page now gives both.</p>
+        <p class="src">Sources: Concacaf and AFC match reports; Canada Soccer; Wikipedia.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Correction · <a href="/desk/world-cup/2026-09-22/">World Cup desk, 22 September 2026</a></p>
+        <p class="was"><strong>Was:</strong> "Korea DPR", four times, including the page title; "in the 92nd minute and the 96th".</p>
+        <p><strong>Now:</strong> DPR Korea, the form the AFC and FIFA use and the one the 21 September page uses. The second goal came a few minutes after the first: Concacaf has the 96th minute, the AFC two minutes after the 92nd.</p>
+        <p class="src">Sources: AFC; FIFA; Concacaf.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Correction · <a href="/nfl/questions/2026-09-22/">What did Aaron Donald do in his first game back?</a></p>
+        <p class="was"><strong>Was:</strong> "his first appearance for 982 days", in the standfirst and again in the last line.</p>
+        <p><strong>Now:</strong> 981 days. His last game was the wild-card defeat to the Detroit Lions on 14 January 2024. The Rams' own count of 982 stays in the body, quoted as theirs.</p>
+        <p class="src">Sources: NFL.com; Pro-Football-Reference.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Update and correction · <a href="/nfl/questions/2026-08-25/">When is the 2026 NFL 53-man roster cutdown deadline?</a></p>
+        <p class="was"><strong>Was:</strong> written before the deadline, and "One detail this desk is not printing: the exact clock time of the deadline."; "one at 5pm Central and one at 6pm Eastern, and those are not the same instant".</p>
+        <p><strong>Now:</strong> the deadline passed at 6pm ET on Sunday 30 August 2026. CBS Sports reports that the league moved it to the Sunday because the San Francisco 49ers flew to Melbourne that week for their 10 September opener against the Los Angeles Rams. 5pm Central and 6pm Eastern are the same instant, so the two outlets agreed all along.</p>
+        <p class="src">Sources: CBS Sports; NBC New York.</p>
+      </li>
+      <li>
+        <p class="meta">22 September 2026 · Update · <a href="/f1/questions/2026-07-29/">Can anyone still catch Kimi Antonelli in the 2026 Formula 1 championship?</a></p>
+        <p class="was"><strong>Was:</strong> standings from 29 July, "Kimi Antonelli leads the Formula 1 drivers championship on 219 points. Lewis Hamilton is second on 169."</p>
+        <p><strong>Now:</strong> after the Spanish Grand Prix, Kimi Antonelli leads on 292 points, George Russell is second on 211 and Lewis Hamilton third on 191.</p>
+        <p class="src">Sources: RacingNews365; Crash.net.</p>
+      </li>
+    </ul>
 
     <div class="footer">
       <p class="links">

@@ -977,7 +977,7 @@ export function assertPureDataFile(absPath, label) {
     "export type Status = 'verified' | 'pending';",
     "export const giantKillersIntro =",
     "  'Every tournament sells you the favourites. This is the other history.';",
-    "export const bundleUrl = 'https://thearchv.gumroad.com/l/sixty-moments';",
+    "export const storeUrl = 'https://thearchvca.etsy.com';",
     "export const transferDays: DayEntry[] = [",
     "  {",
     "    date: \"2026-09-16\",",

@@ -191,7 +191,7 @@ console.log(
    and committed by the daily desk job; this is hand-curated shop merch, a different lifecycle).
    Deliberately NOT folded into the `feeds` loop above so the existing feed files and
    index.json manifest/buildHash stay byte-identical to before this feed existed. */
-const SHOP_URL = "https://thearchv.gumroad.com";
+const SHOP_URL = "https://thearchvca.etsy.com";
 const storefrontItemsRaw = JSON.parse(
   readFileSync(join(ROOT, "scripts", "storefront-items.json"), "utf8")
 );

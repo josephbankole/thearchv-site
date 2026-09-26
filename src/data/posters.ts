@@ -2,14 +2,14 @@
 // Generated from ARCHIVE-PACKS (_system/product-bible.json for pack names, each plate spec for
 // moment_title, date, city and the storefront descriptor). All artwork is original ARCHV work:
 // no crests, no kit logos, no official marks, and no mark names in any title or line below.
-// Every plate sells through its pack on Gumroad (gumroadUrl on the pack). etsyUrl is set only
-// where the plate has its own Etsy print listing (the nine finals plates in pack one); the
-// lightbox shows "Buy the print" only when it is present.
+// The only store is the ARCHV shop on Etsy (storeUrl, D-2026-09-26b); every group links there.
+// A group's slug is a stable id the app feed carries as `pack`, so it never changes. etsyUrl is
+// set only where the plate has its own Etsy print listing (the nine finals plates in group one);
+// the lightbox shows "Buy the print" only when it is present.
 export interface PosterPack {
   slug: string;
   name: string;
   summary: string;
-  gumroadUrl: string;
 }
 
 export interface Poster {
@@ -25,17 +25,16 @@ export interface Poster {
   etsyUrl?: string;
 }
 
-// The complete set, every pack in one bundle.
-export const bundleUrl = 'https://thearchv.gumroad.com/l/sixty-moments';
-export const storeUrl = 'https://thearchv.gumroad.com';
+// The ARCHV shop on Etsy.
+export const storeUrl = 'https://thearchvca.etsy.com';
 
 export const posterPacks: PosterPack[] = [
-  { slug: "every-four-years-men", name: "Every Four Years: The Men's Archive", summary: "Ten moments from the men's tournament, Mexico City 1970 to East Rutherford 2026. Ten plates, ten passages, one moment index.", gumroadUrl: "https://thearchv.gumroad.com/l/every-four-years-men" },
-  { slug: "every-four-years-women", name: "Every Four Years: The Women's Archive", summary: "Every final since Guangzhou 1991, and the unofficial one twenty years before. Ten plates, ten passages, one moment index.", gumroadUrl: "https://thearchv.gumroad.com/l/every-four-years-women" },
-  { slug: "the-red-half-men", name: "The Red Half: The Men's Archive", summary: "Ten nights from the red side of Manchester, the 93rd minute in Barcelona among them. Ten plates, ten passages.", gumroadUrl: "https://thearchv.gumroad.com/l/the-red-half-men" },
-  { slug: "the-red-half-women", name: "The Red Half: The Women's Archive", summary: "The red side of Manchester's women's team in ten moments, from the first season in 2018 to a 4-0 cup final in London.", gumroadUrl: "https://thearchv.gumroad.com/l/the-red-half-women" },
-  { slug: "canada-minute-by-minute-men", name: "Canada, Minute by Minute: The Men's Archive", summary: "Canada's men in ten moments, from St. Louis in 1904 to an added-time win in Inglewood in June 2026.", gumroadUrl: "https://thearchv.gumroad.com/l/canada-minute-by-minute-men" },
-  { slug: "canada-minute-by-minute-women", name: "Canada, Minute by Minute: The Women's Archive", summary: "Canada's women in ten moments, gold in Yokohama on 6 August 2021 among them.", gumroadUrl: "https://thearchv.gumroad.com/l/canada-minute-by-minute-women" },
+  { slug: "every-four-years-men", name: "The men's tournament", summary: "Ten moments, Mexico City 1970 to East Rutherford 2026." },
+  { slug: "every-four-years-women", name: "The women's tournament", summary: "Every final since Guangzhou 1991, and the unofficial one twenty years before." },
+  { slug: "the-red-half-men", name: "The red side of Manchester: the men", summary: "Ten nights, the 93rd minute in Barcelona among them." },
+  { slug: "the-red-half-women", name: "The red side of Manchester: the women", summary: "The women's team in ten moments, from the first season in 2018 to a 4-0 cup final in London." },
+  { slug: "canada-minute-by-minute-men", name: "Canada's men", summary: "Ten moments, from St. Louis in 1904 to an added-time win in Inglewood in June 2026." },
+  { slug: "canada-minute-by-minute-women", name: "Canada's women", summary: "Ten moments, gold in Yokohama on 6 August 2021 among them." },
 ];
 
 export const posters: Poster[] = [

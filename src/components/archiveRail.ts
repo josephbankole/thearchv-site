@@ -1,4 +1,4 @@
-import { posters, posterPacks, bundleUrl, type Poster, type PosterPack } from '../data/posters';
+import { posters, posterPacks, storeUrl, type Poster } from '../data/posters';
 import { track } from '../analytics';
 import { trapFocus } from '../ui/focusTrap';
 
@@ -13,10 +13,9 @@ const esc = (s: unknown): string =>
     .replace(/'/g, '&#39;');
 
 const altFor = (p: Poster): string => `${p.title}. ${p.city}, ${p.year}. Original ARCHV plate.`;
-const packOf = (p: Poster): PosterPack | undefined => posterPacks.find((k) => k.slug === p.pack);
 
-// Builds one draggable rail per archive pack (pack name, line and "Get the pack" above it),
-// then the lightbox. Plates are lazy JPGs under /posters/<pack>/.
+// Builds one draggable rail per archive group (group name, line and a link to the Etsy shop
+// above it), then the lightbox. Plates are lazy JPGs under /posters/<pack>/.
 export function initArchiveRail(): void {
   const host = document.getElementById('archive-packs');
   if (!host) return;
@@ -35,9 +34,9 @@ export function initArchiveRail(): void {
     head.innerHTML =
       `<h3 class="archive__pack-name" id="${esc(nameId)}">${esc(pack.name)}</h3>` +
       `<p class="archive__pack-line">${esc(pack.summary)}</p>` +
-      `<a class="archive__covers-all archive__pack-cta" href="${esc(pack.gumroadUrl)}" target="_blank" rel="noopener noreferrer">Get the pack</a>`;
+      `<a class="archive__covers-all archive__pack-cta" href="${esc(storeUrl)}" target="_blank" rel="noopener noreferrer">Shop the posters on Etsy</a>`;
     head.querySelector('a')?.addEventListener('click', () =>
-      track('pack_click', { pack: pack.slug, location: 'archive_head', href: pack.gumroadUrl }),
+      track('pack_click', { pack: pack.slug, location: 'archive_head', href: storeUrl }),
     );
 
     const rail = document.createElement('div');
@@ -59,9 +58,9 @@ export function initArchiveRail(): void {
 
   const bundle = document.createElement('div');
   bundle.className = 'wrap archive__bundle';
-  bundle.innerHTML = `<a class="archive__covers-all" href="${esc(bundleUrl)}" target="_blank" rel="noopener noreferrer">All six packs in one: Sixty Moments, The Complete Archive</a>`;
+  bundle.innerHTML = `<a class="archive__covers-all" href="${esc(storeUrl)}" target="_blank" rel="noopener noreferrer">Visit the ARCHV shop on Etsy</a>`;
   bundle.querySelector('a')?.addEventListener('click', () =>
-    track('pack_click', { pack: 'sixty-moments', location: 'archive_bundle', href: bundleUrl }),
+    track('pack_click', { pack: 'sixty-moments', location: 'archive_bundle', href: storeUrl }),
   );
   host.appendChild(bundle);
 
@@ -170,17 +169,14 @@ function setLink(a: HTMLAnchorElement | null, href: string | undefined, onClick:
 function openLightbox(slug: string): void {
   const p = posters.find((x) => x.slug === slug);
   if (!p || !lb || !lbImg || !lbCap) return;
-  const pack = packOf(p);
   lastFocus = document.activeElement as HTMLElement;
   lbImg.src = p.image;
   lbImg.alt = altFor(p);
   lbCap.innerHTML =
-    `<strong>${esc(p.title)}</strong>${esc(p.city)} · ${esc(p.stamp)}. ${esc(p.moment)}` +
-    (pack ? `<span class="lightbox__pack">From ${esc(pack.name)}</span>` : '');
-  // "Get the pack" always (every plate sells in its Gumroad pack); "Buy the print" only
-  // where the plate has its own Etsy listing.
-  setLink(lbPack, pack?.gumroadUrl, () =>
-    track('lightbox_pack_click', { slug, pack: p.pack, title: p.title, year: p.year, href: pack?.gumroadUrl }),
+    `<strong>${esc(p.title)}</strong>${esc(p.city)} · ${esc(p.stamp)}. ${esc(p.moment)}`;
+  // The Etsy shop link always; "Buy the print" only where the plate has its own Etsy listing.
+  setLink(lbPack, storeUrl, () =>
+    track('lightbox_pack_click', { slug, pack: p.pack, title: p.title, year: p.year, href: storeUrl }),
   );
   setLink(lbShop, p.etsyUrl, () =>
     track('lightbox_shop_click', { slug, pack: p.pack, title: p.title, year: p.year, href: p.etsyUrl }),

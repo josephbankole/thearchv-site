@@ -1174,6 +1174,54 @@ export function pageStyles() {
       .author__portrait { width: 88px; height: 88px; }
     }
 
+    /* wire:start. The Wire and the table blocks (scripts/wire/lib/render.mjs, design-final D6).
+       Calm by rule: nothing here may animate, transition, scroll sideways or clamp a headline,
+       and scripts/check-wire-links.mjs fails the build if this region gains @keyframes,
+       animation, marquee, line-clamp or text-overflow. Existing tokens only; the two fill-only
+       tokens (--accent-fill, --ink-faint) are never text here. */
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .wire, .tables { margin: 2rem 0 0; }
+    .wire--strip, .tables--strip { padding-top: 1.4rem; border-top: 1px solid var(--rule); }
+    .wire__title { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: 1.5rem; line-height: 1.1; margin: 0 0 .35rem; }
+    .wire__subline { margin: 0 0 .5rem; color: var(--ink-soft); font-size: .95rem; }
+    .wire__edition { margin: 0 0 1rem; color: var(--ink-muted); font-family: var(--font-mono); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .wire__stale { text-transform: none; letter-spacing: 0; font-family: inherit; }
+    .wire__list { list-style: none; margin: 0; padding: 0; }
+    .wire-item { padding: 1rem 0; border-top: 1px solid var(--rule-soft); }
+    .wire-item:first-child { border-top: 0; padding-top: .25rem; }
+    .wire-item__meta { margin: 0 0 .3rem; color: var(--ink-muted); font-family: var(--font-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+    .wire-item__source { color: var(--ink); font-weight: 600; }
+    .wire-item__headline { margin: 0; font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 1.12rem; line-height: 1.35; overflow-wrap: anywhere; }
+    .wire-item__headline a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: .2em; }
+    .wire-item__headline a:hover { text-decoration-color: var(--ink); }
+    .wire-item__headline a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+    .wire-item__note { margin: .5rem 0 0; padding-left: .75rem; border-left: 2px solid var(--rule); color: var(--ink-soft); font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 1rem; line-height: 1.5; }
+    .wire-item__note-label { font-family: "Inter Tight", system-ui, sans-serif; font-style: normal; font-variant: small-caps; letter-spacing: .06em; color: var(--ink-muted); margin-right: .35rem; }
+    .wire__footer { margin: 1rem 0 0; color: var(--ink-muted); font-size: .85rem; line-height: 1.5; }
+    .wire__more { margin: .75rem 0 0; font-size: .9rem; }
+    .wire__more a { color: var(--accent-ink); }
+    .wire-sport { margin: 2rem 0 0; }
+    .wire-sport h2 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: 1.35rem; margin: 0 0 .5rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    .wire-sport__empty { color: var(--ink-muted); margin: 0; }
+    .tblock { margin: 1.5rem 0 0; }
+    .tblock__title { margin: 0 0 .5rem; color: var(--ink); font-family: "Inter Tight", system-ui, sans-serif; font-weight: 600; font-size: 1rem; }
+    .tblock__table { width: 100%; border-collapse: collapse; font-size: .9rem; font-variant-numeric: tabular-nums; }
+    .tblock__table th, .tblock__table td { padding: .4rem .35rem; border-bottom: 1px solid var(--rule); text-align: left; }
+    .tblock__table thead th { color: var(--ink-muted); font-weight: 500; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; }
+    .tblock__table .num { text-align: right; white-space: nowrap; }
+    .tblock__table tr.is-highlight td { background: var(--bg-sunken); font-weight: 600; }
+    .tblock__group th { padding-top: .8rem; color: var(--ink-muted); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 500; }
+    .tblock__matches { list-style: none; margin: 0; padding: 0; }
+    .tblock__match, .tblock__event { display: flex; flex-direction: column; gap: .15rem; padding: .55rem 0; border-bottom: 1px solid var(--rule); }
+    .tblock__meta { color: var(--ink-muted); font-size: .8rem; }
+    .tblock__teams { color: var(--ink); font-size: .95rem; }
+    .tblock__score, .tblock__v { color: var(--ink-soft); font-variant-numeric: tabular-nums; margin: 0 .25rem; }
+    .tblock__winner { color: var(--ink-soft); font-size: .85rem; }
+    .tblock__empty { color: var(--ink-muted); margin: 0; }
+    .tblock__foot { margin: .5rem 0 0; color: var(--ink-muted); font-size: .8rem; line-height: 1.5; }
+    .tblock__foot a { color: var(--ink-muted); }
+    /* wire:end */
+
     @media (prefers-reduced-motion: reduce) {
       .lane-card, .glossary-card { transition: none; }
     }

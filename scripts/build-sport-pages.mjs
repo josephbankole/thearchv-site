@@ -21,6 +21,12 @@ const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 // Both inline scripts on this page family (masthead toggle + PostHog loader) are static, so one
 // CSP covers every sport section page — same as the lane pages.
+// The Wire strip and the compact table blocks (design-final D1): rendered from the daily content
+// files, placed after our own lede behind a rule, and '' when there is nothing current to show.
+import { loadDaily } from "./wire/lib/content.mjs";
+import { renderWireStrip, renderTablesStrip } from "./wire/lib/render.mjs";
+const DAILY = loadDaily();
+
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
 
 /* ---------- the new sports' day data, through scripts/shared/day-data.mjs (the one loader for
@@ -98,6 +104,8 @@ function renderSection(sport) {
       <p class="sport-head__eyebrow">${esc(sport.label)}</p>
       <h1>${esc(sport.label)}</h1>
       <p class="sport-head__lede">${esc(copy.lede)}</p>
+      ${renderWireStrip(DAILY.wire, sport.key, DAILY.today)}
+      ${renderTablesStrip(DAILY.tables, sport.key, DAILY.today)}
       ${rail}
     </section>
   </main>

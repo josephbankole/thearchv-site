@@ -355,6 +355,10 @@ const EXTRA_URLS = [
   // capped the sitemap at the original ten entries when the glossary grew to sixty (2026-07-28).
   ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, changefreq: "monthly", priority: "0.5" })),
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
+  // Tables and fixtures (build-daily-pages.mjs, the Wire build, 2026-09-26): a living page updated
+  // in place once a day. /wire/ is deliberately NOT here: it is noindex (other publishers'
+  // headlines) and must stay out of every sitemap.
+  { loc: "/tables/", changefreq: "daily", priority: "0.5" },
   // The author page (build-author-page.mjs, 2026-08-04). Every article page's byline and its
   // NewsArticle author.url resolve here, so it has to be crawlable in its own right rather than
   // only reachable from a byline. Listed at this one assembly point like /duel/ and /guess/.

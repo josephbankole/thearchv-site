@@ -326,8 +326,9 @@ section marker now.*
   | Instagram folabankole (founder personal; `fola-personal-daily` ONLY, notification mode ONLY, D-2026-08-23a, IG half unchanged by D-2026-09-02a) | 6a7ed151b2d9d57743764a17 |
   | Threads @thearchvfc (NEW ID from the founder's reconnect, channel created 2026-09-10 23:53Z; the old id 6a5d708de2638b94d79bc0b4 no longer exists and its post history went with it) | 6aa342ffcd8b9c702c487f67 |
   | Threads @thearchv.ca (added to Buffer by the same reconnect, 2026-09-10 23:52Z; OWNED by `threads-ca-daily`'s 5pm evening thread from 2026-09-11, which moved off Content360 by founder ruling D-2026-09-10e; no other desk queues here) | 6aa342cdcd8b9c702c487ed0 |
-  | Instagram film.joey (appeared in Buffer 2026-09-10 13:57Z; no ARCHV lane owns it, so no desk queues to it) | 6aa2b751cd8b9c702c429c5e |
-  | TikTok @thearchvfc (REMOVED from Buffer 2026-08-14, D-2026-08-14c; id historical, TikTok ships via Studio or the Drive handoff) | 6a65b5844b2d03035f420822 |
+  | Instagram film.joey (appeared in Buffer 2026-09-10 13:57Z; OWNED by `film-joey-daily`, two automatic carousels a day since 2026-09-19; no ARCHV desk queues here) | 6aa2b751cd8b9c702c429c5e |
+  | TikTok @thearchvfc (BACK in Buffer 2026-09-25 as the 8th paid channel, D-2026-09-25a; automatic, one post a day, session-built reels only; Buffer shows `publish` only, no `analyze`) | 6ab7083eea19ca0bdeedc138 |
+  | TikTok @thearchvfc, old channel (REMOVED from Buffer 2026-08-14, D-2026-08-14c; id historical) | 6a65b5844b2d03035f420822 |
   | X @thearchvfc (founder-manual only, D-2026-08-24d; no task posts) | 6a1e151fc687a22dd44dfef7 |
   | X @archv_ai (STOPPED 2026-09-10, D-2026-09-10a; no task posts) | 6a4f1a9e404834462886dd5d |
 
@@ -401,6 +402,97 @@ section marker now.*
   window instead, so the publish happens when the verification is fresh.
 - **A fixture that fails verification does not ship.** Publishing on a schedule never means shipping
   a slot that came up empty. Fewer carousels is the correct output of a thin week.
+
+### RATIFIED 2026-09-25 (founder, in session with the archive marketing desk)
+
+**D-2026-09-25b (founder): THE STORE IS MANCHESTER UNITED ONLY, RENAMED "THE RED HALF OF MANCHESTER", SEARCHABLE BY
+NAME, SOLD THROUGH FOUNDER-RUN CAROUSEL ADS, AND GROWING A POSTER FOR EVERY FINAL WON.** Founder wording, 25 Sep:
+"going forward i will do single product images as ads on instagram, i will include the clickable link to the store,
+create the images for that as part of your plan, plus the description"; "the products need to be searchable, add the
+team names and key words to the descriptions"; "it will be a carousel of images, and ill run it as an ad"; "we can trim
+down the store, to have only manchester united related cards for sale, we can remove canada for now"; "Also update the
+name to the The Red Half of Manchester"; "use the word Manchester in the art work too, we should have a poster for every
+final manchester united won". His answers to the desk's questions, same session: Red Half only; teams AND competitions
+in descriptions; one poster per ad card; European and FA Cup finals only; singles plus a bundle; "Manchester" as a
+series line on each plate.
+- **Store scope.** On sale: The Red Half of Manchester: The Men's Archive (`the-red-half-men`), The Red Half of
+  Manchester: The Women's Archive (`the-red-half-women`), and the free Sampler (Barcelona 1999). UNPUBLISHED, never
+  deleted: both Canada, Minute by Minute packs, both Every Four Years packs, Sixty Moments Digital and Collector. No
+  unit names, prices or links an unpublished product; `routine/links.json` empties those keys (original URL kept as
+  `paused_url`). Canada and tournament plates may still appear in EDITORIAL units with the Dispatch ask only. The
+  Etsy prints of 6 November are not re-scoped by this entry; the founder decides that before 6 November.
+- **Name.** "The Red Half" becomes "The Red Half of Manchester" everywhere it is a product name. Gumroad slugs do not
+  change, so every link already out keeps working. `_system/product-bible.json` carries the new names (backup
+  `.bak-2026-09-25`).
+- **Searchable listings and marketing (AMENDS the mark-free rule of D-2026-09-12k, D-2026-09-15b and D-2026-09-24d for
+  these products).** Gumroad descriptions, and any later Etsy listing, for Manchester United products carry the team
+  names in full (Manchester United, Manchester United Women, the opponent), the competition names (European Cup,
+  Champions League, Cup Winners' Cup, Europa League, FA Cup, Women's FA Cup, Premier League, Women's Super League and
+  the like), the ground names, and the buyer keywords a fan would type. The same names are allowed in every marketing
+  unit for these products on every surface. The founder chose teams plus competitions over teams only knowing the
+  takedown and ad-rejection risk is higher. What does NOT move: no crest, badge, logo, kit or player likeness on any
+  plate or ad image; never "official", "licensed", "endorsed" or "limited edition"; the bible §4.5 disclaimer ("Unofficial
+  fan art. Not affiliated with any club, league or federation.") stays on every listing; never mention AI; no hashtags.
+  `ip_lint.py` runs with each allowed name passed by `--allow` and named in the report.
+- **Artwork.** Every Manchester United plate (p3, p4 and the finals series) carries the series line "THE RED HALF OF
+  MANCHESTER". Plate text is otherwise unchanged in rule: the word Manchester is the only club-adjacent word added to
+  the art. Buyer files are rebuilt with the line and re-uploaded.
+- **The finals series: EUROPEAN FINALS ONLY (founder: "lets do just european finals").** A poster for every European
+  final Manchester United have won (by the desk's count five: European Cup 1968, Cup Winners' Cup 1991, Champions
+  League 1999 and 2008, Europa League 2017; the list is verified on two sources before anything is built, and the
+  one-match Super Cup stays out as the founder chose). Sold as single printable posters plus a bundle of all of them.
+  Prices are the founder's call, proposed with market evidence.
+- **Art style for the finals series (founder, same session, with a reference image: "we can do similar, have the
+  players facing the other way so we dont show their faces, just a red shirt with the number, no name").** Illustrated
+  players seen FROM BEHIND: no face, no name on the shirt, the shirt number only, in the kit colours that team actually
+  wore in that final (verified; where United did not wear red, the true colour wins and the founder is told). No crest,
+  badge, sponsor or manufacturer mark on any shirt. This is a NARROW exception to the no-likeness rule: back views with
+  numbers only, never a face, never a name on a shirt. Original designs in that genre; nothing is traced or copied from
+  the reference, which is another seller's product. Made on the local engine first (ENGINE-PRIORITY: mflux, numbers and
+  type composited in code), house type per D-2026-08-14a, series line "THE RED HALF OF MANCHESTER".
+- **Ads.** The founder runs Instagram carousel ads himself, from his own account and budget, with a clickable store
+  link: one carousel per product, one poster per card shown as a framed print with its teams, date and moment, and a
+  closing card saying what is in the pack, who it is for and the price. The desk and build make the images, the ad copy
+  and UTM-tagged links. The desk still never spends, never opens an ads screen and never calls an ads tool.
+- **Addendum 26 Sep (founder, same session, answering the desk's questions).** (1) Kit colours: the finals posters use the TRUE colours worn (verified: 1968 all blue, 1991 white, 1999 red, 2008 red, 2017 royal blue), not red throughout; the series line and headline type stay red. (2) Prices: the Red Half of Manchester packs sell at ONE price, US$29, and the US$49 Collector tier is retired; European finals singles US$9 each; the finals set US$29. (3) Finals figures are generic: no build, hair, armband or celebration cue that identifies a player, no maker marks or shoulder stripes; the shirt number is the only identifying element (publicity-rights risk named in the 25 Sep diagnosis). (4) Stockholm 2017 copy never mentions the attack two days earlier, never frames the win as "for Manchester", and is never promoted 20 to 25 May. (5) The founder approved the desk applying the store changes in his logged-in Chrome ("the rest go for it, you know the goal").
+- **Addendum 26 Sep, later (founder, same session): EMOTION ON THE POSTERS, FAMOUS QUOTES, NAMES ALLOWED ON THE ART.** Founder wording: "instead of 'Behind, Level, Behind' or 'Two Corners, Two Goals' I want something that illicits an emotion from the fan. Use famous quotes like 'Solskear has won it!' for the 99 final and it should very clearly say Barcelona 99. Also Manchester United were treble winners in 99, that should be mentioned. Find the most famous quotes." So every Manchester United poster (p3, p4 and the European finals series) leads with the most famous verified quote from that moment (commentary, manager, player), word for word from two sources, with its attribution; the place and year read plainly ("BARCELONA 99"); and a verified context line where it matters ("TREBLE WINNERS"). This AMENDS the art rule above: team names and the names inside a quote may now appear on these posters; no crest, badge, logo, kit mark or face still. Profanity inside a famous quote (for example "Football. Bloody hell.") is put to the founder, never decided by the desk. Munich 1958 keeps its memorial tone and gets no celebratory quote. Stockholm 2017 keeps its sensitivity rules. The player names are a publicity-rights exposure the founder accepted; they go on the IP review list. Also 26 Sep: the founder archived the six unpublished products on Gumroad. Same session, later: "include the last names only of the players that scored as well in the cards": every Manchester United poster carries the scorers' SURNAMES only (with their minutes where verified), for United's goals and, where the design needs the full score, the opponent's scorers too; surnames come only from plate-spec facts marked verified:true with two sources.
+- **The 18 September sell-at-list ruling is canonised for these products.** The Red Half of Manchester products sell
+  at list now, on the desk's surfaces and in the founder's ads; the archive calendar's no-price and no-link windows
+  (phases 1 to 3) no longer bind them. The 1 November cart still runs for them, re-scoped to the Manchester United
+  range. The desk's 25 Sep banked Canada product carousel is void.
+
+### RATIFIED 2026-09-25 (founder, in session with the podcast and reel work)
+
+**D-2026-09-25a (founder): TIKTOK @thearchvfc IS BACK IN BUFFER, AUTOMATIC, ONE POST A DAY.** Founder wording:
+"from tomorrow, i want you to post the reels to tiktok as well", then, after connecting the channel himself,
+"tiktok connected in buffer, use automatic, one post a day".
+- **Channel.** Buffer TikTok @thearchvfc, id `6ab7083eea19ca0bdeedc138`, connected by the founder on 2026-09-25 as
+  the org's 8th paid channel. Essentials bills per channel, so no lane was dropped. The channel lists
+  `products: [publish]` with no `analyze`, so Buffer holds no TikTok metrics for it.
+- **What ships.** The @thearchvfc reels built in session under the viral reel loop (podcast clips, matchday and
+  travel clips, merged old clips), ONE TikTok post a day. `schedulingType: automatic`, set at create time with an
+  explicit `dueAt` (default 19:00 ET), never `addToQueue`. Same master and same search-first caption as the
+  Instagram reel, no hashtags, `metadata.tiktok.isAiGenerated: false` on real footage. The video goes in by a
+  stable public URL, by default the Buffer-hosted asset of the matching Instagram post (buffer-media-uploads S3).
+  thearchv.ca is not used as a host: the site repo is public, Pages has size limits, and match footage must not sit
+  on the brand's domain. Units on this channel from this lane are expected; desks do not raise them as unexpected.
+- **Read every post back.** After creating a TikTok post, read back status, schedulingType, assets and text. In
+  August a Buffer TikTok post fired three days early and another lost its assets, and an automatic early fire goes
+  public with nobody in between.
+- **What it supersedes.** D-2026-08-14c's "TikTok publishing has two routes and Buffer is neither": Buffer is the
+  route again, with TikTok Studio in Chrome and the Drive handoff as fallbacks. The TikTok-stage retirement
+  (D-2026-09-22c) and D-2026-09-11b's "Instagram only unless the founder rules otherwise" give way FOR THESE SESSION
+  REELS ONLY. The desks' own TikTok stages stay retired, and `archv-football-desk` does not restart step 9 on this
+  ruling.
+- **Audio.** TikTok takes the same mixed master as Instagram (speech, stadium sound or the synthesised bed, at
+  -14 LUFS). Automatic mode cannot add TikTok library sounds, so this settles the `_music` versus silent question
+  for this lane only.
+- **Measurement.** TikTok has no Trial Reels, so every post reaches followers. Per-post numbers come from TikTok
+  Studio, read in the founder's Chrome, and TikTok is compared with TikTok only. The account was close to dormant
+  (430 views in the 28 days to 19 September; the July and August peak was mostly paid), so the first weeks set a
+  baseline rather than a verdict.
+- **First three queued on 2026-09-25**, all at 23:00Z (19:00 ET): 26 Sep `arsenal_world_class`, 27 Sep
+  `ronaldo_alvalade`, 28 Sep `old_trafford_pov`.
 
 ### RATIFIED 2026-09-24 (founder, in session with the football desk)
 
@@ -588,7 +680,7 @@ Target: about 60 routine units a week, down from about 170 planned. Effective wi
   No new dated sport pages. It returns only as living answer pages updated in place, once the site build supports them
   (search plan G7, D-2026-09-22d).
 - **@thearchv.ca Instagram.** No carousels. The stat reel mirror stays through an 18 October read.
-- **archv-football-desk.** TikTok stage RETIRED (formalises D-2026-08-14c; no daily PAUSED row). @thearchv.ca carousel
+- **archv-football-desk.** TikTok stage RETIRED (formalises D-2026-08-14c; no daily PAUSED row; the desk's own stage stays retired, while the session-built reels go to TikTok through Buffer under D-2026-09-25a). @thearchv.ca carousel
   mirror OFF. @thearchvfc Threads: one morning thread a day; a second only for a live named saga (named person, a clock
   or deadline, a quotable line). The daily stat reel and D-2026-09-20a's Tuesday and Thursday carousels stand until the
   18 October read. The daily site entry continues, because it feeds the app.
@@ -1501,7 +1593,9 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
   - **No desk or session queues anything to folabankole without a founder-created lane.** Its
     presence in a channel listing is not an invitation; treat an unexpected unit on it exactly
     like the unexpected-unit rule on any owned channel.
-  - **TikTok publishing has two routes and Buffer is neither.** (a) In an interactive session,
+  - **SUPERSEDED 2026-09-25 by D-2026-09-25a: TikTok @thearchvfc is back in Buffer (channel
+    6ab7083eea19ca0bdeedc138), automatic, one post a day; the two routes below are now fallbacks.**
+    **TikTok publishing has two routes and Buffer is neither.** (a) In an interactive session,
     Claude may drive the founder's own Chrome (claude-in-chrome) into TikTok Studio and upload
     there. (b) Scheduled and headless runs stage the finished SILENT cut plus its caption to
     Google Drive and hand off for the founder's phone upload; login walls make browser uploads
@@ -1999,7 +2093,8 @@ a single static stat card as a reel at 25x to 63x their own medians (`competitor
   MLS Weekly and the reel). The 3-hour minimum spacing of D-2026-09-08a still binds every pair of them.
 - **It lifts D-2026-08-13d for THIS FORMAT ONLY.** No other reel is built, the D-2026-08-13c one-a-day
   recut regime stays on hold, and `tiktok-stage` stays PAUSED: the stat card reel goes to Instagram only
-  unless the founder rules otherwise.
+  unless the founder rules otherwise. *(The founder ruled on 2026-09-25, D-2026-09-25a, for the session-built
+  reels only: they go to TikTok through Buffer, one a day. The desk's stat card reel is not covered by it.)*
 - **The format.** One verified number on one 1080x1920 card, held about seven seconds with a slow
   push-in, SILENT, with the founder adding music in the app exactly as for every Instagram reel
   (D-2026-08-05i, D-2026-08-13c). Built at $0 by `fifa.archv/scripts/stat_card_reel.py` from

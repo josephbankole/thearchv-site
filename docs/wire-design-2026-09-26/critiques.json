@@ -1,0 +1,155 @@
+{
+ "compliance": {
+  "verdict": "Conditional pass. The licence basis for the ESPN feeds holds up: I re-fetched https://www.espn.com/espn/news/story?page=rssinfo (HTTP 200), and it reads \"If you choose to display an ESPN RSS feed on a website or app\". It also requires \"you must indicate that the content has been provided by ESPN\", says \"You may not incorporate advertising into any ESPN RSS content\" and says \"You may not modify any content provided in the feed\". Yahoo is correctly held back and the drop list is sound.\n\nThe design still has five defects to fix before anything ships.\n1. The betting filter lets a live ESPN betting article through.\n2. The rules for the note contradict each other, and the grounding check cannot catch the misstatements that matter.\n3. The App Store review notes, listing copy and age rating would become untrue.\n4. The Conversation's cited permission is a republishing clause, not a headline-and-link grant, and the UK page asks for a fee for commercial use.\n5. The verbatim check lets the Layer A strip change a headline.\n\nTwo founder decisions also collide with existing canon and copy:\n- APP-DAY1-PRINCIPLES says \"Live scores, fixtures, standings. Different app\", which conflicts with the tables.\n- The listing promises \"one quiet notification a day\", which conflicts with a push that fires on long-read days only.\n\nThe design names both conflicts, and both need the founder's ruling before the listing is resubmitted. I ran all checks read-only on 2026-09-26 and edited nothing. I wrote this report without running the humanizer-archv, ai-writer-detection and remove-ai-marks chain; it is a report back to the orchestrator, not shipped copy.",
+  "must_fix": [
+   {
+    "issue": "The betting filter checks headlines only, and a live ESPN betting article gets through it.",
+    "why": "I sampled https://www.espn.com/espn/rss/wnba/news today (HTTP 200). Item 5 is \"Top-seeded Lynx heavy favorites to win WNBA title\", and it links to https://www.espn.com/espn/betting/story/_/id/50025309/... None of the exclude patterns in sources.json (odds, picks, bets, betting, parlays, predictions, props, sportsbook) matches that headline. It passes the linkHosts check because the host is espn.com. If it is the first survivor, the app opens an ESPN betting page inside SFSafariViewController. That breaks the \"No betting\" promise (APP-STORE-LISTING.md line 34, \"No ads. No account. No betting.\") and risks the Gambling answer in the age-rating questionnaire.",
+    "fix": "Add a URL-path exclude to the source defaults, applied before the pick: drop any link whose path contains /betting/, /fantasy/ or /chalk/. Add headline terms for favorites, favourites, favourite to win, longshot, odds-on and lines. Add this exact item to the fixture set as a must-reject case, and have check-wire-links.mjs fail the build on any wire href containing /betting/."
+   },
+   {
+    "issue": "The note rules contradict themselves, and the grounding check does not catch the kinds of misstatement that matter.",
+    "why": "B6 says the note is \"Grounded only in the candidate's headline and summary\" and that it adds no claim beyond the item (FOUNDER item 4). The same section then says to \"state the consequence or the open question as a fact\", and it bans restating more than 60% of the headline. A consequence is a new claim. So the only way to pass the checks is to write either an unsourced consequence or an interpretation, placed next to another outlet's headline under the ARCHV name. The canon verification rule says the site and app keep two sources (CANONICAL-CONTEXT.md line 87). The grounding check tests only digits (hard fail) and capitalised names (a warning). It cannot catch the misstatements that actually occur: turning a reported claim into a fact, tense, or negation. Today's ESPN feeds carry several \"Sources:\" headlines, for example \"Sources: Bulls trading Dillingham to Hornets for Hield\" (nba) and \"Sources: Packers sign veteran OG Tomlinson off Cowboys' practice squad\" (nfl). A note such as \"Chicago moves Dillingham for Hield\" would pass every gate and still turn ESPN's reporting into an ARCHV statement of fact. That breaks the listing's own line, \"CONFIRMED means confirmed. A rumour is called a rumour.\"",
+    "fix": "Pick one rule and write it down. Recommended: the note may frame, never assert. It must not state any event, consequence or causal claim in ARCHV's own voice. It may point to what to watch, or put a question as a statement of what is unknown, and nothing else. Add hard fails for:\n- a note that omits attribution (\"ESPN reports\", \"according to ESPN\") when the headline or summary contains \"Sources\", \"reportedly\", \"expected\", \"in talks\", \"could\" or \"set to\";\n- any past-tense completion verb (signed, traded, fired, completed, won) that is absent from the item;\n- a negation that does not appear in the item.\nKeep the name check as a hard fail, not a warning. Keep a human-readable log of rejected notes so drift shows up in week one."
+   },
+   {
+    "issue": "The App Store metadata and review notes become false the day this ships, and the age-rating answer is unresolved.",
+    "why": "APP-STORE-LISTING.md line 236 says \"Article content is the publication's own verified reporting.\" Line 240 says pushes are \"limited to one daily story alert.\" Line 47 promises \"one quiet notification a day.\" Headlines from other publishers make the first claim false, and WP-C makes the others inaccurate. Guideline 5.2.2 (re-fetched from https://developer.apple.com/app-store/review/guidelines/, HTTP 200) says: \"If your app ... displays content from a third-party service, ensure that you are specifically permitted to do so ... Authorization must be provided upon request.\" Guideline 4.2.2 lists \"content aggregators, or a collection of links\". The SFSafariViewController route also lets a reader browse on from espn.com. Apple's age-rating reference (https://developer.apple.com/help/app-store-connect/reference/app-information/age-ratings-values-and-definitions/) defines Unrestricted Web Access as \"Users can navigate to any webpage within the app or freely browse the web. May include: embedded browser functionality\", and that capability puts an app at 16+. The app is 13+ today (thearchv-app/CLAUDE.md), and the listing file still says 4+.",
+    "fix": "Before submission:\n(a) Rewrite the Review Notes. Say that the Wire shows headline-and-link items under ESPN's published RSS terms, cite the URL, and attach an archived snapshot (see should-fix). Name the other licences: football-data.org, CC BY-SA, CC BY and BALLDONTLIE. Say that ARCHV's own reporting is the long reads and the notes.\n(b) Update the description and \"What's New\" to describe the Wire and the tables, and change the push line to \"at most one quiet notification a day\".\n(c) Settle the web-access answer on purpose. Either open publisher links with openURL in the Safari app, which is not in-app browsing and keeps 13+, or keep SFSafariViewController and answer Unrestricted Web Access honestly at 16+. Treat the choice of SFSafariViewController in founder decision 3 as a trade-off that needs his call. Do not leave it as a QC afterthought."
+   },
+   {
+    "issue": "The permission cited for The Conversation is a republishing clause. Its UK page asks for a licence fee for commercial use.",
+    "why": "I re-fetched https://theconversation.com/uk/republishing-guidelines (HTTP 200). The page governs full-article republication. It says \"If you're planning to use our content for commercial use , you'll need to pay a licensing fee\" and asks for a logo and \"You must use our page view counter when republishing online.\" The US page (https://theconversation.com/us/republishing-guidelines, HTTP 200) narrows this to \"Commercial, non-journalism usage: license fees may apply.\" Neither page grants headline-and-link display. The design quotes only the credit-and-backlink line and cites the UK page, which is the stricter one. ARCHV sells prints and posters, so 'commercial' is arguable. Decision 2 requires terms that permit showing a headline and link, and this evidence does not show that.",
+    "fix": "Record the true basis in sources.json: a linked headline is not republication, and the US page limits fees to non-journalism use. Flag the UK fee line as unresolved. Either ship The Conversation with enabled:false until uk-republish@theconversation.com confirms (the founder sends that email, not a desk), or have the founder accept the risk explicitly. The source yields about one item a month, so holding it back costs almost nothing."
+   },
+   {
+    "issue": "The verbatim check lets the remove-ai-marks strip change a headline, which ESPN forbids.",
+    "why": "ESPN: \"You may not modify any content provided in the feed, including but not limited to story headlines, story summaries, or URLs.\" B6 step 9 runs Layer A over the whole wire.json, and Layer A replaces non-breaking spaces and homoglyphs. Step 10 then compares \"after NFC and whitespace collapse\", so a non-breaking space turned into a normal space, or a changed normalisation form, passes and ships as a modified headline. The workspace rule that nothing is exempt from the strip and ESPN's no-modification term meet on this one field.",
+    "fix": "Compare headline and url byte for byte (exact code points) against the candidate, with no NFC and no whitespace collapse. Any difference drops the item; it is never repaired. Run inspect_text.py on headlines and URLs to detect suspicious code points, and drop the item rather than clean it. Run the Layer A clean on the note and footer strings only. Record this in the run report as the reason the headline field is handled as detect-and-drop, so it is not read as a skipped strip."
+   }
+  ],
+  "should_fix": [
+   {
+    "issue": "Evidence for 5.2.2 is a 15-word quote in sources.json. ESPN can change or remove the rssinfo page, and nothing reconciles it with Disney's master terms, which ban commercial use.",
+    "fix": "Store a dated HTML and PDF snapshot of each terms page next to sources.json, with a SHA-256 hash. Re-check the pages weekly (the desk diffs the extracted RSS Terms paragraph), and alert on change. Have the founder send the ESPN email before the app release. The web can go first."
+   },
+   {
+    "issue": "Showing ESPN headlines in App Store screenshots, the preview video or social promotion falls outside the RSS grant, which covers display and bars advertising in ESPN content. Adding 'ESPN', 'Premier League table' or 'standings' to keywords raises 5.2.1 trademark questions.",
+    "fix": "Take marketing screenshots from a fixture with neutral placeholder headlines, or crop the Wire out of them. Keep ESPN and league names out of keywords, subtitle and promotional text. The text label 'ESPN' inside the app is nominative use required by the terms and stays."
+   },
+   {
+    "issue": "The name 'The Wire' pulls against the calm-reading-room brand and against 'The Transfer Desk ... a daily wire' in the listing. Placing the section straight after an ARCHV lede on the sport hubs and the app home can make ESPN headlines read as ARCHV reporting. Today's feeds also show how noisy the content is: 'Follow live: ...' leads the soccer feed and 'Norris calls for race ban...' is near the top of F1.",
+    "fix": "Use a heading that signals third-party content, such as 'Elsewhere today' or 'From other newsrooms', with the source label before each headline, as the design already places it. Leave 'wire' to the Transfer Desk. On sport hubs, put a rule and the per-block footer line between the ARCHV lede and the strip."
+   },
+   {
+    "issue": "The design's claim that the app contacts only thearchv.ca is wrong. AppConfig.swift already sends events to https://us.i.posthog.com, and SupportClient reaches Supabase. The design also never mentions that opened ESPN pages carry Disney's ad and Nielsen measurement stack; the ESPN page footer lists 'Interest-Based Ads' and 'Nielsen Measurement'.",
+    "fix": "Correct the privacy note. The manifest needs no change, because SFSafariViewController content is the publisher's, is user-initiated and does not share the app's data. Add one line to the Wire footer and the privacy policy: \"Links open the publisher's own site, which has its own ads and privacy policy.\" Make sure Wire rows never reuse the ArticleMenu or feedback thumbs component, which sends \"title\": entry.headline to PostHog (Components.swift line 224). That would push publisher headlines into analytics."
+   },
+   {
+    "issue": "WireLinkPolicy allows only espn.com and theconversation.com. The Wikipedia CC BY-SA and CC BY licence and article links in the table footers would therefore be dropped in the app. That leaves the app's attribution without the links the licence asks for where practical.",
+    "fix": "Use a separate allowlist for attribution links (en.wikipedia.org, creativecommons.org, football-data.org, github.com/nflverse, balldontlie.io), or render them as plain text URLs. Test that each table block in the app shows the source, the licence name and a working link."
+   },
+   {
+    "issue": "The United 'prefer' rule is keyword-based. ESPN soccer is US-led (today's top items are USMNT and Spain v England), so the Football Wire will seldom be United-focused. A keyword can also select a United headline that is a rumour or an injury item without the tone switch firing.",
+    "fix": "Report the prefer hit rate in the F3 proof lines. Run the tragedy and serious-injury dial check on the preferred item as well as the default pick. Do not describe the Football Wire as United coverage in any copy."
+   },
+   {
+    "issue": "Rights sitting behind the table data are not recorded in the risk register.",
+    "fix": "Add three items:\n- The Premier League fixture list is licensed commercially by Football DataCo. The CJEU (C-604/10, 2012) limited copyright protection of fixture lists, so risk is low, but record it.\n- NBA.com terms bar any service holding a regularly updated statistics database without consent, and BALLDONTLIE's grant cannot pass on the NBA's own rights. Record W-L records as facts only.\n- football-data clause 9.1 bars showing data after cancellation, so keep the key registered for as long as any held block could show."
+   },
+   {
+    "issue": "Canon conflicts that the design routes to the founder are not yet recorded as blockers.",
+    "fix": "Make these explicit merge blockers for WP-B, WP-C and WP-D:\n- the D-2026-08-04g carve-out (\"harvesting a site into a standing feed is not\" allowed);\n- the dated amendment to APP-DAY1-PRINCIPLES line 47;\n- the push-cadence ruling (founder decision 7 says a push a day; WP-C gives 2 or 3 a week);\n- FOUNDER item 4, the two-source exemption for notes. Rule on it only after the note rule in must-fix 2 is settled."
+   }
+  ]
+ },
+ "engineering": {
+  "verdict": "Not buildable as written; revise before any WP starts. The architecture is sound. The Wire and tables go in standalone JSON files outside loadDayData, the published feeds are separate from index.json and today.json, the app decodes additively, and one Git Data API commit per day on a path nothing else writes. Five problems will bite on day one. (1) The WP-C claim that the push fires only on long-read days is false. build-feed.mjs:150 spreads a global lastUpdated into today.json, and build-feed.mjs:108-113 computes it across every lane. daily-push/index.ts:37-47,67 keys on today.json's hash, so any other lane filing on a new date re-pushes the same long-read headline. This defect already exists: a leagues-only or NFL-only day re-pushes a stale transfer lead today. (2) A rerun of the daily job is not idempotent. (3) Two acceptance checks cannot pass: one jq expression errors, and one grep contradicts D7. (4) The work packages are not parallel: WP-A and WP-B both edit the single-line build script at package.json:12, WP-B and WP-C both edit renderLead in home.ts, WP-D waits on WP-C output, and WP-E waits on WP-A reaching main. (5) The 7-day lead rule breaks a test the plan says stays green. What checks out: every integration point the plan names exists as described (EXTRAS kind code at day-data.mjs:85-99, the storefront standalone precedent at build-feed.mjs:189-233, the vite marker throw at vite.config.ts:36-40, DATA_FILES at deploy-site.sh:44-46 and sync-preview.sh:22-24, the `--ours`/`--theirs` resolution at deploy-site.sh:91 and sync-preview.sh:51, Router.isFeedKey at Router.swift:24-27, SportRouting at SportFilter.swift:132-146, HomeFeedModel.loadFeeds at 180-200, and the tolerant GatedFeedProtocol default-404 at HomeFeedModelTests.swift:74-90). The ESPN claims were confirmed live today at 22:17Z: the soccer, F1, NBA and WNBA feeds returned 200 to the descriptive UA, and all links were https://www.espn.com. The soccer top item was stamped \"18:11:14 EST\", which is only plausible read as New York wall clock, since literal EST would put it in the future. `remove-ai-marks` Layer A leaves curly quotes, em dashes and accented or Cyrillic names alone and turns NBSP into a space, so verify-wire's whitespace-collapse comparison holds. `node --test dir/` works on Node 22.14.",
+  "must_fix": [
+   {
+    "issue": "WP-C/G: the claim that the push fires only when a new long read lands, with no function change, is false. today.json hash moves whenever ANY lane gets a newer date.",
+    "why": "build-feed.mjs:150 writes each feed as `{ schema: SCHEMA, lastUpdated, ...payload }`. `today` at build-feed.mjs:116 carries no lastUpdated of its own, so it inherits the global value from build-feed.mjs:108-113: the newest date across transfer, worldcup, leagues and every sport feed, plus the new reads feed once WP-C adds it. daily-push/index.ts:44-47 hashes today.json from the manifest, and line 67 skips only on an identical hash. So after WP-C, any day another lane files (football desk, leagues, a resumed Answer Desk) sends the day's push with the OLD long-read headline. Today this is a live latent defect as well: a leagues-only or sport-only day already re-pushes a stale transfer lead, which is exactly what the comment at daily-push/index.ts:37-39 says must not happen.",
+    "fix": "In build-feed.mjs give today its own `lastUpdated: daily[0]?.date ?? null` inside the payload. The spread order at line 150 lets the payload override the envelope. Alternatively, make daily-push key on the lead's identity (section+date+headline) rather than the file hash. Add a WP-C acceptance check: build, add a dummy newer-dated entry to a non-reads lane, rebuild, then `cmp dist/feed/today.json` and compare the `today` hash in index.json across the two builds. Fix this in a standalone commit before WP-C, because it is live today."
+   },
+   {
+    "issue": "Rerunning the daily job on the same day is not idempotent (B3/B4/B6 step 8/F2 step 1).",
+    "why": "The seen set is built from 'every item in the previous 7 editions, read from main's content file'. On a rerun (a retry after a failed commit or verify, or a manual rerun) main already holds today's edition. Every one of today's picks is then 'seen', the picker falls through to alternates or all-seen, and finalise 'puts the new edition first' with nothing saying it replaces a same-date edition. Result: either two editions dated $D, or today's picks silently swapped for worse ones. Neither the plan nor the acceptance tests cover a same-date rerun.",
+    "fix": "Specify: (a) fetch-wire excludes the edition whose date == --date from the seen set; (b) finalise replaces any existing same-date edition rather than prepending; (c) put-daily refuses if main's newest edition == $D and differs from what is being written, unless --replace is passed; (d) add a golden test where prev-wire.json already contains the target date and the output equals the first-run output byte for byte."
+   },
+   {
+    "issue": "WP-A acceptance jq expression errors instead of testing.",
+    "why": "`jq -e 'has(\"days\")|not and has(\"lead\")|not'` parses as `has(\"days\") | (not and has(\"lead\")) | not`, so has() runs on a boolean. I ran it here: 'jq: error ... Cannot check whether boolean has a string key', exit 5. The check can never pass.",
+    "fix": "Use `jq -e '(has(\"days\")|not) and (has(\"lead\")|not) and (has(\"wrap\")|not)' dist/feed/wire.json` and the same for tables.json."
+   },
+   {
+    "issue": "WP-B front-page markup contradicts its own acceptance check.",
+    "why": "D7 says index.html replaces the today section with a static `<section class=\"wire\" id=\"wire\">`, and D2's renderer ALSO emits `<section class=\"wire\" id=\"wire\">`. The result is duplicate ids, and the static wrapper means `! grep -q 'id=\"wire\"' dist/index.html` on the empty seed always fails. With a static wrapper, analytics.ts:193 (`main section[id]`) also observes and fires section_view for an empty section.",
+    "fix": "index.html carries only the bare `<!--archv:wire-->` and `<!--archv:tables-->` markers (vite.config.ts:36-40 still requires them). renderWireEdition() and renderTables() return the whole `<section>`, or '' when there is nothing to show. Remove `<!--archv:today-->` from vite.config.ts:29 and index.html:232 in the same commit, or the plugin throws."
+   },
+   {
+    "issue": "The work packages cannot be built in parallel as scoped.",
+    "why": "(a) WP-A and WP-B both edit the single-line `build` string at package.json:12 (and `dev`/`preview` at lines 11 and 38), which is a guaranteed textual conflict. (b) WP-B (D7: `renderLead()` per G) and WP-C (scope: 'renderLead changes only') both rewrite renderLead in src/render/home.ts:191. (c) WP-C's done-when needs WP-D's reads.json decode test, and WP-D's E9/E11 need WP-C's output. (d) WP-E acceptance `--get wire | jq -e '.version==1'` returns 404 until WP-A is merged and deployed to main. (e) WP-A and WP-B both edit site CLAUDE.md.",
+    "fix": "Put every package.json script edit (including build-daily-pages) and the vite/index.html marker swap in WP-A's contract commit. Give renderLead to WP-C only; WP-B does not touch it. Build the WP-C to WP-D dependency on a checked-in reads.json fixture. WP-E's --get must treat 404 as the seed document, and its live acceptance is gated on WP-A being on main. State the merge order explicitly: A, then C, then B, then D and E."
+   },
+   {
+    "issue": "The E4 7-day lead rule breaks a test the plan says stays green.",
+    "why": "HomeFeedModelTests.swift:144 publishes the NFL fixture dated 2026-08-30, and line 299 asserts `model.activeLead?.headline == \"An NFL story\"`. Today is 2026-09-26, 27 days later. Any `activeLead` reading `Date()` with leadMaxAgeDays = 7 returns nil, and testASportChosenDuringAnInFlightLoadIsServedNotDropped fails. That is one of the two tests E11 says must stay green.",
+    "fix": "Put the age rule in a pure `SportLayout.activeLead(entries:today:)` with an injected clock (or a `now` closure on HomeFeedModel's init, like the other injected pieces at HomeFeedModel.swift:85-92). Test the rule separately, and update the fixture dates to be relative to the injected now."
+   }
+  ],
+  "should_fix": [
+   {
+    "issue": "The app decoders are all-or-nothing, so one bad block or item removes every table or the whole Wire. The claim that decoders 'skip unknown kind values' only holds for kind.",
+    "fix": "FeedClient decodes with `try? JSONDecoder().decode` (FeedClient.swift:105). A synthesized `[TableBlock]` or `[WireItem]` fails as a whole if one element lacks `title`/`headline`, or if a `cells` value is JSON null that TableValue does not handle. Add a LossyArray wrapper for items and blocks, make TableValue decode null, and add tests: one malformed block leaves the others renderable, and a null cell decodes."
+   },
+   {
+    "issue": "The F1 sanity check can ratchet: a held block holds forever.",
+    "fix": "'No driver's points below yesterday's' is compared against yesterday's block, which is itself the held copy. A legitimate reduction (a post-race DSQ or penalty) therefore holds every day from then on, and the 'leader agrees' check has the same problem. Compare against the last FRESH value, cap holds at N days, and write a `_LANE-ALERTS.md` row when a block has been held more than 2 days."
+   },
+   {
+    "issue": "The desk runs pipeline code and the schema validator from the local site checkout, which sits on `preview` and has other writers, while the build validates with main's copy.",
+    "fix": "F2 and WP-E import `thearchv-site/scripts/wire/*` and `lib/schema.mjs` from the working tree. The thearchv-search one-offs (Sun and Mon 22:00) and worktree sessions edit that tree. Run the desk from a dedicated `git worktree` reset to origin/main at the start of each run, and remember the exit-69 Xcode-licence git trap (use DEVELOPER_DIR=/Library/Developer/CommandLineTools). Or have put-daily fetch schema.mjs from main through the API."
+   },
+   {
+    "issue": "The node:test suite never runs in CI or the build, and the Node version is misstated.",
+    "fix": "deploy.yml:24 pins node-version 20 while B1 says Node 22. WP-A adds `test:wire` but nothing invokes it, so a parser regression reaches main unseen. Either add `npm run test:wire` to the build chain before vite build (it has no network and runs on fixtures), or add a workflow job. State Node 20 compatibility, since node:test and the directory argument both work on 20."
+   },
+   {
+    "issue": "ESPN feed details the parser and filters miss (verified on today's live feeds).",
+    "fix": "Treat `<description><![CDATA[null]]>` as empty (seen on the soccer top item), or grounding runs against the literal word 'null'. Add URL-path excludes (`/report/_/gameId/`, `/video/`, `/live`), because soccer item 3 is a `/soccer/report/_/gameId/401861066` match page. Use the stable `<guid>` (e.g. `US-EN-50022329`) as the primary dedupe key ahead of the URL hash. The NBA feed's first two items are old evergreen pieces (ids 48957095 and 49135150), so the 36 h window is doing real work: keep it tested."
+   },
+   {
+    "issue": "The display zone for date-precision items is unspecified, so the web and the app will disagree.",
+    "fix": "publishedAt is stored as UTC. An ESPN item at 21:00 ET on 26 Sep is 01:00Z on 27 Sep, which Actions (UTC, per the home.ts:404-407 comment) renders as '27 Sep' while an app in Toronto renders '26 Sep'. Store a `publishedDate` (America/New_York date) alongside, or format both surfaces in a named zone. Also state that WireEditionLabel compares the ET edition date against the device's local date."
+   },
+   {
+    "issue": "Under strict tsc, the JSON import type is inferred from whatever data was last committed.",
+    "fix": "tsconfig.json has resolveJsonModule and includes `scripts`. The seed `\"sports\":{}` infers `{}`, so `tables.sports.football` is a tsc error, and each desk commit changes the inferred type of wire.json, which tsc runs against at package.json:12. That breaks the plan's fail-soft promise. Require home.ts to do `sanitise(raw as unknown)` and never assign the import to an interface directly (the illustrated.ts:28-29 precedent works only because that registry is hand-curated)."
+   },
+   {
+    "issue": "check-wire-links.mjs cannot scope '@keyframes in the wire and tables CSS' in built output.",
+    "fix": "src/style.css already contains one @keyframes, and Vite bundles and minifies it into one stylesheet. Run the animation and marquee check on the source CSS blocks (a delimited `/* wire */ ... /* /wire */` region in src/style.css and in pageStyles()), not on dist."
+   },
+   {
+    "issue": "The 05:00 slot is the PAUSED Answer Desk, not a vacated one.",
+    "fix": "lanes.tsv:97 reads 'PAUSED D-2026-09-22c'. If it resumes, two desks commit to main at 05:00 and cancel-in-progress (deploy.yml:15) cancels one build. Move the Wire to 04:40, or record in the spec that the Answer Desk slot moves if it resumes."
+   },
+   {
+    "issue": "`set -a; . thearchv-site/.env` exports every secret in the file into the desk shell.",
+    "fix": "That puts APIFOOTBALL_KEY and any other secrets in the environment of every child process and anything a failing command echoes. Have fetch-tables.mjs read only FOOTBALL_DATA_KEY, BALLDONTLIE_KEY and THESPORTSDB_KEY from .env itself, and never print env values in errors."
+   },
+   {
+    "issue": "Some acceptance lines are prose or order-dependent.",
+    "fix": "WP-C's 'curl-equivalent check on built output: test -f ...' mixes prose and shell. WP-A's `git clone -b wire/pipeline <repo>` needs the branch pushed and <repo> filled in. WP-B's `cp fixtures && build && git checkout scripts/data/daily` should run on a throwaway clone so a failed step cannot leave fixtures in the tree. Add a Wire-only-commit invariance check: build with two different wire.json files and assert that dist/feed/today.json, the today hash in index.json, feed.xml and search-index.json are byte-identical."
+   },
+   {
+    "issue": "BALLDONTLIE call estimate is low once the NBA season runs.",
+    "fix": "'About 10 calls' only covers the off-season. Computing records from `/games` across a full NBA season means roughly 1,230 games, paged at the API maximum. Budget for pagination growth (or store running totals in tables.json and fetch only yesterday's games), and confirm per_page and cursor behaviour on the first keyed call, as J already notes."
+   },
+   {
+    "issue": "A WP-C long read reaches old builds as a DayEntry lead and can collide with Saved.",
+    "fix": "The same essay can now be saved twice: once as a DayEntry (id `date:title`, Models.swift:36) from Home, and once as a LongRead from Archive. Its lead card also shows no provenance, because sectionDisplayName (Models.swift:40-47) has no `reads` case. Add a `reads` display name in the next build and note the double-save in RELEASE-NOTES. Old builds degrade safely."
+   }
+  ]
+ }
+}

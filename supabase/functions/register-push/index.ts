@@ -4,16 +4,16 @@
 // Upserts on the token, so re-registering the same device is idempotent. A user turning the daily
 // push off sends opt_in:false, which the daily dispatch job respects.
 import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
-import { checkAppSecret } from "../_shared/appGuard.ts";
+import { checkAppSecretSoft } from "../_shared/appGuard.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
 
-  // Soft app-secret guard (build 19+ sends x-archv-app). See _shared/appGuard.ts for the
-  // soft-vs-hard rollout note; the DB-side hourly/per-device caps below remain the real
-  // backstop either way.
-  const guardResp = checkAppSecret(req, "register-push");
+  // Soft app-secret guard (founder-approved 2026-09-26). Builds up to 1.5.5 never sent
+  // x-archv-app on this path, so the hard guard refused every registration from 2026-07-22.
+  // See checkAppSecretSoft in _shared/appGuard.ts; the DB caps below remain the real backstop.
+  const guardResp = checkAppSecretSoft(req, "register-push");
   if (guardResp) return guardResp;
 
   let payload: Record<string, unknown>;

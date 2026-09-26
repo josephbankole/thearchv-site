@@ -23,3 +23,26 @@ export function checkAppSecret(req: Request, fnName: string): Response | null {
   }
   return null;
 }
+
+// Soft variant, register-push only (founder-approved 2026-09-26). No shipped build up to 1.5.5
+// sends x-archv-app on register-push (SupportClient attached it to ticket-* paths only), so the
+// hard guard refused every token upload from 2026-07-22: no install registered for the daily
+// push and in-app opt-out never reached the server. A MISSING header is allowed and logged; a
+// WRONG header is still refused; an unset secret still fails closed. The push_tokens rate-cap
+// trigger (hourly global and per-device) stays the real guard. 1.5.6 sends the header on every
+// path (thearchv-app 8c5ac8b), so this can go hard again once older builds have aged out.
+export function checkAppSecretSoft(req: Request, fnName: string): Response | null {
+  const expected = Deno.env.get("ARCHV_APP_SECRET");
+  if (!expected) {
+    console.error(JSON.stringify({ fn: fnName, error: "ARCHV_APP_SECRET unset — refusing" }));
+    return json({ error: "unauthorized" }, 401);
+  }
+
+  const provided = req.headers.get("x-archv-app");
+  if (!provided) {
+    console.log(JSON.stringify({ fn: fnName, allowed: "missing-header" }));
+    return null;
+  }
+  if (provided !== expected) return json({ error: "unauthorized" }, 401);
+  return null;
+}

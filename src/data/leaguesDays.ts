@@ -7,6 +7,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-26",
+    day: "Saturday",
+    headline: "Manchester City reported guilty on 114 charges, and Manchester United's 2012 title loss is back in the argument",
+    dek: "An independent commission has found Manchester City guilty on 114 of the 115 Premier League charges, per The Athletic, with Reuters and ABC News carrying the same report. No sanction has been set, City are expected to appeal, and the Premier League has not published the ruling.",
+    body: "An independent commission has found Manchester City guilty on 114 of the 115 Premier League charges brought against the club, David Ornstein of The Athletic reported on Friday 25 September. Reuters and ABC News carry the same report. The Premier League has not published the ruling and declined to comment to Reuters, per beIN Sports.\n\nThe charges cover nine seasons, 2009-10 to 2017-18, per The Athletic and ABC News. No sanction has been decided. The possible range runs from a fine to a points deduction to expulsion from the league, and City are expected to appeal.\n\nA City spokesperson told The Athletic: \"The Premier League process remains ongoing, with significant elements to be completed, and subject to strict confidentiality.\"\n\nThe Manchester United angle is one season. In 2011-12 both clubs finished on 89 points, and City won the title on goal difference, +64 to +56, per the Premier League and Sky Sports. City won three league titles inside the charged seasons, per ABC News.\n\nThere is a recent precedent for one club paying another over a financial-rules breach. Everton were ordered to pay Burnley more than £35m over their profit-and-sustainability breach, per ESPN and Sky Sports, and Everton are appealing. No club has yet said it will bring a claim over the City case, and nothing in the reporting so far touches a trophy.",
+    status: "verified",
+    seoTitle: "Manchester City reported guilty on 114 of 115 charges",
+    evergreen: "ffp-and-psr",
+  },
+  {
     date: "2026-09-23",
     day: "Wednesday",
     headline: "Two NWSL records can fall in one match on Sunday, and Canada's Cloé Lacasse holds half of the chance",

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-26T09:20:00Z",
+  "editions": [
+    {
+      "date": "2026-09-26",
+      "status": "partial",
+      "items": [
+        {
+          "id": "espn-soccer:aaaaaaaaaaaa", "sport": "football", "league": null, "sourceId": "espn-soccer", "source": "ESPN",
+          "headline": "Placeholder League title race: what we learned",
+          "url": "https://www.espn.com/soccer/story/_/id/90000005/learned",
+          "publishedAt": "2026-09-26T22:00:00.000Z", "publishedDate": "2026-09-26", "timePrecision": "date",
+          "urlKey": null, "guidKey": null, "titleKey": null, "note": null
+        }
+      ],
+      "missing": []
+    }
+  ]
+}

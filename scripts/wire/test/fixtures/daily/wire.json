@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-27T09:28:40Z",
+  "editions": [
+    {
+      "date": "2026-09-27",
+      "status": "partial",
+      "items": [
+        {
+          "id": "espn-soccer:f02ff836625d",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Manchester United's Placeholder Keeper out for a month, sources say",
+          "url": "https://www.espn.com/soccer/story/_/id/90000004/man-united-keeper",
+          "publishedAt": "2026-09-26T23:30:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-27T09:00:00.000Z",
+          "guidKey": "f02ff836625d",
+          "urlKey": "9347c972ec4e",
+          "titleKey": "58d853f5b4a3",
+          "note": "ESPN reports the absence on the word of sources, so the length of it is the thing to watch."
+        },
+        {
+          "id": "espn-nfl:dff76612c762",
+          "sport": "nfl",
+          "league": null,
+          "sourceId": "espn-nfl",
+          "source": "ESPN",
+          "headline": "Placeholder Packers sign veteran guard off practice squad",
+          "url": "https://www.espn.com/nfl/story/_/id/90000032/packers-sign",
+          "publishedAt": "2026-09-26T22:45:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-27T09:00:00.000Z",
+          "guidKey": "dff76612c762",
+          "urlKey": "e0829072fae8",
+          "titleKey": "1667d9576dcd",
+          "note": null
+        },
+        {
+          "id": "espn-f1:5fc4589b070b",
+          "sport": "f1",
+          "league": null,
+          "sourceId": "espn-f1",
+          "source": "ESPN",
+          "headline": "Placeholder Driver calls for rule review after sprint",
+          "url": "https://www.espn.com/f1/story/_/id/90000042/rule-review",
+          "publishedAt": "2026-09-26T18:00:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-27T09:00:00.000Z",
+          "guidKey": "5fc4589b070b",
+          "urlKey": "85159b1329a4",
+          "titleKey": "710685f460ea",
+          "note": "The stewards have been asked to look again after the sprint, and the rule itself is unchanged for now."
+        },
+        {
+          "id": "espn-golf:6d5a387081a2",
+          "sport": "golf",
+          "league": null,
+          "sourceId": "espn-golf",
+          "source": "ESPN",
+          "headline": "Placeholder Golfer leads by two at Fixture Hills",
+          "url": "https://www.espn.com/golf/story/_/id/90000052/leads-by-two",
+          "publishedAt": "2026-09-26T23:00:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-27T09:00:00.000Z",
+          "guidKey": "6d5a387081a2",
+          "urlKey": "cef93a86da33",
+          "titleKey": "450e5c930af3",
+          "note": null
+        },
+        {
+          "id": "espn-nba:a91f4d641813",
+          "sport": "basketball",
+          "league": "nba",
+          "sourceId": "espn-nba",
+          "source": "ESPN",
+          "headline": "Sources: Fixture Bulls trade Placeholder Guard to Fixture Hornets",
+          "url": "https://www.espn.com/nba/story/_/id/90000011/bulls-trade",
+          "publishedAt": "2026-09-27T00:12:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-27T09:00:00.000Z",
+          "guidKey": "a91f4d641813",
+          "urlKey": "a45890f9695c",
+          "titleKey": "c4581f0c92f7",
+          "note": null
+        },
+        {
+          "id": "espn-wnba:acbab0be65b1",
+          "sport": "basketball",
+          "league": "wnba",
+          "sourceId": "espn-wnba",
+          "source": "ESPN",
+          "headline": "WNBA playoff preview: Fixture Lynx v Placeholder Liberty",
+          "url": "https://www.espn.com/wnba/story/_/id/90000022/playoff-preview",
+          "publishedAt": "2026-09-26T19:00:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-27T09:00:00.000Z",
+          "guidKey": "acbab0be65b1",
+          "urlKey": "5676236fa830",
+          "titleKey": "d5d59cb06a4b",
+          "note": null
+        }
+      ],
+      "missing": [
+        {
+          "sourceId": "espn-tennis",
+          "reason": "parse-error"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-26",
+      "status": "partial",
+      "items": [
+        {
+          "id": "espn-soccer:aaaaaaaaaaaa",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Placeholder League title race: what we learned",
+          "url": "https://www.espn.com/soccer/story/_/id/90000005/learned",
+          "publishedAt": "2026-09-26T22:00:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "firstSeenAt": null,
+          "guidKey": null,
+          "urlKey": null,
+          "titleKey": null,
+          "note": null
+        }
+      ],
+      "missing": []
+    }
+  ]
+}

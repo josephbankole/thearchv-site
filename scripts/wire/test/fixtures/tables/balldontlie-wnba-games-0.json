@@ -1,0 +1,5 @@
+{"data":[
+ {"id":10,"date":"2026-09-01","status":"Final","postseason":false,"home_team":{"id":1,"full_name":"Fixture Lynx"},"visitor_team":{"id":3,"full_name":"Sample Aces"},"home_team_score":80,"visitor_team_score":70},
+ {"id":11,"date":"2026-09-02","status":"Final","postseason":false,"home_team":{"id":2,"full_name":"Placeholder Liberty"},"visitor_team":{"id":4,"full_name":"Example Sun"},"home_team_score":75,"visitor_team_score":77},
+ {"id":12,"date":"2026-09-02","status":"Final","postseason":false,"home_team":{"id":3,"full_name":"Sample Aces"},"visitor_team":{"id":1,"full_name":"Fixture Lynx"},"home_team_score":60,"visitor_team_score":71}
+],"meta":{"next_cursor":null}}

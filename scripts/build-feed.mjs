@@ -112,13 +112,29 @@ const lastUpdated = [
   ...Object.values(sportFeeds).map((f) => f.lastUpdated),
 ].filter(Boolean).sort().at(-1) ?? null;
 
+// The app contract for posters.json (iOS 1.5.x): every poster must decode with non-empty string
+// slug, year, host, title, moment and stamp, and one bad entry throws away the whole array. The
+// poster data renamed `host` to `city` on 2026-09-12, which emptied the Archive poster line in
+// the app, so `host` is restored from `city` here and any entry still short is dropped loudly.
+const APP_POSTER_KEYS = ["slug", "year", "host", "title", "moment", "stamp"];
+const appPosters = posters
+  .map((p) => ({ ...p, host: p.host ?? p.city }))
+  .filter((p) => {
+    const missing = APP_POSTER_KEYS.filter((k) => typeof p[k] !== "string" || p[k].trim() === "");
+    if (missing.length) console.error(`[build-feed] poster ${p.slug ?? "(no slug)"} dropped from feed, missing: ${missing.join(", ")}`);
+    return missing.length === 0;
+  });
+if (posters.length > 0 && appPosters.length === 0) {
+  throw new Error("[build-feed] no poster survives the app contract; posters.json would empty the app's Archive line");
+}
+
 const feeds = {
   today: { lead: daily[0] ?? null, wrap: daily.slice(1, 5) },
   transfer: { days: transferTagged, lastUpdated: newestOf(transferTagged) },
   worldcup: { days: worldCupTagged, lastUpdated: newestOf(worldCupTagged) },
   leagues: { days: leaguesTagged, lastUpdated: newestOf(leaguesTagged) },
   ...sportFeeds,
-  posters: { posters },
+  posters: { posters: appPosters },
   archive: {
     legends,
     giantKillers: { intro: giantKillersIntro, outro: giantKillersOutro, upsets },
@@ -185,6 +201,37 @@ writeFileSync(join(OUT, "index.json"), JSON.stringify(manifest, null, 2));
 console.log(
   `[build-feed] ${manifestFeeds.length} feeds → ${OUT}  (lastUpdated ${lastUpdated}, build ${manifest.buildHash})`
 );
+
+/* ---------- app poster images ----------
+   The app builds each image URL as https://thearchv.ca/posters/<slug>.webp, but the artwork lives
+   at the poster's `image` path. Write a webp at the path the app asks for. Never fails the build. */
+{
+  let sharp = null;
+  try {
+    sharp = (await import("sharp")).default;
+  } catch (err) {
+    console.warn(`[build-feed] sharp unavailable, app poster webps skipped: ${err.message}`);
+  }
+  if (sharp) {
+    const posterOut = join(DIST, "posters");
+    mkdirSync(posterOut, { recursive: true });
+    let written = 0;
+    for (const p of appPosters) {
+      const src = p.image ? join(ROOT, "public", p.image) : null;
+      if (!src || !existsSync(src)) {
+        console.warn(`[build-feed] poster ${p.slug}: source image missing (${p.image ?? "no image"}), webp skipped`);
+        continue;
+      }
+      try {
+        await sharp(src).resize({ width: 1000, withoutEnlargement: true }).webp({ quality: 82 }).toFile(join(posterOut, `${p.slug}.webp`));
+        written++;
+      } catch (err) {
+        console.warn(`[build-feed] poster ${p.slug}: webp failed (${err.message})`);
+      }
+    }
+    console.log(`[build-feed] app poster webps → ${posterOut} (${written}/${appPosters.length})`);
+  }
+}
 
 /* ---------- storefront feed (merch items, additive-only, standalone file) ----------
    Sourced from scripts/storefront-items.json (NOT src/data/*.ts — that dir is engine-owned

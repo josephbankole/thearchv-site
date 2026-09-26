@@ -15,7 +15,6 @@ description: "Argentina 3-2 West Germany at the Azteca on 29 June 1986: how a tw
 quickAnswer: "Argentina beat West Germany 3-2 in the 1986 World Cup final at the Estadio Azteca on 29 June 1986. Brown, Valdano and Burruchaga scored; Rummenigge and Völler dragged West Germany level before the late winner. It was Argentina's second world title, and the peak of Diego Maradona's tournament."
 posterImage: "/posters/azteca-1986.webp"
 posterAlt: "The ARCHV illustrated poster of the 1986 World Cup at the Azteca."
-posterEtsy: "https://www.etsy.com/listing/4521779161"
 ogImage: "/og.jpg"
 related: []
 ---

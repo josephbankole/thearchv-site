@@ -15,7 +15,6 @@ description: "France 3-0 Brazil at the Stade de France, 12 July 1998: Zidane's t
 quickAnswer: "France beat Brazil 3-0 in the 1998 World Cup final at the Stade de France in Saint-Denis on 12 July 1998. Zinedine Zidane headed two first-half goals and Emmanuel Petit added a third in stoppage time. It was France's first world title."
 posterImage: "/posters/paris-1998.webp"
 posterAlt: "The ARCHV illustrated poster of the 1998 World Cup final in Saint-Denis."
-posterEtsy: "https://www.etsy.com/listing/4521790986"
 ogImage: "/og.jpg"
 related: []
 ---

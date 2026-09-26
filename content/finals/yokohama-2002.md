@@ -15,7 +15,6 @@ description: "Brazil 2-0 Germany at Yokohama, 30 June 2002: Ronaldo's two goals,
 quickAnswer: "Brazil beat Germany 2-0 in the 2002 World Cup final in Yokohama on 30 June 2002. Ronaldo scored both goals, in the 67th and 79th minutes, four years after his collapse before the 1998 final. It was Brazil's record fifth world title."
 posterImage: "/posters/yokohama-2002.webp"
 posterAlt: "The ARCHV illustrated poster of the 2002 World Cup final in Yokohama."
-posterEtsy: "https://www.etsy.com/listing/4521787127"
 ogImage: "/og.jpg"
 related: []
 ---

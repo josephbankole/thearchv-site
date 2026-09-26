@@ -15,7 +15,6 @@ description: "West Germany 1-0 Argentina at the Stadio Olimpico, 8 July 1990: Br
 quickAnswer: "West Germany beat Argentina 1-0 in the 1990 World Cup final at the Stadio Olimpico in Rome on 8 July 1990. Andreas Brehme scored the only goal from an 85th-minute penalty. Argentina had two men sent off, the first dismissals in a World Cup final."
 posterImage: "/posters/italia-1990.webp"
 posterAlt: "The ARCHV illustrated poster of the 1990 World Cup final in Rome."
-posterEtsy: "https://www.etsy.com/listing/4521788550"
 ogImage: "/og.jpg"
 related: []
 ---

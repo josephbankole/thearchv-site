@@ -15,7 +15,6 @@ description: "Brazil 4-1 Italy at the Azteca on 21 June 1970: the goals, the tac
 quickAnswer: "Brazil beat Italy 4-1 in the 1970 World Cup final at the Estadio Azteca on 21 June 1970. Pelé, Gérson, Jairzinho and Carlos Alberto scored; Roberto Boninsegna replied for Italy. It was Brazil's third world title, which let them keep the Jules Rimet trophy for good."
 posterImage: "/posters/mexico-1970.webp"
 posterAlt: "The ARCHV illustrated poster of the 1970 World Cup final at the Azteca."
-posterEtsy: "https://www.etsy.com/listing/4521782964"
 ogImage: "/og.jpg"
 related: []
 ---

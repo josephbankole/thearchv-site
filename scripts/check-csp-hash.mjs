@@ -1,8 +1,9 @@
 /* check-csp-hash.mjs — verifies the inline bootstrap <script> in index.html still matches the
-   sha256 hash allow-listed in the CSP meta tag. Runs FIRST in the build chain (see package.json
-   "build"): without this, an edit to the bootstrap script ships green and the browser silently
-   drops it at runtime (reduced-motion detection and the is-mobile flag break) with no build-time
-   signal anywhere.
+   sha256 hash allow-listed in the CSP meta tag. Runs second in the build chain, straight after
+   check-data-shape.mjs, which took the first slot on 2026-09-25 because it has to run before
+   anything can execute src/data (see package.json "build"). Without this check, an edit to the
+   bootstrap script ships green and the browser silently drops it at runtime (reduced-motion
+   detection and the is-mobile flag break) with no build-time signal anywhere.
    Dependency-free on purpose, matching the other scripts/ generators. */
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";

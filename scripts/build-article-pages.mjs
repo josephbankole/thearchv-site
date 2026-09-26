@@ -26,6 +26,7 @@ import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng 
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
+import { sentences, abbreviationStop } from "./shared/sentences.mjs";
 
 /* ---------- evergreen links (founder order 2026-09-11) ----------
    A question that comes back every season (the NFL roster cutdown, how FedEx Cup points work) used
@@ -103,40 +104,83 @@ function bodyHtml(text) {
     .join("\n        ");
 }
 
-/* ---------- meta description: "<dek> <first sentence of body>", trimmed at a word boundary so
-   the whole string stays <=155 chars. Search-only; the visible page and og/twitter copy are
-   untouched. Throws if the result ever exceeds 160, so a bad edit fails the build loudly. */
-const DESC_TARGET = 155;
-function firstSentence(text) {
-  const s = String(text).trim();
-  const m = s.match(/^.*?[.!?](?=\s|$)/);
-  return (m ? m[0] : s).trim();
+/* ---------- meta description: the standfirst, the same clean string og:description carries.
+   E19 (2026-09-24): this used to stitch "<dek> <first sentence of body>" and cut the join at ~155
+   with an ellipsis, so short deks were padded out with the head of the next sentence and cut
+   mid-word ("... Jayden…"), and long ones stopped mid-clause. Now: <=160 passes through unchanged;
+   over 160 it ends on the last full sentence that fits, else a clause break or whole word, never borrows
+   text from the body. Throws if the result ever exceeds 160, so a bad edit fails the build loudly.
+
+   Three guards on the cut (code review 2026-09-25), each found on a dek already filed:
+   - a full stop after an abbreviation or an initial is not a sentence end. Without this the golf
+     lane's descriptions ended "at the FedEx St." (St. Jude) and "Wyndham Clark, J.J." (J.J. Spaun);
+   - a last sentence shorter than DESC_MIN_SENTENCE is a fragment ("A right knee injury.") that
+     throws away most of the standfirst, so the cut falls through to a clause or a word instead;
+   - a clause break needs a space after it, so the comma inside "74,310" never cuts a number. */
+const DESC_MAX = 160;
+const DESC_MIN_SENTENCE = 50;
+// Short forms that take a full stop without ending a sentence. Initials and dotted runs ("J.J.",
+// "p.m.", "U.S.") are caught by shape; this list is the titles and short forms the desks file.
+const DESC_ABBREVIATIONS = new Set(["st", "mr", "mrs", "ms", "dr", "jr", "sr", "no", "nos", "vs", "v", "mt", "ft", "prof", "gen", "capt", "rev", "co", "inc", "ltd", "etc", "approx", "est"]);
+function endsInAbbreviation(textBeforeStop) {
+  const token = textBeforeStop.split(" ").pop().replace(/^["'‘“(]+/, "");
+  return /^(?:[A-Za-z]\.)*[A-Za-z]$/.test(token) || DESC_ABBREVIATIONS.has(token.toLowerCase());
 }
-function truncateAtWord(str, maxLen) {
-  if (str.length <= maxLen) return str;
-  const cut = str.slice(0, maxLen);
-  const lastSpace = cut.lastIndexOf(" ");
-  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?]+$/, "");
-}
-function metaDescription(dek, body) {
-  const d = String(dek).trim();
-  const sentence = firstSentence(body);
-  const full = sentence ? `${d} ${sentence}` : d;
-  const out = full.length > DESC_TARGET ? `${truncateAtWord(full, DESC_TARGET - 1)}…` : full;
-  if (out.length > 160) throw new Error(`meta description exceeds 160 chars (${out.length}): ${out}`);
+function metaDescription(dek) {
+  const d = String(dek ?? "").trim().replace(/\s+/g, " ");
+  if (d.length <= DESC_MAX) return d;
+  const window = d.slice(0, DESC_MAX + 1); // +1 so a mark at the cap is seen with the space after it
+  let sentenceEnd = -1;
+  for (const m of window.matchAll(/[.!?]["'’”)]?(?=\s)/g)) {
+    const end = m.index + m[0].length;
+    if (end > DESC_MAX) continue;
+    if (m[0][0] === "." && endsInAbbreviation(window.slice(0, m.index))) continue;
+    sentenceEnd = end;
+  }
+  let out;
+  if (sentenceEnd >= DESC_MIN_SENTENCE) {
+    out = d.slice(0, sentenceEnd);
+  } else {
+    // No usable sentence fits: prefer the last clause break (comma, semicolon, colon or dash, each
+    // followed by a space) past 60% of the cap, else the last whole word, keeping one char for the
+    // ellipsis. Then drop trailing connectives until none is left, so it never ends "... in the…".
+    let clause = -1;
+    for (const m of window.matchAll(/[,;:](?=\s)|\s[—–](?=\s)/g)) if (m.index < DESC_MAX) clause = m.index;
+    const cut = d.slice(0, DESC_MAX);
+    const lastSpace = cut.lastIndexOf(" ");
+    let stem = clause > DESC_MAX * 0.6 ? cut.slice(0, clause) : lastSpace > 0 ? cut.slice(0, lastSpace) : cut.slice(0, DESC_MAX - 1);
+    for (let prev; prev !== stem; ) {
+      prev = stem;
+      // Lower case only: "Group A" and "AS Roma" are names, not connectives.
+      stem = stem.replace(/[\s.,;:!?—–-]+$/, "").replace(/\s+(?:and|or|but|the|a|an|of|to|in|on|at|for|with|from|by|as|than|then|so|nor)$/, "");
+    }
+    out = `${stem || cut.slice(0, DESC_MAX - 1)}…`;
+  }
+  if (out.length > DESC_MAX) throw new Error(`meta description exceeds ${DESC_MAX} chars (${out.length}): ${out}`);
   return out;
 }
 
 // tests-by-assertion: exercise the helper at module load so a regression fails the build.
 (function selfTestMetaDescription() {
-  const long = "word ".repeat(80).trim(); // 400+ chars, all word boundaries
-  const truncated = metaDescription("A short standfirst.", long);
-  if (truncated.length > DESC_TARGET) throw new Error(`metaDescription self-test: long input produced ${truncated.length} chars`);
-  if (!truncated.endsWith("…")) throw new Error("metaDescription self-test: expected an ellipsis on truncation");
   const shortDek = "Fernandes the name. Not the only one.";
-  const shortBody = "The move building steam is Mateus Fernandes. And more.";
-  const kept = metaDescription(shortDek, shortBody);
-  if (kept !== `${shortDek} The move building steam is Mateus Fernandes.`) throw new Error("metaDescription self-test: short input should pass through untruncated");
+  if (metaDescription(shortDek) !== shortDek) throw new Error("metaDescription self-test: a dek <=160 must pass through unchanged");
+  const s1 = "First sentence runs to a sensible length and stops cleanly here.";
+  const s2 = "Second sentence also stops cleanly and still fits under the cap.";
+  const s3 = "Third sentence would push the whole thing well past one hundred and sixty characters.";
+  const bySentence = metaDescription(`${s1} ${s2} ${s3}`);
+  if (bySentence !== `${s1} ${s2}`) throw new Error(`metaDescription self-test: long dek should end on the last full sentence, got ${JSON.stringify(bySentence)}`);
+  const long = "word ".repeat(80).trim(); // 400 chars, no sentence end at all
+  const byWord = metaDescription(long);
+  if (byWord.length > DESC_MAX || !byWord.endsWith("word…")) throw new Error(`metaDescription self-test: no-sentence dek should cut at a whole word, got ${JSON.stringify(byWord)}`);
+  // The three guards, each on the shape of a dek that tripped it.
+  const abbrev = metaDescription("The 2026 FedEx Cup playoffs begin on Thursday 13 August at the FedEx St. Jude Championship in Memphis, with the top 70 in the standings and one withdrawal already");
+  if (/\bSt\.$/.test(abbrev)) throw new Error(`metaDescription self-test: a full stop after "St" is not a sentence end, got ${JSON.stringify(abbrev)}`);
+  const fragment = metaDescription(`A right knee injury. ${"Jannik Sinner has withdrawn from the Cincinnati Open ".repeat(3).trim()}`);
+  if (fragment === "A right knee injury.") throw new Error("metaDescription self-test: a sentence under DESC_MIN_SENTENCE must not stand as the whole description");
+  const number = metaDescription("Manchester United announced the highest attendance anywhere in English football this season when the club counted 74,310 people through the turnstiles for the derby");
+  if (/\b74…$/.test(number)) throw new Error(`metaDescription self-test: the comma inside a number is not a clause break, got ${JSON.stringify(number)}`);
+  const connectives = metaDescription(`${"Arsenal chased a striker all summer ".repeat(4)}and settled in the end for the one in the`);
+  if (/\s(?:in|the|and)…$/.test(connectives)) throw new Error(`metaDescription self-test: trailing connectives must all be dropped, got ${JSON.stringify(connectives)}`);
 })();
 
 /* ---------- Answer Desk: the direct answer, used verbatim in both the page and the schema ----------
@@ -149,9 +193,13 @@ function metaDescription(dek, body) {
    ANSWER_MAX_WORDS, so it is never cut mid-sentence (the glossary's winning answers run 40 to 60
    words, and a direct answer that trails off reads as broken to both a reader and a parser). */
 const ANSWER_MAX_WORDS = 70;
-function sentences(text) {
-  return String(text).match(/[^.!?]+[.!?]+(?=\s|$)|[^.!?]+$/g) || [];
-}
+/* The sentences come from scripts/shared/sentences.mjs (code review 2026-09-25). The regex splitter
+   that used to sit here dropped any text before a full stop with no space after it, so "per
+   NFL.com." shipped as "com." and "James Pearce Jr., the Atlanta Falcons edge rusher" lost the name:
+   25 of 145 answer pages put words in acceptedAnswer that the page does not show, which is the one
+   thing this block exists to prevent. The shared splitter is lossless, and a full stop after an
+   abbreviation or an initial does not end a sentence there, so the word cap cannot stop an answer
+   at "the FedEx St." either. Its header has the full account. */
 function questionAnswer(dek, body) {
   const firstPara = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
   const kept = [];
@@ -179,6 +227,37 @@ function questionAnswer(dek, body) {
   if (oversized !== "Short standfirst.") {
     throw new Error("questionAnswer self-test: an oversized sentence should be dropped whole, never cut mid-sentence");
   }
+  // The shapes that broke the old splitter, each from a filed answer (code review 2026-09-25). Every
+  // answer must equal what is expected, must be a prefix of the dek plus the first paragraph (so no
+  // text is dropped or invented), and must not end on an abbreviation's full stop.
+  const firstPara = (body) => String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  const check = (label, dek, body, expected) => {
+    const got = questionAnswer(dek, body);
+    if (got !== expected) throw new Error(`questionAnswer self-test (${label}): expected ${JSON.stringify(expected)}, got ${JSON.stringify(got)}`);
+    if (!`${dek.trim()} ${firstPara(body)}`.replace(/\s+/g, " ").startsWith(got.replace(/\s+/g, " "))) {
+      throw new Error(`questionAnswer self-test (${label}): the answer carries text the page does not show, ${JSON.stringify(got)}`);
+    }
+    if (got.endsWith(".") && abbreviationStop(got, got.length - 1)) {
+      throw new Error(`questionAnswer self-test (${label}): the answer ends on an abbreviation, ${JSON.stringify(got)}`);
+    }
+  };
+  const nflDek = "The Seattle Seahawks beat the New England Patriots 13-10 at Lumen Field.";
+  const nflPara = "The Seattle Seahawks won the season opener, per NFL.com. New England led 10-0 in the third quarter before Seattle scored the last 13 points, per NFL.com and Yahoo Sports.";
+  check("NFL.com", nflDek, `${nflPara}\n\nA second paragraph that must not appear.`, `${nflDek} ${nflPara}`);
+  const jrDek = "The Atlanta Falcons edge rusher was suspended eight games. He did not appeal.";
+  const jrPara = "James Pearce Jr., the Atlanta Falcons edge rusher, is suspended for the first eight games of the 2026 NFL season.";
+  check("Jr.", jrDek, jrPara, `${jrDek} ${jrPara}`);
+  const initialsDek = "Four major champions are in the field.";
+  const initialsPara = "The list takes in Rory McIlroy, Wyndham Clark, J.J. Spaun and Gary Woodland.";
+  check("J.J.", initialsDek, initialsPara, `${initialsDek} ${initialsPara}`);
+  const decimalDek = "Yes. The sale is done.";
+  const decimalPara = "The purchase of the Seattle Seahawks closed at 9.612 billion dollars on Thursday 3 September.";
+  check("9.612", decimalDek, decimalPara, `${decimalDek} ${decimalPara}`);
+  // 48 words of standfirst leave room for "The playoffs open ... at the FedEx St." (59 words) but not
+  // for the whole sentence (79), so the sentence goes whole and the answer is the standfirst alone.
+  const capDek = `${"The standings decide who plays on ".repeat(8).trim()}.`;
+  const capPara = "The playoffs open on Thursday 13 August at the FedEx St. Jude Championship in Memphis, and the top 50 in the standings after that week go on to the BMW Championship.";
+  check("St. at the cap", capDek, capPara, capDek);
 })();
 
 function schema(entry, url, label, faq, images) {
@@ -449,10 +528,9 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
   // Search-only title: the entry's seoTitle (the answer) when the desk filed one, else the old
   // headline + entity suffix path, byte-identical for every entry filed before 2026-09-11.
   title: answerTitle(entry.seoTitle, [entry.headline, lane.seoSuffix, "The ARCHV"]),
-  // NOT clampDescription: this family has its own metaDescription(), which stitches the
-  // standfirst to the body's first sentence and throws above 160 characters. og:description
-  // and twitter:description stay on the bare standfirst, as they always have.
-  metaDescription: metaDescription(entry.dek, entry.body),
+  // NOT clampDescription: this family has its own metaDescription(), which returns the same
+  // standfirst og:description and twitter:description carry, cut at a sentence only past 160.
+  metaDescription: metaDescription(entry.dek),
   description: entry.dek,
   socialTitle: entry.headline,
   robots: ROBOTS_INDEXABLE,

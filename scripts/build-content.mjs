@@ -67,6 +67,7 @@ const GLOSSARY_LINKS = {
   "how-transfer-fees-are-actually-paid": ["structured-payments", "amortisation", "sell-on-clause"],
   "release-clause-vs-buy-out-clause": ["release-clause", "buy-back-clause", "sell-on-clause"],
   "why-var-takes-so-long": ["var", "offside"],
+  "false-9-hidegkuti-to-messi": ["false-9", "half-space"],
 };
 const glossaryBySlug = new Map(glossaryEntries.map((e) => [e.slug, e]));
 function glossaryBlock(slug) {

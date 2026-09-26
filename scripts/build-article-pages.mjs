@@ -26,6 +26,7 @@ import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng 
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
+import { sentences, abbreviationStop } from "./shared/sentences.mjs";
 
 /* ---------- evergreen links (founder order 2026-09-11) ----------
    A question that comes back every season (the NFL roster cutdown, how FedEx Cup points work) used
@@ -149,9 +150,13 @@ function metaDescription(dek, body) {
    ANSWER_MAX_WORDS, so it is never cut mid-sentence (the glossary's winning answers run 40 to 60
    words, and a direct answer that trails off reads as broken to both a reader and a parser). */
 const ANSWER_MAX_WORDS = 70;
-function sentences(text) {
-  return String(text).match(/[^.!?]+[.!?]+(?=\s|$)|[^.!?]+$/g) || [];
-}
+/* The sentences come from scripts/shared/sentences.mjs (code review 2026-09-25). The regex splitter
+   that used to sit here dropped any text before a full stop with no space after it, so "per
+   NFL.com." shipped as "com." and "James Pearce Jr., the Atlanta Falcons edge rusher" lost the name:
+   25 of 145 answer pages put words in acceptedAnswer that the page does not show, which is the one
+   thing this block exists to prevent. The shared splitter is lossless, and a full stop after an
+   abbreviation or an initial does not end a sentence there, so the word cap cannot stop an answer
+   at "the FedEx St." either. Its header has the full account. */
 function questionAnswer(dek, body) {
   const firstPara = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
   const kept = [];
@@ -179,6 +184,37 @@ function questionAnswer(dek, body) {
   if (oversized !== "Short standfirst.") {
     throw new Error("questionAnswer self-test: an oversized sentence should be dropped whole, never cut mid-sentence");
   }
+  // The shapes that broke the old splitter, each from a filed answer (code review 2026-09-25). Every
+  // answer must equal what is expected, must be a prefix of the dek plus the first paragraph (so no
+  // text is dropped or invented), and must not end on an abbreviation's full stop.
+  const firstPara = (body) => String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  const check = (label, dek, body, expected) => {
+    const got = questionAnswer(dek, body);
+    if (got !== expected) throw new Error(`questionAnswer self-test (${label}): expected ${JSON.stringify(expected)}, got ${JSON.stringify(got)}`);
+    if (!`${dek.trim()} ${firstPara(body)}`.replace(/\s+/g, " ").startsWith(got.replace(/\s+/g, " "))) {
+      throw new Error(`questionAnswer self-test (${label}): the answer carries text the page does not show, ${JSON.stringify(got)}`);
+    }
+    if (got.endsWith(".") && abbreviationStop(got, got.length - 1)) {
+      throw new Error(`questionAnswer self-test (${label}): the answer ends on an abbreviation, ${JSON.stringify(got)}`);
+    }
+  };
+  const nflDek = "The Seattle Seahawks beat the New England Patriots 13-10 at Lumen Field.";
+  const nflPara = "The Seattle Seahawks won the season opener, per NFL.com. New England led 10-0 in the third quarter before Seattle scored the last 13 points, per NFL.com and Yahoo Sports.";
+  check("NFL.com", nflDek, `${nflPara}\n\nA second paragraph that must not appear.`, `${nflDek} ${nflPara}`);
+  const jrDek = "The Atlanta Falcons edge rusher was suspended eight games. He did not appeal.";
+  const jrPara = "James Pearce Jr., the Atlanta Falcons edge rusher, is suspended for the first eight games of the 2026 NFL season.";
+  check("Jr.", jrDek, jrPara, `${jrDek} ${jrPara}`);
+  const initialsDek = "Four major champions are in the field.";
+  const initialsPara = "The list takes in Rory McIlroy, Wyndham Clark, J.J. Spaun and Gary Woodland.";
+  check("J.J.", initialsDek, initialsPara, `${initialsDek} ${initialsPara}`);
+  const decimalDek = "Yes. The sale is done.";
+  const decimalPara = "The purchase of the Seattle Seahawks closed at 9.612 billion dollars on Thursday 3 September.";
+  check("9.612", decimalDek, decimalPara, `${decimalDek} ${decimalPara}`);
+  // 48 words of standfirst leave room for "The playoffs open ... at the FedEx St." (59 words) but not
+  // for the whole sentence (79), so the sentence goes whole and the answer is the standfirst alone.
+  const capDek = `${"The standings decide who plays on ".repeat(8).trim()}.`;
+  const capPara = "The playoffs open on Thursday 13 August at the FedEx St. Jude Championship in Memphis, and the top 50 in the standings after that week go on to the BMW Championship.";
+  check("St. at the cap", capDek, capPara, capDek);
 })();
 
 function schema(entry, url, label, faq, images) {

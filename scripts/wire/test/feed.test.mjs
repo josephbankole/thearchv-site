@@ -80,7 +80,7 @@ test("verify-wire is byte exact: a non-breaking space or a changed URL fails", (
   const final = load("./fixtures/daily/wire.json");
   assert.deepEqual(verify(candidates, final).problems, []);
   const nbsp = structuredClone(final);
-  nbsp.editions[0].items[0].headline = nbsp.editions[0].items[0].headline.replace(" ", " ");
+  nbsp.editions[0].items[0].headline = nbsp.editions[0].items[0].headline.replace(" ", "\u00a0");
   assert.deepEqual(verify(candidates, nbsp).problems.map((p) => p.field), ["headline"]);
   const utm = structuredClone(final);
   utm.editions[0].items[1].url += "?utm_source=archv";

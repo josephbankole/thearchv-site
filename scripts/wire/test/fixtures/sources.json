@@ -7,7 +7,7 @@
     "maxAgeHours": 36,
     "exclude": [
       "\\bodds\\b",
-      "\\b(expert|experts'?|staff|best|our|straight-up|ats|survivor|pool|confidence|upset|lock|prop|week \\d+|nfl|nba|wnba|cfb|college football|mlb|nhl|ufc|golf|tennis|f1|mls|epl|premier league) picks?\\b",
+      "\\b(expert|experts'?|staff|best|our|straight-up|ats|survivor(?: pool)?|office pool|confidence|prop|week \\d+) picks?\\b",
       "\\bpicks?:", "\\bpicks? (against|vs\\.?) the spread\\b", "\\bpicks? and predictions\\b", "\\bpick'?em\\b",
       "\\bbest bets?\\b", "\\bbets?\\b", "\\bbetting\\b", "\\bparlays?\\b",
       "\\bpredictions?\\b", "\\bprops\\b", "\\bsportsbook\\b", "\\bfavou?rites\\b", "\\bfavou?rite to win\\b",

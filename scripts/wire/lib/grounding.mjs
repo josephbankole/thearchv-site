@@ -11,6 +11,9 @@ const COMPLETION = [
   "signed", "signs", "traded", "trades", "fired", "fires", "sacked", "sacks", "completed", "completes",
   "won", "wins", "agreed", "agrees", "confirmed", "confirms", "joined", "joins", "released", "releases",
   "retired", "retires", "beat", "beats", "beaten", "lost", "loses", "hired", "hires", "appointed", "appoints",
+  // Headline-style present for plural subjects ("United sign", "the Bears trade"): same assertion.
+  "sign", "trade", "fire", "sack", "complete", "win", "agree", "confirm", "join", "release", "retire",
+  "lose", "hire", "appoint",
 ];
 const NEGATION = /\b(not|no|never|without|nor)\b|n't\b/gi;
 const NARRATION = ["why it matters", "here's why", "heres why", "the part most people miss", "that's the point", "worth watching"];

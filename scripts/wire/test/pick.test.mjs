@@ -147,6 +147,9 @@ test("the betting filter catches betting picks and lines but keeps trade and dra
     "Placeholder Rookie was the No. 3 pick in April",
     "Bears' offensive lines struggle in loss",
     "Packers pick up fifth-year option on Placeholder Tackle",
+    "Placeholder Guard was the No. 1 NBA pick in June",
+    "Where the first NFL pick fits in the rebuild",
+    "Upset picks up where it left off for Placeholder City",
   ]) assert.ok(one(keep).pick, keep);
   for (const drop of [
     "Week 4 NFL picks: expert predictions for every game",

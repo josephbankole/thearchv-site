@@ -8,8 +8,8 @@
    Exit 0: every attempted module fresh. 3: something held or skipped. */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
-import { parseArgs } from "./lib/args.mjs";
+import { fileURLToPath } from "node:url";
+import { parseArgs, isMain } from "./lib/args.mjs";
 import { fetchText } from "./lib/http.mjs";
 import { dateInZone } from "./lib/time.mjs";
 import { SOURCES, sanitiseTables } from "./lib/schema.mjs";
@@ -45,7 +45,7 @@ export async function fetchTables({ prev, only, offline, nowMs, env, pause }) {
   return { tables: sanitiseTables(out), report };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isMain(import.meta.url)) {
   const args = parseArgs();
   const prevPath = args.prev || join(ROOT, "scripts", "data", "daily", "tables.json");
   const prev = existsSync(prevPath) ? sanitiseTables(JSON.parse(readFileSync(prevPath, "utf8"))) : { sports: {} };

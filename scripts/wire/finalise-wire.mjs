@@ -41,13 +41,18 @@ export function finalise({ candidates, notes = { notes: {}, vetoes: {} }, prev =
 
   const items = [];
   const missing = [...(candidates.missing || []).map((m) => ({ sourceId: m.sourceId, reason: m.reason }))];
+  // A veto takes the STORY out, not just one source's copy of it: the same story under another
+  // source id (espn-nba and espn-wnba carry some of the same stories) is vetoed with it.
+  const vetoedStories = seenFromEditions([]);
+  for (const c of list) for (const x of [c, ...(c.alternates || [])]) if (vetoes[x.id]) addSeen(vetoedStories, x);
+  const isVetoed = (x) => Boolean(vetoes[x.id]) || isSeen(vetoedStories, x);
   // Every pick nobody vetoed publishes as itself, so a replacement must not repeat one of them (B3).
   const taken = seenFromEditions([]);
-  for (const c of list) if (!vetoes[c.id]) addSeen(taken, c);
+  for (const c of list) if (!isVetoed(c)) addSeen(taken, c);
   for (const c of list) {
     let chosen = c;
-    if (vetoes[c.id]) {
-      const alt = (c.alternates || []).find((a) => !vetoes[a.id] && !isSeen(taken, a));
+    if (isVetoed(c)) {
+      const alt = (c.alternates || []).find((a) => !isVetoed(a) && !isSeen(taken, a));
       if (!alt) { missing.push({ sourceId: c.sourceId, reason: "vetoed-no-alternate" }); continue; }
       chosen = { ...c, ...alt };
       addSeen(taken, alt);

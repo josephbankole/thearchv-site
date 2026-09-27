@@ -154,6 +154,21 @@ test("a veto walks every alternate, skipping vetoed ones and stories already in 
   assert.equal(e2.items.find((i) => i.sourceId === "espn-nba").id, nba.alternates[1].id);
 });
 
+test("a veto takes the story out under every source, not only the vetoed item id", () => {
+  const d = structuredClone(candidates);
+  const nba = d.candidates[4], wnba = d.candidates[5];
+  // The WNBA pick is the same story as the NBA pick (same canonical URL and title), under another id.
+  wnba.headline = nba.headline; wnba.url = nba.url; wnba.urlKey = nba.urlKey; wnba.titleKey = nba.titleKey; wnba.guidKey = null;
+  const ed = fin(d, { vetoes: { [nba.id]: "betting" } }).wire.editions[0];
+  assert.ok(!ed.items.some((i) => i.headline === nba.headline), "the vetoed story never ships, under either source");
+});
+
+test("the notes gate refuses base-form completion verbs the item does not use", () => {
+  const item = { headline: "Placeholder United close in on striker", summary: "Talks continue.", sourceName: "ESPN" };
+  assert.ok(checkNote("ESPN reports Placeholder United sign the striker, so the fee is the thing to watch.", item).errors.includes("completion-verb-not-in-item:sign"));
+  assert.ok(checkNote("ESPN reports the Bears win again, and the defence is the thing to watch.", { headline: "Bears face Lions", summary: "", sourceName: "ESPN" }).errors.includes("completion-verb-not-in-item:win"));
+});
+
 test("a note or veto id that matches no candidate is reported, and a notes file for another day is refused", () => {
   const typo = { date: "2026-09-27", notes: { "espn-soccer:f02ff836625X": "ESPN reports the absence on the word of sources, so the length is the thing to watch." }, vetoes: { "espn-nba:typo": "betting" } };
   const r = fin(candidates, typo);

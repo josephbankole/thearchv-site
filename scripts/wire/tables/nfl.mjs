@@ -59,12 +59,12 @@ export function compute(csvText, today) {
   const upcoming = games.filter((g) => !played.includes(g) && g.gameday >= today).sort((a, b) => (a.gameday + a.gametime).localeCompare(b.gameday + b.gametime));
   const nextWeek = upcoming.length ? +upcoming[0].week : null;
   const next = nextWeek ? upcoming.filter((g) => +g.week === nextWeek).map(fx) : [];
-  const asOf = played.map((g) => g.gameday).sort().pop() || today;
+  const through = played.map((g) => g.gameday).sort().pop() || null;
   // Sanity: a full regular season, and no team with more games than weeks played.
   let why = null;
   if (games.length !== 272) why = `regular-season rows ${games.length} != 272`;
   else if (played.length && Object.values(rec).some((r) => r.w + r.l + r.t > Math.max(...played.map((g) => +g.week)))) why = "games-exceed-weeks";
-  return { rows, results, next, asOf, lastWeek, nextWeek, why };
+  return { rows, results, next, through, lastWeek, nextWeek, why };
 }
 
 export async function run({ get, today }) {
@@ -74,9 +74,9 @@ export async function run({ get, today }) {
   const c = compute(r.body, today);
   if (c.why) return { blocks: [], failed: Object.fromEntries(ids.map((i) => [i, c.why])) };
   const blocks = [
-    { id: "nfl-standings", kind: "standings", league: "nfl", title: "NFL standings", asOf: c.asOf, compactRows: 1, columns: COLUMNS, rows: c.rows, source: SOURCE, emptyText: null },
+    { id: "nfl-standings", kind: "standings", league: "nfl", title: "NFL standings", asOf: today, through: c.through, compactRows: 1, columns: COLUMNS, rows: c.rows, source: SOURCE, emptyText: null },
     { id: "nfl-week", kind: "fixtures", league: "nfl", title: c.nextWeek ? `NFL: week ${c.nextWeek}` : "NFL: next games", asOf: today, rows: c.next, source: SOURCE, emptyText: "No games scheduled." },
   ];
-  if (c.results.length) blocks.push({ id: "nfl-results", kind: "results", league: "nfl", title: `NFL: week ${c.lastWeek} results`, asOf: c.asOf, rows: c.results, source: SOURCE, emptyText: null });
+  if (c.results.length) blocks.push({ id: "nfl-results", kind: "results", league: "nfl", title: `NFL: week ${c.lastWeek} results`, asOf: today, through: c.results.map((g) => g.date).sort().pop(), rows: c.results, source: SOURCE, emptyText: null });
   return { blocks, failed: {} };
 }

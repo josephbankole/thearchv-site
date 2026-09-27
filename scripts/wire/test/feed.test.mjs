@@ -64,9 +64,9 @@ test("an edition older than seven days is not shown; a dated one is labelled, ne
 
 test("a held table block says 'Last updated' and disappears after three held days", () => {
   const b = { ...tables.sports.football.blocks[0], status: "held", heldDays: 2 };
-  assert.match(renderTableBlock(b, { today: "2026-09-27" }), /Last updated 20 September 2026/);
+  assert.match(renderTableBlock(b, { today: "2026-09-27" }), /Last updated 27 September 2026\. Results to 20 September 2026/);
   assert.equal(renderTableBlock({ ...b, heldDays: 4 }, { today: "2026-09-27" }), "");
-  assert.match(renderTableBlock(tables.sports.football.blocks[0], { today: "2026-09-27" }), /Updated 20 September 2026\.<\/span> <a [^>]+>Fixtures and results: openfootball/);
+  assert.match(renderTableBlock(tables.sports.football.blocks[0], { today: "2026-09-27" }), /Updated 27 September 2026\. Results to 20 September 2026\.<\/span> <a [^>]+>Fixtures and results: openfootball/);
 });
 
 test("verify-wire is byte exact: a non-breaking space or a changed URL fails", () => {

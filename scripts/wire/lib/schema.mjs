@@ -112,6 +112,9 @@ export function sanitiseBlock(b, { quiet = false } = {}) {
     status: b.status === "held" ? "held" : "fresh", heldReason: typeof b.heldReason === "string" ? b.heldReason : null,
     heldDays: Number.isInteger(b.heldDays) ? b.heldDays : 0,
     lastFreshAsOf: isDate(b.lastFreshAsOf) ? b.lastFreshAsOf : b.asOf,
+    // Optional, additive: what the data reflects, as distinct from when it was fetched (asOf).
+    through: isDate(b.through) ? b.through : null,
+    throughLabel: str(b.throughLabel, 80) ? b.throughLabel : null,
     compactRows: Number.isInteger(b.compactRows) ? b.compactRows : null,
     columns: columns.map((c) => ({ key: c.key, label: c.label, labelKey: typeof c.labelKey === "string" ? c.labelKey : null, align: c.align === "start" ? "start" : "end" })),
     rows, source, emptyText: typeof b.emptyText === "string" ? b.emptyText : null,
@@ -136,8 +139,10 @@ export function currentEdition(wire, today) {
   return ed;
 }
 
-// Blocks readers may see: held no more than 3 days and asOf no more than 14 days old.
-export const blockVisible = (b, today) => b.heldDays <= 3 && daysBetween(b.asOf, today) <= BLOCK_MAX_AGE_DAYS;
+// Blocks readers may see: held no more than 3 days, and fetched fresh within the last 14 days.
+// Keyed on the last fresh FETCH, never on the newest result: a table fetched today is current
+// through an international break or an off week.
+export const blockVisible = (b, today) => b.heldDays <= 3 && daysBetween(b.lastFreshAsOf || b.asOf, today) <= BLOCK_MAX_AGE_DAYS;
 
 export function buildWireFeed(wire, { generatedAt }) {
   const ed = wire.editions[0] || null;

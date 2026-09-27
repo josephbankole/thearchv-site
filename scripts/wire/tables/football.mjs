@@ -36,21 +36,24 @@ export function sanityTable(rows) {
 const strip = (rows) => rows.map(({ _w, _d, ...r }) => r);
 
 /* ---------- openfootball ---------- */
+// Full time is { ft: [h, a] } for most results, but openfootball writes a 0-0 as a bare [0, 0].
+const fullTime = (m) => (Array.isArray(m.score) ? m.score : m.score?.ft);
+
 export function fromOpenfootball(json, today) {
   const teams = new Map();
   const team = (n) => { if (!teams.has(n)) teams.set(n, { name: n, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0 }); return teams.get(n); };
-  let asOf = null;
+  let through = null;
   const united = [];
   for (const m of json.matches || []) {
     team(m.team1); team(m.team2);
-    const ft = m.score?.ft;
+    const ft = fullTime(m);
     if (m.team1 === UNITED || m.team2 === UNITED) united.push(m);
     if (!Array.isArray(ft)) continue;
     const [a, b] = ft;
     const h = team(m.team1), aw = team(m.team2);
     h.p++; aw.p++; h.gf += a; h.ga += b; aw.gf += b; aw.ga += a;
     if (a > b) { h.w++; aw.l++; } else if (a < b) { aw.w++; h.l++; } else { h.d++; aw.d++; }
-    if (!asOf || m.date > asOf) asOf = m.date;
+    if (!through || m.date > through) through = m.date;
   }
   const rows = [...teams.values()]
     .map((t) => ({ ...t, pts: t.w * 3 + t.d, gd: t.gf - t.ga }))
@@ -62,10 +65,10 @@ export function fromOpenfootball(json, today) {
     return new Date(wallToUtc(y, mo - 1, d, h, mi, 0, "Europe/London")).toISOString();
   };
   const fx = (m) => ({ date: m.date, kickoff: kickoff(m), home: shortName(m.team1), away: shortName(m.team2), competition: "Premier League", round: m.round || null });
-  const next = united.filter((m) => !Array.isArray(m.score?.ft) && m.date >= today).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 3).map(fx);
-  const last = united.filter((m) => Array.isArray(m.score?.ft)).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3)
-    .map((m) => ({ ...fx(m), homeScore: m.score.ft[0], awayScore: m.score.ft[1] }));
-  return { rows, next, last, asOf };
+  const next = united.filter((m) => !Array.isArray(fullTime(m)) && m.date >= today).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 3).map(fx);
+  const last = united.filter((m) => Array.isArray(fullTime(m))).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3)
+    .map((m) => ({ ...fx(m), homeScore: fullTime(m)[0], awayScore: fullTime(m)[1] }));
+  return { rows, next, last, through };
 }
 
 /* ---------- football-data.org ---------- */
@@ -80,18 +83,19 @@ export function fromFootballData(standingsJson, matchesJson, today) {
   const next = ms.filter((m) => ["SCHEDULED", "TIMED"].includes(m.status) && m.utcDate.slice(0, 10) >= today).sort((a, b) => a.utcDate.localeCompare(b.utcDate)).slice(0, 3).map(fx);
   const last = ms.filter((m) => m.status === "FINISHED").sort((a, b) => b.utcDate.localeCompare(a.utcDate)).slice(0, 3)
     .map((m) => ({ ...fx(m), homeScore: m.score?.fullTime?.home, awayScore: m.score?.fullTime?.away }));
-  const asOf = ms.filter((m) => m.status === "FINISHED").map((m) => m.utcDate.slice(0, 10)).sort().pop() || today;
-  return { rows, next, last, asOf };
+  // The standings carry no date of their own; they are live, so the fetch day (asOf) is their date.
+  // United's matches (every competition) never label the league table.
+  return { rows, next, last, through: null };
 }
 
-function blocks({ rows, next, last, asOf }, source, today) {
+function blocks({ rows, next, last, through }, source, today) {
   const failed = {};
   const out = [];
   const why = sanityTable(rows);
   if (why) failed["pl-table"] = why;
-  else out.push({ id: "pl-table", kind: "standings", league: "premier-league", title: "Premier League table", asOf, compactRows: 6, columns: COLUMNS, rows: strip(rows), source, emptyText: null });
+  else out.push({ id: "pl-table", kind: "standings", league: "premier-league", title: "Premier League table", asOf: today, through, compactRows: 6, columns: COLUMNS, rows: strip(rows), source, emptyText: null });
   out.push({ id: "mu-next", kind: "fixtures", title: "Manchester United: next", asOf: today, rows: next, source, emptyText: "No fixture listed yet." });
-  if (last.length) out.push({ id: "mu-results", kind: "results", title: "Manchester United: results", asOf, rows: last, source, emptyText: null });
+  if (last.length) out.push({ id: "mu-results", kind: "results", title: "Manchester United: results", asOf: today, through: last[0]?.date ?? null, rows: last, source, emptyText: null });
   else failed["mu-results"] = "no-results";
   return { blocks: out, failed };
 }

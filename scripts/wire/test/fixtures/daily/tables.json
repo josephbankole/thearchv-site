@@ -9,12 +9,14 @@
           "kind": "standings",
           "league": "premier-league",
           "title": "Premier League table",
-          "asOf": "2026-09-20",
+          "asOf": "2026-09-27",
           "fetchedAt": "2026-09-27T09:10:00.000Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-09-20",
+          "lastFreshAsOf": "2026-09-27",
+          "through": "2026-09-20",
+          "throughLabel": null,
           "compactRows": 6,
           "columns": [
             {
@@ -94,9 +96,9 @@
               "short": "Leeds",
               "cells": {
                 "pos": 5,
-                "p": 4,
+                "p": 5,
                 "gd": 4,
-                "pts": 8
+                "pts": 9
               }
             },
             {
@@ -104,9 +106,9 @@
               "short": "Liverpool",
               "cells": {
                 "pos": 6,
-                "p": 4,
+                "p": 5,
                 "gd": 3,
-                "pts": 8
+                "pts": 9
               }
             },
             {
@@ -114,8 +116,18 @@
               "short": "Everton",
               "cells": {
                 "pos": 7,
-                "p": 4,
+                "p": 5,
                 "gd": 3,
+                "pts": 9
+              }
+            },
+            {
+              "name": "Hull City AFC",
+              "short": "Hull City",
+              "cells": {
+                "pos": 8,
+                "p": 5,
+                "gd": 2,
                 "pts": 8
               }
             },
@@ -123,20 +135,10 @@
               "name": "Newcastle United FC",
               "short": "Newcastle",
               "cells": {
-                "pos": 8,
+                "pos": 9,
                 "p": 5,
                 "gd": 0,
                 "pts": 8
-              }
-            },
-            {
-              "name": "Hull City AFC",
-              "short": "Hull City",
-              "cells": {
-                "pos": 9,
-                "p": 4,
-                "gd": 2,
-                "pts": 7
               }
             },
             {
@@ -175,9 +177,9 @@
               "short": "Nott'm Forest",
               "cells": {
                 "pos": 13,
-                "p": 4,
+                "p": 5,
                 "gd": -1,
-                "pts": 4
+                "pts": 5
               }
             },
             {
@@ -191,32 +193,32 @@
               }
             },
             {
-              "name": "AFC Bournemouth",
-              "short": "Bournemouth",
-              "cells": {
-                "pos": 15,
-                "p": 5,
-                "gd": -2,
-                "pts": 3
-              }
-            },
-            {
               "name": "Crystal Palace FC",
               "short": "Palace",
               "cells": {
-                "pos": 16,
-                "p": 4,
+                "pos": 15,
+                "p": 5,
                 "gd": -5,
-                "pts": 3
+                "pts": 4
               }
             },
             {
               "name": "Aston Villa FC",
               "short": "Aston Villa",
               "cells": {
-                "pos": 17,
-                "p": 4,
+                "pos": 16,
+                "p": 5,
                 "gd": -5,
+                "pts": 4
+              }
+            },
+            {
+              "name": "AFC Bournemouth",
+              "short": "Bournemouth",
+              "cells": {
+                "pos": 17,
+                "p": 5,
+                "gd": -2,
                 "pts": 3
               }
             },
@@ -235,9 +237,9 @@
               "short": "Fulham",
               "cells": {
                 "pos": 19,
-                "p": 4,
+                "p": 5,
                 "gd": -3,
-                "pts": 1
+                "pts": 2
               }
             },
             {
@@ -245,9 +247,9 @@
               "short": "Spurs",
               "cells": {
                 "pos": 20,
-                "p": 3,
+                "p": 5,
                 "gd": -6,
-                "pts": 0
+                "pts": 2
               }
             }
           ],
@@ -272,6 +274,8 @@
           "heldReason": null,
           "heldDays": 0,
           "lastFreshAsOf": "2026-09-27",
+          "through": null,
+          "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
@@ -315,12 +319,14 @@
           "kind": "results",
           "league": null,
           "title": "Manchester United: results",
-          "asOf": "2026-09-20",
+          "asOf": "2026-09-27",
           "fetchedAt": "2026-09-27T09:10:00.000Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-09-20",
+          "lastFreshAsOf": "2026-09-27",
+          "through": "2026-09-20",
+          "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
@@ -374,12 +380,14 @@
           "kind": "standings",
           "league": "nfl",
           "title": "NFL standings",
-          "asOf": "2026-09-24",
+          "asOf": "2026-09-27",
           "fetchedAt": "2026-09-27T09:10:00.000Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-09-24",
+          "lastFreshAsOf": "2026-09-27",
+          "through": "2026-09-24",
+          "throughLabel": null,
           "compactRows": 1,
           "columns": [
             {
@@ -756,6 +764,8 @@
           "heldReason": null,
           "heldDays": 0,
           "lastFreshAsOf": "2026-09-27",
+          "through": null,
+          "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
@@ -895,12 +905,14 @@
           "kind": "results",
           "league": "nfl",
           "title": "NFL: week 2 results",
-          "asOf": "2026-09-24",
+          "asOf": "2026-09-27",
           "fetchedAt": "2026-09-27T09:10:00.000Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-09-24",
+          "lastFreshAsOf": "2026-09-27",
+          "through": "2026-09-21",
+          "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
@@ -1090,6 +1102,8 @@
           "heldReason": null,
           "heldDays": 0,
           "lastFreshAsOf": "2026-09-27",
+          "through": null,
+          "throughLabel": null,
           "compactRows": null,
           "columns": [
             {
@@ -1139,12 +1153,14 @@
           "kind": "standings",
           "league": "wnba",
           "title": "WNBA records",
-          "asOf": "2026-09-02",
+          "asOf": "2026-09-27",
           "fetchedAt": "2026-09-27T09:10:00.000Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-09-02",
+          "lastFreshAsOf": "2026-09-27",
+          "through": "2026-09-02",
+          "throughLabel": null,
           "compactRows": 3,
           "columns": [
             {
@@ -1239,30 +1255,25 @@
           "kind": "results",
           "league": "wnba",
           "title": "WNBA: latest results",
-          "asOf": "2026-09-02",
+          "asOf": "2026-09-27",
           "fetchedAt": "2026-09-27T09:10:00.000Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-09-02",
+          "lastFreshAsOf": "2026-09-27",
+          "through": "2026-09-26",
+          "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
             {
-              "date": "2026-09-02",
-              "home": "Placeholder Liberty",
-              "away": "Example Sun",
+              "date": "2026-09-26",
+              "home": "Fixture Lynx",
+              "away": "Placeholder Liberty",
               "competition": "WNBA",
-              "homeScore": 75,
-              "awayScore": 77
-            },
-            {
-              "date": "2026-09-02",
-              "home": "Sample Aces",
-              "away": "Fixture Lynx",
-              "competition": "WNBA",
-              "homeScore": 60,
-              "awayScore": 71
+              "round": "Playoffs",
+              "homeScore": 88,
+              "awayScore": 80
             }
           ],
           "source": {

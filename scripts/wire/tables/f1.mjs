@@ -11,12 +11,15 @@ export function fromJolpica(drivers, constructors, next, today) {
   const dl = drivers?.MRData?.StandingsTable?.StandingsLists?.[0];
   const cl = constructors?.MRData?.StandingsTable?.StandingsLists?.[0];
   const race = next?.MRData?.RaceTable?.Races?.[0];
+  // Standings carry the round they follow but no date; asOf stays the fetch day and the label
+  // says which race the numbers reflect.
+  const after = (list) => (/^\d+$/.test(list?.round ?? "") ? `After round ${list.round}` : null);
   const dRows = (dl?.DriverStandings || []).map((d) => ({ name: `${d.Driver?.givenName ?? ""} ${d.Driver?.familyName ?? ""}`.trim(), short: d.Driver?.familyName, group: null, cells: { pos: +d.position || null, team: d.Constructors?.[0]?.name ?? "", pts: +d.points, wins: +d.wins } }));
   const cRows = (cl?.ConstructorStandings || []).map((c) => ({ name: c.Constructor?.name ?? "", group: null, cells: { pos: +c.position || null, pts: +c.points, wins: +c.wins } }));
   const blocks = [], failed = {};
-  if (dRows.length >= 20) blocks.push({ id: "f1-drivers", kind: "standings", league: "f1", title: "F1 drivers' standings", asOf: today, compactRows: 10, columns: [col("pos", "#"), col("name", "Driver", "start"), col("pts", "Pts")], rows: dRows, source: SOURCE, emptyText: null });
+  if (dRows.length >= 20) blocks.push({ id: "f1-drivers", kind: "standings", league: "f1", title: "F1 drivers' standings", asOf: today, throughLabel: after(dl), compactRows: 10, columns: [col("pos", "#"), col("name", "Driver", "start"), col("pts", "Pts")], rows: dRows, source: SOURCE, emptyText: null });
   else failed["f1-drivers"] = `driver-count ${dRows.length} < 20`;
-  if (cRows.length >= 10) blocks.push({ id: "f1-constructors", kind: "standings", league: "f1", title: "F1 constructors' standings", asOf: today, compactRows: 10, columns: [col("pos", "#"), col("name", "Team", "start"), col("pts", "Pts")], rows: cRows, source: SOURCE, emptyText: null });
+  if (cRows.length >= 10) blocks.push({ id: "f1-constructors", kind: "standings", league: "f1", title: "F1 constructors' standings", asOf: today, throughLabel: after(cl), compactRows: 10, columns: [col("pos", "#"), col("name", "Team", "start"), col("pts", "Pts")], rows: cRows, source: SOURCE, emptyText: null });
   else failed["f1-constructors"] = `constructor-count ${cRows.length} < 10`;
   if (race) blocks.push({ id: "f1-next", kind: "event", league: "f1", title: "F1: next race", asOf: today, rows: [{ name: race.raceName, venue: race.Circuit?.circuitName, city: [race.Circuit?.Location?.locality, race.Circuit?.Location?.country].filter(Boolean).join(", "), date: race.date, round: `Round ${race.round}` }], source: SOURCE, emptyText: null });
   return { blocks, failed };

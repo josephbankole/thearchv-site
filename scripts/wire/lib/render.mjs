@@ -72,7 +72,9 @@ export function renderWireStrip(wire, sportKey, today) {
 /* ---------- tables ---------- */
 
 function blockFooter(b) {
-  const when = b.status === "held" ? `Last updated ${fullDate(b.asOf)}` : `Updated ${fullDate(b.asOf)}`;
+  // asOf is the day the data was fetched; through/throughLabel say what it reflects.
+  const reflects = b.throughLabel || (b.through ? `Results to ${fullDate(b.through)}` : "");
+  const when = `${b.status === "held" ? "Last updated" : "Updated"} ${fullDate(b.asOf)}${reflects ? `. ${reflects}` : ""}`;
   const s = b.source;
   const src = s.url ? `<a href="${escAttr(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.attribution)}</a>` : esc(s.attribution);
   const lic = s.licence

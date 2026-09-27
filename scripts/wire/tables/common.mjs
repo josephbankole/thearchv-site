@@ -1,13 +1,17 @@
 /* common.mjs: shared pieces for the table fetchers. The HOLD rule lives here (design-final B8):
    a module that fails, or whose data fails its sanity checks, keeps the previous block with
    status "held"; held days count from the last FRESH value, never from a held copy, so a block
-   cannot ratchet; the renderers hide a block held more than 3 days. */
+   cannot ratchet; the renderers hide a block held more than 3 days.
+   Two dates, never mixed: `asOf` (and `lastFreshAsOf`) is the day the data was last fetched and
+   confirmed current, and drives holds and visibility; `through` is the newest result the data
+   includes, and `throughLabel` (optional) says what it reflects in words, e.g. "After round 15".
+   A table fetched today is current even when the last match was two weeks ago. */
 import { daysBetween } from "../lib/schema.mjs";
 
 export const WIKI_UA = "TheARCHV-Wire/1.0 (+https://thearchv.ca/standards/; partnerships@josephbankole.ca)";
 
 export function fresh(block, { today, fetchedAt }) {
-  return { ...block, asOf: block.asOf || today, fetchedAt, status: "fresh", heldReason: null, heldDays: 0, lastFreshAsOf: block.asOf || today };
+  return { ...block, asOf: today, through: block.through ?? null, fetchedAt, status: "fresh", heldReason: null, heldDays: 0, lastFreshAsOf: today };
 }
 
 export function hold(prevBlock, reason, today) {

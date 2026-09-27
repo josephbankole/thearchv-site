@@ -5,7 +5,9 @@
 
    /wire/ is noindex,follow with a self canonical and stays out of every sitemap, feed and the
    search index: the headlines are other publishers' work (design-final D4, FOUNDER). /tables/ is
-   indexable and enters the sitemap through build-content.mjs's EXTRA_URLS.
+   indexable and enters the sitemap through build-content.mjs's EXTRA_URLS, but only while it has a
+   block to show (hasVisibleTables): an empty /tables/ is noindex and out of the sitemap, and
+   neither page's description promises content it does not have.
    The web never says "today": a static page can outlive its day, so it prints the edition date. */
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -16,7 +18,7 @@ import {
 } from "./shared/page-shell.mjs";
 import { loadDaily } from "./wire/lib/content.mjs";
 import { currentEdition } from "./wire/lib/schema.mjs";
-import { renderWireItem, renderEditionLine, renderWireFooter, wireItemsFor, renderTableBlock, WIRE_SUBLINE } from "./wire/lib/render.mjs";
+import { renderWireItem, renderEditionLine, renderWireFooter, wireItemsFor, renderTableBlock, hasVisibleTables, WIRE_SUBLINE } from "./wire/lib/render.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -53,11 +55,13 @@ ${body}
 
 /* ---------- /wire/ ---------- */
 const WIRE_URL = `${SITE}/wire/`;
-const WIRE_DESC = "The Wire: one headline a day from each permitted newsroom, across football, the NFL, F1, tennis, golf and basketball, linked to the publisher.";
 const ed = currentEdition(wire, today);
+const WIRE_DESC = ed
+  ? "The Wire: one headline a day from each permitted newsroom, across football, the NFL, F1, tennis, golf and basketball, linked to the publisher."
+  : "The Wire from The ARCHV: headlines from permitted newsrooms, linked to the publisher. There is no current edition.";
 let wireBody;
 if (!ed) {
-  wireBody = `      <p class="wire__edition">No edition in the last seven days.</p>`;
+  wireBody = `      <p class="wire__edition">No current edition.</p>`;
 } else {
   let pos = 0;
   wireBody = SPORTS.map((sport) => {
@@ -89,7 +93,10 @@ ${wireBody}
 
 /* ---------- /tables/ ---------- */
 const TABLES_URL = `${SITE}/tables/`;
-const TABLES_DESC = "Tables and fixtures from The ARCHV: the Premier League, Manchester United, the NFL and more, updated once a day with every source credited.";
+const TABLES_SHOWN = hasVisibleTables(tables, today);
+const TABLES_DESC = TABLES_SHOWN
+  ? "Tables and fixtures from The ARCHV: the Premier League, Manchester United, the NFL and more, updated once a day with every source credited."
+  : "Tables and fixtures from The ARCHV. No tables are showing at the moment.";
 const sportsWithBlocks = SPORTS.map((sport) => {
   const blocks = (tables.sports[sport.key]?.blocks || []).map((b) => renderTableBlock(b, { today })).filter(Boolean);
   return blocks.length ? `      <section class="tables" id="${escAttr(sport.key)}" aria-labelledby="tables-${escAttr(sport.key)}">
@@ -101,12 +108,12 @@ const tablesHtml = page({
   title: "Tables and fixtures · The ARCHV",
   description: TABLES_DESC,
   url: TABLES_URL,
-  robots: ROBOTS_INDEXABLE,
+  robots: TABLES_SHOWN ? ROBOTS_INDEXABLE : ROBOTS_NOINDEX_FOLLOW,
   body: `    <article class="tables-page">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Tables</p>
       <h1>Tables and fixtures</h1>
       <p class="wire__subline">Updated once a day. Each block says when it was last updated and where the data comes from.</p>
-${sportsWithBlocks.length ? sportsWithBlocks.join("\n") : `      <p class="wire__edition">No tables to show yet.</p>`}
+${sportsWithBlocks.length ? sportsWithBlocks.join("\n") : `      <p class="wire__edition">No tables to show at the moment.</p>`}
     </article>`,
 });
 

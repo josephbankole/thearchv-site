@@ -1201,6 +1201,8 @@ export function pageStyles() {
     .wire__more { margin: .75rem 0 0; font-size: .9rem; }
     .wire__more a { color: var(--accent-ink); }
     .wire-sport { margin: 2rem 0 0; }
+    /* The sticky sport nav is about 3.3rem tall: an anchor (/wire/#nfl, /tables/#nfl) lands below it. */
+    .wire-sport, .tables[id], .tblock { scroll-margin-top: 4rem; }
     .wire-sport h2 { color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: 1.35rem; margin: 0 0 .5rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
     .wire-sport__empty { color: var(--ink-muted); margin: 0; }
     .tblock { margin: 1.5rem 0 0; }

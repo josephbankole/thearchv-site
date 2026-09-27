@@ -1,15 +1,16 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync, mkdtempSync, symlinkSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdtempSync, symlinkSync, rmSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { sanitiseWire, sanitiseTables, sanitiseItem, buildWireFeed, buildTablesFeed, currentEdition, WIRE_SCHEMA, TABLES_SCHEMA } from "../lib/schema.mjs";
+import { sanitiseWire, sanitiseTables, sanitiseItem, sanitiseBlock, buildWireFeed, buildTablesFeed, currentEdition, WIRE_SCHEMA, TABLES_SCHEMA } from "../lib/schema.mjs";
 import { checkNote } from "../lib/grounding.mjs";
 import { verify } from "../verify-wire.mjs";
 import { finalise } from "../finalise-wire.mjs";
-import { renderWireStrip, renderTableBlock } from "../lib/render.mjs";
+import { renderWireStrip, renderTableBlock, renderTablesStrip, renderWireItem, hasVisibleTables } from "../lib/render.mjs";
+import { wireLinkProblems } from "../../check-wire-links.mjs";
 
 const load = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url), "utf8"));
 // The frozen registry copy, never the live sources.json (see pick.test.mjs).
@@ -225,4 +226,158 @@ test("the Wire CLIs run when reached through a symlinked path", () => {
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+});
+
+/* ---------- render group: fail-soft dates, links, scores, a11y (PR #18 review) ---------- */
+
+test("a malformed or impossible row date is dropped by the sanitiser and never throws in the renderer (build-2, security-1)", () => {
+  const raw = load("./fixtures/daily/tables.json");
+  const week = raw.sports.nfl.blocks.find((b) => b.id === "nfl-week");
+  week.rows[0].date = "TBD";
+  week.rows[1].date = "2026-10-10T14:00Z";
+  const mu = raw.sports.football.blocks.find((b) => b.id === "mu-next");
+  mu.rows[0].date = "2026-02-31";
+  const t = sanitiseTables(raw, { quiet: true });
+  const rows = t.sports.nfl.blocks.find((b) => b.id === "nfl-week").rows;
+  assert.equal(rows.length, week.rows.length, "the row is kept, only its bad date goes");
+  assert.equal("date" in rows[0], false);
+  assert.equal("date" in rows[1], false);
+  assert.equal("date" in t.sports.football.blocks.find((b) => b.id === "mu-next").rows[0], false);
+  assert.doesNotThrow(() => renderTablesStrip(t, "nfl", "2026-09-27"));
+  assert.match(renderTablesStrip(t, "nfl", "2026-09-27"), /Buffalo Bills/);
+  // The renderer is defensive on its own: a block that skipped the sanitiser still renders.
+  const unsafe = { ...tables.sports.nfl.blocks.find((b) => b.id === "nfl-week"), rows: [{ date: "TBD", home: "A", away: "B" }] };
+  assert.doesNotThrow(() => renderTableBlock(unsafe, { today: "2026-09-27" }));
+  const ev = { id: "ev", kind: "event", title: "Events", asOf: "2026-09-27", rows: [{ name: "GP", starts: "2026-10-??", ends: "2026-10-12" }], source: { name: "x", attribution: "Data: x." } };
+  const evs = sanitiseBlock(ev, { quiet: true });
+  assert.deepEqual(evs.rows[0], { name: "GP", ends: "2026-10-12" });
+  assert.doesNotThrow(() => renderTableBlock({ ...evs, rows: ev.rows, status: "fresh", heldDays: 0, lastFreshAsOf: "2026-09-27" }, { today: "2026-09-27" }));
+});
+
+test("isDate rejects impossible calendar dates: an edition or block dated 31 February is dropped (security-6)", () => {
+  const raw = load("./fixtures/daily/wire.json");
+  raw.editions.push({ ...raw.editions[0], date: "2026-02-31" });
+  const s = sanitiseWire(raw, { quiet: true, sources: SOURCES });
+  assert.ok(!s.editions.some((e) => e.date === "2026-02-31"));
+  assert.equal(s.editions.length, wire.editions.length);
+  const b = load("./fixtures/daily/tables.json").sports.football.blocks[0];
+  assert.equal(sanitiseBlock({ ...b, asOf: "2026-02-31" }, { quiet: true }), null);
+  assert.ok(sanitiseBlock({ ...b, asOf: "2028-02-29" }, { quiet: true }), "a real leap day is kept");
+  const item = { ...load("./fixtures/daily/wire.json").editions[0].items[0], publishedDate: "2026-04-31" };
+  assert.equal(sanitiseItem(item, { quiet: true, sources: SOURCES }), null);
+});
+
+test("a betting-path Wire link is dropped by the sanitiser, and the build check tests the path the way the pick does (security-2)", () => {
+  const base = { ...wire.editions[0].items.find((i) => i.sourceId === "espn-nfl") };
+  const opts = { quiet: true, sources: SOURCES };
+  assert.equal(sanitiseItem({ ...base, url: "https://www.espn.com/espn/betting/story/_/id/7/x" }, opts), null);
+  assert.equal(sanitiseItem({ ...base, url: "https://www.espn.com/nfl/video/_/id/7" }, opts), null, "every excludePaths rule applies, not only /betting/");
+  // The pick tests the path only, so a query or fragment carrying /betting/ is not a betting page.
+  const q = "https://www.espn.com/nfl/story/_/id/12/x?ex=/betting/";
+  assert.ok(sanitiseItem({ ...base, url: q }, opts));
+  const tag = (href, src = "espn-nfl") => `<a href="${href}" target="_blank" rel="noopener noreferrer" data-wire-source="${src}" data-wire-sport="nfl" data-wire-pos="1">`;
+  assert.deepEqual(wireLinkProblems(tag(q), SOURCES), []);
+  assert.deepEqual(wireLinkProblems(tag("https://www.espn.com/nfl/story/_/id/13/x#/betting/"), SOURCES), []);
+  assert.equal(wireLinkProblems(tag("https://www.espn.com/espn/betting/story/_/id/7/x"), SOURCES).length, 1);
+  assert.equal(wireLinkProblems(tag("https://www.espn.com/nfl/fantasy/x"), SOURCES).length, 1);
+  assert.equal(wireLinkProblems(`<a href="https://www.espn.com/nfl/x" data-wire-source="espn-nfl">`, SOURCES).length, 2, "target and rel still enforced");
+  // Importing the check for its helper must not hide the CLI: run on a dist with no pages, it fails loudly.
+  const tmp = mkdtempSync(join(tmpdir(), "wire-dist-"));
+  try {
+    const run = spawnSync(process.execPath, [fileURLToPath(new URL("../../check-wire-links.mjs", import.meta.url)), tmp], { encoding: "utf8" });
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /\/wire\/: missing/);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test("a results row with one score or a non-finite score renders 'v', never 'undefined' or 'NaN' (security-7)", () => {
+  const b = structuredClone(tables.sports.nfl.blocks.find((x) => x.id === "nfl-results"));
+  const raw = { ...b, rows: [
+    { date: "2026-09-17", home: "A", away: "B", homeScore: 3 },
+    { date: "2026-09-17", home: "C", away: "D", homeScore: Number.NaN, awayScore: 2 },
+    { date: "2026-09-17", home: "E", away: "F", homeScore: 1, awayScore: Infinity },
+    { date: "2026-09-17", home: "G", away: "H", homeScore: 2, awayScore: 0 },
+  ] };
+  const s = sanitiseBlock(raw, { quiet: true });
+  assert.equal("homeScore" in s.rows[1], false, "NaN is not kept");
+  assert.equal("awayScore" in s.rows[2], false, "Infinity is not kept");
+  for (const blk of [s, { ...s, rows: raw.rows }]) {
+    const html = renderTableBlock(blk, { today: "2026-09-27" });
+    assert.ok(!/undefined|NaN|Infinity/.test(html), html);
+    assert.equal((html.match(/tblock__score/g) || []).length, 1);
+    assert.match(html, /tblock__score">2 to 0</);
+  }
+});
+
+test("the sport sections on /wire/ and /tables/ clear the sticky sport nav when reached by anchor (ux-2)", () => {
+  const shell = readFileSync(new URL("../../shared/page-shell.mjs", import.meta.url), "utf8");
+  const region = shell.slice(shell.indexOf("/* wire:start"), shell.indexOf("/* wire:end */"));
+  const rule = region.match(/([^{}]*)\{[^}]*scroll-margin-top:\s*[1-9][\d.]*rem[^}]*\}/);
+  assert.ok(rule, "a scroll-margin-top rule exists in the wire region");
+  for (const sel of [".wire-sport", ".tables", ".tblock"]) assert.ok(rule[1].includes(sel), sel);
+});
+
+test("with no current edition and no tables, /wire/ and /tables/ are noindex and promise nothing (ux-4)", () => {
+  const empty = { version: 1, updatedAt: null, sports: {} };
+  assert.equal(hasVisibleTables(sanitiseTables(empty), "2026-09-27"), false);
+  assert.equal(hasVisibleTables(tables, "2026-09-27"), true);
+  assert.equal(hasVisibleTables(tables, "2026-12-27"), false, "blocks too old to show do not count");
+  const tmp = mkdtempSync(join(tmpdir(), "wire-pages-"));
+  try {
+    const data = join(tmp, "data"), out = join(tmp, "out");
+    mkdirSync(data);
+    writeFileSync(join(data, "wire.json"), JSON.stringify({ version: 1, updatedAt: null, editions: [] }));
+    writeFileSync(join(data, "tables.json"), JSON.stringify(empty));
+    const script = fileURLToPath(new URL("../../build-daily-pages.mjs", import.meta.url));
+    const run = spawnSync(process.execPath, [script], { encoding: "utf8", env: { ...process.env, WIRE_DATA_DIR: data, WIRE_TODAY: "2026-09-27", CONTENT_OUT: out } });
+    assert.equal(run.status, 0, run.stderr);
+    const wireHtml = readFileSync(join(out, "wire", "index.html"), "utf8");
+    const tablesHtml = readFileSync(join(out, "tables", "index.html"), "utf8");
+    for (const html of [wireHtml, tablesHtml]) assert.match(html, /<meta name="robots" content="noindex,follow"/);
+    const desc = (html) => html.match(/<meta name="description" content="([^"]*)"/)[1];
+    assert.ok(!/Premier League|Manchester United|one headline a day from each/.test(desc(tablesHtml) + desc(wireHtml)), desc(tablesHtml) + " | " + desc(wireHtml));
+    assert.ok(!/in the last seven days/.test(wireHtml));
+    // With content, /tables/ is indexable again (the founder's ruling stands when there is something to index).
+    const fx = fileURLToPath(new URL("./fixtures/daily/", import.meta.url));
+    const full = spawnSync(process.execPath, [script], { encoding: "utf8", env: { ...process.env, WIRE_DATA_DIR: fx, WIRE_TODAY: "2026-09-27", CONTENT_OUT: out } });
+    assert.equal(full.status, 0, full.stderr);
+    assert.match(readFileSync(join(out, "tables", "index.html"), "utf8"), /<meta name="robots" content="index,follow/);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test("division and conference rows are row-group headers, one tbody per group (ux-6)", () => {
+  const nfl = tables.sports.nfl.blocks.find((b) => b.id === "nfl-standings");
+  const html = renderTableBlock(nfl, { today: "2026-09-27" });
+  assert.ok(!/colgroup/.test(html));
+  const groups = new Set(nfl.rows.map((r) => r.group)).size;
+  assert.equal((html.match(/<tbody>/g) || []).length, groups);
+  assert.equal((html.match(/<th scope="rowgroup" colspan="\d+">/g) || []).length, groups);
+  assert.match(html, /<tbody>\s*<tr class="tblock__group"><th scope="rowgroup"[^>]*>AFC East<\/th><\/tr>/);
+  // An ungrouped table keeps a single tbody and no group rows.
+  const pl = renderTableBlock(tables.sports.football.blocks.find((b) => b.id === "pl-table"), { today: "2026-09-27" });
+  assert.equal((pl.match(/<tbody>/g) || []).length, 1);
+  assert.ok(!/rowgroup/.test(pl));
+});
+
+test("every outbound link tells a screen reader it opens a new tab (ux-8)", () => {
+  const hint = /<span class="visually-hidden"> \(opens in a new tab\)<\/span><\/a>/;
+  assert.match(renderWireItem(wire.editions[0].items[0], 1), hint);
+  const html = renderTableBlock(tables.sports.nfl.blocks[0], { today: "2026-09-27" });
+  const links = html.match(/<a [^>]*target="_blank"[^>]*>.*?<\/a>/g) || [];
+  assert.ok(links.length >= 2);
+  for (const a of links) assert.match(a, hint);
+});
+
+test("a source whose attribution already credits The ARCHV is not told 'Adapted by The ARCHV' twice (ux-9)", () => {
+  const foot = (b) => renderTableBlock(b, { today: "2026-09-27" }).match(/<p class="tblock__foot">.*<\/p>/)[0];
+  for (const b of [tables.sports.football.blocks[0], tables.sports.nfl.blocks[0]]) {
+    assert.equal((foot(b).match(/The ARCHV/g) || []).length, 1, foot(b));
+    assert.ok(!/Adapted by/.test(foot(b)));
+  }
+  const wiki = { ...tables.sports.football.blocks[0], source: { name: "Wikipedia", attribution: "Source: Wikipedia", url: null, licence: "CC BY-SA 4.0", licenceUrl: null, adapted: true } };
+  assert.match(foot(wiki), /Source: Wikipedia Adapted by The ARCHV\. CC BY-SA 4\.0\./);
 });

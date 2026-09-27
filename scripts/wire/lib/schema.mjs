@@ -7,6 +7,7 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { linkAllowed } from "./canon.mjs";
+import { compileFilters } from "./pick.mjs";
 
 export const WIRE_SCHEMA = "archv-wire/1";
 export const TABLES_SCHEMA = "archv-tables/1";
@@ -19,7 +20,13 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 export const SOURCES = JSON.parse(readFileSync(join(HERE, "..", "sources.json"), "utf8"));
 const ATTRIBUTION_HOSTS = ["football-data.org", "github.com", "githubusercontent.com", "creativecommons.org", "wikipedia.org", "balldontlie.io", "jolpi.ca"];
 
-const isDate = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s + "T00:00:00Z"));
+// A real calendar date in YYYY-MM-DD form. The round trip rejects what Date.parse rolls over
+// (2026-02-31 would otherwise become 3 March).
+const isDate = (s) => {
+  if (typeof s !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const ms = Date.parse(s + "T00:00:00Z");
+  return !Number.isNaN(ms) && new Date(ms).toISOString().slice(0, 10) === s;
+};
 const isIso = (s) => typeof s === "string" && !Number.isNaN(Date.parse(s)) && /^\d{4}-\d{2}-\d{2}T/.test(s);
 const str = (s, max = 400) => typeof s === "string" && s.trim() !== "" && s.length <= max;
 const log = (quiet, msg) => { if (!quiet) console.warn(`[wire-schema] ${msg}`); };
@@ -43,6 +50,13 @@ export function sanitiseItem(it, { quiet = false, sources = SOURCES } = {}) {
   if (!str(it.source, 60)) why.push("source");
   if (!str(it.headline, 300)) why.push("headline");
   if (!linkAllowed(it.url, reg?.linkHosts || [])) why.push("url");
+  else if (reg) {
+    // The registry's excludePaths (defaults plus the source's own), tested against the path the
+    // way pick.mjs does. A betting or video page is dropped here, never left for the build to fail on.
+    const path = new URL(it.url).pathname.toLowerCase();
+    const bad = compileFilters(sources.defaults || {}, reg).paths.find((f) => f.re.test(path));
+    if (bad) why.push(`excluded-path:${bad.p}`);
+  }
   if (!(it.publishedAt == null || isIso(it.publishedAt))) why.push("publishedAt");
   if (!(it.publishedDate == null || isDate(it.publishedDate))) why.push("publishedDate");
   if (why.length) return log(quiet, `item ${it.id ?? "?"} dropped (${why.join(", ")})`), null;
@@ -100,7 +114,11 @@ export function sanitiseBlock(b, { quiet = false } = {}) {
     for (const k of ["name", "short", "group", "date", "kickoff", "home", "away", "competition", "round", "venue", "city", "winner", "ends", "starts", "tour", "category", "surface"]) {
       if (typeof r[k] === "string" && r[k].length <= 120) row[k] = r[k];
     }
-    for (const k of ["homeScore", "awayScore"]) if (typeof r[k] === "number") row[k] = r[k];
+    // A row date the renderer cannot read ("TBD", a datetime, 31 February) is dropped, not the row.
+    for (const k of ["date", "starts", "ends"]) {
+      if (k in row && !isDate(row[k])) { log(quiet, `block ${b.id}: row ${k} ${JSON.stringify(row[k])} dropped`); delete row[k]; }
+    }
+    for (const k of ["homeScore", "awayScore"]) if (Number.isFinite(r[k])) row[k] = r[k];
     if (r.highlight === true) row.highlight = true;
     if (r.cells && typeof r.cells === "object") {
       row.cells = {};

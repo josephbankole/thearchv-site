@@ -5,15 +5,22 @@
    is the feed's own URL, escaped for the attribute and otherwise untouched. A renderer with
    nothing to show returns '' so no empty section ever ships. */
 import { esc, escAttr } from "../../shared/page-shell.mjs";
-import { SOURCES, currentEdition, blockVisible, daysBetween } from "./schema.mjs";
+import { SOURCES, SPORT_KEYS, currentEdition, blockVisible, daysBetween } from "./schema.mjs";
 
-const fmt = (iso, opts) => new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", ...opts }).format(new Date(iso + "T00:00:00Z"));
+// '' for a date it cannot read: content never throws the build (the sanitiser drops bad dates first).
+const fmt = (iso, opts) => {
+  const d = new Date(iso + "T00:00:00Z");
+  return Number.isNaN(d.getTime()) ? "" : new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", ...opts }).format(d);
+};
 export const editionLabel = (date) => fmt(date, { weekday: "long", day: "numeric", month: "long" });
 const dayMonth = (date) => fmt(date, { day: "numeric", month: "short" });
 const fullDate = (date) => fmt(date, { day: "numeric", month: "long", year: "numeric" });
 
 export const WIRE_SUBLINE = "Headlines from other newsrooms, picked once a day. One story per source, linked to the publisher.";
 export const LEAGUE_LABEL = { nba: "NBA", wnba: "WNBA" };
+// Inside every target="_blank" link, for screen readers (WCAG G201); the .visually-hidden rule
+// keeps it off the page.
+const NEW_TAB = `<span class="visually-hidden"> (opens in a new tab)</span>`;
 
 function itemTime(it) {
   if (!it.publishedDate) return "";
@@ -32,7 +39,7 @@ export function renderWireItem(it, pos) {
     : "";
   return `<li class="wire-item">
         <p class="wire-item__meta"><span class="wire-item__source">${esc(it.source)}</span>${league}${itemTime(it)}</p>
-        <h3 class="wire-item__headline"><a href="${escAttr(it.url)}" target="_blank" rel="noopener noreferrer" data-wire-source="${escAttr(it.sourceId)}" data-wire-sport="${escAttr(it.sport)}" data-wire-pos="${pos}">${esc(it.headline)}</a></h3>${note}
+        <h3 class="wire-item__headline"><a href="${escAttr(it.url)}" target="_blank" rel="noopener noreferrer" data-wire-source="${escAttr(it.sourceId)}" data-wire-sport="${escAttr(it.sport)}" data-wire-pos="${pos}">${esc(it.headline)}${NEW_TAB}</a></h3>${note}
       </li>`;
 }
 
@@ -76,9 +83,12 @@ function blockFooter(b) {
   const reflects = b.throughLabel || (b.through ? `Results to ${fullDate(b.through)}` : "");
   const when = `${b.status === "held" ? "Last updated" : "Updated"} ${fullDate(b.asOf)}${reflects ? `. ${reflects}` : ""}`;
   const s = b.source;
-  const src = s.url ? `<a href="${escAttr(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.attribution)}</a>` : esc(s.attribution);
+  const src = s.url ? `<a href="${escAttr(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.attribution)}${NEW_TAB}</a>` : esc(s.attribution);
+  // "Adapted by The ARCHV." only when the attribution does not already credit The ARCHV
+  // ("Table computed by The ARCHV."): the change is indicated once (design-final 116-119).
+  const adapted = s.adapted && !/\bThe ARCHV\b/.test(s.attribution);
   const lic = s.licence
-    ? ` ${s.adapted ? "Adapted by The ARCHV. " : ""}${s.licenceUrl ? `<a href="${escAttr(s.licenceUrl)}" target="_blank" rel="noopener noreferrer">${esc(s.licence)}</a>` : esc(s.licence)}.`
+    ? ` ${adapted ? "Adapted by The ARCHV. " : ""}${s.licenceUrl ? `<a href="${escAttr(s.licenceUrl)}" target="_blank" rel="noopener noreferrer">${esc(s.licence)}${NEW_TAB}</a>` : esc(s.licence)}.`
     : "";
   return `<p class="tblock__foot"><span class="tblock__when">${esc(when)}.</span> ${src}${lic}</p>`;
 }
@@ -99,12 +109,14 @@ function renderTableRows(b, compact) {
     }
   }
   const head = b.columns.map((c) => `<th scope="col"${c.align === "end" ? ' class="num"' : ""}>${esc(c.label)}</th>`).join("");
+  // Grouped tables get one <tbody> per group, headed by a rowgroup <th>, so a screen reader ties
+  // each division or conference to its own rows (a colgroup scope has no column group to apply to).
   let lastGroup = null;
-  const body = rows.map((r) => {
+  const body = rows.map((r, i) => {
     let groupRow = "";
     if (grouped && r.group !== lastGroup) {
       lastGroup = r.group;
-      groupRow = `<tr class="tblock__group"><th scope="colgroup" colspan="${b.columns.length}">${esc(r.group || "")}</th></tr>\n          `;
+      groupRow = `${i ? "</tbody>\n        <tbody>\n          " : ""}<tr class="tblock__group"><th scope="rowgroup" colspan="${b.columns.length}">${esc(r.group || "")}</th></tr>\n          `;
     }
     const tds = b.columns.map((c) => {
       const v = c.key === "team" || c.key === "name" ? (compact && r.short ? r.short : r.name) : r.cells?.[c.key];
@@ -123,7 +135,7 @@ function renderTableRows(b, compact) {
 
 function renderMatchRows(b) {
   const items = b.rows.map((r) => {
-    const score = b.kind === "results" && typeof r.homeScore === "number" ? `<span class="tblock__score">${r.homeScore} to ${r.awayScore}</span>` : `<span class="tblock__v">v</span>`;
+    const score = b.kind === "results" && Number.isFinite(r.homeScore) && Number.isFinite(r.awayScore) ? `<span class="tblock__score">${r.homeScore} to ${r.awayScore}</span>` : `<span class="tblock__v">v</span>`;
     const meta = [shortWhen(r), r.competition, r.round].filter(Boolean).map(esc).join(" &middot; ");
     return `<li class="tblock__match"><span class="tblock__meta">${meta}</span><span class="tblock__teams"><span>${esc(r.home || "")}</span> ${score} <span>${esc(r.away || "")}</span></span></li>`;
   });
@@ -159,6 +171,11 @@ export function renderTableBlock(b, { compact = false, today } = {}) {
       ${blockFooter(b)}
     </section>`;
 }
+
+/* True when at least one sport has a block that renders: /tables/ is indexable and in the sitemap
+   only then (build-daily-pages.mjs, build-content.mjs). */
+export const hasVisibleTables = (tables, today) =>
+  SPORT_KEYS.some((k) => (tables.sports[k]?.blocks || []).some((b) => renderTableBlock(b, { today }) !== ""));
 
 /* A sport's compact table blocks for its hub. '' when none are visible. */
 export function renderTablesStrip(tables, sportKey, today) {

@@ -15,6 +15,8 @@ import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
 import { listPairs } from "./shared/football-data.mjs";
+import { loadDaily } from "./wire/lib/content.mjs";
+import { hasVisibleTables } from "./wire/lib/render.mjs";
 
 // The adapter selects a provider from ARCHV_FOOTBALL_PROVIDER at load and can throw (unknown
 // provider, cache miss with fetching off, head-kit guard) — four scripts before build-duel-pages
@@ -27,6 +29,13 @@ async function listPairsForSitemap() {
     err.message = `football data adapter failed while deriving duel sitemap rows in build-content.mjs (check ARCHV_FOOTBALL_PROVIDER / ARCHV_FOOTBALL_ALLOW_FETCH — an exported provider env var reaches this step too): ${err.message}`;
     throw err;
   }
+}
+
+function tablesInSitemap() {
+  const { tables, today } = loadDaily();
+  const shown = hasVisibleTables(tables, today);
+  if (!shown) console.log("[build-content] /tables/ has no block to show: left out of the sitemap");
+  return shown;
 }
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -356,9 +365,10 @@ const EXTRA_URLS = [
   ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, changefreq: "monthly", priority: "0.5" })),
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
   // Tables and fixtures (build-daily-pages.mjs, the Wire build, 2026-09-26): a living page updated
-  // in place once a day. /wire/ is deliberately NOT here: it is noindex (other publishers'
-  // headlines) and must stay out of every sitemap.
-  { loc: "/tables/", changefreq: "daily", priority: "0.5" },
+  // in place once a day. Listed only while it has a block to show; build-daily-pages.mjs makes an
+  // empty /tables/ noindex from the same test. /wire/ is deliberately NOT here: it is noindex
+  // (other publishers' headlines) and must stay out of every sitemap.
+  ...(tablesInSitemap() ? [{ loc: "/tables/", changefreq: "daily", priority: "0.5" }] : []),
   // The author page (build-author-page.mjs, 2026-08-04). Every article page's byline and its
   // NewsArticle author.url resolve here, so it has to be crawlable in its own right rather than
   // only reachable from a byline. Listed at this one assembly point like /duel/ and /guess/.

@@ -33,7 +33,7 @@ export function addSeen(seen, it) {
   if (t) seen.title.add(t);
 }
 
-const isSeen = (seen, c) => (c.guidKey && seen.guid.has(c.guidKey)) || (c.urlKey && seen.url.has(c.urlKey)) || seen.title.has(c.titleKey);
+export const isSeen = (seen, c) => (c.guidKey && seen.guid.has(c.guidKey)) || (c.urlKey && seen.url.has(c.urlKey)) || seen.title.has(c.titleKey);
 
 /* items: parsed feed items. Returns { pick, alternates, rejected, reason }. */
 export function pickTop(items, source, { defaults, seen, nowMs, maxAgeHours }) {

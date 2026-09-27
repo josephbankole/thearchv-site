@@ -184,7 +184,7 @@
     {
       "sourceId": "espn-nfl",
       "headline": "Week 4 NFL picks: expert predictions for every game",
-      "reason": "excluded:\\bpicks?\\b"
+      "reason": "excluded:\\b(expert|experts'?|staff|best|our|straight-up|ats|survivor|pool|confidence|upset|lock|prop|week \\d+|nfl|nba|wnba|cfb|college football|mlb|nhl|ufc|golf|tennis|f1|mls|epl|premier league) picks?\\b"
     },
     {
       "sourceId": "espn-f1",
@@ -194,7 +194,7 @@
     {
       "sourceId": "espn-golf",
       "headline": "Expert picks for the Placeholder Championship",
-      "reason": "excluded:\\bpicks?\\b"
+      "reason": "excluded:\\b(expert|experts'?|staff|best|our|straight-up|ats|survivor|pool|confidence|upset|lock|prop|week \\d+|nfl|nba|wnba|cfb|college football|mlb|nhl|ufc|golf|tennis|f1|mls|epl|premier league) picks?\\b"
     },
     {
       "sourceId": "espn-wnba",

@@ -11,8 +11,8 @@
    Exit 0: every enabled non-sporadic source picked. 3: partial. 1: nothing picked. */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
-import { parseArgs } from "./lib/args.mjs";
+import { fileURLToPath } from "node:url";
+import { parseArgs, isMain } from "./lib/args.mjs";
 import { fetchText } from "./lib/http.mjs";
 import { parseFeed } from "./lib/feed-parse.mjs";
 import { pickTop, seenFromEditions, addSeen } from "./lib/pick.mjs";
@@ -39,7 +39,7 @@ export async function fetchWire({ date, nowMs, history, offline, sources = SOURC
   return { version: 1, date, fetchedAt, candidates, missing, rejected };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isMain(import.meta.url)) {
   const args = parseArgs();
   const nowMs = args.now ? Date.parse(args.now) : Date.now();
   const date = args.date || dateInZone(nowMs, SOURCES.editionTimeZone);

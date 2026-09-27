@@ -17,9 +17,6 @@ export const BLOCK_MAX_AGE_DAYS = 14;
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SOURCES = JSON.parse(readFileSync(join(HERE, "..", "sources.json"), "utf8"));
-// Every host any registered source may link to. A disabled source's host is still a legal link
-// in an old edition; an unregistered host never is.
-const LINK_HOSTS = [...new Set(SOURCES.sources.flatMap((s) => s.linkHosts || []))];
 const ATTRIBUTION_HOSTS = ["football-data.org", "github.com", "githubusercontent.com", "creativecommons.org", "wikipedia.org", "balldontlie.io", "jolpi.ca"];
 
 const isDate = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s + "T00:00:00Z"));
@@ -31,22 +28,27 @@ export function daysBetween(a, b) {
   return Math.round((Date.parse(b + "T00:00:00Z") - Date.parse(a + "T00:00:00Z")) / 86400000);
 }
 
-export function sanitiseItem(it, { quiet = false } = {}) {
+/* An item is bound to its source in the registry: the sourceId must name an ENABLED source, the
+   url must be on that source's own linkHosts, and the label shown is the registry's name, never
+   the file's. A source switched off (terms changed, or never cleared) takes its items off the site. */
+export function sanitiseItem(it, { quiet = false, sources = SOURCES } = {}) {
   const why = [];
   if (!it || typeof it !== "object") return log(quiet, "item is not an object, dropped"), null;
+  const reg = sources.sources.find((s) => s.id === it.sourceId);
   if (!str(it.id, 120)) why.push("id");
   if (!SPORT_KEYS.includes(it.sport)) why.push("sport");
   if (!(it.league == null || /^[a-z0-9-]{1,20}$/.test(it.league))) why.push("league");
-  if (!str(it.sourceId, 60)) why.push("sourceId");
+  if (!str(it.sourceId, 60) || !reg) why.push("sourceId");
+  else if (!reg.enabled) why.push("source-disabled");
   if (!str(it.source, 60)) why.push("source");
   if (!str(it.headline, 300)) why.push("headline");
-  if (!linkAllowed(it.url, LINK_HOSTS)) why.push("url");
+  if (!linkAllowed(it.url, reg?.linkHosts || [])) why.push("url");
   if (!(it.publishedAt == null || isIso(it.publishedAt))) why.push("publishedAt");
   if (!(it.publishedDate == null || isDate(it.publishedDate))) why.push("publishedDate");
   if (why.length) return log(quiet, `item ${it.id ?? "?"} dropped (${why.join(", ")})`), null;
   const note = typeof it.note === "string" && it.note.trim() && it.note.length <= 200 ? it.note.trim() : null;
   return {
-    id: it.id, sport: it.sport, league: it.league ?? null, sourceId: it.sourceId, source: it.source,
+    id: it.id, sport: it.sport, league: it.league ?? null, sourceId: it.sourceId, source: reg.name,
     headline: it.headline, url: it.url, publishedAt: it.publishedAt ?? null, publishedDate: it.publishedDate ?? null,
     timePrecision: it.timePrecision === "exact" ? "exact" : "date",
     firstSeenAt: isIso(it.firstSeenAt) ? it.firstSeenAt : null,
@@ -131,10 +133,14 @@ export function sanitiseTables(raw, opts = {}) {
   return out;
 }
 
-// The one edition readers may see: the newest, and only if it is at most 7 days old.
+// The newest edition that has any items. An empty edition (every pick vetoed) never hides the
+// last real one.
+export const latestEdition = (wire) => wire.editions.find((e) => e.items.length) || null;
+
+// The one edition readers may see: the newest with items, and only if it is at most 7 days old.
 export function currentEdition(wire, today) {
-  const ed = wire.editions[0];
-  if (!ed || !ed.items.length) return null;
+  const ed = latestEdition(wire);
+  if (!ed) return null;
   if (daysBetween(ed.date, today) > EDITION_MAX_AGE_DAYS) return null;
   return ed;
 }
@@ -144,18 +150,18 @@ export function currentEdition(wire, today) {
 // through an international break or an off week.
 export const blockVisible = (b, today) => b.heldDays <= 3 && daysBetween(b.lastFreshAsOf || b.asOf, today) <= BLOCK_MAX_AGE_DAYS;
 
-export function buildWireFeed(wire, { generatedAt }) {
-  const ed = wire.editions[0] || null;
+export function buildWireFeed(wire, { generatedAt, sources = SOURCES }) {
+  const ed = latestEdition(wire);
   return {
     schema: WIRE_SCHEMA,
     generatedAt,
-    edition: ed ? { date: ed.date, status: ed.status, timeZone: SOURCES.editionTimeZone } : null,
+    edition: ed ? { date: ed.date, status: ed.status, timeZone: sources.editionTimeZone } : null,
     items: ed ? ed.items.map((i) => ({
       id: i.id, sport: i.sport, league: i.league, source: { id: i.sourceId, name: i.source },
       headline: i.headline, url: i.url, publishedAt: i.publishedAt, publishedDate: i.publishedDate,
       timePrecision: i.timePrecision, note: i.note,
     })) : [],
-    footer: SOURCES.footer,
+    footer: sources.footer,
   };
 }
 

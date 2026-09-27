@@ -25,8 +25,8 @@ export const MODULES = { football, nfl, f1, basketball };
 export async function fetchTables({ prev, only, offline, nowMs, env, pause }) {
   const today = dateInZone(nowMs, SOURCES.editionTimeZone);
   const fetchedAt = new Date(nowMs).toISOString();
-  const get = async (url, { headers = {}, offlineName, text = false } = {}) => {
-    const r = await fetchText(url, { userAgent: SOURCES.userAgent, headers, offline, offlineName });
+  const get = async (url, { headers = {}, offlineName, text = false, timeoutMs } = {}) => {
+    const r = await fetchText(url, { userAgent: SOURCES.userAgent, headers, offline, offlineName, ...(timeoutMs ? { timeoutMs } : {}) });
     if (!r.ok || text) return r;
     try { return { ...r, json: JSON.parse(r.body) }; } catch { return { ok: false, status: "bad-json" }; }
   };

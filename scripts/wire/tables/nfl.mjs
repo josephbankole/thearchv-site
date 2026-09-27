@@ -68,7 +68,9 @@ export function compute(csvText, today) {
 }
 
 export async function run({ get, today }) {
-  const r = await get(URL_CSV, { offlineName: "nflverse-games.csv", text: true });
+  // The schedules CSV is about 2 MB on GitHub's release-asset host, which took 42 s from the
+  // desk's Mac on 2026-09-27: the shared 15 s timeout failed every NFL block that morning.
+  const r = await get(URL_CSV, { offlineName: "nflverse-games.csv", text: true, timeoutMs: 120000 });
   const ids = ["nfl-standings", "nfl-week", "nfl-results"];
   if (!r.ok) return { blocks: [], failed: Object.fromEntries(ids.map((i) => [i, `fetch-failed:${r.status}`])) };
   const c = compute(r.body, today);

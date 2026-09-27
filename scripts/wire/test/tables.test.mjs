@@ -198,3 +198,10 @@ test("ux-1: NFL blocks are dated by the fetch; a week's results run to that week
   assert.equal(results.through, results.rows.map((g) => g.date).sort().pop());
   assert.ok(results.through <= standings.through);
 });
+
+test("the NFL schedules download asks for a long timeout (the 2 MB CSV outlived the 15 s default)", async () => {
+  const seen = [];
+  const get = async (url, opts) => { seen.push(opts); return { ok: false, status: "network" }; };
+  await nfl.run({ get, today: "2026-09-27" });
+  assert.ok(seen.length && seen[0].timeoutMs >= 60000, JSON.stringify(seen[0]));
+});

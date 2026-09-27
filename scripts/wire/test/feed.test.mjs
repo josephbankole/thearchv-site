@@ -97,6 +97,11 @@ test("a note frames and never asserts: the grounding hard fails", () => {
   assert.ok(bad("ESPN reports it, with 3 teams involved in a trade that is still to be finished.").some((e) => e.startsWith("number-not-in-item")));
   assert.ok(bad("ESPN reports the guard will not move until the Hornets clear room for him.").some((e) => e.startsWith("negation-not-in-item")));
   assert.ok(bad("Short.").includes("length"));
+  // The attribution forms the rule asks for pass as sentence openers too, and "per" needs the source.
+  assert.ok(checkNote("According to ESPN, the guard is heading to the Hornets on the word of sources.", item).ok);
+  assert.ok(checkNote("Per ESPN, the guard is heading to the Hornets on the word of sources.", item).ok);
+  assert.ok(bad("Per the sources, the guard is heading to the Hornets and that is the story.").includes("hedged-item-needs-attribution"));
+  assert.ok(bad("According to Shams, the guard is heading to the Hornets on the word of sources.").some((e) => e.startsWith("name-not-in-item")));
 });
 
 test("finalise drops a failing note but keeps its item, and a veto takes the first alternate", () => {

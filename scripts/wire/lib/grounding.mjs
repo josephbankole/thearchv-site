@@ -25,6 +25,8 @@ const SENTENCE_START = new Set([
   "whether", "what", "who", "which", "how", "both", "either", "neither", "each", "every", "all", "any", "some",
   "much", "more", "most", "one", "next", "another", "and", "but", "so", "yet", "there", "here", "still", "now",
   "then", "also", "only", "even", "just", "watch", "expect", "keep", "look", "note",
+  // The attribution openers the hedged-item rule asks for ("According to ESPN", "Per ESPN").
+  "according", "per",
 ]);
 // A period after one of these, or after single letters (U.S., A.J.), does not end a sentence.
 const ABBREV = /^(?:\p{L}\.)+$|^(?:st|mr|mrs|ms|dr|jr|sr|vs|mt|ft|gen|lt|col|sgt|capt|prof|rev|inc|ltd|co|corp|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\.$/iu;
@@ -73,7 +75,9 @@ export function checkNote(note, { headline = "", summary = "", sourceName = "" }
     if (grounded(w) || w.toLowerCase() === sourceName.toLowerCase()) return;
     errors.push(`name-not-in-item:${w}`);
   });
-  if (HEDGES.test(src) && !(ATTRIBUTION.test(nn) && (!sourceName || nn.toLowerCase().includes(sourceName.toLowerCase())))) errors.push("hedged-item-needs-attribution");
+  // "per ESPN" attributes as well as "ESPN reports" (design-final B6 G4); a bare "per" does not.
+  const perSource = sourceName && new RegExp(`\\bper ${sourceName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(nn);
+  if (HEDGES.test(src) && !(perSource || (ATTRIBUTION.test(nn) && (!sourceName || nn.toLowerCase().includes(sourceName.toLowerCase()))))) errors.push("hedged-item-needs-attribution");
   const srcWords = new Set(words(src));
   const noteWords = words(nn);
   for (const v of COMPLETION) if (noteWords.includes(v) && !srcWords.has(v)) errors.push(`completion-verb-not-in-item:${v}`);

@@ -142,6 +142,10 @@ const targets = [
   // exactly the claim worth checking, because the day someone inlines the search client to save a
   // request, this is what fails.
   ["search: /search/", join(DIST, "search", "index.html")],
+  // The Wire and the tables (build-daily-pages.mjs, 2026-09-26): shared masthead + PostHog inline
+  // scripts and no per-page script, so both hashes must be in each page's own CSP.
+  ["wire: /wire/", join(DIST, "wire", "index.html")],
+  ["tables: /tables/", join(DIST, "tables", "index.html")],
 ];
 
 // Every long-read page. Slugs are derived from the essay titles (src/data/readSlug.ts), so this

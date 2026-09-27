@@ -25,3 +25,6 @@ supabase/.branches/
 CLAUDE-SECURITY-*/
 .claude/worktrees/
 .heads-cache/
+
+# Wire desk run directory (candidates files; never committed, design-final B5)
+.wire-run/

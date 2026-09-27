@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "userAgent": "TheARCHV-Wire/1.0 (+https://thearchv.ca/standards/; partnerships@josephbankole.ca)",
+  "editionTimeZone": "America/Toronto",
+  "footer": "Headlines appear exactly as each publisher wrote them and link to the publisher's own site, which has its own ads and privacy policy. ESPN headlines are provided by ESPN. The notes are The ARCHV's own.",
+  "defaults": {
+    "maxAgeHours": 36,
+    "exclude": [
+      "\\bodds\\b",
+      "\\b(expert|experts'?|staff|best|our|straight-up|ats|survivor(?: pool)?|office pool|confidence|prop|week \\d+) picks?\\b",
+      "\\bpicks?:", "\\bpicks? (against|vs\\.?) the spread\\b", "\\bpicks? and predictions\\b", "\\bpick'?em\\b",
+      "\\bbest bets?\\b", "\\bbets?\\b", "\\bbetting\\b", "\\bparlays?\\b",
+      "\\bpredictions?\\b", "\\bprops\\b", "\\bsportsbook\\b", "\\bfavou?rites\\b", "\\bfavou?rite to win\\b",
+      "\\blongshots?\\b", "\\bodds-on\\b", "\\b(opening|closing|betting|vegas|odds|spread|money|week \\d+) ?lines?\\b",
+      "how to watch", "\\blive:", "follow live", "live updates", "live blog", "as it happened",
+      "\\bstart time\\b", "\\bstream(ing)?\\b"
+    ],
+    "excludePaths": ["/betting/", "/fantasy/", "/chalk/", "/video/", "/live(/|$)", "/report/_/gameid/"]
+  },
+  "sources": [
+    {
+      "id": "espn-soccer", "enabled": true, "sport": "football", "league": null, "name": "ESPN",
+      "feedUrl": "https://www.espn.com/espn/rss/soccer/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "America/New_York", "timePrecision": "date",
+      "prefer": ["Manchester United", "Man United", "Man Utd"], "exclude": [], "linkHosts": ["espn.com"],
+      "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "If you choose to display an ESPN RSS feed on a website or app",
+        "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
+    },
+    {
+      "id": "espn-nfl", "enabled": true, "sport": "nfl", "league": null, "name": "ESPN",
+      "feedUrl": "https://www.espn.com/espn/rss/nfl/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "America/New_York", "timePrecision": "date", "prefer": [], "exclude": [], "linkHosts": ["espn.com"],
+      "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "If you choose to display an ESPN RSS feed on a website or app",
+        "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
+    },
+    {
+      "id": "espn-f1", "enabled": true, "sport": "f1", "league": null, "name": "ESPN",
+      "feedUrl": "https://www.espn.com/espn/rss/f1/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "America/New_York", "timePrecision": "date", "prefer": [], "exclude": [], "linkHosts": ["espn.com"],
+      "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "If you choose to display an ESPN RSS feed on a website or app",
+        "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
+    },
+    {
+      "id": "espn-tennis", "enabled": true, "sport": "tennis", "league": null, "name": "ESPN",
+      "feedUrl": "https://www.espn.com/espn/rss/tennis/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "America/New_York", "timePrecision": "date", "prefer": [], "exclude": [], "linkHosts": ["espn.com"],
+      "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "If you choose to display an ESPN RSS feed on a website or app",
+        "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
+    },
+    {
+      "id": "espn-golf", "enabled": true, "sport": "golf", "league": null, "name": "ESPN",
+      "feedUrl": "https://www.espn.com/espn/rss/golf/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "America/New_York", "timePrecision": "date", "prefer": [], "exclude": [], "linkHosts": ["espn.com"],
+      "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "If you choose to display an ESPN RSS feed on a website or app",
+        "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
+    },
+    {
+      "id": "espn-nba", "enabled": true, "sport": "basketball", "league": "nba", "name": "ESPN",
+      "feedUrl": "https://www.espn.com/espn/rss/nba/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "America/New_York", "timePrecision": "date", "prefer": [], "exclude": [], "linkHosts": ["espn.com"],
+      "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "If you choose to display an ESPN RSS feed on a website or app",
+        "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
+    },
+    {
+      "id": "espn-wnba", "enabled": true, "sport": "basketball", "league": "wnba", "name": "ESPN",
+      "feedUrl": "https://www.espn.com/espn/rss/wnba/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "America/New_York", "timePrecision": "date", "prefer": [], "exclude": [], "linkHosts": ["espn.com"],
+      "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "If you choose to display an ESPN RSS feed on a website or app",
+        "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
+    },
+    {
+      "id": "the-conversation-epl", "enabled": false,
+      "disabledReason": "Terms page governs full republication and the UK page asks a fee for commercial use. Enable only after uk-republish@theconversation.com confirms headline-and-link display, or the founder accepts the risk in writing (design-final A1).",
+      "sport": "football", "league": null, "name": "The Conversation",
+      "feedUrl": "https://theconversation.com/topics/english-premier-league-11809/articles.atom", "format": "atom", "order": "chronological", "sporadic": true,
+      "timeZoneHint": "UTC", "timePrecision": "exact", "prefer": [], "exclude": [], "linkHosts": ["theconversation.com"],
+      "terms": { "url": "https://theconversation.com/us/republishing-guidelines", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "Commercial, non-journalism usage: license fees may apply",
+        "conditions": ["credit The Conversation", "backlink to the article", "headline and link only, never the body"] }
+    },
+    {
+      "id": "yahoo-nfl", "enabled": false,
+      "disabledReason": "Held for a founder decision: Yahoo terms bar commercial reuse unless expressly stated, and most items are syndicated from publishers with non-commercial terms (design-final A2).",
+      "sport": "nfl", "league": null, "name": "Yahoo Sports",
+      "feedUrl": "https://sports.yahoo.com/nfl/rss/", "format": "rss", "order": "editorial", "sporadic": false,
+      "timeZoneHint": "UTC", "timePrecision": "exact", "prefer": [], "exclude": [], "linkHosts": ["yahoo.com"],
+      "terms": { "url": "https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html", "checked": "2026-09-26", "snapshotSha256": null,
+        "quote": "only permitted to display the content that is provided in the feed, without modification",
+        "conditions": ["only items whose <source> is Yahoo Sports", "no modification", "no advertising"] }
+    }
+  ]
+}

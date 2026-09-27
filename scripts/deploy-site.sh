@@ -43,7 +43,8 @@ git() { command git -c maintenance.auto=false "$@"; }
 
 DATA_FILES="src/data/transferDays.ts src/data/worldCupDays.ts src/data/leaguesDays.ts \
 src/data/nflDays.ts src/data/f1Days.ts src/data/tennisDays.ts src/data/golfDays.ts \
-src/data/basketballDays.ts src/data/longReads.ts"
+src/data/basketballDays.ts src/data/longReads.ts \
+scripts/data/daily/wire.json scripts/data/daily/tables.json"
 
 # Wait for the index lock, never delete it. The old line removed .git/index.lock on sight with no
 # age check and no process check, which is not a fix for a race: if something legitimately holds

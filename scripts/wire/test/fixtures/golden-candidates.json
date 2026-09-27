@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "date": "2026-09-27",
+  "fetchedAt": "2026-09-27T09:00:00.000Z",
+  "candidates": [
+    {
+      "id": "espn-soccer:f02ff836625d",
+      "sourceId": "espn-soccer",
+      "sourceName": "ESPN",
+      "sport": "football",
+      "league": null,
+      "headline": "Manchester United's Placeholder Keeper out for a month, sources say",
+      "url": "https://www.espn.com/soccer/story/_/id/90000004/man-united-keeper",
+      "canonicalUrl": "https://espn.com/soccer/story/_/id/90000004/man-united-keeper",
+      "guidKey": "f02ff836625d",
+      "urlKey": "9347c972ec4e",
+      "titleKey": "58d853f5b4a3",
+      "publishedAt": "2026-09-26T23:30:00.000Z",
+      "publishedDate": "2026-09-26",
+      "timePrecision": "date",
+      "position": 3,
+      "preferMatched": true,
+      "summary": "Sources said the Placeholder Keeper would miss four weeks.",
+      "firstSeenAt": "2026-09-27T09:00:00.000Z",
+      "alternates": [
+        {
+          "id": "espn-soccer:59a4ff9650fe",
+          "headline": "Fixture Rovers stun Placeholder Athletic in late comeback",
+          "url": "https://www.espn.com/soccer/story/_/id/90000002/rovers-comeback?utm_source=rss&utm_medium=feed",
+          "publishedAt": "2026-09-27T02:05:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "summary": "",
+          "position": 1,
+          "guidKey": "59a4ff9650fe",
+          "urlKey": "ad64efa7b78b",
+          "titleKey": "f95b59a2605d"
+        }
+      ]
+    },
+    {
+      "id": "espn-nfl:dff76612c762",
+      "sourceId": "espn-nfl",
+      "sourceName": "ESPN",
+      "sport": "nfl",
+      "league": null,
+      "headline": "Placeholder Packers sign veteran guard off practice squad",
+      "url": "https://www.espn.com/nfl/story/_/id/90000032/packers-sign",
+      "canonicalUrl": "https://espn.com/nfl/story/_/id/90000032/packers-sign",
+      "guidKey": "dff76612c762",
+      "urlKey": "e0829072fae8",
+      "titleKey": "1667d9576dcd",
+      "publishedAt": "2026-09-26T22:45:00.000Z",
+      "publishedDate": "2026-09-26",
+      "timePrecision": "date",
+      "position": 1,
+      "preferMatched": false,
+      "summary": "The Packers signed a veteran guard.",
+      "firstSeenAt": "2026-09-27T09:00:00.000Z",
+      "alternates": []
+    },
+    {
+      "id": "espn-f1:5fc4589b070b",
+      "sourceId": "espn-f1",
+      "sourceName": "ESPN",
+      "sport": "f1",
+      "league": null,
+      "headline": "Placeholder Driver calls for rule review after sprint",
+      "url": "https://www.espn.com/f1/story/_/id/90000042/rule-review",
+      "canonicalUrl": "https://espn.com/f1/story/_/id/90000042/rule-review",
+      "guidKey": "5fc4589b070b",
+      "urlKey": "85159b1329a4",
+      "titleKey": "710685f460ea",
+      "publishedAt": "2026-09-26T18:00:00.000Z",
+      "publishedDate": "2026-09-26",
+      "timePrecision": "date",
+      "position": 1,
+      "preferMatched": false,
+      "summary": "The driver asked the stewards to look again.",
+      "firstSeenAt": "2026-09-27T09:00:00.000Z",
+      "alternates": []
+    },
+    {
+      "id": "espn-golf:6d5a387081a2",
+      "sourceId": "espn-golf",
+      "sourceName": "ESPN",
+      "sport": "golf",
+      "league": null,
+      "headline": "Placeholder Golfer leads by two at Fixture Hills",
+      "url": "https://www.espn.com/golf/story/_/id/90000052/leads-by-two",
+      "canonicalUrl": "https://espn.com/golf/story/_/id/90000052/leads-by-two",
+      "guidKey": "6d5a387081a2",
+      "urlKey": "cef93a86da33",
+      "titleKey": "450e5c930af3",
+      "publishedAt": "2026-09-26T23:00:00.000Z",
+      "publishedDate": "2026-09-26",
+      "timePrecision": "date",
+      "position": 1,
+      "preferMatched": false,
+      "summary": "She shot 66 in the third round.",
+      "firstSeenAt": "2026-09-27T09:00:00.000Z",
+      "alternates": []
+    },
+    {
+      "id": "espn-nba:a91f4d641813",
+      "sourceId": "espn-nba",
+      "sourceName": "ESPN",
+      "sport": "basketball",
+      "league": "nba",
+      "headline": "Sources: Fixture Bulls trade Placeholder Guard to Fixture Hornets",
+      "url": "https://www.espn.com/nba/story/_/id/90000011/bulls-trade",
+      "canonicalUrl": "https://espn.com/nba/story/_/id/90000011/bulls-trade",
+      "guidKey": "a91f4d641813",
+      "urlKey": "a45890f9695c",
+      "titleKey": "c4581f0c92f7",
+      "publishedAt": "2026-09-27T00:12:00.000Z",
+      "publishedDate": "2026-09-26",
+      "timePrecision": "date",
+      "position": 1,
+      "preferMatched": false,
+      "summary": "Sources said the Bulls would trade the guard.",
+      "firstSeenAt": "2026-09-27T09:00:00.000Z",
+      "alternates": [
+        {
+          "id": "espn-nba:964e54d5fa7f",
+          "headline": "Placeholder Center signs extension with Fixture Kings",
+          "url": "https://www.espn.com/nba/story/_/id/90000012/center-extension",
+          "publishedAt": "2026-09-26T21:00:00.000Z",
+          "publishedDate": "2026-09-26",
+          "timePrecision": "date",
+          "summary": "A four-year deal.",
+          "position": 2,
+          "guidKey": "964e54d5fa7f",
+          "urlKey": "eaa0476c17a3",
+          "titleKey": "3d30c6010f77"
+        }
+      ]
+    },
+    {
+      "id": "espn-wnba:acbab0be65b1",
+      "sourceId": "espn-wnba",
+      "sourceName": "ESPN",
+      "sport": "basketball",
+      "league": "wnba",
+      "headline": "WNBA playoff preview: Fixture Lynx v Placeholder Liberty",
+      "url": "https://www.espn.com/wnba/story/_/id/90000022/playoff-preview",
+      "canonicalUrl": "https://espn.com/wnba/story/_/id/90000022/playoff-preview",
+      "guidKey": "acbab0be65b1",
+      "urlKey": "5676236fa830",
+      "titleKey": "d5d59cb06a4b",
+      "publishedAt": "2026-09-26T19:00:00.000Z",
+      "publishedDate": "2026-09-26",
+      "timePrecision": "date",
+      "position": 1,
+      "preferMatched": false,
+      "summary": "The semifinal opens on Sunday.",
+      "firstSeenAt": "2026-09-27T09:00:00.000Z",
+      "alternates": []
+    }
+  ],
+  "missing": [
+    {
+      "sourceId": "espn-tennis",
+      "reason": "parse-error",
+      "detail": "truncated-or-malformed"
+    }
+  ],
+  "rejected": [
+    {
+      "sourceId": "espn-soccer",
+      "headline": "Follow live: Fixture City v Placeholder Town",
+      "reason": "excluded:\\blive:"
+    },
+    {
+      "sourceId": "espn-soccer",
+      "headline": "Fixture Rovers 2-1 Placeholder Athletic",
+      "reason": "excluded-path:/report/_/gameid/"
+    },
+    {
+      "sourceId": "espn-soccer",
+      "headline": "Placeholder League title race: what we learned",
+      "reason": "seen"
+    },
+    {
+      "sourceId": "espn-nfl",
+      "headline": "Week 4 NFL picks: expert predictions for every game",
+      "reason": "excluded:\\b(expert|experts'?|staff|best|our|straight-up|ats|survivor|pool|confidence|upset|lock|prop|week \\d+|nfl|nba|wnba|cfb|college football|mlb|nhl|ufc|golf|tennis|f1|mls|epl|premier league) picks?\\b"
+    },
+    {
+      "sourceId": "espn-f1",
+      "headline": "Placeholder Grand Prix: how to watch, full schedule, predictions",
+      "reason": "excluded:\\bpredictions?\\b"
+    },
+    {
+      "sourceId": "espn-golf",
+      "headline": "Expert picks for the Placeholder Championship",
+      "reason": "excluded:\\b(expert|experts'?|staff|best|our|straight-up|ats|survivor|pool|confidence|upset|lock|prop|week \\d+|nfl|nba|wnba|cfb|college football|mlb|nhl|ufc|golf|tennis|f1|mls|epl|premier league) picks?\\b"
+    },
+    {
+      "sourceId": "espn-wnba",
+      "headline": "Top-seeded Fixture Lynx heavy favorites to win WNBA title",
+      "reason": "excluded-path:/betting/"
+    },
+    {
+      "sourceId": "espn-wnba",
+      "headline": "Sources: Fixture Bulls trade Placeholder Guard to Fixture Hornets",
+      "reason": "seen"
+    }
+  ]
+}

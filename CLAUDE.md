@@ -225,6 +225,33 @@ reads only; `/reads/` lists them all. `archive.longReads[]` in the feed gained `
 because the app renders the same markdown (thearchv-app `21a24fd`). The converter and the weekly
 mirror live in `../dispatch/site-longreads/` (`substack_to_longread.py`).
 
+## The Wire and the daily tables (2026-09-26, branch feature/wire-site)
+
+Design of record: `docs/wire-design-2026-09-26/design-final.md`. Code: `scripts/wire/`.
+
+- **Content files** are `scripts/data/daily/wire.json` and `tables.json`: JSON, never executed,
+  deliberately outside `loadDayData`, so Wire items never reach `feed.xml`, the news sitemap,
+  search, `today.json`, `withAppArt` or `entryArt`. The desk commits them to main; both are in
+  `DATA_FILES`. The seeds are empty and the pages render nothing from an empty file.
+- **Two NEW feeds**, `dist/feed/wire.json` (`archv-wire/1`) and `dist/feed/tables.json`
+  (`archv-tables/1`), written by `build-daily-feed.mjs` outside the manifest loop, so
+  `index.json` and every existing feed stay byte-identical. Neither ever carries a top-level
+  `days`, `lead` or `wrap` key (tested). Additive changes only; a breaking change is a new file
+  name, and the old one keeps publishing.
+- **Only permitted sources** (`scripts/wire/sources.json`). Headline and URL are the feed's own,
+  byte for byte: the canonical URL is a dedupe key only. No summary, body, image, logo or crest
+  is stored or shown. Nothing in this repo writes a note; a note is optional and
+  `lib/grounding.mjs` refuses any note that asserts.
+- **Calm by rule**: `check-wire-links.mjs` fails the build on a Wire link without
+  `target="_blank" rel="noopener noreferrer"`, an off-registry or `/betting/` href, an `<img>` in
+  Wire or tables content, or animation in the `wire:start`/`wire:end` CSS region.
+- `/wire/` is noindex and out of every sitemap; `/tables/` is indexable. The web never says
+  "today": it prints the edition date and "No new edition since then" when the build outlives it.
+- Keys come from `FOOTBALL_DATA_TOKEN`, `BALLDONTLIE_API_KEY` and `ARCHV_JOLPICA_PERMITTED` only,
+  read by name, never printed, never `VITE_`, never CI. Jolpica stays off until admin@jolpi.ca
+  grants commercial use in writing.
+- Tests: `npm run test:wire` (node:test, fixtures only, no network), which runs inside `build`.
+
 ## Site structure: the page graph (site depth pass, 2026-07-09)
 
 The site is a navigable graph, not one long homepage: home -> lane index -> article ->

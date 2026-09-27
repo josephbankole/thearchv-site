@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-27",
+    day: "Sunday",
+    headline: "Harry Kane hit the crossbar from the spot at 2-1 up, and Spain won 3-2 at Wembley",
+    dek: "England led 2-1 at half-time on Saturday and had a penalty to make it 3-1. Harry Kane slipped and hit the bar after 54 minutes, and Spain scored twice to win the UEFA Nations League match 3-2.",
+    body: "Spain beat England 3-2 in the UEFA Nations League at Wembley on Saturday 26 September, per ESPN and the Football Association's own match centre.\n\nLamine Yamal scored after two minutes. Anthony Gordon equalised on 36 minutes and Harry Kane headed England in front four minutes later, so England went in 2-1 up.\n\nThe turn came nine minutes into the second half. Rodri tripped Jude Bellingham, England had a penalty, and Kane slipped as he struck it and hit the crossbar, per ESPN and the FA. Álex Baena levelled on the hour and Mikel Oyarzabal won it on 74 minutes.\n\nEngland started James Trafford in goal, and no Manchester United player featured for either side, per the FA's line-ups.",
+    status: "verified",
+    seoTitle: "Spain beat England 3-2 at Wembley in the Nations League",
+  },
+  {
     date: "2026-09-25",
     day: "Friday",
     headline: "Erling Haaland passes Ronaldo and Zlatan Ibrahimovic with his 64th goal for Norway",

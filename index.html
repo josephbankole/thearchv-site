@@ -103,17 +103,6 @@
               "target": { "@type": "EntryPoint", "urlTemplate": "https://thearchv.ca/search/?q={search_term_string}" },
               "query-input": "required name=search_term_string"
             }
-          },
-          {
-            "@type": "ItemList",
-            "name": "The ARCHV finals cover line",
-            "description": "The great finals as illustrated magazine covers, the night's two protagonists face to face. Matte poster prints.",
-            "itemListOrder": "https://schema.org/ItemListOrderAscending",
-            "numberOfItems": 2,
-            "itemListElement": [
-              { "@type": "ListItem", "position": 1, "name": "Moscow 2018 — The Cover", "image": "https://thearchv.ca/shop/moscow-2018-cover.webp", "url": "https://www.etsy.com/listing/4539731211" },
-              { "@type": "ListItem", "position": 2, "name": "Lusail 2022 — The Cover", "image": "https://thearchv.ca/shop/lusail-2022-cover.webp", "url": "https://www.etsy.com/listing/4539743978" }
-            ]
           }
         ]
       }
@@ -246,13 +235,14 @@
         </div>
         <!-- One rail per archive pack, built by src/components/archiveRail.ts from src/data/posters.ts. -->
         <div class="archive__packs" id="archive-packs"></div>
-        <!-- The finals cover line: magazine-cover matte posters, linked to their Etsy listings. -->
+        <!-- The finals cover line: magazine-cover matte posters. The tiles link to the Etsy shop home, not
+             to listings: the two cover listings were converted to other products on 2026-09-27. -->
         <div class="wrap archive__covers">
           <h3 class="archive__reads-title">New &middot; The finals cover line</h3>
           <p class="archive__covers-lede" data-reveal>The great finals as ARCHV magazine covers, the night's two protagonists face to face. Printed as museum-quality matte posters.</p>
           <ul class="archive__covers-grid" data-stagger>
-            <li><a href="https://www.etsy.com/listing/4539743978" target="_blank" rel="noopener noreferrer"><img src="/shop/lusail-2022-cover.webp" alt="Lusail 2022 finals cover poster, two illustrated portraits face to face over a gold engraved stadium." loading="lazy" width="680" height="907" /><span>Lusail 2022</span></a></li>
-            <li><a href="https://www.etsy.com/listing/4539731211" target="_blank" rel="noopener noreferrer"><img src="/shop/moscow-2018-cover.webp" alt="Moscow 2018 finals cover poster, two illustrated portraits face to face over a gold engraved stadium." loading="lazy" width="680" height="907" /><span>Moscow 2018</span></a></li>
+            <li><a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="covers"><img src="/shop/lusail-2022-cover.webp" alt="Lusail 2022 finals cover poster, two illustrated portraits face to face over a gold engraved stadium." loading="lazy" width="680" height="907" /><span>Lusail 2022</span></a></li>
+            <li><a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="covers"><img src="/shop/moscow-2018-cover.webp" alt="Moscow 2018 finals cover poster, two illustrated portraits face to face over a gold engraved stadium." loading="lazy" width="680" height="907" /><span>Moscow 2018</span></a></li>
           </ul>
           <a class="archive__covers-all" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="covers">All prints in the Etsy shop</a>
         </div>

@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr, ORG_REF, ORG_NODE, trustLinks } from "./shared/page-shell.mjs";
 // The frontmatter parser and the content/ walk moved to shared/content-pages.mjs on 2026-08-09,
 // so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
@@ -177,7 +177,8 @@ if (!pages.length) { console.log("No content/ pages found; skipping content buil
 // Organization JSON-LD carries this same "https://thearchv.ca/#org" @id, so every long read now
 // points back at the one entity Google/answer engines already resolve for the site, instead of
 // each page describing an org-shaped but disconnected duplicate.
-const ORG_REF = { "@id": `${SITE}/#org` };
+// ORG_REF and the full ORG_NODE now come from page-shell.mjs (search plan 3.6, 2026-09-27), and
+// the node rides in this graph so the @id resolves on the page itself.
 function schema(p, url) {
   const graph = [
     { "@type": "Article", "headline": p.title, "description": p.description, "datePublished": p.datePublished,
@@ -187,6 +188,7 @@ function schema(p, url) {
       { "@type": "ListItem", "position": 1, "name": "Home", "item": `${SITE}/` },
       { "@type": "ListItem", "position": 2, "name": sect(p.section).label, "item": `${SITE}${sect(p.section).href}` },
       { "@type": "ListItem", "position": 3, "name": p.title, "item": url } ] },
+    ORG_NODE,
   ];
   if (p.section === "finals" && Array.isArray(p.teams) && p.eventDate) {
     // `competition` names the actual trophy. It exists because this block used to hard-code
@@ -315,6 +317,7 @@ function render(p, allPages) {
         <a href="/guess/">Daily Archive</a>
         <a href="/feed.xml">RSS</a>
       </nav>
+      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>

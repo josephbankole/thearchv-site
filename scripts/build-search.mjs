@@ -133,7 +133,7 @@ const DESTINATIONS = [
   ["Editorial standards", "The two-source rule, the correction policy and what the desk will not publish.", "/standards/", "Reference"],
   ["Player duels", "Two players, the same stats, side by side.", "/duel/", "Games"],
   ["Daily archive game", "One historical player a day, four clues, five guesses.", "/guess/", "Games"],
-  ["Joseph Bankole", "Who writes and edits The ARCHV, and everything filed under that byline.", "/authors/joseph-bankole/", "About"],
+  ["Joseph Bankole", "The founder of The ARCHV and the person answerable for what it publishes.", "/authors/joseph-bankole/", "About"],
   ["About The ARCHV", "What the archive is, who runs it, and how to reach it.", "/about/", "About"],
   ["Corrections", "Every correction the desk has made, dated and kept.", "/corrections/", "About"],
 ];

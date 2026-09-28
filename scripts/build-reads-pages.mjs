@@ -24,7 +24,7 @@ import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   masthead, footer, documentShell, ROBOTS_INDEXABLE,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT, ORG_REF, ORG_NODE,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -88,7 +88,8 @@ const words = (body) => longreadPlain(body);
 // author/publisher reference the site's Organization entity by @id, the same shape the other
 // long-form family uses (scripts/build-content.mjs): index.html's Organization JSON-LD carries
 // this @id, so every essay points back at the one entity rather than describing a duplicate.
-const ORG_REF = { "@id": `${SITE}/#org` };
+// ORG_REF and ORG_NODE come from page-shell.mjs (search plan 3.6, 2026-09-27); each graph here
+// carries the full node so the @id resolves on the page.
 
 /* The head for both page types here. Every long read and the /reads/ front is indexable and
    self-canonical, so those two are stated once, here, rather than at each call site; documentShell
@@ -148,6 +149,7 @@ function renderRead(read) {
         timeRequired: readDuration(words(read.body)),
         mainEntityOfPage: url,
       },
+      ORG_NODE,
       {
         "@type": "BreadcrumbList",
         itemListElement: [

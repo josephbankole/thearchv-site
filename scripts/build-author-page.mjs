@@ -28,7 +28,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, byDateDesc,
   cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_REF, ORG_NODE, PERSON_REF, PERSON_ID,
   AUTHOR_NAME, AUTHOR_PATH, AUTHOR_URL, AUTHOR_PERSONAL_URL, AUTHOR_SAMEAS,
   LANE_META, SPORTS, QUESTION_LANE_META,
 } from "./shared/page-shell.mjs";
@@ -54,17 +54,22 @@ const PAGE_URL = AUTHOR_URL;
    true when canon D-2026-08-04h made the weekly match job publish on a schedule. What is
    written below is what actually exists: the routine lane publishes under automated
    verification gates, the flagship lane carries a human signature. Do not soften this back
-   into a blanket-checkpoint claim. */
+   into a blanket-checkpoint claim.
+   Rewritten 2026-09-27 (search plan week 2, Decision 1): the old copy said the house voice was
+   "applied by hand", that every fact had two sources (NFL and F1 ship on the official record,
+   D-2026-08-28b), that a thin week ended with fewer entries, and that the archive held nine
+   finals (content/finals/ holds 18). The desk pages now carry The ARCHV Desk byline, and the
+   long reads are not claimed for him until he names the ones he wrote. */
 const BIO = [
-  `Joseph Bankole founded The ARCHV and edits it. He is the named author on this site and the person answerable for what it publishes.`,
-  `Most of what you read here is built by a system rather than typed out one entry at a time. The routine desks publish on a schedule, and nothing reaches the page without clearing the same gates: two independent sources on any claim of fact, every number re-checked at the moment of publishing rather than the moment of drafting, a dated freshness stamp, and the house voice applied by hand. An entry that fails verification does not run, and a thin week ends with fewer entries on the site. That is the whole argument for automating the routine work. The standard stops depending on how tired anyone is on a Tuesday.`,
-  `The flagship work is the other half of it, and that carries a human signature. The long reads, the corrections, the standards page and every call about what the archive will and will not carry are his by name, because someone has to be answerable for them.`,
-  `The subject is football history, mostly: transfers while the window is open, international football while it is on, the club season week by week, and the poster archive of nine World Cup finals drawn in the house style, Mexico 1970 to Lusail 2022. The desks now run to the NFL, Formula 1, tennis, golf and basketball as well. No photographs, no club crests, no kit designs, no competition marks. Every face on the site is original illustration published as editorial commentary. That rule does not bend.`,
+  `Joseph Bankole founded The ARCHV and runs it. He sets its rules and is the person answerable for what it publishes.`,
+  `Most of what you read here is built by a system rather than typed out one entry at a time. The routine desks publish on a schedule. Automated writing tools draft each entry and apply the house voice, and nothing reaches the page without clearing the same checks: a named source on every claim of fact (two independent ones, or the league's own record for NFL and Formula 1), every number re-read at the moment of publishing rather than the moment of drafting, and a dated freshness stamp. An entry that fails verification does not run. No person reads those entries before they go up, so they carry The ARCHV Desk byline and not his. Automating the routine work means the standard stops depending on how tired anyone is on a Tuesday.`,
+  `His name goes on the rules: the standards page, the corrections, and every call about what the archive will and will not carry. Someone has to be answerable for those.`,
+  `The subject is football history, mostly: transfers while the window is open, international football while it is on, the club season week by week, and an archive of 18 finals illustrated in the house style, ten of them World Cup finals from Mexico 1970 to MetLife 2026. The site also keeps question pages on the NFL, Formula 1, tennis, golf and basketball. No photographs, no club crests, no kit designs, no competition marks. Every face on the site is original illustration published as editorial commentary. That rule does not bend.`,
 ];
 
 // The meta description and the schema's Person.description. First two sentences of the bio,
 // clamped: it has to say who he is and how the work is checked inside 160 characters.
-const BIO_SUMMARY = `Founder and editor of The ARCHV. The routine desks publish under automated verification gates; the flagship work carries his signature.`;
+const BIO_SUMMARY = `Founder of The ARCHV. He sets the rules its automated desks publish under and answers for what the site carries.`;
 
 /* ---------- portrait ----------
    No photograph of the founder exists anywhere in this repo, and the site's own imagery rule
@@ -155,36 +160,19 @@ function render() {
         isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` },
         // mainEntity is the whole point of a ProfilePage: this page IS about the Person below,
         // which is the same @id every article page's author block resolves to.
-        mainEntity: { "@id": `${PAGE_URL}#person` },
+        mainEntity: { "@id": PERSON_ID },
       },
       {
-        "@type": "Person",
-        "@id": `${PAGE_URL}#person`,
-        name: AUTHOR_NAME,
-        url: PAGE_URL,
-        // josephbankole.ca is kept rather than dropped, so the on-site page and the personal
-        // site read as one entity instead of two competing ones (founder call, 2026-08-04).
+        ...PERSON_REF,
+        // One Person id sitewide (search plan 3.6): PERSON_ID in page-shell.mjs. sameAs is the
+        // profiles off this site, josephbankole.ca and LinkedIn.
         sameAs: AUTHOR_SAMEAS,
         description: BIO_SUMMARY,
         jobTitle: "Founder and Editor",
         knowsAbout: ["Football history", "Association football", "Transfer reporting", "World Cup", "Sports journalism"],
-        worksFor: { "@id": `${SITE}/#org` },
+        worksFor: ORG_REF,
       },
-      {
-        "@type": "NewsMediaOrganization",
-        // #org matches the Organization @id index.html has declared since before this page
-        // existed — a second id (#organization, as first shipped) never merges with it, and the
-        // founder/publishingPrinciples/correctionsPolicy fields here would hang off an orphan
-        // node (2026-08-12 review).
-        "@id": `${SITE}/#org`,
-        name: "The ARCHV",
-        url: `${SITE}/`,
-        logo: { "@type": "ImageObject", url: `${SITE}/brand/logo-badge@192.png`, width: 192, height: 192 },
-        founder: { "@id": `${PAGE_URL}#person` },
-        publishingPrinciples: `${SITE}/standards/`,
-        correctionsPolicy: `${SITE}/corrections/`,
-        sameAs: ORG_SAMEAS,
-      },
+      ORG_NODE,
       {
         "@type": "BreadcrumbList",
         itemListElement: [
@@ -197,7 +185,7 @@ function render() {
 
   const recentBlock = recent.length
     ? `<section class="related" aria-labelledby="recent-work">
-        <h2 id="recent-work">Recent bylined work</h2>
+        <h2 id="recent-work">Latest from The ARCHV Desk</h2>
         <ul class="lane-list">
           ${recent.map(recentCard).join("\n          ")}
         </ul>

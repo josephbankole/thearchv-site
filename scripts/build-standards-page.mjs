@@ -11,7 +11,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, masthead, footer, documentShell, ROBOTS_INDEXABLE,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_REF, ORG_NODE,
 } from "./shared/page-shell.mjs";
 
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
@@ -30,11 +30,11 @@ const SECTIONS = [
   {
     h2: "Two sources before we publish",
     paras: [
-      "Nothing goes up as fact on a single source. A claim, a fee, a date or a scoreline is checked against at least two independent outlets before we treat it as settled. Two write-ups of the same original scoop are not two sources; we want outlets that did the reporting separately.",
+      "Nothing goes up as fact on a single source, with one standing exception: on the NFL and Formula 1 desks, the league's own official record is enough on its own, and it is named on the page. Everywhere else, a claim, a fee, a date or a scoreline is checked against at least two independent outlets before we treat it as settled. Two write-ups of the same original scoop are not two sources; we want outlets that did the reporting separately.",
     ],
   },
   {
-    h2: "The one exception: REPORTED",
+    h2: "Breaking news: the REPORTED tier",
     paras: [
       "Transfer news moves faster than confirmation, and the best of it often breaks through one reporter. When a named journalist with a strong record breaks a story alone, we may run it marked REPORTED, with the reporter and outlet named every time.",
       "REPORTED means one credible source and nothing more. It does not turn into confirmed because other sites have copied it. It hardens only when the club confirms, or a genuinely separate outlet reports the same thing.",
@@ -44,6 +44,15 @@ const SECTIONS = [
     h2: "VERIFIED and RUMOUR say what they mean",
     paras: [
       "On the transfer desk, every item carries a status. VERIFIED means the move is done and confirmed. RUMOUR means it is a link and not a certainty, however loudly it is being talked about. We do not blur the two to make a story sound bigger than it is. When we are not sure, the label says so.",
+    ],
+  },
+  {
+    // Search plan 3.2, Decision 1 (approved 2026-09-23). Names no model and no vendor. The dated
+    // pages link here from their byline ("How this desk works", HOW_MADE_PATH in page-shell.mjs).
+    id: "how-made",
+    h2: "How the daily desks are made",
+    paras: [
+      "The daily desk entries and the question pages are drafted with automated writing tools, language models among them, working from the sources each entry names. Every draft goes through the same checks before it can publish: a named source for each fact, figures re-read against those sources at the moment of publishing, and a dated stamp. A draft that fails them does not run. No person reads a desk entry before it goes up, so those pages carry The ARCHV Desk as their byline rather than a name. Joseph Bankole sets these rules and answers for what the desks publish, and a piece he wrote himself carries his name.",
     ],
   },
   {
@@ -76,8 +85,9 @@ const schema = JSON.stringify({
       url: URL,
       inLanguage: "en-GB",
       isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` },
-      publisher: { "@type": "Organization", name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
+      publisher: ORG_REF,
     },
+    ORG_NODE,
     {
       "@type": "BreadcrumbList",
       itemListElement: [
@@ -89,7 +99,7 @@ const schema = JSON.stringify({
 }).replace(/</g, "\\u003c");
 
 const sectionsHtml = SECTIONS.map(
-  (s) => `      <h2>${esc(s.h2)}</h2>\n      ${s.paras.map((p) => `<p>${esc(p)}</p>`).join("\n      ")}`,
+  (s) => `      <h2${s.id ? ` id="${escAttr(s.id)}"` : ""}>${esc(s.h2)}</h2>\n      ${s.paras.map((p) => `<p>${esc(p)}</p>`).join("\n      ")}`,
 ).join("\n");
 
 const html = `${documentShell({

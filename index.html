@@ -64,15 +64,37 @@
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": ["Organization", "NewsMediaOrganization"],
+            "@type": "NewsMediaOrganization",
             "@id": "https://thearchv.ca/#org",
             "name": "The ARCHV",
-            "alternateName": ["THE ARCHV", "ARCHV", "The ARCHV FC", "thearchvfc"],
+            "alternateName": [
+              "THE ARCHV",
+              "ARCHV",
+              "The ARCHV FC",
+              "thearchvfc"
+            ],
             "url": "https://thearchv.ca/",
             "foundingDate": "2026",
-            "description": "A daily illustrated sports desk covering football, the NFL, Formula 1, tennis, golf and basketball (the NBA and the WNBA), with long reads on the systems behind the games. Every entry is checked against two independent sources before it goes up, and no photograph appears anywhere on the site.",
-            "logo": "https://thearchv.ca/brand/logo-badge@192.png",
+            "description": "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and no photograph appears anywhere on the site.",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://thearchv.ca/brand/logo-badge@192.png",
+              "width": 192,
+              "height": 192
+            },
             "image": "https://thearchv.ca/og.jpg",
+            "founder": {
+              "@type": "Person",
+              "@id": "https://thearchv.ca/authors/joseph-bankole/#person",
+              "name": "Joseph Bankole",
+              "url": "https://thearchv.ca/authors/joseph-bankole/"
+            },
+            "publishingPrinciples": "https://thearchv.ca/standards/",
+            "verificationFactCheckingPolicy": "https://thearchv.ca/standards/",
+            "correctionsPolicy": "https://thearchv.ca/corrections/",
+            "actionableFeedbackPolicy": "https://thearchv.ca/corrections/#report",
+            "ownershipFundingInfo": "https://thearchv.ca/about/#funding",
+            "masthead": "https://thearchv.ca/about/#who",
             "sameAs": [
               "https://www.instagram.com/thearchvfc/",
               "https://www.instagram.com/thearchv.ca/",
@@ -418,6 +440,16 @@
           <a href="https://www.linkedin.com/company/thearchvfc/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a href="https://open.spotify.com/show/2z628foL4d6swp2Z0RfQyD" target="_blank" rel="noopener noreferrer">Podcast</a>
           <a href="https://podcasts.apple.com/us/podcast/pros-in-the-arena/id1745668123" target="_blank" rel="noopener noreferrer">Apple Podcasts</a>
+        </nav>
+        <!-- Trust links, the same six as trustLinks() in scripts/shared/page-shell.mjs (search plan
+             3.8, week 2). Change one, change both. -->
+        <nav class="footer__links footer__links--trust" aria-label="About The ARCHV">
+          <a href="/about/">About</a>
+          <a href="/standards/">Standards</a>
+          <a href="/corrections/">Corrections</a>
+          <a href="/privacy/">Privacy</a>
+          <a href="/about/#contact">Contact</a>
+          <a href="/authors/joseph-bankole/">Joseph Bankole</a>
         </nav>
         <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
         <p class="footer__legal">

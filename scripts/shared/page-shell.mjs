@@ -36,9 +36,54 @@ export const AUTHOR_NAME = "Joseph Bankole";
 export const AUTHOR_PATH = "/authors/joseph-bankole/";
 export const AUTHOR_URL = `${SITE}${AUTHOR_PATH}`;
 export const AUTHOR_PERSONAL_URL = "https://josephbankole.ca";
-// author.sameAs: the on-site page first (it is the author.url and the canonical entity here),
-// then the personal site it used to point at. Order is stable so the JSON-LD diff stays readable.
-export const AUTHOR_SAMEAS = [AUTHOR_URL, AUTHOR_PERSONAL_URL];
+// The Person's sameAs: the profiles OFF this site that are the same man. The on-site author page
+// is the Person's url and @id, so it is not repeated in its own sameAs (search plan 3.6,
+// 2026-09-27). Order is stable so the JSON-LD diff stays readable.
+export const AUTHOR_LINKEDIN_URL = "https://www.linkedin.com/in/joseph-bankole/";
+export const AUTHOR_SAMEAS = [AUTHOR_PERSONAL_URL, AUTHOR_LINKEDIN_URL];
+
+/* ---------- one Organization, one Person (search plan 3.6, week 2, 2026-09-27) ----------
+   Before this the Organization was declared under three ids (#org, #organization on /about/ and
+   /corrections/, and an anonymous node on /standards/) and Joseph under two Person ids. Every
+   generated page now takes its node from here, and the hand-built pages (index.html, public/about,
+   public/corrections) carry a copy of ORG_NODE's fields: change one, change those three with it.
+   ORG_NODE.founder is written out with type and name as well as the @id, so a page that carries the
+   Organization but not the full Person still describes him without minting a second Person id.
+   An email field is added only once a thearchv.ca mailbox exists (founder item, plan 3.8). */
+export const ORG_ID = `${SITE}/#org`;
+export const PERSON_ID = `${AUTHOR_URL}#person`;
+export const ORG_REF = { "@id": ORG_ID };
+export const PERSON_REF = { "@type": "Person", "@id": PERSON_ID, name: AUTHOR_NAME, url: AUTHOR_URL };
+export const ORG_NODE = {
+  "@type": "NewsMediaOrganization",
+  "@id": ORG_ID,
+  name: "The ARCHV",
+  alternateName: ["THE ARCHV", "ARCHV", "The ARCHV FC", "thearchvfc"],
+  url: `${SITE}/`,
+  foundingDate: "2026",
+  description:
+    "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and no photograph appears anywhere on the site.",
+  logo: { "@type": "ImageObject", url: `${SITE}/brand/logo-badge@192.png`, width: 192, height: 192 },
+  image: `${SITE}/og.jpg`,
+  founder: PERSON_REF,
+  publishingPrinciples: `${SITE}/standards/`,
+  verificationFactCheckingPolicy: `${SITE}/standards/`,
+  correctionsPolicy: `${SITE}/corrections/`,
+  actionableFeedbackPolicy: `${SITE}/corrections/#report`,
+  ownershipFundingInfo: `${SITE}/about/#funding`,
+  masthead: `${SITE}/about/#who`,
+  sameAs: null, // filled below, once ORG_SAMEAS is defined
+};
+
+/* ---------- the byline on automated pages (Decision 1, approved 2026-09-23) ----------
+   Routine desk entries and question pages are made by the desks, not typed by a person, so they
+   carry "The ARCHV Desk" and an Organization author. The Person byline is kept for pieces Joseph
+   wrote himself. The disclosure names no model and no vendor, and it renders on dated pages and
+   /standards/ only, never on /shop/, /posters/, a pack page or a home store rail (D-2026-09-12k). */
+export const DESK_BYLINE = "The ARCHV Desk";
+export const HOW_MADE_PATH = "/standards/#how-made";
+export const DESK_DISCLOSURE =
+  "Drafted with automated writing tools from the sources named on this page, and checked before it could publish.";
 
 // The ARCHV's official profiles, for the Organization sameAs entity graph. Kept in one place so
 // the homepage Organization JSON-LD (index.html) and every generated article page's publisher
@@ -58,6 +103,7 @@ export const ORG_SAMEAS = [
   "https://apps.apple.com/app/id6786508653",
   "https://flipboard.com/@thearchv",
 ];
+ORG_NODE.sameAs = ORG_SAMEAS;
 
 // Defensive sort: every lane's day-entry array is committed newest-first by convention
 // (the daily desk job), but nothing in the type enforces that order. A single
@@ -468,6 +514,21 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
   </script>`;
 }
 
+// The trust links every footer carries (search plan 3.8, week 2): About, Standards, Corrections,
+// Privacy, Contact and the author page. One definition, used by footer() below and by the two
+// builders that write their own footer markup (build-content.mjs, build-day-pages.mjs). The
+// hand-built index.html footer carries the same six links; change one, change it too.
+export function trustLinks() {
+  return `<nav class="footer__links footer__links--trust" aria-label="About The ARCHV">
+        <a href="/about/">About</a>
+        <a href="/standards/">Standards</a>
+        <a href="/corrections/">Corrections</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/about/#contact">Contact</a>
+        <a href="${AUTHOR_PATH}">${AUTHOR_NAME}</a>
+      </nav>`;
+}
+
 export function footer() {
   return `<footer class="footer">
     <div class="wrap">
@@ -481,10 +542,8 @@ export function footer() {
         <a href="/guess/">Daily Archive</a>
         <a href="/feed.xml">RSS</a>
         <a href="/glossary/">Glossary</a>
-        <a href="/standards/">Standards</a>
-        <a href="/about/">About</a>
-        <a href="/corrections/">Corrections</a>
       </nav>
+      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>
@@ -995,6 +1054,7 @@ export function pageStyles() {
     .article__byline { color: var(--cream-faint-text); font-size: .875rem; margin: 0 0 .25rem; }
     .article__byline a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
     .article__byline a:hover { color: var(--gold); }
+    .article__disclosure { color: var(--cream-faint-text); font-size: .8rem; margin: 0 0 .25rem; }
     .article__meta { color: var(--cream-faint-text); font-size: .9rem; margin: 0 0 1.5rem; }
     .article__fig { margin: 1.5rem 0 2rem; }
     .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }

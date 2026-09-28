@@ -16,8 +16,8 @@ import { fileURLToPath } from "node:url";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle, answerTitle, answerTitleFlags,
   deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
-  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_SAMEAS,
-  AUTHOR_NAME, AUTHOR_URL, AUTHOR_SAMEAS, SPORTS, QUESTION_LANE_META,
+  cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
+  SPORTS, QUESTION_LANE_META, ORG_REF, ORG_NODE, DESK_BYLINE, DESK_DISCLOSURE, HOW_MADE_PATH,
   DISPATCH_URL, captureBlock, CAPTURE_STYLES,
 } from "./shared/page-shell.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
@@ -274,20 +274,14 @@ function schema(entry, url, label, faq, images) {
         dateModified: entry.date,
         isAccessibleForFree: true,
         inLanguage: "en-GB",
-        // A named Person, not the masthead: Google News and the news aggregators want a human
-        // author, and the visible byline on the page says the same thing (see render() below).
-        // Name and URL come from AUTHOR_NAME / AUTHOR_URL in scripts/shared/page-shell.mjs.
-        // As of 2026-08-04 author.url resolves to the on-site author page and sameAs carries both
-        // that page and josephbankole.ca, so the two profiles read as one Person entity.
-        // publisher stays the Organization, unchanged.
-        // @id matches the Person node the author page emits (`<author URL>#person`), so every
-        // article's author and the ProfilePage's mainEntity resolve to ONE entity instead of a
-        // url-string coincidence (2026-08-12 review). Publisher likewise references the #org id
-        // index.html declares rather than shipping an anonymous Organization per page.
-        author: { "@type": "Person", "@id": `${AUTHOR_URL}#person`, name: AUTHOR_NAME, url: AUTHOR_URL, sameAs: AUTHOR_SAMEAS },
-        // Compact Organization carrying the sameAs entity graph, so every article page reinforces
-        // the same brand entity (matches the homepage Organization JSON-LD in index.html).
-        publisher: { "@type": "Organization", "@id": `${SITE}/#org`, name: "The ARCHV", url: `${SITE}/`, logo: `${SITE}/brand/logo-badge@192.png`, sameAs: ORG_SAMEAS },
+        // The ARCHV Desk, not a named person (Decision 1, approved by the founder 2026-09-23; search
+        // plan 3.1). These entries are drafted and published by the desks with no person reading
+        // them first, so a Person author would claim work nobody did. author and publisher both
+        // point at the one Organization node (ORG_NODE in scripts/shared/page-shell.mjs), which
+        // this graph carries in full below so the @id resolves on the page itself. The visible
+        // byline in render() says the same thing. The Person byline is kept for pieces Joseph wrote.
+        author: ORG_REF,
+        publisher: ORG_REF,
         // The generated share cards, both crops (1.91:1 og.png and 16:9 og-wide.png), as an
         // array of absolute URLs. NEVER the entry headshot: that file is 240x240, which fails
         // Google News's large-image minimums and misrepresents the page's share art (defect
@@ -322,6 +316,8 @@ function schema(entry, url, label, faq, images) {
       ],
     });
   }
+
+  graph.push(ORG_NODE);
 
   graph.push({
     "@type": "BreadcrumbList",
@@ -553,7 +549,8 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
     <article class="article">
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
-      <p class="article__byline">By <a href="${escAttr(AUTHOR_URL)}" rel="author">${esc(AUTHOR_NAME)}</a></p>
+      <p class="article__byline">${esc(DESK_BYLINE)} · <a href="${escAttr(HOW_MADE_PATH)}">How this desk works</a></p>
+      <p class="article__disclosure">${esc(DESK_DISCLOSURE)}</p>
       <p class="article__meta">${esc(longDate(entry.date))} &middot; ${esc(readLabel(entry.dek, entry.body))}</p>
       <div class="share" aria-label="Share this article">
         <button class="btn btn--ghost" id="share-native" type="button" hidden>Share</button>

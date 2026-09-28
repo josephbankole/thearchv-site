@@ -10,7 +10,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META } from "./shared/page-shell.mjs";
+import { cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, ORG_REF, ORG_NODE, trustLinks } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
@@ -55,13 +55,14 @@ function schema(entry, url, label, laneHref) {
     "@graph": [
       { "@type": "Article", "headline": entry.headline, "description": entry.dek,
         "datePublished": entry.date, "inLanguage": "en-GB",
-        "author": { "@type": "Organization", "name": "The ARCHV" },
-        "publisher": { "@type": "Organization", "name": "The ARCHV", "logo": `${SITE}/brand/logo-badge@192.png` },
+        "author": ORG_REF,
+        "publisher": ORG_REF,
         "image": `${SITE}/og.jpg`, "mainEntityOfPage": url },
       { "@type": "BreadcrumbList", "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": `${SITE}/` },
         { "@type": "ListItem", "position": 2, "name": label, "item": `${SITE}${laneHref}` },
         { "@type": "ListItem", "position": 3, "name": entry.headline, "item": url } ] },
+      ORG_NODE,
     ],
   }).replace(/</g, "\\u003c");
 }
@@ -144,6 +145,7 @@ function render(entry, sectionKey) {
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
       </nav>
+      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>

@@ -25,6 +25,7 @@ import {
   SITE, esc, escAttr, clampTitle, clampDescription,
   masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, scriptHash, extractScriptBody, jsLiteral, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
+  ORG_REF, ORG_NODE,
 } from "./shared/page-shell.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -410,8 +411,9 @@ const html = `${documentShell({
         inLanguage: "en-GB",
         genre: "Football history quiz",
         numberOfPlayers: { "@type": "QuantitativeValue", minValue: 1, maxValue: 1 },
-        publisher: { "@type": "Organization", name: "The ARCHV", url: `${SITE}/` },
+        publisher: ORG_REF,
       },
+      ORG_NODE,
       {
         "@type": "BreadcrumbList",
         itemListElement: [

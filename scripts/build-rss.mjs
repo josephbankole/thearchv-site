@@ -22,9 +22,11 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const SITE = "https://thearchv.ca";
 const MAX_ITEMS = 30;
-// Named author and editor of the publication (founder decision, 2026-07-21). Emitted per item
-// as dc:creator, which is the field syndication platforms read for a byline.
-const AUTHOR = "Joseph Bankole";
+// dc:creator, the field syndication platforms read for a byline. Desk entries are The ARCHV Desk
+// and long reads the publication, matching each page's own byline and JSON-LD author (Decision 1,
+// approved 2026-09-23; this replaces the 2026-07-21 named-author byline for automated pages).
+const DESK_CREATOR = "The ARCHV Desk";
+const READ_CREATOR = "The ARCHV";
 // The standing rights notice. On the site it is the footer's legal line (article pages carried a
 // separate article__rights box until the 2026-09-12 declutter). Syndicated full text travels away
 // from the site, so it carries the notice with it. Kept byte-identical to the old page copy.
@@ -206,7 +208,7 @@ const itemXml = items
       <description>${xmlEsc(it.dek)}</description>
       <content:encoded>${cdata(contentHtml(it, img))}</content:encoded>
       <pubDate>${rfc822(it.date)}</pubDate>
-      <dc:creator>${xmlEsc(AUTHOR)}</dc:creator>${enclosure}
+      <dc:creator>${xmlEsc(it.path ? READ_CREATOR : DESK_CREATOR)}</dc:creator>${enclosure}
     </item>`;
   })
   .join("\n");

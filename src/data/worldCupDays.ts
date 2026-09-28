@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-28",
+    day: "Monday",
+    headline: "Portugal left Ronaldo on the bench in Oslo and won anyway",
+    dek: "Cristiano Ronaldo sat out all 90 minutes of Portugal's Nations League win in Norway. Gonçalo Ramos, who started up front, scored the winner three minutes after Erling Haaland had equalised.",
+    body: "Portugal beat Norway 2-1 in the UEFA Nations League on Sunday 27 September 2026, at the Ullevaal Stadion in Oslo. João Félix scored after 17 minutes, Erling Haaland equalised on 51 and Gonçalo Ramos scored the winner on 54. ESPN's match report and Al Jazeera's live coverage agree on the score and all three scorers.\n\nThe team sheet was the story before a ball was kicked. Cristiano Ronaldo, who started Portugal's 1-0 win over Wales on Thursday, stayed on the bench for the full 90 minutes. Ramos started up front instead.\n\nHaaland got his goal, and Norway got nothing from it. The equaliser lasted three minutes.\n\nPortugal have two wins from two in their group. The next team sheet will say whether one winner in Oslo is enough to keep Ramos in the side.",
+    status: "verified",
+    seoTitle: "Norway 1-2 Portugal: Ramos wins it, Ronaldo unused",
+  },
+  {
     date: "2026-09-27",
     day: "Sunday",
     headline: "Harry Kane hit the crossbar from the spot at 2-1 up, and Spain won 3-2 at Wembley",

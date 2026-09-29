@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-09-29",
+    day: "Tuesday",
+    headline: "England lost at Wembley, then went to Prague against ten men and won their first Nations League game of the campaign",
+    dek: "Anthony Gordon and Harry Kane scored in a 2-0 win over Czechia on Tuesday. Czechia played the match out with ten men, and England had opened the campaign by losing 3-2 to Spain.",
+    body: "England beat Czechia 2-0 in League A of the UEFA Nations League on Tuesday 29 September 2026, in Prague. Anthony Gordon and Harry Kane scored, and Czechia finished the match with ten men. ESPN's live coverage and the Sky Sports match report agree on the scoreline, both scorers and the red card.\n\nIt is England's first win of this Nations League campaign. They opened it with a 3-2 defeat by Spain at Wembley, the match in which Kane hit the crossbar from the penalty spot with England 2-1 up.\n\nThe finer detail has one carrier so far: the minutes of both goals, the name of the Czechia player sent off, and the England tally Kane's goal takes him to. This page leaves all three out until a second report confirms them.",
+    status: "verified",
+    seoTitle: "Czechia 0-2 England: Gordon and Kane win it in Prague",
+  },
+  {
     date: "2026-09-28",
     day: "Monday",
     headline: "Portugal left Ronaldo on the bench in Oslo and won anyway",

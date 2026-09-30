@@ -7,6 +7,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-09-30",
+    day: "Wednesday",
+    headline: "Manchester City's former chairman says the club \"cannot stay in the league\", and the appeal deadline is Friday",
+    dek: "An independent commission found Manchester City guilty of serious breaches of the Premier League's financial rules, the league confirmed on Tuesday 29 September 2026. City say they are innocent and have until Friday 2 October to appeal. No sanction has been set.",
+    body: "The Premier League published an independent commission's decision on Tuesday 29 September 2026, and it finds Manchester City guilty of serious breaches of the league's financial rules across nine seasons, 2009-10 to 2017-18. The commission found the club used \"sham\" contracts with commercial partners to inflate revenue and cut costs by more than £900m, per Reuters and Sky Sports. ESPN's Mark Ogden puts the inflated commercial revenue alone at £830m.\n\nESPN and Sky Sports report a guilty finding on all the financial charges. The National and AFP report that most of the separate charges of failing to cooperate with the investigation were proven as well.\n\nRichard Masters, the league's chief executive, said the decision \"details how the club systematically broke Premier League Rules for nearly a decade\", per Reuters and the Evening Standard, and called the case the most significant in Premier League history. Masters said the sanction is still to be decided. Sky Sports reports that a separate hearing will set it, with no date given.\n\nCity's statement says \"The club is innocent of the accusations made by the Premier League.\" The club called the opinion unsafe, with \"clear material errors, of law, principle and fact\", and has until Friday 2 October to appeal, per ESPN and Sky Sports. A new three-person commission would hear that appeal, per Sky Sports.\n\nOne call for the heaviest punishment came from a former City chairman. David Bernstein, who ran the club from 1998 to 2003, told the BBC: \"If the appeal fails, Manchester City cannot stay in the league.\" Reuters and AFP both carry the line. The rules allow a fine, a points deduction or expulsion from the division.\n\nFor Manchester United the season inside those nine that still stings is 2011-12, when both clubs finished on 89 points and City took the title on goal difference, per the Premier League and Sky Sports.",
+    status: "verified",
+    seoTitle: "Manchester City found guilty by Premier League commission",
+    evergreen: "ffp-and-psr",
+  },
+  {
     date: "2026-09-26",
     day: "Saturday",
     headline: "Manchester City reported guilty on 114 charges, and Manchester United's 2012 title loss is back in the argument",

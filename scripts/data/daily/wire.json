@@ -1,7 +1,121 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-29T21:33:58.668Z",
+  "updatedAt": "2026-09-30T09:51:07.802Z",
   "editions": [
+    {
+      "date": "2026-09-30",
+      "status": "partial",
+      "items": [
+        {
+          "id": "espn-soccer:591f59931481",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Overshadowed by USMNT's talented teens, Berhalter is stealing the spotlight",
+          "url": "https://www.espn.com/soccer/story/_/id/50064271/overshadowed-usmnt-talented-teens-cavan-sullivan-sebastian-berhalter-stealing-spotlight",
+          "publishedAt": "2026-09-30T04:32:52.000Z",
+          "publishedDate": "2026-09-30",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-30T09:49:33.742Z",
+          "guidKey": "591f59931481",
+          "urlKey": "5bfdb8ffa57f",
+          "titleKey": "16587ee6c8a8",
+          "note": "Sebastian Berhalter had a goal and an assist in Tuesday's 4-2 win over Chile, which by ESPN's count makes two straight matches with both."
+        },
+        {
+          "id": "espn-nfl:098f27057d06",
+          "sport": "nfl",
+          "league": null,
+          "sourceId": "espn-nfl",
+          "source": "ESPN",
+          "headline": "Shuffling at the top of the NFL? Our Week 4 Power Rankings, plus every team's fantasy surprise",
+          "url": "https://www.espn.com/nfl/story/_/id/50052289/nfl-power-rankings-week-4-teams-fantasy-surprises",
+          "publishedAt": "2026-09-30T05:30:32.000Z",
+          "publishedDate": "2026-09-30",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-30T09:49:33.742Z",
+          "guidKey": "098f27057d06",
+          "urlKey": "d28cc1903c60",
+          "titleKey": "01debf33033e",
+          "note": "ESPN ranks all 32 teams through three weeks and names a fantasy surprise for each, good or bad."
+        },
+        {
+          "id": "espn-f1:f909cf819fd7",
+          "sport": "f1",
+          "league": null,
+          "sourceId": "espn-f1",
+          "source": "ESPN",
+          "headline": "Ocon exiting Haas but vows F1 career isn't over",
+          "url": "https://www.espn.com/f1/story/_/id/50064900/esteban-ocon-leaving-haas-vows-f1-career-over",
+          "publishedAt": "2026-09-30T08:13:08.000Z",
+          "publishedDate": "2026-09-30",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-30T09:49:33.742Z",
+          "guidKey": "f909cf819fd7",
+          "urlKey": "55bb8db3c472",
+          "titleKey": "7b391d6d3572",
+          "note": "Ocon and Haas confirmed on Wednesday that he will leave at the end of the season, and the Frenchman insists his Formula 1 career is not finished."
+        },
+        {
+          "id": "espn-tennis:4506d1b294f9",
+          "sport": "tennis",
+          "league": null,
+          "sourceId": "espn-tennis",
+          "source": "ESPN",
+          "headline": "Alex Eala secures Asian Games medal with quarterfinal triumph",
+          "url": "https://www.espn.com/tennis/story/_/id/50065685/alex-eala-secures-asian-games-medal-win-joanna-garland",
+          "publishedAt": "2026-09-30T09:29:53.000Z",
+          "publishedDate": "2026-09-30",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-30T09:49:33.742Z",
+          "guidKey": "4506d1b294f9",
+          "urlKey": "bfa61e1be4fa",
+          "titleKey": "cb4df0eeb887",
+          "note": "A place in the semifinals guarantees Alex Eala at least a bronze at the Asian Games, which leaves the colour as the open question."
+        },
+        {
+          "id": "espn-nba:4f07b95a6d2c",
+          "sport": "basketball",
+          "league": "nba",
+          "sourceId": "espn-nba",
+          "source": "ESPN",
+          "headline": "Sources: NBA reviewing finalists' bids for Vegas team in $12-13B range",
+          "url": "https://www.espn.com/nba/story/_/id/50060732/nba-reviewing-finalists-bids-vegas-team-12-13b",
+          "publishedAt": "2026-09-30T02:23:26.000Z",
+          "publishedDate": "2026-09-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-30T09:49:33.742Z",
+          "guidKey": "4f07b95a6d2c",
+          "urlKey": "b7efa8885f93",
+          "titleKey": "be4490d8d61b",
+          "note": "ESPN reports three finalist groups remain for the Las Vegas expansion franchise, with the league expected to choose its owner from among them."
+        },
+        {
+          "id": "espn-wnba:71b519d24132",
+          "sport": "basketball",
+          "league": "wnba",
+          "sourceId": "espn-wnba",
+          "source": "ESPN",
+          "headline": "How the Fever took down the Aces in Game 2",
+          "url": "https://www.espn.com/wnba/story/_/id/50060522/2026-wnba-playoffs-scores-results-takeaways-analysis-fever-aces-liberty-lynx",
+          "publishedAt": "2026-09-30T04:30:43.000Z",
+          "publishedDate": "2026-09-30",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-09-30T09:49:33.742Z",
+          "guidKey": "71b519d24132",
+          "urlKey": "2d42e143dcfb",
+          "titleKey": "cc115d987e9f",
+          "note": "With top seed Minnesota eliminated by New York, ESPN turns to how sixth seed Indiana stayed alive against Las Vegas."
+        }
+      ],
+      "missing": [
+        {
+          "sourceId": "espn-golf",
+          "reason": "no-fresh-item"
+        }
+      ]
+    },
     {
       "date": "2026-09-29",
       "status": "complete",

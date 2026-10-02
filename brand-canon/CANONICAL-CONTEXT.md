@@ -263,7 +263,7 @@ section marker now.*
   yt-community lane was DROPPED on 2026-09-10 (D-2026-09-10d).
   **`archv-metrics-desk`**, cron `30 13 * * *`, owns per-post metrics, the rotation audit and the
   end-of-day roll-call, with Buffer READ-ONLY. **`josephbankole-site-desk`**, cron `0 15 * * *`, owns the
-  founder's personal site. Deadlines on the publish desk: thread live by about 7am, Instagram queued
+  founder's personal site. **`archv-clip-desk`**, cron `10 5 * * *` (D-2026-09-26c), clips every video the founder records: at most two clips a weekday to IG @thearchvfc trial reels, TikTok @thearchvfc and YouTube Shorts @thearchvca; Saturday and Sunday it reviews and never posts. Deadlines on the publish desk: thread live by about 7am, Instagram queued
   before the 9am slot, site and app live before the 10:30am push.
 - **Instagram Reels ship the SILENT base cut, never the `_music` cut** (founder, 2026-08-01). The
   founder adds music in the Instagram app on the last lap. TikTok is unaffected and still takes the
@@ -321,18 +321,19 @@ section marker now.*
 
   | Surface | Channel id |
   |---|---|
-  | Instagram @thearchvfc (football) | 6a1e155cc687a22dd44dffda |
+  | Instagram @thearchvfc (football; archv-clip-desk trial reels, notification, 12:00 and 15:00 ET weekdays, D-2026-09-26c) | 6a1e155cc687a22dd44dffda |
   | Instagram @thearchv.ca (multi-sport) | 6a65b5a24b2d03035f42087b |
   | Instagram folabankole (founder personal; `fola-personal-daily` ONLY, notification mode ONLY, D-2026-08-23a, IG half unchanged by D-2026-09-02a) | 6a7ed151b2d9d57743764a17 |
   | Threads @thearchvfc (NEW ID from the founder's reconnect, channel created 2026-09-10 23:53Z; the old id 6a5d708de2638b94d79bc0b4 no longer exists and its post history went with it) | 6aa342ffcd8b9c702c487f67 |
   | Threads @thearchv.ca (added to Buffer by the same reconnect, 2026-09-10 23:52Z; OWNED by `threads-ca-daily`'s 5pm evening thread from 2026-09-11, which moved off Content360 by founder ruling D-2026-09-10e; no other desk queues here) | 6aa342cdcd8b9c702c487ed0 |
-  | Instagram film.joey (appeared in Buffer 2026-09-10 13:57Z; OWNED by `film-joey-daily`, two automatic carousels a day since 2026-09-19; no ARCHV desk queues here) | 6aa2b751cd8b9c702c429c5e |
-  | TikTok @thearchvfc (BACK in Buffer 2026-09-25 as the 8th paid channel, D-2026-09-25a; automatic, one post a day, session-built reels only; Buffer shows `publish` only, no `analyze`) | 6ab7083eea19ca0bdeedc138 |
+  | Instagram film.joey (appeared in Buffer 2026-09-10 13:57Z; OWNED by `film-joey-daily`; from 2026-09-30 two automatic posts a WEEK, art Tuesday 16:00 and film Thursday 12:00, built by one Sunday run, D-2026-09-30b; was two carousels a day; no ARCHV desk queues here) | 6aa2b751cd8b9c702c429c5e |
+  | TikTok @thearchvfc (BACK in Buffer 2026-09-25 as the 8th paid channel, D-2026-09-25a; automatic; archv-clip-desk up to two a weekday at 13:00 and 19:00 ET, D-2026-09-26c; session-built reels one a day while any remain queued; Buffer shows `publish` only, no `analyze`) | 6ab7083eea19ca0bdeedc138 |
   | TikTok @thearchvfc, old channel (REMOVED from Buffer 2026-08-14, D-2026-08-14c; id historical) | 6a65b5844b2d03035f420822 |
+  | YouTube @thearchvca (not in Buffer; Data API, archv-clip-desk Shorts 14:00 and 20:00 ET weekdays, D-2026-09-26c; Studio in Chrome for youtube-goal-archive-weekly) | UCl6d9aV0mLImkGwvYzunWBg |
   | X @thearchvfc (founder-manual only, D-2026-08-24d; no task posts) | 6a1e151fc687a22dd44dfef7 |
   | X @archv_ai (STOPPED 2026-09-10, D-2026-09-10a; no task posts) | 6a4f1a9e404834462886dd5d |
 
-- **`archv-youtube-weekly` is RETIRED (founder, 2026-08-19), and no lane produces video anywhere.**
+- **`archv-youtube-weekly` is RETIRED (founder, 2026-08-19), and no lane produces video anywhere.** (Narrowed by D-2026-09-26c: archv-clip-desk cuts podcast and founder-footage clips for IG, TikTok and Shorts.)
   The live YouTube surface is `youtube-goal-archive-weekly`, Tuesdays 06:00 ET, uploading the next
   banked Drive goal-archive volume as a Short, gated on `fifa.archv/goal-archive-queue.md` reading
   STATUS CONFIRMED, which is the founder confirming both the queue order and the rights. A closed
@@ -414,8 +415,13 @@ section marker now.*
 - **Threads @thearchvfc: STILL DAILY, PRE-QUEUED.** Each run publishes its own morning thread and schedules one thread for each off day before the next run, Buffer `automatic`, `customScheduled`, 06:30 ET: Monday queues Tuesday, Wednesday queues Thursday, Friday queues Saturday and Sunday. Every pre-queued thread passes the D-2026-09-22c bar on the day it is written or that date is `SKIPPED (bar, D-2026-09-22c)`; nothing fills a day. A pre-queued thread is built on facts that cannot change before it sends (a settled result, a published ruling, an archive argument, a dated deadline that falls after the send), because no run exists on the off day to pull it; a story with a clock that could expire first is held for the next run. Each pre-queued thread writes its own `Threads @thearchvfc` row dated its publish day, token SCHEDULED, and the next run reads it back and reports whether it sent.
 - **Liveness:** `lanes.tsv` keys `site-content` and `ig-ca-reel` Monday, Wednesday and Friday, `ig-fc-reel` Wednesday and Friday, `mls-weekly` Monday, `threads-united` daily; `expected-writers.conf` tolerates four days of silence for this desk. `archv-metrics-desk` STEP 5 carries the same due days.
 - Unchanged: every verification, gate, art, spacing, face-rotation and notification rule; step 1b and the Monday WEEKLY block; step 8 OFF and step 9 RETIRED.
+- **Beside it on IG @thearchvfc (D-2026-09-26c):** archv-clip-desk queues trial reels at 12:00 and 15:00 ET on weekdays before 06:02; this desk's 18:00 units need no move.
 
 ### RATIFIED 2026-09-29 (founder, in session with the weekly desk)
+
+**D-2026-09-30c (founder, 30 Sep, in session): FILM.JOEY ROTATES FOUR FORMATS.** Founder wording: "i would also like to add into the rotation 7 second static image reels with famous quotes from the film and into the rotation 7 second static art image reels with a famous poem that has some relation to the artwork". This amends the format half of D-2026-09-30b; the cadence (Sunday run, art Tuesday 16:00, film Thursday 12:00, two posts a week) is unchanged. Formats: `format:reel` (story reel, either lane), `format:carousel` (either lane), `format:quote-reel` (film only), `format:poem-reel` (art only). Each lane cycles story reel, carousel, quote or poem reel; film runs one step ahead of art so a week never carries the same format twice (4 Oct: art story reel, film carousel; 11 Oct: art carousel, film quote reel; 18 Oct: art poem reel, film story reel). Guard rails written into `film.joey/RUNBOOK.md` 3f and 3g: a film line ships only verbatim against a primary source plus one more, and a misquote is a MYTH post; a poem ships only with a documented tie to the artwork (written about it, illustrated by it, or inscribed on it), with public-domain poems quoted up to six lines and in-copyright poems two lines at most. Keywords still in every caption, no hashtags.
+
+**D-2026-09-30b (founder, 30 Sep, in session): FILM.JOEY GOES WEEKLY, TWO POSTS A WEEK, TWO FORMATS.** Founder wording: "update this routine to run only once a week on sundays, to post only twice a week, one art post on tuesdays, one film post on thursdays. it should alternate between a carousel and a single image 7 second reel with the story in the caption. keywords should always be in the caption". From 30 September 2026 `film-joey-daily` (task id unchanged, listed as "film.joey weekly (Sunday build)") is registered on cron `30 4 * * 0` and queues, in Buffer automatic mode on channel 6aa2b751cd8b9c702c429c5e, one ART post for Tuesday 16:00 ET and one FILM post for Thursday 12:00 ET. Each week one is the ten-slide carousel and the other a single-image 7-second silent reel (1080x1920, `film.joey/toolkit/reel.py`) whose caption carries the whole story and a Sources block; the lanes swap formats every week, starting with art reel and film carousel in the week of 4 October. Every caption, both formats, carries the search keywords (film: title, director, DP, year; art: artist, title, medium, date, museum) in real sentences; no hashtags, as ever. The two-source rule, the badges, the gate chain and the 3-hour spacing rule are unchanged. This supersedes the two-carousels-a-day cadence (10 to 30 September). Authority: `film.joey/RUNBOOK.md`; the heartbeat row in `expected-writers.conf` is weekly. film.joey stays out of scope for every ARCHV desk.
 
 **D-2026-09-30a (founder, 30 Sep, in session): THE ARCHIVE MARKETING DESK RUNS TWICE A WEEK AND ON A CREDIT BUDGET.** Founder wording: "update this routine so it runs twice a week, tuesday and thursdays, next run will be thursday"; "remove any steps that use a lot of plan credits and are not required"; "leave the routine as opus 5.5, it can use sonnet 5.5 sub agents or opus 5.5 sub agents". From 30 September 2026 `archv-archive-marketing-desk` is registered on cron `30 7 * * 2,4` (Tuesday and Thursday, about 07:39 ET with jitter; first run Thursday 1 October). No run on the other five days is a miss, a HOLD or an alert, and the nightly review does not expect a log row from it on those days. Duties the spec dates to other weekdays move to the nearest run: the Friday deep market pass runs on Thursday. The desk follows the CREDIT RULES block in its `SKILL.md`: no Workflow runs and no fan-out, one subagent at a time, Sonnet 5 by default for build work and Opus 5.5 only where judgement is needed, one QC pass and one fix pass per poster, and no spec or vault read on a run that ships no unit. The routine itself stays on Opus 5.5. The D-2026-09-26a hold and the HANDOFF.md continuation stand. SUPERSEDES the daily cadence in D-2026-09-12k and, for this desk only, the Opus-only subagent rule of 26 September.
 
@@ -435,6 +441,140 @@ section marker now.*
 - **Design of record:** thearchv-site `docs/wire-design-2026-09-26/design-final.md`; code `scripts/wire/`; merged as PR #18 (d232599) after a 5-lens review, 33 verified findings fixed with tests, and a re-proof that every existing feed is byte-identical. The app half lands on thearchv-app main for the 4 October TestFlight build; submission waits for the founder's word (D-2026-09-22c); the ESPN email condition is dropped by D-2026-09-27b.
 - **Addendum 27 Sep evening (status, no new ruling).** The desk is registered: scheduled task `archv-wire-desk` (cron 05:40, fires about 05:49 with jitter; first run 28 Sep), spec `routines-v2/archv-wire-desk.md`, own worktree `thearchv-site-wt-desk`, lane `wire` in `lanes.tsv` and a heartbeat row in `expected-writers.conf`. It commits only through `scripts/archv-site-put-daily.mjs` (Git Data API, one commit, both files, refuses to overwrite a different same-date edition). A full rehearsal of every step passed short of the real commit; it found that the note check refused "According to ESPN" and "Per ESPN", fixed on thearchv-site main in 33bcafa. The app half is merged on thearchv-app main (e513285, 294 tests green, tab-strip gate green on both simulators) and rides the 4 Oct TestFlight build; nothing is submitted.
 
+### RATIFIED 2026-09-26 (founder, in session with the clip desk design; applied 2026-09-30 after the supervised dry run)
+
+**AMENDED 2026-09-30 (founder, in session): ROUTES SIMPLIFIED.** "yes go with the simpler route. for youtube drive chrome and go to youtube studio". IG @thearchvfc and TikTok @thearchvfc clips are uploaded by the desk through the Buffer composer in Chrome (IG notification, TikTok automatic); YouTube Shorts go through YouTube Studio in Chrome as @thearchvca. No Supabase bucket, no key file, no Google Cloud project, no YouTube Data API. Where the block below says otherwise, this line wins. Chrome or a logged-out tab = that surface HOLDs.
+
+**D-2026-09-26c (founder session, evening): THE CLIP DESK. IT PROCESSES EVERY VIDEO THE FOUNDER RECORDS, AND SHIPS AT
+MOST TWO CLIPS A WEEKDAY TO INSTAGRAM TRIAL REELS, TIKTOK AND YOUTUBE SHORTS; WEEKENDS REVIEW AND NEVER POST.** Founder
+wording: "create a daily routine, 5:20am on weekdays, weekends it just reviews the weeks work and cleans up and issues,
+main task is to do clipping for tik tok and instagram trial reels using podcast footage (i will record most weeks on
+sunday, and whenever i go to games or on trips ill add videos to the same folder), max 2 videos a day, use analytics and
+vidiq tools", then "clips should also go on youtube shorts", then, asked whether he would keep uploading Shorts by hand,
+"nope, ill let this process all video i record". Host: he chose a storage bucket of the desk's own over the Chrome
+composer and vidIQ direct publish.
+- **The desk.** `archv-clip-desk`, one scheduled task, cron `10 5 * * *` America/Toronto with a fixed jitter of about
+  ten minutes, so it fires at about 05:20. Spec single-homed at `fifa.archv/routines-v2/archv-clip-desk.md`; engine at
+  `~/Movies/Podcast/_clipdesk/engine/` (python package `clipdesk`, system python3); data under
+  `~/Movies/Podcast/_clipdesk/`. Log domain `podcast`, writer prefix `archv-clip-desk`. Every run is DRY until
+  `~/Movies/Podcast/_clipdesk/state/READY` exists, and again while `state/HOLD` exists: a DRY run builds, checks and
+  writes its plans to disk with the same commands a live run uses, and uploads, queues and inserts nothing. READY is
+  written only by a designing session after the regression fixtures pass; a run never creates it. The engine holds the
+  same gates in code: no upload and no queue payload without READY, with HOLD present, or on a Saturday or Sunday.
+- **Mode by day.** Monday to Friday CLIP mode. Saturday and Sunday REVIEW mode: review the week, clean up, fix issues
+  (engine bugs fixed with regression fixtures re-rendered), ingest and catalogue ALL new footage, pre-build the bank, and
+  report bank depth and what material is going unused. REVIEW mode never posts, releases, queues, uploads or schedules
+  anything (the engine checks the weekday itself), and no slot of this desk falls on a Saturday or Sunday. A weekend
+  run never edits the engine's safety code, a QC threshold, the blocklist or an off-limits span; it proposes.
+- **Material: ALL video the founder records.** The desk owns the clipping of every video he records: every podcast
+  episode (most weeks recorded on Sunday; Monday's run ingests it after queueing) and every game or trip folder he adds
+  to `~/Movies/Podcast/`. Each is ingested, catalogued and mined into the bank. **The founder uploads no clips by hand
+  anywhere**, to Shorts, Instagram or TikTok, and no desk plans around a hand upload. Unused material is reported at the
+  weekend, never forced out.
+- **Volume.** At most TWO clips a weekday, unchanged by the wider material. Each clip goes to all three surfaces below.
+  The cap is a ceiling, not a quota: a clip is built only at 60 or more on the desk's 100-point rubric (hard gates
+  first), and one strong clip beats a weak second.
+- **Surfaces and routes.**
+  - Instagram @thearchvfc, Buffer `6a1e155cc687a22dd44dffda`, `schedulingType: notification`, `type: reel`. The founder
+    publishes each as a Trial Reel from the notification. His IG publish is the approval for any leg that waits on it.
+  - TikTok @thearchvfc, Buffer `6ab7083eea19ca0bdeedc138`, `schedulingType: automatic`,
+    `metadata.tiktok.isAiGenerated: false`.
+  - YouTube Shorts on @thearchvca, channel `UCl6d9aV0mLImkGwvYzunWBg`, through the YouTube Data API (OAuth app
+    `archv-uploader`), `privacyStatus: private` with `publishAt` at the slot, `categoryId 17`,
+    `selfDeclaredMadeForKids: false`, `containsSyntheticMedia: false`; the channel id is asserted before every insert
+    (the same Google login owns a personal channel). Not through Buffer: Buffer has no YouTube channel, and the section
+    3 line "NEVER ... YouTube via the engine" stands.
+  - Buffer writes are GraphQL `createPost` via `execute_mutation` only, `mode: customScheduled`, explicit `dueAt`, and
+    only with the mutation the desk's engine returns for a leg it has cleared (`clipdesk.publish buffer-plan`, the
+    single gate); never `addToQueue`, never `shareNow`; independent read-back of every post.
+- **Duplicate guard.** Before every queue call and every YouTube insert the desk reads that channel's recent posts (14
+  days on Buffer, 30 days of the YouTube uploads playlist) as well as its own ledger, so nothing already posted is
+  posted again. Posts the desk did not make count: the Shorts the founder uploaded by hand on 22 and 25 September and
+  the session-built reels of 25 to 28 September.
+- **Slots, weekdays, ET.** IG 12:00 (clip 1) and 15:00 (clip 2). TikTok 13:00 and 19:00. Shorts 14:00 and 20:00. After
+  D-2026-09-30b (football desk) the only standing football time on IG @thearchvfc is 18:00 (MLS Weekly on Monday, the
+  stat card reel on Wednesday and Friday); 15:00 sits exactly three hours before it and 12:00 exactly three hours before
+  15:00, so no football unit moves, and the archive desk's 21:00 stays three hours clear of 18:00. All `dueAt` and
+  `publishAt` from `zoneinfo` America/Toronto.
+- **The QC rule: failed, clean, or passed and not clean.** A reel that fails the desk's QC ships nowhere. A CLEAN reel
+  (passed with no overrule used, no manual result, no open listen item and no look item) goes to all three surfaces
+  the same day. A reel that passed and is not clean is Instagram notification only that day, because the founder's
+  review in Buffer is the gate; a later weekday run queues its TikTok and Shorts legs only after Buffer shows the IG
+  post `markedAsPublished` with its network twin. Such a leg expires ten days after the IG publish. An overrule is a
+  written entry in the cut (the check, a real sentence of reason, who) and can never clear the privacy, minors,
+  employer, betting or marks checks. The engine refuses any upload or queue payload unless QC passed on the exact file
+  being sent.
+- **Late start and backlog.** A run queues only slots on its own weekday that are 60 minutes or more away; every other
+  leg holds to the next weekday run. When four or more of the desk's IG notifications are past their slot and unposted,
+  nothing new is queued on any surface until the founder clears them.
+- **Spacing, D-2026-09-12c, unchanged and binding.** Checked live before every queue call and every YouTube insert. The
+  clip reels count as units on IG @thearchvfc like every other unit on that channel. Spacing on IG is judged on the
+  queued slot, because Buffer rewrites a notification post's `dueAt` to the founder's press time; a press-time gap is
+  not a breach by any desk. Blocked means the clip desk HOLDS that leg: it never slides into another owner's window and
+  never re-times another owner's post. All clip-desk Buffer writes and YouTube inserts are done by 06:02 ET on every
+  weekday, so the football desk (about 06:06 on Monday, Wednesday and Friday) and the archive desk (about 07:39 on
+  Tuesday and Thursday) see them.
+- **Host.** Supabase Storage bucket `clipdesk-reels` in the founder's existing Supabase organisation: a desk-owned
+  bucket with public read and unlisted 128-bit object names (Buffer fetches the file without credentials, so anyone
+  holding the exact URL can read it; the bucket cannot be listed without the service key), not on the brand's domain.
+  Service key in `~/.config/archv/keys/clipdesk-supabase.env` (chmod 600), saved by the founder, never printed or
+  logged. HEAD must show 200, `video/mp4` and the exact byte count before `createPost`. An object is deleted at a
+  weekend review once its IG post is `markedAsPublished` and its TikTok post is `sent`. Key file absent or the host
+  down: the IG and TikTok legs HOLD, files staged, a HELD row, queued first on the next weekday run. There is no
+  fallback route: the Buffer composer in Chrome stays off until a supervised rehearsal with the founder. YouTube token
+  down: the Shorts leg HOLDS and the founder is asked to re-consent. Never thearchv.ca, never Higgsfield, never vidIQ
+  direct publish for this lane.
+- **The bar (adds a line to D-2026-09-22c's "The bar, per format").** Podcast or founder-footage clip on the clip desk:
+  60 or more on the desk's rubric with every hard gate passed and the EDITING_SPEC_v4 §21 QC passed. A day with nothing
+  over the bar writes `SKIPPED (bar, D-2026-09-26c)`, a sanctioned skip.
+- **Measurement.** The clip desk scores its own clips (vidIQ owner insights at 0 credits for skip and watch, Buffer
+  network twins and TikTok metrics, YouTube reads) at 12 to 30 h (direction), 44 to 56 h (judged) and 6 to 8 days
+  (settled). Trial-reel reach stays OUT of the organic medians the football desk (D-2026-09-24a/b), the archive desk's
+  throttle and the metrics desk use, and out of the >3,000 paid flag's denominators; trial status is `unconfirmed`
+  until the founder says. The metrics desk fills the metric cells of the clip desk's performance-log rows as for any
+  row. vidIQ budget: 25 credits a weekday, 80 a weekend. The weekend may move a rubric weight by one 5-point step per
+  factor per week, at most two factors, only with 5 or more judged reels per arm; changes to the rubric's gates or
+  factors go to the founder. The weekend report also carries bank depth and unused material per source.
+- **Performance-log Platform cells (added to the closed list).** `IG Clip @thearchvfc`, `TikTok Clip @thearchvfc`,
+  `YT Short Clip @thearchvca`. No cell of a clip-desk row may contain `IG @thearchvfc`, `IG Reel @thearchvfc`,
+  `TikTok @thearchvfc`, `YouTube @thearchvca` or `MLS Weekly` (the roll-call greps whole rows). Note tokens as the
+  lanes file sets them, plus two sanctioned states that are never FAILED and carry no alert row:
+  `DEFERRED (not clean, D-2026-09-26c)` for a TikTok or Shorts leg waiting on the IG publish, and
+  `HELD (founder: <action>, D-2026-09-26c)` for a leg that waits only on a founder action already on his list (the
+  key file, the YouTube re-consent, a backlog of unposted notifications). Due days: Monday to Friday; never due on a
+  Saturday or Sunday. A lane is registered in `lanes.tsv` only once its surface answers a live preflight.
+- **Rules that bind, unchanged.** No hashtags anywhere (D-2026-07-28f). Search-first first line with full entity names.
+  Never name or imply Bryan's employer or its clients, or that Bryan worked an event; the prep sheet's BRYAN'S MATCH
+  talk is screened out. No on-screen name unless that person is visibly the subject. No referee faces, no named
+  officials. Podcast cuts at sentence boundaries; a join never changes meaning. No fabricated claims; two sources for
+  numbers. Gate chain on every string the desk writes, post caption, title, description and authored on-screen text
+  (humanizer-archv with the house voice, ai-writer-detection phases 2 and 3, banned_moves_lint, remove-ai-marks Layer
+  A last); burned-in speech captions are the speaker's words and get Layer A only. Video strip by the engine (a
+  stream copy with no container, encoder or handler metadata, then `exiftool -all=`), never `clean_file.py` on video.
+  One heavy ML job machine-wide through `heavy_gate.sh`; Whisper only in ingest, only through the engine's gate; one
+  ffmpeg render at a time under the engine's own lock. Every agent Opus 5.5 (D-2026-09-30a's Sonnet allowance is the
+  archive desk's alone).
+- **What it supersedes, FOR THE CLIP DESK'S CLIPS ONLY.**
+  - D-2026-09-25a's "ONE TikTok post a day" and its scope "session-built reels only": TikTok @thearchvfc carries up to
+    two clip-desk posts a weekday at 13:00 and 19:00. The founder no longer uploads clips by hand; a session reel
+    already queued keeps its slot and the clip desk holds around
+    it. The 19:00 default, automatic mode, the read-back and the no-thearchv.ca host rule stand. The desks' own TikTok
+    stages stay retired.
+  - D-2026-08-13d's "no scheduled lane resumes reel work" is lifted for `archv-clip-desk` and no other lane. Canon's
+    own lesson applies: a carve-out that names one owner forbids every other owner, so no other desk reads this as a
+    licence.
+  - D-2026-09-19a's two-unit ceiling on IG @thearchvfc and D-2026-09-20a's one-reel-a-day line do not count the clip
+    desk's trial reels, as the archive unit is exempt: the clip desk carries its own cap of two a weekday. The football
+    desk's units and its Monday, Wednesday and Friday cadence (D-2026-09-30b) are unchanged.
+  - D-2026-09-22c's volume target is not a ceiling on this desk: the founder ordered it four days later. The slim-down's
+    skip rule and its bar apply in the clip desk's own form above.
+  - §0 "no lane produces video anywhere" (the `archv-youtube-weekly` retirement line): the clip desk's Shorts are a
+    second live YouTube lane beside `youtube-goal-archive-weekly`, which is unchanged (Tuesday 06:00, one banked vol).
+  - The archive desk's surface note that every other IG @thearchvfc unit "belongs to archv-football-desk" now reads
+    "except the clip desk's trial reels".
+- **Rollback.** Disable the task; `expected-writers.conf` row to `paused`; comment out the clip lanes in `lanes.tsv`
+  with a dated line; delete `state/READY`. Queued posts stay unless the founder says otherwise.
+
 ### RATIFIED 2026-09-26 (founder, in session with the archive marketing desk)
 
 **D-2026-09-26a (founder session, 07:11 ET): ARCHIVE DESK HOLD WHILE THE MANCHESTER UNITED POSTERS ARE REDESIGNED.** The founder approved a full redesign of every Manchester United poster on 26 Sep (see D-2026-09-25b addenda: quote-led back-view posters, reference ARCHIVE-PACKS/routine/redesign-2026-09-26/approved/) and said of the current plates: "the way our posters are now, its impossible for a customer to actually know or care what they are". Until the redesigned posters are live on Gumroad (the orchestrating session will record the go-live here), `archv-archive-marketing-desk`:
@@ -452,6 +592,7 @@ The founder's paid ads are also on hold until the new posters are live. This ent
 - **D-2026-09-26a now reads "live on Etsy"** in place of "live on Gumroad": the desk hold and the founder's ad hold lift when the orchestrating session adds the Etsy go-live line under D-2026-09-26a.
 - **Addendum 26 Sep ~18:45 ET (founder: "finish up, let the next run of this routine continue").** thearchv.ca moved to Etsy, commit ef92a87, and a follow-up that removes the nine World Cup "Buy the print" links was deploying at handoff (HANDOFF.md says how to check it is live). The remaining work passes to the next run of `archv-archive-marketing-desk` (27 Sep 07:39 ET) through ARCHIVE-PACKS/routine/redesign-2026-09-26/etsy/HANDOFF.md, with a CONTINUATION FIRST paragraph at the top of that task's SKILL.md: finish the posters, produce the print files, photos and download files, convert the Etsy and Printful listings, add the site bundle links, then add the go-live line. For that work only, D-2026-09-26a's no-touch rule on the ad kit and redesign folders does not bind the desk. The United Men bundle is 11 posters (the nine plus Rotterdam 91 and Stockholm 17): founder confirmed 26 Sep, "11 is fine".
 - **Addendum 26 Sep evening (founder: "update the links to the etsy store, its already live").** The Etsy SHOP link is open from today: `ARCHIVE-PACKS/routine/links.json` `etsy_shop` live_from moved from 2026-11-06 to 2026-09-26 (backup `links.json.bak-2026-09-26b`), and the iOS app's fallback shop link now matches the site's https://thearchvca.etsy.com (thearchv-app 6d18605, ships in 1.5.6). This opens the shop link only. The D-2026-09-26a go-live line is NOT added here: the redesigned United posters are not live yet, so the product-unit hold and the founder's ad hold stand, and per-listing keys are still added at that go-live by `archv-archive-marketing-desk`.
+- **GO-LIVE, 1 Oct 2026 (founder session, manual mode; founder: "close out the rest of the items").** All 21 redesigned Manchester United printed posters are LIVE on Etsy (11 men, 10 women; Printful files swapped, photos, copy, tags, alt texts, public pages checked; six inactive listings activated; prices on the ladder 5x7 C$24, 12x16/12x18 C$43, 18x24 C$49, 24x36 C$67.50), and all four digital bundles are live (World Cup Finals 4517536632, United Men 4513722055, United Women 4513523849 at C$40.99; big pack 4514912834 at C$69.25). thearchv.ca commit 397ad2f links the finals bundle and the big pack. Per-listing keys are in `routine/links.json` (live_from 2026-10-01). **The D-2026-09-26a desk hold and the founder's ad hold are LIFTED from today**; the CONTINUATION FIRST paragraph is removed from the desk SKILL.md. Listing ids and notes: `etsy/listing-map.json`, `etsy/HANDOFF.md` (1 Oct sections).
 
 ### RATIFIED 2026-09-25 (founder, in session with the archive marketing desk)
 
@@ -551,6 +692,7 @@ series line on each plate.
   baseline rather than a verdict.
 - **First three queued on 2026-09-25**, all at 23:00Z (19:00 ET): 26 Sep `arsenal_world_class`, 27 Sep
   `ronaldo_alvalade`, 28 Sep `old_trafford_pov`.
+- **Narrowed by D-2026-09-26c (2026-09-26):** archv-clip-desk posts up to two clips a weekday to this channel at 13:00 and 19:00 ET and the founder no longer uploads clips by hand; the one-a-day line covers only session-built reels already queued.
 
 ### RATIFIED 2026-09-24 (founder, in session with the football desk)
 
@@ -758,7 +900,7 @@ Target: about 60 routine units a week, down from about 170 planned. Effective wi
   72 hours with the record number held to the last beat. Carousel: one screenshot-able fact per slide, payoff on the
   last card, lint clean, a use that earns a save; judged on saves plus shares per 1k reach. Thread: passes the saga test
   or a broad-event record angle, otherwise skip the day. Site page: evergreen, named cases, answer-first title under 60
-  characters, sourced by deep URL, updated in place. Newsletter issue: built from a unit that already proved itself.
+  characters, sourced by deep URL, updated in place. Clip desk clip (D-2026-09-26c): 60 or more on the desk's rubric, every hard gate and the EDITING_SPEC_v4 §21 QC passed. Newsletter issue: built from a unit that already proved itself.
 - **Kill or keep.** Every lane carries a threshold and a judge date. Two consecutive 4-week misses pause it; a paused
   lane returns only with a changed format. IG lane: organic median reach under 100 over 20 posts with a flat account.
   Threads lane: settled median under 300 over 20 threads. Site lane: under 0.5 clicks per page at 28 days.
@@ -838,7 +980,7 @@ per day**, not one across the operation; and it binds **IG @thearchvfc and IG @t
 - **What does NOT move:** IG @thearchv.ai keeps its own grid under `archv-ai-desk` and `ai-company-feature`
   (founder scoped this ruling to the two football-desk accounts); the archive-marketing IG Archive unit
   keeps its exemption and its own slot; folabankole and film.joey are out of scope as ever. Threads, the
-  site, the app and the Dispatch are untouched.
+  site, the app and the Dispatch are untouched. The clip desk's trial reels are also outside this cap and cadence (D-2026-09-26c); spacing D-2026-09-12c still counts them.
 - **Applied from 2026-09-20.** The four reels already queued that morning under D-2026-09-19c (two per
   account) were built and verified before the ruling landed and were LEFT AS QUEUED rather than re-cut;
   the two surplus ids are named in that day's run report for the founder to drop in Buffer if he wants the
@@ -918,7 +1060,7 @@ carousel and 1 single image reel." Scope and conflicts ruled by the founder the 
   card reel still ships. This ends the two-units-on-Sunday exception of D-2026-09-08b (Sunday was three units with
   the reel).
 - **The archive-marketing desk's IG Archive @thearchvfc unit is EXEMPT** from the cap (founder ruling) and keeps its
-  own slot; spacing still binds it.
+  own slot; spacing still binds it. The clip desk's trial reels are also outside this cap and cadence (D-2026-09-26c); spacing D-2026-09-12c still counts them.
 - **@thearchv.ca: the EVERGREEN-BENCH repost half is RETIRED** (it was the account's second carousel). One new
   carousel plus the stat card reel.
 - **@thearchv.ai: the founder's 10:00 ET explainer is the day's carousel until the series ends on 9 October.** Until
@@ -942,7 +1084,7 @@ between any two units on one CHANNEL (one account on one surface; an account's I
 measured `dueAt` to `dueAt`, checked against the channel's live schedule before every queue call, a blocked slot
 moving to three hours after the blocking post and never earlier. More units a day than a lane's usual count is fine.
 IG @thearchv.ai runs on the 07/10/13/16/19/22 ET grid; Threads @thearchv.ai keeps fola's 14:00 and puts every other
-thread on 08/11/17/20/23. Full text and procedure in RATIFIED 2026-09-12.
+thread on 08/11/17/20/23. Full text and procedure in RATIFIED 2026-09-12. Clip desk IG slots are 12:00 and 15:00 ET on weekdays; spacing on a notification post is judged on the queued slot (D-2026-09-26c).
 
 **D-2026-09-08b (founder, evening of 2026-09-08) puts ONE cap back, on one account.** *(LIFTED 2026-09-12 by D-2026-09-12d: IG @thearchvfc may run more than one unit a day, three hours apart.)* Instagram
 @thearchvfc ships **ONE unit a day**, and the lanes compete for that single slot. This does not
@@ -1722,6 +1864,7 @@ inheriting yesterday's, because a reader scanning §0 for what changed navigates
   that no scheduled lane resumes reel work. What stands from tonight:
   **PARTLY LIFTED 2026-09-11 by D-2026-09-11b: ONE single stat card reel a day on @thearchvfc is
   back, that format only, outside the one-unit cap. Everything else below still stands.**
+  **LIFTED 2026-09-26 by D-2026-09-26c for archv-clip-desk only: podcast and founder-footage clips. No other lane resumes reel work.**
   - **The daily desk and the weekly task build, stage and queue NO reels.** They report the
     lane PAUSED citing this decision. The D-2026-08-13c one-a-day regime is ON HOLD, not
     implemented; no desk spec rewrite proceeds.

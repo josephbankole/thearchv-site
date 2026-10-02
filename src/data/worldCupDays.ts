@@ -18,6 +18,15 @@ export interface DayEntry {
 
 export const worldCupDays: DayEntry[] = [
   {
+    date: "2026-10-02",
+    day: "Friday",
+    headline: "Cristiano Ronaldo walked out of the Portugal camp, and two Manchester United players set up three of the four goals the next night",
+    dek: "Portugal beat Denmark 4-2 in the UEFA Nations League in Copenhagen on Thursday 1 October 2026. Bruno Fernandes made two goals and Diogo Dalot one, a day after Cristiano Ronaldo left the squad.",
+    body: "Portugal beat Denmark 4-2 in League A of the UEFA Nations League in Copenhagen on Thursday 1 October 2026, per ESPN and SBS. João Cancelo, Gonçalo Ramos, Vitinha and João Félix scored for Portugal. Mikkel Damsgaard and Rasmus Højlund scored for Denmark.\n\nTwo Manchester United players set up three of the four. Bruno Fernandes played the pass for Ramos's goal at 25 minutes and the free kick that Vitinha headed in at 67 minutes, per Sofascore and United in Focus. ESPN and SBS also credit Fernandes with the Vitinha goal. Diogo Dalot, on as a substitute, squared the ball for Félix to make it 4-2 at 87 minutes, per Sofascore and SBS. Sofascore rated Fernandes 8.6, the highest on the pitch, with three big chances created.\n\nThe match came the day after Cristiano Ronaldo left the camp. Ronaldo announced on Instagram on 30 September that he had gone, shortly after the coach Jorge Jesus said he did not plan to start the 41-year-old against Denmark, per ESPN, Al Jazeera and The Irish Times. Ronaldo said he would tell the Portuguese people the truth about why he left in due course. Ramos started in his place and scored.\n\nFernandes had missed Portugal's win in Norway on 27 September. Jesus said then that the midfielder had joined the squad carrying an injury from Manchester United, per Sports Illustrated and Goal, and ESPN reports he had been managing the problem since the 4-0 against Sabah FK on 10 September. He came through Copenhagen without a reported setback. Patrick Dorgu missed the match for Denmark after he went off injured against Wales on 27 September and was sent home, per ESPN and Goal.\n\nManchester United play Tottenham Hotspur at Old Trafford on Saturday 10 October, per ESPN.",
+    status: "verified",
+    seoTitle: "Denmark 2-4 Portugal: Bruno Fernandes sets up two",
+  },
+  {
     date: "2026-09-29",
     day: "Tuesday",
     headline: "England lost at Wembley, then went to Prague against ten men and won their first Nations League game of the campaign",

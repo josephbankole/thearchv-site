@@ -83,7 +83,7 @@ conversion map: `listings.json`.
 | 3 | I never wanted Manchester United to be second to anybody. Only the best would be good enough. | **HELD** (trade mark) | Man cave | Red | No poster carries this exact line; the Busby product on the market is "Manchester is my Heaven". Dignified, no profanity, works as a dad or grandad gift. |
 | 4 | If you're good enough, you're old enough. | LISTED | Kids' room | Cream, pitch lines | No wall art found for the exact line and nobody aims it at children. Positive, and parents get it without knowing football. |
 | 5 | Glory glory Man United | **HELD** (trade mark) | Kids' room | Cream, red type, pitch lines | Crowded as an adult lyrics print, but no kids' version was found. Amazon sellers already title it "gift dad, man cave", so it gifts. Refrain only. |
-| 6 | The Theatre of Dreams | **HELD** (trade mark) | Kids' room | Cream, pitch lines | **HELD for a trade mark check.** Competitors are all stadium photos, so a type-only version is a gap. But UKIPO decision O/520/01 (2001) shows Manchester United Merchandising got another company's THEATRE OF DREAMS registration for printed matter invalidated. Listed only if the registers are clear (MAC-ROUTINE.md section 1). |
+| 6 | The Theatre of Dreams | **HELD** (trade mark) | Kids' room | Cream, pitch lines | **HELD for a trade mark check.** Competitors are all stadium photos, so a type-only version is a gap. But UKIPO decision O/520/01 (2001) shows Manchester United Merchandising got another company's THEATRE OF DREAMS registration for printed matter invalidated. Listed only if the registers are clear (MAC-ROUTINE.md section 1); the registers weren't clear, so it's HELD (UK00902201879). |
 
 ## Left out, and why
 

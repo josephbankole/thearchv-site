@@ -110,7 +110,8 @@ A pin keeps sending traffic for months, where an Instagram post is spent in a da
 - **Images.** One fresh image per pin: the flat 1000x1500 poster, the framed mockup, and later a
   styled room shot. Never the same image twice on one board. Before it queues, each image is
   read back as an image and passes the metadata strip (`clean_file.py`, then `inspect_file.py`).
-- **Title** up to 100 characters, written as a search: "Football Quote Poster for a Kids Room".
+- **Title** up to 100 characters, written as a search: "Manchester United Kids' Room Poster, If You're Good Enough, You're Old Enough", with
+  "Manchester United" in full (D-2026-10-04a).
 - **Description** up to 500 characters: two sentences of plain English with the buyer's words in
   them (gift for dad, boys bedroom, man cave, football fan), "Manchester United" in full where the
   club is named, and the disclaimer "Unofficial fan art. Not affiliated with any club, league or
@@ -204,12 +205,12 @@ hand; the desk drafts at most one post a fortnight, aimed at groups whose rules 
 ## 8. Instagram and Threads
 
 No new lanes and no change to caps or spacing. In the desk's existing product carousel slot, the Good
-Enough poster can lead a kids' room carousel (notification mode, like every @thearchvfc carousel,
-D-2026-08-05i), ending on a question the reader can answer. Threads gets the story behind a line,
+Enough poster can lead a kids' room carousel (automatic, as D-2026-09-12k sets for this desk's
+@thearchvfc promo units), ending on a question the reader can answer. Threads gets the story behind a line,
 once a week at most, inside the desk's existing Threads lane. A held poster never appears in either.
 
 ## 9. Unchanged
 
 Cadence (Tue and Thu), credit rules, the gate chain, spacing (three hours per channel), caps, the
 Dispatch ask as the primary call on @thearchvfc, no hashtags, no AI mention in stores, Reddit drafts
-only, the Instagram notification path, Munich and Stockholm sensitivities, and "never spends money".
+only, D-2026-09-12k's automatic path for this desk's @thearchvfc promo units, Munich and Stockholm sensitivities, and "never spends money".

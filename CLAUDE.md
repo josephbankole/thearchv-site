@@ -539,6 +539,9 @@ held poster is committed, thumbnails and contact sheets included.
 poster. The old tee, tote, mug and sticker sheet are out of it: the tote's listing became the poster,
 and the rest of the merch and the finals tees were deactivated on Etsy, never deleted. A quote
 poster goes into the feed only once its listing is live and its art clears the rule below.
+Storefront and fallback Etsy links use the Share & Save form, `https://thearchvca.etsy.com/listing/<id>`
+(D-2026-10-04b), so a sale that starts from the site or the app earns the fee credit. `index.html` carries
+Pinterest's `p:domain_verify` meta for the thearchv.ca claim; leave it in place or the claim drops.
 
 **The art rule (D-2026-10-04a; founder, 4 Oct 2026: "anything that is a registered trademark, do
 not use", scoped "Strict on art, name in copy").** Nothing registered as a trade mark is printed on

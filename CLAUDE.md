@@ -519,6 +519,19 @@ United and Paris Saint-Germain only. It grows per fixture through `build_badges.
 `../match-covers/carousel/`, which requires the founded year to be verified against two named
 sources or left off. Do not hand-add a badge file to this repo to fill a gap on a card.
 
+## The quote posters and the app storefront (2026-10-04)
+
+`scripts/quote-posters/render.py` draws the six typographic Manchester United quote posters from
+`scripts/quote-posters/lineup.json` (Archivo Black, Marcellus 700, THE ARCHV. wordmark from two
+committed alpha masks, Pillow only). It is NOT in `npm run build`. Its print files are never
+committed: this repo is public and a print file is the product, so the founder's Mac renders them
+into `ARCHIVE-PACKS`. Only the 600x900 storefront thumbnails (`public/shop/quote-*.webp`) live here.
+`scripts/storefront-items.json` feeds the app's `dist/feed/storefront.json`; since D-2026-10-04a it
+lists these posters, not the old tee, tote, mug and sticker sheet, whose Etsy listings were converted
+in place, so the listing ids carried over. Decision, research and the Etsy copy:
+`docs/quote-posters-2026-10-04/`. Art rules there that differ from the match posters: no quotation
+marks, contractions, and The Theatre of Dreams held for a trade mark check.
+
 ## Open site work
 
 **The news-product rebuild, phases 2A and 2B (2026-08-09).** Branch

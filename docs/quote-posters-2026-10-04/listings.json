@@ -1,0 +1,98 @@
+{
+  "note": "Etsy copy and the listing conversion map for the quote posters. Rules: searchable team, competition and ground names allowed (D-2026-09-25b); no player or manager names in listing text; the disclaimer on every listing; never official, licensed, endorsed or limited edition; never mention AI and never touch the AI or creativity fields; no hashtags; contractions (founder, 4 Oct). Photos come from scripts/quote-posters/render.py --out: 1 <slug>_mockup.jpg, 2 <slug>_flat.jpg, 3 size-guide.jpg.",
+  "shared": {
+    "price_ladder_cad": {"5x7": "24.00", "12x16": "43.00", "12x18": "43.00", "18x24": "49.00", "24x36": "67.50"},
+    "print_file_for_size": {"5x7": "5x7", "12x16": "3x4", "18x24": "3x4", "12x18": "2x3", "24x36": "2x3"},
+    "paper": "Printful matte poster, the same product as the 21 match posters",
+    "section_man_cave": "Quote Posters",
+    "section_kids_room": "For the Kids' Room",
+    "attributes": {
+      "orientation": "Vertical",
+      "framing": "Unframed",
+      "subject": "Sports & fitness",
+      "occasion": "Birthday",
+      "holiday": ["Christmas", "Father's Day"]
+    },
+    "description_footer": "What you get\n- A poster printed to order on museum-quality matte paper.\n- Five sizes: 5x7, 12x16, 12x18, 18x24 and 24x36 inches. Each size is set for its own shape, so nothing's cropped.\n- Frame not included.\n\nUnofficial fan art. Not affiliated with any club, league or federation.",
+    "alt_size_guide": "The five poster sizes drawn to scale: 5x7, 12x16, 12x18, 18x24 and 24x36 inches."
+  },
+  "conversion_map": [
+    {"from": "The ARCHV Logo Tee", "listing_id": "4517419194", "to": "they-always-score"},
+    {"from": "The ARCHV Tote Bag", "listing_id": "4517424545", "to": "good-enough-old-enough"},
+    {"from": "The ARCHV White Glossy Mug", "listing_id": "4521104801", "to": "never-second"},
+    {"from": "ARCHV Football Sticker Sheet", "listing_id": "4527674843", "to": "glory-glory"},
+    {"from": "first finals t-shirt found in Shop Manager (active or inactive)", "listing_id": "find on the run", "to": "seagulls"},
+    {"from": "second finals t-shirt found in Shop Manager", "listing_id": "find on the run", "to": "theatre-of-dreams", "only_if": "the trade mark check clears; otherwise deactivate this listing"},
+    {"from": "any further finals t-shirt", "listing_id": "find on the run", "to": "deactivate, never delete"}
+  ],
+  "if_short_of_listings": "If fewer finals t-shirts exist than posters left to place, create the remaining poster listings from Printful and record the new ids.",
+  "listings": [
+    {
+      "slug": "they-always-score",
+      "audience": "man-cave",
+      "section": "Quote Posters",
+      "title": "Manchester United Quote Poster, They Always Score, Barcelona 1999 Treble Print, Man Utd Gift for Dad",
+      "description": "Can Manchester United score? They always score.\n\nThat's the line from Barcelona, 26 May 1999. Manchester United went into added time of the Champions League final a goal down and won it 2-1, both goals from corners, to finish the treble. This poster sets the words in heavy type on Old Trafford red with the place and the date, and nothing else.\n\nIt's for the fan who still talks about that night: a dad, a partner, a mate with a birthday coming, a man cave or a home bar.\n\n",
+      "tags": ["man utd poster", "manchester united", "man united gift", "football poster", "soccer poster", "gift for dad", "man cave wall art", "football quote", "treble 1999", "barcelona 1999", "united fan gift", "sports bar decor", "football print"],
+      "room": ["Living room", "Office", "Game room"],
+      "alt_mockup": "Framed red poster on a plain wall. Heavy cream type reads: Can Manchester United score? They always score. Barcelona 99, treble winners, 26 May 1999.",
+      "alt_flat": "Red typographic poster with cream lettering: Can Manchester United score? They always score. Barcelona 99 and treble winners at the top, 26.05.1999 at the foot."
+    },
+    {
+      "slug": "seagulls",
+      "audience": "man-cave",
+      "section": "Quote Posters",
+      "title": "Manchester United Quote Poster, Seagulls and Trawler Print, 1995 Football Wall Art, Man Utd Gift",
+      "description": "When the seagulls follow the trawler, it's because they think sardines will be thrown into the sea.\n\nSaid to a room full of reporters on 31 March 1995, and quoted by Manchester United fans ever since. Nobody's sure what it means, which is half the point. This poster sets it in heavy cream type on navy with the date, and nothing else.\n\nIt's for the fan who knows the line by heart: a dad, a partner, a mate, a man cave, a study or a home bar.\n\n",
+      "tags": ["man utd poster", "manchester united", "man united gift", "football quote", "seagulls trawler", "football poster", "soccer poster", "gift for dad", "man cave wall art", "united fan gift", "funny football", "football print", "navy wall art"],
+      "room": ["Living room", "Office", "Game room"],
+      "alt_mockup": "Framed navy poster on a plain wall. Cream type reads: When the seagulls follow the trawler, it's because they think sardines will be thrown into the sea. 31 March 1995.",
+      "alt_flat": "Navy typographic poster with cream lettering: When the seagulls follow the trawler, it's because they think sardines will be thrown into the sea. Manchester at the top, 31.03.1995 at the foot."
+    },
+    {
+      "slug": "never-second",
+      "audience": "man-cave",
+      "section": "Quote Posters",
+      "title": "Manchester United Quote Poster, Only the Best Would Be Good Enough, Old Trafford Print, Man Utd Gift",
+      "description": "I never wanted Manchester United to be second to anybody. Only the best would be good enough.\n\nThe standard Old Trafford was built on, in the words of the manager who rebuilt the club after the war. This poster sets it in heavy cream type on Old Trafford red, the second line big enough to read from across the room.\n\nIt's for the fan who measures every season against it: a dad, a grandad, an office wall, a man cave.\n\n",
+      "tags": ["man utd poster", "manchester united", "old trafford", "man united gift", "football quote", "motivational quote", "football poster", "soccer poster", "gift for dad", "man cave wall art", "office wall art", "united fan gift", "football print"],
+      "room": ["Living room", "Office", "Game room"],
+      "alt_mockup": "Framed red poster on a plain wall. Cream type reads: I never wanted Manchester United to be second to anybody. Only the best would be good enough. Old Trafford, Manchester.",
+      "alt_flat": "Red typographic poster with cream lettering: I never wanted Manchester United to be second to anybody, in smaller type, then Only the best would be good enough in large type. Old Trafford at the top."
+    },
+    {
+      "slug": "good-enough-old-enough",
+      "audience": "kids-room",
+      "section": "For the Kids' Room",
+      "title": "Manchester United Kids Room Poster, If You're Good Enough You're Old Enough, Boys Football Bedroom Print",
+      "description": "If you're good enough, you're old enough.\n\nIt's the idea Manchester United have trusted their young players with for generations, and it's a good one to grow up under. This poster sets it in big navy type on cream over the faint lines of a pitch, so it suits a bedroom as well as a football fan.\n\nIt's for the parent decorating a young fan's room, or the grandparent buying a first Manchester United present. Parents who don't follow football still get it.\n\n",
+      "tags": ["man utd kids", "manchester united", "kids room decor", "boys bedroom decor", "football bedroom", "soccer room decor", "football nursery", "kids wall art", "motivational kids", "man united gift", "football poster", "gift for son", "playroom wall art"],
+      "room": ["Kids", "Bedroom", "Nursery"],
+      "alt_mockup": "Framed cream poster on a plain wall. Big navy type over faint pitch lines reads: If you're good enough, you're old enough. Manchester United, since 1878.",
+      "alt_flat": "Cream typographic poster with navy lettering over faint pitch markings: If you're good enough, you're old enough. Manchester United, since 1878, at the top."
+    },
+    {
+      "slug": "glory-glory",
+      "audience": "kids-room",
+      "section": "For the Kids' Room",
+      "title": "Manchester United Kids Room Poster, Glory Glory Man United Print, Football Bedroom Wall Art, Man Utd Gift",
+      "description": "Glory glory Man United.\n\nThe song the Stretford End has sung for generations, in letters big enough for a bedroom wall. Old Trafford red on cream, over the faint lines of a pitch.\n\nIt's for the young fan who already knows the words, and for the parent or grandparent putting their first Manchester United room together.\n\n",
+      "tags": ["man utd kids", "manchester united", "glory glory", "kids room decor", "boys bedroom decor", "football bedroom", "soccer room decor", "football nursery", "kids wall art", "man united gift", "football chant", "football poster", "gift for son"],
+      "room": ["Kids", "Bedroom", "Nursery"],
+      "alt_mockup": "Framed cream poster on a plain wall. Big red type over faint pitch lines reads: Glory glory Man United. Old Trafford, the Stretford End.",
+      "alt_flat": "Cream typographic poster with red lettering over faint pitch markings: Glory glory Man United. Old Trafford and the Stretford End at the top."
+    },
+    {
+      "slug": "theatre-of-dreams",
+      "audience": "kids-room",
+      "section": "For the Kids' Room",
+      "hold": "List only if the trade mark check in MAC-ROUTINE.md section 1 clears.",
+      "title": "Old Trafford Poster, Manchester United Kids Room Print, Football Bedroom Wall Art, Man Utd Gift",
+      "description": "The Theatre of Dreams.\n\nThe name Old Trafford has carried for decades, set in big navy type on cream over the faint lines of a pitch. Simple enough for a bedroom, and every Manchester United fan knows it.\n\nIt's for a young fan's first Manchester United room, or a fan of any age who'd rather have the words than a stadium photo.\n\n",
+      "tags": ["man utd kids", "manchester united", "old trafford", "kids room decor", "boys bedroom decor", "football bedroom", "soccer room decor", "football nursery", "kids wall art", "man united gift", "football poster", "stadium wall art", "gift for son"],
+      "room": ["Kids", "Bedroom", "Nursery"],
+      "alt_mockup": "Framed cream poster on a plain wall. Big navy type over faint pitch lines reads: The Theatre of Dreams. Old Trafford, Manchester.",
+      "alt_flat": "Cream typographic poster with navy lettering over faint pitch markings: The Theatre of Dreams. Old Trafford, Manchester, at the top."
+    }
+  ]
+}

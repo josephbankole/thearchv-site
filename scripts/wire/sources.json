@@ -12,10 +12,12 @@
       "\\bbest bets?\\b", "\\bbets?\\b", "\\bbetting\\b", "\\bparlays?\\b",
       "\\bpredictions?\\b", "\\bprops\\b", "\\bsportsbook\\b", "\\bfavou?rites\\b", "\\bfavou?rite to win\\b",
       "\\blongshots?\\b", "\\bodds-on\\b", "\\b(opening|closing|betting|vegas|odds|spread|money|week \\d+) ?lines?\\b",
-      "how to watch", "\\blive:", "follow live", "live updates", "live blog", "as it happened",
+      "how to watch", "\\blive:", "\\blive!", "follow live", "live updates", "live blog", "as it happened",
       "\\bstart time\\b", "\\bstream(ing)?\\b"
     ],
-    "excludePaths": ["/betting/", "/fantasy/", "/chalk/", "/video/", "/live(/|$)", "/report/_/gameid/"]
+    "excludePaths": ["/betting/", "/fantasy/", "/chalk/", "/video/", "/live(/|$)", "/report/_/gameid/",
+      "[-/]live-(updates|blog|coverage|commentary)([-/]|$)",
+      "[-/](odds|betting|bets|parlays?|sportsbook|predictions?)([-/]|$)"]
   },
   "sources": [
     {

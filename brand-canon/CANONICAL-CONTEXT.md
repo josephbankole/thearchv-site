@@ -372,6 +372,8 @@ section marker now.*
   class 16 goods name posters, prints or pictures, so ENOUGH (US 3667120, pamphlets) holds neither Good enough, old
   enough nor the Busby poster. The 21 match-poster proofs are approved; 17 swap now and the four with an open quote
   wait for verified alternates. "Only the best would be good enough." lists in red.
+- **Match-poster swap (D-2026-10-04e).** Barcelona, London and Rotterdam carry the approved art on Etsy and Printful
+  since 4 Oct; the archive marketing desk swaps the other 14 on 6 and 8 Oct, per the etsy HANDOFF.md bottom section.
 - **Channel ids: this table is authoritative (refreshed 2026-10-04 for Pinterest and Substack on D-2026-10-04a,
   checked against a live `list_channels`; 2026-09-10 after the founder's Threads reconnect,
   and 2026-08-24 on D-2026-08-14c, D-2026-08-23a and D-2026-08-24d; base ids per D-2026-07-27b). §3's
@@ -569,6 +571,12 @@ section marker now.*
 - **The four quotes (founder: "Swap in verified alternates").** Each gets another quote said about that match, verbatim on two independent sources, clear of any US or Canadian word mark covering posters, not a duplicate of another poster's quote, and proofed for the founder before it swaps.
 - **Busby poster colour (founder: "Red").** "Only the best would be good enough." lists in red (cream type on Old Trafford red), from `ARCHIVE-PACKS/quote-posters-2026-10-04/only-the-best/`. It is listed, linked and pinned like Good enough, old enough once its listing is live and read back.
 - **Files changed:** this file (backup `CANONICAL-CONTEXT.md.bak-2026-10-04g`): this entry and the stamp on D-2026-10-04a's quote-poster search line.
+
+**D-2026-10-04e (founder, 4 Oct 2026, in session): THREE MATCH POSTERS SWAPPED NOW, THE OTHER 14 GO TO THE ARCHIVE MARKETING DESK IN TWO BATCHES.** Founder wording: "do another 2 posters, then handover to the marketing desk routine to complete the rest in batches in the next 2 runs of the routine".
+- **Swapped and read back on 4 Oct:** 03-1999-barcelona (Etsy 4521782964, Printful 439354871), 01-1968-london (4521788550, 439357107) and 02-1991-rotterdam (4521790986, 439358071). Every Printful variant carries the approved print file and each listing has the five new photos and alt text. These three may be pinned under D-2026-10-04c.
+- **The other 14 approved posters** go to `archv-archive-marketing-desk`: batch 1 on Tuesday 6 Oct (04-2008-moscow, p3-01, p3-07, p3-08, 05-2017-stockholm, p3-03, p3-05), batch 2 on Thursday 8 Oct (p3-09, p4-08, p4-01, p4-02, p4-04, p4-06, p4-09). For those listings on those runs only, this narrows the desk's Etsy read-only rule to the print files on the listed Printful variants and the five photos plus alt text on each listing. Ids, files, alt text and the steps are in the bottom section of `ARCHIVE-PACKS/routine/redesign-2026-09-26/etsy/HANDOFF.md`; the desk stamps its spec after each batch, which releases those posters to Pinterest. A refused store edit stops the store step and goes to the founder; nobody works around it.
+- **Not in the batches:** p4-03, p4-05, p4-07 and p4-10 (verified alternate quotes offered to the founder on 4 Oct, not yet chosen) and the red Busby poster's listing, which still needs a session because the desk never creates a listing.
+- **Files changed:** this file (backup `CANONICAL-CONTEXT.md.bak-2026-10-04h`), the desk spec (backup `.bak-2026-10-04e`), both copies of its SKILL.md (backups `.bak-2026-10-04-swap`), HANDOFF.md (backup `.bak-2026-10-04`) and `etsy/swap-2026-10-04/alt-texts.json`.
 
 ### RATIFIED 2026-10-02 (founder, in session with the football desk)
 

@@ -40,6 +40,22 @@ test("the betting story that passed the draft's headline filter is rejected by i
   assert.ok(r.rejected.some((x) => x.headline.startsWith("Top-seeded") && x.reason === "excluded-path:/betting/"));
 });
 
+test("liveblogs and betting slugs are filtered even when the headline looks clean (2026-10-04)", () => {
+  const at = "Sat, 26 Sep 2026 20:00:00 EST";
+  const list = [
+    { title: "Grand Prix LIVE! Placeholder Driver leads after restart", link: "https://www.espn.com/f1/story/_/id/1/grand-prix-placeholder", published: at, guid: "l1", position: 0 },
+    { title: "Placeholder Grand Prix: the race so far", link: "https://www.espn.com/f1/story/_/id/2/grand-prix-2026-live-updates-results", published: at, guid: "l2", position: 1 },
+    { title: "Your guide to the Fixture semifinals", link: "https://www.espn.com/wnba/story/_/id/3/semifinals-preview-prediction-odds-fixture", published: at, guid: "l3", position: 2 },
+    { title: "Placeholder Liverpool live wire wins again", link: "https://www.espn.com/soccer/story/_/id/4/liverpool-live-wire-oddsmaker-defied", published: at, guid: "l4", position: 3 },
+  ];
+  const r = pickTop(list, src("espn-golf"), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.equal(r.pick.headline, "Placeholder Liverpool live wire wins again", "a slug that merely contains live or odds is kept");
+  const why = Object.fromEntries(r.rejected.map((x) => [x.headline.slice(0, 12), x.reason]));
+  assert.equal(why["Grand Prix L"], "excluded:\\blive!");
+  assert.match(why["Placeholder "], /^excluded-path:.*live-\(updates/);
+  assert.match(why["Your guide t"], /^excluded-path:.*\(odds\|/);
+});
+
 test("chronological order takes the newest", () => {
   const s = { ...src("espn-golf"), order: "chronological", exclude: [] };
   const list = [

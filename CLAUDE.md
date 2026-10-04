@@ -521,16 +521,32 @@ sources or left off. Do not hand-add a badge file to this repo to fill a gap on 
 
 ## The quote posters and the app storefront (2026-10-04)
 
-`scripts/quote-posters/render.py` draws the six typographic Manchester United quote posters from
+`scripts/quote-posters/render.py` draws the typographic Manchester United quote posters from
 `scripts/quote-posters/lineup.json` (Archivo Black, Marcellus 700, THE ARCHV. wordmark from two
-committed alpha masks, Pillow only). It is NOT in `npm run build`. Its print files are never
-committed: this repo is public and a print file is the product, so the founder's Mac renders them
-into `ARCHIVE-PACKS`. Only the 600x900 storefront thumbnails (`public/shop/quote-*.webp`) live here.
-`scripts/storefront-items.json` feeds the app's `dist/feed/storefront.json`; since D-2026-10-04a it
-lists these posters, not the old tee, tote, mug and sticker sheet, whose Etsy listings were converted
-in place, so the listing ids carried over. Decision, research and the Etsy copy:
-`docs/quote-posters-2026-10-04/`. Art rules there that differ from the match posters: no quotation
-marks, contractions, and The Theatre of Dreams held for a trade mark check.
+committed alpha masks, Pillow only). It is NOT in `npm run build`. **One poster is listed: Good
+enough, old enough, on the converted tote listing 4517424545.** The other five are held
+because each would print a registered trade mark on the art (MANCHESTER UNITED inside two quotes,
+SEAGULLS, GLORY GLORY MAN UNITED and THEATRE OF DREAMS), and each held entry in `lineup.json` carries a
+`hold` string naming the registration. A full run skips every held poster; `--only <slug>` still
+draws one by name, for the record, never for a listing or for this repo.
+
+Print files are never committed: this repo is public and a print file is the product, so the
+founder's Mac renders them into `ARCHIVE-PACKS`. The only quote-poster art here is the listed
+poster's 600x900 storefront thumbnail, `public/shop/quote-good-enough-old-enough.webp`. No art of a
+held poster is committed, thumbnails and contact sheets included.
+
+`scripts/storefront-items.json` feeds the app's `dist/feed/storefront.json` and lists the one
+poster. The old tee, tote, mug and sticker sheet are out of it: the tote's listing became the poster,
+and the rest of the merch and the finals tees were deactivated on Etsy, never deleted. A quote
+poster goes into the feed only once its listing is live and its art clears the rule below.
+
+**The art rule (D-2026-10-04a; founder, 4 Oct 2026: "anything that is a registered trademark, do
+not use", scoped "Strict on art, name in copy").** Nothing registered as a trade mark is printed on
+quote-poster art. "Manchester United" stays in listing and pin copy and stays off the poster, which is
+why the Good Enough top line reads MANCHESTER with no context line. The rule covers the quote posters;
+whether it reaches the 21 match posters is an open founder question. Two more art rules differ from
+the match posters: the quote posters carry no quotation marks, and they use contractions. Decision,
+research, the 4 Oct outcome and the Etsy copy: `docs/quote-posters-2026-10-04/`.
 
 ## Open site work
 

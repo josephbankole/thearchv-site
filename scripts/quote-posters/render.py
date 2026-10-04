@@ -304,6 +304,13 @@ def main():
     specs = json.loads((HERE / "lineup.json").read_text())["posters"]
     if a.only:
         specs = [s for s in specs if s["slug"] == a.only]
+    else:
+        # A held poster carries a registered trade mark on the art (founder, 4 Oct 2026), so a
+        # full run never draws it. --only still renders one by name, for the record.
+        for s in specs:
+            if s.get("hold"):
+                print("held", s["slug"])
+        specs = [s for s in specs if not s.get("hold")]
     for spec in specs:
         master = render(spec, "2x3")
         if a.shop:

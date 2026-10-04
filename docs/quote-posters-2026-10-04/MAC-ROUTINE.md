@@ -1,5 +1,12 @@
 # One-time Mac routine: list the quote posters, refresh Pinterest, update the desk
 
+> **Run on 4 October 2026.** The Mac session ran this routine that day with the founder in session,
+> with corrections. The outcome is in `LINEUP.md` under "Outcome, 4 October 2026 (Mac session)": one
+> poster listed (Good enough, old enough) and five held for registered trade marks. Where the text
+> below differs from that outcome or from the corrected `DESK-UPDATE.md` and `CANON-ENTRY.md`, those
+> win. The text below is the cloud session's prompt, unchanged. The six-up contact sheet and the held
+> posters' thumbnails it mentions aren't in this repo, which carries no art of a held poster.
+
 Run this ONCE on the founder's Mac (Claude Desktop scheduled task set to run once, or pasted into a
 `claude remote-control` session opened in `~/Claude/fifa.archv`). It needs the logged-in Chrome
 (Etsy as TheARCHVCA, Printful as JoeydesignCA, Pinterest as thearchvca), the Buffer and Gmail

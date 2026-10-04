@@ -1,0 +1,112 @@
+{
+  "note": "Render spec for scripts/quote-posters/render.py. Speaker and sources are for the record and are never printed on the art. Every fact on the art is checked against two sources by the Mac routine before listing (LINEUP.md).",
+  "posters": [
+    {
+      "slug": "they-always-score",
+      "hold": "founder, 4 Oct 2026: nothing registered as a trade mark goes on the art. MANCHESTER UNITED is registered to Manchester United Football Club Limited in class 16 (UK00900761312) and it is inside this quote.",
+      "audience": "man-cave",
+      "theme": "red",
+      "top": "BARCELONA 99",
+      "context": "TREBLE WINNERS",
+      "date": "26 . 05 . 1999",
+      "parts": [
+        {"text": "Can Manchester United score?", "scale": 0.55},
+        {"text": "They always score.", "scale": 1.0}
+      ],
+      "speaker": "Clive Tyldesley, ITV commentary, Champions League final, Camp Nou, 26 May 1999",
+      "sources": [
+        "https://www.90min.com/posts/6565920-clive-tyldesley-lifts-lids-on-iconic-commentary-from-the-1999-champions-league-final",
+        "https://www.offtheball.com/name-trophy-clive-tyldesleys-treble-1999-memories-twenty-years-863423"
+      ]
+    },
+    {
+      "slug": "seagulls",
+      "hold": "trade mark: SEAGULLS is registered to The Brighton and Hove Albion Football Club Limited, UK00002584437, class 16 naming posters relating to football. Held for good (founder, 4 Oct 2026: nothing registered as a trade mark goes on the art).",
+      "audience": "man-cave",
+      "theme": "navy",
+      "top": "LONDON",
+      "context": "THE PRESS CONFERENCE",
+      "date": "31 . 03 . 1995",
+      "parts": [
+        {"text": "When the seagulls follow the trawler,", "scale": 1.0},
+        {"text": "it's because they think sardines will be thrown into the sea.", "scale": 0.55}
+      ],
+      "speaker": "Eric Cantona, press conference in Croydon, south London, after his appeal at Croydon Crown Court, 31 March 1995 (BBC, the Independent 1 April 1995, PA). The top line read MANCHESTER until 4 Oct 2026; the founder chose LONDON. Press transcriptions print 'it is'; the poster uses 'it's' (founder, 4 Oct 2026: 'use contractions').",
+      "sources": [
+        "https://www.fourfourtwo.com/features/what-does-eric-cantonas-seagulls-follow-the-trawler-quote-mean-the-story-behind-the-speech",
+        "https://www.football365.com/news/quoteunquote-cantona-and-his-seagulls"
+      ]
+    },
+    {
+      "slug": "never-second",
+      "hold": "founder, 4 Oct 2026: nothing registered as a trade mark goes on the art. MANCHESTER UNITED is registered to Manchester United Football Club Limited in class 16 (UK00900761312) and it is inside this quote.",
+      "audience": "man-cave",
+      "theme": "red",
+      "top": "OLD TRAFFORD",
+      "context": "MANCHESTER",
+      "date": "",
+      "parts": [
+        {"text": "I never wanted Manchester United to be second to anybody.", "scale": 0.5},
+        {"text": "Only the best would be good enough.", "scale": 1.0}
+      ],
+      "speaker": "Sir Matt Busby",
+      "sources": [
+        "https://www.manutd.com/en/amp/news/detail/manchester-is-my-heaven-classic-quotes-from-key-united-figures",
+        "https://thefootballfaithful.com/sir-matt-busby-10-best-quotes/"
+      ]
+    },
+    {
+      "slug": "good-enough-old-enough",
+      "audience": "kids-room",
+      "theme": "cream",
+      "motif": "pitch",
+      "top": "MANCHESTER",
+      "context": "",
+      "date": "",
+      "parts": [
+        {"text": "If you're good enough, you're old enough.", "scale": 1.0}
+      ],
+      "speaker": "Attributed to Sir Matt Busby (the Busby Babes youth policy); no primary source found, so never claimed as a direct quote in copy.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Fergie%27s_Fledglings",
+        "https://en.wikipedia.org/wiki/Busby_Babes"
+      ]
+    },
+    {
+      "slug": "glory-glory",
+      "hold": "trade mark: GLORY GLORY MAN UNITED is registered to Manchester United Football Club Limited, UK00002011324, class 16 naming posters, prints and pictures. Held for good (founder, 4 Oct 2026: nothing registered as a trade mark is used).",
+      "audience": "kids-room",
+      "theme": "cream-red",
+      "motif": "pitch",
+      "top": "OLD TRAFFORD",
+      "context": "THE STRETFORD END",
+      "date": "",
+      "parts": [
+        {"text": "Glory glory Man United", "scale": 1.0}
+      ],
+      "speaker": "Terrace anthem; the 1983 record's verses are someone's copyright, so only the three-word refrain is used.",
+      "sources": [
+        "https://footballgroundguide.com/glory-glory-man-united-chant-lyrics-tune-story",
+        "https://en.wikipedia.org/wiki/Glory_Glory_(football_chant)"
+      ]
+    },
+    {
+      "slug": "theatre-of-dreams",
+      "audience": "kids-room",
+      "theme": "cream",
+      "motif": "pitch",
+      "hold": "trade mark: THEATRE OF DREAMS is registered to Manchester United Football Club Limited, UK00902201879 (from EUTM 002201879), class 16 naming posters, prints and pictures. Held for good (founder, 4 Oct 2026: nothing registered as a trade mark is used).",
+      "top": "OLD TRAFFORD",
+      "context": "MANCHESTER",
+      "date": "",
+      "parts": [
+        {"text": "The Theatre of Dreams", "scale": 1.0}
+      ],
+      "speaker": "Sir Bobby Charlton's name for Old Trafford",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Old_Trafford",
+        "https://bigredbook.info/the_theatre_of_dreams.html"
+      ]
+    }
+  ]
+}

@@ -215,7 +215,7 @@ function render(p, allPages) {
   const fig = p.posterImage ? `
         <figure class="article__fig">
           <img src="${escAttr(p.posterImage)}" alt="${escAttr(p.posterAlt || p.title)}" width="1080" height="1350" loading="eager" />
-          <figcaption>Original ARCHV illustration. All nine finals come in one <a href="${escAttr(p.posterEtsy || "https://www.etsy.com/listing/4517536632")}">digital download</a> on Etsy.</figcaption>
+          <figcaption>Original ARCHV illustration. All nine finals come in one <a href="${escAttr(p.posterEtsy || "https://thearchvca.etsy.com/listing/4517536632")}">digital download</a> on Etsy.</figcaption>
         </figure>` : "";
   const qa = p.quickAnswer ? `
         <div class="quick-answer">

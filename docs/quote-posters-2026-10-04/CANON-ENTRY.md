@@ -1,6 +1,7 @@
 # Canon entry (D-2026-10-04a)
 
 The Mac session of 4 October 2026 applied this to `CANONICAL-CONTEXT.md` with corrections; this is the corrected text.
+`CANONICAL-CONTEXT.md` is the authority: where this copy and canon differ, D-2026-10-04a and D-2026-10-04b in canon win.
 
 The dated block sits in §0 under its own `### RATIFIED 2026-10-04` heading, newest first, above the
 2 October block. The same edit updates the matching §0 lines and stamps older lines in place, never
@@ -101,8 +102,9 @@ chose "LONDON" for the top line and then "Hold Seagulls"; and "approved for shar
   image gets the metadata strip and is read back as an image before it queues. A unit with a product
   link names no player or manager (D-2026-09-15b).
 - **Lanes.** Pinterest and Substack Notes join archv-metrics-desk's closed Platform list and enter
-  `lanes.tsv` (Tuesday and Thursday) only after a live preflight. D-2026-09-22c's bar applies: a run
-  with nothing that clears it logs `SKIPPED (bar, D-2026-09-22c)` rather than filling a slot.
+  `lanes.tsv` only after a live preflight: Pinterest due Tuesday and Thursday, Notes due Thursday.
+  D-2026-09-22c's bar applies: a run with nothing that clears it logs
+  `SKIPPED (bar, D-2026-09-22c, D-2026-10-04a)` rather than filling a slot.
 - **Unchanged.** Cadence (Tue and Thu, D-2026-09-30a), the credit rules, gates, spacing, caps, the
   Dispatch ask as the primary call on @thearchvfc, no hashtags, no AI mention in stores, Reddit drafts
   only, never spends money.

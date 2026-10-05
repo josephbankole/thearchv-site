@@ -1,6 +1,12 @@
 /* scripts/glossary-data.mjs — the evergreen glossary entries (sixty-two as of 2026-09-12), read by
    scripts/build-glossary-pages.mjs. Each entry:
      slug     URL segment under /glossary/
+     updated  OPTIONAL, 2026-10-04 (search plan G10): the ISO date this entry's wording last
+              changed. Change any field of an entry and set this to that day, in Toronto time. It
+              is the page's dateModified, its sitemap lastmod and its visible "Last updated" line;
+              the build never takes a date from git or its own clock. The values first written
+              were read off this file's git history, the day each entry last changed. A missing
+              one is a build warning, never an error.
      title    the term as it reads as an <h1> (e.g. "xG (expected goals)")
      question the visible question, matching the homepage FAQ question verbatim so the two
               surfaces describe the same entity (index.html's FAQPage acceptedAnswer carries a
@@ -43,6 +49,7 @@
 export const glossaryEntries = [
   {
     slug: "xg",
+    updated: "2026-07-14",
     title: "xG (expected goals)",
     question: "What does xG (expected goals) mean?",
     answer:
@@ -56,6 +63,7 @@ export const glossaryEntries = [
   },
   {
     slug: "false-9",
+    updated: "2026-07-14",
     title: "The false 9",
     question: "What is a false 9 in football?",
     answer:
@@ -69,6 +77,7 @@ export const glossaryEntries = [
   },
   {
     slug: "offside",
+    updated: "2026-07-14",
     title: "The offside rule",
     question: "How does the offside rule work?",
     answer:
@@ -82,6 +91,7 @@ export const glossaryEntries = [
   },
   {
     slug: "var",
+    updated: "2026-07-14",
     title: "VAR",
     question: "What is VAR in football?",
     answer:
@@ -95,6 +105,7 @@ export const glossaryEntries = [
   },
   {
     slug: "pressing",
+    updated: "2026-07-14",
     title: "Pressing and gegenpressing",
     question: "What is pressing (and gegenpressing)?",
     answer:
@@ -108,6 +119,7 @@ export const glossaryEntries = [
   },
   {
     slug: "low-block",
+    updated: "2026-07-14",
     title: "The low block",
     question: "What is a low block?",
     answer:
@@ -121,6 +133,7 @@ export const glossaryEntries = [
   },
   {
     slug: "inverted-full-back",
+    updated: "2026-07-14",
     title: "The inverted full-back",
     question: "What is an inverted full-back?",
     answer:
@@ -134,6 +147,7 @@ export const glossaryEntries = [
   },
   {
     slug: "half-space",
+    updated: "2026-07-14",
     title: "Half-spaces",
     question: "What are half-spaces?",
     answer:
@@ -147,6 +161,7 @@ export const glossaryEntries = [
   },
   {
     slug: "xa",
+    updated: "2026-07-14",
     title: "xA (expected assists)",
     question: "What does xA (expected assists) mean?",
     answer:
@@ -160,6 +175,7 @@ export const glossaryEntries = [
   },
   {
     slug: "loan-with-obligation",
+    updated: "2026-07-28",
     title: "A loan with an obligation to buy",
     question: "What is a loan with an obligation to buy?",
     answer:
@@ -176,6 +192,7 @@ export const glossaryEntries = [
 
   {
     slug: "loan-with-option",
+    updated: "2026-07-28",
     title: "A loan with an option to buy",
     question: "What is a loan with an option to buy?",
     answer:
@@ -189,6 +206,7 @@ export const glossaryEntries = [
   },
   {
     slug: "option-vs-obligation",
+    updated: "2026-07-28",
     title: "Option to buy versus obligation to buy",
     question: "What is the difference between an option to buy and an obligation to buy?",
     answer:
@@ -202,6 +220,7 @@ export const glossaryEntries = [
   },
   {
     slug: "release-clause",
+    updated: "2026-07-28",
     title: "Release clauses and buy-out clauses",
     question: "What is a release clause in football?",
     answer:
@@ -215,6 +234,7 @@ export const glossaryEntries = [
   },
   {
     slug: "sell-on-clause",
+    updated: "2026-07-28",
     title: "The sell-on clause",
     question: "What is a sell-on clause?",
     answer:
@@ -228,6 +248,7 @@ export const glossaryEntries = [
   },
   {
     slug: "buy-back-clause",
+    updated: "2026-09-11",
     title: "The buy-back clause",
     question: "What is a buy-back clause?",
     seoTitle: "Buy-back clause: the price to re-sign a player you sold",
@@ -242,6 +263,7 @@ export const glossaryEntries = [
   },
   {
     slug: "agent-fees",
+    updated: "2026-07-28",
     title: "Agent fees",
     question: "How do agent fees work in football transfers?",
     answer:
@@ -255,6 +277,7 @@ export const glossaryEntries = [
   },
   {
     slug: "signing-on-fee",
+    updated: "2026-07-28",
     title: "The signing-on fee",
     question: "What is a signing-on fee?",
     answer:
@@ -268,6 +291,7 @@ export const glossaryEntries = [
   },
   {
     slug: "amortisation",
+    updated: "2026-07-28",
     title: "Amortisation",
     question: "What is amortisation in football transfers?",
     answer:
@@ -281,6 +305,7 @@ export const glossaryEntries = [
   },
   {
     slug: "ffp-and-psr",
+    updated: "2026-07-28",
     title: "Financial fair play, PSR and squad cost ratio",
     question: "What is the difference between financial fair play and PSR?",
     answer:
@@ -294,6 +319,7 @@ export const glossaryEntries = [
   },
   {
     slug: "bid-vs-enquiry",
+    updated: "2026-07-28",
     title: "A bid versus an enquiry",
     question: "What is the difference between a bid and an enquiry in a transfer?",
     answer:
@@ -307,6 +333,7 @@ export const glossaryEntries = [
   },
   {
     slug: "personal-terms",
+    updated: "2026-07-28",
     title: "Personal terms",
     question: "What does agreeing personal terms mean?",
     answer:
@@ -320,6 +347,7 @@ export const glossaryEntries = [
   },
   {
     slug: "transfer-medical",
+    updated: "2026-07-28",
     title: "The transfer medical",
     question: "What happens in a football transfer medical?",
     answer:
@@ -333,6 +361,7 @@ export const glossaryEntries = [
   },
   {
     slug: "work-permit",
+    updated: "2026-09-22",
     title: "Work permits",
     question: "What is a work permit in football and who needs one?",
     answer:
@@ -347,6 +376,7 @@ export const glossaryEntries = [
   },
   {
     slug: "pre-contract",
+    updated: "2026-07-28",
     title: "The pre-contract agreement",
     question: "What is a pre-contract agreement in football?",
     answer:
@@ -360,6 +390,7 @@ export const glossaryEntries = [
   },
   {
     slug: "bosman-ruling",
+    updated: "2026-07-28",
     title: "The Bosman ruling",
     question: "What is the Bosman ruling?",
     answer:
@@ -373,6 +404,7 @@ export const glossaryEntries = [
   },
   {
     slug: "free-transfer",
+    updated: "2026-07-28",
     title: "The free transfer",
     question: "What is a free transfer?",
     answer:
@@ -386,6 +418,7 @@ export const glossaryEntries = [
   },
   {
     slug: "undisclosed-fee",
+    updated: "2026-07-28",
     title: "The undisclosed fee",
     question: "What does an undisclosed transfer fee mean?",
     answer:
@@ -399,6 +432,7 @@ export const glossaryEntries = [
   },
   {
     slug: "add-ons",
+    updated: "2026-07-28",
     title: "Add-ons in a transfer fee",
     question: "What are add-ons in a transfer fee?",
     answer:
@@ -412,6 +446,7 @@ export const glossaryEntries = [
   },
   {
     slug: "structured-payments",
+    updated: "2026-07-28",
     title: "Structured payments and instalments",
     question: "How are transfer fees paid in instalments?",
     answer:
@@ -425,6 +460,7 @@ export const glossaryEntries = [
   },
   {
     slug: "wage-structure",
+    updated: "2026-07-28",
     title: "The wage structure",
     question: "What is a club wage structure?",
     answer:
@@ -438,6 +474,7 @@ export const glossaryEntries = [
   },
   {
     slug: "homegrown-quota",
+    updated: "2026-07-28",
     title: "The homegrown player rule",
     question: "What is the homegrown player rule?",
     answer:
@@ -451,6 +488,7 @@ export const glossaryEntries = [
   },
   {
     slug: "transfer-window",
+    updated: "2026-07-28",
     title: "Transfer windows and registration",
     question: "How do football transfer windows work?",
     answer:
@@ -464,6 +502,7 @@ export const glossaryEntries = [
   },
   {
     slug: "deadline-day",
+    updated: "2026-07-28",
     title: "Deadline day",
     question: "How does transfer deadline day work?",
     answer:
@@ -477,6 +516,7 @@ export const glossaryEntries = [
   },
   {
     slug: "tapping-up",
+    updated: "2026-07-28",
     title: "Tapping up",
     question: "What is tapping up in football?",
     answer:
@@ -490,6 +530,7 @@ export const glossaryEntries = [
   },
   {
     slug: "dual-representation",
+    updated: "2026-07-28",
     title: "Dual representation",
     question: "What is dual representation in a transfer?",
     answer:
@@ -503,6 +544,7 @@ export const glossaryEntries = [
   },
   {
     slug: "image-rights",
+    updated: "2026-07-28",
     title: "Image rights",
     question: "What are image rights in a football contract?",
     answer:
@@ -516,6 +558,7 @@ export const glossaryEntries = [
   },
   {
     slug: "loan-army",
+    updated: "2026-07-28",
     title: "The loan army",
     question: "What is a loan army in football?",
     answer:
@@ -529,6 +572,7 @@ export const glossaryEntries = [
   },
   {
     slug: "emergency-loan",
+    updated: "2026-07-28",
     title: "The emergency loan",
     question: "What is an emergency loan in football?",
     answer:
@@ -542,6 +586,7 @@ export const glossaryEntries = [
   },
   {
     slug: "domestic-and-international-windows",
+    updated: "2026-07-28",
     title: "Domestic and international transfer windows",
     question: "What is the difference between a domestic and an international transfer window?",
     answer:
@@ -555,6 +600,7 @@ export const glossaryEntries = [
   },
   {
     slug: "transfer-request",
+    updated: "2026-07-28",
     title: "The transfer request",
     question: "What is a transfer request?",
     answer:
@@ -574,6 +620,7 @@ export const glossaryEntries = [
 
   {
     slug: "franchise-tag",
+    updated: "2026-07-28",
     title: "The NFL franchise tag",
     question: "What is the franchise tag in the NFL?",
     answer:
@@ -587,6 +634,7 @@ export const glossaryEntries = [
   },
   {
     slug: "nfl-waivers",
+    updated: "2026-09-11",
     title: "NFL waivers",
     question: "How do NFL waivers work?",
     answer:
@@ -600,6 +648,7 @@ export const glossaryEntries = [
   },
   {
     slug: "practice-squad",
+    updated: "2026-07-28",
     title: "The NFL practice squad",
     question: "What is an NFL practice squad?",
     answer:
@@ -616,6 +665,7 @@ export const glossaryEntries = [
     // Desk entry nfl/questions/2026-08-25 links here through its `evergreen` field. 2026 facts
     // web-checked 2026-09-11 against the Yahoo Sports and CBS Sports cut trackers.
     slug: "nfl-roster-cutdown",
+    updated: "2026-09-11",
     title: "The NFL roster cutdown",
     question: "When is the NFL 53-man roster cutdown deadline?",
     seoTitle: "NFL roster cutdown: every team cuts from 90 players to 53",
@@ -630,6 +680,7 @@ export const glossaryEntries = [
   },
   {
     slug: "dead-cap",
+    updated: "2026-07-28",
     title: "Dead cap",
     question: "What is dead cap in the NFL?",
     answer:
@@ -643,6 +694,7 @@ export const glossaryEntries = [
   },
   {
     slug: "compensatory-picks",
+    updated: "2026-07-28",
     title: "NFL compensatory draft picks",
     question: "What are compensatory picks in the NFL draft?",
     answer:
@@ -656,6 +708,7 @@ export const glossaryEntries = [
   },
   {
     slug: "power-unit-allocation",
+    updated: "2026-07-28",
     title: "Formula 1 power unit allocation",
     question: "How many engines can a Formula 1 driver use in a season?",
     answer:
@@ -669,6 +722,7 @@ export const glossaryEntries = [
   },
   {
     slug: "parc-ferme",
+    updated: "2026-07-28",
     title: "Parc fermé",
     question: "What does parc fermé mean in Formula 1?",
     answer:
@@ -682,6 +736,7 @@ export const glossaryEntries = [
   },
   {
     slug: "drs",
+    updated: "2026-07-28",
     title: "DRS (drag reduction system)",
     question: "What was DRS in Formula 1 and why was it removed?",
     answer:
@@ -695,6 +750,7 @@ export const glossaryEntries = [
   },
   {
     slug: "undercut-and-overcut",
+    updated: "2026-07-28",
     title: "The undercut and the overcut",
     question: "What is an undercut in Formula 1?",
     answer:
@@ -708,6 +764,7 @@ export const glossaryEntries = [
   },
   {
     slug: "f1-sprint",
+    updated: "2026-07-28",
     title: "The Formula 1 sprint",
     question: "How does the Formula 1 sprint weekend work?",
     answer:
@@ -721,6 +778,7 @@ export const glossaryEntries = [
   },
   {
     slug: "f1-cost-cap",
+    updated: "2026-07-28",
     title: "The Formula 1 cost cap",
     question: "What is the Formula 1 cost cap?",
     answer:
@@ -734,6 +792,7 @@ export const glossaryEntries = [
   },
   {
     slug: "tennis-seeding",
+    updated: "2026-07-28",
     title: "Tennis seeding",
     question: "How does seeding work in tennis?",
     answer:
@@ -747,6 +806,7 @@ export const glossaryEntries = [
   },
   {
     slug: "protected-ranking",
+    updated: "2026-09-11",
     title: "Protected and special rankings in tennis",
     question: "What is a protected ranking in tennis?",
     seoTitle: "Protected ranking: injured players enter on old ranking",
@@ -761,6 +821,7 @@ export const glossaryEntries = [
   },
   {
     slug: "walkover",
+    updated: "2026-07-28",
     title: "The walkover",
     question: "What is a walkover in tennis?",
     answer:
@@ -774,6 +835,7 @@ export const glossaryEntries = [
   },
   {
     slug: "tennis-qualifying",
+    updated: "2026-07-28",
     title: "Qualifying and lucky losers in tennis",
     question: "What is a lucky loser in tennis?",
     answer:
@@ -787,6 +849,7 @@ export const glossaryEntries = [
   },
   {
     slug: "golf-handicap",
+    updated: "2026-07-28",
     title: "The golf handicap",
     question: "How does a golf handicap work?",
     answer:
@@ -800,6 +863,7 @@ export const glossaryEntries = [
   },
   {
     slug: "cut-line",
+    updated: "2026-07-28",
     title: "The cut line",
     question: "What is the cut line in golf?",
     answer:
@@ -813,6 +877,7 @@ export const glossaryEntries = [
   },
   {
     slug: "fedex-cup",
+    updated: "2026-09-11",
     title: "The FedEx Cup",
     question: "How do FedEx Cup points work?",
     seoTitle: "FedEx Cup: PGA Tour's season points race and playoffs",
@@ -827,6 +892,7 @@ export const glossaryEntries = [
   },
   {
     slug: "liv-and-dp-world-tour",
+    updated: "2026-07-28",
     title: "LIV Golf and the DP World Tour",
     question: "What is the difference between LIV Golf and the DP World Tour?",
     answer:
@@ -840,6 +906,7 @@ export const glossaryEntries = [
   },
   {
     slug: "ryder-cup-qualification",
+    updated: "2026-07-28",
     title: "Ryder Cup qualification",
     question: "How do players qualify for the Ryder Cup?",
     answer:
@@ -853,6 +920,7 @@ export const glossaryEntries = [
   },
   {
     slug: "manchester-derby",
+    updated: "2026-09-12",
     title: "The Manchester derby",
     question: "What is the Manchester derby?",
     seoTitle: "Manchester derby: Manchester United v Manchester City",

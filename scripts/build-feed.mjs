@@ -63,6 +63,15 @@ function withInfogram(entry, section) {
   };
 }
 
+// The app feed carries an entry's fields as they are, publishedAt and updatedAt included (additive,
+// and unknown keys are ignored by the app's decoder). The one field kept out is `corrections`
+// (search plan G12, 2026-10-04): it holds each amended entry's replaced text for the /corrections/
+// log, which would double the size of a corrected entry in a feed the app downloads every day.
+function feedFields(d) {
+  const { corrections, ...rest } = d;
+  return rest;
+}
+
 // Today = newest dated wrap across Transfer Desk + World Cup, lead + the next four cards.
 // (today.lead/wrap reuse these same tagged objects, so the infogram fields propagate there too.)
 // v3: every day entry gains `sport` (resolved here, always populated, so the app never has to
@@ -70,9 +79,9 @@ function withInfogram(entry, section) {
 // `image` is the app's only card art: withAppArt swaps in the app-grade portrait (or drops a
 // sub-600px one) and fills it from the illustrated registry when the desk filed none.
 // See scripts/shared/app-art.mjs.
-const transferTagged = transferDays.map((d) => withAppArt(withInfogram({ ...d, section: "transfer", sport: "football", url: articleUrl("transfer", d.date) }, "transfer")));
-const worldCupTagged = worldCupDays.map((d) => withAppArt(withInfogram({ ...d, section: "worldcup", sport: "football", url: articleUrl("worldcup", d.date) }, "worldcup")));
-const leaguesTagged = leaguesDays.map((d) => withAppArt(withInfogram({ ...d, section: "leagues", sport: "football", url: articleUrl("leagues", d.date) }, "leagues")));
+const transferTagged = transferDays.map((d) => withAppArt(withInfogram({ ...feedFields(d), section: "transfer", sport: "football", url: articleUrl("transfer", d.date) }, "transfer")));
+const worldCupTagged = worldCupDays.map((d) => withAppArt(withInfogram({ ...feedFields(d), section: "worldcup", sport: "football", url: articleUrl("worldcup", d.date) }, "worldcup")));
+const leaguesTagged = leaguesDays.map((d) => withAppArt(withInfogram({ ...feedFields(d), section: "leagues", sport: "football", url: articleUrl("leagues", d.date) }, "leagues")));
 // leagues entries are deliberately NOT in the daily today-pool yet: the Today lead is
 // "newest dated wrap" and a leagues launch batch must not displace the day's transfer/WC lead.
 const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);
@@ -96,7 +105,7 @@ for (const sport of SPORTS) {
   // Already newest-first out of day-data.mjs; .map returns a new array, so the shared one is
   // never touched.
   const days = (SPORT_RAW[sport.key] || [])
-    .map((d) => withAppArt({ ...d, section: sport.key, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
+    .map((d) => withAppArt({ ...feedFields(d), section: sport.key, sport: sport.key, url: `${SITE}/${sport.urlBase}/${laneKey}/${d.date}/` }));
   sportFeeds[sport.key] = { days, lastUpdated: newestOf(days) };
 }
 

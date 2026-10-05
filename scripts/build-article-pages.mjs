@@ -18,8 +18,9 @@ import {
   deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, QUESTION_LANE_META, ORG_REF, ORG_NODE, DESK_BYLINE, DESK_DISCLOSURE, HOW_MADE_PATH,
-  DISPATCH_URL, captureBlock, CAPTURE_STYLES,
+  DISPATCH_URL, captureBlock, CAPTURE_STYLES, sentenceDescription,
 } from "./shared/page-shell.mjs";
+import { publishedAt, modifiedAt, wasUpdated, dateFieldReport } from "./shared/entry-dates.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
 import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
@@ -104,83 +105,41 @@ function bodyHtml(text) {
     .join("\n        ");
 }
 
-/* ---------- meta description: the standfirst, the same clean string og:description carries.
-   E19 (2026-09-24): this used to stitch "<dek> <first sentence of body>" and cut the join at ~155
-   with an ellipsis, so short deks were padded out with the head of the next sentence and cut
-   mid-word ("... Jayden…"), and long ones stopped mid-clause. Now: <=160 passes through unchanged;
-   over 160 it ends on the last full sentence that fits, else a clause break or whole word, never borrows
-   text from the body. Throws if the result ever exceeds 160, so a bad edit fails the build loudly.
-
-   Three guards on the cut (code review 2026-09-25), each found on a dek already filed:
-   - a full stop after an abbreviation or an initial is not a sentence end. Without this the golf
-     lane's descriptions ended "at the FedEx St." (St. Jude) and "Wyndham Clark, J.J." (J.J. Spaun);
-   - a last sentence shorter than DESC_MIN_SENTENCE is a fragment ("A right knee injury.") that
-     throws away most of the standfirst, so the cut falls through to a clause or a word instead;
-   - a clause break needs a space after it, so the comma inside "74,310" never cuts a number. */
-const DESC_MAX = 160;
-const DESC_MIN_SENTENCE = 50;
-// Short forms that take a full stop without ending a sentence. Initials and dotted runs ("J.J.",
-// "p.m.", "U.S.") are caught by shape; this list is the titles and short forms the desks file.
-const DESC_ABBREVIATIONS = new Set(["st", "mr", "mrs", "ms", "dr", "jr", "sr", "no", "nos", "vs", "v", "mt", "ft", "prof", "gen", "capt", "rev", "co", "inc", "ltd", "etc", "approx", "est"]);
-function endsInAbbreviation(textBeforeStop) {
-  const token = textBeforeStop.split(" ").pop().replace(/^["'‘“(]+/, "");
-  return /^(?:[A-Za-z]\.)*[A-Za-z]$/.test(token) || DESC_ABBREVIATIONS.has(token.toLowerCase());
-}
-function metaDescription(dek) {
-  const d = String(dek ?? "").trim().replace(/\s+/g, " ");
-  if (d.length <= DESC_MAX) return d;
-  const window = d.slice(0, DESC_MAX + 1); // +1 so a mark at the cap is seen with the space after it
-  let sentenceEnd = -1;
-  for (const m of window.matchAll(/[.!?]["'’”)]?(?=\s)/g)) {
-    const end = m.index + m[0].length;
-    if (end > DESC_MAX) continue;
-    if (m[0][0] === "." && endsInAbbreviation(window.slice(0, m.index))) continue;
-    sentenceEnd = end;
-  }
-  let out;
-  if (sentenceEnd >= DESC_MIN_SENTENCE) {
-    out = d.slice(0, sentenceEnd);
-  } else {
-    // No usable sentence fits: prefer the last clause break (comma, semicolon, colon or dash, each
-    // followed by a space) past 60% of the cap, else the last whole word, keeping one char for the
-    // ellipsis. Then drop trailing connectives until none is left, so it never ends "... in the…".
-    let clause = -1;
-    for (const m of window.matchAll(/[,;:](?=\s)|\s[—–](?=\s)/g)) if (m.index < DESC_MAX) clause = m.index;
-    const cut = d.slice(0, DESC_MAX);
-    const lastSpace = cut.lastIndexOf(" ");
-    let stem = clause > DESC_MAX * 0.6 ? cut.slice(0, clause) : lastSpace > 0 ? cut.slice(0, lastSpace) : cut.slice(0, DESC_MAX - 1);
-    for (let prev; prev !== stem; ) {
-      prev = stem;
-      // Lower case only: "Group A" and "AS Roma" are names, not connectives.
-      stem = stem.replace(/[\s.,;:!?—–-]+$/, "").replace(/\s+(?:and|or|but|the|a|an|of|to|in|on|at|for|with|from|by|as|than|then|so|nor)$/, "");
-    }
-    out = `${stem || cut.slice(0, DESC_MAX - 1)}…`;
-  }
-  if (out.length > DESC_MAX) throw new Error(`meta description exceeds ${DESC_MAX} chars (${out.length}): ${out}`);
-  return out;
+/* ---------- meta description (search plan G11, 2026-10-04) ----------
+   E19 (2026-09-24) stopped padding short deks with the head of the body and cutting the join
+   mid-word. It still cut a long dek at a clause or a word and appended "…", and 42 of the 318
+   indexable dated pages shipped that way. G11 is the plan's one labelled exception to "no bulk meta
+   rewrites": it rebuilds every dated description from sentences the page already shows, with no
+   new wording.
+     - the dek alone when it is 155 characters or under;
+     - over 155, the longest run of whole dek sentences that fits;
+     - when that run is a fragment under 50 characters, the body's first sentence is appended, but
+       only when the whole sentence fits;
+     - never an ellipsis.
+   The rule itself is sentenceDescription() in scripts/shared/page-shell.mjs, shared with
+   clampDescription(), so the two families cannot drift. */
+const DESC_MAX = 155;
+function metaDescription(dek, body = "") {
+  const firstPara = String(body).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)[0] || "";
+  return sentenceDescription(dek, DESC_MAX, { then: firstPara });
 }
 
 // tests-by-assertion: exercise the helper at module load so a regression fails the build.
 (function selfTestMetaDescription() {
   const shortDek = "Fernandes the name. Not the only one.";
-  if (metaDescription(shortDek) !== shortDek) throw new Error("metaDescription self-test: a dek <=160 must pass through unchanged");
+  if (metaDescription(shortDek, "A body sentence that must not be appended.") !== shortDek) throw new Error("metaDescription self-test: a dek of 155 or under must pass through alone");
   const s1 = "First sentence runs to a sensible length and stops cleanly here.";
   const s2 = "Second sentence also stops cleanly and still fits under the cap.";
-  const s3 = "Third sentence would push the whole thing well past one hundred and sixty characters.";
+  const s3 = "Third sentence would push the whole thing well past one hundred and fifty-five characters.";
   const bySentence = metaDescription(`${s1} ${s2} ${s3}`);
   if (bySentence !== `${s1} ${s2}`) throw new Error(`metaDescription self-test: long dek should end on the last full sentence, got ${JSON.stringify(bySentence)}`);
-  const long = "word ".repeat(80).trim(); // 400 chars, no sentence end at all
-  const byWord = metaDescription(long);
-  if (byWord.length > DESC_MAX || !byWord.endsWith("word…")) throw new Error(`metaDescription self-test: no-sentence dek should cut at a whole word, got ${JSON.stringify(byWord)}`);
-  // The three guards, each on the shape of a dek that tripped it.
-  const abbrev = metaDescription("The 2026 FedEx Cup playoffs begin on Thursday 13 August at the FedEx St. Jude Championship in Memphis, with the top 70 in the standings and one withdrawal already");
+  const abbrev = metaDescription("The 2026 FedEx Cup playoffs begin on Thursday 13 August at the FedEx St. Jude Championship in Memphis, with the top 70 in the standings. One has already withdrawn from it.");
   if (/\bSt\.$/.test(abbrev)) throw new Error(`metaDescription self-test: a full stop after "St" is not a sentence end, got ${JSON.stringify(abbrev)}`);
-  const fragment = metaDescription(`A right knee injury. ${"Jannik Sinner has withdrawn from the Cincinnati Open ".repeat(3).trim()}`);
-  if (fragment === "A right knee injury.") throw new Error("metaDescription self-test: a sentence under DESC_MIN_SENTENCE must not stand as the whole description");
-  const number = metaDescription("Manchester United announced the highest attendance anywhere in English football this season when the club counted 74,310 people through the turnstiles for the derby");
-  if (/\b74…$/.test(number)) throw new Error(`metaDescription self-test: the comma inside a number is not a clause break, got ${JSON.stringify(number)}`);
-  const connectives = metaDescription(`${"Arsenal chased a striker all summer ".repeat(4)}and settled in the end for the one in the`);
-  if (/\s(?:in|the|and)…$/.test(connectives)) throw new Error(`metaDescription self-test: trailing connectives must all be dropped, got ${JSON.stringify(connectives)}`);
+  const fragment = metaDescription(`A right knee injury. ${"Jannik Sinner has withdrawn from the Cincinnati Open ".repeat(3).trim()}.`, "Sinner pulled out on Monday.\n\nA second paragraph.");
+  if (fragment !== "A right knee injury. Sinner pulled out on Monday.") throw new Error(`metaDescription self-test: a fragment takes the body's first sentence when the whole of it fits, got ${JSON.stringify(fragment)}`);
+  const number = metaDescription("Manchester United announced the highest attendance anywhere in English football this season when the club counted 74,310 people through the turnstiles for the derby against Manchester City at Old Trafford in the rain");
+  if (/\b74$/.test(number)) throw new Error(`metaDescription self-test: the comma inside a number is not a clause break, got ${JSON.stringify(number)}`);
+  for (const t of [shortDek, bySentence, abbrev, fragment, number]) if (/…$/.test(metaDescription(t))) throw new Error(`metaDescription self-test: never an ellipsis, got ${JSON.stringify(t)}`);
 })();
 
 /* ---------- Answer Desk: the direct answer, used verbatim in both the page and the schema ----------
@@ -264,14 +223,17 @@ function schema(entry, url, label, faq, images) {
   const graph = [
     {
         // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
-        // stay Article). dateModified is kept equal to datePublished: the data is date-only and
-        // carries no separate revised date, so claiming a later modification would be dishonest;
-        // appended, dated "Update, ..." lines stay visible in the body without inflating this.
+        // stay Article). Both dates come from the entry's own fields (search plan G10,
+        // 2026-10-04): datePublished is publishedAt, stamped by the commit script, and
+        // dateModified is updatedAt, stamped only by an amend that appended a dated correction,
+        // update or revision note. An entry nobody amended keeps dateModified equal to
+        // datePublished, so a page can never look fresher than it is. See
+        // scripts/shared/entry-dates.mjs for the fallbacks.
         "@type": "NewsArticle",
         headline: entry.headline,
         description: entry.dek,
-        datePublished: entry.date,
-        dateModified: entry.date,
+        datePublished: publishedAt(entry),
+        dateModified: modifiedAt(entry),
         isAccessibleForFree: true,
         inLanguage: "en-GB",
         // The ARCHV Desk, not a named person (Decision 1, approved by the founder 2026-09-23; search
@@ -524,9 +486,9 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
   // Search-only title: the entry's seoTitle (the answer) when the desk filed one, else the old
   // headline + entity suffix path, byte-identical for every entry filed before 2026-09-11.
   title: answerTitle(entry.seoTitle, [entry.headline, lane.seoSuffix, "The ARCHV"]),
-  // NOT clampDescription: this family has its own metaDescription(), which returns the same
-  // standfirst og:description and twitter:description carry, cut at a sentence only past 160.
-  metaDescription: metaDescription(entry.dek),
+  // NOT clampDescription: this family has its own metaDescription() (G11), which returns the
+  // standfirst og:description and twitter:description carry, cut at a sentence only past 155.
+  metaDescription: metaDescription(entry.dek, entry.body),
   description: entry.dek,
   socialTitle: entry.headline,
   robots: ROBOTS_INDEXABLE,
@@ -551,7 +513,7 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
       <h1>${esc(entry.headline)}</h1>
       <p class="article__byline">${esc(DESK_BYLINE)} · <a href="${escAttr(HOW_MADE_PATH)}">How this desk works</a></p>
       <p class="article__disclosure">${esc(DESK_DISCLOSURE)}</p>
-      <p class="article__meta">${esc(longDate(entry.date))} &middot; ${esc(readLabel(entry.dek, entry.body))}</p>
+      <p class="article__meta">${esc(longDate(entry.date))}${wasUpdated(entry) ? ` &middot; Updated ${esc(longDate(modifiedAt(entry).slice(0, 10)))}` : ""} &middot; ${esc(readLabel(entry.dek, entry.body))}</p>
       <div class="share" aria-label="Share this article">
         <button class="btn btn--ghost" id="share-native" type="button" hidden>Share</button>
         <a class="btn btn--ghost" id="share-x" href="${escAttr(xIntent)}" target="_blank" rel="noopener noreferrer">Share on X</a>
@@ -570,6 +532,9 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
 </html>
 `;
 }
+
+/* ---------- G10 census, warn-only ---------- */
+dateFieldReport(sections.flatMap((s) => s.days), "[build-article-pages]");
 
 /* ---------- write pages ---------- */
 let count = 0;
@@ -618,7 +583,8 @@ for (const section of sections) {
     const moreFrom = [...older, ...newer].slice(0, 3);
 
     writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom));
-    urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: entry.date, changefreq: "monthly", priority: "0.6" });
+    // lastmod is the entry's own last change (G10): updatedAt after an amend, else publishedAt.
+    urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: modifiedAt(entry), changefreq: "monthly", priority: "0.6" });
     count++;
   }
 }

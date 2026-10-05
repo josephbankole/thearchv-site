@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 import { byDateDesc, esc, escAttr, SPORTS, laneByFeedKey } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { sourcesAwareParagraph } from "./shared/source-links.mjs";
+import { publishedAt, rfc822, newest } from "./shared/entry-dates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -104,17 +105,11 @@ const xmlEsc = (s = "") =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-// RFC-822 date. The data is date-only (YYYY-MM-DD); publish each entry at 12:00:00 in the
-// desk's timezone (America/Edmonton, -0600 in summer) so readers see a stable, sensible time.
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-function rfc822(dateOnly) {
-  const [y, m, d] = String(dateOnly).split("-").map(Number);
-  // Weekday of that calendar date (time-of-day irrelevant to the weekday).
-  const weekday = WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
-  const dd = String(d).padStart(2, "0");
-  return `${weekday}, ${dd} ${MONTHS[m - 1]} ${y} 12:00:00 -0600`;
-}
+// RFC-822 dates come from the entry's own publishedAt (search plan G10, 2026-10-04), via
+// scripts/shared/entry-dates.mjs. This used to stamp 12:00 -0600 on the calendar date, about seven
+// hours after the 05:22 ET commit, so every new item was future-dated when a reader first fetched
+// it. An entry without the field takes the date at 05:00 Toronto time.
+const pubDate = (it) => rfc822(publishedAt(it));
 
 /* ---------- full article body for <content:encoded> ----------
    description stays the short standfirst (the teaser); content:encoded carries the article, which
@@ -187,7 +182,9 @@ function contentHtml(entry, img) {
 }
 
 /* ---------- compose the RSS 2.0 document ---------- */
-const lastBuild = items.length ? rfc822(items[0].date) : rfc822(new Date().toISOString().slice(0, 10));
+// lastBuildDate is the newest item's own time, not the build clock: the channel changed when its
+// newest item did.
+const lastBuild = items.length ? rfc822(newest(items.map((it) => publishedAt(it)))) : rfc822(new Date().toISOString().slice(0, 10));
 
 const itemXml = items
   .map((it) => {
@@ -207,7 +204,7 @@ const itemXml = items
       <guid isPermaLink="true">${xmlEsc(url)}</guid>
       <description>${xmlEsc(it.dek)}</description>
       <content:encoded>${cdata(contentHtml(it, img))}</content:encoded>
-      <pubDate>${rfc822(it.date)}</pubDate>
+      <pubDate>${pubDate(it)}</pubDate>
       <dc:creator>${xmlEsc(it.path ? READ_CREATOR : DESK_CREATOR)}</dc:creator>${enclosure}
     </item>`;
   })

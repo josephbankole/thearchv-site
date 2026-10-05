@@ -4,6 +4,7 @@ slug: "most-world-cup-titles"
 section: "explainers"
 eyebrow: "ARCHV Explains · World Cup"
 datePublished: "2026-07-15"
+updated: "2026-09-22"
 description: "Every World Cup winner from 1930 to 2026: Brazil's record five, Germany and Italy on four, Argentina on three, and why only eight nations from two continents have ever lifted the trophy."
 quickAnswer: "Only eight nations have won the men's World Cup. Brazil lead with five titles, Germany and Italy have four each, Argentina three, France, Spain and Uruguay two apiece, and England one. Spain won their second in 2026, beating Argentina 1-0 after extra time in the final. Every winner has come from either Europe or South America across the 23 tournaments held from 1930 to 2026."
 players: ["Pelé", "Franz Beckenbauer", "Diego Maradona", "Lionel Messi", "Zinedine Zidane", "Andrés Iniesta"]

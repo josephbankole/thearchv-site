@@ -16,6 +16,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { byDateDesc, SPORTS } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
+import { publishedAt } from "./shared/entry-dates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -43,15 +44,15 @@ for (const sport of SPORTS) {
   }
 }
 
-// The data is date-only; each entry publishes at 12:00 in the desk's timezone
-// (America/Edmonton, -0600 in summer) — the same instant build-rss.mjs stamps on the RSS
-// pubDate, here in ISO 8601 for news:publication_date.
-const isoDate = (dateOnly) => `${dateOnly}T12:00:00-06:00`;
-
+// news:publication_date is the entry's own publishedAt (search plan G10, 2026-10-04), the commit
+// time the commit script stamps, through scripts/shared/entry-dates.mjs. It used to be 12:00 -06:00
+// on the calendar date, hours after the real publication, so a fresh entry was future-dated when
+// Google first read this file. The 2-day window below still runs off the build clock: that decides
+// which rows are listed, it never stamps one.
 const cutoff = Date.now() - WINDOW_MS;
 const items = lanes
   .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
-  .filter((it) => new Date(isoDate(it.date)).getTime() >= cutoff)
+  .filter((it) => Date.parse(publishedAt(it)) >= cutoff)
   .sort(byDateDesc);
 
 const xmlEsc = (s = "") =>
@@ -70,7 +71,7 @@ const urlXml = items
         <news:name>${xmlEsc(PUBLICATION_NAME)}</news:name>
         <news:language>${PUBLICATION_LANGUAGE}</news:language>
       </news:publication>
-      <news:publication_date>${isoDate(it.date)}</news:publication_date>
+      <news:publication_date>${publishedAt(it)}</news:publication_date>
       <news:title>${xmlEsc(it.headline)}</news:title>
     </news:news>
   </url>`)

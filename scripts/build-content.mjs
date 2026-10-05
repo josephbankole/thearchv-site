@@ -11,6 +11,8 @@ import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, R
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
 import { loadContentPages } from "./shared/content-pages.mjs";
 import { writeSitemap } from "./shared/sitemap.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
+import { modifiedAt, newest } from "./shared/entry-dates.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
@@ -181,7 +183,10 @@ if (!pages.length) { console.log("No content/ pages found; skipping content buil
 // the node rides in this graph so the @id resolves on the page itself.
 function schema(p, url) {
   const graph = [
+    // dateModified is the frontmatter `updated` date when the page was corrected or revised (search
+    // plan 3.5 and G10, 2026-10-04), else datePublished. Never the build date.
     { "@type": "Article", "headline": p.title, "description": p.description, "datePublished": p.datePublished,
+      "dateModified": p.updated || p.datePublished,
       "author": ORG_REF, "publisher": ORG_REF,
       "image": `${SITE}${p.ogImage || "/og.jpg"}`, "mainEntityOfPage": url, "inLanguage": "en-GB" },
     { "@type": "BreadcrumbList", "itemListElement": [
@@ -350,6 +355,13 @@ for (const p of pages) {
    is the slashed one; never list the slashless variant here. As of the collector pass this
    is ENFORCED rather than merely documented: shared/sitemap.mjs throws on a slashless loc,
    here and at every other splice site, so the build stops instead of shipping the redirect. */
+// The newest of a list of dates or ISO times, or undefined when none is set (the row then carries
+// no lastmod rather than an invented one).
+const newestOf = (list) => newest(list.filter(Boolean));
+const DUEL_PAIRS = await listPairsForSitemap();
+// The home page changes when a desk entry lands or is amended: its lastmod is the newest such time.
+const { transferDays: HT, worldCupDays: HW, leaguesDays: HL, sportDays: HS } = await loadDayData();
+const HOME_LASTMOD = newestOf([...HT, ...HW, ...HL, ...Object.values(HS).flat()].map((e) => modifiedAt(e)));
 const EXTRA_URLS = [
   { loc: "/about/", changefreq: "monthly", priority: "0.5" },
   { loc: "/corrections/", changefreq: "monthly", priority: "0.4" },
@@ -362,10 +374,10 @@ const EXTRA_URLS = [
   // Evergreen surfaces generated later in the chain (build-glossary-pages.mjs,
   // build-standards-page.mjs). Listed here so they enter the sitemap through this one
   // assembly point; the trailing slash matches each page's own <link rel="canonical">.
-  { loc: "/glossary/", changefreq: "monthly", priority: "0.6" },
+  { loc: "/glossary/", lastmod: newestOf(glossaryEntries.map((e) => e.updated)), changefreq: "monthly", priority: "0.6" },
   // Entry rows are DERIVED from glossary-data.mjs, never hand-listed. The hand list silently
   // capped the sitemap at the original ten entries when the glossary grew to sixty (2026-07-28).
-  ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, changefreq: "monthly", priority: "0.5" })),
+  ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, lastmod: e.updated, changefreq: "monthly", priority: "0.5" })),
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
   // Tables and fixtures (build-daily-pages.mjs, the Wire build, 2026-09-26): a living page updated
   // in place once a day. Listed only while it has a block to show; build-daily-pages.mjs makes an
@@ -387,20 +399,29 @@ const EXTRA_URLS = [
   { loc: "/basketball/", changefreq: "daily", priority: "0.7" },
   // Player duels (build-duel-pages.mjs) and the daily archive game (build-archive-game.mjs).
   // The pair rows come from the data adapter so the sitemap grows with the roster on its own.
-  { loc: "/duel/", changefreq: "weekly", priority: "0.7" },
-  ...(await listPairsForSitemap()).map((p) => ({ loc: p.href, changefreq: "monthly", priority: "0.6" })),
+  // Duel lastmods: a pair page changes when either player's record does, so its lastmod is the
+  // later of the two players' `updated` dates in the roster snapshot (G10, 2026-10-04).
+  { loc: "/duel/", lastmod: newestOf(DUEL_PAIRS.flatMap((p) => [p.a.updated, p.b.updated])), changefreq: "weekly", priority: "0.7" },
+  ...DUEL_PAIRS.map((p) => ({ loc: p.href, lastmod: newestOf([p.a.updated, p.b.updated]), changefreq: "monthly", priority: "0.6" })),
   { loc: "/guess/", changefreq: "daily", priority: "0.6" },
 ];
-const today = new Date().toISOString().slice(0, 10);
+/* ---------- lastmod (search plan 1.7 and G10, 2026-10-04) ----------
+   This stamped the build date on the home page and on every EXTRA_URLS row, so 97 URLs claimed a
+   change on every deploy whether or not anything on them had changed, and Google only uses lastmod
+   "if it's consistently and verifiably accurate". Now a row carries a lastmod only when the data
+   says when the page changed: the home page from the newest desk entry it shows, glossary entries
+   and duels from their per-entry `updated` dates, the explainers from their frontmatter. A static
+   page with no such date carries no lastmod at all, which the sitemap protocol allows. The build
+   clock is never read here. */
 const urlCount = writeSitemap([
-  { loc: `${SITE}/`, lastmod: today, changefreq: "weekly", priority: "1.0" },
+  { loc: `${SITE}/`, lastmod: HOME_LASTMOD, changefreq: "weekly", priority: "1.0" },
   ...pages.map((p) => ({
     loc: `${SITE}/${p.section}/${p.slug}/`,
-    lastmod: p.datePublished || today,
+    lastmod: p.updated || p.datePublished,
     changefreq: "monthly",
     priority: "0.8",
   })),
-  ...EXTRA_URLS.map((e) => ({ loc: `${SITE}${e.loc}`, lastmod: today, changefreq: e.changefreq, priority: e.priority })),
+  ...EXTRA_URLS.map((e) => ({ loc: `${SITE}${e.loc}`, lastmod: e.lastmod, changefreq: e.changefreq, priority: e.priority })),
 ]);
 
 console.log(`build-content: wrote ${n} page(s) + sitemap (${urlCount} urls) to ${OUT}`);

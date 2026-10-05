@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, esc, escAttr, clampTitle, answerTitle, answerTitleFlags, clampDescription, masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  SITE, esc, escAttr, clampTitle, answerTitle, answerTitleFlags, clampDescription, masthead, footer, documentShell, ROBOTS_INDEXABLE, longDate,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT, DISPATCH_URL, captureBlock, CAPTURE_STYLES,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -87,6 +87,9 @@ function entrySchema(entry, url) {
         url,
         inDefinedTermSet: { "@type": "DefinedTermSet", name: "The ARCHV football glossary", url: HUB_URL },
       },
+      // dateModified from the entry's own `updated` date (search plan 3.5 and G10, 2026-10-04),
+      // never the build date. An entry without one carries no WebPage node, as before.
+      ...(entry.updated ? [{ "@type": "WebPage", "@id": `${url}#webpage`, url, name: entry.title, dateModified: entry.updated }] : []),
       {
         "@type": "FAQPage",
         mainEntity: [
@@ -140,7 +143,8 @@ function renderEntry(entry) {
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/glossary/">Glossary</a> / ${esc(entry.title)}</p>
       <p class="lane__eyebrow">The ARCHV glossary</p>
       <h1>${esc(entry.title)}</h1>
-      <h2 class="glossary__q">${esc(entry.question)}</h2>
+      <h2 class="glossary__q">${esc(entry.question)}</h2>${entry.updated ? `
+      <p class="article__meta">Last updated ${esc(longDate(entry.updated))}</p>` : ""}
       <div class="article__body">
         <p class="glossary__answer">${esc(entry.answer)}</p>
         ${depth}
@@ -240,6 +244,11 @@ for (const entry of glossaryEntries) {
   writeFileSync(join(dir, "index.html"), renderEntry(entry));
   count++;
 }
+
+// G10 (2026-10-04), warn-only: an entry with no `updated` date carries no dateModified and no sitemap
+// lastmod. The build never fails on it.
+const undated = glossaryEntries.filter((e) => !/^\d{4}-\d{2}-\d{2}$/.test(String(e.updated || "")));
+if (undated.length) console.warn(`[build-glossary-pages] G10 (warn-only): ${undated.length} entr${undated.length === 1 ? "y has" : "ies have"} no updated date: ${undated.map((e) => e.slug).join(", ")}`);
 
 // Answer-title flags (2026-09-11): every glossary entry is an answer page, so all of them count.
 const titleFlags = answerTitleFlags(glossaryEntries.map((e) => ({ id: `/glossary/${e.slug}/`, seoTitle: e.seoTitle })));

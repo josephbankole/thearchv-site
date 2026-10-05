@@ -14,6 +14,24 @@ export interface DayEntry {
                       // The <h1> keeps `headline`. See answerTitle() in scripts/shared/page-shell.mjs.
   evergreen?: string; // OPTIONAL glossary slug holding the standing answer to a question that recurs
                       // (e.g. "nfl-roster-cutdown"). The dated page links to it; an unknown slug stops the build.
+  publishedAt?: string; // OPTIONAL, search plan G10 (2026-10-04): full ISO time with zone, stamped by
+                        // ../scripts/archv-site-commit.mjs when the entry is committed. With none the
+                        // build uses the entry date at 05:00 America/Toronto (scripts/shared/entry-dates.mjs).
+  updatedAt?: string;   // OPTIONAL, G10: stamped only by an amend (correction or revision). The build
+                        // reads it for dateModified and the sitemap lastmod, never git or the clock.
+  corrections?: CorrectionRecord[]; // OPTIONAL, G12: one record per correction or revision note in the
+                        // body, newest last. /corrections/ is generated from these at build.
+}
+
+// G12 (2026-10-04). `was` is what the page said, `now` is what is right, `source` the outlets it
+// was checked against. `prior` keeps the replaced fields as they stood before the amend.
+export interface CorrectionRecord {
+  at: string;        // ISO time the note went up
+  kind: string;      // "correction", "revision" or "update"
+  was: string;
+  now: string;
+  source?: string;
+  prior?: { headline?: string; dek?: string; body?: string };
 }
 
 export const worldCupDays: DayEntry[] = [
@@ -24,6 +42,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Portugal beat Denmark 4-2 in the UEFA Nations League in Copenhagen on Thursday 1 October 2026. Bruno Fernandes made two goals and Diogo Dalot one, a day after Cristiano Ronaldo left the squad.",
     body: "Portugal beat Denmark 4-2 in League A of the UEFA Nations League in Copenhagen on Thursday 1 October 2026, per ESPN and SBS. João Cancelo, Gonçalo Ramos, Vitinha and João Félix scored for Portugal. Mikkel Damsgaard and Rasmus Højlund scored for Denmark.\n\nTwo Manchester United players set up three of the four. Bruno Fernandes played the pass for Ramos's goal at 25 minutes and the free kick that Vitinha headed in at 67 minutes, per Sofascore and United in Focus. ESPN and SBS also credit Fernandes with the Vitinha goal. Diogo Dalot, on as a substitute, squared the ball for Félix to make it 4-2 at 87 minutes, per Sofascore and SBS. Sofascore rated Fernandes 8.6, the highest on the pitch, with three big chances created.\n\nThe match came the day after Cristiano Ronaldo left the camp. Ronaldo announced on Instagram on 30 September that he had gone, shortly after the coach Jorge Jesus said he did not plan to start the 41-year-old against Denmark, per ESPN, Al Jazeera and The Irish Times. Ronaldo said he would tell the Portuguese people the truth about why he left in due course. Ramos started in his place and scored.\n\nFernandes had missed Portugal's win in Norway on 27 September. Jesus said then that the midfielder had joined the squad carrying an injury from Manchester United, per Sports Illustrated and Goal, and ESPN reports he had been managing the problem since the 4-0 against Sabah FK on 10 September. He came through Copenhagen without a reported setback. Patrick Dorgu missed the match for Denmark after he went off injured against Wales on 27 September and was sent home, per ESPN and Goal.\n\nManchester United play Tottenham Hotspur at Old Trafford on Saturday 10 October, per ESPN.",
     status: "verified",
+    publishedAt: "2026-10-02T06:13:54-04:00",
     seoTitle: "Denmark 2-4 Portugal: Bruno Fernandes sets up two",
   },
   {
@@ -33,6 +52,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Anthony Gordon and Harry Kane scored in a 2-0 win over Czechia on Tuesday. Czechia played the match out with ten men, and England had opened the campaign by losing 3-2 to Spain.",
     body: "England beat Czechia 2-0 in League A of the UEFA Nations League on Tuesday 29 September 2026, in Prague. Anthony Gordon and Harry Kane scored, and Czechia finished the match with ten men. ESPN's live coverage and the Sky Sports match report agree on the scoreline, both scorers and the red card.\n\nIt is England's first win of this Nations League campaign. They opened it with a 3-2 defeat by Spain at Wembley, the match in which Kane hit the crossbar from the penalty spot with England 2-1 up.\n\nThe finer detail has one carrier so far: the minutes of both goals, the name of the Czechia player sent off, and the England tally Kane's goal takes him to. This page leaves all three out until a second report confirms them.",
     status: "verified",
+    publishedAt: "2026-09-29T17:11:41-04:00",
     seoTitle: "Czechia 0-2 England: Gordon and Kane win it in Prague",
   },
   {
@@ -42,6 +62,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Cristiano Ronaldo sat out all 90 minutes of Portugal's Nations League win in Norway. Gonçalo Ramos, who started up front, scored the winner three minutes after Erling Haaland had equalised.",
     body: "Portugal beat Norway 2-1 in the UEFA Nations League on Sunday 27 September 2026, at the Ullevaal Stadion in Oslo. João Félix scored after 17 minutes, Erling Haaland equalised on 51 and Gonçalo Ramos scored the winner on 54. ESPN's match report and Al Jazeera's live coverage agree on the score and all three scorers.\n\nThe team sheet was the story before a ball was kicked. Cristiano Ronaldo, who started Portugal's 1-0 win over Wales on Thursday, stayed on the bench for the full 90 minutes. Ramos started up front instead.\n\nHaaland got his goal, and Norway got nothing from it. The equaliser lasted three minutes.\n\nPortugal have two wins from two in their group. The next team sheet will say whether one winner in Oslo is enough to keep Ramos in the side.",
     status: "verified",
+    publishedAt: "2026-09-28T07:48:42-04:00",
     seoTitle: "Norway 1-2 Portugal: Ramos wins it, Ronaldo unused",
   },
   {
@@ -51,6 +72,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "England led 2-1 at half-time on Saturday and had a penalty to make it 3-1. Harry Kane slipped and hit the bar after 54 minutes, and Spain scored twice to win the UEFA Nations League match 3-2.",
     body: "Spain beat England 3-2 in the UEFA Nations League at Wembley on Saturday 26 September, per ESPN and the Football Association's own match centre.\n\nLamine Yamal scored after two minutes. Anthony Gordon equalised on 36 minutes and Harry Kane headed England in front four minutes later, so England went in 2-1 up.\n\nThe turn came nine minutes into the second half. Rodri tripped Jude Bellingham, England had a penalty, and Kane slipped as he struck it and hit the crossbar, per ESPN and the FA. Álex Baena levelled on the hour and Mikel Oyarzabal won it on 74 minutes.\n\nEngland started James Trafford in goal, and no Manchester United player featured for either side, per the FA's line-ups.",
     status: "verified",
+    publishedAt: "2026-09-27T10:06:02-04:00",
     seoTitle: "Spain beat England 3-2 at Wembley in the Nations League",
   },
   {
@@ -60,6 +82,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Two goals in Norway's 3-2 Nations League win over Denmark in Oslo on Thursday took Erling Haaland to 64 international goals in 56 games. Ronaldo Nazário and Zlatan Ibrahimovic both finished on 62.",
     body: "Erling Haaland scored twice as Norway beat Denmark 3-2 in the UEFA Nations League at the Ullevaal Stadium in Oslo on Thursday 24 September. The goals took him to 64 for Norway in 56 appearances, per beIN Sports and Goal. Ronaldo Nazário of Brazil and Zlatan Ibrahimovic of Sweden both ended their international careers on 62. Haaland is 26.\n\nOscar Bobb gave Norway the lead and Haaland made it 2-0 after 18 minutes. Denmark levelled through Mikkel Damsgaard and Rasmus Højlund, the former Manchester United striker, before Haaland's second, a left-footed finish, won the match, per Sofascore and beIN Sports. The two reports give different minutes for the winner, so this page prints neither.\n\nNorway finished with ten men after David Møller Wolfe was sent off for a second yellow card in stoppage time, per Sofascore and beIN Sports.\n\nThe club half of the record is familiar in Manchester. Haaland has nine Premier League goals in Manchester derbies, more than Wayne Rooney or Sergio Agüero, per AP and ESPN after the derby on 13 September.",
     status: "verified",
+    publishedAt: "2026-09-25T06:13:29-04:00",
     image: "/heads/hd/haaland.webp",
     imageAlt: "Illustrated portrait of Erling Haaland",
     seoTitle: "Erling Haaland scores his 64th Norway goal in 56 games",
@@ -71,6 +94,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Korea DPR beat Colombia 3-0 and Spain beat Italy 2-0 in Lodz on Wednesday, so the FIFA Under-20 Women's World Cup final on Sunday is Spain against the holders.",
     body: "The FIFA Under-20 Women's World Cup final is set for Sunday 27 September in Lodz, at 18:00 local time and 12:00 in Toronto. Spain play Korea DPR, and both got there on Wednesday without conceding.\n\nKorea DPR beat Colombia 3-0, with Pak Ok-I opening the scoring after 28 minutes and two more goals from two different players to follow. They are the holders. They won this tournament in 2006, 2016 and 2024, and the Asian Football Confederation's own report says they are one match from becoming the first team to retain it. Nobody has won it twice in a row since the competition began.\n\nSpain beat Italy 2-0. An Italian own goal came five minutes before half-time and Pau Comendador scored the second after 56 minutes. It was her sixth goal of the tournament, which leads the scoring, and it put Spain into their third final in the last four editions. Italy had never reached a semi-final at this level before. Italy and Colombia play for third place on Saturday.\n\nCanada's part in this ended on Sunday 20 September, when Korea DPR beat them 2-0 in the quarter-final with two goals in stoppage time. Two days later one of that squad moved up. Kaylee Hunter, 18, who scored four goals in Poland, is in Casey Stoney's senior squad for the friendlies against Denmark at Stade Saputo in Montreal on 9 October and BMO Field in Toronto on 12 October. It is not her first call. She already has two senior caps. She is one of six Northern Super League players in the group, the most the league has had in a Canada squad.\n\n\"There's genuine competition for places in this squad,\" Stoney said when the squad was named.",
     status: "verified",
+    publishedAt: "2026-09-24T06:23:21-04:00",
     seoTitle: "Spain play Korea DPR in the U-20 Women's World Cup final",
   },
   {
@@ -80,6 +104,9 @@ export const worldCupDays: DayEntry[] = [
     dek: "DPR Korea beat Canada 2-0 in the quarter-final of the FIFA Under-20 Women's World Cup in Lodz on Sunday, with both goals in stoppage time, and the shot count read 29 to 4.",
     body: "Canada reached the last eight of the FIFA Under-20 Women's World Cup in Poland and lost to DPR Korea 2-0 in Lodz on Sunday. Both goals arrived in stoppage time, the first in the 92nd minute and the second a few minutes later. Until then it was goalless, which the shot count makes hard to explain: DPR Korea had 29 attempts, Canada had four.\n\nNoelle Henning made seven saves, the most by a Canada goalkeeper at the tournament and her own best across two of them. She was losing the match on every other measure for ninety minutes and did not concede in any of them.\n\nThe run has been written up generously since. Canada were runners-up at this competition in 2002, beaten 1-0 by the United States on a golden goal in front of 47,784 at Commonwealth Stadium in Edmonton, with Christine Sinclair taking both the Golden Ball and the Golden Shoe. That is still the ceiling. Sunday was Canada's first quarter-final since 2014 and their fourth appearance in the last eight.\n\nKaylee Hunter, 18, of Calgary and AFC Toronto, finished on four goals, three of them in one afternoon against France in the round of 16. Annabelle Chukwu, 19, born in Gravesend and raised in Ottawa, scored three from 14 shots and now has 39 goals for Canada's women's youth national teams, past Sinclair's 27. Jeneva Hernandez Gray made 36 possession recoveries before she was carried off on 85 minutes on Sunday.\n\nFifteen of the 21 go back into the American college season this week. Hunter and Olivia Chisholm return to AFC Toronto with four Northern Super League games left and a playoff place to settle.\n\nCorrection, 22 September 2026: this page wrote the opponents' name as Korea DPR. DPR Korea is right, the form the AFC and FIFA's quarter-final round-up use, and the one the 21 September page uses (AFC; FIFA). It also put the second goal in the 96th minute. That minute is from Concacaf's match report alone, and the AFC's report puts the goal two minutes after the first (Concacaf; AFC).",
     status: "verified",
+    publishedAt: "2026-09-22T06:31:17-04:00",
+    updatedAt: "2026-09-22T22:36:41-04:00",
+    corrections: [{"at":"2026-09-22T22:36:41-04:00","kind":"correction","was":"\"Korea DPR\", four times, including the page title; \"in the 92nd minute and the 96th\".","now":"DPR Korea, the form the AFC and FIFA use and the one the 21 September page uses. The second goal came a few minutes after the first: Concacaf has the 96th minute, the AFC two minutes after the 92nd.","source":"AFC; FIFA; Concacaf."}],
     seoTitle: "DPR Korea beat Canada 2-0 in the U-20 Women's World Cup",
   },
   {
@@ -89,6 +116,9 @@ export const worldCupDays: DayEntry[] = [
     dek: "Canada reached the last eight as a third-placed qualifier and were still level with the defending champions at ninety minutes. Noelle Henning made seven saves. Two goals in added time ended the run.",
     body: "DPR Korea beat Canada 2-0 in the quarter-final of the 2026 FIFA U-20 Women's World Cup on Sunday 20 September 2026, at the Stadion Miejski LKS Lodz in Lodz, Poland. Choe Rim-jong scored in the 92nd minute and Ho Kyong added the second deeper into stoppage time, in the 96th minute by Concacaf's match report and two minutes after the first by the AFC's. Concacaf's own match report and Canadian Soccer Daily agree on the scoreline and on both scorers.\n\nThe scoreline does not describe the match. DPR Korea had 29 shots to Canada's four. Noelle Henning, the Michigan State goalkeeper, made seven saves, her highest of the tournament, and a DPR Korea free-kick on 74 minutes was ruled out for offside after a video review. Canada were level until the second minute of added time. Jeneva Hernandez Gray was carried off injured on 85.\n\nCanada finished the tournament with two wins, one draw and two defeats, ten goals scored and seven conceded. They drew 1-1 with England, lost 3-0 to Brazil with ten players after Stephanie Schoeley was sent off, and beat Tanzania 6-0. They finished level with England on points, goal difference, goals scored and head-to-head, and were separated only by the tournament's disciplinary tiebreaker, which the red card decided. They advanced anyway as one of the four best third-placed teams.\n\nKaylee Hunter ends the tournament on four goals, three of them in the round of 16 against France. Concacaf records her as the first player to score three or more in a U-20 Women's World Cup knockout match across the last four editions of the tournament. Hernandez Gray finished with four assists, the tournament lead at the time Canada went out.\n\nOne correction worth making, because it has been printed elsewhere this week: the quarter-final did not match Canada's best finish at this tournament. Canada were runners-up in 2002, when the event was the U-19 World Championship and the final was played in front of 47,784 people at Commonwealth Stadium in Edmonton. This was Canada's fourth quarter-final, after 2002, 2004 and 2014.\n\nDPR Korea are the defending champions and had conceded nothing in five matches before Sunday. They play Colombia in the semi-final on Wednesday 23 September.\n\nCorrection, 22 September 2026: this page said Canada led the quarter-final into injury time, and called it Canada's third quarter-final, after 2004 and 2014. Canada never led. The match was goalless until the 92nd minute (Concacaf and AFC match reports). It was Canada's fourth quarter-final: the 2002 side beat England in the last eight on the way to the final (Canada Soccer; Wikipedia's record of the 2002 tournament). This page also said Canada lost in four minutes and put Ho Kyong's goal in the 96th minute on Concacaf's report alone. The AFC's report puts it two minutes after the 92nd-minute opener, so the page now gives both counts (Concacaf; AFC).",
     status: "verified",
+    publishedAt: "2026-09-21T06:34:04-04:00",
+    updatedAt: "2026-09-22T22:36:41-04:00",
+    corrections: [{"at":"2026-09-22T22:36:41-04:00","kind":"correction","was":"\"Canada led the U-20 World Cup quarter-final into injury time, then lost it in four minutes\"; \"This was Canada's third quarter-final, after 2004 and 2014.\"; \"Ho Kyong in the 96th\".","now":"Canada never led. DPR Korea won 2-0 and the match was goalless until the 92nd minute. It was Canada's fourth quarter-final, after 2002, 2004 and 2014. The 96th minute for the second goal is Concacaf's count. The AFC puts it two minutes after the 92nd-minute opener, and the page now gives both.","source":"Concacaf and AFC match reports; Canada Soccer; Wikipedia."}],
     seoTitle: "Canada out of U-20 Women's World Cup, 2-0 to DPR Korea",
   },
   {
@@ -98,6 +128,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Canada went into the round of 16 as a third-placed qualifier against the team that won Group C. An 18-year-old forward from Calgary settled it before the hour.",
     body: "Canada beat France 3-1 in the round of 16 of the 2026 FIFA U-20 Women's World Cup on Thursday 17 September 2026, at the Stadion Miejski LKS Lodz in Lodz, Poland. Kaylee Hunter scored all three, in the 28th, 33rd and 70th minutes. Kenza Dufour pulled one back for France on 81. Concacaf's own match report and TSN, who carried the match in Canada, agree on the scoreline and on all four minutes.\n\nThe number underneath it is the one worth keeping. Concacaf's report puts Hunter as \"the first player to score three or more goals in a FIFA U-20 Women's World Cup knockout match\" counting the last four editions of the tournament. She took three shots on target and scored three times.\n\nCanada had not arrived in the last 16 with any momentum. They opened Group B on 5 September with a 1-1 draw against England at the Bielsko-Biala Stadium, Annabelle Chukwu scoring on 52 before England equalised from the penalty spot, per Concacaf. They came out of the group in third. France came out of Group C in first. Just Women's Sports called the result the day's biggest upset, which is a fair reading of the seedings and a poor one of the 42 minutes between Hunter's first goal and her third.\n\nHunter is 18 and from Calgary, Alberta, and plays her club football for AFC Toronto in the Northern Super League, per TSN. That detail has one carrier and is offered as background rather than as a verified fact.\n\nThe quarter-final against DPR Korea, the defending champions, is scheduled and had not kicked off when this page was written. This desk carries no result on it and will not until two named sources report a finished match.",
     status: "verified",
+    publishedAt: "2026-09-20T18:49:21-04:00",
     seoTitle: "Kaylee Hunter hat-trick: Canada beat France 3-1 at the U-20s",
   },
   {
@@ -107,6 +138,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Malawi were playing their first ever match at the Women's Africa Cup of Nations and beat the defending champions Nigeria 3-1 in Group C in Morocco, with Temwa Chawinga scoring twice.",
     body: "Malawi had never played a match at the Women's Africa Cup of Nations before Tuesday night. Their first one was against Nigeria, the defending champions and the most successful national team on the continent. Malawi won it 3-1.\n\nTemwa Chawinga scored the country's first goal at the competition, set up by Ireen Khumalo. Six minutes later Tabitha Chawinga made it two, from an assist by Sabina Thom. Rasheedat Ajibade pulled one back from the penalty spot and gave the Super Falcons about forty minutes of hope. In the 95th minute Temwa Chawinga scored again to finish her brace and the match.\n\nTwo of the three goals came from sisters. Temwa and Tabitha Chawinga have both spent their careers making this argument in other people's leagues. On Tuesday they made it in a Malawi shirt, at a tournament their country had never reached, against the holders.\n\nIt was Malawi's first win at the Women's Africa Cup of Nations and their first goal in it. Both arrived in the same ninety minutes.\n\nFor Nigeria the problem is the calendar rather than the scoreline alone. Group C also contains Zambia and Egypt, so the margin for error a favourite usually carries into a group has gone in one match.\n\nThe wider tournament is in Morocco. Group A is the hosts with Algeria, Senegal and Kenya. Group B is South Africa, Ivory Coast, Burkina Faso and Tanzania, and that group has already produced its own upset, with Tanzania beating South Africa 2-1 and Ivory Coast marking a first appearance in twelve years by putting four past Burkina Faso. Group D is Ghana, Cameroon, Mali and Cape Verde.\n\nTwo groups, two results that were not supposed to happen, inside the opening round of fixtures. The growth of African women's football usually gets described in terms of investment and infrastructure, which is true and which is dull. This is what it looks like on a scoreboard.",
     status: "verified",
+    publishedAt: "2026-07-29T02:05:22-04:00",
   },
   {
     date: "2026-07-28",
@@ -115,6 +147,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Tanzania beat South Africa 2-1 at the Women's Africa Cup of Nations. Ivory Coast marked a first appearance in 12 years by putting four past Burkina Faso.",
     body: "Tanzania beat South Africa 2-1 on 27 July in the opening round of Group B at the Women's Africa Cup of Nations in Morocco. South Africa won this tournament in 2022 and arrived as one of the sides expected to reach the last four. They start with nothing.\n\nIvory Coast were the other result of the day. They had not played at a Women's Africa Cup of Nations for 12 years, and they beat Burkina Faso 4-1 in their first match back. Tanzania and Ivory Coast lead the group on three points each, and South Africa and Burkina Faso have a fortnight to fix it.\n\nThe hosts had set the tone the day before. Morocco beat Kenya 4-0 in the opening match, Ibtissam Jraidi scoring twice with Sakina Ouzraoui and Meriem Atiq adding the others. Algeria had beaten Senegal 2-0 earlier that day, so Morocco top Group A on goal difference. Nigeria arrive as holders with 10 titles. The tournament runs to 16 August.",
     status: "verified",
+    publishedAt: "2026-07-28T17:30:44-04:00",
   },
   {
     date: "2026-07-26",
@@ -123,6 +156,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Morocco play Kenya on the opening day. Nigeria arrive as holders with 10 titles, and the winners' cheque has doubled to 2 million dollars.",
     body: "The Women's Africa Cup of Nations starts today, which is not when it was meant to start. The tournament was scheduled for 17 March to 3 April. CAF moved it back by roughly four months, citing unforeseen circumstances, with Morocco reported to have asked for the change. Morocco are hosting for the third time in succession, which no country has done before.\n\nThe field has grown from 12 teams to 16. The prize pot has gone from about 3.48 million dollars to 5.8 million, and the winners now take 2 million, double what the last champions received, with 750,000 for the runners-up. Set against the men's tournament it is still small, but it is the largest this competition has ever been.\n\nNigeria arrive as holders and have won this 10 times. They open against Malawi and also face Zambia and Egypt. The hosts play Kenya at the Moulay El Hassan Stadium on the opening day, in a group that also holds Algeria and Senegal. Sixteen nations qualified, among them Cape Verde, Tanzania and Burkina Faso. The final is on 16 August in Rabat.",
     status: "verified",
+    publishedAt: "2026-07-26T06:18:04-04:00",
   },
   {
     date: "2026-07-25",
@@ -131,6 +165,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Jurgen Klopp will coach Germany until 2030. His first match is away to the Netherlands in Amsterdam on 24 September.",
     body: "Germany have appointed Jurgen Klopp as head coach on a contract running to 2030, confirmed by the German Football Association on 24 July and reported the same way by Sky Sports, CNN and Bundesliga.com. He takes up the job on 15 August. Peter Krawietz, Pep Lijnders and Sven Bender join his staff. The first fixture could hardly ask more of him: Germany away to the Netherlands in Amsterdam on 24 September, the opening match of the 2026/27 Nations League. The release was the unusual part. Klopp was Red Bull's head of global soccer, and rather than pay a compensation fee the DFB agreed to donate 1 million euros to Wings for Life, the Red Bull foundation that funds spinal cord research. Kicker and sport.de report that three Germany home matches will be staged in Leipzig over the length of the contract as part of the same arrangement. Klopp replaces Julian Nagelsmann, who left after Germany went out of the World Cup to Paraguay in the last 32. Klopp has four years to work with, and a rebuild rather than a rescue, which is the easier brief of the two. It still opens in Amsterdam.",
     status: "verified",
+    publishedAt: "2026-07-25T02:40:57-04:00",
   },
   {
     date: "2026-07-20",
@@ -139,6 +174,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Ferran Torres scored in the 106th minute at MetLife Stadium. Argentina did not put a single shot on target.",
     body: "Spain are world champions for the second time. Ferran Torres scored in the 106th minute of extra time at MetLife Stadium, and Argentina finished with ten men after Enzo Fernandez was sent off for a second yellow card. The numbers are strange. Spain had 20 shots and 12 on target. Argentina did not put one on target all night. Emiliano Martinez made 11 saves, more than any goalkeeper has made in a World Cup final, and still lost. Spain conceded one goal in the whole tournament. Lionel Messi finished his last World Cup match with 15 touches. Kylian Mbappe took the Golden Boot with ten goals.",
     status: "verified",
+    publishedAt: "2026-07-20T06:08:33-04:00",
   },
   {
     date: "2026-07-18",
@@ -147,6 +183,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "England 6-4 France. Bukayo Saka scored three, Kylian Mbappe scored two, and the record books moved.",
     body: "England led 4-0 at half time and still needed six. Declan Rice and Ezri Konsa scored, Bukayo Saka scored twice before the break, and the third-place match looked settled. France did not accept that. Bradley Barcola pulled one back, then Kylian Mbappe scored in the 48th minute and the 66th, and 4-0 became 4-3. England found two more. Saka completed his hat-trick. Ten goals is the most a World Cup third-place match has ever produced, and the most in any World Cup game since Hungary beat El Salvador 10-1 in 1982. Mbappe's two took him past Lionel Messi as the tournament's all-time leading scorer. A dead rubber, on paper.",
     status: "verified",
+    publishedAt: "2026-07-18T05:00:00-04:00",
   },
   {
     date: "2026-07-19",
@@ -155,6 +192,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Kylian Mbappe passed Lionel Messi as the World Cup's all-time leading scorer, and leads the Golden Boot going into Argentina against Spain.",
     body: "Kylian Mbappe scored twice against England on Saturday night and left the tournament's oldest individual record behind him. He has 22 World Cup goals from 22 matches. Lionel Messi has 21 from 33. Mbappe also leads the Golden Boot on ten goals to Messi's eight, and his tournament is finished. Messi's is not. Argentina meet Spain at MetLife Stadium at three o'clock eastern time, the holders against a side who have conceded once in seven matches and are in a first final since 2010. Argentina can become the first nation to win four major tournaments in a row. Messi can still take the Golden Boot. He plays last, which is the whole point.",
     status: "verified",
+    publishedAt: "2026-07-19T05:55:11-04:00",
     image: "/heads/mbappe.webp",
     imageAlt: "Kylian Mbappe, illustrated by The ARCHV.",
   },
@@ -165,6 +203,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Lionel Messi and Kylian Mbappe share the lead on eight as the tournament runs to Sunday's Argentina-Spain final.",
     body: "The World Cup pauses before its finish, and the individual race is as tight as the trophy one. Lionel Messi and Kylian Mbappe sit level at the top on eight goals each, but their run-ins differ. Mbappe plays first, in Saturday's third-place game against England in Miami, his last chance to move ahead. Messi plays last, in Sunday's final against Spain at MetLife, where he can settle it outright and cap a sixth and final World Cup. Argentina, the holders, meet a Spain side that has conceded once all tournament and reached a first final since 2010. Two games left. One boot and one trophy, both still open.",
     status: "verified",
+    publishedAt: "2026-07-17T06:09:21-04:00",
     image: "/heads/messi.webp",
     imageAlt: "Lionel Messi, illustrated by The ARCHV.",
   },
@@ -175,6 +214,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "England 1-2 Argentina. Messi makes both as the holders go again.",
     body: "England led this one and lost it anyway. Anthony Gordon put them in front just before the hour at the Mercedes-Benz Stadium in Atlanta, and for half an hour it held. Then Argentina did the thing the holders keep doing. Enzo Fernandez levelled with five minutes left, and Lautaro Martinez headed the winner in the 92nd minute, Lionel Messi the maker of both. Argentina reach a second straight final and meet Spain on Sunday. England, so close again, go home with nothing. The final is set: the champions against a Spain side back at this stage for the first time since 2010.",
     status: "verified",
+    publishedAt: "2026-07-16T06:00:53-04:00",
     image: "/heads/messi.webp",
     imageAlt: "Lionel Messi, illustrated by The ARCHV.",
   },
@@ -185,6 +225,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Mikel Oyarzabal and Pedro Porro send Spain past France 2-0.",
     body: "Spain are through to the World Cup final. They beat France two nil at AT&T Stadium in Arlington, a controlled semi-final settled early by Mikel Oyarzabal's penalty, awarded when Lucas Digne fouled Lamine Yamal in the box. Pedro Porro added the second on fifty eight minutes, a give-and-go with Dani Olmo finished past Mike Maignan. It is Spain's first final since 2010 and it extends a long unbeaten run. France go home, and Kylian Mbappe's tournament ends on eight goals, level at the top of the Golden Boot. Spain now wait on England or Argentina, who meet in Atlanta on Wednesday for the other place in Sunday's final.",
     status: "verified",
+    publishedAt: "2026-07-14T05:00:00-04:00",
   },
   {
     date: "2026-07-12",
@@ -193,6 +234,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Bellingham's brace, Alvarez's extra-time strike, and 1986 hangs in the air.",
     body: "The quarter-finals finished with two matches that both needed extra time. England beat Norway two one in Miami, Jude Bellingham scoring twice to send Gareth Southgate's side through. Across the country in Kansas City, Argentina needed one hundred and twelve minutes to break down ten-man Switzerland, Julian Alvarez scoring the goal that settled it three one. The draw does not care about history, but it handed it to us anyway. England face Argentina in the semi-final on the fifteenth of July, the first meeting between the two at a World Cup since 2002. France play Spain the day before. Two semis, four sides that all believe they can win it.",
     status: "verified",
+    publishedAt: "2026-07-12T06:20:32-04:00",
     image: "/heads/bellingham.webp",
     imageAlt: "Jude Bellingham, illustrated by The ARCHV.",
   },
@@ -203,6 +245,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Merino's 88th-minute winner, and a United goalkeeper thrown into the fire.",
     body: "Spain needed until the 88th minute to see off Belgium two one at SoFi Stadium, Mikel Merino scoring the winner after Fabian Ruiz and Charles De Ketelaere had cancelled each other out. Belgium lost more than the game. Thibaut Courtois went off injured in the second half, replaced by Manchester United's own Senne Lammens, and captain Youri Tielemans had already missed the match after a warm-up injury. Spain now face France in the semi-final, a rematch neither side chose but both have earned. Today brings the other two quarter-finals, Norway against England and Argentina against Switzerland.",
     status: "verified",
+    publishedAt: "2026-07-11T05:58:12-04:00",
   },
   {
     date: "2026-07-10",
@@ -211,6 +254,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "A makeshift Belgium goalkeeper could not hold out to the final whistle.",
     body: "Spain didn't get there until the eighty eighth minute. Two one over Belgium at SoFi Stadium, in a quarter final that swung twice. Fabian Ruiz put them ahead just past the half hour, Belgium answered almost straight away through Charles De Ketelaere, and it was 1-1 at the break. Belgium's night got worse from there: Thibaut Courtois went off injured, Manchester United's Senne Lammens came on for him, and captain Youri Tielemans had already been ruled out with a warm-up injury. Mikel Merino made it count late, scoring off a rebound Lammens couldn't hold. Spain go through to face France, already through on the other side, in Tuesday's semi final.",
     status: "verified",
+    publishedAt: "2026-07-10T05:00:00-04:00",
   },
   {
     date: "2026-07-08",
@@ -219,6 +263,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Switzerland beat Colombia on penalties to close out the last-sixteen round.",
     body: "Switzerland beat Colombia on penalties, four three, after a scoreless draw, the final match of the round of sixteen and the result that completes the quarter final draw. All four ties are now set: France face Morocco, Spain face Belgium, Norway face England, and Argentina face Switzerland, matches spread across 9 to 11 July. It closes out a knockout round that has already produced Ronaldo's career-closing exit, Neymar's international retirement, and Cape Verde's near-miss against the holders. The World Cup now moves into its final stretch, eight nations left, four matches standing between any of them and a place in the last four.",
     status: "verified",
+    publishedAt: "2026-07-08T05:00:00-04:00",
   },
   {
     date: "2026-07-09",
@@ -227,6 +272,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Same score, same stage, same story.",
     body: "The quarter finals opened with a rematch. France beat Morocco two nil at Gillette Stadium, the exact scoreline from their 2022 semi final, and once again it was Kylian Mbappe at the centre of it. He missed a first half penalty, then made up for it in the sixtieth minute, with Ousmane Dembele adding the second six minutes later. France have won all six matches so far without needing extra time and are through to a third straight World Cup semi final. Morocco remain the only African nation ever to reach one, a mark France have now denied them twice running. Mbappe leads the race for the Golden Boot heading into the weekend's remaining quarter finals.",
     status: "verified",
+    publishedAt: "2026-07-09T05:00:00-04:00",
     image: "/heads/mbappe.webp",
     imageAlt: "Kylian Mbappe, illustrated by The ARCHV.",
   },
@@ -237,6 +283,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Down two, up three. The holders survive.",
     body: "Egypt led twice in the last sixteen and had Argentina staring at an early flight home. Then Messi took over. He set up Cristian Romero's header to make it two one, then finished the equaliser himself for his eighth goal of the tournament, level at the top of the scoring chart. Enzo Fernandez won it in stoppage time, heading in off a Lautaro Martinez cross to make it three two. It is the biggest scare the champions have survived all summer, and it sends them through to face Switzerland, who beat Colombia on penalties after a goalless one hundred and twenty minutes, in the quarter-finals on Saturday in Kansas City.",
     status: "verified",
+    publishedAt: "2026-07-07T05:00:00-04:00",
     image: "/heads/messi.webp",
     imageAlt: "Lionel Messi, illustrated by The ARCHV.",
   },
@@ -247,6 +294,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Spain edge Portugal. Belgium send the USA home.",
     body: "Monday closed out four days of Round of 16 football with two results that reshaped the tournament. Spain beat Portugal one nil at the death, Mikel Merino converting a Ferran Torres cutback deep into stoppage time to end, in all likelihood, Cristiano Ronaldo's international career. In Seattle, Belgium were ruthless. Charles De Ketelaere scored twice inside the first half, Hans Vanaken added a third, and Romelu Lukaku's stoppage time finish put four unanswered past co-host USA, who become the last of the three hosts to exit the competition. Spain now play Belgium in the quarter-finals on 10 July. Two Round of 16 ties remain, both on Tuesday: Argentina against Egypt, then Switzerland against Colombia.",
     status: "verified",
+    publishedAt: "2026-07-06T05:00:00-04:00",
     image: "/heads/ronaldo.webp",
     imageAlt: "Cristiano Ronaldo, illustrated by The ARCHV.",
   },
@@ -257,6 +305,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Bellingham doubles up. England and Norway reach the last eight.",
     body: "The last of the marquee round of 16 ties delivered on both counts. In Mexico City, Jude Bellingham scored twice inside two minutes at the Azteca, the first player to manage that in a World Cup there since Maradona in 1986, and Harry Kane's penalty saw off Mexico three two. In New Jersey, Erling Haaland scored both in Norway's two one win over Brazil, taking his tournament total to seven, more than Messi, Mbappe and Ronaldo have managed between them this summer. Brazil's exit carried extra weight. Neymar confirmed afterwards that his international career is over. England now face Norway in the quarter-finals on 11 July.",
     status: "verified",
+    publishedAt: "2026-07-05T05:00:00-04:00",
     image: "/heads/haaland.webp",
     imageAlt: "Erling Haaland, illustrated by The ARCHV.",
   },
@@ -267,6 +316,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "France win it late with Mbappe's penalty.",
     body: "Morocco beat co-hosts Canada three nil in Houston to reach the quarter-finals, exactly where they finished in 2022, and proof Walid Regragui's side are building a real habit of winning knockout football. Canada's first men's World Cup knockout appearance ends there, a fair result on the balance of the ninety minutes. In Philadelphia, France needed one moment to get past Paraguay. Kylian Mbappe scored the only goal from the penalty spot, sending Les Bleus into the last eight for a fourth straight tournament. Morocco now face France in Boston on the ninth of July, a heavyweight draw nobody wanted this early. Two different countries, two different routes, one shared theme: consistency finally has a name.",
     status: "verified",
+    publishedAt: "2026-07-04T05:00:00-04:00",
     image: "/heads/mbappe.webp",
     imageAlt: "Kylian Mbappe, illustrated by The ARCHV.",
   },
@@ -277,6 +327,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Egypt survive on spot kicks. Cape Verde push Argentina to extra time.",
     body: "The last day of the round belonged to the underdogs, even in defeat. Egypt drew one all with Australia in Arlington and won it four two on penalties, the earlier kick-off of the night. Colombia were the tidiest side on view, Jhon Arias converting a low Luis Suarez cross after fourteen minutes for a one nil win over Ghana at Arrowhead. The story of the night was Miami. Cape Verde, playing their first ever World Cup knockout match, twice pulled level against Argentina, and it took extra time before Lionel Messi and the holders finally won it three two. A World Cup debutant had the reigning champions rattled for two hours. Round of 32 is done. The bracket now sharpens into the last sixteen.",
     status: "verified",
+    publishedAt: "2026-07-03T05:00:00-04:00",
     image: "/heads/messi.webp",
     imageAlt: "Lionel Messi, illustrated by The ARCHV.",
   },
@@ -287,6 +338,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "A stoppage-time header sent Portugal past Croatia.",
     body: "Round of 32 day produced two results with weight behind them. Spain opened the evening with a clean three nil win over Austria at SoFi Stadium, never troubled. Portugal against Croatia in Toronto was a different match entirely. Ivan Perisic put Croatia ahead just after the hour with a low strike across goal, and it held until Cristiano Ronaldo levelled from the penalty spot in the sixty eighth minute, a goal that made him the oldest scorer in World Cup knockout history. Croatia kept pushing, kept Portugal honest, and it looked set for extra time until Goncalo Ramos rose to head in a Rafael Leao cross in the ninety fourth minute. Portugal move on to face Spain in the last sixteen, a genuine heavyweight tie. Croatia go home.",
     status: "verified",
+    publishedAt: "2026-07-02T05:00:00-04:00",
     image: "/heads/ronaldo.webp",
     imageAlt: "Cristiano Ronaldo, illustrated by The ARCHV.",
   },
@@ -297,6 +349,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "England, Belgium and the USA all survive a heavy night.",
     body: "England beat DR Congo two one to continue the chase of a first World Cup since 1966. Belgium supplied the theatre. Down two nil to Senegal with the clock running out, they scored twice in the final five minutes to force extra time, then Youri Tielemans won it from the penalty spot in the 125th minute. The hosts had the hardest route of the three. The United States played over half an hour a man down against Bosnia and Herzegovina and still won two nil, Malik Tillman among the scorers with a free kick. Three different ways to survive a knockout night. Only one way through to the next round.",
     status: "verified",
+    publishedAt: "2026-07-01T05:00:00-04:00",
   },
   {
     date: "2026-06-30",
@@ -305,6 +358,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "A Mbappe brace, an Azteca win, and 28 years undone.",
     body: "Round of 32 delivered its calmer night after two shock exits. France beat Sweden three nil at MetLife Stadium, Kylian Mbappe scoring twice to send the world champions through with barely a scare. Mexico kept the host run alive, beating Ecuador two nil in front of their own crowd at the Azteca, the stadium that opened this tournament back on day one. Norway, back at a World Cup after twenty eight years away, beat Ivory Coast two one to reach the knockout rounds they last saw in 1998. Three wins, no surprises this time, and the bracket edges toward the business end.",
     status: "verified",
+    publishedAt: "2026-06-30T05:00:00-04:00",
   },
   {
     date: "2026-06-28",
@@ -313,6 +367,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Eustaquio settles it. South Africa's dream ends 1-0.",
     body: "The knockout rounds opened with a first for both sides. Canada, hosting a World Cup for the first time, had never won a match at this stage before kickoff in Los Angeles. Stephen Eustaquio settled it in the second minute of stoppage time, a clipped finish from the edge of the box that sent the stadium into disbelief. South Africa, appearing in their first ever World Cup knockout match, pushed hard for an equaliser that never came. For the co-hosts it is a first Round of 16 appearance in the men's tournament's history. For Bafana Bafana, elimination arrived with the kind of pride a team can build a future on.",
     status: "verified",
+    publishedAt: "2026-06-28T05:00:00-04:00",
   },
   {
     date: "2026-06-29",
@@ -321,6 +376,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Paraguay and Morocco win the shootouts.",
     body: "The Round of 32 took two big names down on the same night, and both went the distance. Germany drew one all with Paraguay and lost the shootout four three, their tournament over at the first knockout hurdle. Netherlands drew one all with Morocco and lost their shootout three two, so Morocco march on and back up the run they made in 2022. Brazil had the calmer evening, a two one win over Japan that never looked in doubt. Two heavyweights gone, two decided from twelve yards. The bracket already looks nothing like the seedings said it would.",
     status: "verified",
+    publishedAt: "2026-06-29T05:00:00-04:00",
   },
   {
     date: "2026-06-27",
@@ -329,6 +385,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "England top their group, Austria and Algeria survive a thriller.",
     body: "The group stage closed on Saturday and the round of 32 is set. England finished top of Group L, a two nil win over Panama doing the job without fuss. The day's madness was in Group J, where Austria and Algeria drew three all and both went through, while Argentina beat Jordan three one with Lionel Messi scoring again. Portugal and Colombia played out a goalless draw that suited both. DR Congo saw off Uzbekistan three one, and Croatia edged Ghana two one. Thirty two teams remain. The knockouts begin on Sunday, and from here a single bad night ends it.",
     status: "verified",
+    publishedAt: "2026-06-27T05:00:00-04:00",
   },
   {
     date: "2026-06-26",
@@ -337,6 +394,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Spain edge Uruguay. Belgium roll. Cape Verde sneak through.",
     body: "Group H closed with a giant heading out. Spain beat Uruguay one nil in Guadalajara to win the group, and the result sent Uruguay, twice world champions, out at the first stage. Belgium answered any doubts with a five one win over New Zealand to march on. The day's quieter story carried the most weight. Cape Verde held Saudi Arabia to a goalless draw and reached the knockout rounds, a first in their history. One former winner out, one debutant through. The group stage saved some of its sharpest turns for the very end.",
     status: "verified",
+    publishedAt: "2026-06-26T05:00:00-04:00",
   },
   {
     date: "2026-06-25",
@@ -345,6 +403,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "The tournament's biggest jolt yet, plus a host-nation win and two sides edging through on a draw.",
     body: "Day 15 belonged to Ecuador. They beat Germany 2-1 in the final group game, the sort of result that rewires a bracket and ends a fancied side's afternoon early. Mexico kept the host nation smiling with a 2-0 win over Czechia. The Netherlands saw off Tunisia 3-1. South Africa edged Korea Republic 1-0. And Japan and Sweden played out a 1-1 draw that suited both, sending the pair into the knockouts together. The pattern of the day was simple. The names on the shirt counted for less than the legs on the pitch, and the group stage is now doing what it does best, sorting the brave from the comfortable.",
     status: "verified",
+    publishedAt: "2026-06-25T05:00:00-04:00",
   },
   {
     date: "2026-06-24",
@@ -353,6 +412,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Morocco win a six-goal thriller; Canada hold on.",
     body: "The group stage closed with its cards on the table. Brazil dismantled Scotland three nil to win their group, the gulf in class plain from the first whistle. Mexico did the same to Czechia, a three nil win in front of a roaring home crowd that sent them through as group winners. Morocco and Haiti served up the chaos, six goals shared, Morocco edging it four two. South Africa found a one nil against South Korea, and in Seattle Canada saw off Qatar three one to keep the host nations moving. Fourteen days in, the knockout picture is nearly set. The round of thirty two starts this weekend.",
     status: "verified",
+    publishedAt: "2026-06-24T05:00:00-04:00",
   },
   {
     date: "2026-06-23",
@@ -361,6 +421,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "A record sixth World Cup on the scoresheet.",
     body: "The night had a headline act. Cristiano Ronaldo scored twice as Portugal hammered Uzbekistan five nil, becoming the first man to score at six different World Cups. At forty one, he is not done arguing his case. England had no such joy. They piled up nineteen shots against Ghana and could not score, a goalless draw that became their thirteenth at a World Cup, more than any nation has managed. Croatia edged Panama one nil through Ante Budimir, and Colombia saw off DR Congo by the same scoreline. One man rewrote the record books. One team kept running into its own history.",
     status: "verified",
+    publishedAt: "2026-06-23T05:00:00-04:00",
   },
   {
     date: "2026-06-22",
@@ -369,6 +430,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Norway edge a five-goal tie; Algeria fight back.",
     body: "Group I and J took the floor and the favourites held firm. France brushed Iraq aside three nil, ruthless once they found the opener. Argentina did it the hard way, a single goal enough to see off a stubborn Austria. The day belonged to the underdogs in the other two ties. Norway and Senegal traded blows in a five-goal game, Norway winning it three two. And Algeria came from behind to beat Jordan two one, a result that keeps their group alive into the final round. No giants fell, but two of them were made to sweat. The picture at the top is taking shape.",
     status: "verified",
+    publishedAt: "2026-06-22T05:00:00-04:00",
   },
   {
     date: "2026-06-21",
@@ -377,6 +439,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Four for Spain, a first World Cup win for Egypt, more magic from Cape Verde.",
     body: "Stung by their opening draw, Spain answered on day eleven. Four nil against Saudi Arabia in Atlanta, Lamine Yamal at the heart of it, the favourites looking far more like themselves. Egypt found a result that mattered more. Three one against New Zealand handed them a World Cup win at last, the kind a generation of their fans had waited for. Cape Verde were at it again too, twice pegging back Uruguay for a two two draw that keeps the smallest nation in the field very much alive. Belgium and Iran could not be separated, goalless. The underdogs keep writing, and the giants keep waking up.",
     status: "verified",
+    publishedAt: "2026-06-21T05:00:00-04:00",
   },
   {
     date: "2026-06-20",
@@ -385,6 +448,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Undav's late winner books Germany's place; the Netherlands hit five.",
     body: "Germany are through, but they made hard work of it. Deniz Undav scored twice against Ivory Coast in Toronto, his winner landing in stoppage time to settle a two one game that asked far more of them than the opening rout did. The Netherlands had no such trouble, pulling Sweden apart five one in Houston to lay down a marker. Japan kept their strong tournament going, beating Tunisia four nil with Daichi Kamada scoring inside four minutes. Ecuador and Curaçao played out a goalless draw in Kansas City. Two European heavyweights showed their range on the same afternoon, one by grinding it out, one in style. The knockout picture is hardening.",
     status: "verified",
+    publishedAt: "2026-06-20T05:00:00-04:00",
   },
   {
     date: "2026-06-19",
@@ -393,6 +457,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "USA reach the knockouts. Scotland on the brink.",
     body: "Day nine settled the first host. The United States beat Australia two nil in Seattle and reached the knockout rounds with a match to spare, an own goal and an Alex Freeman header doing the work. Not since 1930 had they won their opening two World Cup games. Around them the day turned cruel. Türkiye lost one nil to Paraguay and went out. Haiti were beaten three nil by Brazil, a Matheus Cunha brace easing Ancelotti's side along. Scotland left it latest of all, undone in Boston after seventy seconds when Ismael Saibari struck for Morocco, the fastest goal of the tournament. The Tartan Army are not finished, but they are close.",
     status: "verified",
+    publishedAt: "2026-06-19T05:00:00-04:00",
     image: "/heads/balogun.webp",
     imageAlt: "Folarin Balogun, illustrated by The ARCHV.",
   },
@@ -403,6 +468,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "A six-goal rout, and the hosts qualify first.",
     body: "Day eight closed the first full round of group games, and the co-hosts owned it. Canada thrashed Qatar six nil in Vancouver, Jonathan David helping himself to a hat-trick on a night that set a new mark for the country. Mexico were tighter but no less effective, Luis Romo's second-half goal beating South Korea one nil and making them the first team into the knockout rounds. Switzerland eased past Bosnia and Herzegovina four one. Czechia and South Africa could not be separated in a one all draw. The hosts are flying, and the new 48-team bracket is taking shape.",
     status: "verified",
+    publishedAt: "2026-06-18T05:00:00-04:00",
   },
   {
     date: "2026-06-17",
@@ -411,6 +477,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Four past Croatia, and the captain ties Lineker.",
     body: "England started their World Cup the hard way and still won it well, four two over Croatia in Group L. Harry Kane scored twice, the first from the spot, and his header drew him level with Gary Lineker on ten World Cup goals for England. Croatia twice hit back, through Martin Baturina and Petar Musa, but Jude Bellingham restored the lead straight after the break and Marcus Rashford came off the bench to finish it late. Colombia beat Uzbekistan three one, Ghana edged Panama one nil, and Portugal were held by DR Congo. The seventh day had its share of jeopardy.",
     status: "verified",
+    publishedAt: "2026-06-17T05:00:00-04:00",
   },
   {
     date: "2026-06-16",
@@ -419,6 +486,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "The holders open with a statement; France and Norway roll.",
     body: "The holders waited until day six to start, and Lionel Messi made it worth the wait. A hat-trick against Algeria, three goals in a three nil win, on his record sixth World Cup and his two hundredth cap for Argentina. The goals took him level with Miroslav Klose on sixteen, the most anyone has scored at World Cups. He was not the only one busy. France beat Senegal three one; Kylian Mbappé's two goals made him France's all time leading scorer. Erling Haaland struck twice in Norway's four one win over Iraq. Austria saw off Jordan three one. The big names arrived together.",
     status: "verified",
+    publishedAt: "2026-06-16T05:00:00-04:00",
   },
   {
     date: "2026-06-15",
@@ -427,6 +495,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "A forty year old goalkeeper denies the European champions.",
     body: "Day five refused to pick a winner. All four matches finished level, and the one they will retell came in Atlanta. Cape Verde, on their World Cup debut, held European champions Spain to a goalless draw. Spain had twenty seven shots and could not beat Vozinha, the forty year old goalkeeper who turned aside Oyarzabal, Laporte and everything else thrown at him. For one of the smallest nations ever to qualify, a point off the favourites is a night they keep for good. The rest matched the mood. Iran and New Zealand traded blows in Los Angeles for a two all, Elijah Just scoring twice before Ramin Rezaeian and Mohammed Mohebbi hauled Iran level. Belgium drew with Egypt, Saudi Arabia with Uruguay.",
     status: "verified",
+    publishedAt: "2026-06-15T05:00:00-04:00",
   },
   {
     date: "2026-06-14",
@@ -435,6 +504,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Ivory Coast nick it in the ninetieth as Germany and Sweden run riot.",
     body: "Day four had a ninetieth-minute twist. Amad Diallo came off the bench, met Wilfried Singo's cutback and steered it past the keeper. Ivory Coast won one nil, ended Ecuador's nineteen-match unbeaten run and took their first World Cup win since 2014. The favourites were blunter about it. Germany battered Curacao seven one for the biggest scoreline of the tournament so far, Kai Havertz scoring twice. Sweden kept pace, seeing off Tunisia five one on a Yasin Ayari brace, with Alexander Isak and Viktor Gyokeres also on the mark. The best of the football came in a draw. Japan twice pegged the Netherlands back to finish two all, Daichi Kamada level at eighty eight minutes.",
     status: "verified",
+    publishedAt: "2026-06-14T05:00:00-04:00",
   },
   {
     date: "2026-06-13",
@@ -443,6 +513,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "McGinn settles it as Brazil and Switzerland drop points.",
     body: "Day three belonged to the underdogs. Scotland beat Haiti one nil in Group C, John McGinn turning in a rebound on twenty eight minutes for the Tartan Army's first World Cup win since 1990, enough to sit top of the group on the night. Above them the favourites wobbled. Brazil were held to a one all draw by Morocco, and Switzerland, dominant for long spells, conceded a late Boualem Khoukhi equaliser to draw one all with Qatar after Breel Embolo's early penalty. Australia delivered the upset of the day, beating Turkiye two nil in Vancouver through Nestory Irankunda and Connor Metcalfe. The big names have been warned.",
     status: "verified",
+    publishedAt: "2026-06-13T05:00:00-04:00",
   },
   {
     date: '2026-06-12', day: 'Day 2',
@@ -450,6 +521,7 @@ export const worldCupDays: DayEntry[] = [
     dek: "Balogun's brace, Canada rescued late.",
     body: 'Day two belonged to the co-hosts. The United States opened with a four one win over Paraguay, Folarin Balogun scoring twice inside the first half before an own goal and a late Gio Reyna strike finished the job. It was the dominant start the tournament wanted from its biggest host. Canada had to settle for less. Bosnia and Herzegovina led in Toronto, and the home side needed Cyle Larin, set up by Jonathan David, to level it one all deep in the game. One host roared. One host survived. The group stage was up and running.',
     status: 'verified',
+    publishedAt: "2026-06-12T05:00:00-04:00",
     image: '/heads/balogun.webp',
     imageAlt: 'Folarin Balogun, illustrated by The ARCHV.',
   },
@@ -459,6 +531,7 @@ export const worldCupDays: DayEntry[] = [
     dek: 'Mexico win the opener amid three red cards.',
     body: 'The tournament kicked off where two of its greatest editions were staged. Mexico beat South Africa two nil at the Estadio Azteca, Julián Quiñones striking inside nine minutes and Raúl Jiménez adding the second, on a feisty night that produced three red cards. The Azteca became the first ground to host matches at three different mens World Cups, after 1970 and 1986. Later, in Guadalajara, South Korea came from behind to beat Czechia two one. Ladislav Krejci put the Czechs ahead, then In-Beom Hwang and Hyeon-Gyu Oh turned it around. A comeback to close the opening day. The tournament had found its jeopardy early.',
     status: 'verified',
+    publishedAt: "2026-06-11T05:00:00-04:00",
     image: '/heads/jimenez.webp',
     imageAlt: 'Raúl Jiménez, illustrated by The ARCHV.',
   },

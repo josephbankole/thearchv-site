@@ -1,0 +1,56 @@
+{
+  "_comment": [
+    "Corrections and revisions on the evergreen pages (content/ and the glossary), one record each,",
+    "read by scripts/build-corrections-log.mjs to generate the /corrections/ log at build (search plan G12,",
+    "2026-10-04). Dated desk entries carry their own records in src/data/*Days.ts under `corrections`.",
+    "was = what the page said, now = what is right, source = where it was checked. The first five rows",
+    "moved here word for word from the hand-written log of 22 September 2026."
+  ],
+  "records": [
+    {
+      "at": "2026-09-22T22:36:41-04:00",
+      "kind": "correction",
+      "path": "/united/treble-1999/",
+      "title": "The 1999 treble",
+      "was": "\"The only English men's treble\"; \"None has done it since\"; \"Real Madrid and a handful of European giants have since matched the treble. In English football it stands alone.\"",
+      "now": "Manchester United's treble was the first by an English men's club. Manchester City won the Premier League, FA Cup and Champions League in 2022-23. Real Madrid have never won a treble.",
+      "source": "ESPN and Manchester City, 10 June 2023; Wikipedia, Treble (association football)."
+    },
+    {
+      "at": "2026-09-22T22:36:41-04:00",
+      "kind": "correction",
+      "path": "/explainers/most-world-cup-titles/",
+      "title": "Most World Cup titles",
+      "was": "Spain on one title; \"the 22 tournaments held from 1930 to 2022\"; \"France reached a third straight final in 2022\"; \"Whoever lifts it on 19 July, the record above moves\"; and an editor's note that the semi-final results \"should be re-confirmed on publish day, with the final result added after 19 July\"; \"Argentina, the modern holders\"; \"Argentina hold the trophy now\"; \"the only nation on the four-and-below tier still adding to its count\"; \"France and Uruguay share second-from-bottom of the multiple-winners, two apiece\"; \"seven knockout wins in a month\".",
+      "now": "Spain beat Argentina 1-0 after extra time on 19 July 2026 for their second title, which makes 23 tournaments from 1930 to 2026. Argentina beat England 2-1 in the Atlanta semi-final. France's finals were 1998, 2006, 2018 and 2022, with a quarter-final exit in 2014, so 2022 was their second straight final. The editor's note is gone. Argentina held the trophy until the 2026 final, and Spain sit on two titles with France and Uruguay. A champion played seven matches, four of them knockouts, from 1998 to 2022, and eight, five of them knockouts, in 2026.",
+      "source": "CBS News and Yahoo Sports, 19 July 2026; FIFA; Olympics.com; ESPN."
+    },
+    {
+      "at": "2026-09-22T22:36:41-04:00",
+      "kind": "correction",
+      "path": "/united/united-record-signings/",
+      "title": "Every time Manchester United broke the British transfer record",
+      "was": "\"Manchester United have broken the British transfer record several times: Denis Law (£115,000, 1962), Bryan Robson (£1.5m, 1981), Roy Keane (£3.75m, 1993), Juan Sebastián Verón (around £28m, 2001) and Rio Ferdinand (£29.1m, 2002).\"; \"It started with Denis Law\"; \"From Denis Law in 1962\"; and the search title \"United's British transfer records, Denis Law to Paul Pogba\".",
+      "now": "The run started with Albert Quixall, £45,000 from Sheffield Wednesday in September 1958. The list also takes in Gordon McQueen, £495,000 from Leeds United on 9 February 1978; Andy Cole, £7m from Newcastle United on 10 January 1995, made up of £6m and Keith Gillespie; Ruud van Nistelrooy, £19m from PSV Eindhoven in 2001; and Ángel Di María, £59.7m from Real Madrid on 26 August 2014. Roy Keane's £3.75m on 19 July 1993 held the British record only for days, until Rangers paid Dundee United £4m for Duncan Ferguson.",
+      "source": "Manchester United; Wikipedia; GiveMeSport; Fox News; Al Jazeera, 26 August 2014; The42."
+    },
+    {
+      "at": "2026-09-22T22:36:41-04:00",
+      "kind": "correction and revision",
+      "path": "/finals/metlife-2026/",
+      "title": "MetLife 2026: the World Cup final",
+      "was": "\"the plan survived until a defender's tackle in first-half stoppage time\"; \"made 12 saves, the most recorded in a World Cup final, per CBS News\"; \"conceding once in two months\"; and, cut as a revision, \"which tells you most of what Spain had become\".",
+      "now": "Enzo Fernández, a midfielder booked in the 82nd minute, was sent off for a second yellow card in the 93rd minute, in stoppage time at the end of the second half. Martínez made 11 saves by the count of Yahoo Sports and Wikipedia, 12 by CBS News', and the page now gives both. The tournament ran from 11 June to 19 July, about six weeks.",
+      "source": "NBC News and Yahoo Sports, 19 July 2026; Wikipedia."
+    },
+    {
+      "at": "2026-09-22T22:36:41-04:00",
+      "kind": "revised",
+      "path": "/glossary/work-permit/",
+      "title": "Work permits",
+      "was": "the Football Association awards points for \"international appearances, the standard of the selling league and the size of the fee and wages\".",
+      "now": "a player needs 15 points for a Governing Body Endorsement, scored from international appearances, the quality of the selling club and its league, and minutes played. The fee and wages stopped scoring in January 2021. Players on 10 to 14 points can go to an exceptions panel, and since June 2023 Premier League clubs have had up to four Elite Significant Contribution places a season.",
+      "source": "The FA, 1 December 2020; Mills and Reeve; Fragomen, 29 June 2023."
+    }
+  ]
+}

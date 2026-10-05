@@ -6,6 +6,7 @@
    pages"). Not used by the homepage bundle (src/), which stays CSP-clean and router-free. */
 import { createHash } from "node:crypto";
 import { entryArt } from "./illustrated.mjs";
+import { sentences } from "./sentences.mjs";
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -220,16 +221,84 @@ export function answerTitleFlags(items) {
   }
 })();
 
-// clampDescription: collapse whitespace, then truncate to `max` at a word boundary
-// with a trailing ellipsis. Meta descriptions over ~160 chars get cut off in search
-// results, so this keeps the whole sentence visible or a clean truncation.
-export function clampDescription(s, max = 160) {
-  const str = String(s ?? "").trim().replace(/\s+/g, " ");
+/* ---------- descriptions end on a sentence (search plan G11, 2026-10-04) ----------
+   clampDescription() used to cut at a word and append "…", and 143 of 651 built pages shipped a
+   description that stopped mid-clause. Google rewrites a snippet like that or shows it broken.
+   sentenceDescription() is the one rule both description builders now use:
+     1. text at or under `max` passes through unchanged;
+     2. otherwise the longest run of WHOLE sentences that fits, from the shared lossless splitter
+        (scripts/shared/sentences.mjs, which knows "St. Jude" and "J.J. Spaun" are not sentence ends);
+     3. when that run is a fragment under `min` characters, the first sentence of `then` (the
+        body, where the caller has one) is appended, but only if the whole of it still fits. The
+        body never stands in for the dek: when no dek sentence fits at all, rule 4 applies;
+     4. a first sentence that is itself longer than `max` is kept whole up to `overflow`, because a
+        complete sentence a little over the cap reads better than a cut one;
+     5. only past that does it cut, at the last clause break (comma, semicolon, colon, dash) or
+        word, and drops any trailing connective. It never appends an ellipsis.
+   Nothing here writes a new word: every description is a run of sentences the page already shows. */
+const CONNECTIVE_TAIL = /\s+(?:and|or|but|the|a|an|of|to|in|on|at|for|with|from|by|as|than|then|so|nor)$/;
+export function sentenceDescription(text, max = 155, { min = 50, then = "", overflow = Math.round(max * 1.5) } = {}) {
+  const str = String(text ?? "").trim().replace(/\s+/g, " ");
   if (str.length <= max) return str;
-  const cut = str.slice(0, max - 1);
-  const sp = cut.lastIndexOf(" ");
-  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s.,;:!?-]+$/, "") + "…";
+  const parts = sentences(str).map((x) => x.trim()).filter(Boolean);
+  let out = "";
+  for (const part of parts) {
+    const next = out ? `${out} ${part}` : part;
+    if (next.length > max) break;
+    out = next;
+  }
+  if (out.length >= min) return out;
+  const tail = sentences(String(then ?? "").trim().replace(/\s+/g, " ")).map((x) => x.trim()).filter(Boolean)[0];
+  if (out && tail) {
+    const next = `${out} ${tail}`;
+    if (next.length <= max) return next;
+  }
+  if (out) return out;
+  if (parts[0] && parts[0].length <= overflow && /[.!?]["'’”)]*$/.test(parts[0])) return parts[0];
+  const head = parts[0] || str;
+  const window = head.slice(0, max + 1);
+  let clause = -1;
+  for (const m of window.matchAll(/[,;:](?=\s)|\s[—–](?=\s)/g)) if (m.index <= max) clause = m.index;
+  const lastSpace = head.slice(0, max).lastIndexOf(" ");
+  let stem = clause > max * 0.6 ? head.slice(0, clause) : lastSpace > 0 ? head.slice(0, lastSpace) : head.slice(0, max);
+  for (let prev; prev !== stem; ) {
+    prev = stem;
+    stem = stem.replace(/[\s,;:—–-]+$/, "").replace(CONNECTIVE_TAIL, "");
+  }
+  return stem;
 }
+
+// clampDescription: the general description builder for every page family except the dated desk
+// pages (which call sentenceDescription with their body, in build-article-pages.mjs). Same rule,
+// at the 160-character cap these families have always used.
+export function clampDescription(s, max = 160) {
+  return sentenceDescription(s, max);
+}
+
+// tests-by-assertion: a regression fails the build at import time.
+(function selfTestSentenceDescription() {
+  const fail = (what, got) => { throw new Error(`sentenceDescription self-test (${what}): got ${JSON.stringify(got)}`); };
+  const short = "Fernandes the name. Not the only one.";
+  if (sentenceDescription(short) !== short) fail("short text passes through", sentenceDescription(short));
+  const s1 = "First sentence runs to a sensible length and stops cleanly here.";
+  const s2 = "Second sentence also stops cleanly and still fits under the cap.";
+  const s3 = "Third sentence would push the whole thing well past one hundred and fifty-five characters.";
+  const two = sentenceDescription(`${s1} ${s2} ${s3}`);
+  if (two !== `${s1} ${s2}`) fail("ends on the last whole sentence", two);
+  const abbrev = sentenceDescription("The playoffs begin at the FedEx St. Jude Championship in Memphis on Thursday 13 August, with the top 70 in the standings and one withdrawal already. Then fifty go on.");
+  if (/St\.$/.test(abbrev)) fail("a full stop after St is not a sentence end", abbrev);
+  const frag = sentenceDescription(`A right knee injury. ${"Jannik Sinner has withdrawn from the Cincinnati Open ".repeat(3).trim()}.`, 155, { then: "He had won the title in 2025. The draw changes." });
+  if (frag !== "A right knee injury. He had won the title in 2025.") fail("a fragment takes the first body sentence when it fits", frag);
+  const longOne = `${"Arsenal chased a striker all summer, ".repeat(4)}and settled in the end for the one in the building.`;
+  const kept = sentenceDescription(longOne);
+  if (kept !== longOne) fail("a first sentence within the overflow is kept whole", kept);
+  const huge = `${"word ".repeat(80).trim()}, and more words after the comma to make it long`;
+  const cut = sentenceDescription(huge);
+  if (/…$/.test(cut) || cut.length > 155 || /\s(?:and|the)$/.test(cut)) fail("an oversized sentence is cut with no ellipsis and no trailing connective", cut);
+  const noSwap = sentenceDescription(`${"The Rocket Classic runs from 30 July to 2 August and the Wyndham follows ".repeat(2).trim()}.`, 155, { then: "Two tournaments are left." });
+  if (/^Two tournaments/.test(noSwap)) fail("the body never replaces the dek", noSwap);
+  for (const t of [two, abbrev, frag, kept, cut, noSwap]) if (/…$/.test(t)) fail("never an ellipsis", t);
+})();
 
 /* THE DATE HELPERS ARE PINNED TO UTC, AND THAT IS THE WHOLE POINT.
 

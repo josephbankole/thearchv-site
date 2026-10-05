@@ -113,6 +113,7 @@
   "players": [
     {
       "id": "haaland",
+      "updated": "2026-08-04",
       "name": "Erling Haaland",
       "sortName": "Haaland",
       "club": "Manchester City",
@@ -134,6 +135,7 @@
     },
     {
       "id": "bruno-fernandes",
+      "updated": "2026-08-04",
       "name": "Bruno Fernandes",
       "sortName": "Fernandes",
       "club": "Manchester United",
@@ -155,6 +157,7 @@
     },
     {
       "id": "jimenez",
+      "updated": "2026-08-04",
       "name": "Raúl Jiménez",
       "sortName": "Jiménez",
       "club": "Fulham",
@@ -170,6 +173,7 @@
     },
     {
       "id": "anderson",
+      "updated": "2026-08-04",
       "name": "Elliot Anderson",
       "sortName": "Anderson",
       "club": "Nottingham Forest",
@@ -185,6 +189,7 @@
     },
     {
       "id": "wharton",
+      "updated": "2026-08-04",
       "name": "Adam Wharton",
       "sortName": "Wharton",
       "club": "Crystal Palace",
@@ -200,6 +205,7 @@
     },
     {
       "id": "baleba",
+      "updated": "2026-08-04",
       "name": "Carlos Baleba",
       "sortName": "Baleba",
       "club": "Brighton & Hove Albion",

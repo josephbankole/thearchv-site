@@ -7,6 +7,16 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-05",
+    day: "Monday",
+    headline: "Manchester United Women have won four in a row, and Julia Zigiotti Olme needed six minutes to beat Liverpool",
+    dek: "Julia Zigiotti Olme scored in the sixth minute as Manchester United Women beat Liverpool Women 1-0 in the Women's Super League at Leigh on Saturday 3 October 2026. It was their fourth win in a row in all competitions and their first back-to-back league wins since February.",
+    body: "Manchester United Women beat Liverpool Women 1-0 in the Women's Super League on Saturday 3 October 2026, at the Progress With Unity Stadium in Leigh, per Sky Sports and the club's own match report.\n\nThe goal came in the sixth minute. Elisabeth Terland pressed Liverpool goalkeeper Khiara Keating into a loose pass, and Julia Zigiotti Olme lifted the ball over her from around 20 yards, per Sky Sports and manutd.com. Zigiotti told Sky Sports: \"We wanted to start the game quickly and hope they were not prepared, and that's what happened today.\"\n\nIt was United's fourth win in a row in all competitions under head coach Eva Olid, a run that includes the 5-1 win at Durham in the Subway Players Cup on Wednesday 30 September, per manutd.com and Goal. It was also their first back-to-back WSL wins since February, per Sky Sports and manutd.com, and their first clean sheet of the season, per manutd.com and Goal.\n\nOlid put the win down to the press. \"The identity of this team is a high press,\" she told her post-match press conference, as reported by manutd.com. \"I don't want to change that because they do it really well.\" She also said the side still has to be better in the final third.\n\nElla Toone told BBC Sport, as quoted by manutd.com: \"It's a project. I think we're getting better and better each week.\"\n\nThe match was also the 250th competitive fixture in the club's history, per manutd.com and the WSL's own round-up, and United have now gone 31 league games unbeaten when they score first, per the same two sources.\n\nThe win leaves United level on seven points with Liverpool after five league games, per Sky Sports and ESPN.",
+    status: "verified",
+    publishedAt: "2026-10-05T06:14:37-04:00",
+    seoTitle: "Manchester United Women beat Liverpool 1-0 in the WSL",
+  },
+  {
     date: "2026-09-30",
     day: "Wednesday",
     headline: "Manchester City's former chairman says the club \"cannot stay in the league\", and the appeal deadline is Friday",

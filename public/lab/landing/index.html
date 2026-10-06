@@ -11,6 +11,15 @@
 <meta name="description" content="A quiet room, one pool of lamplight, and today's lead story from The ARCHV." />
 <!-- Prototype. Hidden and unlinked, not part of the site navigation or sitemap. -->
 <meta name="robots" content="noindex,nofollow" />
+<!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, same shape as
+     scripts/shared/page-shell.mjs cspMeta(). The one inline script at the foot of the page is
+     allowed only by the exact sha256 hash of its body. Edit that script and you must recompute
+     the hash (sha256, base64, of the exact inline body) or the browser silently drops it.
+     font-src carries data: because both faces are embedded as base64 WOFF2 in the style block.
+     connect-src names thearchv.ca because the script fetches the absolute feed URL; in
+     production that is the same origin as self, and it keeps a local preview working.
+     No PostHog, no third-party hosts, no iframes. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mM5bDCcmoR3oJcQqWt0kjsphkf+2iDk8w9UORfCZat4='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://thearchv.ca; base-uri 'self'; object-src 'none'; frame-src 'none'" />
 <link rel="icon" href="data:," />
 <link rel="preload" as="image" href="/brand/crest-badge-ink@512.png" />
 <link rel="preload" as="image" href="/brand/crest-badge-ink@192.png" />
@@ -435,7 +444,7 @@ h1, h2, .fx { font-family: "Fraunces", Georgia, serif; }
     wordmarkEl.innerHTML = "";
     word.split("").forEach(function (ch) {
       var span = document.createElement("span");
-      span.textContent = ch === " " ? "  " : ch;
+      span.textContent = ch === " " ? "\u00a0\u00a0" : ch;
       wordmarkEl.appendChild(span);
     });
   }

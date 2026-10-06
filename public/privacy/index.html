@@ -9,6 +9,12 @@
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="https://thearchv.ca/privacy/" />
   <link rel="icon" href="/favicon.svg" />
+  <!-- CSP: GitHub Pages can't send headers, so this meta is the ceiling, built to the same
+       shape as scripts/shared/page-shell.mjs cspMeta({ googleFonts: true }). This page has no
+       inline or external script, so script-src carries no hash. If a script is ever added,
+       hash its exact inline body (sha256, base64) into script-src, never 'unsafe-inline'.
+       Google Fonts is the only third party, hence the two font hosts. No iframes. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Privacy policy." />
   <meta property="og:description" content="No ads, no accounts, no tracking across other apps or sites." />
@@ -74,12 +80,12 @@
     <div class="wordmark"><a href="/">The ARCHV<span class="dot">.</span></a></div>
 
     <h1>Privacy policy</h1>
-    <p class="updated">Last updated 7 July 2026</p>
+    <p class="updated">Last updated 6 October 2026</p>
 
     <p>The ARCHV is an independent football publication. We publish an iOS app and this
     website. There are no ads on either, there are no accounts, and we do not track you
-    across other companies' apps or websites. This page says exactly what we do collect,
-    in plain words.</p>
+    across other companies' apps or websites. This page says exactly what we do collect
+    and which outside companies handle it for us, in plain words.</p>
 
     <h2>The app</h2>
     <p>The app has no login and no account. What it handles:</p>
@@ -88,19 +94,34 @@
       on your phone. It is not your hardware id and it is not linked to your name. It
       exists so a support message or a push opt-in can be tied to your install and
       nothing else.</li>
-      <li><strong>Daily push, if you turn it on.</strong> Opting in stores a push token
-      with the anonymous id so we can send one notification a day. Turning the toggle
-      off stops the push.</li>
+      <li><strong>Daily push, if you turn it on.</strong> Opting in sends your phone's
+      push token to our server with the anonymous id, the app version, and your phone's
+      time zone setting (a name such as Europe/London). We store the token, the id, the
+      app version, whether push is on, and when the app last registered, so we can send
+      one notification a day through Apple's push service. Our server does not store the
+      time zone at present. Turning the toggle off stops the push.</li>
       <li><strong>Support messages.</strong> If you write to us through Settings, we
-      receive your message. An email address is optional; if you include one, we use it
-      only to reply to you.</li>
+      store your message, the category you picked, the app version, and the anonymous id,
+      along with anything you add to the conversation later. An email address is
+      optional; if you include one, we use it only to reply to you.</li>
+      <li><strong>The first reply is automated.</strong> When a new support message
+      arrives, its text, category, and app version go to Anthropic, whose Claude model
+      writes a first reply from our help notes, or a short holding reply if a person
+      needs to look at it. That step does not send your email address or the anonymous
+      id.</li>
+      <li><strong>Messages that need the founder.</strong> If the automated step passes
+      a message up to the founder, an email goes to his inbox through Zoho Mail, our
+      email provider. It contains your message, its category, the app version, the
+      automated reply, and a one-line note. Your email address is not in it.</li>
       <li><strong>Anonymous usage analytics.</strong> We use PostHog to count things
-      like opens and reads so we know what is worth writing. It is first party,
-      anonymous, and never used to follow you anywhere else.</li>
+      like opens and reads so we know what is worth writing. PostHog is a separate
+      company that handles this data for us. It is anonymous and never used to follow
+      you anywhere else.</li>
       <li><strong>Saved stories and reading history stay on your phone.</strong> They
       never leave the device.</li>
     </ul>
-    <p>Nothing is sold, shared for advertising, or used to build a profile of you.</p>
+    <p>Support messages and push tokens are kept in a database that Supabase runs for
+    us. Nothing is sold, shared for advertising, or used to build a profile of you.</p>
 
     <h2>The website</h2>
     <p>This site uses the same anonymous PostHog analytics, and it honours your
@@ -108,11 +129,19 @@
     your browser requests those font files from Google. The partnerships form is
     delivered by Web3Forms, which passes your message and the details you type to us
     and is not used for anything else.</p>
+    <p>Android visitors to the <a href="/app/">app page</a> see a waitlist. Joining it
+    stores your email address, your browser's user agent (the line of text that names
+    your browser and operating system), and the page you signed up on, in the same
+    Supabase database. We use the address to tell you when the Android app is
+    ready.</p>
 
     <h2>Deleting your data</h2>
-    <p>Deleting the app removes everything stored on the device. If you have written to
-    support and want that conversation and any details in it removed, ask us and we
-    will delete it.</p>
+    <p>Deleting the app removes everything stored on the device, but not what has
+    already reached our database, such as a support conversation or a push token. If you
+    have written to support and want that conversation and any details in it removed,
+    ask us and we will delete it. To ask about deleting a push token, a waitlist email,
+    or anything else on this page, email
+    <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>.</p>
 
     <h2>Changes</h2>
     <p>If this policy changes, the date at the top changes with it. We will not quietly

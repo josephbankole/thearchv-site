@@ -146,6 +146,16 @@ const targets = [
   // scripts and no per-page script, so both hashes must be in each page's own CSP.
   ["wire: /wire/", join(DIST, "wire", "index.html")],
   ["tables: /tables/", join(DIST, "tables", "index.html")],
+  // The six hand-built public/ pages that shipped with no CSP at all until the 2026-10-06 audit.
+  // /privacy/ and /support/ are the app's own policy and help pages; /desk/, /world-cup/ and
+  // /start/start/ are script-free meta-refresh stubs; /lab/landing/ is the noindex prototype with
+  // one inline script. Listed so a missing meta or an unhashed script fails the build here.
+  ["static: /privacy/", join(DIST, "privacy", "index.html")],
+  ["static: /support/", join(DIST, "support", "index.html")],
+  ["stub: /desk/", join(DIST, "desk", "index.html")],
+  ["stub: /world-cup/", join(DIST, "world-cup", "index.html")],
+  ["stub: /start/start/", join(DIST, "start", "start", "index.html")],
+  ["lab: /lab/landing/", join(DIST, "lab", "landing", "index.html")],
 ];
 
 // Every long-read page. Slugs are derived from the essay titles (src/data/readSlug.ts), so this

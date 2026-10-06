@@ -126,6 +126,7 @@ function renderFootballAlias() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-itunes-app" content="app-id=6786508653" />
   <meta http-equiv="refresh" content="0; url=/" />
   <title>Football · The ARCHV</title>
   <meta name="description" content="Football lives at the front door of The ARCHV. Redirecting you there now." />

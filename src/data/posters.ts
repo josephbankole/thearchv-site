@@ -2,7 +2,8 @@
 // Generated from ARCHIVE-PACKS (_system/product-bible.json for pack names, each plate spec for
 // moment_title, date, city and the storefront descriptor). All artwork is original ARCHV work:
 // no crests, no kit logos, no official marks, and no mark names in any title or line below.
-// The only store is the ARCHV shop on Etsy (storeUrl, D-2026-09-26b); every group links there.
+// The only store is the ARCHV shop on Etsy (storeUrl, D-2026-09-26b). Since 2026-10-06 each group's button links
+// to bundleUrl, the big poster bundle, which is the one listing that holds all sixty plates.
 // A group's slug is a stable id the app feed carries as `pack`, so it never changes. etsyUrl is
 // set only where the plate has its own Etsy print listing, and the lightbox shows "Buy the print"
 // only when it is present. No plate carries one today: the nine finals plates' listings were
@@ -28,6 +29,9 @@ export interface Poster {
 
 // The ARCHV shop on Etsy.
 export const storeUrl = 'https://thearchvca.etsy.com';
+
+// The big poster bundle on Etsy: all sixty plates plus the Manchester United posters (Share & Save link form).
+export const bundleUrl = 'https://thearchvca.etsy.com/listing/4514912834';
 
 export const posterPacks: PosterPack[] = [
   { slug: "every-four-years-men", name: "The men's tournament", summary: "Ten moments, Mexico City 1970 to East Rutherford 2026." },

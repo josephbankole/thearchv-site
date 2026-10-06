@@ -1,4 +1,4 @@
-import { posters, posterPacks, storeUrl, type Poster } from '../data/posters';
+import { posters, posterPacks, storeUrl, bundleUrl, type Poster } from '../data/posters';
 import { track } from '../analytics';
 import { trapFocus } from '../ui/focusTrap';
 
@@ -34,9 +34,9 @@ export function initArchiveRail(): void {
     head.innerHTML =
       `<h3 class="archive__pack-name" id="${esc(nameId)}">${esc(pack.name)}</h3>` +
       `<p class="archive__pack-line">${esc(pack.summary)}</p>` +
-      `<a class="archive__covers-all archive__pack-cta" href="${esc(storeUrl)}" target="_blank" rel="noopener noreferrer">Shop the posters on Etsy</a>`;
+      `<a class="archive__covers-all archive__pack-cta" href="${esc(bundleUrl)}" target="_blank" rel="noopener noreferrer">Get all sixty plates on Etsy</a>`;
     head.querySelector('a')?.addEventListener('click', () =>
-      track('pack_click', { pack: pack.slug, location: 'archive_head', href: storeUrl }),
+      track('pack_click', { pack: pack.slug, location: 'archive_head', href: bundleUrl }),
     );
 
     const rail = document.createElement('div');

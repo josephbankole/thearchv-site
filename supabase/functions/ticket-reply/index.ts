@@ -32,6 +32,7 @@ Deno.serve(async (req) => {
   const ticket_id = typeof payload.ticket_id === "string" ? payload.ticket_id : "";
   const body = typeof payload.body === "string" ? payload.body.trim() : "";
   if (!device_id) return json({ error: "device_id required" }, 400);
+  if (device_id.length > 128) return json({ error: "device_id too long" }, 400);
   if (!ticket_id) return json({ error: "ticket_id required" }, 400);
   if (body.length < 1) return json({ error: "body required" }, 400);
   if (body.length > 5000) return json({ error: "body too long" }, 400);
@@ -51,7 +52,14 @@ Deno.serve(async (req) => {
     author: "user",
     body,
   });
-  if (mErr) { console.error("ticket-reply: message db error", mErr.message); return json({ error: "server_error" }, 500); }
+  if (mErr) {
+    // The DB-side cap (ticket_messages_hourly_cap trigger, 2026-10-06) aborts the insert with this marker.
+    if (/ticket_reply_rate_limited/.test(mErr.message)) {
+      return json({ error: "rate limited, please try again later" }, 429);
+    }
+    console.error("ticket-reply: message db error", mErr.message);
+    return json({ error: "server_error" }, 500);
+  }
 
   // If the ticket had been closed off, reopen it for the tier that last owned it.
   if (RESOLVED.has(ticket.status)) {

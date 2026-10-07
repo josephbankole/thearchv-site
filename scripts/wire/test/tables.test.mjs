@@ -205,3 +205,18 @@ test("the NFL schedules download asks for a long timeout (the 2 MB CSV outlived 
   await nfl.run({ get, today: "2026-09-27" });
   assert.ok(seen.length && seen[0].timeoutMs >= 60000, JSON.stringify(seen[0]));
 });
+
+test("fetchText gunzips a .gz release asset (nflverse schedules ship only games.csv.gz)", async () => {
+  const { createServer } = await import("node:http");
+  const { gzipSync } = await import("node:zlib");
+  const { fetchText } = await import("../lib/http.mjs");
+  const csv = "season,game_type,week\n2026,REG,5\n";
+  const srv = createServer((req, res) => { res.writeHead(200, { "Content-Type": "application/gzip" }); res.end(gzipSync(csv)); });
+  await new Promise((r) => srv.listen(0, "127.0.0.1", r));
+  try {
+    const url = `http://127.0.0.1:${srv.address().port}/games.csv.gz`;
+    const r = await fetchText(url, { userAgent: "test", gunzip: true, backoff: [] });
+    assert.equal(r.ok, true);
+    assert.equal(r.body, csv);
+  } finally { srv.close(); }
+});

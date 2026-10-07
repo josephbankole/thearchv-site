@@ -4,8 +4,8 @@
 //
 // Checks:
 //   (a) https://thearchv.ca/ returns 200
-//   (b) https://thearchv.ca/feed/today.json returns 200 AND its lastUpdated is within 26h
-//   (c) push_state row is readable and last_sent_at is not older than 26h, but ONLY checked
+//   (b) https://thearchv.ca/feed/today.json returns 200 AND its lastUpdated is within 72h
+//   (c) push_state row is readable and last_sent_at is not older than 76h, but ONLY checked
 //       11:00-23:59 UTC (before 11:00 UTC the day's push legitimately has not fired yet)
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
@@ -19,7 +19,14 @@ import { sendFounderMail } from "../_shared/zoho.ts";
 
 const SITE_URL = "https://thearchv.ca/";
 const FEED_URL = "https://thearchv.ca/feed/today.json";
-const STALE_MS = 26 * 60 * 60 * 1000;
+// The lead story changes only when archv-football-desk runs, Mon/Wed/Fri since D-2026-10-06a, and
+// daily-push sends only on a new lead. The old 26h windows assumed a daily desk and emailed on
+// every off day. Fri to Mon is the longest legitimate gap: the Friday lead's day ends Sat 00:00
+// UTC and Monday's lands near 10:30 UTC (58.5h), and Friday's 14:30 UTC push is followed by
+// Monday's 72h later. A missed desk run now alerts the same evening on Mondays and within a day
+// otherwise. Change these with the desk's schedule.
+const FEED_STALE_MS = 72 * 60 * 60 * 1000;
+const PUSH_STALE_MS = 76 * 60 * 60 * 1000;
 const DEBOUNCE_MS = 6 * 60 * 60 * 1000;
 
 type Failure = { check: string; detail: string };
@@ -54,7 +61,7 @@ Deno.serve(async (req) => {
       // today.json's lastUpdated is a calendar DATE ("YYYY-MM-DD"), the editorial date of the
       // lead story, not a build timestamp — the engine's normal cadence means "today's" feed
       // legitimately still carries yesterday's date for hours after midnight UTC. Anchor the
-      // 26h freshness window at the END of that editorial day (i.e. the moment it rolled from
+      // freshness window at the END of that editorial day (i.e. the moment it rolled from
       // current to historical), not at its midnight start, so a healthy daily cadence doesn't
       // read as stale for the first ~24h of every day.
       const dayStart = raw ? new Date(`${raw}T00:00:00Z`) : null;
@@ -62,7 +69,7 @@ Deno.serve(async (req) => {
         failures.push({ check: "feed", detail: `missing/invalid lastUpdated: ${JSON.stringify(raw)}` });
       } else {
         const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
-        if (now.getTime() - dayEnd.getTime() > STALE_MS) {
+        if (now.getTime() - dayEnd.getTime() > FEED_STALE_MS) {
           failures.push({ check: "feed", detail: `stale: lastUpdated ${raw} (day ended ${dayEnd.toISOString()})` });
         }
       }
@@ -108,7 +115,7 @@ Deno.serve(async (req) => {
       failures.push({ check: "push_state", detail: "no last_sent_at recorded" });
     } else {
       const last = new Date(state.last_sent_at);
-      if (now.getTime() - last.getTime() > STALE_MS) {
+      if (now.getTime() - last.getTime() > PUSH_STALE_MS) {
         failures.push({ check: "push_state", detail: `stale: last_sent_at ${last.toISOString()}` });
       }
     }

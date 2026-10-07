@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-05T09:49:22.287Z",
+  "updatedAt": "2026-10-07T10:17:48.388Z",
   "sports": {
     "football": {
       "blocks": [
@@ -9,12 +9,12 @@
           "kind": "standings",
           "league": "premier-league",
           "title": "Premier League table",
-          "asOf": "2026-10-05",
-          "fetchedAt": "2026-10-05T09:49:22.287Z",
+          "asOf": "2026-10-07",
+          "fetchedAt": "2026-10-07T10:17:48.388Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-05",
+          "lastFreshAsOf": "2026-10-07",
           "through": "2026-09-20",
           "throughLabel": null,
           "compactRows": 6,
@@ -268,12 +268,12 @@
           "kind": "fixtures",
           "league": null,
           "title": "Manchester United: next",
-          "asOf": "2026-10-05",
-          "fetchedAt": "2026-10-05T09:49:22.287Z",
+          "asOf": "2026-10-07",
+          "fetchedAt": "2026-10-07T10:17:48.388Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-05",
+          "lastFreshAsOf": "2026-10-07",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
@@ -319,12 +319,12 @@
           "kind": "results",
           "league": null,
           "title": "Manchester United: results",
-          "asOf": "2026-10-05",
-          "fetchedAt": "2026-10-05T09:49:22.287Z",
+          "asOf": "2026-10-07",
+          "fetchedAt": "2026-10-07T10:17:48.388Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-05",
+          "lastFreshAsOf": "2026-10-07",
           "through": "2026-09-20",
           "throughLabel": null,
           "compactRows": null,
@@ -380,13 +380,13 @@
           "kind": "standings",
           "league": "nfl",
           "title": "NFL standings",
-          "asOf": "2026-10-05",
-          "fetchedAt": "2026-10-05T09:49:22.287Z",
+          "asOf": "2026-10-07",
+          "fetchedAt": "2026-10-07T10:17:48.388Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-05",
-          "through": "2026-10-04",
+          "lastFreshAsOf": "2026-10-07",
+          "through": "2026-10-05",
           "throughLabel": null,
           "compactRows": 1,
           "columns": [
@@ -663,6 +663,16 @@
               }
             },
             {
+              "name": "Atlanta Falcons",
+              "group": "NFC South",
+              "cells": {
+                "w": 2,
+                "l": 2,
+                "t": 0,
+                "pct": ".500"
+              }
+            },
+            {
               "name": "Carolina Panthers",
               "group": "NFC South",
               "cells": {
@@ -673,23 +683,13 @@
               }
             },
             {
-              "name": "Atlanta Falcons",
-              "group": "NFC South",
-              "cells": {
-                "w": 1,
-                "l": 2,
-                "t": 0,
-                "pct": ".333"
-              }
-            },
-            {
               "name": "New Orleans Saints",
               "group": "NFC South",
               "cells": {
                 "w": 1,
-                "l": 2,
+                "l": 3,
                 "t": 0,
-                "pct": ".333"
+                "pct": ".250"
               }
             },
             {
@@ -757,25 +757,137 @@
           "id": "nfl-week",
           "kind": "fixtures",
           "league": "nfl",
-          "title": "NFL: week 4",
-          "asOf": "2026-10-05",
-          "fetchedAt": "2026-10-05T09:49:22.287Z",
+          "title": "NFL: week 5",
+          "asOf": "2026-10-07",
+          "fetchedAt": "2026-10-07T10:17:48.388Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-05",
+          "lastFreshAsOf": "2026-10-07",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
             {
-              "date": "2026-10-05",
-              "kickoff": "2026-10-06T00:15:00.000Z",
-              "home": "New Orleans Saints",
-              "away": "Atlanta Falcons",
+              "date": "2026-10-08",
+              "kickoff": "2026-10-09T00:15:00.000Z",
+              "home": "Dallas Cowboys",
+              "away": "Tampa Bay Buccaneers",
               "competition": "NFL",
-              "round": "Week 4"
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T13:30:00.000Z",
+              "home": "Jacksonville Jaguars",
+              "away": "Philadelphia Eagles",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "Miami Dolphins",
+              "away": "Cincinnati Bengals",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "New England Patriots",
+              "away": "Las Vegas Raiders",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "New Orleans Saints",
+              "away": "Minnesota Vikings",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "New York Jets",
+              "away": "Cleveland Browns",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "Pittsburgh Steelers",
+              "away": "Indianapolis Colts",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "Tennessee Titans",
+              "away": "Houston Texans",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "Washington Commanders",
+              "away": "New York Giants",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T17:00:00.000Z",
+              "home": "Green Bay Packers",
+              "away": "Chicago Bears",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T20:05:00.000Z",
+              "home": "Los Angeles Chargers",
+              "away": "Denver Broncos",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T20:25:00.000Z",
+              "home": "Arizona Cardinals",
+              "away": "Detroit Lions",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-11T20:25:00.000Z",
+              "home": "Seattle Seahawks",
+              "away": "San Francisco 49ers",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-11",
+              "kickoff": "2026-10-12T00:20:00.000Z",
+              "home": "Atlanta Falcons",
+              "away": "Baltimore Ravens",
+              "competition": "NFL",
+              "round": "Week 5"
+            },
+            {
+              "date": "2026-10-12",
+              "kickoff": "2026-10-13T00:15:00.000Z",
+              "home": "Los Angeles Rams",
+              "away": "Buffalo Bills",
+              "competition": "NFL",
+              "round": "Week 5"
             }
           ],
           "source": {
@@ -792,177 +904,177 @@
           "id": "nfl-results",
           "kind": "results",
           "league": "nfl",
-          "title": "NFL: week 3 results",
-          "asOf": "2026-10-05",
-          "fetchedAt": "2026-10-05T09:49:22.287Z",
+          "title": "NFL: week 4 results",
+          "asOf": "2026-10-07",
+          "fetchedAt": "2026-10-07T10:17:48.388Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-05",
-          "through": "2026-09-28",
+          "lastFreshAsOf": "2026-10-07",
+          "through": "2026-10-05",
           "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
             {
-              "date": "2026-09-24",
-              "kickoff": "2026-09-25T00:15:00.000Z",
-              "home": "Green Bay Packers",
-              "away": "Atlanta Falcons",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 14,
-              "awayScore": 35
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
-              "home": "Buffalo Bills",
-              "away": "Los Angeles Chargers",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 24,
-              "awayScore": 16
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
+              "date": "2026-10-01",
+              "kickoff": "2026-10-02T00:15:00.000Z",
               "home": "Cleveland Browns",
-              "away": "Carolina Panthers",
+              "away": "Pittsburgh Steelers",
               "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 21,
-              "awayScore": 18
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
-              "home": "Detroit Lions",
-              "away": "New York Jets",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 31,
+              "round": "Week 4",
+              "homeScore": 27,
               "awayScore": 24
             },
             {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
-              "home": "Indianapolis Colts",
-              "away": "Houston Texans",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 19,
-              "awayScore": 17
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
-              "home": "Jacksonville Jaguars",
-              "away": "New England Patriots",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 35,
-              "awayScore": 6
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
-              "home": "Miami Dolphins",
-              "away": "Kansas City Chiefs",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 10,
-              "awayScore": 24
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
-              "home": "New York Giants",
-              "away": "Tennessee Titans",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 12,
-              "awayScore": 7
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
-              "home": "Pittsburgh Steelers",
-              "away": "Cincinnati Bengals",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 30,
-              "awayScore": 27
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T17:00:00.000Z",
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T13:30:00.000Z",
               "home": "Washington Commanders",
-              "away": "Seattle Seahawks",
+              "away": "Indianapolis Colts",
               "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 33,
-              "awayScore": 31
-            },
-            {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T20:05:00.000Z",
-              "home": "San Francisco 49ers",
-              "away": "Arizona Cardinals",
-              "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 36,
+              "round": "Week 4",
+              "homeScore": 13,
               "awayScore": 30
             },
             {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T20:05:00.000Z",
-              "home": "Tampa Bay Buccaneers",
-              "away": "Minnesota Vikings",
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "Baltimore Ravens",
+              "away": "Tennessee Titans",
               "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 16,
-              "awayScore": 23
+              "round": "Week 4",
+              "homeScore": 24,
+              "awayScore": 18
             },
             {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T20:25:00.000Z",
-              "home": "Dallas Cowboys",
-              "away": "Baltimore Ravens",
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "Buffalo Bills",
+              "away": "New England Patriots",
               "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 31,
+              "round": "Week 4",
+              "homeScore": 26,
+              "awayScore": 29
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "Chicago Bears",
+              "away": "New York Jets",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 23,
+              "awayScore": 12
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "Cincinnati Bengals",
+              "away": "Jacksonville Jaguars",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 17,
+              "awayScore": 22
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "Houston Texans",
+              "away": "Dallas Cowboys",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 30,
               "awayScore": 34
             },
             {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-27T20:25:00.000Z",
-              "home": "New Orleans Saints",
-              "away": "Las Vegas Raiders",
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "New York Giants",
+              "away": "Arizona Cardinals",
               "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 27,
-              "awayScore": 35
+              "round": "Week 4",
+              "homeScore": 36,
+              "awayScore": 24
             },
             {
-              "date": "2026-09-27",
-              "kickoff": "2026-09-28T00:20:00.000Z",
-              "home": "Denver Broncos",
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "Philadelphia Eagles",
               "away": "Los Angeles Rams",
               "competition": "NFL",
-              "round": "Week 3",
+              "round": "Week 4",
+              "homeScore": 20,
+              "awayScore": 24
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T17:00:00.000Z",
+              "home": "Tampa Bay Buccaneers",
+              "away": "Green Bay Packers",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 14,
+              "awayScore": 17
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T20:05:00.000Z",
+              "home": "Minnesota Vikings",
+              "away": "Miami Dolphins",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 15,
+              "awayScore": 10
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T20:25:00.000Z",
+              "home": "Las Vegas Raiders",
+              "away": "Kansas City Chiefs",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 27,
+              "awayScore": 30
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T20:25:00.000Z",
+              "home": "Seattle Seahawks",
+              "away": "Los Angeles Chargers",
+              "competition": "NFL",
+              "round": "Week 4",
               "homeScore": 30,
+              "awayScore": 23
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-04T20:25:00.000Z",
+              "home": "San Francisco 49ers",
+              "away": "Denver Broncos",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 24,
+              "awayScore": 14
+            },
+            {
+              "date": "2026-10-04",
+              "kickoff": "2026-10-05T00:20:00.000Z",
+              "home": "Carolina Panthers",
+              "away": "Detroit Lions",
+              "competition": "NFL",
+              "round": "Week 4",
+              "homeScore": 32,
               "awayScore": 26
             },
             {
-              "date": "2026-09-28",
-              "kickoff": "2026-09-29T00:15:00.000Z",
-              "home": "Chicago Bears",
-              "away": "Philadelphia Eagles",
+              "date": "2026-10-05",
+              "kickoff": "2026-10-06T00:15:00.000Z",
+              "home": "New Orleans Saints",
+              "away": "Atlanta Falcons",
               "competition": "NFL",
-              "round": "Week 3",
-              "homeScore": 27,
-              "awayScore": 7
+              "round": "Week 4",
+              "homeScore": 24,
+              "awayScore": 45
             }
           ],
           "source": {

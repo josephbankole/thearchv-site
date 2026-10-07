@@ -6,6 +6,18 @@ import type { DayEntry } from './worldCupDays';
 
 export const transferDays: DayEntry[] = [
   {
+    date: "2026-10-07",
+    day: "Wednesday",
+    headline: "Bruno Fernandes wants a raise. Rashford set the bar.",
+    dek: "Contract talks stall on wages, per Romano.",
+    body: "Manchester United's talks over a new contract for Bruno Fernandes have not produced an agreement, and his wage demands are a major reason, according to Fabrizio Romano, whose update was carried by Stretty News and Read Man Utd on 6 October. RUMOUR, with nothing confirmed by the club. The length of any new deal and the captain's release clause are part of the same conversation.\n\nThe clock is mostly the club's. Fernandes is contracted to June 2027, with a club option for a further year (Stretty News; Romano via Football365). The release clause in the current deal is about €65m (Sports Illustrated; Stretty News), and United are expected to want it removed or raised.\n\nThen there is Marcus Rashford, back at Old Trafford after Barcelona did not make his loan permanent. Michael Carrick says he has returned \"fantastically well\" (manutd.com; Sky Sports). Reports on his pay differ: £300,000 a week according to The National, £390,000 with bonuses according to Capology, cited by The Peoples Person. The Peoples Person also reports that United had planned to make Fernandes their best-paid player and that INEOS do not want to break the wage structure.\n\nFernandes arrives back from the international break having set up two goals in Portugal's 4-2 win in Denmark on 1 October (ESPN; SBS). Tottenham Hotspur are at Old Trafford on Saturday, and the contract will still be open.",
+    status: "verified",
+    publishedAt: "2026-10-07T06:29:44-04:00",
+    image: "/heads/hd/bruno-fernandes.webp",
+    imageAlt: "Bruno Fernandes, illustrated by The ARCHV.",
+    seoTitle: "Bruno Fernandes contract: talks stall on wages, says Romano",
+  },
+  {
     date: "2026-09-16",
     day: "Wednesday",
     headline: "JJ Gabriel has stopped training at Manchester United, and at 16 an Irish passport opens a route to the European Union",

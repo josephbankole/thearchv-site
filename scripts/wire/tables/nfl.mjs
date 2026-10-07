@@ -10,7 +10,9 @@ import { wallToUtc } from "../lib/time.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const TEAMS = JSON.parse(readFileSync(join(HERE, "..", "data", "nfl-teams.json"), "utf8"));
-const URL_CSV = "https://github.com/nflverse/nflverse-data/releases/download/schedules/games.csv";
+const URL_CSV = "https://github.com/nflverse/nflverse-data/releases/download/schedules/games.csv.gz";
+// nflverse stopped attaching the plain games.csv to the schedules release on or before 2026-10-06;
+// only games.csv.gz (plus .qs and .parquet) remain, so the fetch gunzips.
 const SOURCE = { name: "nflverse", attribution: "Data: nflverse. Standings computed by The ARCHV.", url: "https://github.com/nflverse/nflverse-data", licence: "CC BY 4.0", licenceUrl: "https://creativecommons.org/licenses/by/4.0/", adapted: true };
 const COLUMNS = [
   { key: "team", label: "Team", labelKey: "tables.col.team", align: "start" },
@@ -70,7 +72,7 @@ export function compute(csvText, today) {
 export async function run({ get, today }) {
   // The schedules CSV is about 2 MB on GitHub's release-asset host, which took 42 s from the
   // desk's Mac on 2026-09-27: the shared 15 s timeout failed every NFL block that morning.
-  const r = await get(URL_CSV, { offlineName: "nflverse-games.csv", text: true, timeoutMs: 120000 });
+  const r = await get(URL_CSV, { offlineName: "nflverse-games.csv", text: true, gunzip: true, timeoutMs: 120000 });
   const ids = ["nfl-standings", "nfl-week", "nfl-results"];
   if (!r.ok) return { blocks: [], failed: Object.fromEntries(ids.map((i) => [i, `fetch-failed:${r.status}`])) };
   const c = compute(r.body, today);

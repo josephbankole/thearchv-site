@@ -4,10 +4,11 @@
    is how the tests and a blocked network run. Never prints a header or a key. */
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import { gunzipSync } from "node:zlib";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export async function fetchText(url, { userAgent, headers = {}, offline = null, offlineName = null, backoff = [5000, 15000], timeoutMs = 15000 } = {}) {
+export async function fetchText(url, { userAgent, headers = {}, offline = null, offlineName = null, gunzip = false, backoff = [5000, 15000], timeoutMs = 15000 } = {}) {
   if (offline) {
     const file = join(offline, offlineName || encodeURIComponent(url));
     if (!existsSync(file)) return { ok: false, status: "offline-missing", body: null };
@@ -21,7 +22,8 @@ export async function fetchText(url, { userAgent, headers = {}, offline = null, 
     try {
       const ctl = AbortSignal.timeout(timeoutMs);
       res = await fetch(url, { headers: { "User-Agent": userAgent, Accept: "*/*", ...headers }, signal: ctl, redirect: "follow" });
-      body = await res.text();
+      // gunzip: the asset itself is a .gz file (no Content-Encoding), so fetch cannot inflate it.
+      body = gunzip && res.ok ? gunzipSync(Buffer.from(await res.arrayBuffer())).toString("utf8") : await res.text();
     } catch (err) {
       if (attempt < backoff.length) { await sleep(backoff[attempt]); continue; }
       return { ok: false, status: "network", body: null, detail: String(err?.cause?.code || err?.name || "error") };

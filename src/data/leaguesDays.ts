@@ -7,6 +7,18 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-09",
+    day: "Friday",
+    headline: "Five points, a board that will wait, and Spurs at Old Trafford",
+    dek: "Carrick's United meet bottom-placed Tottenham on Saturday.",
+    body: "Manchester United go into Saturday's Premier League game against Tottenham Hotspur at Old Trafford (17:30 UK time) with five points from five matches, 12th in the table. That equals the club's lowest total after five games of the Premier League era, a mark set by Louis van Gaal's side in 2014-15, which still finished fourth (Al Jazeera; Football365). Michael Carrick took the same group to third place last season.\n\nThe cup exit is the result that hurt most. United led Brighton 2-0 at Old Trafford inside ten minutes on 16 September and lost 3-2 (Sky Sports; Irish Examiner). According to Sky Sports it was the first time in 50 years United had lost a home game after leading 2-0, having won 143 of the previous 145. Their last league outing before the international break needed an 89th-minute Matheus Cunha equaliser to draw 1-1 at Fulham (Sports Mole; Read Man Utd).\n\nThe board, for now, is not moving. The Daily Mail, relayed by Football365 on 7 October, reports that Carrick is under no immediate threat from a hierarchy with no appetite for change, and that the club would be unlikely to panic even after another defeat.\n\nTottenham arrive in a worse position: bottom, two points from five games and still without a league win under Roberto De Zerbi (Read Man Utd; Sports Mole). The last meeting, in February, finished United 2 Spurs 0 (Sports Mole; Read Man Utd).\n\nThe injury list is long. Manuel Ugarte, Matthijs de Ligt and Tom Heaton are out, Benjamin Sesko, Patrick Dorgu and Noussair Mazraoui are doubts, and Kobbie Mainoo is being assessed (Sports Mole; Read Man Utd). Carlos Baleba, signed from Brighton for an initial £65m and yet to play a minute after a pre-season ankle injury, is in line for a debut (Read Man Utd; The Peoples Person).",
+    status: "verified",
+    publishedAt: "2026-10-09T06:30:01-04:00",
+    image: "/heads/hd/michael-carrick.webp",
+    imageAlt: "Michael Carrick, illustrated by The ARCHV.",
+    seoTitle: "Manchester United v Tottenham: Carrick's five-point start",
+  },
+  {
     date: "2026-10-05",
     day: "Monday",
     headline: "Manchester United Women have won four in a row, and Julia Zigiotti Olme needed six minutes to beat Liverpool",

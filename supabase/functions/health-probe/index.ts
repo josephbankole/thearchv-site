@@ -5,8 +5,9 @@
 // Checks:
 //   (a) https://thearchv.ca/ returns 200
 //   (b) https://thearchv.ca/feed/today.json returns 200 AND its lastUpdated is within 72h
-//   (c) push_state row is readable and last_sent_at is not older than 76h, but ONLY checked
-//       11:00-23:59 UTC (before 11:00 UTC the day's push legitimately has not fired yet)
+//   (c) push_state row is readable and, while today.json's lead is one daily-push has not sent,
+//       last_sent_at is not older than 76h, but ONLY checked 11:00-23:59 UTC (before 11:00 UTC
+//       the day's push legitimately has not fired yet)
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
 // Debounced per check: health_alert_state records the last alert time, and a check will not
@@ -16,6 +17,7 @@
 // daily-push's pg_cron caller uses.
 import { adminClient, json } from "../_shared/cors.ts";
 import { sendFounderMail } from "../_shared/zoho.ts";
+import { pushOverdue } from "./push_check.ts";
 
 const SITE_URL = "https://thearchv.ca/";
 const FEED_URL = "https://thearchv.ca/feed/today.json";
@@ -24,7 +26,8 @@ const FEED_URL = "https://thearchv.ca/feed/today.json";
 // every off day. Fri to Mon is the longest legitimate gap: the Friday lead's day ends Sat 00:00
 // UTC and Monday's lands near 10:30 UTC (58.5h), and Friday's 14:30 UTC push is followed by
 // Monday's 72h later. A missed desk run now alerts the same evening on Mondays and within a day
-// otherwise. Change these with the desk's schedule.
+// otherwise. Change these with the desk's schedule. PUSH_STALE_MS only counts while a lead is
+// waiting to go out (pushOverdue in push_check.ts), so a week with no new lead stays quiet.
 const FEED_STALE_MS = 72 * 60 * 60 * 1000;
 const PUSH_STALE_MS = 76 * 60 * 60 * 1000;
 const DEBOUNCE_MS = 6 * 60 * 60 * 1000;
@@ -50,13 +53,15 @@ Deno.serve(async (req) => {
     failures.push({ check: "site", detail: `unreachable: ${String(e).slice(0, 120)}` });
   }
 
-  // (b) feed 200 + fresh
+  // (b) feed 200 + fresh. The parsed document is kept for check (c), which needs its lead.
+  let todayDoc: unknown = null;
   try {
     const res = await fetch(FEED_URL, { cache: "no-store" });
     if (res.status !== 200) {
       failures.push({ check: "feed", detail: `status ${res.status}` });
     } else {
       const data = await res.json();
+      todayDoc = data;
       const raw = data?.lastUpdated;
       // today.json's lastUpdated is a calendar DATE ("YYYY-MM-DD"), the editorial date of the
       // lead story, not a build timestamp — the engine's normal cadence means "today's" feed
@@ -102,22 +107,24 @@ Deno.serve(async (req) => {
   }
 
   // (c) push_state, gated to 11:00-23:59 UTC — before that, the day's push legitimately has not
-  // fired yet and this must not alert.
+  // fired yet and this must not alert. An old last_sent_at is a failure only while today.json
+  // carries a lead daily-push would still send: since C115, football pushes only when a new
+  // lead lands, and a quiet week is not a broken push (see push_check.ts). Without today.json
+  // there is no telling, and check (b) has already reported the feed, so this stays quiet
+  // rather than alerting twice.
   if (now.getUTCHours() >= 11) {
     const { data: state, error } = await supabase
       .from("push_state")
-      .select("last_sent_at")
+      .select("last_build_hash, last_sent_at")
       .eq("id", 1)
       .maybeSingle();
     if (error) {
       failures.push({ check: "push_state", detail: `read error: ${error.message.slice(0, 120)}` });
-    } else if (!state?.last_sent_at) {
-      failures.push({ check: "push_state", detail: "no last_sent_at recorded" });
+    } else if (todayDoc === null) {
+      console.error("health-probe: push_state check skipped — today.json unreadable, check (b) reports it");
     } else {
-      const last = new Date(state.last_sent_at);
-      if (now.getTime() - last.getTime() > PUSH_STALE_MS) {
-        failures.push({ check: "push_state", detail: `stale: last_sent_at ${last.toISOString()}` });
-      }
+      const detail = pushOverdue(state, todayDoc, now, PUSH_STALE_MS);
+      if (detail) failures.push({ check: "push_state", detail });
     }
   }
 

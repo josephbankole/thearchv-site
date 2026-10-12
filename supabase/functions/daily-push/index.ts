@@ -34,6 +34,9 @@ import {
 
 const FEED_INDEX = `${SITE}/feed/index.json`;
 const CONCURRENCY = 50;
+// Tokens per claim_push_tokens call, kept under PostgREST's max-rows (Supabase default 1000). See
+// the claim in pushSport.
+const CLAIM_CHUNK = 500;
 
 type Supabase = ReturnType<typeof adminClient>;
 
@@ -274,17 +277,33 @@ async function pushSport(run: Run, sport: SportKey): Promise<Record<string, unkn
   //    are marked as pushed in the same statement. That is what holds a reader to one push a day
   //    even across sports: one who had football this morning and switched to NFL at lunch is
   //    not claimed again when NFL's lead lands. Claimed before the send, for the same
-  //    at-most-once reason as the record above, and a failed claim sends nothing.
-  const { data: claimedRows, error: claimError } = await run.supabase
-    .rpc("claim_push_tokens", { p_tokens: tokens, p_day: run.today });
-  if (claimError) {
-    run.writeFailed = true;
-    console.error(`daily-push: ${sport} token claim failed, not sending: ${claimError.message}`);
-    return { ok: false, error: `token claim failed: ${claimError.message.slice(0, 120)}` };
+  //    at-most-once reason as the record above.
+  //
+  //    In chunks of CLAIM_CHUNK. The rows the claim RETURNS are capped by PostgREST's max-rows
+  //    (Supabase default 1000) like any other read, but the UPDATE inside it is not: one call
+  //    over more tokens than the cap would mark every one as pushed and hand back only the first
+  //    1000, and the rest would silently miss the day. The token read above is capped at the
+  //    same limit, so nothing is lost today; the chunks keep it that way once that read is
+  //    paginated. A failed chunk stops the claiming. Tokens an earlier chunk claimed are already
+  //    marked for today, so they are still sent to, and the run reports the failure.
+  const claimed: string[] = [];
+  let claimFailure = "";
+  for (let i = 0; i < tokens.length; i += CLAIM_CHUNK) {
+    const { data: claimedRows, error: claimError } = await run.supabase
+      .rpc("claim_push_tokens", { p_tokens: tokens.slice(i, i + CLAIM_CHUNK), p_day: run.today });
+    if (claimError) {
+      claimFailure = claimError.message || "unknown claim error";
+      break;
+    }
+    for (const r of (claimedRows ?? []) as { token?: unknown }[]) {
+      if (typeof r.token === "string" && r.token.length > 0) claimed.push(r.token);
+    }
   }
-  const claimed = ((claimedRows ?? []) as { token?: unknown }[])
-    .map((r) => r.token)
-    .filter((t): t is string => typeof t === "string" && t.length > 0);
+  if (claimFailure) {
+    run.writeFailed = true;
+    console.error(`daily-push: ${sport} token claim failed after ${claimed.length} claimed, sending only those: ${claimFailure}`);
+    if (claimed.length === 0) return { ok: false, error: `token claim failed: ${claimFailure.slice(0, 120)}` };
+  }
   if (claimed.length === 0) return { ok: true, sent: 0, note: "every reader already had a push today" };
 
   // f. Notification copy + deep-link route from the lead story. The app routes the tap straight
@@ -293,7 +312,9 @@ async function pushSport(run: Run, sport: SportKey): Promise<Record<string, unkn
   const payload = JSON.stringify({ aps: { alert: { title: "The ARCHV", body }, sound: "default" }, archv: routeFor(story) });
   const headers = apnsHeaders(jwt, run.apns.bundleId, sport, run.today, new Date());
   const { sent, failed } = await fanOut(run, sport, claimed, headers, payload);
-  return { ok: true, sent, failed };
+  return claimFailure
+    ? { ok: false, sent, failed, error: `token claim failed part way: ${claimFailure.slice(0, 120)}` }
+    : { ok: true, sent, failed };
 }
 
 // Fan-out in bounded concurrent batches, not one-at-a-time. The old sequential loop awaited
@@ -396,8 +417,8 @@ async function urlIs200(url: string): Promise<boolean> {
 
 // Records one sport's lead as sent. Football writes the original push_state singleton, whose
 // last_build_hash column now holds the football lead key (column name kept, as it was when it
-// moved from the build hash to the today-feed hash on 2026-07-10); health-probe watches its
-// last_sent_at. Every other sport writes its own push_sport_state row.
+// moved from the build hash to the today-feed hash on 2026-07-10); health-probe reads both
+// columns. Every other sport writes its own push_sport_state row.
 // Returns null when the row was written and the error text when it was not, and never throws:
 // the caller refuses to fan out unless this came back null (code review 2026-09-25; it used to
 // discard the upsert's error).

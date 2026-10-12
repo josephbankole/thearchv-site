@@ -109,18 +109,26 @@ that skips or fails never holds up the next. For each one it:
 4. Sends a HEAD to the lead's image and article url. If either answers anything but 200, the sport
    waits for the next tick and nothing is recorded.
 5. Records the lead as sent, then claims that sport's tokens for the day with `claim_push_tokens`,
-   then sends. The claim is one UPDATE that returns only the tokens with no push yet that day, so a
-   reader who changes sport in the afternoon is not pushed a second time.
+   then sends. The claim is an UPDATE, run in batches of 500 tokens to stay under PostgREST's row
+   limit, that returns only the tokens with no push yet that day, so a reader who changes sport in
+   the afternoon is not pushed a second time.
 
 Each notification carries `apns-expiration`, set to the end of the editorial day so a phone that was
 switched off never receives a previous day's story, and the collapse id `daily-<sport>-<date>`. The
 payload is `{ archv: { section, date } }`, with `section` the entry's own feed key, so the app opens
 the exact story.
 
-Football's state is the `push_state` row: `last_build_hash` holds the football lead key, and
-health-probe reads `last_sent_at`. Every other sport has a row in `push_sport_state`. A sport with no
-readers still records its lead, so its first reader starts with the next new story rather than an
-old one.
+Football's state is the `push_state` row, where `last_build_hash` holds the football lead key. Every
+other sport has a row in `push_sport_state`. A sport with no readers still records its lead, so its
+first reader starts with the next new story rather than an old one.
+
+health-probe watches football's row. It alerts when `last_sent_at` is more than 76 hours old and
+today.json's lead is one daily-push would still send, which it works out with the same guard
+daily-push uses (`_shared/push_guard.ts`). A week with no new football lead raises no alert. Deploy
+health-probe again whenever the guard changes:
+```
+supabase functions deploy health-probe --no-verify-jwt
+```
 
 It exits cleanly if the APNs key is not set yet, so it is safe to deploy and schedule before Apple
 push is configured. Nothing happens until the secrets and some opted-in devices exist.
@@ -193,10 +201,11 @@ supabase migration repair --status applied 20261012120000
 
 ### Tests
 
-The pure parts (the guard, the sport list and grouping, the APNs headers, the fan-out pool) have
-unit tests that need no network and no permissions:
+The pure parts (the guard, the sport list and grouping, the APNs headers, the fan-out pool and
+health-probe's push check) have unit tests that need no network and no permissions:
 
 ```
 cd supabase/functions/daily-push && deno test
 cd supabase/functions/_shared && deno test
+cd supabase/functions/health-probe && deno test
 ```

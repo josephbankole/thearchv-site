@@ -1,8 +1,20 @@
-// daily-push lead helpers: which feed carries each sport's lead, what identifies a lead, the
-// once-a-day guard, the token grouping and the APNs headers. Pulled out of index.ts like
-// fanout.ts, so leads_test.ts can run them under a bare `deno test` with no network and no
-// database. Nothing here does I/O; feedHash only hashes the text it is handed.
+// daily-push lead helpers: which feed carries each sport's lead, the sport states, the token
+// grouping and the APNs headers. Pulled out of index.ts like fanout.ts, so leads_test.ts can run
+// them under a bare `deno test` with no network and no database. Nothing here does I/O;
+// feedHash only hashes the text it is handed. What identifies a lead, and the once-a-day guard,
+// live in ../_shared/push_guard.ts, because health-probe asks the guard the same question.
 import { DEFAULT_SPORT, resolveSport, SPORT_KEYS, type SportKey } from "../_shared/sports.ts";
+import { EDITORIAL_TZ, edmontonDay, type Lead, type SportState } from "../_shared/push_guard.ts";
+
+export {
+  decideSend,
+  type Decision,
+  edmontonDay,
+  type Lead,
+  leadKey,
+  leadKeyDate,
+  type SportState,
+} from "../_shared/push_guard.ts";
 
 export const SITE = "https://thearchv.ca";
 
@@ -16,8 +28,6 @@ export const SITE = "https://thearchv.ca";
 export function feedName(sport: SportKey): string {
   return sport === DEFAULT_SPORT ? "today" : sport;
 }
-
-export type Lead = { headline?: string; section?: string; date?: string; image?: string; url?: string };
 
 // The lead out of one parsed feed document: today.json's `lead` for football, `days[0]` for a
 // sport feed (build-feed.mjs writes days newest first). Anything else, an empty sport or a
@@ -51,75 +61,11 @@ export async function feedHash(text: string): Promise<string> {
   return hex.slice(0, 12);
 }
 
-// ---------- the lead's identity, and the guard ----------
-
-const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
-
-// What makes a lead the same lead (C115). The guard used to compare the whole today.json
-// hash, and that file carries a lastUpdated taken across every lane, so a leagues or NFL
-// publish changed the hash and pushed yesterday's football headline again. The key is the
-// lead's own date, section and url: the url names the article, so a later headline correction
-// does not push the same story twice. The headline stands in only where an entry has no url.
-// The date leads the key so the guard can read it back (leadKeyDate). No date, or nothing to
-// name the story by, gives no key, and no key means no send.
-export function leadKey(lead: Lead | null): string | null {
-  if (!lead) return null;
-  const date = typeof lead.date === "string" ? lead.date : "";
-  if (!ISO_DAY.test(date)) return null;
-  const section = typeof lead.section === "string" ? lead.section : "";
-  const name = typeof lead.url === "string" && lead.url
-    ? lead.url
-    : typeof lead.headline === "string" ? lead.headline : "";
-  if (!name) return null;
-  return `${date}|${section}|${name}`;
-}
-
-// The date a stored key was made from, or null for anything that is not a lead key. That
-// includes the today-feed hash push_state.last_build_hash held before this change, which is
-// how decideSend tells a legacy football row from a new one.
-export function leadKeyDate(key: string | null | undefined): string | null {
-  if (!key || key[10] !== "|") return null;
-  const day = key.slice(0, 10);
-  return ISO_DAY.test(day) ? day : null;
-}
-
-export type SportState = { lastLeadKey: string | null; lastSentAt: string | null };
-export type Decision = { send: true; key: string } | { send: false; skipped: string };
-
-// One sport's once-a-day guard, pure. In order: no dated lead, the same lead as last time, a
-// push already sent today for this sport, a lead older than the last one pushed (the newest
-// entry was pulled and the feed fell back to one readers already had), and, on a legacy
-// football row that holds a hash rather than a key, a lead dated on or before the day of that
-// last push. The legacy rule fails toward NOT sending: a hash cannot say which lead it was, and
-// a lead dated on or before the last push day was almost certainly the one pushed. It clears
-// itself the first time a newer lead sends and the row gets a real key. A last_sent_at that
-// does not parse is a state we cannot trust, so it refuses too.
-export function decideSend(state: SportState | null, lead: Lead | null, today: string): Decision {
-  const key = leadKey(lead);
-  if (!key) return { send: false, skipped: "no dated lead" };
-  if (state?.lastLeadKey === key) return { send: false, skipped: "lead unchanged" };
-
-  let lastDay: string | null = null;
-  if (state?.lastSentAt) {
-    const at = new Date(state.lastSentAt);
-    if (Number.isNaN(at.getTime())) return { send: false, skipped: "push state unreadable" };
-    lastDay = edmontonDay(at);
-    if (lastDay === today) return { send: false, skipped: "already sent today" };
-  }
-
-  const leadDate = key.slice(0, 10);
-  const lastLeadDate = leadKeyDate(state?.lastLeadKey);
-  if (lastLeadDate) {
-    if (leadDate < lastLeadDate) return { send: false, skipped: "lead older than the last one pushed" };
-  } else if (lastDay && leadDate <= lastDay) {
-    return { send: false, skipped: "lead predates the last push" };
-  }
-  return { send: true, key };
-}
+// ---------- sport states ----------
 
 // Every sport's state from the two tables daily-push reads. Football keeps the original
-// push_state singleton (last_build_hash now holds the football lead key; health-probe watches
-// its last_sent_at), and the other sports have a row each in push_sport_state. A
+// push_state singleton (last_build_hash now holds the football lead key; health-probe reads
+// both columns), and the other sports have a row each in push_sport_state. A
 // push_sport_state row for football or an unknown sport is ignored rather than trusted, so
 // there is one football state and only one.
 export function statesFrom(
@@ -159,17 +105,7 @@ export function groupTokensBySport(
   return groups;
 }
 
-// ---------- the editorial day, and APNs ----------
-
-const EDITORIAL_TZ = "America/Edmonton";
-
-// The "already sent today" check uses the ARCHV editorial day, not the UTC day: the desk
-// operates out of America/Edmonton, and a UTC-based check would flip to a new "day" hours
-// before (winter, UTC-7) or after (summer, UTC-6) the desk's own midnight, letting a second
-// push slip through, or blocking a legitimate one, right at the boundary. en-CA formats as
-// YYYY-MM-DD.
-export const edmontonDay = (d: Date): string =>
-  new Intl.DateTimeFormat("en-CA", { timeZone: EDITORIAL_TZ }).format(d);
+// ---------- APNs ----------
 
 // Edmonton's wall clock minus UTC at one instant, in ms (-6h in summer, -7h in winter).
 function edmontonOffsetMs(at: Date): number {

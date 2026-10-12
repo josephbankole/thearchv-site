@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 import { byDateDesc, esc, escAttr, SPORTS, laneByFeedKey } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { sourcesAwareParagraph } from "./shared/source-links.mjs";
-import { publishedAt, rfc822, newest } from "./shared/entry-dates.mjs";
+import { publishedAt, rfc822, newest, torontoIso } from "./shared/entry-dates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -38,7 +38,9 @@ const RIGHTS =
    src/data/*.ts; the lanes arrive sorted newest-first, the essays in committed order) ---------- */
 const {
   transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA, longReads, readSlug, longreadHtml, longreadPlain,
-} = await loadDayData({ extras: ["longReads", "readSlug", "longreadMd"] });
+  indexDecision,
+} = await loadDayData({ extras: ["longReads", "readSlug", "longreadMd", "entryGates"] });
+const TODAY = torontoIso().slice(0, 10);
 
 // URL lane per data source: World Cup's internal `section` key is "worldcup" but its URL lane is
 // hyphenated "world-cup" (same mapping build-article-pages.mjs / build-feed.mjs use for the
@@ -88,6 +90,8 @@ const readItems = longReads.map((r) => ({
 
 const items = lanes
   .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
+  // G1 (search plan week 4, 2026-10-11): a dated entry filed noindex is not syndicated.
+  .filter((it) => indexDecision(it, TODAY).index)
   .concat(readItems)
   .sort(byDateDesc)
   .slice(0, MAX_ITEMS);

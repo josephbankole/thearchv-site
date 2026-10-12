@@ -15,12 +15,12 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, POSTHOG_KEY, esc, escAttr, longDate, LANE_META, clampTitle, answerTitle, answerTitleFlags,
-  deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE, ROBOTS_NOINDEX_FOLLOW,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, QUESTION_LANE_META, ORG_REF, ORG_NODE, DESK_BYLINE, DESK_DISCLOSURE, HOW_MADE_PATH,
   DISPATCH_URL, captureBlock, CAPTURE_STYLES, sentenceDescription,
 } from "./shared/page-shell.mjs";
-import { publishedAt, modifiedAt, wasUpdated, dateFieldReport } from "./shared/entry-dates.mjs";
+import { publishedAt, modifiedAt, wasUpdated, dateFieldReport, torontoIso } from "./shared/entry-dates.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
 import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
@@ -57,7 +57,11 @@ const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const {
   transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS,
   readLabel, readDuration, wordCount,
-} = await loadDayData({ extras: ["readTime"] });
+  GATES_ENFORCE, indexDecision, sourceProblems, tierProblems, needsExpiry, isExpired, entrySources,
+} = await loadDayData({ extras: ["readTime", "entryGates"] });
+
+// The operation's day, in Toronto, for the G6 and G9 date rules (search plan week 4).
+const TODAY = torontoIso().slice(0, 10);
 
 // A "section" is one sport+lane's article surface. `base` is the path prefix under which its
 // articles live (leading and trailing slash) and is also the lane front the "More from" block
@@ -96,13 +100,52 @@ for (const sport of SPORTS) {
    disagree about which outlets are linked. The self-tests run when that module loads. */
 
 /* ---------- body: \n\n paragraph breaks, dated "Update, N Jul:" additions stay visible paragraphs ---------- */
-function bodyHtml(text) {
-  return String(text)
+function bodyHtml(text, sources = []) {
+  const paras = String(text)
     .split(/\n{2,}/)
     .map((p) => p.trim())
-    .filter(Boolean)
-    .map((p) => (isSourcesPara(p) ? `<p class="article__sources">${sourcesAwareParagraph(p)}</p>` : `<p>${sourcesAwareParagraph(p)}</p>`))
-    .join("\n        ");
+    .filter(Boolean);
+  // G4 (search plan, 2026-10-11): an entry filed with a `sources` array shows those deep links as
+  // the Sources list, in place of the body's "Sources:" line, which stays in the data because the
+  // amend path and the app both rely on it. With no "Sources:" line the list closes the body.
+  // An entry with no array renders exactly as before.
+  const list = sources.length ? sourcesList(sources) : "";
+  let placed = false;
+  const html = paras.map((p) => {
+    if (isSourcesPara(p)) {
+      if (list && !placed) { placed = true; return list; }
+      if (list) return "";
+      return `<p class="article__sources">${sourcesAwareParagraph(p)}</p>`;
+    }
+    return `<p>${sourcesAwareParagraph(p)}</p>`;
+  }).filter(Boolean);
+  if (list && !placed) html.push(list);
+  return html.join("\n        ");
+}
+
+// The Sources list: outlet, linked to the article itself, and the article's date when filed.
+// Only https links are rendered as links; anything else prints as plain text (G4 warns on it).
+function sourcesList(sources) {
+  const items = sources.map((s) => {
+    const name = /^https:\/\//.test(s.url) ? `<a href="${escAttr(s.url)}" rel="noopener">${esc(s.outlet)}</a>` : esc(s.outlet);
+    const when = /^\d{4}-\d{2}-\d{2}/.test(String(s.published || "")) ? `, ${esc(longDate(String(s.published).slice(0, 10)))}` : "";
+    return `<li>${name}${when}</li>`;
+  });
+  return `<p class="article__sources">Sources:</p>
+        <ul class="article__sources">${items.join("")}</ul>`;
+}
+
+// G6: once a time-bound entry's `expires` date has passed, the page says so at the top and points
+// at the standing answer when there is one, else at the lane. Plan 1.4's own line.
+function expiryLine(entry, section) {
+  if (!isExpired(entry, TODAY)) return "";
+  const kind = section.laneKey === "questions" ? "answer" : "story";
+  const g = entry.evergreen ? GLOSSARY_BY_SLUG.get(entry.evergreen) : null;
+  const to = g
+    ? `Current answer: <a href="/glossary/${escAttr(g.slug)}/">${esc(g.title)}</a>`
+    : `Latest: <a href="${escAttr(section.base)}">${esc(section.label)}</a>`;
+  return `
+        <p class="article__evergreen">This ${kind} was for ${esc(longDate(entry.expires))}. ${to}</p>`;
 }
 
 /* ---------- meta description (search plan G11, 2026-10-04) ----------
@@ -219,7 +262,7 @@ function questionAnswer(dek, body) {
   check("St. at the cap", capDek, capPara, capDek);
 })();
 
-function schema(entry, url, label, faq, images) {
+function schema(entry, url, label, faq, images, sources = []) {
   const graph = [
     {
         // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
@@ -256,6 +299,15 @@ function schema(entry, url, label, faq, images) {
         wordCount: wordCount(entry.dek, entry.body),
         timeRequired: readDuration(entry.dek, entry.body),
         mainEntityOfPage: url,
+        // G4: the deep links the page lists, as citation. Absent when the entry has none.
+        ...(sources.length ? {
+          citation: sources.map((s) => ({
+            "@type": "CreativeWork",
+            name: s.outlet,
+            url: s.url,
+            ...(/^\d{4}-\d{2}-\d{2}/.test(String(s.published || "")) ? { datePublished: String(s.published) } : {}),
+          })),
+        } : {}),
       },
   ];
 
@@ -431,7 +483,7 @@ function shareScriptTag(url, headline) {
      page to the lane front;
    - the visible breadcrumb above the eyebrow, which named the lane a third time and on football
      pages linked a homepage anchor rather than the lane. BreadcrumbList stays in the JSON-LD. */
-function render(entry, section, hasCard, hasWide, moreFrom) {
+function render(entry, section, hasCard, hasWide, moreFrom, decision) {
   const lane = section; // section carries label/seoSuffix/anchor/base/sportKey/laneKey
   // The Answer Desk lanes (NFL, F1, tennis, golf, basketball) file a question as the headline and
   // its answer as the body. Those two facts drive the FAQPage block; the three football lanes file
@@ -491,7 +543,9 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
   metaDescription: metaDescription(entry.dek, entry.body),
   description: entry.dek,
   socialTitle: entry.headline,
-  robots: ROBOTS_INDEXABLE,
+  // G1 (search plan week 4): noindex,follow when the entry was filed noindex, or when an enforced
+  // G6 or G9 rule says so. The URL stays live, crawlable and in sitemap.xml.
+  robots: decision.index ? ROBOTS_INDEXABLE : ROBOTS_NOINDEX_FOLLOW,
   canonical: url,
   ogUrl: url,
   ogType: "article",
@@ -501,7 +555,7 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
   // Per-page CSP: the share-row script embeds this page's url, so its hash is not constant
   // across the family, and form-action names the Dispatch because of the inline email capture.
   csp: pageCsp,
-  jsonLd: schema(entry, url, lane.label, faq, schemaImages),
+  jsonLd: schema(entry, url, lane.label, faq, schemaImages, entrySources(entry)),
   extraHead: [CAPTURE_STYLES],
 })}
 <body>
@@ -519,9 +573,9 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
         <a class="btn btn--ghost" id="share-x" href="${escAttr(xIntent)}" target="_blank" rel="noopener noreferrer">Share on X</a>
         <button class="btn btn--ghost" id="share-copy" type="button">Copy link</button>
       </div>${figure}
-      <div class="article__body">
+      <div class="article__body">${expiryLine(entry, section)}
         <p><strong>${esc(entry.dek)}</strong></p>
-        ${bodyHtml(entry.body)}${evergreenLink(entry, `${section.base}${entry.date}/`)}
+        ${bodyHtml(entry.body, entrySources(entry))}${evergreenLink(entry, `${section.base}${entry.date}/`)}
       </div>
       ${captureBlock()}${moreLinks}
     </article>
@@ -535,6 +589,42 @@ function render(entry, section, hasCard, hasWide, moreFrom) {
 
 /* ---------- G10 census, warn-only ---------- */
 dateFieldReport(sections.flatMap((s) => s.days), "[build-article-pages]");
+
+/* ---------- week 4 gates census (G1, G4, G5, G6, G9), warn-only ----------
+   One line per rule with a count, then the entries filed from today's gates onward by name. An
+   entry filed before 2026-10-11 carries none of the new fields, so the field census is reported
+   as a count and never listed: listing 321 old pages would bury the line that matters. Nothing
+   here can fail the build (plan §6). */
+const GATES_FROM = "2026-10-11";
+const census = { noindex: [], warn: [], g4: [], g5: [], g6: [] };
+const decisions = new Map();
+for (const section of sections) {
+  for (const entry of section.days) {
+    const id = `${section.base}${entry.date}/`;
+    const d = indexDecision(entry, TODAY);
+    decisions.set(entry, d);
+    if (!d.index) census.noindex.push(`${id} (${d.reasons.join("; ")})`);
+    else if (d.reasons.length) census.warn.push(`${id} (${d.reasons.join("; ")})`);
+    if (entry.date < GATES_FROM) continue;
+    const s = sourceProblems(entry, section.sportKey);
+    if (s.length) census.g4.push(`${id} (${s.join("; ")})`);
+    const t = tierProblems(entry, section.laneKey, section.sportKey);
+    if (t.length) census.g5.push(`${id} (${t.join("; ")})`);
+    if (needsExpiry(entry) && !entry.expires) census.g6.push(`${id} (time-bound headline or standfirst, no expires)`);
+  }
+}
+const show = (label, list) => {
+  if (!list.length) return;
+  console.warn(`[build-article-pages] WARN ${label}: ${list.length}`);
+  for (const line of list.slice(0, 20)) console.warn(`  ${line}`);
+  if (list.length > 20) console.warn(`  ... and ${list.length - 20} more`);
+};
+console.log(`[build-article-pages] gates (warn-only: ${!GATES_ENFORCE}): ${census.noindex.length} noindex, ${census.warn.length} would-be noindex once enforced`);
+show("G1/G6/G9 would be noindex once enforced", census.warn);
+show("G4 sources", census.g4);
+show("G5 tier", census.g5);
+show("G6 expiry", census.g6);
+if (census.noindex.length) for (const line of census.noindex.slice(0, 20)) console.log(`  noindex ${line}`);
 
 /* ---------- write pages ---------- */
 let count = 0;
@@ -582,8 +672,10 @@ for (const section of sections) {
     const newer = lane.days.slice(Math.max(0, i - (3 - older.length)), i).reverse();
     const moreFrom = [...older, ...newer].slice(0, 3);
 
-    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom));
+    writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom, decisions.get(entry)));
     // lastmod is the entry's own last change (G10): updatedAt after an amend, else publishedAt.
+    // A noindex page stays here with its real lastmod (G1, plan 1.2): pulling it would remove a
+    // discovery path and slow the exclusion.
     urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: modifiedAt(entry), changefreq: "monthly", priority: "0.6" });
     count++;
   }

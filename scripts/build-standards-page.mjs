@@ -41,9 +41,12 @@ const SECTIONS = [
     ],
   },
   {
-    h2: "VERIFIED and RUMOUR say what they mean",
+    // Search plan G5 and 3.3 (2026-10-11). The chip on every desk card is derived from these three
+    // tiers by chipLabel() in src/lib/entryGates.ts. VERIFIED was printed on every entry, rumours
+    // included, so it went.
+    h2: "CONFIRMED, REPORTED and RUMOUR say what they mean",
     paras: [
-      "On the transfer desk, every item carries a status. VERIFIED means the move is done and confirmed. RUMOUR means it is a link and not a certainty, however loudly it is being talked about. We do not blur the two to make a story sound bigger than it is. When we are not sure, the label says so.",
+      "Every desk entry carries a label that says how firm it is. CONFIRMED means two independent outlets, or the official body for NFL and Formula 1 results. REPORTED means one named reporter, named on the page. RUMOUR, used on the transfer desk only, means a link and not a move, however loudly it is being talked about. We do not blur the three to make a story sound bigger than it is. When we are not sure, the label says so.",
     ],
   },
   {

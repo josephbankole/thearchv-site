@@ -44,16 +44,12 @@ export function infogramRelPath(urlLane, date) {
   return `/desk/${urlLane}/${date}/infogram.png`;
 }
 
-// status → a human, honest label. 'verified' and 'pending' are the only values the data uses
-// today (see src/data/*.ts DayEntry); anything else title-cases the raw value rather than
-// inventing a status.
-const STATUS_LABEL = { verified: "Verified", pending: "Developing" };
-export function infogramStatusLabel(status) {
-  const key = String(status ?? "").trim().toLowerCase();
-  if (!key) return "Filed";
-  if (STATUS_LABEL[key]) return STATUS_LABEL[key];
-  return key.charAt(0).toUpperCase() + key.slice(1);
-}
+// No status label on the card (search plan G5, 2026-10-11). infogramStatusLabel() printed
+// "Verified" for every filed entry; the status row that used it was retired on 2026-07-18
+// (founder ruling) and nothing has imported it since, so it went rather than be a second, stale
+// derivation. If a card ever carries a firmness label again it takes chipLabel() from
+// src/lib/entryGates.ts, through loadDayData({ extras: ["entryGates"] }), the one derivation the
+// front page uses.
 
 // One plain sentence, for the app's accessibilityLabel and the feed's `infogramAlt`.
 // British, no em dash, no hype (house rule). Strips the headline's own terminal punctuation so

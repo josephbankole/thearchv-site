@@ -25,6 +25,7 @@ import { longreadParagraphs } from '../lib/longreadMd';
 import { nflDays } from '../data/nflDays';
 import { readPath } from '../data/readSlug';
 import { readLabel } from '../lib/readTime';
+import { chipLabel, entrySources } from '../lib/entryGates';
 import { tennisDays } from '../data/tennisDays';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
@@ -153,13 +154,28 @@ function shortDate(iso: string): string {
   return `${parseInt(d, 10)} ${month.slice(0, 3)}`;
 }
 
-// The status a desk entry carries maps onto the chip the prototype draws. 'verified' means the
-// entry has cleared the two-source rule; 'pending' means the day is open and still being
-// written. Neither label overstates what the desk has actually done.
+// The chip says how firm the entry is (search plan G5 and 3.3, 2026-10-11). It is derived by
+// chipLabel() in src/lib/entryGates.ts from the entry's tier and its sources, never stamped:
+// "Confirmed · 2 sources", "Reported · <outlet>", "Rumour". Until this change every filed entry
+// printed "Verified", including transfer entries whose body called a claim a rumour. An entry
+// filed before the tier field reads its tier off the body's own (RUMOUR) and (REPORTED) markers.
+// 'pending' still means the day is open and keeps its own chip. The confirmed tier keeps the
+// chip--verified class so the existing styling holds; the other two take chip--open, the quieter one.
 function chip(entry: DayEntry): string {
-  return entry.status === 'pending'
-    ? '<span class="chip chip--open">Updating today</span>'
-    : '<span class="chip chip--verified">Verified</span>';
+  const c = chipLabel(entry);
+  if (!c) return '<span class="chip chip--open">Updating today</span>';
+  const cls = c.tier === 'confirmed' ? 'chip--verified' : 'chip--open';
+  return `<span class="chip ${cls}">${esc(c.text)}</span>`;
+}
+
+// The lead's sourcing line names the outlets the entry itself names (search plan 3.3). It used to
+// read "Checked against two sources" on every lead, whatever the entry said. With no sources
+// array (an entry filed before G4) it points at how we check instead of claiming a count. The
+// /standards/ link stays: it is the front page's only route to the verification policy.
+function leadSources(entry: DayEntry): string {
+  const outlets = [...new Set(entrySources(entry).map((s) => s.outlet))];
+  if (!outlets.length) return '<span><a href="/standards/"><b>How we check</b></a></span>';
+  return `<span>Sources: <a href="/standards/"><b>${esc(outlets.join(', '))}</b></a></span>`;
 }
 
 /* ---------- card art ----------
@@ -220,7 +236,7 @@ export function renderLead(): string {
         <span class="kicker">${esc(lane.label)} &middot; ${esc(longDate(entry.date))}</span>
         <h1 class="lead__title"><a href="${esc(url)}" data-desk-card data-lane="${esc(lane.key)}" data-date="${esc(entry.date)}" data-day="${esc(entry.day)}">${esc(entry.headline)}</a></h1>
         <p class="lead__dek">${esc(entry.dek)}</p>
-        <p class="lead__meta"><span>Filed by <b>${esc(lane.desk)}</b></span><span>Checked against <a href="/standards/"><b>two sources</b></a></span><span><b>${esc(readLabel(entry.dek, entry.body))}</b></span></p>
+        <p class="lead__meta"><span>Filed by <b>${esc(lane.desk)}</b></span>${leadSources(entry)}<span><b>${esc(readLabel(entry.dek, entry.body))}</b></span></p>
         <p class="lead__cta"><a class="btn-solid" href="${esc(url)}">Read the story</a><a class="btn-ghost" href="/desk/${esc(lane.urlLane)}/">Every ${esc(lane.label)} story</a></p>
         ${art}
       </div>`;

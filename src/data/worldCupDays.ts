@@ -21,6 +21,22 @@ export interface DayEntry {
                         // reads it for dateModified and the sitemap lastmod, never git or the clock.
   corrections?: CorrectionRecord[]; // OPTIONAL, G12: one record per correction or revision note in the
                         // body, newest last. /corrections/ is generated from these at build.
+  // Search plan week 4 (2026-10-11), every field OPTIONAL and additive; src/lib/entryGates.ts reads them.
+  index?: 'index' | 'noindex'; // G1: stamped "noindex" by the commit script unless the desk files the evidence.
+                        // No field means the entry predates G1 and stays indexable.
+  demand?: string | { query: string; source: string }; // G1: the search demand, or "official-body event".
+  sources?: EntrySource[]; // G4: deep links. The body still ends on its "Sources:" line.
+  tier?: 'confirmed' | 'reported' | 'rumour'; // G5: rumour on the transfer lane only. `status` is unchanged.
+  expires?: string;     // G6: ISO date a time-bound headline stops being true.
+  postExpiryImpressions?: number; // G6: impressions in the 30 days after `expires`, filed by the SEO run.
+  reviewBy?: string;    // G9: ISO date the page must be re-checked by.
+}
+
+// G4. `published` is the source article's own date, ISO.
+export interface EntrySource {
+  outlet: string;
+  url: string;
+  published?: string;
 }
 
 // G12 (2026-10-04). `was` is what the page said, `now` is what is right, `source` the outlets it

@@ -16,7 +16,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { byDateDesc, SPORTS } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
-import { publishedAt } from "./shared/entry-dates.mjs";
+import { publishedAt, torontoIso } from "./shared/entry-dates.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -27,7 +27,8 @@ const WINDOW_MS = 2 * 24 * 60 * 60 * 1000;
 
 /* ---------- the typed day data, through scripts/shared/day-data.mjs (the one loader for
    src/data/*.ts, which also hands every lane back sorted newest-first) ---------- */
-const { transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA } = await loadDayData();
+const { transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA, indexDecision } = await loadDayData({ extras: ["entryGates"] });
+const TODAY = torontoIso().slice(0, 10);
 
 // Lane registry, identical to build-rss.mjs: football keeps /desk/<lane>/ (World Cup's URL lane
 // is hyphenated even though its section key is "worldcup"); new sports syndicate from
@@ -53,6 +54,8 @@ const cutoff = Date.now() - WINDOW_MS;
 const items = lanes
   .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
   .filter((it) => Date.parse(publishedAt(it)) >= cutoff)
+  // G1 (search plan week 4, 2026-10-11): a noindex page leaves the news sitemap at once (plan 1.2).
+  .filter((it) => indexDecision(it, TODAY).index)
   .sort(byDateDesc);
 
 const xmlEsc = (s = "") =>

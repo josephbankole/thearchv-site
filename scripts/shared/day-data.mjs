@@ -97,6 +97,9 @@ const EXTRAS = {
   // Dispatch issues were copied onto the site. The one renderer and the one plain-text stripper;
   // every generator that reads a long-read body takes both from here (see its header).
   longreadMd: { module: "lib/longreadMd.ts", kind: "code", line: `export { longreadHtml, longreadPlain, longreadParagraphs } from "./lib/longreadMd.ts";` },
+  // src/lib/entryGates.ts (search plan week 4, 2026-10-11): the G1, G4, G5, G6 and G9 rules over
+  // one day entry. Code, shared with the front page the same way readTime is.
+  entryGates: { module: "lib/entryGates.ts", kind: "code", line: `export { GATES_ENFORCE, indexDecision, sourceProblems, tierProblems, needsExpiry, isExpired, freshnessReasons, entrySources, chipLabel, entryTier } from "./lib/entryGates.ts";` },
 };
 
 /* A day lane in the same shape as an EXTRAS entry. Every lane is engine-written DATA. */

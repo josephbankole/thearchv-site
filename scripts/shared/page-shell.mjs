@@ -7,6 +7,7 @@
 import { createHash } from "node:crypto";
 import { entryArt } from "./illustrated.mjs";
 import { sentences } from "./sentences.mjs";
+import { thumbImgAttrs } from "./thumbs.mjs";
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -15,12 +16,12 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 
-// The ARCHV Dispatch, revived on Substack 2026-06-20 and the ONLY newsletter destination for
-// football and site content. There is a separate AI lane elsewhere in the workspace; nothing on
-// this site captures to it. One constant so the masthead link, the footer link, the read ladder
-// and the inline capture on every article page cannot drift apart.
-export const DISPATCH_URL = "https://thearchvdispatch.substack.com";
-export const DISPATCH_SUBSCRIBE_URL = `${DISPATCH_URL}/subscribe`;
+// The ARCHV Dispatch is PAUSED (founder, D-2026-10-06a). On 12 Oct 2026 the founder approved
+// taking every Dispatch ask off the site: the masthead "Subscribe to the Dispatch" slot, the
+// footer link and the inline email capture all became the app download (APP_STORE_URL above),
+// and /dispatch/ became a noindex paused notice pointing at /reads/. The Substack URL survives
+// only in ORG_SAMEAS below, because the publication still exists (paused, not deleted) and is
+// the same entity. Do not bring a subscribe link back until the founder unpauses it by word.
 
 // The named author and editor of The ARCHV (founder decision, 2026-07-21; name FROZEN as
 // "Joseph Bankole" by founder ruling 2026-08-04 - do not vary it, and never introduce a second
@@ -481,11 +482,17 @@ export function sportNav(currentSportKey = DEFAULT_SPORT, { home = false } = {})
    the lane front ripple.
 
    `art` may be passed pre-resolved when the caller has already computed it (the article page
-   needs the same object for its OG card); otherwise pass the entry and let it resolve. */
+   needs the same object for its OG card); otherwise pass the entry and let it resolve.
+
+   The 600px app-grade heads get srcset from their 128/320px thumbs (scripts/shared/thumbs.mjs,
+   2026-10-12), so a 64px circle stops costing ~100 KB. `a.src` itself is untouched: the OG card
+   and the iOS feed still read the full file. */
 export function cardArt(entry, { className = "lane-card__avatar", size = 64, loading = "lazy", art = undefined } = {}) {
   const a = art === undefined ? entryArt(entry) : art;
   if (!a) return "";
-  return `<img class="${className}" src="${escAttr(a.src)}" alt="${escAttr(a.alt)}" loading="${loading}" decoding="async" width="${size}" height="${size}" />`;
+  const t = thumbImgAttrs(a.src, size);
+  const set = t.srcset ? ` srcset="${escAttr(t.srcset)}" sizes="${t.sizes}"` : "";
+  return `<img class="${className}" src="${escAttr(t.src)}"${set} alt="${escAttr(a.alt)}" loading="${loading}" decoding="async" width="${size}" height="${size}" />`;
 }
 
 // Simple desk text nav, on article AND lane pages (SITE-DEPTH-PLAN.md W3.3). Kept as plain
@@ -510,8 +517,9 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 }
 
 // Hamburger masthead (founder design, 2026-07-11): a disclosure button revealing a small
-// brand-styled dropdown (Follow / Subscribe / Shop / App, App hidden until flip day, same
-// hidden + display:none convention as before). Shared by lane index and article pages so
+// brand-styled dropdown (Follow / Download the app / Shop; the gold slot was "Subscribe to the
+// Dispatch" until the Dispatch paused, and the app took it on 2026-10-12, absorbing the old plain
+// "App" link so the panel does not list the App Store twice). Shared by lane index and article pages so
 // both stay in lockstep with the homepage's version of the same pattern (src/ui/chrome.ts).
 // No inline event handlers: the toggle behaviour lives in a plain <script> block wired via
 // addEventListener, matching the existing inline-script convention on this page family
@@ -524,8 +532,11 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 // Pages that belong to no sport pass NO_SPORT (null), which marks no tab current; the default
 // only applies when the argument is left out entirely.
 export function masthead(currentSportKey = DEFAULT_SPORT) {
-  return `<header class="masthead">
-    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
+  // The skip link is the first focusable thing on every page-shell page. It targets id="main",
+  // which every builder puts on its <main>; a page without that id breaks the link silently.
+  return `<a class="skip" href="#main">Skip to content</a>
+  <header class="masthead">
+    <a class="wordmark" href="/"><img src="/brand/logo-badge-68.webp" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <div class="masthead__actions">
       <a class="masthead__search" href="/search/" aria-label="Search the archive">
         <svg class="masthead__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="6.8" cy="6.8" r="4.9" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="M10.5 10.5 L14.4 14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
@@ -545,9 +556,8 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
-        <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
+        <a class="masthead__panel-link masthead__panel-link--gold" href="${APP_STORE_URL}">Download the app</a>
         <a class="masthead__panel-link" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
-        <a class="masthead__panel-link" href="${APP_STORE_URL}">App</a>
       </nav>
       </div>
     </div>
@@ -604,7 +614,7 @@ export function footer() {
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
-        <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
+        <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
@@ -619,59 +629,40 @@ export function footer() {
   </footer>`;
 }
 
-/* ---------- the inline email capture (phase 3; shared since the 2026-09-12 declutter) ----------
-   Until phase 3 the only place a reader could give the site an address was the /start page's
-   embedded form. Every article ended in a link to Substack instead, which asks somebody who has
-   just finished reading to leave the site, find the form and start again.
+/* ---------- the app download block (2026-10-12; was the inline email capture) ----------
+   From phase 3 until 2026-10-12 this slot held a plain GET form that sent an address to the
+   Dispatch's Substack subscribe page. The Dispatch is paused (D-2026-10-06a), so anyone who signed
+   up there would have received nothing, and on 12 Oct 2026 the founder approved swapping the form
+   for the app download. The block is the homepage appstrip's own wording and button (index.html,
+   .appstrip), so the site makes one app ask in one voice wherever it appears.
 
-   THE LANE DECIDES THE DESTINATION AND THIS IS FOOTBALL AND SITE CONTENT, SO IT IS THE DISPATCH.
-   thearchvdispatch.substack.com, from DISPATCH_SUBSCRIBE_URL above. The AI lane's list is a
-   different list on a different property and nothing on this site captures to it.
-
-   It is a plain GET form, which is the whole design. The address goes to Substack's own subscribe
-   page as a query parameter and the reader finishes there, so this site never receives it, never
-   stores it and needs no endpoint, no key and no JavaScript. It works with the bundle blocked and
-   with scripting off. Every page that carries it must pass `forms: [DISPATCH_URL]` to cspMeta(),
-   so form-action is narrowed to 'self' plus the Dispatch and the field cannot be repointed at
-   anything else by an injected attribute.
+   It is a heading, one line and a link. No form, no JavaScript and no inline script, so it adds no
+   CSP hash and needs no form-action entry: the pages that carry it now pass `forms: []` to
+   cspMeta(), which narrows form-action to 'self' alone.
 
    ONE PER PAGE, AND BEHIND THE CONTENT. Article and Answer Desk pages put it directly under the
-   last paragraph; glossary entries put it under the answer. It moved here from
-   build-article-pages.mjs on 2026-09-12 so the glossary could reuse it rather than copy it. The
-   hand-built /start page cannot import a module and carries a copy of the same markup; change one,
-   change both. CAPTURE_STYLES goes in the page head through documentShell's `extraHead`. */
-export const CAPTURE_ID = "inline-capture";
-export const captureBlock = () => `
-      <aside class="capture" id="${CAPTURE_ID}" aria-labelledby="capture-title">
-        <h2 class="capture__title" id="capture-title">Get the next one by email</h2>
-        <p class="capture__note">The ARCHV Dispatch goes out free on Substack. Put an address in below and you finish signing up over there, so it goes to Substack and never to us.</p>
-        <form class="capture__form" action="${escAttr(DISPATCH_SUBSCRIBE_URL)}" method="get" target="_blank" rel="noopener noreferrer">
-          <label class="vh" for="capture-email">Your email address</label>
-          <input class="capture__field" id="capture-email" name="email" type="email" required
-                 autocomplete="email" inputmode="email" spellcheck="false"
-                 placeholder="you@example.com" />
-          <button class="capture__go" type="submit">Join the Dispatch</button>
-        </form>
-        <p class="capture__fine">Every issue carries an unsubscribe link. This site is static files with no database, so there is nowhere here to keep an address anyway.</p>
+   last paragraph; glossary entries put it under the answer. The hand-built /start page cannot
+   import a module and carries a copy of the same markup; change one, change both. APP_CTA_STYLES
+   goes in the page head through documentShell's `extraHead`. */
+export const APP_CTA_ID = "app-cta";
+export const appCtaBlock = () => `
+      <aside class="appcta" id="${APP_CTA_ID}" aria-labelledby="appcta-title">
+        <h2 class="appcta__title" id="appcta-title">The archive, in your pocket</h2>
+        <p class="appcta__note">The daily desk, player duels and an archive game a day. Free on the App Store.</p>
+        <a class="appcta__go" href="${escAttr(APP_STORE_URL)}">Download the app</a>
       </aside>`;
 
-/* Deliberately quiet: a hairline box on the sunken grey rather than a shadowed card, and the
-   accent kept to the submit button. White on --accent-ink measures 5.13:1, --ink-muted on the
-   sunken grey 5.16:1. */
-export const CAPTURE_STYLES = `<style>
-    .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
-    .capture{margin:2rem 0 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:.75rem;background:var(--bg-sunken)}
-    .capture[hidden]{display:none}
-    .capture__title{margin:0 0 .5rem;color:var(--ink);font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3}
-    .capture__note{margin:0 0 1rem;font-size:.95rem;line-height:1.55;color:var(--ink-soft)}
-    .capture__form{display:flex;flex-wrap:wrap;gap:.6rem}
-    .capture__field{flex:1 1 14rem;min-width:0;min-height:44px;padding:.7rem .9rem;font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:.5rem;-webkit-appearance:none;appearance:none}
-    .capture__field::placeholder{color:var(--ink-muted)}
-    .capture__field:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px;border-color:var(--accent-ink)}
-    .capture__go{flex:0 0 auto;min-height:44px;padding:.7rem 1.15rem;font:inherit;font-weight:600;cursor:pointer;color:#FFFFFF;background:var(--accent-ink);border:1px solid var(--accent-ink);border-radius:.5rem}
-    .capture__go:hover{filter:brightness(1.06)}
-    .capture__fine{margin:.85rem 0 0;font-size:.8rem;line-height:1.5;color:var(--ink-muted)}
-    @media (max-width:480px){.capture__go{width:100%}}
+/* Deliberately quiet, the same hairline box on the sunken grey the email capture used, with the
+   accent kept to the one button. White on --accent-ink measures 5.13:1, --ink-soft on the sunken
+   grey clears AA. The button is a link styled as one, 44px tall for touch. */
+export const APP_CTA_STYLES = `<style>
+    .appcta{margin:2rem 0 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:.75rem;background:var(--bg-sunken)}
+    .appcta__title{margin:0 0 .5rem;color:var(--ink);font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3}
+    .appcta__note{margin:0 0 1rem;font-size:.95rem;line-height:1.55;color:var(--ink-soft)}
+    .appcta__go{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.7rem 1.15rem;font-weight:600;color:#FFFFFF;background:var(--accent-ink);border:1px solid var(--accent-ink);border-radius:.5rem;text-decoration:none}
+    .appcta__go:hover{filter:brightness(1.06);color:#FFFFFF;text-decoration:none}
+    .appcta__go:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+    @media (max-width:480px){.appcta__go{display:flex;width:100%}}
   </style>`;
 
 // PostHog pageview snippet. The `before_send` hook normalises the captured path towards its
@@ -730,16 +721,17 @@ export const POSTHOG_SCRIPT_HASH = scriptHash(extractScriptBody(posthogSnippet()
 // and so is NOT identical across pages - verified: it must be computed per page, not once).
 // `forms` narrows form-action to a named allowlist. It is opt-in rather than a default because
 // form-action has NO fallback to default-src: a page that omits it can post anywhere, which is
-// the status quo every page here shipped with. Article pages pass the Dispatch (the inline email
-// capture posts to Substack) and get 'self' with it; every other family stays as it was rather
-// than being silently tightened by a change made for one page.
-export function cspMeta({ scripts = [], posthog = false, googleFonts = false, frame = null, forms = null } = {}) {
+// the status quo every page here shipped with. Article and glossary entry pages carried the
+// Dispatch email capture until 2026-10-12 and passed its URL here; with the capture replaced by
+// the app download block they pass an empty list, which yields `form-action 'self'` alone. Every
+// other family stays as it was rather than being silently tightened by a change made for one page.
+// Fonts are self-hosted from /fonts/ (2026-10-12), so style-src and font-src name no third
+// party. The old `googleFonts` flag is gone; a caller that still passes it is ignored.
+export function cspMeta({ scripts = [], posthog = false, frame = null, forms = null } = {}) {
   const scriptSrc = ["'self'", ...scripts.map((h) => `'${h}'`)];
   if (posthog) scriptSrc.push("https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com");
   const styleSrc = ["'self'", "'unsafe-inline'"]; // inline style="" attrs (e.g. the hidden App Store link)
-  if (googleFonts) styleSrc.push("https://fonts.googleapis.com");
   const fontSrc = ["'self'"];
-  if (googleFonts) fontSrc.push("https://fonts.gstatic.com");
   const connectSrc = ["'self'"];
   if (posthog) connectSrc.push("https://us.i.posthog.com", "https://us-assets.i.posthog.com", "https://eu.i.posthog.com", "https://eu-assets.i.posthog.com");
   const frameSrc = frame ? ["'self'", frame] : ["'none'"];
@@ -753,7 +745,7 @@ export function cspMeta({ scripts = [], posthog = false, googleFonts = false, fr
     `base-uri 'self'`,
     `object-src 'none'`,
     `frame-src ${frameSrc.join(" ")}`,
-    ...(forms ? [`form-action 'self' ${forms.join(" ")}`] : []),
+    ...(forms ? [`form-action ${["'self'", ...forms].join(" ")}`] : []),
   ].join("; ");
   return `<meta http-equiv="Content-Security-Policy" content="${content}" />`;
 }
@@ -785,7 +777,7 @@ export function cspMeta({ scripts = [], posthog = false, googleFonts = false, fr
 
    Two head SHAPES live here, and the difference is real rather than cosmetic. The self-contained
    family (article, lane, sport, glossary, standards, duel, guess, author, search, reads, section)
-   ships its own PostHog snippet, Google Fonts links and inlined brand CSS. The older content.css
+   ships its own PostHog snippet, self-hosted font faces (fontLinks()) and inlined brand CSS. The older content.css
    family (build-content.mjs, build-day-pages.mjs) links /content.css instead and ships none of
    those three. Passing `stylesheet` and turning off `rss`, `posthog`, `fonts` and `styles` gets
    the second shape; nothing is inferred from anything else. */
@@ -873,10 +865,41 @@ export function documentShell(opts = {}) {
   return lines.join("\n");
 }
 
+/* ---------- brand webfonts, self-hosted (2026-10-12) ----------
+   Until 2026-10-12 every page in this family blocked first paint on a stylesheet from
+   fonts.googleapis.com, then fetched the faces from fonts.gstatic.com: two extra origins and a
+   render-blocking round trip, for the same two families the front page already serves itself.
+   These are the front page's own files (the @fontsource-variable wght builds main.ts imports),
+   copied to public/fonts/ so the URLs are stable rather than Vite-hashed. Latin plus latin-ext
+   only; unicode-range means the ext file downloads only for a name that needs it (Šeško,
+   Szczęsny). The family names stay "Fraunces" and "Inter Tight" so no font-family rule changes.
+   public/content.css and the hand-built pages under public/ carry the same faces; change one,
+   change them all. Only the body face is preloaded: Anton and Fraunces are found by the parser
+   soon enough, and preloading all three would compete with the page's own first bytes. */
+const FONT_LATIN =
+  "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD";
+const FONT_LATIN_EXT =
+  "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF";
+export const FONT_FACE_CSS = [
+  ["Inter Tight", "inter-tight"],
+  ["Fraunces", "fraunces"],
+]
+  .flatMap(([family, stem]) =>
+    [
+      ["latin", FONT_LATIN],
+      ["latin-ext", FONT_LATIN_EXT],
+    ].map(
+      ([subset, range]) =>
+        `@font-face{font-family:'${family}';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/${stem}-${subset}-wght-normal.woff2') format('woff2');unicode-range:${range}}`,
+    ),
+  )
+  .join("\n");
+
 export function fontLinks() {
-  return `<link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />`;
+  return `<link rel="preload" href="/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <style>
+${FONT_FACE_CSS}
+  </style>`;
 }
 
 // Shared brand CSS for the self-contained page family (article pages + lane index pages).
@@ -986,6 +1009,9 @@ export function pageStyles() {
     a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
     a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    /* Skip link: off-screen until a keyboard user tabs onto it. Mirrors .skip in src/style.css. */
+    .skip { position: fixed; top: -100px; left: 1rem; z-index: 200; background: var(--ink); color: var(--bg); padding: .6rem 1rem; border-radius: 2px; }
+    .skip:focus { top: 1rem; text-decoration: none; }
     img { max-width: 100%; height: auto; display: block; }
     .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 1.25rem; }
     .wrap--wide { max-width: 60rem; }
@@ -1129,6 +1155,8 @@ export function pageStyles() {
     .article__fig { margin: 1.5rem 0 2rem; }
     .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
     .article__body p { margin: 1rem 0; }
+    /* In-body links carry an underline, so a link is not told apart by colour alone. */
+    .article__body a { text-decoration: underline; text-underline-offset: 3px; }
     .article__body strong { color: var(--cream); }
     /* Long-read light markdown (src/lib/longreadMd.ts, 2026-09-11): the Dispatch issues copied
        onto /reads/ carry headings, quotes, dividers and lists. Scoped to UNCLASSED children of the

@@ -122,6 +122,11 @@ for (const [name, size, fmt] of [
 // the JSON-LD on seven page families, which Google reads, so that one keeps an opaque white
 // ground rather than shipping a transparent square to a consumer that may composite on anything.
 wrote.push(await png(variant(SOURCES.light, { size: 512 }), 512, join(BRAND, "logo-badge.png")));
+// The masthead draws the mark at 34px, so the page shell and the content.css pages load this 68px
+// (2x) WebP instead of the 512px PNG: about 41 KB down to a couple, on nearly every page
+// (2026-10-12). Same full variant as logo-badge.png so the masthead looks exactly as it did.
+// logo-badge.png stays for anything outside that still links it.
+wrote.push(await webp(variant(SOURCES.light, { size: 68 }), 68, join(BRAND, "logo-badge-68.webp")));
 wrote.push(
   await png(variant(SOURCES.light, { ground: true, size: 192 }), 192, join(BRAND, "logo-badge@192.png")),
 );

@@ -92,14 +92,15 @@ export async function initAnalytics(): Promise<void> {
   setupSectionViews();
   setupOutboundTracking();
   setupArticleLinkTracking();
-  setupNewsletterTracking();
+  setupAppTracking();
 }
 
-// Track clicks to the Dispatch newsletter (Substack subscribe links).
-function setupNewsletterTracking(): void {
-  document.querySelectorAll<HTMLAnchorElement>('a[href*="substack.com"]').forEach((el) => {
+// Track clicks on the App Store download links. They took the Dispatch slots on 2026-10-12, when
+// the Dispatch paused, so this replaces the old newsletter_click event.
+function setupAppTracking(): void {
+  document.querySelectorAll<HTMLAnchorElement>('a[href*="apps.apple.com"]').forEach((el) => {
     el.addEventListener('click', () => {
-      track('newsletter_click', { href: el.href, location: el.closest('section')?.id || el.className });
+      track('app_store_click', { href: el.href, location: el.closest('section')?.id || el.className });
     });
   });
 }

@@ -29,13 +29,14 @@ import {
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, DEFAULT_SPORT, NO_SPORT,
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
+import { thumbSrcAttrs } from "./shared/thumbs.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 // Both inline scripts here (masthead toggle + PostHog loader) are static, so one CSP serves every
 // page this script writes, the 404 included.
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 /* ---------- the fronts ----------
    One entry per section that exists in content/. A section with no entry here is a build error
@@ -148,7 +149,7 @@ function renderSection(section, front, pages) {
 })}
 <body>
   ${masthead(DEFAULT_SPORT)}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(front.label)}</p>
       <p class="lane__eyebrow">${esc(front.label)}</p>
@@ -196,7 +197,7 @@ function renderLegends() {
 })}
 <body>
   ${masthead()}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(front.label)}</p>
       <p class="lane__eyebrow">${esc(front.label)}</p>
@@ -205,7 +206,7 @@ function renderLegends() {
       <ul class="lane-list" aria-label="Legends Series profiles">
         ${legends
           .map(
-            (l) => `<li class="lane-card lane-card--static"><img class="lane-card__avatar" src="${escAttr(l.headshot)}" alt="${escAttr(`${l.name}, illustrated by The ARCHV.`)}" loading="lazy" decoding="async" width="64" height="64" /><span class="lane-card__body"><span class="lane-card__kicker">${esc(l.no)} · ${esc(l.years ? `${l.nation} · ${l.years}` : l.nation)}</span><span class="lane-card__headline">${esc(l.name)}</span><span class="lane-card__dek">${esc(l.bio)}</span></span></li>`,
+            (l) => `<li class="lane-card lane-card--static"><img class="lane-card__avatar"${thumbSrcAttrs(l.headshot, 64)} alt="${escAttr(`${l.name}, illustrated by The ARCHV.`)}" loading="lazy" decoding="async" width="64" height="64" /><span class="lane-card__body"><span class="lane-card__kicker">${esc(l.no)} · ${esc(l.years ? `${l.nation} · ${l.years}` : l.nation)}</span><span class="lane-card__headline">${esc(l.name)}</span><span class="lane-card__dek">${esc(l.bio)}</span></span></li>`,
           )
           .join("\n        ")}
       </ul>
@@ -243,7 +244,7 @@ function renderNotFound() {
 })}
 <body>
   ${masthead(NO_SPORT)}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <section class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Not found</p>
       <p class="article__eyebrow">404</p>

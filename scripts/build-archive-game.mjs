@@ -185,6 +185,17 @@ function gameScriptTag() {
       var elBest = document.getElementById('g-best');
       var elShare = document.getElementById('g-share');
       var elLeft = document.getElementById('g-left');
+      var elStatus = document.getElementById('g-status');
+
+      // Screen readers hear nothing when the clue list and guess list redraw, so every guess, skip
+      // and result also writes one plain sentence into the polite live region.
+      function announce(msg) {
+        if (elStatus) elStatus.textContent = msg;
+      }
+      function leftText() {
+        var left = MAX_GUESSES - round.guesses.length;
+        return left === 1 ? 'One guess left.' : left + ' guesses left.';
+      }
 
       function renderClues() {
         elClues.innerHTML = '';
@@ -262,7 +273,8 @@ function gameScriptTag() {
         elResult.appendChild(elShare);
         elShare.hidden = false;
         renderStats();
-        if (window.posthog) posthog.capture('archive_guess_done', { won: won, clues: round.clues, guesses: round.guesses.length, edition: edition });
+        if (!restoring) announce(won ? head.textContent : 'Out of guesses. ' + head.textContent);
+        if (window.posthog) posthog.capture('archive_guess_done',{ won: won, clues: round.clues, guesses: round.guesses.length, edition: edition });
       }
 
       function shareText() {
@@ -286,10 +298,16 @@ function gameScriptTag() {
           finish(false);
           return;
         }
-        if (round.clues < CLUES.length) round.clues++;
+        var opened = round.clues < CLUES.length;
+        if (opened) round.clues++;
         persistRound();
         renderClues();
         renderGuesses();
+        announce(
+          (guess === '(skipped)' ? 'Skipped. ' : 'Not ' + value + '. ') +
+          (opened ? 'Clue ' + round.clues + ' is open. ' : 'No clues left. ') +
+          leftText()
+        );
         elInput.value = '';
         elInput.focus();
       }
@@ -381,7 +399,6 @@ const script = gameScriptTag();
 const pageCsp = cspMeta({
   scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(script))],
   posthog: true,
-  googleFonts: true,
 });
 
 const html = `${documentShell({
@@ -426,7 +443,7 @@ const html = `${documentShell({
 })}
 <body>
   ${masthead()}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <section class="game">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / The Daily Archive</p>
       <p class="game__eyebrow">The Daily Archive <span id="g-edition"></span></p>
@@ -446,6 +463,7 @@ const html = `${documentShell({
         <button type="button" class="game__skip" id="g-skip">Next clue (uses a guess)</button>
       </form>
       <p class="game__left" id="g-left"></p>
+      <p class="visually-hidden" id="g-status" role="status" aria-live="polite"></p>
 
       <ul class="guesses" id="g-guesses" aria-label="Your guesses so far"></ul>
 

@@ -27,7 +27,7 @@ import { loadDaily } from "./wire/lib/content.mjs";
 import { renderWireStrip, renderTablesStrip } from "./wire/lib/render.mjs";
 const DAILY = loadDaily();
 
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 /* ---------- the new sports' day data, through scripts/shared/day-data.mjs (the one loader for
    src/data/*.ts; it also owns the newest-first sort every generator here relies on). Empty
@@ -98,7 +98,7 @@ function renderSection(sport) {
 <body>
   ${masthead(sport.key)}
   ${deskNav(laneKey, sport.key)}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="sport-head">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(sport.label)}</p>
       <p class="sport-head__eyebrow">${esc(sport.label)}</p>

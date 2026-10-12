@@ -40,7 +40,7 @@ const CONTENT = join(ROOT, "content");
 // Both inline scripts on this page (masthead toggle + PostHog loader) are static, so one CSP
 // covers the page. No third inline script is added here on purpose: a per-page hash is a
 // maintenance cost, and this page has nothing that needs to run.
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 const PAGE_URL = AUTHOR_URL;
 
@@ -229,7 +229,7 @@ function render() {
 <body>
   ${masthead()}
   ${deskNav()}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <!-- No data-inview here on purpose: this page family ships no bundled JS, so an opacity-0
          reveal state would have nothing to switch it back on. The dot-grid field comes from
          body::before in pageStyles(), which needs no markup at all. -->

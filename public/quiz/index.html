@@ -16,7 +16,7 @@
        one (including the QUESTIONS/VERDICTS data or the quiz logic further down), recompute
        its hash (sha256, base64-encoded, of its exact inline body) and update it here, or the
        browser will silently drop that script at runtime. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-C2dLM9J5LAUr51kRw8IbbantQNk3tpDzTn3f4RFXn3I=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-C2dLM9J5LAUr51kRw8IbbantQNk3tpDzTn3f4RFXn3I=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="What's your football IQ?" />
   <meta property="og:description" content="Eight questions from the archive. Sixty seconds." />
@@ -39,9 +39,14 @@
     posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Brand fonts, self-hosted (2026-10-12). Same faces as fontLinks() in scripts/shared/page-shell.mjs. -->
+  <link rel="preload" href="/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <style>
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  </style>
 
   <style>
     :root {
@@ -141,10 +146,13 @@
     .small { margin-top: 26px; font-size: 0.85rem; color: var(--cream-dim); }
     .small a { color: var(--gold); }
     .hidden { display: none; }
+    .skip { position: fixed; top: -100px; left: 1rem; z-index: 200; background: var(--cream); color: var(--navy); padding: .6rem 1rem; border-radius: 2px; }
+    .skip:focus { top: 1rem; }
   </style>
 </head>
 <body>
-  <main class="card">
+  <a class="skip" href="#main">Skip to content</a>
+  <main class="card" id="main">
     <div class="wordmark"><a href="/">The ARCHV<span class="dot">.</span></a></div>
 
     <!-- Intro -->

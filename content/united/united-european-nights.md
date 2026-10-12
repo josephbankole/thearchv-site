@@ -1,5 +1,5 @@
 ---
-title: "United's great European nights"
+title: "Manchester United's great European nights"
 slug: "united-european-nights"
 section: "united"
 eyebrow: "Manchester United · History"

@@ -117,7 +117,7 @@ export function initChrome(): void {
 }
 
 // Masthead hamburger menu: a disclosure button that reveals a small dropdown
-// (Follow / Subscribe / Shop / App, App hidden until flip day). No CSS transition
+// (the site links, then Follow / Download the app / Shop). No CSS transition
 // (the `hidden` attribute is toggled directly), which keeps it reduced-motion
 // safe by construction rather than needing a media-query opt-out.
 export function initMastheadMenu(): void {

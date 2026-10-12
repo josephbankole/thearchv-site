@@ -352,7 +352,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    its own + on the right. */
 .killer__box { display: block; }
 .killer__head {
-  display: grid; grid-template-columns: 3.5rem 1fr auto; gap: 1.5rem; align-items: baseline;
+  display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) auto; gap: 1.5rem; align-items: baseline;
   width: 100%; text-align: left; background: none; border: none; color: inherit;
   padding: 1.6rem 0; cursor: pointer; font-family: inherit;
   transition: padding-left 0.5s var(--ease);
@@ -373,8 +373,10 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .killer__panel { overflow: hidden; }
 .killer__panel-inner { padding: 0 0 2rem calc(3.5rem + 1.5rem); max-width: 60ch; color: var(--cream-dim); }
 @media (max-width: 640px) {
-  .killer__head { grid-template-columns: 2.2rem 1fr; row-gap: 0.4rem; }
-  .killer__meta { grid-column: 2; }
+  .killer__head { grid-template-columns: 2.2rem minmax(0, 1fr); row-gap: 0.4rem; }
+  /* nowrap is a desktop nicety; on a phone a long competition line has to wrap or it pushes
+     the row past the viewport. */
+  .killer__meta { grid-column: 2; white-space: normal; }
   .killer__plus { position: absolute; right: 0; }
   .killer { position: relative; }
   .killer__panel-inner { padding-left: 2.2rem; }
@@ -878,9 +880,6 @@ a.band__more:hover { color: var(--accent-ink); }
 .brief__list a:hover b { color: var(--accent-ink); }
 .brief__list time { display: block; margin-bottom: 0.2rem; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-ink); }
 .brief__list b { font-weight: 500; font-size: 0.88rem; line-height: 1.4; color: var(--ink); }
-.brief__cta { margin-top: 1.4rem; background: var(--bg-sunken); border: 1px solid var(--rule); padding: 1.1rem; }
-.brief__cta h3 { font-family: var(--display); font-weight: 400; font-size: 0.98rem; letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 0.45rem; }
-.brief__cta p { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 0.85rem; }
 
 /* ---------- app strip ---------- */
 .appstrip { background: var(--bg-sunken); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }

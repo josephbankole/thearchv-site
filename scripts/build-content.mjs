@@ -19,6 +19,9 @@ import { glossaryEntries } from "./glossary-data.mjs";
 import { listPairs } from "./shared/football-data.mjs";
 import { loadDaily } from "./wire/lib/content.mjs";
 import { hasVisibleTables } from "./wire/lib/render.mjs";
+// The per-page share card (2026-10-12), the article pages' renderer shared out. Only the
+// explainers use it here; see the write loop.
+import { writePageCard } from "./shared/page-card.mjs";
 
 // The adapter selects a provider from ARCHV_FOOTBALL_PROVIDER at load and can throw (unknown
 // provider, cache miss with fetching off, head-kit guard) — four scripts before build-duel-pages
@@ -273,8 +276,9 @@ function render(p, allPages) {
   twitterSite: false,
 })}
 <body>
+  <a class="skip" href="#main">Skip to content</a>
   <header class="masthead">
-    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
+    <a class="wordmark" href="/"><img src="/brand/logo-badge-68.webp" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <div class="masthead__actions">
       <a class="masthead__search" href="/search/" aria-label="Search the archive">
         <svg class="masthead__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="6.8" cy="6.8" r="4.9" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="M10.5 10.5 L14.4 14.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
@@ -294,15 +298,14 @@ function render(p, allPages) {
         <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
-        <a class="masthead__panel-link masthead__panel-link--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to the Dispatch</a>
+        <a class="masthead__panel-link masthead__panel-link--gold" href="${APP_STORE_URL}">Download the app</a>
         <a class="masthead__panel-link" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
-        <a class="masthead__panel-link" href="${APP_STORE_URL}">App</a>
       </nav>
       </div>
     </div>
   </header>
   ${MASTHEAD_SCRIPT_TAG}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <article class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(meta.href)}">${esc(meta.label)}</a></p>
       <p class="article__eyebrow">${esc(p.eyebrow || "")}</p>
@@ -318,7 +321,7 @@ function render(p, allPages) {
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
-        <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
+        <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
@@ -337,12 +340,25 @@ function render(p, allPages) {
 
 /* ---------- write pages ---------- */
 let n = 0;
-for (const p of pages) {
+// Explainers get their own 1200x630 card (2026-10-12): the page eyebrow over its title. Every
+// explainer's frontmatter names the site-wide "/og.jpg", so the card replaces only that default;
+// a page that names a picture of its own keeps it. All cards start at once so resvg paints them
+// in parallel (see writePageCard in shared/page-card.mjs). On a card failure the page keeps the
+// frontmatter value and the build carries on. og:image and the Article JSON-LD image both read
+// p.ogImage, so the override reaches both. Finals and United pages are unchanged.
+const wantsCard = (p) => p.section === "explainers" && (!p.ogImage || p.ogImage === "/og.jpg");
+for (const p of pages) mkdirSync(join(OUT, p.section, p.slug), { recursive: true });
+const pageCards = await Promise.all(pages.map((p) => wantsCard(p)
+  ? writePageCard(join(OUT, p.section, p.slug), { kicker: p.eyebrow || "Explained", headline: p.title }, `/${p.section}/${p.slug}/`)
+  : false));
+for (const [i, p] of pages.entries()) {
   const dir = join(OUT, p.section, p.slug);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "index.html"), render(p, pages));
+  const page = pageCards[i] ? { ...p, ogImage: `/${p.section}/${p.slug}/og.png` } : p;
+  writeFileSync(join(dir, "index.html"), render(page, pages));
   n++;
 }
+const cards = pageCards.filter(Boolean).length;
+if (cards) console.log(`[build-content] ${cards} explainer og card(s)`);
 
 /* ---------- sitemap (homepage + all article pages + static indexable pages) ----------
    This is the FIRST script in the build chain to touch dist/sitemap.xml (build-lane-pages.mjs
@@ -371,7 +387,8 @@ const EXTRA_URLS = [
   { loc: "/start/", changefreq: "monthly", priority: "0.5" },
   { loc: "/app/", changefreq: "monthly", priority: "0.6" }, // founder 2026-07-28: indexable, carries SoftwareApplication schema
   { loc: "/quiz/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/dispatch/", changefreq: "monthly", priority: "0.5" },
+  // /dispatch/ is deliberately NOT here: the Dispatch is paused (D-2026-10-06a) and since
+  // 2026-10-12 the page is a noindex notice pointing at /reads/, so it stays out of the sitemap.
   { loc: "/privacy/", changefreq: "yearly", priority: "0.2" },
   { loc: "/support/", changefreq: "yearly", priority: "0.2" },
   // Evergreen surfaces generated later in the chain (build-glossary-pages.mjs,

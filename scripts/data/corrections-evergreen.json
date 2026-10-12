@@ -60,6 +60,42 @@
       "was": "\"The poster carries the line \\\"four minutes in June\\\", and that points to the match before this one rather than the final itself.\"",
       "now": "The four minutes came in the quarter-final against England on 22 June 1986, a week before the final, not in the semi-final, which was the match before the final. The page no longer carries a poster.",
       "source": "FIFA, 1986 FIFA World Cup Mexico match results; Wikipedia, 1986 FIFA World Cup knockout stage."
+    },
+    {
+      "at": "2026-10-12T17:25:00-04:00",
+      "kind": "revised",
+      "path": "/notes/the-archv-method/",
+      "title": "The ARCHV Method: AI magazine covers in a browser tab",
+      "was": "The note named the image model and the vendor's browser workspace behind the covers, in its title, description, quick answer and body.",
+      "now": "The note describes the same method without naming the model or the vendor, because the site does not name the image model on pages about its art. Nothing else in the note changed.",
+      "source": "The ARCHV house rule on pages about the illustrated art, 19 September 2026."
+    },
+    {
+      "at": "2026-10-12T17:25:00-04:00",
+      "kind": "revised",
+      "path": "/reads/the-archv-method-why-we-need-a-dedicated-creative-studio-workspace-in-google-ai-studio/",
+      "title": "The ARCHV Method: Why we need a dedicated 'Creative Studio' workspace",
+      "was": "The long read named the image model and the vendor's browser workspace in its title, dek and body, and linked to the vendor's pages.",
+      "now": "The long read describes the same method without naming the model or the vendor, and the links to the vendor's pages are gone. The web address is unchanged.",
+      "source": "The ARCHV house rule on pages about the illustrated art, 19 September 2026."
+    },
+    {
+      "at": "2026-10-12T17:25:00-04:00",
+      "kind": "revised",
+      "path": "/reads/where-can-i-get-a-print-of-canadas-first-world-cup-win/",
+      "title": "Where can I get a print of Canada's first World Cup win?",
+      "was": "The read linked to a poster bundle on Etsy holding all ten Canada plates.",
+      "now": "The bundle listing was deactivated on 12 October 2026, so the link is gone. A dated note at the end of the read says the Canada prints are no longer for sale.",
+      "source": "The ARCHV Etsy shop, 12 October 2026."
+    },
+    {
+      "at": "2026-10-12T17:25:00-04:00",
+      "kind": "revised",
+      "path": "/reads/",
+      "title": "Long reads copied from The ARCHV Dispatch",
+      "was": "Eleven issues copied from the Dispatch kept lines written for email: reply-by-email prompts, forward-and-subscribe lines, the weekly-letter footer and promises of a round-up next Sunday.",
+      "now": "Those lines are off the site copies, because the Dispatch is paused and a web page cannot take a reply. The reporting is unchanged. The issues: Manchester City guilty on every financial charge across nine seasons; Manchester City guilty on 114 of 115 charges, reports say; Pro Ref stood down two officials over one Manchester derby goal; Manchester United Women's biggest night was a 3-0 in Leigh; The £222m transfer that was really a resignation; Hull City beat Manchester United at the eleventh try; Napoli bought a striker without a phone call; Mbappé took the record on the wrong night; Milla's record, and the man closing in on it; Canada's World Cup story; Hosts again: the USA's whole World Cup story.",
+      "source": "The ARCHV Dispatch on Substack, paused 6 October 2026."
     }
   ]
 }

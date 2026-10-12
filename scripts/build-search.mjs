@@ -44,7 +44,7 @@ import { appendUrls } from "./shared/sitemap.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 /* ---------- the typed data, through scripts/shared/day-data.mjs — the one loader every
    generator in this chain uses ---------- */
@@ -259,7 +259,7 @@ const page = `${documentShell({
 })}
 <body>
   ${masthead()}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <section class="search" id="search" data-index="/search-index.json?v=${escAttr(indexVersion)}">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Search</p>
       <p class="lane__eyebrow">Search</p>

@@ -14,7 +14,7 @@ import {
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, ORG_REF, ORG_NODE,
 } from "./shared/page-shell.mjs";
 
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -127,7 +127,7 @@ const html = `${documentShell({
 })}
 <body>
   ${masthead()}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <article class="standards">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / How we verify</p>
       <p class="lane__eyebrow">Editorial standards</p>

@@ -355,7 +355,10 @@ export function renderLongReads(): string {
     .join('\n            ');
 }
 
-/* ---------- the desk brief rail ---------- */
+/* ---------- the desk brief rail ----------
+   It ended in a "The ARCHV Dispatch / Read the Dispatch" box until 2026-10-12. The Dispatch is
+   paused (D-2026-10-06a), and the app strip directly under the front grid in index.html already
+   makes the one ask this page needs, so the box came off rather than becoming a second app CTA. */
 export function renderBrief(): string {
   const lead = allItems()[0];
   const items = roundRobin(7)
@@ -373,12 +376,7 @@ export function renderBrief(): string {
         <p class="brief__sub">The three football desks, newest first</p>
         <ul class="brief__list">
             ${lines}
-        </ul>
-        <div class="brief__cta">
-          <h3>The ARCHV Dispatch</h3>
-          <p>The long reads go out free on Substack.</p>
-          <a class="btn-ghost" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Read the Dispatch</a>
-        </div>`;
+        </ul>`;
 }
 
 /* ---------- the three bands ---------- */

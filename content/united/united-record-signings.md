@@ -1,7 +1,7 @@
 ---
-title: "Every time United broke the British transfer record"
+title: "Every time Manchester United broke the British transfer record"
 slug: "united-record-signings"
-seoTitle: "United's British transfer records, Quixall to Pogba"
+seoTitle: "Manchester United's British record buys: Quixall to Pogba"
 section: "united"
 eyebrow: "Manchester United · History"
 datePublished: "2026-06-15"

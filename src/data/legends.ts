@@ -69,7 +69,7 @@ export const legends: Legend[] = [
     nation: 'England',
     years: '1937–2023',
     headshot: '/legends/bobby-charlton.webp',
-    bio: 'Munich survivor, 1966 World Cup winner and United’s heart. A Ballon d’Or and a lifetime of grace.',
+    bio: 'Munich survivor, 1966 World Cup winner and Manchester United’s heart. A Ballon d’Or and a lifetime of grace.',
   },
   {
     no: 'No. 09',

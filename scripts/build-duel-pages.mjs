@@ -407,7 +407,6 @@ function renderPair({ a, b, slug }, hasCard) {
   const pageCsp = cspMeta({
     scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript))],
     posthog: true,
-    googleFonts: true,
   });
 
   const others = pairs
@@ -458,7 +457,7 @@ function renderPair({ a, b, slug }, hasCard) {
 })}
 <body>
   ${masthead()}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="duel-wrap">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/duel/">Player duels</a></p>
       <p class="duel-eyebrow">Player duel</p>
@@ -571,7 +570,6 @@ function renderIndex(players) {
   const pageCsp = cspMeta({
     scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(script))],
     posthog: true,
-    googleFonts: true,
   });
   const options = (selected) =>
     players
@@ -614,7 +612,7 @@ function renderIndex(players) {
 })}
 <body>
   ${masthead()}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="duel-wrap">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Player duels</p>
       <p class="duel-eyebrow">Player duels</p>

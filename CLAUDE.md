@@ -152,6 +152,12 @@ Phase 2A (2026-08-09) flipped the ground and the ink across every page family in
   New rules should use the real names.
 - Type: **Anton** for display (self-hosted latin subset at `public/fonts/anton-latin.woff2`,
   preloaded on the front page), Fraunces and Inter Tight for everything else.
+  **No page loads Google Fonts (2026-10-12).** The front page bundles the two families through
+  `@fontsource-variable`; every static page self-hosts the same wght woff2 files from
+  `public/fonts/` (latin + latin-ext, `unicode-range`). The page shell writes them through
+  `fontLinks()` (`FONT_FACE_CSS`, Inter Tight preloaded), `public/content.css` carries Inter Tight,
+  and the eight hand-built pages under `public/` carry a pasted copy. CSPs name no font host;
+  `cspMeta()` no longer takes `googleFonts`. Change the faces in one place, change all three.
 - **The token block is duplicated in four files that do not import each other**:
   `src/style.css`, `pageStyles()` in `scripts/shared/page-shell.mjs`, `public/content.css`,
   and `scripts/shared/card-brand.mjs` for the rendered share images. Change one, change all
@@ -194,6 +200,15 @@ club badge, then **nothing**. A miss renders no `<img>` at all. Never add a face
 registry on one source: each head-bank entry is identified by both the bank index at
 `../player-headshot-bank.md` and the desk's own committed `imageAlt` for that same file, and
 the 2026-08-05 Alex Scott case is why. Bare mononyms are left out on purpose.
+
+**Small portraits come from `public/thumbs/` (2026-10-12).** The 64px card circles used to pull the
+600px `heads/hd` rebuilds and the 1024px Legends art. `scripts/build-thumbs.mjs` (in the build
+before `vite build`, or `npm run thumbs`) writes a 128px and a 320px WebP of every file on those
+two shelves to `public/thumbs/<width>/<original path>`, keyed by content hash in
+`scripts/data/thumbs.json`, and `cardArt()` and the /legends/ list emit srcset from them through
+`scripts/shared/thumbs.mjs`. A head with no thumbs falls back to its original src, so nothing
+breaks; run the script and commit `public/thumbs/` plus the manifest after adding or replacing a
+head. The originals stay for the app feed, share cards and article art.
 
 ## The feed contract (the iOS app depends on this)
 
@@ -295,7 +310,7 @@ homepage hero/experience section, the nav's in-page scroll behaviour, or any
 "build") and emits one static page per daily entry across all three
 lanes at `dist/desk/<lane>/<date>/index.html` — this is the canonical URL the feed's `url`
 field points at and what the app's canonical shares use. Pages are self-contained
-(inline brand styles, PostHog snippet, Google Fonts), following the
+(inline brand styles, PostHog snippet, self-hosted font faces), following the
 `public/start/index.html` pattern rather than `content.css` (deliberate: these pages
 do not depend on the hashed app bundle or the long-read article template). The script
 also appends every article URL to `dist/sitemap.xml`, which by that point in the
@@ -313,6 +328,16 @@ build time by the same script at `dist/desk/<lane>/<date>/og.png` (satori +
 because satori/resvg cannot read webp). The page's `og:image` / `twitter:image` point
 at that PNG; if card generation fails for an entry the build logs it and that page
 falls back to the static `/og.jpg` — a card failure never fails the build.
+
+**The same card now covers the long reads, explainers and glossary entries (2026-10-12).** The
+renderer lives in `scripts/shared/page-card.mjs` (`pageCard()`; the article pages' `ogCard()` is a
+thin wrapper over it and its output is byte-identical to the old inline copy). `writePageCard()`
+writes `og.png` beside `/reads/<slug>/`, `/explainers/<slug>/` and `/glossary/<slug>/` pages from
+`build-reads-pages.mjs`, `build-content.mjs` (explainers whose frontmatter says `/og.jpg` only) and
+`build-glossary-pages.mjs`, and og:image, twitter:image and the JSON-LD image all point at it,
+`/og.jpg` on failure. It paints with resvg's `renderAsync`, and each family starts all its cards at
+once, so the ~120 cards cost about 2 to 3 seconds per family instead of ~110ms each in series. The
+section fronts (`/reads/`, `/glossary/`), finals and United pages keep `/og.jpg`.
 
 **The cards are on the white system as of phase 2B, and `scripts/shared/card-brand.mjs` is
 the only place their palette, fonts and wordmark live.** The per-article pair, the duel
@@ -418,7 +443,7 @@ their own JSON-LD. Only the head moved.
   hashes are not constant across a family. `verify-csp-pages.mjs` is the net under that, not the
   design for it.
 - **Two head shapes, and the difference is real.** The self-contained family ships PostHog,
-  Google Fonts and inlined brand CSS. The older content.css family (`build-content.mjs`,
+  the self-hosted font faces and inlined brand CSS. The older content.css family (`build-content.mjs`,
   `build-day-pages.mjs`) links `/content.css` and ships none of the three, plus no RSS
   autodiscovery, no og:image dimensions and no `twitter:site`. Those absences are passed
   explicitly (`stylesheet`, `rss: false`, `posthog: false`, `fonts: false`, `styles: false`,
@@ -576,7 +601,9 @@ which was both the wrong colour system after phase 2A and the wrong sport after 
 `npm run build` before `vite build`, and on its own as `npm run crest`. Before it existed,
 `brand-assets.mjs` built the two `logo-badge` files and **nothing at all** built the five
 `crest-badge` files or any favicon: they were made by hand, off-repo, so a brand change meant
-redoing that by hand and hoping. Thirteen assets now come off one source. Do not hand-edit a
+redoing that by hand and hoping. Fourteen assets now come off one source (the fourteenth,
+`logo-badge-68.webp`, is the 2x masthead mark the page shell and content.css pages load since
+2026-10-12 instead of the 512px PNG). Do not hand-edit a
 file in `public/brand/` or a favicon; edit the SVG and re-run.
 
 - Source of truth: `scripts/brand/crest-monogram-{light,ink}.svg`. Same geometry, two

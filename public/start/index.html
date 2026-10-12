@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="apple-itunes-app" content="app-id=6786508653" />
   <title>The ARCHV. Start here.</title>
-  <meta name="description" content="Sport drawn down to the moment that decided it. Today's verified story, the archive, the Dispatch and the store." />
+  <meta name="description" content="Sport drawn down to the moment that decided it. Today's verified story, the archive and the store." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="https://thearchv.ca/start/" />
   <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
@@ -15,10 +15,13 @@
        Both inline scripts below are allowed only via an exact sha256 hash - if you edit either
        one, recompute its hash (sha256, base64-encoded, of its exact inline body) and update it
        here, or the browser will silently drop that script at runtime.
-       2026-09-12: the Substack iframe is gone (frame-src is 'none' again) and the page's own
-       email form posts to the Dispatch, so form-action names 'self' and the Dispatch only, the
-       same rule the article pages follow. Neither script changed, so neither hash did. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-ngAWGaU2A6Wk8a4SXOMa/FDCzn8E4Fa8tUjt7cDjEHo=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self' https://thearchvdispatch.substack.com" />
+       2026-09-12: the Substack iframe is gone (frame-src is 'none' again).
+       2026-10-12: the Dispatch email form is gone too (the Dispatch is paused, D-2026-10-06a) and
+       an app download link took its place, so the page has no form and form-action is 'self'
+       alone, the same rule the article pages follow. Neither script changed for that.
+       2026-10-12, later: the page script (the second hash) changed. It now dates the TODAY
+       kicker when the feed's lead is not today's story, so its hash was recomputed. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-7/qBfdScegwJzohArUOL2cIXTUmDx0TQrMg3VFHh5rs=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
   <meta property="og:description" content="Sport drawn down to the moment that decided it." />
@@ -41,9 +44,14 @@
     posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Brand fonts, self-hosted (2026-10-12). Same faces as fontLinks() in scripts/shared/page-shell.mjs. -->
+  <link rel="preload" href="/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <style>
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  </style>
 
   <style>
     :root {
@@ -146,26 +154,17 @@
     .strip img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
     .strip a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
-    /* The free daily email, the page's primary ask (canon D-2026-09-08g), directly under the
-       title so it sits above the fold on a 375x812 phone. It replaced the embedded Substack
-       iframe on 2026-09-12: the same plain GET form every article page carries (captureBlock()
-       in scripts/shared/page-shell.mjs; this page cannot import it, so the markup is a copy,
-       and a change to one is a change to both). The address goes to Substack's own subscribe
-       page and the reader finishes there, so this page never receives it. The iframe was also
-       the page's one poor interaction score (INP 752ms at p75). */
-    .vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
-    .capture { margin-top: 22px; padding: 18px 18px 16px; text-align: left; border: 1px solid var(--rule); border-radius: 14px; background: var(--navy-deep); }
-    .capture__title { font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 1.15rem; line-height: 1.3; color: var(--cream); }
-    .capture__note { margin-top: 6px; font-size: 0.92rem; line-height: 1.5; color: var(--cream-dim); }
-    .capture__form { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; }
-    .capture__field { flex: 1 1 14rem; min-width: 0; min-height: 48px; padding: 12px 14px; font: inherit; font-size: 1rem; color: var(--cream); background: #FFFFFF; border: 1px solid var(--rule); border-radius: 10px; -webkit-appearance: none; appearance: none; }
-    .capture__field::placeholder { color: var(--cream-dim); }
-    .capture__field:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-color: var(--gold); }
-    .capture__go { flex: 0 0 auto; min-height: 48px; padding: 12px 18px; font: inherit; font-weight: 600; cursor: pointer; color: #FFFFFF; background: var(--gold); border: 1px solid var(--gold); border-radius: 10px; }
-    .capture__go:hover { filter: brightness(1.06); }
-    .capture__go:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
-    .capture__fine { margin-top: 10px; font-size: 0.8rem; line-height: 1.5; color: var(--cream-dim); }
-    @media (max-width: 480px) { .capture__go { width: 100%; } }
+    /* The app download, in the slot the free Dispatch email held from 2026-09-12 until the
+       Dispatch paused (D-2026-10-06a; swapped 2026-10-12 on the founder's approval). Same
+       heading, line and button as appCtaBlock() in scripts/shared/page-shell.mjs and the
+       homepage app strip; this page cannot import it, so the markup is a copy, and a change to
+       one is a change to both. A link, not a form, so the page needs no form-action entry. */
+    .appcta { margin-top: 22px; padding: 18px 18px 16px; text-align: left; border: 1px solid var(--rule); border-radius: 14px; background: var(--navy-deep); }
+    .appcta__title { font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 1.15rem; line-height: 1.3; color: var(--cream); }
+    .appcta__note { margin-top: 6px; font-size: 0.92rem; line-height: 1.5; color: var(--cream-dim); }
+    .appcta__go { display: flex; align-items: center; justify-content: center; margin-top: 12px; min-height: 48px; padding: 12px 18px; font-weight: 600; color: #FFFFFF; background: var(--gold); border: 1px solid var(--gold); border-radius: 10px; text-decoration: none; }
+    .appcta__go:hover { filter: brightness(1.06); }
+    .appcta__go:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
 
     /* Follow sat first from 2026-08-04 to 2026-08-13 on the reasoning that the app is iOS
        only and converts almost no one, so the ask anyone can act on should lead. It now sits
@@ -232,18 +231,6 @@
       color: var(--cream);
     }
 
-    /* App Store, demoted from a badge to a quiet secondary line (kept, not removed). */
-    .alsoiphone {
-      display: inline-block;
-      color: var(--cream-dim);
-      font-size: 0.9rem;
-      letter-spacing: 0.03em;
-      text-decoration: none;
-      padding: 6px 8px;
-    }
-    .alsoiphone:hover { color: var(--cream); }
-    .alsoiphone:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
-
     /* One slim line: the other sports live on the homepage, where the tab bar is. */
     .multisport {
       margin-top: 22px;
@@ -254,27 +241,27 @@
     .multisport a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
     .multisport a:hover { color: var(--gold); }
     .multisport a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .skip { position: fixed; top: -100px; left: 1rem; z-index: 200; background: var(--cream); color: var(--navy); padding: .6rem 1rem; border-radius: 2px; }
+    .skip:focus { top: 1rem; }
   </style>
 </head>
 <body>
-  <main class="hub">
+  <a class="skip" href="#main">Skip to content</a>
+  <main class="hub" id="main">
     <h1 class="wordmark">The ARCHV<span class="dot">.</span></h1>
     <p class="tagline">Sport drawn down to the moment that decided it.</p>
 
-    <!-- The free daily email, first thing under the title (2026-09-12, canon D-2026-09-08g). Same
-         markup and GET-to-Substack pattern as captureBlock() in scripts/shared/page-shell.mjs;
-         the title line is this page's own wording from the embed it replaced. -->
-    <aside class="capture" id="inline-capture" aria-labelledby="capture-title">
-      <h2 class="capture__title" id="capture-title">The day’s story by email, free.</h2>
-      <p class="capture__note">The ARCHV Dispatch goes out free on Substack. Put an address in below and you finish signing up over there, so it goes to Substack and never to us.</p>
-      <form class="capture__form" action="https://thearchvdispatch.substack.com/subscribe" method="get" target="_blank" rel="noopener noreferrer">
-        <label class="vh" for="capture-email">Your email address</label>
-        <input class="capture__field" id="capture-email" name="email" type="email" required
-               autocomplete="email" inputmode="email" spellcheck="false"
-               placeholder="you@example.com" />
-        <button class="capture__go" type="submit">Join the Dispatch</button>
-      </form>
-      <p class="capture__fine">Every issue carries an unsubscribe link. This site is static files with no database, so there is nowhere here to keep an address anyway.</p>
+    <!-- The app download, first thing under the title, in the slot the Dispatch email form held
+         until the Dispatch paused (swapped 2026-10-12). Same markup as appCtaBlock() in
+         scripts/shared/page-shell.mjs. The link keeps id="app-store-link", the id the script
+         below already binds as the 'appstore' tap, so the swap itself needed no script change.
+         The script hash was recomputed later the same day for the dated TODAY kicker (see the
+         head comment). The quiet "Also on iPhone" line it replaces would have been a second App
+         Store link on the same small page. -->
+    <aside class="appcta" id="app-cta" aria-labelledby="appcta-title">
+      <h2 class="appcta__title" id="appcta-title">The archive, in your pocket</h2>
+      <p class="appcta__note">The daily desk, player duels and an archive game a day. Free on the App Store.</p>
+      <a class="appcta__go" id="app-store-link" href="https://apps.apple.com/app/id6786508653">Download the app</a>
     </aside>
 
     <div class="actions">
@@ -288,10 +275,10 @@
            Do not restore Follow to the top without newer numbers than these.
            This block is a flex column with no CSS `order` anywhere, so DOM order is the
            visual order and this comment describes what a reader actually sees.
-           The email form above this block sits outside this order on purpose: canon
-           D-2026-09-08g makes the free daily email the primary ask, above the fold (2026-09-12). -->
+           The app block above this one sits outside this order: it took the slot the Dispatch
+           email form held (canon D-2026-09-08g) when the Dispatch paused (2026-10-12). -->
 
-      <p class="kicker">TODAY</p>
+      <p class="kicker" id="today-kicker">TODAY</p>
       <a class="today-card" id="today-card" href="https://thearchv.ca/">
         <div class="today-copy">
           <h2 class="today-headline" id="today-headline">Today’s verified story.</h2>
@@ -318,10 +305,8 @@
         <span class="desk-link__note">Newest first, every entry with its sources named.</span>
       </a>
 
-      <a class="alsoiphone" id="app-store-link" href="https://apps.apple.com/app/id6786508653">Also on iPhone</a>
-
       <nav class="linkrow" aria-label="More from The ARCHV">
-        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvdispatch.substack.com" target="_blank" rel="noopener noreferrer">Dispatch</a><span class="sep">·</span><a class="quiet" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Etsy shop</a>
+        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Etsy shop</a>
       </nav>
 
       <div class="strip" aria-label="Manchester United posters">
@@ -402,12 +387,32 @@
       // write the headline and dek in. If the infogram loads it bakes that text into the
       // picture, so hide the text versions then; if it never arrives, they stay as the copy.
       // The day's real transfer headline for the desk line, off the SAME response. No second
-      // request. `lead` is the newest wrap across the transfer and World Cup desks
-      // (scripts/build-feed.mjs), so it is not always a transfer entry, and pasting a World
-      // Cup headline under a "THE DESK" link pointed at /desk/transfer/ would be the same
-      // false claim the hardcoded club name was. So: take the lead when it is a transfer
-      // entry, otherwise walk the wrap for the day's transfer one, and if there is neither,
-      // leave the generic string in the markup alone.
+      // request. `lead` is the newest entry across the transfer, World Cup and Leagues desks
+      // (scripts/build-feed.mjs; Leagues joined 2026-10-12), so it is not always a transfer
+      // entry, and pasting a Leagues headline under a "THE DESK" link pointed at
+      // /desk/transfer/ would be the same false claim the hardcoded club name was. So: take
+      // the lead when it is a transfer entry, otherwise walk the wrap for the day's transfer
+      // one, and if there is neither, leave the generic string in the markup alone.
+      // The newest story is not always today's. When the lead's date is not today in Toronto
+      // (or today cannot be worked out), the TODAY kicker shows the lead's own date and the
+      // gold button stops saying "today's", so a story from last week never reads as today's.
+      var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      var WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      function torontoToday() {
+        try {
+          var parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Toronto', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+          var get = function (t) { for (var i = 0; i < parts.length; i++) if (parts[i].type === t) return parts[i].value; return ''; };
+          return get('year') + '-' + get('month') + '-' + get('day');
+        } catch (e) { return null; }
+      }
+      function leadDateLabel(iso, today) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+        if (!m) return null;
+        var y = +m[1], mo = +m[2], d = +m[3];
+        var label = WEEKDAYS[new Date(Date.UTC(y, mo - 1, d)).getUTCDay()] + ' ' + d + ' ' + MONTHS[mo - 1];
+        if (!today || today.slice(0, 4) !== m[1]) label += ' ' + y;
+        return label;
+      }
       function deskHeadline(d) {
         var pool = [d && d.lead].concat((d && d.wrap) || []);
         for (var i = 0; i < pool.length; i++) {
@@ -433,6 +438,13 @@
         cta.href = lead.url;
         if (lead.headline && h) h.textContent = lead.headline;
         if (lead.dek && dek) dek.textContent = lead.dek;
+        var today = torontoToday();
+        var dated = lead.date !== today ? leadDateLabel(lead.date, today) : null;
+        if (dated) {
+          var kicker = document.getElementById('today-kicker');
+          if (kicker) kicker.textContent = dated.toUpperCase();
+          if (cta) cta.textContent = 'Read the latest story';
+        }
         trackFeedState('ok');
         if (img && lead.infogram) {
           var probe = new Image();

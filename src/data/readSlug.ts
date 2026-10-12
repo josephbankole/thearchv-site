@@ -10,7 +10,18 @@
 // Because the slug is derived, the engine can prepend an essay to longReads.ts and its page,
 // its sitemap row and its feed item all appear on the next build with no other edit. The flip
 // side: renaming an essay changes its URL. Rename with that in mind.
+//
+// PINNED_SLUGS keeps the first URL of an essay renamed after publication. Key: the current
+// title, exactly. Value: the slug it was published at. The method note's title lost its vendor
+// name on 2026-10-12 (no image model or vendor named on pages about the art); its URL stays.
+const PINNED_SLUGS: Record<string, string> = {
+  "The ARCHV Method: Why we need a dedicated 'Creative Studio' workspace":
+    'the-archv-method-why-we-need-a-dedicated-creative-studio-workspace-in-google-ai-studio',
+};
+
 export function readSlug(title: string): string {
+  const pinned = PINNED_SLUGS[String(title)];
+  if (pinned) return pinned;
   return String(title)
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '') // Galácticos -> Galacticos

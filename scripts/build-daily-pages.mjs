@@ -22,7 +22,7 @@ import { renderWireItem, renderEditionLine, renderWireFooter, wireItemsFor, rend
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 const { wire, tables, today } = loadDaily();
 
 const webPage = (name, description, url) => ({
@@ -44,7 +44,7 @@ function page({ title, description, url, robots, body }) {
 })}
 <body>
   ${masthead(NO_SPORT)}
-  <main class="wrap">
+  <main class="wrap" id="main">
 ${body}
   </main>
   ${footer()}

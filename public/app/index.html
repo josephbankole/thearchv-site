@@ -15,9 +15,10 @@
        Every inline script below is allowed only via an exact sha256 hash - if you edit any of
        them, recompute the hash (sha256, base64-encoded, of the exact inline body) and update it
        here, or the browser will silently drop that script at runtime.
-       connect-src carries the Supabase project (Android waitlist post); frame-src carries
-       Substack (the Dispatch embed). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rJuB+Kqp9gdahxoCqDx7tpFEQI5eENyEwJnVuFTlZm8=' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-uQL9Zf9KXWTdiV0qFXDKVq9Z+t3jR7l3jxOI698v6tI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src https://thearchvdispatch.substack.com" />
+       connect-src carries the Supabase project (Android waitlist post). frame-src is 'none':
+       the Substack Dispatch embed came off on 2026-10-12 (the Dispatch is paused,
+       D-2026-10-06a), and nothing else on the page is framed. No script changed, so no hash did. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rJuB+Kqp9gdahxoCqDx7tpFEQI5eENyEwJnVuFTlZm8=' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-uQL9Zf9KXWTdiV0qFXDKVq9Z+t3jR7l3jxOI698v6tI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Football with a memory." />
   <meta property="og:description" content="A daily archive of sport in original illustration. Football, NFL, F1, tennis, golf and basketball. Free on iPhone." />
@@ -56,9 +57,14 @@
     posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Brand fonts, self-hosted (2026-10-12). Same faces as fontLinks() in scripts/shared/page-shell.mjs. -->
+  <link rel="preload" href="/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <style>
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  </style>
 
   <style>
     :root {
@@ -198,7 +204,7 @@
     .cta-gold:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
     .cta-gold[disabled] { opacity: 0.6; cursor: default; transform: none; filter: none; }
 
-    /* Android honest path: the ~44% who cannot install still leave a follow and an email.
+    /* Android honest path: the ~44% who cannot install still leave a follow and a waitlist email.
        Ghost button so it sits beside, not on top of, the gold waitlist submit. */
     .android-follow { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
     .android-lead { font-size: 0.95rem; line-height: 1.5; color: var(--cream); }
@@ -241,24 +247,6 @@
        white ground, which is a message nobody can read; #A32219 is 7.50:1. */
     .formnote.bad { color: #A32219; }
 
-    /* Substack subscribe, embedded. Cross-origin iframe, so we cannot restyle its
-       inside; we only frame it to sit tidily in the column. */
-    .dispatch-embed { margin-top: 26px; }
-    .embed-label {
-      font-size: 0.78rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--cream-dim);
-      margin-bottom: 10px;
-    }
-    .dispatch-embed iframe {
-      display: block;
-      width: 100%;
-      border: 1px solid rgba(30, 34, 61, 0.08);
-      border-radius: 12px;
-      background: #ffffff;
-    }
-
     .fallback {
       margin-top: 26px;
       font-size: 0.85rem;
@@ -268,6 +256,8 @@
     .fallback a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
     .fallback a:hover { color: var(--cream); }
     .fallback a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .skip { position: fixed; top: -100px; left: 1rem; z-index: 200; background: var(--cream); color: var(--navy); padding: .6rem 1rem; border-radius: 2px; }
+    .skip:focus { top: 1rem; }
   </style>
   <script type="application/ld+json">
   {
@@ -284,7 +274,8 @@
   </script>
 </head>
 <body>
-  <main class="page">
+  <a class="skip" href="#main">Skip to content</a>
+  <main class="page" id="main">
     <div class="wordmark">The ARCHV<span class="dot">.</span></div>
 
     <!-- Today's story. Populated from the live feed; the static poster and brand line
@@ -335,13 +326,6 @@
         <button class="cta-gold" type="submit" id="wait-submit">Tell me when Android is ready</button>
       </form>
       <p class="formnote" id="wait-note" role="status" aria-live="polite"></p>
-
-      <div class="dispatch-embed">
-        <p class="embed-label">And the Dispatch, by email</p>
-        <iframe src="https://thearchvdispatch.substack.com/embed"
-                title="Subscribe to The ARCHV Dispatch"
-                height="320" frameborder="0" scrolling="no" loading="lazy"></iframe>
-      </div>
 
       <p class="fallback">
         The app is on iPhone today. Everything reads on the web at

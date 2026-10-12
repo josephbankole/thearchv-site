@@ -31,7 +31,7 @@ const GLOSSARY_BY_SLUG = new Map(glossaryEntries.map((e) => [e.slug, e]));
 
 // Both inline scripts on this page family (masthead toggle + PostHog loader) are static, no
 // per-page interpolation, so one CSP works for every lane page.
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -156,7 +156,7 @@ function render(laneKey, lane) {
 <body>
   ${masthead()}
   ${deskNav(laneKey)}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(lane.label)}</p>
       <p class="lane__eyebrow">${esc(lane.label)}</p>
@@ -234,7 +234,7 @@ function renderSportLane(sport, laneKey) {
 <body>
   ${masthead(sport.key)}
   ${deskNav(laneKey, sport.key)}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="sport-head">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${sport.urlBase}/">${esc(sport.label)}</a> / ${esc(laneLabel)}</p>
       <p class="sport-head__eyebrow">${esc(sport.label)} · ${esc(laneLabel)}</p>

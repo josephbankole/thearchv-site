@@ -75,12 +75,11 @@ verified entries under the two-source gate. No scores or deals are invented in t
 
 ## Commerce — Etsy prints (Printful)
 
-The homepage shows 20 Manchester United posters, 11 men's and 9 women's, as static tiles in
+The homepage shows 21 Manchester United posters, 11 men's and 10 women's, as static tiles in
 `index.html`. Each tile links to its own Etsy listing (fulfilled by Printful, store
-`etsy.com/shop/TheARCHVCA`). `src/data/posters.ts` lists the same 20 for the app's poster feed,
-`/feed/posters.json`; the website does not render it. The 21st poster in the packs, p4-03 (Etsy
-listing 4539732851), stays off both because its art was never swapped to the new design. No fake
-links ship.
+`etsy.com/shop/TheARCHVCA`). `src/data/posters.ts` lists the same 21 for the app's poster feed,
+`/feed/posters.json`; the website does not render it. p4-03 (Leigh 2019, Etsy listing 4539732851)
+joined on 12 Oct 2026 after it was redrawn without a quote. No fake links ship.
 
 ## Player headshots — brand illustrations only
 

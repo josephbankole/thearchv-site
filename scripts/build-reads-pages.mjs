@@ -13,7 +13,7 @@
    row and its feed item on the next build with no other edit.
 
    Same self-contained page family as the article and lane pages (scripts/shared/page-shell.mjs:
-   masthead, footer, brand CSS, PostHog, Google Fonts, CSP). Runs after build-content.mjs, which
+   masthead, footer, brand CSS, PostHog, self-hosted fonts, CSP). Runs after build-content.mjs, which
    writes dist/sitemap.xml first; this script appends its rows to whatever sitemap exists at that
    point, the pattern build-lane-pages.mjs and build-article-pages.mjs already use. */
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -26,13 +26,14 @@ import {
   masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT, ORG_REF, ORG_NODE,
 } from "./shared/page-shell.mjs";
+import { writePageCard } from "./shared/page-card.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 
 // Both inline scripts on this family (masthead toggle + PostHog loader) are static, no per-page
 // interpolation, so one CSP serves every page here — same as the lane fronts.
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 /* ---------- the typed essay data, through scripts/shared/day-data.mjs — the one loader in this
    chain, because a .mjs build script cannot import a .ts at run time. `days: false` because this
@@ -94,8 +95,9 @@ const words = (body) => longreadPlain(body);
 /* The head for both page types here. Every long read and the /reads/ front is indexable and
    self-canonical, so those two are stated once, here, rather than at each call site; documentShell
    itself refuses to default them. og:type is "article" on the index as well as on the reads, which
-   is how this family has always shipped. */
-function head({ title, description, url, extraLd }) {
+   is how this family has always shipped. `ogImage` is the essay's own card (2026-10-12) when
+   page-card.mjs drew one, the site-wide /og.jpg otherwise and on the /reads/ front. */
+function head({ title, description, url, extraLd, ogImage = `${SITE}/og.jpg` }) {
   return documentShell({
     title: clampTitle([title, "The ARCHV"]),
     metaDescription: clampDescription(description),
@@ -105,15 +107,16 @@ function head({ title, description, url, extraLd }) {
     canonical: url,
     ogUrl: url,
     ogType: "article",
-    ogImage: `${SITE}/og.jpg`,
+    ogImage,
     csp: PAGE_CSP,
     jsonLd: extraLd,
   });
 }
 
-function renderRead(read) {
+function renderRead(read, hasCard = false) {
   const path = readPath(read.title);
   const url = `${SITE}${path}`;
+  const ogImage = hasCard ? `${url}og.png` : `${SITE}/og.jpg`;
   const description = firstSentence(read.body);
   const others = reads.filter((r) => r !== read).slice(0, 6);
 
@@ -129,6 +132,7 @@ function renderRead(read) {
   title: plainTitle(read.title),
   description,
   url,
+  ogImage,
   extraLd: {
     "@context": "https://schema.org",
     "@graph": [
@@ -143,7 +147,7 @@ function renderRead(read) {
         articleSection: read.kicker,
         author: ORG_REF,
         publisher: ORG_REF,
-        image: `${SITE}/og.jpg`,
+        image: ogImage,
         // Same helper as the visible "N min read" on the page and on the /reads/ front card.
         wordCount: wordCount(words(read.body)),
         timeRequired: readDuration(words(read.body)),
@@ -163,7 +167,7 @@ function renderRead(read) {
 })}
 <body>
   ${masthead(NO_SPORT)}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <article class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${INDEX_PATH}">Long reads</a></p>
       <p class="article__eyebrow">${esc(read.kicker)}</p>
@@ -216,7 +220,7 @@ function renderIndex() {
 })}
 <body>
   ${masthead(NO_SPORT)}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Long reads</p>
       <p class="lane__eyebrow">Long reads</p>
@@ -239,10 +243,17 @@ function renderIndex() {
 const urls = [{ loc: `${SITE}${INDEX_PATH}`, changefreq: "monthly", priority: "0.7" }];
 mkdirSync(join(OUT, "reads"), { recursive: true });
 writeFileSync(join(OUT, "reads", "index.html"), renderIndex());
-for (const [slug, read] of bySlug) {
+// Each essay's own 1200x630 card (2026-10-12): its kicker and date over its title, the page's
+// own eyebrow and h1. All of them start at once so resvg paints them in parallel (see
+// writePageCard). A failure logs and that page keeps /og.jpg; it never fails the build.
+const readEntries = [...bySlug];
+for (const [slug] of readEntries) mkdirSync(join(OUT, "reads", slug), { recursive: true });
+const readCards = await Promise.all(readEntries.map(([slug, read]) =>
+  writePageCard(join(OUT, "reads", slug), { kicker: `${read.kicker} · ${longDate(read.date)}`, headline: plainTitle(read.title) }, `/reads/${slug}/`)));
+const cards = readCards.filter(Boolean).length;
+for (const [i, [slug, read]] of readEntries.entries()) {
   const dir = join(OUT, "reads", slug);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "index.html"), renderRead(read));
+  writeFileSync(join(dir, "index.html"), renderRead(read, readCards[i]));
   urls.push({ loc: `${SITE}/reads/${slug}/`, lastmod: read.date, changefreq: "monthly", priority: "0.7" });
 }
 
@@ -251,4 +262,4 @@ for (const [slug, read] of bySlug) {
    trailing-slash rule, and returns the rows it actually wrote. */
 const added = appendUrls(urls);
 
-console.log(`[build-reads-pages] wrote ${bySlug.size} long-read page(s) + the /reads/ front to ${OUT}/reads/, appended ${added} sitemap row(s)`);
+console.log(`[build-reads-pages] wrote ${bySlug.size} long-read page(s) + the /reads/ front to ${OUT}/reads/, ${cards} og card(s), appended ${added} sitemap row(s)`);

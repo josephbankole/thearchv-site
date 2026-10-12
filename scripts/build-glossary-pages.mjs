@@ -16,16 +16,18 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, answerTitle, answerTitleFlags, clampDescription, masthead, footer, documentShell, ROBOTS_INDEXABLE, longDate,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT, DISPATCH_URL, captureBlock, CAPTURE_STYLES,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, NO_SPORT, appCtaBlock, APP_CTA_STYLES,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
+import { writePageCard } from "./shared/page-card.mjs";
 
 // Both inline scripts on this page family (masthead toggle + PostHog loader) are static, no
 // per-page interpolation, so one CSP works for the hub and one for every entry page. The entry
-// pages carry the inline Dispatch capture (2026-09-12), so theirs narrows form-action to 'self'
-// plus the Dispatch, the same rule the article pages follow; the hub has no form and is unchanged.
-const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true });
-const ENTRY_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, googleFonts: true, forms: [DISPATCH_URL] });
+// pages carried the inline Dispatch capture from 2026-09-12 and now carry the app download block
+// in its place (2026-10-12), which has no form, so theirs narrows form-action to 'self' alone, the
+// same rule the article pages follow; the hub has no form and is unchanged.
+const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
+const ENTRY_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true, forms: [] });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -76,7 +78,7 @@ function nextTerm(currentSlug) {
       <p class="glossary__next"><a href="/glossary/${escAttr(next.slug)}/">Next term: ${esc(next.title)} &rarr;</a></p>`;
 }
 
-function entrySchema(entry, url) {
+function entrySchema(entry, url, image) {
   return JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
@@ -85,6 +87,9 @@ function entrySchema(entry, url) {
         name: entry.title,
         description: entry.answer,
         url,
+        // The entry's own share card (2026-10-12), or /og.jpg when it failed: the same URL as
+        // og:image, so a crawler and a social preview see one picture.
+        image,
         inDefinedTermSet: { "@type": "DefinedTermSet", name: "The ARCHV football glossary", url: HUB_URL },
       },
       // dateModified from the entry's own `updated` date (search plan 3.5 and G10, 2026-10-04),
@@ -112,8 +117,9 @@ function entrySchema(entry, url) {
   }).replace(/</g, "\\u003c");
 }
 
-function renderEntry(entry) {
+function renderEntry(entry, hasCard = false) {
   const url = `${SITE}/glossary/${entry.slug}/`;
+  const ogImage = hasCard ? `${url}og.png` : `${SITE}/og.jpg`;
   const description = clampDescription(firstSentence(entry.answer));
   const socialTitle = `${entry.title} · The ARCHV`;
   const depth = entry.depth.map((p) => `<p>${esc(p)}</p>`).join("\n        ");
@@ -130,15 +136,15 @@ function renderEntry(entry) {
   canonical: url,
   ogUrl: url,
   ogType: "article",
-  ogImage: `${SITE}/og.jpg`,
+  ogImage,
   csp: ENTRY_CSP,
   // entrySchema() already returns a serialised, <-escaped string.
-  jsonLd: entrySchema(entry, url),
-  extraHead: [CAPTURE_STYLES],
+  jsonLd: entrySchema(entry, url, ogImage),
+  extraHead: [APP_CTA_STYLES],
 })}
 <body>
   ${masthead(NO_SPORT)}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <article class="glossary">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/glossary/">Glossary</a> / ${esc(entry.title)}</p>
       <p class="lane__eyebrow">The ARCHV glossary</p>
@@ -149,7 +155,7 @@ function renderEntry(entry) {
         <p class="glossary__answer">${esc(entry.answer)}</p>
         ${depth}
       </div>
-      ${captureBlock()}${nextTerm(entry.slug)}
+      ${appCtaBlock()}${nextTerm(entry.slug)}
       ${relatedList(entry.slug)}
     </article>
   </main>
@@ -217,7 +223,7 @@ function renderHub() {
 })}
 <body>
   ${masthead(NO_SPORT)}
-  <main class="wrap wrap--wide">
+  <main class="wrap wrap--wide" id="main">
     <section class="glossary">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Glossary</p>
       <p class="lane__eyebrow">Football, explained</p>
@@ -238,10 +244,17 @@ function renderHub() {
 mkdirSync(join(OUT, "glossary"), { recursive: true });
 writeFileSync(join(OUT, "glossary", "index.html"), renderHub());
 let count = 0;
-for (const entry of glossaryEntries) {
+// Each entry's own 1200x630 card (2026-10-12): the page eyebrow over the entry's question, which
+// fills the card where a two-word term would leave it mostly empty. All of them start at once so
+// resvg paints them in parallel (see writePageCard in shared/page-card.mjs). A failure logs and
+// that page keeps /og.jpg; it never fails the build. The hub keeps /og.jpg.
+for (const entry of glossaryEntries) mkdirSync(join(OUT, "glossary", entry.slug), { recursive: true });
+const entryCards = await Promise.all(glossaryEntries.map((entry) =>
+  writePageCard(join(OUT, "glossary", entry.slug), { kicker: "The ARCHV glossary", headline: entry.question }, `/glossary/${entry.slug}/`)));
+const cards = entryCards.filter(Boolean).length;
+for (const [i, entry] of glossaryEntries.entries()) {
   const dir = join(OUT, "glossary", entry.slug);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "index.html"), renderEntry(entry));
+  writeFileSync(join(dir, "index.html"), renderEntry(entry, entryCards[i]));
   count++;
 }
 
@@ -255,4 +268,4 @@ const titleFlags = answerTitleFlags(glossaryEntries.map((e) => ({ id: `/glossary
 if (titleFlags.missing.length) console.warn(`[build-glossary-pages] answer-title: ${titleFlags.missing.length} of ${glossaryEntries.length} entries have no seoTitle yet`);
 if (titleFlags.long.length) console.warn(`[build-glossary-pages] answer-title: seoTitle over 60 chars: ${titleFlags.long.join(", ")}`);
 
-console.log(`[build-glossary-pages] wrote the glossary hub + ${count} entry page(s) to ${OUT}/glossary/`);
+console.log(`[build-glossary-pages] wrote the glossary hub + ${count} entry page(s) and ${cards} og card(s) to ${OUT}/glossary/`);

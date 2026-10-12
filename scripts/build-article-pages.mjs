@@ -4,7 +4,7 @@
    This is the URL the app's canonical shares point at (see BUILD11-PLAN.md W1/W2) and the primary
    SEO surface for daily entries. Runs AFTER vite build, build-feed.mjs and build-day-pages.mjs (see
    package.json "build"). Follows the public/start/index.html pattern: inline brand styles, the
-   PostHog snippet, Google Fonts — deliberately standalone, no dependency on the hashed app bundle
+   PostHog snippet, self-hosted fonts — deliberately standalone, no dependency on the hashed app bundle
    or on content.css (article pages built by build-content.mjs/build-day-pages.mjs use content.css;
    these pages intentionally match public/start/index.html instead, per the founder-approved plan).
    Also extends dist/sitemap.xml through shared/sitemap.mjs: it appends every article URL to
@@ -18,12 +18,12 @@ import {
   deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE, ROBOTS_NOINDEX_FOLLOW,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, QUESTION_LANE_META, ORG_REF, ORG_NODE, DESK_BYLINE, DESK_DISCLOSURE, HOW_MADE_PATH,
-  DISPATCH_URL, captureBlock, CAPTURE_STYLES, sentenceDescription,
+  appCtaBlock, APP_CTA_STYLES, sentenceDescription,
 } from "./shared/page-shell.mjs";
 import { publishedAt, modifiedAt, wasUpdated, dateFieldReport, torontoIso } from "./shared/entry-dates.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { entryArt } from "./shared/illustrated.mjs";
-import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
+import { pageCard } from "./shared/page-card.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -358,84 +358,20 @@ function schema(entry, url, label, faq, images, sources = []) {
    opened as another. It is now the article page's own furniture at share size: white ground, the
    accent hairline across the top, the kicker in accent ink, the headline in Anton and uppercase
    exactly as the page sets its own h1, and the wordmark as the masthead draws it. Palette and
-   fonts come from scripts/shared/card-brand.mjs. */
-const CARD_W = 1200;
+   fonts come from scripts/shared/card-brand.mjs.
 
-// Shrink-to-fit headline sizing: three lines maximum, ellipsized by satori's lineClamp as a last
-// resort so text can never overflow the card. The steps sit above the old Fraunces ones because
-// Anton is a condensed face and fits noticeably more per line at the same size.
-function headlineSize(text) {
-  const len = String(text).length;
-  if (len <= 42) return 82;
-  if (len <= 64) return 70;
-  if (len <= 90) return 58;
-  return 50;
-}
-
-// The entries reference far fewer distinct head files than there are pages, so cache the
-// conversion by resolved path — build-duel-pages.mjs has carried the same cache since it
-// shipped, this generator just never got it (2026-08-12 review). The conversion itself is
-// artPng() in shared/card-brand.mjs; a missing file gives null and the card draws no face.
-const headPngCache = new Map();
-async function headPngDataUri(imgPath) {
-  if (headPngCache.has(imgPath)) return headPngCache.get(imgPath);
-  const png = await artPng(imgPath, { size: 600 });
-  const uri = png ? `data:image/png;base64,${png.toString("base64")}` : null;
-  headPngCache.set(imgPath, uri);
-  return uri;
-}
-
+   The renderer itself moved to scripts/shared/page-card.mjs on 2026-10-12, unchanged, so the
+   long reads, explainers and glossary entries draw their own cards from the same code. This
+   wrapper keeps the article call site as it was: lane label and date as the kicker, the
+   headline, and the same art the page shows (entryArt: filed image, banked portrait, club
+   badge, nothing). */
 async function ogCard(entry, laneLabel, height = 630, art = undefined) {
-  // The card was designed at 1200x630. Any taller render (og-wide at 675) keeps the content
-  // block at its designed height by absorbing the difference into the vertical padding — no
-  // scaling, no letterbox bars, and the headline wraps identically at both sizes.
-  const padY = 60 + Math.round((height - 630) / 2);
-  const kicker = `${laneLabel} · ${longDate(entry.date)}`.toUpperCase();
-
-  // The same art the page shows (entryArt: filed image, banked portrait, club badge, nothing).
   const resolved = art === undefined ? entryArt(entry) : art;
-  let portrait = null;
-  if (resolved) {
-    portrait = await headPngDataUri(join(ROOT, "public", resolved.src.replace(/^\//, "")));
-  }
-
-  const left = div(
-    { display: "flex", flexDirection: "column", justifyContent: "space-between", flexGrow: 1, flexShrink: 1, height: "100%", minWidth: 0 },
-    [
-      div({ display: "flex", flexDirection: "column" }, [
-        text({ color: CARD.accentInk, fontFamily: "Inter Tight", fontWeight: 600, fontSize: 24, letterSpacing: 4.5, lineClamp: 1, marginBottom: 30 }, kicker),
-        text({ color: CARD.ink, fontFamily: "Anton", fontSize: headlineSize(entry.headline), lineHeight: 1.06, letterSpacing: 0.5, lineClamp: 3 }, String(entry.headline).toUpperCase()),
-      ]),
-      div({ display: "flex", alignItems: "baseline", justifyContent: "space-between", width: "100%" }, [
-        wordmark(38),
-        text({ color: CARD.inkMuted, fontFamily: "Inter Tight", fontWeight: 400, fontSize: 20 }, "thearchv.ca"),
-      ]),
-    ],
-  );
-
-  const children = [left];
-  if (portrait) {
-    children.push(
-      div({ display: "flex", alignItems: "center", marginLeft: 56, flexShrink: 0 }, [
-        {
-          type: "img",
-          props: {
-            src: portrait,
-            width: 300,
-            height: 300,
-            style: { borderRadius: 300, border: `2px solid ${CARD.rule}`, boxShadow: `0 0 0 12px ${CARD.bg}` },
-          },
-        },
-      ]),
-    );
-  }
-
-  const tree = div({ width: CARD_W, height, display: "flex", flexDirection: "column", backgroundColor: CARD.bg, backgroundImage: CARD_GROUND }, [
-    accentRule(CARD_W),
-    div({ display: "flex", alignItems: "center", flexGrow: 1, width: CARD_W, padding: `${padY}px 72px` }, children),
-  ]);
-
-  return renderCard(tree, { width: CARD_W, height });
+  return pageCard({
+    kicker: `${laneLabel} · ${longDate(entry.date)}`,
+    headline: entry.headline,
+    artPath: resolved ? join(ROOT, "public", resolved.src.replace(/^\//, "")) : null,
+  }, height);
 }
 
 // The share-row script embeds this page's own url/title, so - unlike masthead()/posthogSnippet()
@@ -471,9 +407,10 @@ function shareScriptTag(url, headline) {
 }
 
 /* ---------- after the story (declutter, 2026-09-12) ----------
-   Two modules follow the last paragraph and nothing else: the inline Dispatch capture, then one
-   "More from" block of three one-line links. The capture itself (captureBlock() and its styles)
-   lives in scripts/shared/page-shell.mjs so the glossary can reuse it rather than copy it.
+   Two modules follow the last paragraph and nothing else: the app download block (the inline
+   Dispatch email capture until the Dispatch paused; swapped 2026-10-12), then one "More from"
+   block of three one-line links. The block itself (appCtaBlock() and its styles) lives in
+   scripts/shared/page-shell.mjs so the glossary can reuse it rather than copy it.
 
    Removed in the same pass, with the reasons, so nobody puts them back by accident:
    - the read ladder and its per-page inline script (shown 148 times in 28 days, clicked twice in
@@ -504,10 +441,9 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
   const pageCsp = cspMeta({
     scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, scriptHash(extractScriptBody(shareScript))],
     posthog: true,
-    googleFonts: true,
-    // The one form on this page family is the inline capture, and it posts to the Dispatch.
-    // Naming it here means an injected action attribute has nowhere to send an address.
-    forms: [DISPATCH_URL],
+    // No form on this page family since the Dispatch capture came off (2026-10-12), so
+    // form-action is 'self' alone and an injected form has nowhere else to post.
+    forms: [],
   });
 
   // The page's own art. Resolved through entryArt() (phase 2B) rather than reading entry.image
@@ -553,15 +489,15 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
   // not. A card failure logs and falls back rather than failing the build, so both are live.
   ogImage,
   // Per-page CSP: the share-row script embeds this page's url, so its hash is not constant
-  // across the family, and form-action names the Dispatch because of the inline email capture.
+  // across the family, and form-action is narrowed to 'self' (no form on the page).
   csp: pageCsp,
   jsonLd: schema(entry, url, lane.label, faq, schemaImages, entrySources(entry)),
-  extraHead: [CAPTURE_STYLES],
+  extraHead: [APP_CTA_STYLES],
 })}
 <body>
   ${masthead(section.sportKey)}
   ${deskNav(section.laneKey, section.sportKey)}
-  <main class="wrap">
+  <main class="wrap" id="main">
     <article class="article">
       <p class="article__eyebrow">${esc(lane.label)} · ${esc(entry.day)}</p>
       <h1>${esc(entry.headline)}</h1>
@@ -577,7 +513,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
         <p><strong>${esc(entry.dek)}</strong></p>
         ${bodyHtml(entry.body, entrySources(entry))}${evergreenLink(entry, `${section.base}${entry.date}/`)}
       </div>
-      ${captureBlock()}${moreLinks}
+      ${appCtaBlock()}${moreLinks}
     </article>
   </main>
   ${footer()}

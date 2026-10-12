@@ -19,7 +19,7 @@
        its exact inline body) and update it, or the browser will silently drop it at runtime.
        The JSON-LD block is type="application/ld+json" and is not gated by script-src.
        No iframes on this page, hence frame-src 'none'. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The ARCHV" />
   <meta property="og:title" content="About The ARCHV" />
@@ -51,9 +51,14 @@
     posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Brand fonts, self-hosted (2026-10-12). Same faces as fontLinks() in scripts/shared/page-shell.mjs. -->
+  <link rel="preload" href="/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <style>
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/fraunces-latin-ext-wght-normal.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  </style>
 
   <style>
     :root {
@@ -151,12 +156,17 @@
     }
     .footer a { color: var(--cream-dim); }
     .footer a:hover { color: var(--cream); }
-    .footer .links { margin-bottom: 10px; }
+    /* flex-wrap: the row is links and separators with no spaces between them, so without it the
+       line cannot break and pushes the page wider than a phone. */
+    .footer .links { margin-bottom: 10px; display: flex; flex-wrap: wrap; row-gap: 4px; }
     .footer .sep { padding: 0 6px; color: rgba(179, 171, 146, 0.5); }
+    .skip { position: fixed; top: -100px; left: 1rem; z-index: 200; background: var(--cream); color: var(--navy); padding: .6rem 1rem; border-radius: 2px; }
+    .skip:focus { top: 1rem; }
   </style>
 </head>
 <body>
-  <main class="page">
+  <a class="skip" href="#main">Skip to content</a>
+  <main class="page" id="main">
     <div class="wordmark"><a href="/">The ARCHV<span class="dot">.</span></a></div>
     <p class="breadcrumb"><a href="/">The ARCHV</a> / About</p>
 
@@ -173,8 +183,8 @@
     each short and written to be read once, without jargon or padding. The site also keeps
     question pages on the NFL, Formula 1, tennis, golf and basketball, the long reads, a glossary,
     and an archive of 18 finals, ten of them World Cup finals from Mexico 1970 to MetLife 2026.</p>
-    <p>Everything reads free on the web. The same stories reach the iPhone app, which carries
-    no paywall and nothing to buy.</p>
+    <p>Everything reads free on the web. The same stories reach the iPhone app, which has no
+    paywall and no in-app purchases. Its Buy Here buttons open the poster shop on Etsy.</p>
 
     <h2 id="who">Who makes it</h2>
     <p>Joseph Bankole founded The ARCHV and sets its rules. The daily desk entries and question
@@ -211,9 +221,9 @@
     it.</p>
 
     <h2 id="funding">Who pays for it</h2>
-    <p>The only money The ARCHV takes comes from prints of its own illustrations and paid
-    subscriptions to the Dispatch newsletter. No club, league or betting company pays for
-    anything here.</p>
+    <p>The only money The ARCHV takes comes from the posters it sells through its Etsy shop and
+    from paid subscriptions to the Dispatch newsletter, which is paused. No club, league or
+    betting company pays for anything here.</p>
 
     <h2 id="contact">Getting in touch</h2>
     <p>Write to <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>.

@@ -10,7 +10,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, ORG_REF, ORG_NODE, trustLinks } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, ORG_REF, ORG_NODE, trustLinks } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
@@ -117,14 +117,15 @@ function render(entry, sectionKey) {
   twitterSite: false,
 })}
 <body>
+  <a class="skip" href="#main">Skip to content</a>
   <header class="masthead">
-    <a class="wordmark" href="/"><img src="/brand/logo-badge.png" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
+    <a class="wordmark" href="/"><img src="/brand/logo-badge-68.webp" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <nav class="masthead__actions" aria-label="Primary">
       <a class="btn btn--ghost" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
-      <a class="btn btn--gold" href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe</a>
+      <a class="btn btn--gold" href="${APP_STORE_URL}">Download the app</a>
     </nav>
   </header>
-  <main class="wrap">
+  <main class="wrap" id="main">
     <article class="article">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${escAttr(s.laneHref)}">${esc(s.label)}</a></p>
       <p class="article__eyebrow">${esc(s.label)} · ${esc(entry.day)}</p>
@@ -141,7 +142,7 @@ function render(entry, sectionKey) {
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
-        <a href="https://thearchvdispatch.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Dispatch</a>
+        <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
       </nav>

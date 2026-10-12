@@ -72,7 +72,7 @@ function feedFields(d) {
   return rest;
 }
 
-// Today = newest dated wrap across Transfer Desk + World Cup, lead + the next four cards.
+// Today = newest dated entry across Transfer Desk + World Cup + Leagues, lead + the next four cards.
 // (today.lead/wrap reuse these same tagged objects, so the infogram fields propagate there too.)
 // v3: every day entry gains `sport` (resolved here, always populated, so the app never has to
 // know about the absent-means-football default). Football's three lanes are sport "football".
@@ -82,9 +82,16 @@ function feedFields(d) {
 const transferTagged = transferDays.map((d) => withAppArt(withInfogram({ ...feedFields(d), section: "transfer", sport: "football", url: articleUrl("transfer", d.date) }, "transfer")));
 const worldCupTagged = worldCupDays.map((d) => withAppArt(withInfogram({ ...feedFields(d), section: "worldcup", sport: "football", url: articleUrl("worldcup", d.date) }, "worldcup")));
 const leaguesTagged = leaguesDays.map((d) => withAppArt(withInfogram({ ...feedFields(d), section: "leagues", sport: "football", url: articleUrl("leagues", d.date) }, "leagues")));
-// leagues entries are deliberately NOT in the daily today-pool yet: the Today lead is
-// "newest dated wrap" and a leagues launch batch must not displace the day's transfer/WC lead.
-const daily = [...transferTagged, ...worldCupTagged].sort(byDateDesc);
+// The today-pool is every football lane, Leagues included (2026-10-12). Leagues was held out
+// while its launch batch landed, so the batch could not displace the day's transfer or World Cup
+// lead. That reason is long gone, and leaving it out had /start/ calling a 7 October transfer
+// rumour "today's story" while a 12 October Leagues story was live and leading the homepage.
+// The lead is now what the homepage leads with: the newest entry across the three desks, no gate
+// applied, the same as before (G1 noindex is a search decision, not a reader one). The sort is
+// stable and the lanes go in transfer, World Cup, Leagues order, so on a tie the older order
+// still wins. Additive for the app: the objects and fields are the ones leagues.json already
+// carries, and TodayFeed decodes any DayEntry as lead or wrap.
+const daily = [...transferTagged, ...worldCupTagged, ...leaguesTagged].sort(byDateDesc);
 
 const newestOf = (days) => (days.length ? days[0].date : null);
 

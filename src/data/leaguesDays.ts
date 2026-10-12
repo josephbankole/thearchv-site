@@ -7,6 +7,22 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-12",
+    day: "Monday",
+    headline: "Neville blames effort, Rooney blames shape: Manchester United before Madrid",
+    dek: "Two former captains read the 1-1 with 10-man Tottenham Hotspur in opposite ways, and Michael Carrick takes the question to Atletico Madrid on Tuesday.",
+    body: "Manchester United drew 1-1 with Tottenham Hotspur at Old Trafford on Saturday. Bryan Mbeumo scored on 73 minutes, Rodrigo Bentancur was sent off five minutes later, and Dominic Solanke equalised in stoppage time against 10 men (The Guardian; Sky Sports). Six points from six Premier League games is the club's fewest at this stage of a league season since 1986-87 (BBC Sport; Sky Sports).\n\nTwo former Manchester United captains have since given opposite diagnoses. Gary Neville, on Sky Sports, put it on effort. He said the crowd booed after 22 minutes, at half-time and at the end, that supporters \"won't accept a lack of energy\", and that the players are \"not showing enough tenacity, determination\" (Sky Sports; United in Focus). He did not aim it at the manager: \"I don't think the boos are against Michael Carrick\", though he warned the crowd is \"turning quite quickly\".\n\nWayne Rooney, on BBC Match of the Day, put it on shape. He said the side sits in a mid-block and is \"just not getting up to the ball\", and that \"they just haven't got that aggression\", while the running itself is not the problem (United in Focus; The Peoples Person). His comparison was Jose Mourinho's first Chelsea side, which defended in the same block but got up to the ball the moment it moved side to side. On that reading the fix is a coaching instruction.\n\nThe club, for now, is waiting. TEAMtalk reports Carrick is under no immediate pressure from the hierarchy, in line with the Daily Mail's report on 7 October of no appetite for change. Both rest on unnamed sources.\n\nThe next answer comes in the Champions League. Manchester United play Atletico Madrid at the Metropolitano on Tuesday, kick-off 20:00 UK time (starting11; On Tour Football), after opening the league phase with a 4-0 win over Sabah (Al Jazeera; Irish Examiner). Atletico Madrid lost their opener 2-1 at Liverpool (Khel Now; The Express Tribune). The last visit, in February 2022, ended 1-1 before Atletico Madrid won the return 1-0 at Old Trafford to go through (manutd.com; ESPN).\n\nSources: Sky Sports; United in Focus; The Peoples Person; The Guardian; BBC Sport; Al Jazeera; Irish Examiner; ESPN.",
+    status: "verified",
+    publishedAt: "2026-10-12T06:32:29-04:00",
+    index: "noindex",
+    image: "/heads/hd/michael-carrick.webp",
+    imageAlt: "Michael Carrick, illustrated by The ARCHV.",
+    seoTitle: "Neville v Rooney on Manchester United's 1-1 with Spurs",
+    sources: [{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13597587/gary-neville-warns-man-utd-players-to-get-a-grip-or-face-a-worrying-few-weeks-after-draw-with-10-man-spurs","published":"2026-10-11"},{"outlet":"United in Focus","url":"https://www.unitedinfocus.com/news/wayne-rooney-uncovers-man-utds-systemic-issue-outside-of-running-criticism-aimed-at-michael-carricks-side/","published":"2026-10-12"},{"outlet":"The Peoples Person","url":"https://thepeoplesperson.com/2026/10/12/wayne-rooney-highlights-key-difference-between-michael-carricks-man-united-and-jose-mourinhos-chelsea-318837/","published":"2026-10-12"},{"outlet":"Al Jazeera","url":"https://www.aljazeera.com/sports/2026/9/10/man-utd-cruise-past-sabah-on-champions-league-return-with-4-0-win","published":"2026-09-10"}],
+    tier: "confirmed",
+    expires: "2026-10-13",
+  },
+  {
     date: "2026-10-09",
     day: "Friday",
     headline: "Five points, a board that will wait, and Spurs at Old Trafford",

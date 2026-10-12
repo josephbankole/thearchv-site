@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-11T09:49:36.514Z",
+  "updatedAt": "2026-10-12T09:49:42.320Z",
   "sports": {
     "football": {
       "blocks": [
@@ -9,12 +9,12 @@
           "kind": "standings",
           "league": "premier-league",
           "title": "Premier League table",
-          "asOf": "2026-10-11",
-          "fetchedAt": "2026-10-11T09:49:36.514Z",
+          "asOf": "2026-10-12",
+          "fetchedAt": "2026-10-12T09:49:42.320Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-11",
+          "lastFreshAsOf": "2026-10-12",
           "through": "2026-09-20",
           "throughLabel": null,
           "compactRows": 6,
@@ -268,12 +268,12 @@
           "kind": "fixtures",
           "league": null,
           "title": "Manchester United: next",
-          "asOf": "2026-10-11",
-          "fetchedAt": "2026-10-11T09:49:36.514Z",
+          "asOf": "2026-10-12",
+          "fetchedAt": "2026-10-12T09:49:42.320Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-11",
+          "lastFreshAsOf": "2026-10-12",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
@@ -319,12 +319,12 @@
           "kind": "results",
           "league": null,
           "title": "Manchester United: results",
-          "asOf": "2026-10-11",
-          "fetchedAt": "2026-10-11T09:49:36.514Z",
+          "asOf": "2026-10-12",
+          "fetchedAt": "2026-10-12T09:49:42.320Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-11",
+          "lastFreshAsOf": "2026-10-12",
           "through": "2026-09-20",
           "throughLabel": null,
           "compactRows": null,
@@ -380,13 +380,13 @@
           "kind": "standings",
           "league": "nfl",
           "title": "NFL standings",
-          "asOf": "2026-10-11",
-          "fetchedAt": "2026-10-11T09:49:36.514Z",
+          "asOf": "2026-10-12",
+          "fetchedAt": "2026-10-12T09:49:42.320Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-11",
-          "through": "2026-10-08",
+          "lastFreshAsOf": "2026-10-12",
+          "through": "2026-10-11",
           "throughLabel": null,
           "compactRows": 1,
           "columns": [
@@ -436,20 +436,20 @@
               "name": "New England Patriots",
               "group": "AFC East",
               "cells": {
-                "w": 2,
+                "w": 3,
                 "l": 2,
                 "t": 0,
-                "pct": ".500"
+                "pct": ".600"
               }
             },
             {
               "name": "New York Jets",
               "group": "AFC East",
               "cells": {
-                "w": 1,
+                "w": 2,
                 "l": 3,
                 "t": 0,
-                "pct": ".250"
+                "pct": ".400"
               }
             },
             {
@@ -457,7 +457,7 @@
               "group": "AFC East",
               "cells": {
                 "w": 0,
-                "l": 4,
+                "l": 5,
                 "t": 0,
                 "pct": ".000"
               }
@@ -466,10 +466,20 @@
               "name": "Baltimore Ravens",
               "group": "AFC North",
               "cells": {
-                "w": 3,
+                "w": 4,
                 "l": 1,
                 "t": 0,
-                "pct": ".750"
+                "pct": ".800"
+              }
+            },
+            {
+              "name": "Cincinnati Bengals",
+              "group": "AFC North",
+              "cells": {
+                "w": 3,
+                "l": 2,
+                "t": 0,
+                "pct": ".600"
               }
             },
             {
@@ -477,39 +487,29 @@
               "group": "AFC North",
               "cells": {
                 "w": 3,
-                "l": 1,
-                "t": 0,
-                "pct": ".750"
-              }
-            },
-            {
-              "name": "Cincinnati Bengals",
-              "group": "AFC North",
-              "cells": {
-                "w": 2,
                 "l": 2,
                 "t": 0,
-                "pct": ".500"
+                "pct": ".600"
               }
             },
             {
               "name": "Pittsburgh Steelers",
               "group": "AFC North",
               "cells": {
-                "w": 2,
+                "w": 3,
                 "l": 2,
                 "t": 0,
-                "pct": ".500"
+                "pct": ".600"
               }
             },
             {
               "name": "Jacksonville Jaguars",
               "group": "AFC South",
               "cells": {
-                "w": 3,
+                "w": 4,
                 "l": 1,
                 "t": 0,
-                "pct": ".750"
+                "pct": ".800"
               }
             },
             {
@@ -517,19 +517,19 @@
               "group": "AFC South",
               "cells": {
                 "w": 2,
-                "l": 2,
+                "l": 3,
                 "t": 0,
-                "pct": ".500"
+                "pct": ".400"
               }
             },
             {
               "name": "Houston Texans",
               "group": "AFC South",
               "cells": {
-                "w": 0,
+                "w": 1,
                 "l": 4,
                 "t": 0,
-                "pct": ".000"
+                "pct": ".200"
               }
             },
             {
@@ -537,7 +537,7 @@
               "group": "AFC South",
               "cells": {
                 "w": 0,
-                "l": 4,
+                "l": 5,
                 "t": 0,
                 "pct": ".000"
               }
@@ -553,23 +553,23 @@
               }
             },
             {
+              "name": "Denver Broncos",
+              "group": "AFC West",
+              "cells": {
+                "w": 3,
+                "l": 2,
+                "t": 0,
+                "pct": ".600"
+              }
+            },
+            {
               "name": "Las Vegas Raiders",
               "group": "AFC West",
               "cells": {
                 "w": 3,
-                "l": 1,
-                "t": 0,
-                "pct": ".750"
-              }
-            },
-            {
-              "name": "Denver Broncos",
-              "group": "AFC West",
-              "cells": {
-                "w": 2,
                 "l": 2,
                 "t": 0,
-                "pct": ".500"
+                "pct": ".600"
               }
             },
             {
@@ -577,7 +577,7 @@
               "group": "AFC West",
               "cells": {
                 "w": 0,
-                "l": 4,
+                "l": 5,
                 "t": 0,
                 "pct": ".000"
               }
@@ -588,22 +588,22 @@
               "cells": {
                 "w": 3,
                 "l": 1,
-                "t": 0,
-                "pct": ".750"
-              }
-            },
-            {
-              "name": "Philadelphia Eagles",
-              "group": "NFC East",
-              "cells": {
-                "w": 2,
-                "l": 2,
-                "t": 0,
-                "pct": ".500"
+                "t": 1,
+                "pct": ".700"
               }
             },
             {
               "name": "Dallas Cowboys",
+              "group": "NFC East",
+              "cells": {
+                "w": 2,
+                "l": 3,
+                "t": 0,
+                "pct": ".400"
+              }
+            },
+            {
+              "name": "Philadelphia Eagles",
               "group": "NFC East",
               "cells": {
                 "w": 2,
@@ -618,15 +618,15 @@
               "cells": {
                 "w": 1,
                 "l": 3,
-                "t": 0,
-                "pct": ".250"
+                "t": 1,
+                "pct": ".300"
               }
             },
             {
               "name": "Minnesota Vikings",
               "group": "NFC North",
               "cells": {
-                "w": 4,
+                "w": 5,
                 "l": 0,
                 "t": 0,
                 "pct": "1.000"
@@ -637,39 +637,29 @@
               "group": "NFC North",
               "cells": {
                 "w": 3,
-                "l": 1,
+                "l": 2,
                 "t": 0,
-                "pct": ".750"
+                "pct": ".600"
               }
             },
             {
               "name": "Detroit Lions",
               "group": "NFC North",
               "cells": {
-                "w": 2,
+                "w": 3,
                 "l": 2,
                 "t": 0,
-                "pct": ".500"
+                "pct": ".600"
               }
             },
             {
               "name": "Green Bay Packers",
               "group": "NFC North",
               "cells": {
-                "w": 2,
+                "w": 3,
                 "l": 2,
                 "t": 0,
-                "pct": ".500"
-              }
-            },
-            {
-              "name": "Atlanta Falcons",
-              "group": "NFC South",
-              "cells": {
-                "w": 2,
-                "l": 2,
-                "t": 0,
-                "pct": ".500"
+                "pct": ".600"
               }
             },
             {
@@ -683,13 +673,23 @@
               }
             },
             {
+              "name": "Atlanta Falcons",
+              "group": "NFC South",
+              "cells": {
+                "w": 2,
+                "l": 3,
+                "t": 0,
+                "pct": ".400"
+              }
+            },
+            {
               "name": "New Orleans Saints",
               "group": "NFC South",
               "cells": {
                 "w": 1,
-                "l": 3,
+                "l": 4,
                 "t": 0,
-                "pct": ".250"
+                "pct": ".200"
               }
             },
             {
@@ -706,7 +706,7 @@
               "name": "San Francisco 49ers",
               "group": "NFC West",
               "cells": {
-                "w": 4,
+                "w": 5,
                 "l": 0,
                 "t": 0,
                 "pct": "1.000"
@@ -717,9 +717,9 @@
               "group": "NFC West",
               "cells": {
                 "w": 3,
-                "l": 1,
+                "l": 2,
                 "t": 0,
-                "pct": ".750"
+                "pct": ".600"
               }
             },
             {
@@ -737,9 +737,9 @@
               "group": "NFC West",
               "cells": {
                 "w": 1,
-                "l": 3,
+                "l": 4,
                 "t": 0,
-                "pct": ".250"
+                "pct": ".200"
               }
             }
           ],
@@ -758,121 +758,17 @@
           "kind": "fixtures",
           "league": "nfl",
           "title": "NFL: week 5",
-          "asOf": "2026-10-11",
-          "fetchedAt": "2026-10-11T09:49:36.514Z",
+          "asOf": "2026-10-12",
+          "fetchedAt": "2026-10-12T09:49:42.320Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-11",
+          "lastFreshAsOf": "2026-10-12",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T13:30:00.000Z",
-              "home": "Jacksonville Jaguars",
-              "away": "Philadelphia Eagles",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "Green Bay Packers",
-              "away": "Chicago Bears",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "Miami Dolphins",
-              "away": "Cincinnati Bengals",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "New England Patriots",
-              "away": "Las Vegas Raiders",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "New Orleans Saints",
-              "away": "Minnesota Vikings",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "New York Jets",
-              "away": "Cleveland Browns",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "Pittsburgh Steelers",
-              "away": "Indianapolis Colts",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "Tennessee Titans",
-              "away": "Houston Texans",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T17:00:00.000Z",
-              "home": "Washington Commanders",
-              "away": "New York Giants",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T20:05:00.000Z",
-              "home": "Los Angeles Chargers",
-              "away": "Denver Broncos",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T20:25:00.000Z",
-              "home": "Arizona Cardinals",
-              "away": "Detroit Lions",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-11T20:25:00.000Z",
-              "home": "Seattle Seahawks",
-              "away": "San Francisco 49ers",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
-            {
-              "date": "2026-10-11",
-              "kickoff": "2026-10-12T00:20:00.000Z",
-              "home": "Atlanta Falcons",
-              "away": "Baltimore Ravens",
-              "competition": "NFL",
-              "round": "Week 5"
-            },
             {
               "date": "2026-10-12",
               "kickoff": "2026-10-13T00:15:00.000Z",
@@ -897,12 +793,12 @@
           "kind": "results",
           "league": "nfl",
           "title": "NFL: week 4 results",
-          "asOf": "2026-10-11",
-          "fetchedAt": "2026-10-11T09:49:36.514Z",
+          "asOf": "2026-10-12",
+          "fetchedAt": "2026-10-12T09:49:42.320Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-11",
+          "lastFreshAsOf": "2026-10-12",
           "through": "2026-10-05",
           "throughLabel": null,
           "compactRows": null,

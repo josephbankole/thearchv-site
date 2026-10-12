@@ -13,8 +13,6 @@ score: "Brazil 2 - 0 Germany"
 players: ["Ronaldo", "Oliver Kahn", "Rivaldo", "Ronaldinho"]
 description: "Brazil 2-0 Germany at Yokohama, 30 June 2002: Ronaldo's two goals, Kahn's one mistake, and the redemption that followed the nightmare of 1998."
 quickAnswer: "Brazil beat Germany 2-0 in the 2002 World Cup final in Yokohama on 30 June 2002. Ronaldo scored both goals, in the 67th and 79th minutes, four years after his collapse before the 1998 final. It was Brazil's record fifth world title."
-posterImage: "/posters/yokohama-2002.webp"
-posterAlt: "The ARCHV illustrated poster of the 2002 World Cup final in Yokohama."
 ogImage: "/og.jpg"
 related: []
 ---

@@ -39,11 +39,12 @@
    rails this incident happened inside are gone: the front page is server-rendered cards in a grid.
    The rule is not about day rails. **A horizontal scroller must never be able to own a vertical
    gesture, and the way it starts owning one is a downward transform on something inside it.**
-   The site still has horizontal scrollers, on the homepage (`.rail`, the poster archive) and on
-   every static page (`.sportnav`, the sport tab bar). Both carry `overflow-y: hidden` and a
-   comment saying why. Keep the guard on anything new that scrolls sideways, and do not put a
-   translate-down resting state inside one. The account below is the original diagnosis; line
-   numbers in it are from the pre-rebuild `src/style.css` and no longer resolve.
+   The poster rail (`.rail`) left the homepage on 2026-10-12 for a static grid of Manchester
+   United poster tiles. The sport tab bar (`.sportnav`), on the homepage and every static page,
+   still scrolls sideways, and it carries `overflow-y: hidden` and a comment saying why. Keep the
+   guard on anything new that scrolls sideways, and do not put a translate-down resting state
+   inside one. The account below is the original diagnosis; line numbers in it are from the
+   pre-rebuild `src/style.css` and no longer resolve.
 
    **Root cause, found 2026-08-04 by a controlled diagnosis run (no deploy).** The break is one
    declaration: `transform: translateY(16px)` at `src/style.css:784`, the resting state of the
@@ -70,7 +71,8 @@
    | 3600 | page 136, worldcup rail 160 | page 296 |
 
    Rail vertical overflow: 8px on all three day rails on the branch, 0px on all three on the
-   control, and 0px on the archive poster rail (`#rail`, which carries no reveal) in both.
+   control, and 0px on the archive poster rail (`#rail`, which carried no reveal and was removed on
+   2026-10-12) in both.
 
    **Two one-line fixes, each verified on its own.** Applied separately to the running branch build,
    each returned page ownership to 296 of 296 sample points:
@@ -173,9 +175,8 @@ as well as in `npm run build`, so a developer sees what ships.
   arrangement exists to remove.
 - **Nothing in `src/render/` may emit a `<script>` tag.** `index.html` carries exactly one
   inline bootstrap and `scripts/check-csp-hash.mjs` asserts that count.
-- `src/main.ts` creates no front-page content. It attaches behaviour: the wire's pause on
-  hover, the poster rail, the contact form, the masthead menu, the long-reads height
-  animation. If the bundle never arrives the page still reads, and that is the test to apply
+- `src/main.ts` creates no front-page content. It attaches behaviour: the contact form, the
+  masthead menu, the sport tabs, the long-reads height animation, analytics. If the bundle never arrives the page still reads, and that is the test to apply
   to anything new.
 - The long reads are a native `<details>` per essay for exactly that reason. They open with
   no JS on the page at all. Do not reintroduce a button plus a panel with a CSS resting
@@ -486,8 +487,8 @@ Tier 0 only from the deep-dive report. Four things to know before touching it:
   **What the reveal is remembered for survives, and it is the important half.** The first
   version translated the card down 16px at rest. That is the declaration that broke homepage
   scrolling on a phone and forced the 2026-08-04 rollback; trap 3 above is the full account, and
-  it is the authority. The guard it produced, `overflow-y: hidden` on `.rail` and `.sportnav`,
-  is still in force and stays in force. A downward transform on anything inside a horizontal
+  it is the authority. The guard it produced, `overflow-y: hidden` on `.sportnav` (the poster
+  `.rail` that also carried it was removed on 2026-10-12), is still in force and stays in force. A downward transform on anything inside a horizontal
   scroller is the mistake not to repeat, whatever mechanism happens to apply it. Any future
   reveal starts from that, not from a resurrected `reveal.ts`. The static page family gets the
   CSS half of Tier 0 and never had a reveal, by design: it ships no bundled JS at all.
@@ -496,9 +497,8 @@ Tier 0 only from the deep-dive report. Four things to know before touching it:
   `.reduced-motion` class the early bootstrap sets. The edge-fade masks drop on
   `:focus-within` so a keyboard user never sees the focused control faded out.
 
-The deep editorial shadows on the poster frames, the lightbox and the banner band were
-deliberately left alone. Those are art direction, not UI chrome; flattening them to the
-quiet ambient shadow would gut the archive gallery.
+The deep editorial shadows this pass left alone, on the poster frames and the lightbox, went
+with the poster rail on 2026-10-12. The homepage poster tiles carry no shadow of their own.
 
 ## Editorial and rights lines (site side)
 

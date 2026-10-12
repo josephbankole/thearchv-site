@@ -5,7 +5,7 @@
 // full text of every desk entry (12,000-plus words, growing daily) rode into a content-hashed
 // bundle that therefore re-hashed and re-downloaded every morning. This module renders the same
 // data into the built HTML instead. The bundle now enhances what is already on the page —
-// analytics, the poster rail, the long-reads animation — rather than creating it.
+// analytics, the masthead menu, the long-reads animation — rather than creating it.
 //
 // It runs inside vite.config.ts (the archvHome() plugin, transformIndexHtml), which means it
 // runs in dev AND in build, so what a developer sees is what ships. It imports the same

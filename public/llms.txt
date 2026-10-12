@@ -1,10 +1,10 @@
 # The ARCHV
 
-> The ARCHV is an illustrated football publication at thearchv.ca. It files daily, two-source-verified reporting on Manchester United transfers, international football and the football leagues, and it illustrates every major final since 1970 in an original house style.
+> The ARCHV is an illustrated football publication at thearchv.ca. It files daily, two-source-verified reporting on Manchester United transfers, international football and the football leagues.
 
 ## Key pages
 
-- [Homepage](https://thearchv.ca/): the archive, the daily desks and the poster gallery.
+- [Homepage](https://thearchv.ca/): the archive, the daily desks and the Manchester United posters sold on Etsy.
 - [Manchester United transfer news](https://thearchv.ca/desk/transfer/): every United move, checked against two sources and drawn the same day.
 - [International football and the World Cup](https://thearchv.ca/desk/world-cup/): men's and women's international football, every competition, every match day.
 - [Football leagues](https://thearchv.ca/desk/leagues/): title races, promotions, sackings and the tables behind them.

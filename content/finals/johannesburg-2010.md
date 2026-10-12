@@ -13,8 +13,6 @@ score: "Spain 1 - 0 Netherlands (a.e.t.)"
 players: ["Andrés Iniesta", "Xavi", "Nigel de Jong", "Iker Casillas"]
 description: "Spain 1-0 Netherlands at Soccer City, 11 July 2010: Iniesta's 116th-minute winner, De Jong's kung-fu foul, and tiki-taka's first world title."
 quickAnswer: "Spain beat the Netherlands 1-0 after extra time in the 2010 World Cup final at Soccer City, Johannesburg on 11 July 2010. Andrés Iniesta scored in the 116th minute to win Spain their first world title, in a bad-tempered final remembered for Nigel de Jong's foul on Xabi Alonso."
-posterImage: "/posters/johannesburg-2010.webp"
-posterAlt: "The ARCHV illustrated poster of the 2010 World Cup final in Johannesburg."
 ogImage: "/og.jpg"
 related: []
 ---

@@ -13,8 +13,6 @@ score: "Germany 1 - 0 Argentina (a.e.t.)"
 players: ["Mario Götze", "André Schürrle", "Lionel Messi", "Gonzalo Higuaín"]
 description: "Germany 1-0 Argentina at the Maracanã, 13 July 2014: Götze's extra-time volley, the chances Argentina spurned, and the first European side to win a World Cup in the Americas."
 quickAnswer: "Germany beat Argentina 1-0 after extra time in the 2014 World Cup final at the Maracanã on 13 July 2014. Substitute Mario Götze volleyed home André Schürrle's cross in the 113th minute to win Germany a fourth title, the first European team to win a World Cup in the Americas."
-posterImage: "/posters/maracana-2014.webp"
-posterAlt: "The ARCHV illustrated poster of the 2014 World Cup final at the Maracanã."
 ogImage: "/og.jpg"
 related: []
 ---

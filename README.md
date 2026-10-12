@@ -26,7 +26,6 @@ lightweight, fully-functional experience (no WebGL).
 
 ```bash
 npm install        # install dependencies
-npm run assets     # (re)generate optimized posters from ../POSTERS/FINAL  -> public/posters
 npm run og         # (re)generate the social share image -> public/og.jpg
 npm run dev        # local dev server
 npm run build      # typecheck + production build -> dist/
@@ -34,7 +33,10 @@ npm run preview    # serve the production build on :4173
 ```
 
 The poster + OG images are committed under `public/`, so a clean `npm install && npm run build`
-works without the source art. Re-run `npm run assets` only when the poster set changes.
+works without the source art. The build never regenerates the posters: the 1080x1350 previews in
+`public/posters/united-men/` and `public/posters/united-women/` and the 900x675 homepage tiles in
+`public/shop/united-*.webp` were exported once from the poster files in `fifa.archv/ARCHIVE-PACKS`,
+outside this repo.
 
 ## Activate the partnerships form
 
@@ -73,10 +75,12 @@ verified entries under the two-source gate. No scores or deals are invented in t
 
 ## Commerce — Etsy prints (Printful)
 
-The Archive posters are wired to link to their Etsy listings (fulfilled by Printful, store
-`etsy.com/shop/TheARCHVCA`). Each `Poster` in `src/data/posters.ts` has an optional `etsyUrl`.
-When set, a gold **"Shop this print"** button appears in that poster's lightbox; until then it
-stays hidden. As of Jun 2026 all nine archive posters are live and wired. No fake links ship.
+The homepage shows 20 Manchester United posters, 11 men's and 9 women's, as static tiles in
+`index.html`. Each tile links to its own Etsy listing (fulfilled by Printful, store
+`etsy.com/shop/TheARCHVCA`). `src/data/posters.ts` lists the same 20 for the app's poster feed,
+`/feed/posters.json`; the website does not render it. The 21st poster in the packs, p4-03 (Etsy
+listing 4539732851), stays off both because its art was never swapped to the new design. No fake
+links ship.
 
 ## Player headshots — brand illustrations only
 
@@ -96,16 +100,12 @@ the partnerships section.
 
 ## Asset / IP decisions baked in
 
-- **Nine posters, not ten.** Moscow 2018 is intentionally **excluded** — its gold cup reads as
-  the World Cup trophy, whose shape is a registered design mark, and this is a permanent,
-  commercial, indexed page. To restore it, regenerate a trophy-free version, drop it in
-  `../POSTERS/FINAL`, add it to `scripts/optimize-posters.mjs` + `src/data/posters.ts`, re-run
-  `npm run assets`.
+- **Manchester United posters only.** The `/finals/` pages are history pages with no poster image,
+  and nothing on the site links to the World Cup finals bundle on Etsy. `scripts/build-content.mjs`
+  renders a figure only when a page sets `posterImage`, and it has no default Etsy link to fall back on.
 - **No player likenesses on the site.** The third-party player renders are not ours to publish.
   The Transfer Desk is a typographic treatment instead. Keep any future player art editorial,
   never beside the partnerships section.
-- **Johannesburg 2010** carries "La Roja's Minute" baked into the art (low-medium mark risk).
-  Defensible as editorial; swap to a trophy/text-free variant if a sponsor's counsel objects.
 
 ## Pre-launch go / no-go gate
 

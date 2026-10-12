@@ -1063,7 +1063,7 @@ export function pageStyles() {
        presence, gold on hover and when current, a 2px gold underline on the active tab. Sticky at
        the top of the page family; horizontally scrollable with an edge fade once it overflows. */
     .sportnav-wrap { position: sticky; top: 0; z-index: 30; background: var(--bg-elevated); border-bottom: 1px solid var(--accent-soft); }
-    /* overflow-y: hidden mirrors .rail in src/style.css: setting overflow-x to auto makes the used
+    /* overflow-y: hidden mirrors .sportnav in src/style.css: setting overflow-x to auto makes the used
        value of overflow-y auto too, and a horizontal scroller that owns a vertical gesture is what
        broke homepage scrolling on 2026-08-04 (trap 3 in CLAUDE.md). This family measured clean; the
        guard keeps it that way. */

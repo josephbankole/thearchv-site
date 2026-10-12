@@ -29,7 +29,7 @@ const SCHEMA = "archv-feed/3";
 /* ---------- the typed data, through scripts/shared/day-data.mjs ----------
    That module is the one loader for src/data/*.ts and it owns the newest-first sort every
    downstream feed and the "today" lead-story pick below assume. The rest of what this script
-   needs — the poster archive, the legends wall, the essays and the giant-killers block — comes
+   needs — the app's poster list, the legends wall, the essays and the giant-killers block — comes
    off the same bundle as named extras. */
 const {
   transferDays, worldCupDays, leaguesDays, sportDays: SPORT_RAW,

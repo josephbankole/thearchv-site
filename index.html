@@ -33,7 +33,7 @@
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="The ARCHV: Football History, Illustrated" />
-    <meta name="twitter:description" content="Every final drawn down to the moment that decided it, plus long reads on how football really works." />
+    <meta name="twitter:description" content="Sport drawn down to the moment that decided it. Football, NFL, F1, tennis, golf and basketball, plus long reads on how the game really works." />
     <meta name="twitter:image" content="https://thearchv.ca/og.jpg" />
 
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
@@ -255,20 +255,41 @@
         <div class="wrap">
           <p class="section-index">05 / The archive</p>
           <h2 class="archive__title" data-reveal>From the archive.</h2>
-          <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it. Sixty moments across six archives, each one drawn as a plate for the wall. Drag to explore.</p>
+          <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it.</p>
         </div>
-        <!-- One rail per archive pack, built by src/components/archiveRail.ts from src/data/posters.ts. -->
-        <div class="archive__packs" id="archive-packs"></div>
-        <!-- Manchester United posters from the Etsy shop (2026-10-06): each tile links to its own listing through
-             the shop's Share & Save link form (thearchvca.etsy.com/listing/<id>, per ARCHIVE-PACKS/routine/links.json).
-             The old finals cover line was retired: those listings became other products on 2026-09-27. -->
+        <!-- Manchester United poster tiles, the men's side then Manchester United Women, each in
+             match-date order. One tile per Etsy listing (thearchvca.etsy.com/listing/<id>); the image
+             is the listing photo at 900x675 under public/shop/ and the alt is that photo's Etsy alt
+             text. Keep in step with src/data/posters.ts, whose header holds the inclusion rules
+             (README.md, Commerce). -->
         <div class="wrap archive__covers">
-          <h3 class="archive__reads-title">New &middot; Manchester United posters</h3>
-          <p class="archive__covers-lede" data-reveal>Manchester United's European nights as posters, printed to order and shipped by our print partner. The shop also has the women's team and a printable World Cup finals set.</p>
-          <ul class="archive__covers-grid" data-stagger>
-            <li><a href="https://thearchvca.etsy.com/listing/4521782964" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-barcelona-1999.webp" alt="Manchester United 1999 Champions League final poster, Barcelona 99, framed on a shelf." loading="lazy" width="900" height="675" /><span>Barcelona 1999</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521788550" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-london-1968.webp" alt="Manchester United 1968 European Cup final poster, London 68, framed on a shelf." loading="lazy" width="900" height="675" /><span>London 1968</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521790986" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-rotterdam-1991.webp" alt="Manchester United 1991 Cup Winners' Cup final poster, Rotterdam 91, framed on a shelf." loading="lazy" width="900" height="675" /><span>Rotterdam 1991</span></a></li>
+          <h3 class="archive__reads-title">Manchester United posters</h3>
+          <p class="archive__covers-lede" data-reveal>Manchester United and Manchester United Women, one match to a poster, printed to order and shipped by our print partner.</p>
+          <h4 class="archive__covers-sub" id="covers-men">Manchester United, 1968 to 2025</h4>
+          <ul class="archive__covers-grid" aria-labelledby="covers-men" data-stagger>
+            <li><a href="https://thearchvca.etsy.com/listing/4521788550" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-london-1968.webp" alt="Framed poster of Manchester United 4-1 Benfica, the 1968 European Cup final at Wembley, hanging on a wall." loading="lazy" width="900" height="675" /><span>London 1968</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521790986" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-rotterdam-1991.webp" alt="Framed poster of Manchester United 2-1 Barcelona, the 1991 Cup Winners' Cup final in Rotterdam, hanging on a wall." loading="lazy" width="900" height="675" /><span>Rotterdam 1991</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521795943" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-manchester-1993.webp" alt="Framed poster of Manchester United 2-1 Sheffield Wednesday at Old Trafford, April 1993, hanging on a wall." loading="lazy" width="900" height="675" /><span>Manchester 1993</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521795838" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-london-1996.webp" alt="Framed poster of Manchester United 1-0 Liverpool, the 1996 FA Cup final at Wembley, hanging on a wall." loading="lazy" width="900" height="675" /><span>London 1996</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521798833" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-birmingham-1999.webp" alt="Framed poster of Manchester United 2-1 Arsenal, the 1999 FA Cup semi-final replay at Villa Park, hanging on a wall." loading="lazy" width="900" height="675" /><span>Birmingham 1999</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521782964" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-barcelona-1999.webp" alt="Framed poster of Manchester United 2-1 Bayern Munich, the 1999 Champions League final in Barcelona, hanging on a wall." loading="lazy" width="900" height="675" /><span>Barcelona 1999</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521779161" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-moscow-2008.webp" alt="Framed poster of Manchester United 1-1 Chelsea, the 2008 Champions League final in Moscow won on penalties, hanging on a wall." loading="lazy" width="900" height="675" /><span>Moscow 2008</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4527296455" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-manchester-2011.webp" alt="Framed poster of Manchester United 2-1 Manchester City, the February 2011 derby at Old Trafford, hanging on a wall." loading="lazy" width="900" height="675" /><span>Manchester 2011</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521787127" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-stockholm-2017.webp" alt="Framed poster of Manchester United 2-0 Ajax, the 2017 Europa League final in Stockholm, hanging on a wall." loading="lazy" width="900" height="675" /><span>Stockholm 2017</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521778670" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-merseyside-2023.webp" alt="Framed poster of Manchester United's 3-0 win at Everton, Goodison Park, November 2023, hanging on a wall." loading="lazy" width="900" height="675" /><span>Merseyside 2023</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4521798166" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-manchester-2025-lyon.webp" alt="Framed poster of Manchester United 5-4 Lyon, the 2025 Europa League quarter-final at Old Trafford, hanging on a wall." loading="lazy" width="900" height="675" /><span>Manchester 2025</span></a></li>
+          </ul>
+          <h4 class="archive__covers-sub" id="covers-women">Manchester United Women, 2018 to 2025</h4>
+          <ul class="archive__covers-grid" aria-labelledby="covers-women" data-stagger>
+            <li><a href="https://thearchvca.etsy.com/listing/4539752764" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-birkenhead-2018.webp" alt="Framed poster on a wall: Manchester United Women's 1-0 win over Liverpool in Birkenhead, 2018, three players seen from behind in navy and gold." loading="lazy" width="900" height="675" /><span>Birkenhead 2018</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4539751302" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-sutton-coldfield-2018.webp" alt="Framed poster on a wall: Manchester United Women's 12-0 win at Aston Villa, Sutton Coldfield 2018, three players seen from behind in pink shirts." loading="lazy" width="900" height="675" /><span>Sutton Coldfield 2018</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4539731211" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-manchester-2019.webp" alt="Framed poster on a wall: Manchester United Women v Manchester City, the first WSL Manchester derby, 2019, three players seen from behind in red and black." loading="lazy" width="900" height="675" /><span>Manchester 2019</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4539743978" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-manchester-2022.webp" alt="Framed poster on a wall: Manchester United Women's 3-1 win over Everton at Old Trafford, 2022, two players seen from behind." loading="lazy" width="900" height="675" /><span>Manchester 2022</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4517396908" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-london-2023.webp" alt="Framed poster on a wall: Manchester United Women v Chelsea, the 2023 Women's FA Cup final at Wembley, two players seen from behind." loading="lazy" width="900" height="675" /><span>London 2023</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4517398702" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-leigh-2024.webp" alt="Framed poster on a wall: Manchester United Women's 2-1 win over Chelsea in the 2024 Women's FA Cup semi-final, three players seen from behind." loading="lazy" width="900" height="675" /><span>Leigh 2024</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4527673755" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-london-2024.webp" alt="Framed poster on a wall: Manchester United Women's 4-0 win over Tottenham Hotspur in the 2024 Women's FA Cup final at Wembley, three players seen from behind." loading="lazy" width="900" height="675" /><span>London 2024</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4517399720" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-leigh-2025.webp" alt="Framed poster on a wall: Manchester United Women's 3-0 win over SK Brann in the 2025 Women's Champions League qualifier at Leigh, three players seen from behind." loading="lazy" width="900" height="675" /><span>Leigh 2025</span></a></li>
+            <li><a href="https://thearchvca.etsy.com/listing/4527680418" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-manchester-2025.webp" alt="Framed poster on a wall: Manchester United Women's 2-1 win over Paris Saint-Germain at Old Trafford, November 2025, three players seen from behind." loading="lazy" width="900" height="675" /><span>Manchester 2025</span></a></li>
           </ul>
           <a class="archive__covers-all" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="covers">All prints in the Etsy shop</a>
         </div>
@@ -461,19 +482,6 @@
         </p>
       </div>
     </footer>
-
-    <!-- Lightbox for the poster archive -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Poster" hidden>
-      <button class="lightbox__close" id="lightbox-close" aria-label="Close">Close</button>
-      <figure class="lightbox__fig">
-        <img id="lightbox-img" alt="ARCHV poster preview" />
-        <figcaption id="lightbox-cap"></figcaption>
-        <div class="lightbox__ctas">
-          <a id="lightbox-pack" class="btn btn--gold lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Shop the posters on Etsy</a>
-          <a id="lightbox-shop" class="btn btn--ghost lightbox__shop" target="_blank" rel="noopener noreferrer" hidden>Buy the print</a>
-        </div>
-      </figure>
-    </div>
 
   </body>
 </html>

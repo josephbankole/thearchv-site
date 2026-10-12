@@ -166,7 +166,7 @@ em { font-style: italic; }
 .skip:focus { top: 1rem; }
 
 main, .footer { position: relative; z-index: 2; }
-/* Above .sportnav (55) so the open menu panel is never painted over; below lightbox (100) and skip (200). */
+/* Above .sportnav (55) so the open menu panel is never painted over; below the skip link (200). */
 .masthead { position: relative; z-index: 60; }
 
 /* ---------- type primitives ---------- */
@@ -310,9 +310,9 @@ main, .footer { position: relative; z-index: 2; }
   display: flex; align-items: center;
   background: var(--bg); border-bottom: 1px solid var(--rule);
 }
-/* overflow-y: hidden for the same reason as .rail: a horizontal scroller must never be able to own
-   a vertical gesture. This one measured clean during the 2026-08-04 diagnosis; the guard is here so
-   it stays that way. */
+/* overflow-y: hidden because a horizontal scroller must never be able to own a vertical gesture
+   (trap 3 in CLAUDE.md). This one measured clean during the 2026-08-04 diagnosis; the guard is here
+   so it stays that way. */
 .sportnav { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; width: 100%; }
 .sportnav::-webkit-scrollbar { display: none; }
 .sportnav__row { display: flex; gap: 0; align-items: center; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); width: max-content; min-width: 100%; }
@@ -388,57 +388,12 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .killers__all { display: inline-block; margin-top: 2rem; margin-right: 1.5rem; color: var(--cream); border-bottom: 1px solid var(--cream-faint); padding-bottom: 0.15rem; }
 .killers__all:hover { color: var(--gold); }
 
-/* ---------- archive rail ---------- */
+/* ---------- archive ----------
+   The JS-built plate rail (.rail, .poster, the pack heads and the progress bar) went with
+   src/components/archiveRail.ts on 2026-10-12. The posters are now the static tile grids under
+   .archive__covers further down. */
 .archive__title { margin-bottom: 1.25rem; }
 .archive__lede { max-width: 46ch; color: var(--cream-dim); }
-.rail {
-  display: flex; gap: clamp(1rem, 3vw, 2.5rem); margin-top: 3.5rem;
-  padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x proximity;
-  overscroll-behavior-x: contain;
-  /* A horizontal scroller must never own a vertical gesture. Setting overflow-x to auto makes the
-     used value of overflow-y auto too, so every rail has always been a vertical scroll container
-     that simply had nothing to scroll; the moment anything pokes below the padding edge it starts
-     swallowing page swipes (trap 3 in CLAUDE.md, 2026-08-04). This pins that shut regardless of
-     what lands inside the rail later. */
-  overflow-y: hidden;
-  scrollbar-width: none; cursor: grab; -webkit-overflow-scrolling: touch;
-}
-.rail::-webkit-scrollbar { display: none; }
-.rail.is-dragging { cursor: grabbing; scroll-snap-type: none; }
-.poster {
-  flex: 0 0 auto; width: clamp(220px, 30vw, 360px); scroll-snap-align: center;
-  background: none; border: none; color: inherit; cursor: pointer; text-align: left; font-family: inherit;
-  display: block;
-}
-.poster__frame {
-  position: relative; aspect-ratio: 2 / 3; overflow: hidden; border-radius: 2px;
-  background-size: cover; background-position: center;
-  box-shadow: 0 18px 44px -24px rgba(30, 34, 61, 0.42);
-}
-.poster__frame img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.8s var(--ease); }
-.poster__frame img.is-loaded { opacity: 1; }
-.poster__frame::after {
-  content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(30, 34, 61, 0.10);
-  pointer-events: none;
-}
-.poster__cap { display: flex; justify-content: space-between; align-items: baseline; margin-top: 1rem; gap: 1rem; }
-.poster__year { font-family: var(--serif); font-size: 1.5rem; font-weight: 340; }
-.poster__host { font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-dim); text-align: right; }
-.poster__title { margin-top: 0.35rem; font-size: 0.95rem; color: var(--cream-dim); }
-.archive__hint { margin-top: 2.5rem; }
-/* The archive, grouped by pack: one head (name, line, Etsy shop link) and one rail per pack. */
-.archive__packs { margin-top: 3rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(3rem, 7vw, 5rem); }
-.archive__pack { min-width: 0; }
-.archive__pack .rail { margin-top: 1.5rem; }
-.archive__pack .archive__hint { margin-top: 1.5rem; }
-.archive__pack .poster { width: clamp(180px, 22vw, 280px); }
-.archive__pack-head { display: grid; gap: 0.35rem; }
-.archive__pack-name { font-family: var(--serif); font-weight: 360; font-size: clamp(1.3rem, 2.4vw, 1.75rem); color: var(--cream); margin: 0; }
-.archive__pack-line { color: var(--cream-dim); max-width: 60ch; margin: 0; }
-.archive__pack-cta { justify-self: start; }
-.archive__bundle { margin-top: 0.5rem; }
-.rail__progress { display: block; height: 1px; background: var(--cream-faint); position: relative; }
-.rail__progress::after { content: ''; position: absolute; left: 0; top: 0; height: 1px; width: var(--p, 10%); background: var(--gold); transition: width 0.1s linear; }
 
 /* ---------- transfer desk ---------- */
 .desk__title { margin-bottom: 1.25rem; }
@@ -512,24 +467,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .footer__tag { margin-top: 2rem; color: var(--cream-dim); font-family: var(--serif); font-weight: 300; font-size: 1.1rem; }
 .footer__legal { margin-top: 2rem; max-width: 80ch; font-size: 0.78rem; line-height: 1.7; color: var(--cream-faint-text); }
 
-/* ---------- lightbox ---------- */
-.lightbox {
-  position: fixed; inset: 0; z-index: 100; background: rgba(255, 255, 255, 0.96);
-  display: flex; align-items: center; justify-content: center; padding: 4vh 5vw;
-  opacity: 0; transition: opacity 0.4s var(--ease);
-}
-.lightbox[hidden] { display: none; }
-.lightbox.is-open { opacity: 1; }
-.lightbox__close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: 1px solid var(--cream-faint); color: var(--cream); padding: 0.6rem 1rem; border-radius: 2px; cursor: pointer; font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase; min-height: 44px; }
-.lightbox__fig { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; max-height: 92vh; }
-.lightbox__fig img { max-height: 62vh; max-width: 100%; object-fit: contain; border-radius: 2px; box-shadow: 0 24px 60px -30px rgba(30, 34, 61, 0.45); }
-.lightbox__fig figcaption { text-align: center; color: var(--cream-dim); font-size: 0.95rem; max-width: 50ch; }
-.lightbox__fig figcaption strong { color: var(--cream); font-family: var(--serif); font-weight: 360; display: block; font-size: 1.2rem; margin-bottom: 0.3rem; }
-.lightbox__shop { margin-top: 0.25rem; }
-.lightbox__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
-.lightbox__pack { display: block; margin-top: 0.4rem; font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase; }
-.lightbox__shop[hidden] { display: none; }
-
 /* ---------- mobile follow bar: REMOVED 2026-09-12 (site declutter) ----------
    The fixed 56px Follow bar and the 7rem of footer padding that cleared it on phones went with
    its markup in index.html and its scroll handler (src/components/stickyFollow.ts, deleted). */
@@ -599,7 +536,14 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 /* Static "Read the finals" links in the archive (crawlable internal links) */
 .archive__covers { margin-top: 2.6rem; }
 .archive__covers-lede { max-width: 46ch; color: var(--cream-dim); margin: 0 0 1.1rem; }
-.archive__covers-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; max-width: 920px; }
+/* Two grids now, Manchester United (11 tiles) then Manchester United Women (9), each under an h4.
+   Fixed columns rather than auto-fit: auto-fit with a 140px floor packed 11 tiles six to a row at
+   about 143px, too small to read a framed poster in a 4:3 photo. Three across keeps the ~300px tile
+   the original three-tile row had; two across on a phone. */
+.archive__covers-sub { color: var(--cream); font-family: var(--serif); font-weight: 360; font-size: 1.15rem; margin: 1.6rem 0 0.75rem; }
+.archive__covers-lede + .archive__covers-sub { margin-top: 0.4rem; }
+.archive__covers-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; max-width: 920px; }
+@media (max-width: 560px) { .archive__covers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .archive__covers-grid a { display: block; text-decoration: none; color: var(--cream-dim); font-size: 0.85rem; letter-spacing: 0.04em; }
 .archive__covers-grid img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--rule); margin-bottom: 0.45rem; transition: transform 0.25s var(--ease), border-color 0.25s var(--ease); }
 .archive__covers-grid a:hover img { transform: translateY(-3px); border-color: var(--gold); }
@@ -677,12 +621,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .btn--gold:active { transform: translateY(0); box-shadow: 0 6px 14px -10px rgba(201, 58, 15, 0.4); }
 .btn--ghost:hover { border-color: var(--cream); background: rgba(30, 34, 61, 0.04); }
 
-/* poster cards: lift + a slow image push-in on hover */
-.poster__frame { transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
-.poster:hover .poster__frame { transform: translateY(-6px); box-shadow: 0 26px 58px -28px rgba(30, 34, 61, 0.5); }
-.poster__frame img { transition: opacity 0.8s var(--ease), transform 0.9s var(--ease); }
-.poster:hover .poster__frame img.is-loaded { transform: scale(1.04); }
-
 /* ---------- keyboard focus rings (visible, gold, keyboard-only) ---------- */
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
 .btn:focus-visible { outline-offset: 4px; }
@@ -696,10 +634,9 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .reduced-motion .spynav__label { transition: none; }
 /* This list was left open (no declaration block) until 2026-09-12, so it ran on into the mono
    micro-label rule below: the transition was never stripped from these three, and under reduced
-   motion they picked up the monospace face instead. Closed here; the label rule is untouched. */
-.reduced-motion .btn--gold,
-.reduced-motion .poster__frame,
-.reduced-motion .poster__frame img { transition: none; }
+   motion they picked up the monospace face instead. Closed here; the label rule is untouched. The two
+   .poster__frame selectors went with the plate rail on 2026-10-12. */
+.reduced-motion .btn--gold { transition: none; }
 
 /* ============================================================
    Tier 0 pass (2026-08-04). Type, elevation, masking and one reveal.
@@ -716,7 +653,6 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    have overrun its line at 375px. */
 .eyebrow,
 .section-index,
-.poster__host,
 .killer__meta,
 .field span {
   font-family: var(--font-mono);
@@ -745,17 +681,15 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .dot-grid > * { position: relative; z-index: 1; }
 @media print { .dot-grid::before { display: none; } }
 
-/* ---------- edge fades on the horizontal scrollers ----------
-   The rails and the sport tab bar both cut off hard at the viewport edge, which reads as a
-   clipped layout rather than as "there is more this way". A mask fades the first and last 24px
-   and costs no extra element. :focus-within drops it so a keyboard user tabbing to the first or
-   last card never sees the focused control faded out. */
-.rail,
+/* ---------- edge fade on the horizontal scroller ----------
+   The sport tab bar cuts off hard at the viewport edge, which reads as a clipped layout rather
+   than as "there is more this way". A mask fades the first and last 24px and costs no extra
+   element. :focus-within drops it so a keyboard user tabbing to the first or last tab never sees
+   the focused control faded out. (The poster .rail shared this rule until 2026-10-12.) */
 .sportnav {
   -webkit-mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
   mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
 }
-.rail:focus-within,
 .sportnav:focus-within { -webkit-mask-image: none; mask-image: none; }
 
 /* ---------- the IntersectionObserver staggered reveal is GONE (phase 3, 2026-08-09) ----------
@@ -766,7 +700,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    to find: initReveal() queried [data-inview-group], matched zero elements and returned. The
    history it carried is not lost — trap 3 in CLAUDE.md holds the full account of the downward
    transform that broke homepage scrolling on 2026-08-04, and the guard it produced,
-   overflow-y: hidden on .rail and .sportnav, is still in force above.
+   overflow-y: hidden on .sportnav, is still in force above (the poster .rail that also carried it
+   was removed on 2026-10-12).
 
    The CSS went with the script rather than being left inert. Its resting state was opacity: 0,
    so leaving the rules behind would have left a loaded weapon: anyone putting data-inview on
@@ -784,8 +719,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 /* ---------- dateline strip and the wire: REMOVED 2026-09-12 (site declutter) ----------
    `.topbar` (the "Latest filed" strip) and `.wire` (the headline marquee) went with their markup
    in index.html and their renderers in src/render/home.ts. The wire was one of the horizontal
-   scrollers trap 3 in CLAUDE.md guards; removing it leaves `.rail` and `.sportnav`, both still
-   carrying `overflow-y: hidden`. */
+   scrollers trap 3 in CLAUDE.md guards; removing it left `.rail` and `.sportnav`. The poster `.rail`
+   went on 2026-10-12, so `.sportnav` is the one left, still carrying `overflow-y: hidden`. */
 
 /* ---------- shared front-page type ---------- */
 .kicker {

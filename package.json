@@ -43,7 +43,6 @@
     "standards": "node scripts/build-standards-page.mjs",
     "check-img-alt": "node scripts/check-img-alt.mjs",
     "preview": "node scripts/check-data-shape.mjs && vite preview --port 4173",
-    "assets": "node scripts/optimize-posters.mjs",
     "og": "node scripts/make-og.mjs"
   },
   "devDependencies": {

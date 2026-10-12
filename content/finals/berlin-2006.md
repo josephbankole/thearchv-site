@@ -13,8 +13,6 @@ score: "Italy 1 - 1 France (Italy win 5-3 on pens)"
 players: ["Zinedine Zidane", "Marco Materazzi", "Fabio Grosso", "David Trezeguet"]
 description: "Italy 1-1 France, Italy win on penalties, Berlin, 9 July 2006: Zidane's panenka, Materazzi's header, the headbutt, and the shootout that gave Italy a fourth star."
 quickAnswer: "Italy beat France 5-3 on penalties after a 1-1 draw in the 2006 World Cup final in Berlin on 9 July 2006. Zidane's early panenka penalty and Materazzi's header drew it level; Zidane was sent off in extra time for headbutting Materazzi, and Italy won the shootout for a fourth title."
-posterImage: "/posters/berlin-2006.webp"
-posterAlt: "The ARCHV illustrated poster of the 2006 World Cup final in Berlin."
 ogImage: "/og.jpg"
 related: []
 ---

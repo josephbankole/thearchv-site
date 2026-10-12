@@ -13,8 +13,6 @@ score: "Argentina 3 - 3 France (Argentina win 4-2 on pens)"
 players: ["Lionel Messi", "Kylian Mbappé", "Ángel Di María", "Emiliano Martínez"]
 description: "Argentina 3-3 France, Argentina win on penalties, Lusail, 18 December 2022: Messi's crowning, Mbappé's hat-trick, and a final many call the greatest ever played."
 quickAnswer: "Argentina beat France 4-2 on penalties after a 3-3 draw in the 2022 World Cup final at Lusail Stadium on 18 December 2022. Lionel Messi scored twice and Ángel Di María once; Kylian Mbappé replied with a hat-trick. Argentina won their third title and Messi finally lifted the World Cup."
-posterImage: "/posters/lusail-2022.webp"
-posterAlt: "The ARCHV illustrated poster of the 2022 World Cup final in Lusail."
 ogImage: "/og.jpg"
 related: []
 ---

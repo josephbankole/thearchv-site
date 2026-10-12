@@ -217,10 +217,13 @@ function render(p, allPages) {
   let related = allPages.filter((x) => x.section === p.section && x.slug !== p.slug);
   if (!related.length) related = allPages.filter((x) => x.slug !== p.slug);
   related = related.slice(0, 6);
+  // No finals page sets posterImage since 2026-10-12 (the site carries only the Manchester United
+  // posters). The caption deliberately has no default Etsy link: the old fallback pointed at the
+  // World Cup finals bundle (listing 4517536632), which holds pre-redesign art and must not return.
   const fig = p.posterImage ? `
         <figure class="article__fig">
           <img src="${escAttr(p.posterImage)}" alt="${escAttr(p.posterAlt || p.title)}" width="1080" height="1350" loading="eager" />
-          <figcaption>Original ARCHV illustration. All nine finals come in one <a href="${escAttr(p.posterEtsy || "https://thearchvca.etsy.com/listing/4517536632")}">digital download</a> on Etsy.</figcaption>
+          <figcaption>Original ARCHV illustration.</figcaption>
         </figure>` : "";
   const qa = p.quickAnswer ? `
         <div class="quick-answer">

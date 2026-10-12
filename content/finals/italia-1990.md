@@ -13,8 +13,6 @@ score: "West Germany 1 - 0 Argentina"
 players: ["Andreas Brehme", "Diego Maradona", "Lothar Matthäus", "Rudi Völler"]
 description: "West Germany 1-0 Argentina at the Stadio Olimpico, 8 July 1990: Brehme's late penalty, the first red cards in a World Cup final, and the rematch that settled 1986."
 quickAnswer: "West Germany beat Argentina 1-0 in the 1990 World Cup final at the Stadio Olimpico in Rome on 8 July 1990. Andreas Brehme scored the only goal from an 85th-minute penalty. Argentina had two men sent off, the first dismissals in a World Cup final."
-posterImage: "/posters/italia-1990.webp"
-posterAlt: "The ARCHV illustrated poster of the 1990 World Cup final in Rome."
 ogImage: "/og.jpg"
 related: []
 ---

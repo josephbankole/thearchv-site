@@ -4,7 +4,6 @@ import './style.css';
 
 import { initFrontCards } from './components/frontCards';
 import { initLongReads } from './components/longReads';
-import { initArchiveRail } from './components/archiveRail';
 import { initContactForm } from './components/contactForm';
 import { initChrome, initMastheadMenu } from './ui/chrome';
 import { initSportTabs } from './ui/sportTabs';
@@ -27,7 +26,9 @@ function boot(): void {
   // animation to an accordion that is already in the HTML and already works without it; the
   // legends wall has no behaviour at all now, so its component is gone rather than idle.
   initLongReads(animate);
-  initArchiveRail();
+  // The archive's poster tiles are static links in index.html and need no script. The JS-built
+  // plate rail and its lightbox (src/components/archiveRail.ts) were removed on 2026-10-12, when
+  // the site moved to the redrawn Manchester United posters only.
   initContactForm();
   // The fixed mobile Follow bar and its scroll handler (initStickyFollow) were removed on
   // 2026-09-12: 56px pinned over every phone screen of the front page for one follow click in

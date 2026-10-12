@@ -119,8 +119,8 @@ function setupArticleLinkTracking(): void {
 
 // Track outbound clicks to the Etsy listings (the poster-funnel KPI), and to the Etsy shop
 // behind every Shop link. Shop links carry data-shop and count as shop_click. The listing
-// selector matches /listing/ URLs only, so neither those nor the archive rail's shop links
-// (tracked as pack_click) are also counted as listing clicks.
+// selector matches /listing/ URLs only, so a link to the shop root is never also counted as a
+// listing click. The homepage poster tiles link listings and carry data-shop, so they count as both.
 function setupOutboundTracking(): void {
   document.querySelectorAll<HTMLAnchorElement>('a[href*="etsy.com/listing"]').forEach((el) => {
     el.addEventListener('click', () => {

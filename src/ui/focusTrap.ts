@@ -1,7 +1,8 @@
-// Shared focus trap for disclosure/dialog-style UI (masthead hamburger panel, poster
-// lightbox): while `container` is open, Tab/Shift+Tab cycles between its first and last
-// focusable element instead of leaking focus into the page behind it. Call trapFocus()
-// when the container opens; call the function it returns when it closes.
+// Shared focus trap for disclosure/dialog-style UI (the masthead hamburger panel; the poster
+// lightbox that also used it was removed on 2026-10-12): while `container` is open,
+// Tab/Shift+Tab cycles between its first and last focusable element instead of leaking focus
+// into the page behind it. Call trapFocus() when the container opens; call the function it
+// returns when it closes.
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 

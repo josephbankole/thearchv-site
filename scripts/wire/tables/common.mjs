@@ -37,6 +37,18 @@ export function mergeSport(prevBlocks = [], result, today) {
   return out;
 }
 
+// mergeSport lists fresh blocks before held ones. A module that exports ORDER gets its feed order
+// back; ids it does not name keep their slots.
+export function inOrder(blocks, order) {
+  if (!order) return blocks;
+  const rank = (b) => order.indexOf(b.id);
+  const slots = blocks.flatMap((b, i) => (rank(b) >= 0 ? [i] : []));
+  const sorted = slots.map((i) => blocks[i]).sort((a, b) => rank(a) - rank(b));
+  const out = [...blocks];
+  slots.forEach((i, k) => { out[i] = sorted[k]; });
+  return out;
+}
+
 // RFC 4180 CSV, quoted fields and embedded commas included.
 export function parseCsv(text) {
   const rows = [];

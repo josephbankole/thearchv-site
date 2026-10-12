@@ -13,7 +13,7 @@ import { parseArgs, isMain } from "./lib/args.mjs";
 import { fetchText } from "./lib/http.mjs";
 import { dateInZone } from "./lib/time.mjs";
 import { SOURCES, sanitiseTables } from "./lib/schema.mjs";
-import { fresh, mergeSport } from "./tables/common.mjs";
+import { fresh, mergeSport, inOrder } from "./tables/common.mjs";
 import * as football from "./tables/football.mjs";
 import * as nfl from "./tables/nfl.mjs";
 import * as f1 from "./tables/f1.mjs";
@@ -38,7 +38,7 @@ export async function fetchTables({ prev, only, offline, nowMs, env, pause }) {
     try { result = await mod.run({ get, today, env, pause }); }
     catch (err) { result = { blocks: [], failed: {}, skipped: `error:${err.message}` }; }
     const blocks = (result.blocks || []).map((b) => fresh(b, { today, fetchedAt }));
-    const merged = mergeSport(prev.sports[sport]?.blocks, { ...result, blocks }, today);
+    const merged = inOrder(mergeSport(prev.sports[sport]?.blocks, { ...result, blocks }, today), mod.ORDER);
     if (merged.length) out.sports[sport] = { blocks: merged }; else delete out.sports[sport];
     report[sport] = { fresh: blocks.map((b) => b.id), held: merged.filter((b) => b.status === "held").map((b) => `${b.id} (${b.heldReason})`), skipped: result.skipped || null };
   }

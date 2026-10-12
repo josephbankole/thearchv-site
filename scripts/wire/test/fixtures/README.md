@@ -13,6 +13,13 @@ points at `fixtures/daily/`.
   trimmed to ten columns (no odds columns). Source: https://github.com/nflverse/nflverse-data,
   licence CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Trimmed by The ARCHV.
 - `tables/openfootball-en1.json`: openfootball `football.json` 2026-27 `en.1.json`, CC0 1.0.
+- `tables/football-data-standings.json`, `tables/football-data-cl-standings.json`,
+  `tables/football-data-matches.json`: real football-data.org v4 responses of 12 October 2026
+  (Premier League standings, Champions League standings with all 36 league-phase rows, and
+  Manchester United's 2026 matches to 8 November), trimmed by The ARCHV to the fields
+  `tables/football.mjs` reads. No crest, emblem, flag or URL field. Football data provided by
+  the Football-Data.org API (https://www.football-data.org/). `fetch-tables --offline` reads
+  them when `FOOTBALL_DATA_TOKEN` is set to any value.
 - `tables/balldontlie-*.json`, `tables/jolpica-*.json`: invented, in the providers' documented
   shapes, for offline tests.
 - `daily/wire.json`, `daily/tables.json`: a finished edition and tables file for the

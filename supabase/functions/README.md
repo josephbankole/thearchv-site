@@ -181,6 +181,10 @@ Functions cannot import from outside `supabase/functions`. To add a sport, add i
 `src/data/sports.ts` first, then to `_shared/sports.ts`, then deploy both functions.
 `_shared/sports_test.ts` fails if the two lists differ.
 
+### Cron timeouts
+
+The pg_cron jobs for daily-push and health-probe call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
+
 ### Migration
 
 `supabase/migrations/20261012160124_push_per_sport.sql` adds `push_tokens.sport`,

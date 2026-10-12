@@ -11,6 +11,7 @@ import { fresh, mergeSport, inOrder } from "../tables/common.mjs";
 import { sanitiseBlock, sanitiseTables } from "../lib/schema.mjs";
 import { fetchTables } from "../fetch-tables.mjs";
 import { renderTableBlock } from "../lib/render.mjs";
+import { wait429 } from "../lib/http.mjs";
 
 const load = (name) => JSON.parse(readFileSync(new URL(`./fixtures/tables/${name}`, import.meta.url), "utf8"));
 const TODAY = "2026-10-12";
@@ -249,4 +250,14 @@ test("no crest, emblem, flag or logo in any football output, even when the sourc
   assert.equal(r.blocks.length, 4);
   assert.ok(!/crest|emblem|flag|logo|crests\.example/i.test(out));
   for (const f of Object.keys(over)) assert.ok(!/crest|emblem|flag|logo|https?:/i.test(readFileSync(new URL(`./fixtures/tables/${f}`, import.meta.url), "utf8")), `${f} carries no crest field or URL`);
+});
+
+test("a 429 waits as long as football-data.org says its 10-a-minute window has left", () => {
+  const h = (o) => new Headers(o);
+  assert.equal(wait429(h({ "X-RequestCounter-Reset": "42" })), 43);
+  assert.equal(wait429(h({ "X-RequestCounter-Reset": "0" })), 1);
+  assert.equal(wait429(h({ "Retry-After": "5", "X-RequestCounter-Reset": "42" })), 5);
+  assert.equal(wait429(h({ "X-RequestCounter-Reset": "300" })), 60);
+  assert.equal(wait429(h({})), 30);
+  assert.equal(wait429(h({ "X-RequestCounter-Reset": "soon" })), 30);
 });

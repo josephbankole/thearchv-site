@@ -8,6 +8,15 @@ import { gunzipSync } from "node:zlib";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Seconds to wait after a 429: Retry-After, else football-data.org's X-RequestCounter-Reset (the
+// seconds left in its 10-a-minute window) plus one, else 30. Capped at 60.
+export function wait429(headers) {
+  const secs = (h) => { const v = headers.get(h); const n = v == null || v.trim() === "" ? NaN : Number(v); return Number.isFinite(n) && n >= 0 ? n : null; };
+  const ra = secs("retry-after");
+  const reset = secs("x-requestcounter-reset");
+  return Math.min(60, ra ?? (reset != null ? reset + 1 : 30));
+}
+
 export async function fetchText(url, { userAgent, headers = {}, offline = null, offlineName = null, gunzip = false, backoff = [5000, 15000], timeoutMs = 15000 } = {}) {
   if (offline) {
     const file = join(offline, offlineName || encodeURIComponent(url));
@@ -30,8 +39,7 @@ export async function fetchText(url, { userAgent, headers = {}, offline = null, 
     }
     if (res.status === 429 && !waited429) {
       waited429 = true;
-      const ra = Math.min(60, Number(res.headers.get("retry-after")) || 30);
-      await sleep(ra * 1000);
+      await sleep(wait429(res.headers) * 1000);
       continue;
     }
     const retryable = res.status === 202 || res.status >= 500 || (res.ok && !body.trim());

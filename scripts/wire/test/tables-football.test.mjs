@@ -4,10 +4,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import * as football from "../tables/football.mjs";
 import { fromFootballData, fromFootballDataCl, fromOpenfootball, sanityLeaguePhase, fdCompetition, fdRound, fdScore } from "../tables/football.mjs";
-import { fresh, mergeSport } from "../tables/common.mjs";
-import { sanitiseBlock } from "../lib/schema.mjs";
+import { fresh, mergeSport, inOrder } from "../tables/common.mjs";
+import { sanitiseBlock, sanitiseTables } from "../lib/schema.mjs";
+import { fetchTables } from "../fetch-tables.mjs";
 import { renderTableBlock } from "../lib/render.mjs";
 
 const load = (name) => JSON.parse(readFileSync(new URL(`./fixtures/tables/${name}`, import.meta.url), "utf8"));
@@ -93,9 +95,44 @@ test("a CL fetch failure holds ucl-table only; the PL blocks stay fresh", async 
   assert.deepEqual(r.blocks.map((b) => b.id), ["pl-table", "mu-next", "mu-results"]);
   assert.deepEqual(r.failed, { "ucl-table": "fetch-failed:503" });
   assert.ok(lines.some((l) => /Champions League table not refreshed \(fetch-failed:503\)/.test(l)));
-  const merged = mergeSport(prev, { ...r, blocks: r.blocks.map((b) => fresh(b, { today: TODAY, fetchedAt: `${TODAY}T09:10:00.000Z` })) }, TODAY);
-  assert.deepEqual(merged.map((b) => `${b.id}:${b.status}`), ["pl-table:fresh", "mu-next:fresh", "mu-results:fresh", "ucl-table:held"]);
-  assert.deepEqual([merged[3].heldReason, merged[3].heldDays, merged[3].rows.length], ["fetch-failed:503", 1, 36]);
+  const merged = inOrder(mergeSport(prev, { ...r, blocks: r.blocks.map((b) => fresh(b, { today: TODAY, fetchedAt: `${TODAY}T09:10:00.000Z` })) }, TODAY), football.ORDER);
+  assert.deepEqual(merged.map((b) => `${b.id}:${b.status}`), ["pl-table:fresh", "ucl-table:held", "mu-next:fresh", "mu-results:fresh"]);
+  assert.deepEqual([merged[1].heldReason, merged[1].heldDays, merged[1].rows.length], ["fetch-failed:503", 1, 36]);
+});
+
+test("a body that is JSON but not a table fails its own blocks and never throws out of run()", async () => {
+  const body = (name, json) => { const base = stub(); return async (url, o = {}) => (o.offlineName === name ? { ok: true, status: 200, json } : base(url, o)); };
+  const cl = load("football-data-cl-standings.json");
+  const nullRow = structuredClone(cl); nullRow.standings[0].table[3] = null;
+  for (const json of [null, { standings: {} }, nullRow]) {
+    const { result: r, lines } = await capture(() => football.run({ get: body("football-data-cl-standings.json", json), today: TODAY, env: TOKEN }));
+    assert.equal(r.provider, "football-data.org");
+    assert.deepEqual([r.blocks.map((b) => b.id), r.failed], [["pl-table", "mu-next", "mu-results"], { "ucl-table": "parse-error" }]);
+    assert.ok(lines.some((l) => /Champions League standings unreadable/.test(l)));
+  }
+  // A PL body that will not read falls back to openfootball and keeps the good CL table.
+  const { result: pl, lines } = await capture(() => football.run({ get: body("football-data-standings.json", null), today: TODAY, env: TOKEN }));
+  assert.deepEqual(pl.blocks.map((b) => [b.id, b.source.name]), [["pl-table", "openfootball"], ["ucl-table", "football-data.org"], ["mu-next", "openfootball"], ["mu-results", "openfootball"]]);
+  assert.ok(lines.includes("[tables:football] football-data.org failed (parse-error); falling back to openfootball"));
+  // openfootball broken as well (2025-26 once shipped with no dates): the CL block still stands.
+  const dateless = { matches: [{ team1: "Manchester United FC", team2: "Fulham FC", score: { ft: [1, 0] } }, { team1: "Fulham FC", team2: "Manchester United FC", score: { ft: [0, 1] } }] };
+  const both = async (url, o = {}) => (o.offlineName === "football-data-standings.json" ? { ok: true, status: 200, json: null } : body("openfootball-en1.json", dateless)(url, o));
+  const { result: none } = await capture(() => football.run({ get: both, today: TODAY, env: TOKEN }));
+  assert.equal(none.provider, "none");
+  assert.deepEqual(none.blocks.map((b) => b.id), ["ucl-table"]);
+  assert.deepEqual(none.failed, { "pl-table": "parse-error", "mu-next": "parse-error", "mu-results": "parse-error" });
+});
+
+test("fetch-tables keeps the football feed order when blocks are held: pl-table, ucl-table, mu-next, mu-results", async () => {
+  const { result: day } = await capture(() => football.run({ get: stub(), today: TODAY, env: TOKEN }));
+  const prev = sanitiseTables({ version: 1, updatedAt: `${TODAY}T09:10:00.000Z`, sports: { football: { blocks: day.blocks.map((b) => fresh(b, { today: TODAY, fetchedAt: `${TODAY}T09:10:00.000Z` })) } } });
+  const offline = fileURLToPath(new URL("./fixtures/tables/", import.meta.url));
+  // Eight days on with no token, openfootball is stale: only mu-next is fresh.
+  const { result: { tables, report } } = await capture(() => fetchTables({ prev, only: ["football"], offline, nowMs: Date.parse("2026-10-20T16:00:00Z"), env: {}, pause: 0 }));
+  assert.deepEqual(tables.sports.football.blocks.map((b) => `${b.id}:${b.status}`), ["pl-table:held", "ucl-table:held", "mu-next:fresh", "mu-results:held"]);
+  assert.deepEqual(report.football.fresh, ["mu-next"]);
+  assert.deepEqual(inOrder([{ id: "x" }, { id: "mu-next" }, { id: "y" }, { id: "pl-table" }], football.ORDER).map((b) => b.id), ["x", "pl-table", "y", "mu-next"], "unknown ids keep their slots");
+  assert.deepEqual(inOrder([{ id: "b" }, { id: "a" }], undefined).map((b) => b.id), ["b", "a"]);
 });
 
 test("a PL failure falls back to openfootball and keeps a good CL table", async () => {
@@ -127,6 +164,9 @@ test("display names: our short name, then football-data's, then the trimmed full
   assert.deepEqual([fd.next[0].home, fd.next[0].away], ["Atleti", "Man Utd"]);
   const cl = fromFootballDataCl(load("football-data-cl-standings.json"), TODAY).block;
   assert.equal(cl.rows.find((x) => x.name === "FK Shakhtar Donetsk").short, "Shakhtar", "football-data spells it Shaktar");
+  const short = (name) => cl.rows.find((x) => x.name === name).short;
+  assert.deepEqual(["Como 1907", "PAE AEK", "Sabah FK", "\u0160K Slovan Bratislava"].map(short), ["Como", "AEK Athens", "Sabah", "Slovan Bratislava"]);
+  assert.deepEqual(cl.rows.slice(0, 8).map((x) => x.short), ["PSG", "Bayern", "Barça", "Man Utd", "Como", "Sporting CP", "Stuttgart", "Man City"], "the compact top 8");
 });
 
 test("United's fixtures and results across PL and CL carry competition and round labels", () => {
@@ -135,7 +175,7 @@ test("United's fixtures and results across PL and CL carry competition and round
   assert.deepEqual(fd.next.map((m) => [m.date, m.home, m.away, m.competition, m.round]), [
     ["2026-10-13", "Atleti", "Man Utd", "Champions League", "League phase, matchday 2"],
     ["2026-10-18", "Leeds", "Man Utd", "Premier League", "Matchday 7"],
-    ["2026-10-21", "Como 1907", "Man Utd", "Champions League", "League phase, matchday 3"],
+    ["2026-10-21", "Como", "Man Utd", "Champions League", "League phase, matchday 3"],
   ]);
   assert.deepEqual(fd.last.map((m) => m.date), ["2026-10-10", "2026-09-20", "2026-09-13"]);
   const cl = (stage, matchday = null) => ({ competition: { code: "CL", name: "UEFA Champions League" }, stage, matchday });

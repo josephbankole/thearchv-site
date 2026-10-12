@@ -22,13 +22,16 @@ const SHORT = {
   "Wolverhampton Wanderers FC": "Wolves", "Brighton & Hove Albion FC": "Brighton", "Nottingham Forest FC": "Nott'm Forest",
   "West Ham United FC": "West Ham", "Newcastle United FC": "Newcastle", "Leeds United FC": "Leeds", "AFC Bournemouth": "Bournemouth",
   "Crystal Palace FC": "Palace", "Coventry City FC": "Coventry", "Sheffield United FC": "Sheff Utd", "Leicester City FC": "Leicester",
-  "FK Shakhtar Donetsk": "Shakhtar",
+  "FK Shakhtar Donetsk": "Shakhtar", "Como 1907": "Como", "PAE AEK": "AEK Athens", "Sabah FK": "Sabah",
+  "\u0160K Slovan Bratislava": "Slovan Bratislava",
 };
 export const shortName = (n) => SHORT[n] || n.replace(/^AFC\s+/, "").replace(/\s+(A?FC)$/, "");
 const SEASON = (today) => { const y = +today.slice(0, 4), m = +today.slice(5, 7); const s = m >= 7 ? y : y - 1; return `${s}-${String((s + 1) % 100).padStart(2, "0")}`; };
 // openfootball is stale when this many matches after its newest result are a week overdue: one
 // postponement is not a dead source, half a round is.
 const STALE_OVERDUE = 5, STALE_DAYS = 7;
+// Feed order. mergeSport puts held blocks after fresh ones; fetch-tables restores this order.
+export const ORDER = ["pl-table", "ucl-table", "mu-next", "mu-results"];
 
 export function sanityTable(rows) {
   if (rows.length !== 20) return `row-count ${rows.length} != 20`;
@@ -157,6 +160,12 @@ function blocks({ rows, next, last, through }, source, today, { ucl = null, stal
   return { blocks: out, failed };
 }
 
+// A body that is JSON but not the expected shape fails its own blocks; it never throws out of run(),
+// which would hold every football block, good ones included.
+const read = (what, fn) => {
+  try { return fn(); } catch (err) { console.log(`[tables:football] ${what} unreadable (${err.message})`); return null; }
+};
+
 export async function run({ get, today, env }) {
   const token = env.FOOTBALL_DATA_TOKEN;
   let ucl;
@@ -166,21 +175,21 @@ export async function run({ get, today, env }) {
     const m = await get(`https://api.football-data.org/v4/teams/66/matches?season=${SEASON(today).slice(0, 4)}`, { headers, offlineName: "football-data-matches.json" });
     // The CL table is its own block: a failure here holds ucl-table and nothing else.
     const c = await get("https://api.football-data.org/v4/competitions/CL/standings", { headers, offlineName: "football-data-cl-standings.json" });
-    ucl = c.ok ? fromFootballDataCl(c.json, today) : { failed: `fetch-failed:${c.status}` };
+    ucl = c.ok ? (read("Champions League standings", () => fromFootballDataCl(c.json, today)) || { failed: "parse-error" }) : { failed: `fetch-failed:${c.status}` };
     if (ucl.failed) console.log(`[tables:football] Champions League table not refreshed (${ucl.failed}); ucl-table holds`);
-    if (s.ok && m.ok) return { provider: "football-data.org", ...blocks(fromFootballData(s.json, m.json, today), FD_ATTR, today, { ucl }) };
-    console.log(`[tables:football] football-data.org failed (${s.status}/${m.status}); falling back to openfootball`);
+    const fd = s.ok && m.ok ? read("football-data.org", () => blocks(fromFootballData(s.json, m.json, today), FD_ATTR, today, { ucl })) : null;
+    if (fd) return { provider: "football-data.org", ...fd };
+    console.log(`[tables:football] football-data.org failed (${s.ok && m.ok ? "parse-error" : `${s.status}/${m.status}`}); falling back to openfootball`);
   } else {
     console.log("[tables:football] FOOTBALL_DATA_TOKEN not set: skipping football-data.org, using openfootball (CC0)");
     ucl = { failed: "no-token" };
   }
+  const none = (f) => ({ provider: "none", blocks: ucl.block ? [ucl.block] : [], failed: { "pl-table": f, ...(ucl.failed ? { "ucl-table": ucl.failed } : {}), "mu-next": f, "mu-results": f } });
   const url = `https://raw.githubusercontent.com/openfootball/football.json/master/${SEASON(today)}/en.1.json`;
   const r = await get(url, { offlineName: "openfootball-en1.json" });
-  if (!r.ok) {
-    const f = `fetch-failed:${r.status}`;
-    return { provider: "none", blocks: ucl.block ? [ucl.block] : [], failed: { "pl-table": f, ...(ucl.failed ? { "ucl-table": ucl.failed } : {}), "mu-next": f, "mu-results": f } };
-  }
-  const of = fromOpenfootball(r.json, today);
+  if (!r.ok) return none(`fetch-failed:${r.status}`);
+  const of = read("openfootball", () => fromOpenfootball(r.json, today));
+  if (!of) return none("parse-error");
   let stale = null;
   if (of.overdue >= STALE_OVERDUE) {
     stale = "source-stale";

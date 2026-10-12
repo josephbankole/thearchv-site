@@ -1,10 +1,17 @@
 // register-push: the app registers or updates its APNs token and opt-in state here.
-// POST { device_id, token, opt_in?, app_version? }
+// POST { device_id, token, opt_in?, app_version?, sport? }
 // -> { ok }
 // Upserts on the token, so re-registering the same device is idempotent. A user turning the daily
 // push off sends opt_in:false, which the daily dispatch job respects.
+//
+// `sport` (optional) is the sport the reader picked on Home, so daily-push can send them that
+// sport's lead. Any value is accepted and resolved, never rejected: a known feed key is stored
+// as itself; "all", the wrong shape or a key this server does not know yet is stored as
+// football. A request without the field leaves the stored sport alone (null on a new row, which
+// daily-push also reads as football), so every shipped build keeps getting the football push.
 import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
 import { checkAppSecretSoft } from "../_shared/appGuard.ts";
+import { resolveSport, unknownSportKey } from "../_shared/sports.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -31,14 +38,20 @@ Deno.serve(async (req) => {
   const opt_in = typeof payload.opt_in === "boolean" ? payload.opt_in : true;
   const app_version = typeof payload.app_version === "string" ? payload.app_version.slice(0, 40) : null;
 
+  const row: Record<string, unknown> = { device_id, token, opt_in, app_version, last_seen: new Date().toISOString() };
+  if (payload.sport !== undefined) {
+    row.sport = resolveSport(payload.sport);
+    // A well-formed key this server does not publish yet (an app build ahead of the server) is
+    // stored as football and logged, so it shows up. Only a shape-checked value is echoed.
+    const unknown = unknownSportKey(payload.sport);
+    if (unknown) console.log(JSON.stringify({ fn: "register-push", unknownSport: unknown }));
+  }
+
   const supabase = adminClient();
 
   const { error } = await supabase
     .from("push_tokens")
-    .upsert(
-      { device_id, token, opt_in, app_version, last_seen: new Date().toISOString() },
-      { onConflict: "token" },
-    );
+    .upsert(row, { onConflict: "token" });
   if (error) {
     // The DB-side rate caps (push_tokens_rate_cap trigger) abort the insert with this marker.
     // Surface it as a clean 429 rather than a 500 so the app can back off quietly.

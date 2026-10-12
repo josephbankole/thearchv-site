@@ -116,18 +116,26 @@
       a message up to the founder, an email goes to his inbox through Zoho Mail, our
       email provider. It contains your message, its category, the app version, the
       automated reply, and a one-line note. Your email address is not in it.</li>
-      <li><strong>Anonymous usage analytics.</strong> We use PostHog to count things
-      like opens and reads so we know what is worth writing. PostHog is a separate
-      company that handles this data for us. It is anonymous and never used to follow
-      you anywhere else.</li>
-      <li><strong>Saved stories and reading history stay on your phone.</strong> They
-      never leave the device.</li>
+      <li><strong>Usage analytics.</strong> We use PostHog to count things like opens
+      and reads so we know what is worth writing. PostHog is a separate company that
+      handles this data for us. The app sends events to PostHog under a random id that
+      PostHog creates for your install, which is not the device id above. When you open,
+      save, or rate a story (More like this or Fewer like this), or use the Continue
+      reading card, the event includes the story's headline. The open, save, and rating
+      events also include its section. Every event carries details that PostHog's own
+      software adds, including the phone model, iOS version, app version, language
+      setting, and time zone. PostHog uses the IP address each event comes from to
+      estimate a rough location, such as the city or country, and then discards the
+      address. We never use any of it to follow you anywhere else.</li>
+      <li><strong>Saved stories, and the story you last left unfinished, stay on your
+      phone.</strong> The app does not upload them. The analytics events above do
+      record a story's headline when you open or save it.</li>
     </ul>
     <p>Support messages and push tokens are kept in a database that Supabase runs for
     us. Nothing is sold, shared for advertising, or used to build a profile of you.</p>
 
     <h2>The website</h2>
-    <p>This site uses the same anonymous PostHog analytics, and it honours your
+    <p>This site uses the same PostHog analytics, and it honours your
     browser's Do Not Track setting. Pages load fonts from Google Fonts, which means
     your browser requests those font files from Google. The partnerships form is
     delivered by Web3Forms, which passes your message and the details you type to us

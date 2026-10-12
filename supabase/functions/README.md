@@ -183,9 +183,9 @@ Functions cannot import from outside `supabase/functions`. To add a sport, add i
 
 ### Migration
 
-`supabase/migrations/20261012120000_push_per_sport.sql` adds `push_tokens.sport`,
+`supabase/migrations/20261012160124_push_per_sport.sql` adds `push_tokens.sport`,
 `push_tokens.last_push_day`, the `push_sport_state` table and the `claim_push_tokens` function.
-Apply it before deploying either function. A daily-push deployed without it fails its token read and
+Applied to production on 2026-10-12 through the Supabase MCP, which recorded it as version 20261012160124 (the file is named to match); the columns, table, row-level security and grants were read back. Apply it before deploying either function. A daily-push deployed without it fails its token read and
 sends nothing, which is safe, but nobody gets a push until the migration is in.
 
 Check `supabase migration list --linked` before reaching for `supabase db push`. Earlier
@@ -195,8 +195,8 @@ Unless every earlier migration shows as applied on the remote, apply this one fi
 record it:
 
 ```
-psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261012120000_push_per_sport.sql
-supabase migration repair --status applied 20261012120000
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261012160124_push_per_sport.sql
+supabase migration repair --status applied 20261012160124
 ```
 
 ### Tests

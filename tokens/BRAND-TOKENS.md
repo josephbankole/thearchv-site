@@ -1,6 +1,6 @@
 # The ARCHV brand tokens
 
-Extracted from the live site (`src/style.css` `:root`, cross-checked against `public/content.css` and `pageStyles()` in `scripts/shared/page-shell.mjs`). These are the real values the site ships, not a redesign. Rewritten 2026-08-09 for the white ground.
+Extracted from the live site (`src/style.css` `:root`, cross-checked against `public/content.css` and `pageStyles()` in `scripts/shared/page-shell.mjs`). These are the real values the site ships, not a redesign. Rewritten 2026-08-09 for the white ground; the ground became warm paper on 2026-10-13 (founder: a slightly darker background and better contrast).
 
 Three files in this folder:
 
@@ -10,28 +10,28 @@ Three files in this folder:
 
 ## Palette
 
-The ground is white and the ink is navy. Orange is the accent, and it does two different jobs at
+The ground is warm off-white paper and the ink is navy. Orange is the accent, and it does two different jobs at
 two different values: `--accent` fills and rules, `--accent-ink` carries words. Green and amber are
 the two status states the desks use.
 
-The contrast column is the measured WCAG ratio against `#FFFFFF` and against `#F4F2F3`, the only
+The contrast column is the measured WCAG ratio against `#F4F1EA` and against `#EAE6DC`, the only
 two grounds this system sets text on. Every text role clears 4.5:1; that is a floor, not a target.
 
-| Token | Value | Contrast (white / sunken) | Use |
+| Token | Value | Contrast (ground / sunken) | Use |
 |---|---|---|---|
-| `--bg` | `#FFFFFF` | — | Page background |
-| `--bg-sunken` | `#F4F2F3` | — | Wire strip, app strip, panels |
-| `--ink` | `#1E223D` | 15.54:1 / 13.94:1 | Primary text |
-| `--ink-soft` | `#4A4F73` | 7.90:1 / 7.09:1 | Deks, secondary text |
-| `--ink-muted` | `#5F6485` | 5.76:1 / 5.16:1 | Muted text: bylines, dates, captions, legal |
-| `--ink-faint` | `#7A7F9E` | 3.92:1 / 3.52:1 | **Decorative only.** Never text |
-| `--accent` | `#F54F1B` | 3.49:1 / 3.13:1 | **Fills and rules only.** Never text |
-| `--accent-ink` | `#C93A0F` | 5.13:1 / 4.60:1 | Accent text, links, kickers |
+| `--bg` | `#F4F1EA` | — | Page background |
+| `--bg-sunken` | `#EAE6DC` | — | Wire strip, app strip, panels |
+| `--ink` | `#1E223D` | 13.78:1 / 12.47:1 | Primary text |
+| `--ink-soft` | `#3C4163` | 8.75:1 / 7.92:1 | Deks, secondary text |
+| `--ink-muted` | `#4C5176` | 6.78:1 / 6.14:1 | Muted text: bylines, dates, captions, legal |
+| `--ink-faint` | `#7A7F9E` | 3.48:1 / 3.15:1 | **Decorative only.** Never text |
+| `--accent` | `#F54F1B` | 3.09:1 / 2.80:1 | **Fills and rules only.** Never text |
+| `--accent-ink` | `#B23109` | 5.58:1 / 5.05:1 | Accent text, links, kickers |
 | `--on-accent` | `#16192E` | 4.96:1 on the accent fill | Text on an orange fill |
-| `--rule` | `#DED9DB` | — | Hairlines and borders |
-| `--rule-soft` | `#EDEAEB` | — | Interior dividers |
-| `--confirmed` | `#1E7A38` | 5.39:1 / 4.84:1 | Verified state |
-| `--reported` | `#7A6000` | 6.00:1 / 5.38:1 | Reported / still open state |
+| `--rule` | `#D9D3C5` | — | Hairlines and borders |
+| `--rule-soft` | `#E7E2D6` | — | Interior dividers |
+| `--confirmed` | `#176A2E` | 5.93:1 / 5.37:1 | Verified state |
+| `--reported` | `#6E5600` | 6.22:1 / 5.63:1 | Reported / still open state |
 
 Band hues (`--yellow` `#FFD85F`, `--lilac` `#C8BEFA`, `--chalk` `#EFE9E9`) are 2px decorative
 rules under a section name. They carry no contrast floor and must never sit behind text.
@@ -39,7 +39,7 @@ rules under a section name. They carry no contrast floor and must never sit behi
 ## Three rules that aren't in the values
 
 1. **The accent has two values and they are not interchangeable.** `#F54F1B` is a fill. The moment
-   it carries a word it fails AA on white, so text uses `#C93A0F`. If a rule sets both a background
+   it carries a word it fails AA on the ground, so text uses `#B23109`. If a rule sets both a background
    and a colour, state the colour explicitly rather than inheriting.
 2. **`--ink-faint` is not `--ink-muted`.** The faint tone is for bar fills and marks. The muted one
    is for words. This is the same split the navy system made between `--cream-faint` and

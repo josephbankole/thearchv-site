@@ -132,13 +132,13 @@ function renderFootballAlias() {
   <meta name="description" content="Football lives at the front door of The ARCHV. Redirecting you there now." />
   <link rel="canonical" href="${home}" />
   <meta name="robots" content="noindex,follow" />
-  <meta name="theme-color" content="#FFFFFF" />
+  <meta name="theme-color" content="#F4F1EA" />
   ${cspMeta({})}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   ${RSS_LINK}
   <style>
-    body { margin: 0; background: #FFFFFF; color: #1E223D; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; text-align: center; }
-    a { color: #C93A0F; }
+    body { margin: 0; background: #F4F1EA; color: #1E223D; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; text-align: center; }
+    a { color: #B23109; }
   </style>
 </head>
 <body>

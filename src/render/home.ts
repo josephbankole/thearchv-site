@@ -14,18 +14,21 @@
 //
 // NOTHING HERE MAY EMIT A <script> TAG. index.html carries exactly one inline bootstrap script
 // and scripts/check-csp-hash.mjs asserts that; an injected second one would break the CSP gate.
+//
+// 2026-10-13 (founder): the front page was cut back to the live scores strip, the day's story
+// (the lead and "Today at the desk"), the Desk Brief and a few posters. The three desk bands, the
+// legends wall and the long-reads accordion came off it, and so did their renderers: renderBands,
+// renderLegends, renderLongReads and the card helpers (chip, cardArt) that only they used. The
+// desks, the legends and the long reads all have their own pages (/desk/<lane>/, /legends/,
+// /reads/), listed in the masthead menu.
 import type { DayEntry } from '../data/worldCupDays';
 import { basketballDays } from '../data/basketballDays';
 import { f1Days } from '../data/f1Days';
 import { golfDays } from '../data/golfDays';
 import { leaguesDays } from '../data/leaguesDays';
-import { legends } from '../data/legends';
-import { longReads } from '../data/longReads';
-import { longreadParagraphs } from '../lib/longreadMd';
 import { nflDays } from '../data/nflDays';
-import { readPath } from '../data/readSlug';
 import { readLabel } from '../lib/readTime';
-import { chipLabel, entrySources } from '../lib/entryGates';
+import { entrySources } from '../lib/entryGates';
 import { tennisDays } from '../data/tennisDays';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
@@ -45,54 +48,21 @@ const esc = (s: unknown): string =>
 /* ---------- lanes ----------
    `key` is the FEED KEY and is load-bearing: dist/feed/*.json carries it as `section`, and the
    iOS app renders its shelves off that value (archv-feed/3, CLAUDE.md "the feed contract").
-   `urlLane` is the URL segment, which differs for World Cup only. `anchor` is the section id
-   the app's fallback share links resolve against. None of the three may be renamed here. */
+   `urlLane` is the URL segment, which differs for World Cup only. Neither may be renamed here.
+   (The `anchor` field went on 2026-10-13 with the bands: #football-leagues, #transfer-desk and
+   #world-cup no longer exist on the page, and src/ui/movedAnchors.ts sends them to the desks.) */
 interface Lane {
   key: 'leagues' | 'transfer' | 'worldcup';
   urlLane: 'leagues' | 'transfer' | 'world-cup';
-  anchor: string;
   label: string;
   desk: string;
-  band: 'chalk' | 'yellow' | 'lilac';
   days: DayEntry[];
-  index: string;
-  blurb: string;
 }
 
 const LANES: Lane[] = [
-  {
-    key: 'leagues',
-    urlLane: 'leagues',
-    anchor: 'football-leagues',
-    label: 'Football Leagues',
-    desk: 'The Leagues Desk',
-    band: 'chalk',
-    days: leaguesDays,
-    index: '01',
-    blurb: 'Title races, promotions, sackings and the tables behind them.',
-  },
-  {
-    key: 'transfer',
-    urlLane: 'transfer',
-    anchor: 'transfer-desk',
-    label: 'Transfer Desk',
-    desk: 'The Transfer Desk',
-    band: 'yellow',
-    days: transferDays,
-    index: '02',
-    blurb: 'Every move carries its source in the sentence. Done means done, rumour means rumour.',
-  },
-  {
-    key: 'worldcup',
-    urlLane: 'world-cup',
-    anchor: 'world-cup',
-    label: 'International Football',
-    desk: 'The International Desk',
-    band: 'lilac',
-    days: worldCupDays,
-    index: '03',
-    blurb: "Men's and women's international football, every competition, every day it is on.",
-  },
+  { key: 'leagues', urlLane: 'leagues', label: 'Football Leagues', desk: 'The Leagues Desk', days: leaguesDays },
+  { key: 'transfer', urlLane: 'transfer', label: 'Transfer Desk', desk: 'The Transfer Desk', days: transferDays },
+  { key: 'worldcup', urlLane: 'world-cup', label: 'International Football', desk: 'The International Desk', days: worldCupDays },
 ];
 
 const byDateDesc = (a: DayEntry, b: DayEntry): number => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
@@ -154,20 +124,6 @@ function shortDate(iso: string): string {
   return `${parseInt(d, 10)} ${month.slice(0, 3)}`;
 }
 
-// The chip says how firm the entry is (search plan G5 and 3.3, 2026-10-11). It is derived by
-// chipLabel() in src/lib/entryGates.ts from the entry's tier and its sources, never stamped:
-// "Confirmed · 2 sources", "Reported · <outlet>", "Rumour". Until this change every filed entry
-// printed "Verified", including transfer entries whose body called a claim a rumour. An entry
-// filed before the tier field reads its tier off the body's own (RUMOUR) and (REPORTED) markers.
-// 'pending' still means the day is open and keeps its own chip. The confirmed tier keeps the
-// chip--verified class so the existing styling holds; the other two take chip--open, the quieter one.
-function chip(entry: DayEntry): string {
-  const c = chipLabel(entry);
-  if (!c) return '<span class="chip chip--open">Updating today</span>';
-  const cls = c.tier === 'confirmed' ? 'chip--verified' : 'chip--open';
-  return `<span class="chip ${cls}">${esc(c.text)}</span>`;
-}
-
 // The lead's sourcing line names the outlets the entry itself names (search plan 3.3). It used to
 // read "Checked against two sources" on every lead, whatever the entry said. With no sources
 // array (an entry filed before G4) it points at how we check instead of claiming a count. The
@@ -176,24 +132,6 @@ function leadSources(entry: DayEntry): string {
   const outlets = [...new Set(entrySources(entry).map((s) => s.outlet))];
   if (!outlets.length) return '<span><a href="/standards/"><b>How we check</b></a></span>';
   return `<span>Sources: <a href="/standards/"><b>${esc(outlets.join(', '))}</b></a></span>`;
-}
-
-/* ---------- card art ----------
-   Three sources, in order, resolved by entryArt() in ./illustrated: the entry's own banked
-   headshot (public/heads/, committed by the desk job), then a banked portrait of a player named
-   in the headline or standfirst, then the ARCHV badge of a club named in the same text. All of
-   it is our own artwork. A miss renders no <img> at all rather than a placeholder, because a
-   face the archive has not drawn is not a face the archive may show.
-
-   A badge is drawn smaller than a face and takes its own class: it is a mark, not a portrait,
-   and at 72px it would sit on the card claiming to be the day's subject. */
-function cardArt(entry: DayEntry): string {
-  const art = entryArt(entry);
-  if (!art) return '';
-  if (art.kind === 'club') {
-    return `<img class="fcard__badge" src="${esc(art.src)}" alt="${esc(art.alt)}" width="60" height="60" loading="lazy" decoding="async" />`;
-  }
-  return `<img class="fcard__art" src="${esc(art.src)}" alt="${esc(art.alt)}" width="72" height="72" loading="lazy" decoding="async" />`;
 }
 
 /* ---------- the wire: REMOVED 2026-09-12 (site declutter) ----------
@@ -242,40 +180,6 @@ export function renderLead(): string {
       </div>`;
 }
 
-/* ---------- one section band of cards ---------- */
-function renderBand(lane: Lane, skip: DayEntry | null): string {
-  const days = sorted(lane.days)
-    .filter((d) => d !== skip)
-    .slice(0, 3);
-  if (!days.length) return '';
-  const cards = days
-    .map((entry) => {
-      const url = articleUrl(lane, entry);
-      const art = cardArt(entry);
-      return `<article class="fcard">
-              ${art}
-              ${chip(entry)}
-              <h3 class="fcard__headline"><a href="${esc(url)}" data-desk-card data-lane="${esc(lane.key)}" data-date="${esc(entry.date)}" data-day="${esc(entry.day)}">${esc(entry.headline)}</a></h3>
-              <p class="fcard__dek">${esc(entry.dek)}</p>
-              <p class="fcard__foot"><span>${esc(shortDate(entry.date))}</span><span>${esc(lane.desk)}</span><span>${esc(readLabel(entry.dek, entry.body))}</span></p>
-            </article>`;
-    })
-    .join('\n            ');
-
-  return `<section class="band band--${lane.band}" id="${esc(lane.anchor)}">
-          <div class="band__head">
-            <p class="band__index">${esc(lane.index)}</p>
-            <h2 class="band__title"><a href="/desk/${esc(lane.urlLane)}/">${esc(lane.label)}</a></h2>
-            <span class="band__rule" aria-hidden="true"></span>
-            <a class="band__more" href="/desk/${esc(lane.urlLane)}/">More from ${esc(lane.label)} &rarr;</a>
-          </div>
-          <p class="band__blurb">${esc(lane.blurb)}</p>
-          <div class="fcards">
-            ${cards}
-          </div>
-        </section>`;
-}
-
 /* ---------- the illustrated library: REMOVED 2026-08-24 (founder) ----------
    `renderLibrary()` built a band of every drawn portrait in the registry, at band index 04,
    under the id `illustrated-library`. Removed on the founder's call along with the desk-in-numbers
@@ -286,79 +190,20 @@ function renderBand(lane: Lane, skip: DayEntry | null): string {
    src/style.css. The `PLAYERS` import went too, because noUnusedLocals is on and would have
    failed the build on a dangling one. */
 
-/* ---------- the legends wall ----------
-   Was built by src/components/legends.ts from JS strings into an empty <ul>, which meant a
-   reader with no JS reached the section and found fourteen profiles' worth of nothing, and
-   fourteen bios rode into the bundle. There is no behaviour on this grid at all: it is a wall
-   of cards, so it is markup, and the component that used to build it is gone. */
-export function renderLegends(): string {
-  return legends
-    .map((l) => {
-      const meta = l.years ? `${l.nation} · ${l.years}` : l.nation;
-      return `<li class="legend">
-              <div class="legend__avatar">
-                <img src="${esc(l.headshot)}" alt="${esc(`${l.name}, illustrated by The ARCHV.`)}" width="160" height="160" loading="lazy" decoding="async" />
-              </div>
-              <p class="legend__no">${esc(l.no)}</p>
-              <h3 class="legend__name">${esc(l.name)}</h3>
-              <p class="legend__meta">${esc(meta)}</p>
-              <p class="legend__bio">${esc(l.bio)}</p>
-            </li>`;
-    })
-    .join('\n            ');
-}
+/* ---------- the legends wall and the long reads: REMOVED 2026-10-13 (founder) ----------
+   `renderLegends()` and `renderLongReads()` filled the legends wall and the long-reads accordion.
+   Both sections left the front page when it was cut back to the scores strip, the day's story, the
+   Desk Brief and a few posters. The Legends have /legends/ (build-section-pages.mjs) and the
+   essays have /reads/ and one page each (build-reads-pages.mjs), and both are in the masthead
+   menu. The `<!--archv:legends-->` and `<!--archv:longreads-->` markers went from index.html and
+   from the archvHome() plugin map in vite.config.ts in the same commit, since the plugin throws on
+   a marker with no renderer. src/components/longReads.ts, which animated the accordion, is gone too. */
 
-/* ---------- the long reads ----------
-   Same story as the legends wall, with one extra requirement: this one has behaviour. It was a
-   button plus a div whose CSS resting height was 0, so the essays were only ever reachable by
-   the bundle's own click handler. Now every essay is in the built HTML inside a real <details>,
-   which means a reader with no JS at all can still open one — the browser does it.
-
-   src/components/longReads.ts no longer creates anything. It attaches the height animation and
-   the analytics to what is already on the page, and if it never loads the accordion still works.
-   That is the whole point of the phase 2A pattern applied to the one block that resisted it.
-
-   Note the panel's paragraphs are the full essay text: the section has always rendered it into
-   the DOM for search, and <details> keeps it in the document when closed.
-
-   CAPPED AT THE THREE NEWEST (2026-09-11). Every Dispatch issue became a long read that day, and
-   putting the full text of every one into the front page would have made it the heaviest page on
-   the site for no reader's benefit. Every essay keeps its own page and the /reads/ front lists
-   them all; the "Every long read" link under this list (index.html) is the way there. The panel
-   shows the essay as PLAIN paragraphs through the shared stripper (src/lib/longreadMd.ts), so a
-   body's markdown never prints its markers here and nothing in it is ever written as markup: each
-   paragraph is escaped text, as it always was. Links and headings live on the essay's own page,
-   one click away. Sorted rather than trusted, the same reasoning as build-reads-pages.mjs. */
-export const HOME_LONG_READS = 3;
-export function renderLongReads(): string {
-  return [...longReads]
-    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
-    .slice(0, HOME_LONG_READS)
-    .map((r) => {
-      const paragraphs = longreadParagraphs(r.body)
-        .map((p) => `<p>${esc(p.trim())}</p>`)
-        .join('');
-      return `<li class="killer">
-              <details class="killer__box" data-read-title="${esc(r.title)}" data-read-kicker="${esc(r.kicker)}">
-                <summary class="killer__head">
-                  <span class="killer__n">${esc(r.kicker)}</span>
-                  <span class="killer__match">${esc(r.title)}</span>
-                  <span class="killer__meta">${esc(r.meta)}</span>
-                  <span class="killer__plus" aria-hidden="true">+</span>
-                </summary>
-                <div class="killer__panel">
-                  <div class="killer__panel-inner">${paragraphs}<p class="killer__permalink"><a href="${esc(readPath(r.title))}">Open this on its own page</a></p></div>
-                </div>
-              </details>
-            </li>`;
-    })
-    .join('\n            ');
-}
-
-/* ---------- the desk brief rail ----------
-   It ended in a "The ARCHV Dispatch / Read the Dispatch" box until 2026-10-12. The Dispatch is
-   paused (D-2026-10-06a), and the app strip directly under the front grid in index.html already
-   makes the one ask this page needs, so the box came off rather than becoming a second app CTA. */
+/* ---------- the desk brief ----------
+   A side rail beside the three desk bands until 2026-10-13; now a full-width block of its own,
+   since the bands came off the front page. It still takes one entry from each desk in turn
+   (roundRobin) so a reader sees all three, newest first within a desk, and it ended in a "The
+   ARCHV Dispatch / Read the Dispatch" box until 2026-10-12 (the Dispatch is paused, D-2026-10-06a). */
 export function renderBrief(): string {
   const lead = allItems()[0];
   const items = roundRobin(7)
@@ -379,17 +224,9 @@ export function renderBrief(): string {
         </ul>`;
 }
 
-/* ---------- the three bands ---------- */
-export function renderBands(): string {
-  const top = allItems()[0] ?? null;
-  return LANES.map((lane) => renderBand(lane, top && top.lane === lane ? top.entry : null))
-    .filter(Boolean)
-    .join('\n\n        ');
-}
-
 /* ---------- today at the desk ----------
    A dated strip of what has actually been filed today, across every desk the site runs rather
-   than only the three football ones the bands below cover. It is the answer to the one question
+   than only the three football ones the Desk Brief below covers. It is the answer to the one question
    a returning reader arrives with, and until this pass the front page never answered it: the
    lead is the newest entry whenever it was filed, so a page that had not been touched in four
    days looked exactly like a page filed this morning.

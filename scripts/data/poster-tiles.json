@@ -1,0 +1,152 @@
+{
+  "_note": "The twenty-one Manchester United poster tiles shown on /posters/ (moved off the front page on 2026-10-13). One tile per Etsy listing; image is the listing photo at 900x675 under public/shop/ and alt is that photo's Etsy alt text. Keep in step with src/data/posters.ts (inclusion rules in its header) and with the four tiles in index.html.",
+  "tiles": [
+    {
+      "group": "men",
+      "listing": "4521788550",
+      "image": "/shop/united-london-1968.webp",
+      "label": "London 1968",
+      "alt": "Framed poster of Manchester United 4-1 Benfica, the 1968 European Cup final at Wembley, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521790986",
+      "image": "/shop/united-rotterdam-1991.webp",
+      "label": "Rotterdam 1991",
+      "alt": "Framed poster of Manchester United 2-1 Barcelona, the 1991 Cup Winners' Cup final in Rotterdam, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521795943",
+      "image": "/shop/united-manchester-1993.webp",
+      "label": "Manchester 1993",
+      "alt": "Framed poster of Manchester United 2-1 Sheffield Wednesday at Old Trafford, April 1993, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521795838",
+      "image": "/shop/united-london-1996.webp",
+      "label": "London 1996",
+      "alt": "Framed poster of Manchester United 1-0 Liverpool, the 1996 FA Cup final at Wembley, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521798833",
+      "image": "/shop/united-birmingham-1999.webp",
+      "label": "Birmingham 1999",
+      "alt": "Framed poster of Manchester United 2-1 Arsenal, the 1999 FA Cup semi-final replay at Villa Park, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521782964",
+      "image": "/shop/united-barcelona-1999.webp",
+      "label": "Barcelona 1999",
+      "alt": "Framed poster of Manchester United 2-1 Bayern Munich, the 1999 Champions League final in Barcelona, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521779161",
+      "image": "/shop/united-moscow-2008.webp",
+      "label": "Moscow 2008",
+      "alt": "Framed poster of Manchester United 1-1 Chelsea, the 2008 Champions League final in Moscow won on penalties, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4527296455",
+      "image": "/shop/united-manchester-2011.webp",
+      "label": "Manchester 2011",
+      "alt": "Framed poster of Manchester United 2-1 Manchester City, the February 2011 derby at Old Trafford, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521787127",
+      "image": "/shop/united-stockholm-2017.webp",
+      "label": "Stockholm 2017",
+      "alt": "Framed poster of Manchester United 2-0 Ajax, the 2017 Europa League final in Stockholm, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521778670",
+      "image": "/shop/united-merseyside-2023.webp",
+      "label": "Merseyside 2023",
+      "alt": "Framed poster of Manchester United's 3-0 win at Everton, Goodison Park, November 2023, hanging on a wall."
+    },
+    {
+      "group": "men",
+      "listing": "4521798166",
+      "image": "/shop/united-manchester-2025-lyon.webp",
+      "label": "Manchester 2025",
+      "alt": "Framed poster of Manchester United 5-4 Lyon, the 2025 Europa League quarter-final at Old Trafford, hanging on a wall."
+    },
+    {
+      "group": "women",
+      "listing": "4539752764",
+      "image": "/shop/united-women-birkenhead-2018.webp",
+      "label": "Birkenhead 2018",
+      "alt": "Framed poster on a wall: Manchester United Women's 1-0 win over Liverpool in Birkenhead, 2018, three players seen from behind in navy and gold."
+    },
+    {
+      "group": "women",
+      "listing": "4539751302",
+      "image": "/shop/united-women-sutton-coldfield-2018.webp",
+      "label": "Sutton Coldfield 2018",
+      "alt": "Framed poster on a wall: Manchester United Women's 12-0 win at Aston Villa, Sutton Coldfield 2018, three players seen from behind in pink shirts."
+    },
+    {
+      "group": "women",
+      "listing": "4539732851",
+      "image": "/shop/united-women-leigh-2019.webp",
+      "label": "Leigh 2019",
+      "alt": "Framed poster on a wall: Manchester United Women's 5-0 promotion win over Aston Villa, Leigh 2019, three players seen from behind in red and black."
+    },
+    {
+      "group": "women",
+      "listing": "4539731211",
+      "image": "/shop/united-women-manchester-2019.webp",
+      "label": "Manchester 2019",
+      "alt": "Framed poster on a wall: Manchester United Women v Manchester City, the first WSL Manchester derby, 2019, three players seen from behind in red and black."
+    },
+    {
+      "group": "women",
+      "listing": "4539743978",
+      "image": "/shop/united-women-manchester-2022.webp",
+      "label": "Manchester 2022",
+      "alt": "Framed poster on a wall: Manchester United Women's 3-1 win over Everton at Old Trafford, 2022, two players seen from behind."
+    },
+    {
+      "group": "women",
+      "listing": "4517396908",
+      "image": "/shop/united-women-london-2023.webp",
+      "label": "London 2023",
+      "alt": "Framed poster on a wall: Manchester United Women v Chelsea, the 2023 Women's FA Cup final at Wembley, two players seen from behind."
+    },
+    {
+      "group": "women",
+      "listing": "4517398702",
+      "image": "/shop/united-women-leigh-2024.webp",
+      "label": "Leigh 2024",
+      "alt": "Framed poster on a wall: Manchester United Women's 2-1 win over Chelsea in the 2024 Women's FA Cup semi-final, three players seen from behind."
+    },
+    {
+      "group": "women",
+      "listing": "4527673755",
+      "image": "/shop/united-women-london-2024.webp",
+      "label": "London 2024",
+      "alt": "Framed poster on a wall: Manchester United Women's 4-0 win over Tottenham Hotspur in the 2024 Women's FA Cup final at Wembley, three players seen from behind."
+    },
+    {
+      "group": "women",
+      "listing": "4517399720",
+      "image": "/shop/united-women-leigh-2025.webp",
+      "label": "Leigh 2025",
+      "alt": "Framed poster on a wall: Manchester United Women's 3-0 win over SK Brann in the 2025 Women's Champions League qualifier at Leigh, three players seen from behind."
+    },
+    {
+      "group": "women",
+      "listing": "4527680418",
+      "image": "/shop/united-women-manchester-2025.webp",
+      "label": "Manchester 2025",
+      "alt": "Framed poster on a wall: Manchester United Women's 2-1 win over Paris Saint-Germain at Old Trafford, November 2025, three players seen from behind."
+    }
+  ]
+}

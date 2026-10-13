@@ -135,17 +135,25 @@ allowed by an exact sha256 (see the CSP section under Per-article pages). Reduce
 a hard requirement on any animation; `src/anim/` shows the register (fast, no bounce,
 content readable if JS never runs).
 
-**THE BRAND IS A WHITE TOKEN SYSTEM, and any file still saying navy is out of date.**
-Phase 2A (2026-08-09) flipped the ground and the ink across every page family in one pass.
+**THE BRAND IS A LIGHT TOKEN SYSTEM ON WARM PAPER, and any file still saying navy is out of date.**
+Phase 2A (2026-08-09) flipped the ground and the ink across every page family in one pass. On
+2026-10-13 the founder asked for "a slightly darker background colour for the website, and a
+better contrast so the writing is more visible", so the white ground became warm off-white and
+the three paler text tokens were darkened (the "white system" names in older notes mean this).
 
-- `--bg` #FFFFFF, `--bg-sunken` #F4F2F3, `--ink` #1E223D, `--ink-soft` #4A4F73,
-  `--ink-muted` #5F6485, `--accent-fill` #F54F1B, `--accent-ink` #C93A0F, `--rule` #DED9DB,
-  `--rule-soft` #EDEAEB, `--confirmed` #1E7A38.
-- **Two tokens are never text.** `--accent-fill` measures 3.49:1 on white and `--ink-faint`
-  (#7A7F9E) 3.92:1, so both are fills, bars and marks only. The text form of the accent is
-  `--accent-ink` at 5.13:1, and the readable muted text token is `--ink-muted` at 5.76:1 on
-  white and 5.16:1 on the sunken grey. Reaching for the bright orange because a label looked
-  quiet is the mistake that keeps getting made.
+- `--bg` #F4F1EA, `--bg-sunken` #EAE6DC, `--ink` #1E223D, `--ink-soft` #3C4163,
+  `--ink-muted` #4C5176, `--accent-fill` #F54F1B, `--accent-ink` #B23109, `--rule` #D9D3C5,
+  `--rule-soft` #E7E2D6, `--confirmed` #176A2E. (Was #FFFFFF, #F4F2F3, ink unchanged, #4A4F73,
+  #5F6485, #F54F1B, #C93A0F, #DED9DB, #EDEAEB, #1E7A38.) `--reported` is #6E5600 and `--bg-raised`
+  (src/style.css only, a card or strip lifting off the paper) is #FAF8F3.
+- Contrast, ground / sunken: ink 13.78 / 12.47, ink-soft 8.75 / 7.92, ink-muted 6.78 / 6.14,
+  accent-ink 5.58 / 5.05, confirmed 5.93 / 5.37, reported 6.22 / 5.63, white on accent-ink 6.29.
+- **Two tokens are never text.** `--accent-fill` measures 3.09:1 on the ground and `--ink-faint`
+  (#7A7F9E) 3.48:1, so both are fills, bars and marks only. The text form of the accent is
+  `--accent-ink`, and the readable muted text token is `--ink-muted`. Reaching for the bright
+  orange because a label looked quiet is the mistake that keeps getting made.
+- The crest's white disc and the navy crest, poster and infogram surfaces are deliberately
+  untouched: the disc now reads as a white round badge on the paper.
 - **The old navy names still resolve.** `--navy: var(--bg)`, `--cream: var(--ink)`,
   `--gold: var(--accent-ink)` and the rest are aliases, deliberately, so no rule written
   against the old vocabulary had to be rewritten. They are a migration seam, not a palette.
@@ -171,8 +179,12 @@ Phase 2A (2026-08-09) flipped the ground and the ink across every page family in
   declare their own small `:root` (`/app`, `/start`, `/quiz`); they carry the same values.
 
 **The front page is rendered at build time, and the bundle enhances it.**
-`src/render/home.ts` builds the dateline, the wire, the lead, the three desk bands, the
-illustrated library, the desk brief, the legends wall and the long reads into the HTML.
+`src/render/home.ts` builds the lead, the "Today at the desk" strip and the Desk Brief into the
+HTML. **The front page was cut back on 2026-10-13 (founder) to five things: the live scores
+strip, the lead (the day's story), "Today at the desk", the Desk Brief and four poster tiles.**
+The three desk bands, the app block, the legends wall, the long reads, the FAQ and the
+partnership form are off it; see "The front page after the 2026-10-13 trim" below for where each
+went.
 `vite.config.ts` swaps them in through the `archvHome()` plugin, which runs in `npm run dev`
 as well as in `npm run build`, so a developer sees what ships.
 
@@ -181,12 +193,12 @@ as well as in `npm run build`, so a developer sees what ships.
   arrangement exists to remove.
 - **Nothing in `src/render/` may emit a `<script>` tag.** `index.html` carries exactly one
   inline bootstrap and `scripts/check-csp-hash.mjs` asserts that count.
-- `src/main.ts` creates no front-page content. It attaches behaviour: the contact form, the
-  masthead menu, the sport tabs, the long-reads height animation, analytics. If the bundle never arrives the page still reads, and that is the test to apply
+- `src/main.ts` creates no front-page content. It attaches behaviour: the masthead menu, the
+  sport tabs, the scores strip, the moved-anchor redirect, analytics. If the bundle never arrives the page still reads, and that is the test to apply
   to anything new.
-- The long reads are a native `<details>` per essay for exactly that reason. They open with
-  no JS on the page at all. Do not reintroduce a button plus a panel with a CSS resting
-  height of zero.
+- (The long reads accordion, a native `<details>` per essay, left the front page on 2026-10-13;
+  the same rule holds if it ever returns: do not reintroduce a button plus a panel with a CSS
+  resting height of zero.)
 - There is no WebGL hero and no `three` in the graph any more. `three` and `@types/three` are
   still in `package.json` and are dead weight.
 
@@ -209,6 +221,51 @@ two shelves to `public/thumbs/<width>/<original path>`, keyed by content hash in
 `scripts/shared/thumbs.mjs`. A head with no thumbs falls back to its original src, so nothing
 breaks; run the script and commit `public/thumbs/` plus the manifest after adding or replacing a
 head. The originals stay for the app feed, share cards and article art.
+
+## The front page after the 2026-10-13 trim
+
+Founder, 2026-10-13: "live scores across the top of the page, plus a visible link to go to the
+scores page ... less stuff on the first page, just the brief, the story of the day, and a few
+posters at the bottom of the page, the rest can live in sub pages."
+
+- **Live scores strip.** `<section class="scores-strip">` at the top of `<main>`, under the sport
+  tabs. The "All scores" link to `/scores/` is server-rendered and pinned OUTSIDE the scrolling
+  track, so it is visible with the feed empty or down. `src/components/scoresStrip.ts` (bundled,
+  not inline, so the one hashed bootstrap script is still the only inline script and
+  `check-csp-hash.mjs` still holds) fills the track from the public `archv-scores/1` feed
+  (`https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/scores.json`). The
+  homepage CSP names that Supabase host in `connect-src` and nowhere else; `form-action` is
+  `'self'` since the Web3Forms form left. Live matches first, then today's results and fixtures in
+  the reader's local time, else the next day's fixtures. It polls every 30 seconds only while a
+  match is live (or due within two minutes before / fifteen after kickoff) and the tab is visible.
+  Its status wording mirrors `scripts/shared/scores-client.js` (the inline client on /scores/):
+  change one, change the other. Text only, no crests. The track carries `overflow-y: hidden` (trap 3).
+- **Where each removed section went.** Football Leagues, Transfer Desk and International Football
+  bands: `/desk/leagues/`, `/desk/transfer/`, `/desk/world-cup/` (lane indexes; all three are in
+  the masthead menu). The Legends: `/legends/`. Long reads: `/reads/`. Quick answers (FAQ): the six
+  answers are the glossary entries' own opening definitions, so `/glossary/` (menu label "Quick
+  answers"); the FAQPage JSON-LD came off the front page with the visible block. "The archive, in
+  your pocket" block: the menu's gold "Download the app" slot, the footer button and `/app/`. "The
+  fans are already here" CTA: `/about/#contact` (menu "Partner with us" and the footer button);
+  the Web3Forms form and `contactForm.ts` are gone, so partnership enquiries are the mailto on
+  /about/ now. "Read the finals" and "The ARCHV explains" lists: `/finals/` and `/explainers/`,
+  linked from the front-page footer. The poster grids: `/posters/`
+  (`scripts/build-posters-page.mjs`, tiles from `scripts/data/poster-tiles.json`, indexable, in
+  the sitemap); the front page keeps four tiles in index.html (keep in step with the JSON).
+- **Old anchors still resolve.** The iOS app's fallback share links point at `thearchv.ca/#transfer-desk`,
+  `#world-cup` and `#football-leagues` (`thearchv-app/TheARCHV/Models.swift`, `siteURL`). Those ids
+  are gone from the page, so `src/ui/movedAnchors.ts` (run first in `boot()`) `location.replace`s
+  them, and `#legends`, `#long-reads`, `#faq`, `#partnerships`, to the page that holds the section.
+  Do not repoint the app; keep this map in step with the menu.
+  The two meta-refresh stubs `public/desk/index.html` and `public/world-cup/index.html`, which used to
+  refresh to `/#transfer-desk` and `/#world-cup`, now refresh (and canonical) straight to the lane pages.
+- **The masthead menu** now lists thirteen internal destinations (front page, live scores, the
+  three desks, Legends, Long reads, Quick answers, Posters, Player duels, Daily archive game,
+  Partner with us, RSS). Three copies, no shared import: `index.html`, `masthead()` in
+  `scripts/shared/page-shell.mjs` and the hand-built nav in `scripts/build-content.mjs`. The panel
+  scrolls inside itself (`max-height` + `overflow-y: auto`) on a short phone.
+- The Desk Brief is a full-width block (was a side rail beside the bands) and the scroll-spy nav
+  (`.spynav`) is gone, since the page has one section left.
 
 ## The feed contract (the iOS app depends on this)
 
@@ -276,10 +333,10 @@ onward. Three static page families sit under `/desk/`:
 - **Home** (`/`) — a front page, not a brand statement, since phase 2A. The `<h1>` is the
   day's lead headline. The brand signal moved to the `<title>`, `og:site_name`, the masthead
   wordmark and the Organization/NewsMediaOrganization plus WebSite JSON-LD in `index.html`;
-  that block is load-bearing now rather than decorative, so do not thin it out. Each desk
-  band's title links to that lane's index page and **the section anchor ids
-  (`#transfer-desk`, `#world-cup`, `#football-leagues`) are unchanged in the DOM**, because
-  the app's fallback share links resolve against them. The day rails and
+  that block is load-bearing now rather than decorative, so do not thin it out. **The desk
+  bands left the page on 2026-10-13, so the section anchor ids (`#transfer-desk`, `#world-cup`,
+  `#football-leagues`) are no longer in the DOM; `src/ui/movedAnchors.ts` redirects them to the
+  lane index pages, because the app's fallback share links still use them.** The day rails and
   `src/components/dailyDigest.ts` are gone: cards are server-rendered by `renderBands()` in
   `src/render/home.ts` and each headline is a plain link, so the drag-versus-click threshold
   the rails needed no longer exists. Still true: no inline handlers, no client-side router.

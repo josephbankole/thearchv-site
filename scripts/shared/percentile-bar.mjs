@@ -106,21 +106,21 @@ export function percentileBar({
 export function percentileBarStyles() {
   return `<style>
     /* percentile-bar.mjs — self-contained. Colours are the white system (phase 2A, 2026-08-09):
-       ink #1E223D, muted ink #5F6485 (5.76:1 on white, the AA floor for the label and rank text),
-       accent #F54F1B for the fill (a graphic mark, no contrast floor), rule #DED9DB for the track.
+       ink #1E223D, muted ink #4C5176 (6.78:1 on the #F4F1EA ground, the AA floor for the label and rank text),
+       accent #F54F1B for the fill (a graphic mark, no contrast floor), rule #D9D3C5 for the track.
        Values are literals rather than var() because this module is emitted standalone into the
        carousel renderer as well as the duel pages, where no :root block is present. */
     .pctl { display: flex; flex-direction: column; gap: .28rem; min-width: 0; }
     .pctl--right { align-items: flex-end; text-align: right; }
-    .pctl__label { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: #5F6485; }
+    .pctl__label { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: #4C5176; }
     .pctl__value { font-family: 'Anton', 'Inter Tight', system-ui, sans-serif; font-weight: 400; text-transform: uppercase; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1; color: #1E223D; font-variant-numeric: tabular-nums; }
     /* Deliberately short. Wherever this sits next to a wider bar (the duel row's split bar, a
        carousel slide's chart) a full-width track reads as a second chart competing with the first.
        This one is a chip that qualifies the number above it. */
-    .pctl__track { display: block; width: 100%; max-width: 8.5rem; height: 4px; border-radius: 2px; background: #DED9DB; overflow: hidden; }
+    .pctl__track { display: block; width: 100%; max-width: 8.5rem; height: 4px; border-radius: 2px; background: #D9D3C5; overflow: hidden; }
     .pctl__fill { display: block; height: 100%; border-radius: 2px; background: #F54F1B; }
     .pctl--cream .pctl__fill { background: #7A7F9E; }
-    .pctl__rank { font-size: .74rem; color: #5F6485; }
-    .pctl__note { font-size: .72rem; line-height: 1.4; color: #C93A0F; }
+    .pctl__rank { font-size: .74rem; color: #4C5176; }
+    .pctl__note { font-size: .72rem; line-height: 1.4; color: #B23109; }
   </style>`;
 }

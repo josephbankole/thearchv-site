@@ -550,10 +550,17 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
       </button>
       <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
         <a class="masthead__panel-link" href="/">Front page</a>
+        <a class="masthead__panel-link" href="/scores/">Live scores</a>
+        <a class="masthead__panel-link" href="/desk/leagues/">Football Leagues</a>
         <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+        <a class="masthead__panel-link" href="/desk/world-cup/">International Football</a>
+        <a class="masthead__panel-link" href="/legends/">Legends</a>
+        <a class="masthead__panel-link" href="/reads/">Long reads</a>
+        <a class="masthead__panel-link" href="/glossary/">Quick answers</a>
+        <a class="masthead__panel-link" href="/posters/">Posters</a>
         <a class="masthead__panel-link" href="/duel/">Player duels</a>
         <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
-        <a class="masthead__panel-link" href="/scores/">Live scores</a>
+        <a class="masthead__panel-link" href="/about/#contact">Partner with us</a>
         <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
@@ -654,8 +661,8 @@ export const appCtaBlock = () => `
       </aside>`;
 
 /* Deliberately quiet, the same hairline box on the sunken grey the email capture used, with the
-   accent kept to the one button. White on --accent-ink measures 5.13:1, --ink-soft on the sunken
-   grey clears AA. The button is a link styled as one, 44px tall for touch. */
+   accent kept to the one button. White on --accent-ink measures 6.29:1, --ink-soft on the sunken
+   step measures 7.92:1. The button is a link styled as one, 44px tall for touch. */
 export const APP_CTA_STYLES = `<style>
     .appcta{margin:2rem 0 0;padding:1.4rem 1.5rem;border:1px solid var(--rule);border-radius:.75rem;background:var(--bg-sunken)}
     .appcta__title{margin:0 0 .5rem;color:var(--ink);font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3}
@@ -831,7 +838,7 @@ export function documentShell(opts = {}) {
     `  <meta name="description" content="${escAttr(metaDescription)}" />`,
     `  <meta name="robots" content="${escAttr(robots)}" />`,
     ...(canonical ? [`  <link rel="canonical" href="${escAttr(canonical)}" />`] : []),
-    `  <meta name="theme-color" content="#FFFFFF" />`,
+    `  <meta name="theme-color" content="#F4F1EA" />`,
     `  ${csp}`,
     `  <meta property="og:type" content="${escAttr(ogType)}" />`,
     `  <meta property="og:site_name" content="The ARCHV" />`,
@@ -919,22 +926,25 @@ export function pageStyles() {
 
          MIRRORS the :root block in src/style.css and the smaller one in public/content.css.
          The three files do not import each other. Change one, change all three. */
-      --bg: #FFFFFF; --bg-sunken: #F4F2F3;
-      --ink: #1E223D;        /* 15.54:1 on white, 13.94:1 on sunken */
-      --ink-soft: #4A4F73;   /*  7.90:1 on white,  7.09:1 on sunken */
+      --bg: #F4F1EA; --bg-sunken: #EAE6DC;
+      --ink: #1E223D;        /* 13.78:1 on the ground, 12.47:1 on sunken */
+      --ink-soft: #3C4163;   /*  8.75:1 on the ground,  7.92:1 on sunken */
       /* --ink-muted is the readable-muted TEXT token and the direct successor of
-         --cream-faint-text: the prototype's --ink-faint (#7A7F9E) measures 3.92:1 on white and
-         3.52:1 on the sunken grey, so it fails AA wherever it carries words. #5F6485 is the same
-         hue ramp at 5.76:1 / 5.16:1, and it is what every breadcrumb, byline, date, desk-nav
-         link, related dek, prev/next label and footer legal line resolves to. */
-      --ink-muted: #5F6485;
+         --cream-faint-text: the prototype's --ink-faint (#7A7F9E) measures 3.48:1 on the ground
+         and 3.15:1 on the sunken step, so it fails AA wherever it carries words. #4C5176 is the
+         same hue ramp at 6.78:1 / 6.14:1, and it is what every breadcrumb, byline, date,
+         desk-nav link, related dek, prev/next label and footer legal line resolves to.
+         2026-10-13: the ground moved from white to warm paper and these three text tokens were
+         darkened with it (ink-soft was #4A4F73, ink-muted #5F6485, accent-ink #C93A0F). */
+      --ink-muted: #4C5176;
       /* Decorative only — bar fills and marks, never text. */
       --ink-faint: #7A7F9E;
-      /* --accent is a fill and a rule, never text (#F54F1B is 3.49:1 on white). --accent-ink is
-         the text/link form at 5.13:1 white / 4.60:1 sunken. --on-accent goes on the fill. */
-      --accent-fill: #F54F1B; --accent-ink: #C93A0F; --on-accent: #16192E;
-      --rule: #DED9DB; --rule-soft: #EDEAEB;
-      --confirmed: #1E7A38; --on-status: #FFFFFF;
+      /* --accent is a fill and a rule, never text (#F54F1B is 3.09:1 on the ground).
+         --accent-ink is the text/link form at 5.58:1 on the ground / 5.05:1 sunken.
+         --on-accent goes on the fill. */
+      --accent-fill: #F54F1B; --accent-ink: #B23109; --on-accent: #16192E;
+      --rule: #D9D3C5; --rule-soft: #E7E2D6;
+      --confirmed: #176A2E; --on-status: #FFFFFF;
 
       /* ---------- legacy aliases ----------
          Every rule below this block was written against the navy vocabulary. The names stay and
@@ -985,7 +995,7 @@ export function pageStyles() {
       margin: 0; background: var(--bg-main); color: var(--text-secondary);
       font-family: "Inter Tight", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       font-size: 18px; line-height: 1.65; -webkit-font-smoothing: antialiased;
-      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-sunken) 0%, rgba(255,255,255,0) 70%);
+      background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-sunken) 0%, rgba(244,241,234,0) 70%);
     }
     /* Dot-grid field (Tier 0). Two offset radial-gradient layers on a 24px lattice, masked so it
        fades out before the content gets dense. Purely decorative, pointer-events off, and it sits
@@ -1031,7 +1041,7 @@ export function pageStyles() {
     .mast-rule { height: 3px; background: var(--accent-fill); max-width: 72rem; margin: 0 auto; }
     .btn { display: inline-block; padding: .5rem .9rem; border-radius: .5rem; font-size: .85rem; font-weight: 600; white-space: nowrap; }
     .btn--ghost { border: 1px solid var(--gold-soft); color: var(--cream); }
-    .btn--gold { background: var(--gold); color: #FFFFFF; }  /* 5.13:1 on --accent-ink */
+    .btn--gold { background: var(--gold); color: #FFFFFF; }  /* 6.29:1 on --accent-ink */
 
     /* masthead search + hamburger. The search link is a visible destination beside the menu
        rather than an item inside it (phase 3). MIRROR of the same rules in src/style.css and in
@@ -1064,6 +1074,9 @@ export function pageStyles() {
       background: var(--navy-deep); border: 1px solid var(--cream-faint); border-radius: .5rem;
       padding: .35rem; display: flex; flex-direction: column; gap: .1rem;
       box-shadow: var(--shadow-lift);
+      /* The panel lists thirteen internal destinations since 2026-10-13: on a short phone it scrolls
+         inside itself (a vertical scroller, nothing sideways) rather than running off the screen. */
+      max-height: calc(100vh - 7rem); max-height: calc(100svh - 7rem); overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
     }
     .masthead__panel[hidden] { display: none; }
     .masthead__panel-link {
@@ -1157,7 +1170,7 @@ export function pageStyles() {
     .article__disclosure { color: var(--cream-faint-text); font-size: .8rem; margin: 0 0 .25rem; }
     .article__meta { color: var(--cream-faint-text); font-size: .9rem; margin: 0 0 1.5rem; }
     .article__fig { margin: 1.5rem 0 2rem; }
-    .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
+    .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px var(--bg); }
     .article__body p { margin: 1rem 0; }
     /* In-body links carry an underline, so a link is not told apart by colour alone. */
     .article__body a { text-decoration: underline; text-underline-offset: 3px; }
@@ -1215,7 +1228,7 @@ export function pageStyles() {
       background: var(--bg-raised); color: inherit; transition: border-color .2s ease, transform .2s ease; }
     .lane-card:hover { border-color: var(--gold-soft); text-decoration: none; transform: translateY(-2px); }
     .lane-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-    .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
+    .lane-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 1px solid var(--rule); box-shadow: 0 0 0 4px var(--bg); }
     .lane-card__body { min-width: 0; }
     .lane-card__kicker { display: block; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .4rem; }
     /* display:block is load-bearing, not tidiness. These are <span>s inside a whole-card <a>, and

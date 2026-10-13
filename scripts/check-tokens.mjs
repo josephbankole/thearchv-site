@@ -31,8 +31,8 @@
      - Value-only, not presence. Those roots are deliberate subsets, so a token simply being
        absent from one is not an error; a token being present with the WRONG hex is.
      - --cream-dim IS EXCLUDED, and it is excluded because it genuinely disagrees today. In all
-       three shared files --cream-dim aliases --ink-soft (#4A4F73). All three hand-built pages set
-       --cream-dim: #5F6485, which is --ink-muted's value. Both are white-system colours, so this
+       three shared files --cream-dim aliases --ink-soft (#3C4163). All three hand-built pages set
+       --cream-dim: #4C5176, which is --ink-muted's value. Both are white-system colours, so this
        is naming drift and not a brand break, but it is a real inconsistency and not this
        script's to resolve: correcting it means changing a colour on three live pages, which is a
        founder call. The exclusion is printed on every successful run so it cannot rot into
@@ -76,7 +76,7 @@ const LEGACY_ALIASES = {
 
 const EXCLUDED_LEGACY = {
   "--cream-dim":
-    "aliases --ink-soft (#4A4F73) in the three shared files but is set to --ink-muted's #5F6485 " +
+    "aliases --ink-soft (#3C4163) in the three shared files but is set to --ink-muted's #4C5176 " +
     "on all three hand-built pages. Naming drift between two system colours, not an off-palette " +
     "hex. Fixing it changes a colour on live pages, so it needs a founder call, not a guard.",
 };

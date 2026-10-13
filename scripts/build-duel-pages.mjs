@@ -289,7 +289,7 @@ function duelStyles() {
     /* the two faces, name and club, either side of a gold V */
     .duel-heads { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin: 0 0 1.4rem; }
     .duel-head { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1 1 0; min-width: 0; }
-    .duel-head__img, .duel-head__monogram { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px #FFFFFF; }
+    .duel-head__img, .duel-head__monogram { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px var(--bg); }
     .duel-head__monogram { display: flex; align-items: center; justify-content: center; background: var(--bg-sunken); color: var(--accent-ink); font-family: var(--display); font-size: 2rem; font-weight: 400; }
     .duel-head__name { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.05rem, 3.4vw, 1.35rem); line-height: 1.2; margin: .8rem 0 .2rem; }
     .duel-head__club { font-size: .82rem; color: var(--cream-faint-text); margin: 0; }

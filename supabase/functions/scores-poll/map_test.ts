@@ -10,6 +10,7 @@ import {
   mapMatch,
   mapMatchFile,
   type Match,
+  normaliseMatch,
   sortMatches,
   tidy,
 } from "./map.ts";
@@ -390,4 +391,26 @@ Deno.test("names: a double-encoded name from the API is repaired, and invisible 
     assertEquals(tidy(ok), ok);
   }
   assertEquals(tidy("  padded  "), "padded");
+});
+
+Deno.test("normaliseMatch: a stored match comes back exactly as mapMatch built it, keys in order", () => {
+  const sorted = (v: unknown): unknown => {
+    if (Array.isArray(v)) return v.map(sorted);
+    if (v && typeof v === "object") {
+      return Object.fromEntries(
+        Object.entries(v).sort(([a], [b]) => a.length - b.length || (a < b ? -1 : 1)).map(([k, x]) => [k, sorted(x)]),
+      );
+    }
+    return v;
+  };
+  for (const id of [IDS.plFinished, IDS.uclLive, IDS.wslFinished, IDS.uclFinalPens]) {
+    const m = matchOf(id);
+    assert(JSON.stringify(sorted(m)) !== JSON.stringify(m), "the test needs a reordering to undo");
+    assertEquals(JSON.stringify(normaliseMatch(sorted(m))), JSON.stringify(m), String(id));
+  }
+  // Junk is refused, not repaired into something that looks like a match.
+  for (const bad of [null, 7, "x", [], {}, { ...matchOf(IDS.plFinished), id: "abc" }, { ...matchOf(IDS.plFinished), kickoff: "soon" },
+    { ...matchOf(IDS.plFinished), home: null }, { ...matchOf(IDS.plFinished), competition: { key: "la-liga" } }]) {
+    assertEquals(normaliseMatch(bad), null, JSON.stringify(bad)?.slice(0, 60));
+  }
 });

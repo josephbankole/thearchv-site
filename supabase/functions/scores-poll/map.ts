@@ -205,6 +205,51 @@ export function mapMatch(fx: unknown): Match | null {
   };
 }
 
+// A MATCH read back from storage, rebuilt field by field in the order mapMatch builds it. Postgres
+// jsonb hands an object's keys back shortest first, not in the order they went in, so a match
+// that has been through the state row would otherwise be written out with its keys in a different
+// order. Strings are taken as stored (they were tidied on the way in). null for anything that is
+// not a match, so one damaged entry costs that match, not the run.
+export function normaliseMatch(v: unknown): Match | null {
+  const m = obj(v);
+  const comp = obj(m?.competition);
+  const status = obj(m?.status);
+  const key = COMPETITIONS.find((c) => c.key === comp?.key);
+  const id = int(m?.id);
+  const kickoff = typeof m?.kickoff === "string" ? m.kickoff : null;
+  const code = typeof status?.code === "string" ? status.code : null;
+  const home = storedSide(m?.home);
+  const away = storedSide(m?.away);
+  if (!key || id === null || !kickoff || !Number.isFinite(Date.parse(kickoff)) || !code || !home || !away) {
+    return null;
+  }
+  const pen = obj(m?.penalties);
+  const text = (x: unknown) => typeof x === "string" ? x : null;
+  return {
+    id,
+    competition: { key: key.key, name: key.name, round: text(comp?.round) },
+    kickoff,
+    status: {
+      code,
+      minute: int(status?.minute),
+      extra: int(status?.extra),
+      live: isLive(code),
+      finished: isFinished(code),
+    },
+    home,
+    away,
+    penalties: pen ? { home: int(pen.home), away: int(pen.away) } : null,
+    venue: text(m?.venue),
+    detail: text(m?.detail),
+  };
+}
+
+function storedSide(v: unknown): Side | null {
+  const o = obj(v);
+  const id = int(o?.id);
+  return id !== null && typeof o?.name === "string" && o.name ? { id, name: o.name, goals: int(o.goals) } : null;
+}
+
 // Kickoff, then competition order, then id, so the file is byte-stable between runs.
 export function sortMatches<T extends Match>(matches: readonly T[]): T[] {
   const order = (m: Match) => COMPETITIONS.findIndex((c) => c.key === m.competition.key);

@@ -172,12 +172,26 @@ export function detailTargets(
 export type OutFile = { path: string; body: { generatedAt: string } & Record<string, unknown> };
 export type Planned = { path: string; text: string; hash: string };
 
+// JSON with every object's keys sorted, so two documents that say the same thing compare equal
+// whatever order their keys were built or read back in (Postgres jsonb reorders them). Arrays keep
+// their order, which is meaningful here.
+export function canonicalJson(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(canonicalJson).join(",")}]`;
+  if (v && typeof v === "object") {
+    const o = v as Record<string, unknown>;
+    const parts = Object.keys(o).sort().filter((k) => o[k] !== undefined)
+      .map((k) => `${JSON.stringify(k)}:${canonicalJson(o[k])}`);
+    return `{${parts.join(",")}}`;
+  }
+  return JSON.stringify(v) ?? "null";
+}
+
 // The first 16 hex of the sha256 of a document with generatedAt left out. generatedAt moves every
-// run, so it cannot be part of "has this changed". Key order is the order the mappers build the
-// objects in, which does not vary.
+// run, so it cannot be part of "has this changed". Keys are sorted first: the matches in a quiet
+// minute come back from the state row in jsonb's key order, and an order change is not a change.
 export async function contentHash(body: Record<string, unknown>): Promise<string> {
   const { generatedAt: _ignored, ...rest } = body;
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(rest)));
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(canonicalJson(rest)));
   let hex = "";
   for (const b of new Uint8Array(digest)) hex += b.toString(16).padStart(2, "0");
   return hex.slice(0, 16);

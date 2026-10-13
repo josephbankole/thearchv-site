@@ -9,6 +9,7 @@ import {
   mapMatch,
   mapMatchFile,
   type Match,
+  normaliseMatch,
   SCORES_SCHEMA,
   SOURCE,
   sortMatches,
@@ -109,30 +110,38 @@ export async function runPoll(
       deps.api(`/fixtures?league=${c.leagueId}&season=${deps.season}&from=${win.from}&to=${win.to}`)
     ));
     results.forEach(saw);
-    results.forEach((r, i) => {
-      if (!r.ok) errors.push(`${COMPETITIONS[i].key}: ${r.reason}`);
+    // A competition that failed keeps the matches we already had for it. So does one that answered
+    // with nothing while we hold matches for it: a real competition does not empty out of a
+    // three-day window, and believing it would drop the night's matches from scores.json (and stop
+    // their details calls) until the next refresh.
+    const outcomes = COMPETITIONS.map((c, i) => {
+      const r = results[i];
+      const held = matches.filter((m) => m.competition.key === c.key);
+      if (!r.ok) {
+        errors.push(`${c.key}: ${r.reason}`);
+        return { fresh: null, held };
+      }
+      const fresh = r.fixtures.map(mapMatch).filter((m): m is Match =>
+        m !== null && m.competition.key === c.key && inWindow(m.kickoff, win)
+      );
+      if (fresh.length === 0 && held.length > 0) {
+        errors.push(`${c.key}: empty schedule reply`);
+        return { fresh: null, held };
+      }
+      return { fresh, held };
     });
-    const good = results.filter((r) => r.ok).length;
+    const good = outcomes.filter((o) => o.fresh !== null).length;
     if (good === 0) {
       // Nothing came back we can use: keep the last good state and files, and leave the API alone
       // for a couple of minutes.
       return done({ ...state, backoffUntil: backoff }, false);
     }
-    // A competition that failed keeps the matches we already had for it.
     const merged = new Map<number, Match>();
-    COMPETITIONS.forEach((c, i) => {
-      const r = results[i];
-      const fresh = r.ok
-        ? r.fixtures.map(mapMatch).filter((m): m is Match =>
-          m !== null && m.competition.key === c.key && inWindow(m.kickoff, win)
-        )
-        : matches.filter((m) => m.competition.key === c.key);
-      for (const m of fresh) merged.set(m.id, m);
-    });
+    for (const o of outcomes) for (const m of o.fresh ?? o.held) merged.set(m.id, m);
     matches = sortMatches([...merged.values()]);
     scheduleRefreshed = true;
     // A partial refresh comes due again in five minutes instead of thirty.
-    scheduleFetchedAt = new Date(now.getTime() - (good === results.length ? 0 : SCHEDULE_EVERY_MS - 5 * 60_000))
+    scheduleFetchedAt = new Date(now.getTime() - (good === COMPETITIONS.length ? 0 : SCHEDULE_EVERY_MS - 5 * 60_000))
       .toISOString();
     windowDay = win.today;
   }
@@ -217,7 +226,8 @@ export async function runPoll(
 // ---------- the state row ----------
 
 // public.scores_poll_state's single row <-> PollState. Read defensively: a column of the wrong
-// shape reads as empty, which costs one schedule refresh and a few rewrites, never a crash.
+// shape reads as empty, which costs one schedule refresh and a few rewrites, never a crash. The
+// matches are rebuilt in the mapper's key order (jsonb returns them in its own).
 export function stateFromRow(row: Record<string, unknown> | null | undefined): PollState {
   if (!row) return EMPTY_STATE;
   const text = (v: unknown) => typeof v === "string" && v ? v : null;
@@ -231,7 +241,9 @@ export function stateFromRow(row: Record<string, unknown> | null | undefined): P
   return {
     scheduleFetchedAt: text(row.schedule_fetched_at),
     windowDay: text(row.window_day),
-    matches: Array.isArray(row.matches) ? row.matches as Match[] : [],
+    matches: Array.isArray(row.matches)
+      ? row.matches.map(normaliseMatch).filter((m): m is Match => m !== null)
+      : [],
     finishedAt: map(row.finished_at),
     fileHashes: map(row.file_hashes),
     backoffUntil: text(row.backoff_until),

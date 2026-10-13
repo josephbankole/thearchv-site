@@ -3,6 +3,7 @@
 import { mapMatch, type Match } from "./map.ts";
 import {
   addDays,
+  canonicalJson,
   contentHash,
   detailTargets,
   FINISHED_TAIL_MS,
@@ -270,4 +271,16 @@ Deno.test("planWrites: only new or changed files are written", async () => {
   // A file the state has never heard of is written even though the others are not.
   const extra = await planWrites([f("scores.json", 0), f("match/2.json", 0)], written);
   assertEquals(extra.map((p) => p.path), ["match/2.json"]);
+});
+
+Deno.test("contentHash: the order keys were built or read back in is not a change", async () => {
+  const a = { schema: "x", generatedAt: "t", matches: [{ id: 1, home: { id: 2, goals: null }, venue: "A" }] };
+  const jsonb = { matches: [{ id: 1, home: { id: 2, goals: null }, venue: "A" }], schema: "x" };
+  const reordered = { schema: "x", matches: [{ venue: "A", home: { goals: null, id: 2 }, id: 1 }] };
+  assertEquals(await contentHash(jsonb), await contentHash(a));
+  assertEquals(await contentHash(reordered), await contentHash(a));
+  // Array order is meaningful, and a null is not a missing key.
+  assertEquals((await contentHash({ matches: [{ id: 2 }, { id: 1 }] })) === (await contentHash({ matches: [{ id: 1 }, { id: 2 }] })), false);
+  assertEquals((await contentHash({ m: { goals: null } })) === (await contentHash({ m: {} })), false);
+  assertEquals(canonicalJson({ b: [1, { d: 1, c: undefined }], a: "x" }), '{"a":"x","b":[1,{"d":1}]}');
 });

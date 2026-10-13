@@ -46,5 +46,5 @@ export const IDS = {
   uclLive: 1635623, // Atletico Madrid v Manchester United, 2H when captured, a cancelled goal
   uclFinished: 1635679, // Lens 0-2 Sporting CP, FT
   wslFinished: 1607697, // Manchester City W 4-2 Arsenal W, FT
-  uclFinalPens: 1544371, // PSG v Arsenal, PEN 4-3, the 2025 final
+  uclFinalPens: 1544371, // PSG v Arsenal, PEN 4-3, the 2026 final (2025/26 season)
 };

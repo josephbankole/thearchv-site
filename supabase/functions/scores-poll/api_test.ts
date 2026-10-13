@@ -22,6 +22,8 @@ Deno.test("readEnvelope: everything else is a failure, and the reason names a fi
   const quota = readEnvelope(200, { errors: { requests: "You have reached the request limit for the day" }, response: [] });
   assertEquals(quota, { ok: false, reason: "API error (requests)" });
   assertEquals(readEnvelope(200, { errors: ["bad"], response: [] }), { ok: false, reason: "API error (list)" });
+  assertEquals(readEnvelope(200, { errors: "rate limited", response: [] }), { ok: false, reason: "API error (text)" });
+  assertEquals(readEnvelope(200, { errors: "", response: [] }), { ok: true, fixtures: [] });
   assertEquals(readEnvelope(200, { errors: { token: "x", plan: "y" }, response: [] }), { ok: false, reason: "API error (token,plan)" });
 });
 

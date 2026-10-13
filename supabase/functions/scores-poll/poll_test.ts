@@ -12,8 +12,11 @@ import {
   stateFromRow,
   type Summary,
 } from "./poll.ts";
+import { mapMatch, type Match } from "./map.ts";
 import { scheduleDue } from "./plan.ts";
 import { assert, assertEquals, DETAIL_FIXTURES, fixtureById, IDS, SCHEDULES } from "./testkit.ts";
+
+const matchOf = (id: number): Match => mapMatch(fixtureById(id))!;
 
 const MIN = 60_000;
 const T0 = "2026-10-13T20:10:00Z"; // a Champions League night, seven matches in the second half
@@ -24,7 +27,9 @@ type Fx = any;
 
 // The API: a schedule per league=, and for ids= every fixture we hold a details reply for, or else
 // the schedule's own row for it (which has no events or lineups, as a quiet match would not).
-function fakeApi(opts: { fail?: (path: string) => string | null; edit?: (fx: Fx) => void } = {}) {
+function fakeApi(
+  opts: { fail?: (path: string) => string | null; empty?: (path: string) => boolean; edit?: (fx: Fx) => void } = {},
+) {
   const calls: string[] = [];
   const api: ApiGet = (path) => {
     calls.push(path);
@@ -41,7 +46,8 @@ function fakeApi(opts: { fail?: (path: string) => string | null; edit?: (fx: Fx)
       ).filter(Boolean);
       fixtures.forEach((fx) => opts.edit?.(fx));
     } else {
-      fixtures = structuredClone(SCHEDULES[q.get("league")!].response);
+      // A well-formed 200 with nothing in it, when asked for.
+      fixtures = opts.empty?.(path) ? [] : structuredClone(SCHEDULES[q.get("league")!].response);
     }
     return Promise.resolve({ ok: true, fixtures, remaining: 7400 - calls.length });
   };
@@ -69,6 +75,20 @@ async function minute(
   const out = await runPoll(state, { now, season: 2026, api, write: store.write });
   return { ...out, calls };
 }
+// What Postgres jsonb does to an object on its way back out of the state row: keys come back
+// shortest first, then bytewise, whatever order they went in.
+function jsonbOrder(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(jsonbOrder);
+  if (v && typeof v === "object") {
+    const byKey = ([a]: [string, unknown], [b]: [string, unknown]) =>
+      a.length - b.length || (a < b ? -1 : a > b ? 1 : 0);
+    return Object.fromEntries(Object.entries(v).sort(byKey).map(([k, x]) => [k, jsonbOrder(x)]));
+  }
+  return v;
+}
+const viaJsonb = (s: PollState): PollState =>
+  stateFromRow(jsonbOrder(rowFromState(s, new Date(0))) as Record<string, unknown>);
+
 const scoresOf = (store: ReturnType<typeof fakeStore>) => JSON.parse(store.files.get(SCORES_PATH)!);
 const scheduleCalls = (calls: string[]) => calls.filter((c) => c.includes("league="));
 const detailCalls = (calls: string[]) => calls.filter((c) => c.includes("ids="));
@@ -200,6 +220,77 @@ Deno.test("one competition failing keeps its matches and comes due again in five
   assertEquals(scoresOf(store).matches.length, 7);
 });
 
+Deno.test("an empty reply for a competition we hold matches for is a partial failure, not a wipe", async () => {
+  const store = fakeStore();
+  const a = await minute(EMPTY_STATE, at(T0), store);
+  const ucl = (s: PollState) => s.matches.filter((m) => m.competition.key === "champions-league");
+  assertEquals([ucl(a.state).length, a.state.matches.filter((m) => m.status.live).length], [18, 7]);
+  const before = new Map(store.files);
+
+  // Half an hour on, the Champions League schedule comes back 200 with an empty list.
+  const empty = (p: string) => p.includes("league=2&");
+  const b = await minute(a.state, at(T0, 30), store, { empty });
+  assertEquals(b.summary.scheduleRefreshed, true);
+  assertEquals(b.summary.ok, false);
+  assertEquals(b.summary.error, "champions-league: empty schedule reply");
+  assertEquals(b.summary.liveCount, 7, "the live matches are still live");
+  assertEquals(ucl(b.state).length, 18, "its matches are carried over");
+  assertEquals(detailCalls(b.calls).length, 1, "and their details calls go on");
+  assertEquals(b.summary.filesWritten, 0);
+  assertEquals([...store.files], [...before], "scores.json still lists them");
+  assertEquals(b.state.backoffUntil, null);
+  assertEquals(scheduleDue(b.state, at(T0, 34)), false);
+  assertEquals(scheduleDue(b.state, at(T0, 35)), true, "retried in five minutes, not thirty");
+
+  // The next try gets the real list: back to normal, still nothing to rewrite.
+  const c = await minute(b.state, at(T0, 35), store);
+  assertEquals([c.summary.ok, c.summary.scheduleRefreshed, c.summary.filesWritten], [true, true, 0]);
+  assertEquals(ucl(c.state).length, 18);
+  assertEquals(scheduleDue(c.state, at(T0, 64)), false);
+});
+
+Deno.test("an empty reply from a competition we hold nothing for is just a quiet competition", async () => {
+  const store = fakeStore();
+  const a = await minute(EMPTY_STATE, at("2026-10-04T20:00:00Z"), store); // seven WSL matches, nothing else
+  assertEquals(a.state.matches.length, 7);
+  const b = await minute(a.state, at("2026-10-04T20:31:00Z"), store, { empty: (p) => !p.includes("league=44") });
+  assertEquals([b.summary.ok, b.summary.scheduleRefreshed, b.summary.filesWritten], [true, true, 0]);
+  assertEquals(b.state.backoffUntil, null);
+});
+
+Deno.test("empty replies from every competition we hold matches for back off like an outage", async () => {
+  const store = fakeStore();
+  const a = await minute(EMPTY_STATE, at(T0), store);
+  // Hold a WSL match too, so all three competitions have something to lose.
+  const wsl = { ...a.state.matches[0], id: 999, competition: { key: "wsl" as const, name: "FA WSL", round: null } };
+  const held = { ...a.state, matches: [...a.state.matches, wsl] };
+  const before = new Map(store.files);
+  const b = await minute(held, at(T0, 30), store, { empty: () => true });
+  assertEquals([b.summary.ok, b.summary.scheduleRefreshed], [false, false]);
+  assertEquals(b.summary.error, "premier-league: empty schedule reply; champions-league: empty schedule reply; wsl: empty schedule reply");
+  assertEquals(b.state.matches, held.matches);
+  assertEquals(b.state.backoffUntil, at(T0, 32).toISOString());
+  assertEquals(b.calls.length, 3, "no details call after a failed schedule");
+  assertEquals([...store.files], [...before]);
+});
+
+Deno.test("a quiet half hour through the state row's jsonb key order writes nothing", async () => {
+  const store = fakeStore();
+  let run = await minute(EMPTY_STATE, at(T0), store);
+  assertEquals(run.summary.filesWritten, 11);
+  // Every minute starts from the state as Postgres would hand it back, including the schedule
+  // refresh at minute 30 and the minute after it.
+  for (let m = 1; m <= 40; m++) {
+    run = await minute(viaJsonb(run.state), at(T0, m), store);
+    assertEquals(run.summary.filesWritten, 0, `minute ${m}`);
+    assertEquals(run.summary.ok, true, `minute ${m}`);
+  }
+  assertEquals(scoresOf(store).generatedAt, at(T0).toISOString(), "scores.json was never restamped");
+  // And what is published keeps the mapper's key order, not jsonb's.
+  const first = JSON.stringify(scoresOf(store).matches[0]);
+  assert(first.startsWith('{"id":'), first.slice(0, 40));
+});
+
 Deno.test("the Edmonton day rolling forces a schedule refresh, and the window moves with it", async () => {
   const store = fakeStore();
   const a = await minute(EMPTY_STATE, at("2026-10-13T05:50:00Z"), store); // 23:50 MDT on the 12th
@@ -279,6 +370,11 @@ Deno.test("the state row round-trips, and a damaged row reads as empty", () => {
   assertEquals(row.id, 1);
   assertEquals(stateFromRow(row), state);
   assertEquals(stateFromRow(null), EMPTY_STATE);
+  // A damaged entry costs that match only, and a stored match comes back in the mapper's key order.
+  const good = rowFromState({ ...state, matches: [matchOf(IDS.uclLive)] }, at(T0)).matches as Match[];
+  const damaged = stateFromRow({ matches: [null, 7, { id: 1 }, jsonbOrder(good[0])] }).matches;
+  assertEquals(damaged, good);
+  assertEquals(JSON.stringify(damaged), JSON.stringify(good));
   assertEquals(
     stateFromRow({ schedule_fetched_at: 5, window_day: "", matches: "x", finished_at: [1], file_hashes: { a: 1, b: "ok" }, backoff_until: {} }),
     { ...EMPTY_STATE, fileHashes: { b: "ok" } },

@@ -18,7 +18,7 @@
 import { adminClient, json } from "../_shared/cors.ts";
 import { makeApiGet } from "./api.ts";
 import { rowFromState, runPoll, stateFromRow } from "./poll.ts";
-import { seasonFor } from "./plan.ts";
+import { canonicalJson, seasonFor } from "./plan.ts";
 
 const BUCKET = "live";
 const STATE_COLUMNS =
@@ -66,7 +66,7 @@ Deno.serve(async (req) => {
 
   // Save the state only if the run changed it, so a quiet minute is a single read.
   let stateFailed = false;
-  if (JSON.stringify(state) !== JSON.stringify(before)) {
+  if (canonicalJson(state) !== canonicalJson(before)) {
     const { error } = await supabase.from("scores_poll_state").upsert(rowFromState(state, now));
     if (error) {
       stateFailed = true;

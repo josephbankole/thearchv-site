@@ -23,11 +23,15 @@ export function readEnvelope(
   if (status !== 200) return { ok: false, reason: `HTTP ${status}` };
   if (!body || typeof body !== "object") return { ok: false, reason: "not a JSON object" };
   const { errors, response } = body as { errors?: unknown; response?: unknown };
+  // `errors` is [] or an object when the API is well; a non-empty string is not documented but is
+  // read as the failure it would be.
   const failed = Array.isArray(errors)
+    ? errors.length > 0
+    : typeof errors === "string"
     ? errors.length > 0
     : !!errors && typeof errors === "object" && Object.keys(errors).length > 0;
   if (failed) {
-    const keys = Array.isArray(errors) ? "list" : Object.keys(errors as object).join(",").slice(0, 60);
+    const keys = Array.isArray(errors) ? "list" : typeof errors === "string" ? "text" : Object.keys(errors as object).join(",").slice(0, 60);
     return { ok: false, reason: `API error (${keys})` };
   }
   if (!Array.isArray(response)) return { ok: false, reason: "no response array" };

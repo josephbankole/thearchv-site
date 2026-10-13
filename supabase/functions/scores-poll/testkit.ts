@@ -11,7 +11,7 @@ import uclFinished from "./fixtures/detail-champions-league-finished.json" with 
 import wslFinished from "./fixtures/detail-wsl-finished.json" with { type: "json" };
 import uclFinalPens from "./fixtures/detail-champions-league-final-pens.json" with { type: "json" };
 
-export function assert(cond: unknown, msg: string): void {
+export function assert(cond: unknown, msg = "condition"): void {
   if (!cond) throw new Error(`assertion failed: ${msg}`);
 }
 export function assertEquals(actual: unknown, expected: unknown, msg = ""): void {
@@ -48,3 +48,29 @@ export const IDS = {
   wslFinished: 1607697, // Manchester City W 4-2 Arsenal W, FT
   uclFinalPens: 1544371, // PSG v Arsenal, PEN 4-3, the 2026 final (2025/26 season)
 };
+
+// A bucket in memory: what a run reads and writes. `failOn` makes the writes to some paths fail,
+// and `unreadable` makes reads of some paths throw (a Storage error that is not "no such file").
+export function memoryStore(
+  opts: { failOn?: (path: string) => boolean; unreadable?: (path: string) => boolean } = {},
+) {
+  const files = new Map<string, string>();
+  const reads: string[] = [];
+  const writes: string[] = [];
+  return {
+    files,
+    reads,
+    writes,
+    read: (path: string): Promise<string | null> => {
+      reads.push(path);
+      if (opts.unreadable?.(path)) return Promise.reject(new Error("storage down"));
+      return Promise.resolve(files.get(path) ?? null);
+    },
+    write: (path: string, text: string): Promise<void> => {
+      if (opts.failOn?.(path)) return Promise.reject(new Error("storage down"));
+      writes.push(path);
+      files.set(path, text);
+      return Promise.resolve();
+    },
+  };
+}

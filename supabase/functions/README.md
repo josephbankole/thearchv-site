@@ -227,11 +227,13 @@ mapper builds each field by name and copies no URL across.
 | --- | --- | --- |
 | `scores.json` | `https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/scores.json` | every match from yesterday 00:00 to tomorrow 23:59 (America/Edmonton), sorted by kickoff then competition |
 | `match/<id>.json` | `.../public/live/match/<id>.json` | events, lineups, API-Football's player ratings and team stats for one match, once it has kicked off |
+| `days/<YYYY-MM-DD>.json` | `.../public/live/days/2026-10-13.json` | `archv-day/1`: every match that kicked off on that Edmonton day, the same MATCH objects as `scores.json` (postponed and cancelled fixtures included, with their status) |
+| `days/index.json` | `.../public/live/days/index.json` | `archv-days/1`: the days that have a file and their match counts, newest first |
 
 Objects are uploaded with `contentType` `application/json` and `cacheControl` 30. supabase-js sends that
 as `Cache-Control: max-age=30` (not `public, max-age=30`); check the header on a read-back. A finished
 match's file stops changing about two hours after full time. Files are never deleted, so the bucket
-grows by about 7 KB for each match played.
+grows by about 7 KB for each match played, and a few KB for each day.
 
 Ratings are API-Football's numbers. The files say so in `source`, and the app has to label them as
 theirs. WSL team names lose the API's trailing " W" ("Arsenal W" becomes "Arsenal"); the competition
@@ -272,6 +274,81 @@ An API error, a spent quota or an answer that is not the expected shape (HTTP ot
 non-empty `errors`, no `response` array) writes nothing and leaves the last good files in place. Failure
 reasons name an HTTP status or a field of the API's error object, never a request URL or the key.
 
+### Match history: days/ and the backfill
+
+Finished matches are archived by day so the site can look back. The live poll writes, after the match
+files and before `scores.json`, a `days/<date>.json` for each Edmonton day in its window (yesterday, today,
+tomorrow), built from the matches it already holds, so the archive costs no API-Football requests. A day
+file is written only when its content (ignoring `generatedAt`) differs from the last write, by the same
+hash record `scores.json` uses (`days/<date>.json` keys in `scores_poll_state.file_hashes`), and its
+`detail` pointers follow the same rule as `scores.json`'s. A day that had a file and has emptied (every
+match rescheduled away) gets an empty one, so it stops showing matches it no longer has. A live minute in
+which `scores.json` changes therefore uploads one more file than before: the day file.
+
+`days/index.json` lists each day with its match count, newest first. It stops at today: tomorrow's
+schedule is not history. The poll replaces the entries for the window's days (up to today) and leaves every
+other entry alone, so it only grows. It reads and rewrites the index only when what those days say about
+themselves (their set and counts) has changed, which is a few times a day, never on a quiet or a live
+minute. If the index is there and cannot be read as an index, the poll leaves it alone, reports
+`days/index.json is not readable, left alone` in `error` and tries again the next time something changes;
+delete the file and run a backfill to rebuild it. A failure to write a day file or the index is reported
+like any other failed upload (HTTP 500) and retried the next minute, and never holds `scores.json` back.
+Day files and match files are never deleted. One narrow race exists: if a live poll and a backfill both
+rewrite the index in the same moment, the later write can drop entries the earlier one added. Running the
+backfill again repairs it, because it re-lists every day it covers.
+
+**Backfill.** A POST with the `x-push-secret` header and a JSON body `{"mode":"backfill","from":"2026-07-01"}`
+fills in the season from that date up to yesterday (Edmonton). The cron call has no body and is not
+affected. It requests the season's fixtures once per competition (3 requests), keeps the ones from `from`
+to yesterday, fetches the full details of every finished one with `/fixtures?ids=` in batches of 20, and
+writes each `match/<id>.json`, each `days/<date>.json` and `days/index.json`. It does not read or write
+`scores_poll_state`. A competition that fails to list stops the run with nothing written, because a day
+file missing one league's matches would be wrong. It is safe to run again: what is already stored is read
+back from Storage, and a file whose content matches is not rewritten, so a second run costs the same API
+requests and no writes. A day file goes up as soon as every finished match in it has its file, and the
+index follows each batch. When it has used about 100 seconds it stops starting new work and answers
+`done: false` with `next`, the first day not yet written; call again with `from` set to `next` and it
+carries on from there. The answer of a call that ran out of time, for example:
+
+```
+{ "ok": true, "done": false, "from": "2026-07-01", "to": "2026-10-12", "next": "2026-09-14",
+  "requests": 18, "remaining": 7381, "days": 71, "daysWritten": 52, "daysUnchanged": 0,
+  "matches": 310, "matchFilesWritten": 232, "matchFilesUnchanged": 0, "noDetails": 0 }
+```
+
+`requests` is the API-Football requests that call made: 3 plus one per 20 finished matches it asked about
+(a season to date of about 150 matches is 3 + 8; a whole 700-match season is 3 + 35, over two or three calls).
+`noDetails` counts finished matches the API answered without details for: they are listed in their day
+with no `detail` pointer, and do not hold the day back. An upload that fails holds its day (and its index
+entry) back and is reported in `error`; call again with `from` set to `next`. `from` must be a real date,
+and a `from` after yesterday does nothing.
+
+An edge function also has a CPU allowance (about 2 seconds of its own work; waiting on the network does not
+count). Parsing the details replies is the cost, and a whole season is near it, though the time budget
+above does not watch it. If a call ends with no answer at all, call again with the same `from`: what it had
+written is kept and is skipped on the second pass by a plain string comparison. If that keeps happening,
+work in slices (`from` a month later, then a month earlier, and so on).
+
+Run it from the SQL editor. pg_net answers asynchronously, so this returns a request id and the answer is
+read back from `net._http_response` a minute or two later (the cron job's 60-second timeout is too short
+for this; the backfill can run for 120 seconds):
+
+```sql
+select net.http_post(
+  url := 'https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/scores-poll',
+  headers := jsonb_build_object(
+    'Content-Type', 'application/json',
+    'x-push-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'push_secret')
+  ),
+  body := jsonb_build_object('mode', 'backfill', 'from', '2026-07-01'),
+  timeout_milliseconds := 150000
+) as request_id;
+
+-- then, until done is true (repeat the call above with from := next when it is not):
+select id, status_code, content::jsonb as answer
+from net._http_response order by id desc limit 3;
+```
+
 ### Request budget
 
 The plan allows 7,500 requests a day. The schedule costs 3 requests every 30 minutes, 144 a day. Details
@@ -284,6 +361,7 @@ cost at most 1 a minute and only while something is live, starting or just finis
 | A match in play round the clock | 1,584: 144 plus 1,440 |
 | A competition failing or answering empty all day (schedule due every 5 minutes) | 2,304: 864 schedule plus 1,440 details |
 | The state row unwritable all day (see below) | 5,760: 3 schedule plus 1 details, every minute |
+| A backfill from the start of the season (once, then again only to repair) | about 3 plus one per 20 matches played: 38 for a full 700-match season, about a dozen at the moment |
 
 The last row is the one to watch. If the state read works and the state write fails (for example the
 database has gone read-only), the next run reloads the old state and finds the schedule due again, so
@@ -332,10 +410,16 @@ Deploy:
 supabase functions deploy scores-poll --no-verify-jwt
 ```
 
+The function's own files are `index.ts`, `api.ts`, `backfill.ts`, `days.ts`, `map.ts`, `plan.ts` and
+`poll.ts`, plus `../_shared/cors.ts` and `../_shared/push_guard.ts`. Nothing else in the folder (tests,
+`testkit.ts`, `fixtures/`) is deployed. Deploying changes nothing until something calls the new code: the
+cron call carries no body, so the minute's poll runs as before and now also keeps `days/`; the backfill
+runs only when called with its body.
+
 ### Tests
 
-The mapping, the window, the decisions and whole runs against the recorded API answers have unit tests
-that need no network and no permissions. The recorded answers are in `scores-poll/fixtures/`: real
+The mapping, the window, the decisions, the day archive, the backfill and whole runs against the recorded
+API answers have unit tests that need no network and no permissions. The recorded answers are in `scores-poll/fixtures/`: real
 API-Football responses captured on 2026-10-13 (a finished Premier League match, a live Champions League
 match, a finished WSL match, the 2026 Champions League final that went to penalties, and the three
 schedules), with every logo, flag and photo URL, the referee and the coach photo removed.

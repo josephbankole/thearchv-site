@@ -1,7 +1,9 @@
 (function () {
   // Live scores client for /scores/. Inlined into the page by scripts/build-scores-page.mjs (the
-  // CSP hash is computed from this exact text). Reads two public JSON files and builds the DOM
-  // with textContent only, so nothing from the feed is ever parsed as markup.
+  // CSP hash is computed from this exact text). Reads public JSON files and builds the DOM with
+  // textContent only, so nothing from the feed is ever parsed as markup. scores.json is the live
+  // window (yesterday to tomorrow); days/index.json and days/<date>.json are the history behind the
+  // date menu, and ?date=YYYY-MM-DD in the address shows one past day.
   var BASE = 'https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/';
   var POLL = 30000;
   var ORDER = ['premier-league', 'champions-league', 'wsl'];
@@ -9,15 +11,30 @@
   // Goals and cards only. Substitutions, VAR notes and missed penalties stay out.
   var SHOWN = { 'goal': 1, 'own-goal': 1, 'penalty-goal': 1, 'yellow': 1, 'red': 1, 'second-yellow': 1 };
   var EMPTY = 'No matches to show right now.';
+  var EMPTY_DAY = 'No matches were recorded for this day.';
   var DOWN = 'Scores are not available right now. Try again in a moment.';
+  var DOWN_DAY = 'That day is not available right now. Try again in a moment.';
+  var LIVE_LABEL = 'Live and recent';
+  var TZ = 'America/Edmonton'; // the editorial day: the feed files matches under the Edmonton date
 
   var root = document.getElementById('scores');
   var stamp = document.getElementById('scores-updated');
+  var nav = document.getElementById('scores-nav');
+  var pick = document.getElementById('scores-date');
+  var prevBtn = document.getElementById('scores-prev');
+  var nextBtn = document.getElementById('scores-next');
+  var liveBtn = document.getElementById('scores-live');
+  var tzNote = document.getElementById('scores-tz');
+  var announcer = document.getElementById('scores-status');
   if (!root) return;
 
   var matches = [], byId = {}, sig = '', haveData = false;
   var open = {}, details = {};
   var timer = 0, pending = false;
+  var live = null; // the last good scores.json
+  var view = ''; // '' is the live window; otherwise the YYYY-MM-DD history day on show
+  var days = []; // days/index.json, newest first: [{ date, count }]
+  var dayCache = {};
 
   function h(tag, cls, text) {
     var e = document.createElement(tag);
@@ -42,6 +59,48 @@
     return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
   }
   function clock(minute, extra) { return minute + (extra ? '+' + extra : '') + "'"; }
+
+  // ----- history days. A day is a YYYY-MM-DD string on the Edmonton calendar, handled as plain
+  // text or in UTC so the reader's own time zone never shifts it.
+  function isDay(s) {
+    if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    var d = new Date(s + 'T00:00:00Z');
+    return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }
+  function edmontonToday() {
+    var parts = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+    var v = {};
+    parts.forEach(function (p) { v[p.type] = p.value; });
+    return v.year + '-' + v.month + '-' + v.day;
+  }
+  function addDay(s, n) {
+    var p = s.split('-');
+    return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2] + n)).toISOString().slice(0, 10);
+  }
+  function dayText(s) {
+    var p = s.split('-');
+    return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).toLocaleDateString('en-GB', {
+      timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+    });
+  }
+  // The live window starts yesterday, so the history the live view does not already hold is older.
+  function windowStart() { return addDay(edmontonToday(), -1); }
+  // The day to step back to from the one on show: from the live view, the newest day before the
+  // window; from a day, the next older one in the index. null when there is none.
+  function earlier(cur) {
+    var i, from = cur || windowStart();
+    for (i = 0; i < days.length; i++) if (days[i].date < from) return days[i].date;
+    return null;
+  }
+  // The day to step forward to: the next newer one in the index, or the live view once the next
+  // one would be inside the live window. null on the live view itself.
+  function later(cur) {
+    if (!cur) return null;
+    for (var i = days.length - 1; i >= 0; i--) {
+      if (days[i].date > cur) return days[i].date < windowStart() ? days[i].date : '';
+    }
+    return '';
+  }
 
   function statusText(m) {
     var s = m.status || {};
@@ -94,7 +153,7 @@
     var f = document.activeElement;
     var fid = f && f.getAttribute ? f.getAttribute('data-id') : null;
     byId = {};
-    if (!matches.length) { note(EMPTY); return; }
+    if (!matches.length) { note(view ? EMPTY_DAY : EMPTY); return; }
 
     var groups = {}, keys = [];
     matches.forEach(function (m) {
@@ -280,24 +339,32 @@
   }
   function schedule() {
     clearTimeout(timer);
-    var d = nextDelay();
+    var d = view ? null : nextDelay();
     timer = d == null ? 0 : setTimeout(tick, d);
   }
   function tick() {
     timer = 0;
+    if (view) return;
     if (document.hidden) { pending = true; return; }
     load();
   }
   document.addEventListener('visibilitychange', function () {
-    if (!document.hidden && pending) { pending = false; load(); }
+    if (!document.hidden && pending && !view) { pending = false; load(); }
   });
+
+  function setStamp(generatedAt) {
+    if (!stamp) return;
+    var t = generatedAt ? new Date(generatedAt) : null;
+    stamp.textContent = t && !isNaN(t.getTime()) ? 'Updated ' + hm(t) : '';
+  }
 
   function apply(d) {
     haveData = true;
+    live = d;
+    if (view) return; // a past day is on show; the live window waits in `live`
     var s = JSON.stringify(d.matches);
     if (s !== sig) { sig = s; matches = d.matches; render(); }
-    var t = d.generatedAt ? new Date(d.generatedAt) : null;
-    if (stamp) stamp.textContent = t && !isNaN(t.getTime()) ? 'Updated ' + hm(t) : '';
+    setStamp(d.generatedAt);
     refreshOpen();
   }
 
@@ -308,9 +375,129 @@
         if (!d || !Array.isArray(d.matches)) throw new Error('shape');
         apply(d);
       })
-      .catch(function () { if (!haveData) note(DOWN); })
+      .catch(function () { if (!haveData && !view) note(DOWN); })
       .then(schedule);
   }
 
-  load();
+  // ----- history: the date menu, the previous and next buttons, and the address.
+  function option(value, text) {
+    var o = document.createElement('option');
+    o.value = value;
+    o.textContent = text;
+    return o;
+  }
+  function syncNav() {
+    if (!nav) return;
+    // Nothing to browse (no index, or not yet loaded) and no past day on show: no controls.
+    if (!days.length && !view) { nav.hidden = true; return; }
+    nav.hidden = false;
+    pick.textContent = '';
+    pick.appendChild(option('', LIVE_LABEL));
+    var listed = false;
+    days.forEach(function (e) {
+      if (e.date === view) listed = true;
+      pick.appendChild(option(e.date, dayText(e.date)));
+    });
+    if (view && !listed) pick.appendChild(option(view, dayText(view)));
+    pick.value = view;
+    prevBtn.disabled = earlier(view) === null;
+    nextBtn.disabled = later(view) === null;
+    liveBtn.hidden = !view;
+    tzNote.hidden = !view;
+  }
+  function announce() {
+    if (announcer) announcer.textContent = view ? 'Showing matches on ' + dayText(view) : 'Showing live and recent matches';
+  }
+
+  function showDay(date, d) {
+    if (view !== date) return; // the reader has moved on
+    matches = d.matches;
+    sig = '';
+    render();
+    if (stamp) stamp.textContent = 'Matches on ' + dayText(date);
+  }
+  function loadDay(date) {
+    if (dayCache[date]) { showDay(date, dayCache[date]); return; }
+    note('Loading matches.');
+    if (stamp) stamp.textContent = 'Matches on ' + dayText(date);
+    fetch(BASE + 'days/' + date + '.json', { cache: 'no-cache' })
+      .then(function (res) {
+        if (res.status === 404) return { matches: [] }; // no file: nothing was played that day
+        if (!res.ok) throw new Error('day');
+        return res.json();
+      })
+      .then(function (d) {
+        if (!d || !Array.isArray(d.matches)) throw new Error('shape');
+        if (date < windowStart()) dayCache[date] = d; // a settled day; a recent one can still change
+        showDay(date, d);
+      })
+      .catch(function () { if (view === date) note(DOWN_DAY); });
+  }
+
+  function loadIndex() {
+    fetch(BASE + 'days/index.json', { cache: 'no-cache' })
+      .then(function (res) { if (!res.ok) throw new Error('index'); return res.json(); })
+      .then(function (d) {
+        if (!d || !Array.isArray(d.days)) throw new Error('shape');
+        days = d.days
+          .filter(function (e) { return e && isDay(e.date); })
+          .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+        syncNav();
+      })
+      .catch(function () { /* no history yet: the controls stay hidden */ });
+  }
+
+  // Puts `view` on screen. The live window is redrawn from what is held and then refreshed; a
+  // past day is fetched once and never polled.
+  function enter() {
+    clearTimeout(timer);
+    timer = 0;
+    open = {};
+    syncNav();
+    announce();
+    if (view) { loadDay(view); return; }
+    if (live) {
+      matches = live.matches;
+      sig = JSON.stringify(live.matches);
+      render();
+      setStamp(live.generatedAt);
+    } else {
+      note('Loading scores.');
+      if (stamp) stamp.textContent = '';
+    }
+    load();
+  }
+  function go(date, push) {
+    if (date === view) return;
+    view = date;
+    if (push) {
+      try { history.pushState(null, '', date ? '?date=' + date : location.pathname); } catch (e) { /* no history API: the view still changes */ }
+    }
+    if (!date) loadIndex();
+    enter();
+  }
+  function fromAddress() {
+    var d = '';
+    try { d = new URLSearchParams(location.search).get('date') || ''; } catch (e) { d = ''; }
+    return isDay(d) ? d : '';
+  }
+
+  if (nav) {
+    prevBtn.addEventListener('click', function () { var t = earlier(view); if (t !== null) go(t, true); });
+    nextBtn.addEventListener('click', function () { var t = later(view); if (t !== null) go(t, true); });
+    pick.addEventListener('change', function () { go(pick.value, true); });
+    liveBtn.addEventListener('click', function () { go('', true); });
+  }
+  window.addEventListener('popstate', function () {
+    var d = fromAddress();
+    if (d === view) return;
+    view = d;
+    if (!d) loadIndex();
+    enter();
+  });
+
+  view = fromAddress();
+  loadIndex();
+  if (view) enter();
+  else load();
 })();

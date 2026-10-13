@@ -3,6 +3,15 @@
 // requests and writes. index.ts supplies the real ones and persists the state between runs.
 import type { ApiGet, ApiResult } from "./api.ts";
 import {
+  buildDayFile,
+  buildIndex,
+  dayPath,
+  groupByDay,
+  INDEX_PATH,
+  mergeIndex,
+  parseIndex,
+} from "./days.ts";
+import {
   COMPETITIONS,
   detailPath,
   hasKickedOff,
@@ -15,7 +24,9 @@ import {
   sortMatches,
 } from "./map.ts";
 import {
+  addDays,
   BACKOFF_MS,
+  contentHash,
   detailTargets,
   inWindow,
   type OutFile,
@@ -52,6 +63,11 @@ export type Deps = {
   season: number;
   api: ApiGet;
   write: (path: string, text: string) => Promise<void>;
+  // Supplying `archive` turns the day archive on: the run also keeps days/<date>.json for the days
+  // in the window and merges them into days/index.json. `read` returns a stored file's text, null
+  // when there is no such file, and throws when it cannot tell. Left out, the run writes exactly
+  // what it wrote before the archive existed.
+  archive?: { read: (path: string) => Promise<string | null> };
 };
 
 export type Summary = {
@@ -60,6 +76,7 @@ export type Summary = {
   liveCount: number;
   detailCalls: number;
   filesWritten: number;
+  dayFilesWritten?: number; // day files and the index written this run; there only when the archive is on
   remaining: number | null; // the API's own daily count left, from its last reply this run
   error?: string;
 };
@@ -75,6 +92,7 @@ export async function runPoll(
   let remaining: number | null = null;
   let detailCalls = 0;
   let filesWritten = 0;
+  let dayFilesWritten = 0;
   let writeFailed = false; // a storage upload failed: the caller answers 500
   const saw = (r: ApiResult) => {
     if (r.remaining !== null) remaining = r.remaining;
@@ -86,6 +104,7 @@ export async function runPoll(
       liveCount: next.matches.filter((m) => m.status.live).length,
       detailCalls,
       filesWritten,
+      ...(deps.archive ? { dayFilesWritten } : {}),
       remaining,
       ...(errors.length ? { error: errors.join("; ").slice(0, 300) } : {}),
     },
@@ -186,31 +205,83 @@ export async function runPoll(
     const path = detailPath(m.id);
     return hasKickedOff(m.status.code) && fileExists(path) ? { ...m, detail: path } : m;
   };
-  const upload = async (files: OutFile[]) => {
+  // Writes the files whose content changed and answers how many went up.
+  const upload = async (files: OutFile[]): Promise<number> => {
     const planned = await planWrites(files, hashes);
     const outcomes = await Promise.allSettled(planned.map((p) => deps.write(p.path, p.text)));
+    let written = 0;
     outcomes.forEach((o, i) => {
       if (o.status === "fulfilled") {
         hashes[planned[i].path] = planned[i].hash;
-        filesWritten++;
+        written++;
       } else {
         errors.push(`write ${planned[i].path} failed`);
         writeFailed = true;
       }
     });
+    return written;
   };
 
-  await upload(fetched.map(({ match, fx }) => ({
+  filesWritten += await upload(fetched.map(({ match, fx }) => ({
     path: detailPath(match.id),
     body: mapMatchFile(fx, pointed(match, (p) => p in hashes || willHave.has(p)), stamp),
   })));
-  await upload([{
+
+  // The day archive: the window's days, and the index entries for them. After the match files, so
+  // a day file points only at files that are there, and before scores.json, so a failure here
+  // cannot hold the live file back.
+  const archiveKeep: string[] = [];
+  if (deps.archive) {
+    const days = [addDays(win.today, -1), win.today, addDays(win.today, 1)];
+    const byDay = groupByDay(matches.map((m) => pointed(m, (p) => p in hashes)));
+    // A day with no matches gets a file only if it had one: a day emptied by a reschedule must not
+    // keep showing its old matches.
+    const files: OutFile[] = days
+      .filter((d) => byDay.has(d) || dayPath(d) in hashes)
+      .map((d) => ({ path: dayPath(d), body: buildDayFile(d, byDay.get(d) ?? [], stamp) }));
+    dayFilesWritten += await upload(files);
+    archiveKeep.push(...days.map(dayPath), INDEX_PATH);
+
+    // History is the days up to today; tomorrow's schedule is not history yet.
+    const past = days.filter((d) => d <= win.today);
+    const counts = new Map(past.map((d) => [d, byDay.get(d)?.length ?? 0]));
+    const asked = { past, counts: past.map((d) => counts.get(d)) };
+    const sig = await contentHash(asked);
+    // The index is read and rewritten only when what these days say about themselves has changed,
+    // so a quiet minute, and a live minute in which no match is added or removed, never touch it.
+    if (hashes[INDEX_PATH] !== sig) {
+      try {
+        const existing = parseIndex(await deps.archive.read(INDEX_PATH));
+        if (!existing) {
+          errors.push(`${INDEX_PATH} is not readable, left alone`);
+        } else {
+          const merged = mergeIndex(existing, past, counts);
+          if (await contentHash({ days: merged }) === await contentHash({ days: existing })) {
+            hashes[INDEX_PATH] = sig;
+          } else {
+            try {
+              await deps.write(INDEX_PATH, JSON.stringify(buildIndex(merged, stamp)));
+              hashes[INDEX_PATH] = sig;
+              dayFilesWritten++;
+            } catch {
+              errors.push(`write ${INDEX_PATH} failed`);
+              writeFailed = true;
+            }
+          }
+        }
+      } catch {
+        errors.push(`read ${INDEX_PATH} failed`);
+      }
+    }
+  }
+
+  filesWritten += await upload([{
     path: SCORES_PATH,
     body: { schema: SCORES_SCHEMA, generatedAt: stamp, source: SOURCE, matches: matches.map((m) => pointed(m, (p) => p in hashes)) },
   }]);
 
   // Hashes for matches that have left the window go with them.
-  const keep = new Set([SCORES_PATH, ...matches.map((m) => detailPath(m.id))]);
+  const keep = new Set([SCORES_PATH, ...matches.map((m) => detailPath(m.id)), ...archiveKeep]);
   for (const path of Object.keys(hashes)) if (!keep.has(path)) delete hashes[path];
 
   return done({

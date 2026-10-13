@@ -10,6 +10,10 @@
 // is live, about to start or just finished. An API error, an exhausted quota or a reply that is
 // not the shape we expect writes nothing and leaves the last good files where they are.
 //
+// It also keeps the match history (days.ts): a file per Edmonton day, days/<date>.json, and an index
+// of them, days/index.json. A POST with the body {"mode":"backfill","from":"YYYY-MM-DD"} fills that
+// history in for the season so far (backfill.ts); the cron call has no body and is unaffected.
+//
 // Secrets required:
 //   APIFOOTBALL_KEY     the API-Football key (sent in a header, never logged or put in a URL)
 //   PUSH_SECRET         the guard, matched against the x-push-secret header from the cron call
@@ -17,12 +21,30 @@
 //   APIFOOTBALL_SEASON  overrides the season (the year it starts in); default is worked out from the date
 import { adminClient, json } from "../_shared/cors.ts";
 import { makeApiGet } from "./api.ts";
+import { runBackfill } from "./backfill.ts";
 import { rowFromState, runPoll, stateFromRow } from "./poll.ts";
 import { canonicalJson, seasonFor } from "./plan.ts";
 
 const BUCKET = "live";
 const STATE_COLUMNS =
   "schedule_fetched_at, window_day, matches, finished_at, file_hashes, backoff_until";
+
+// Whether a Storage error means "no such object" rather than "could not look". The two must not be
+// confused: a missing index is an empty one, an unreadable index must not be overwritten.
+function isMissing(e: { message?: string; status?: number; statusCode?: string | number }): boolean {
+  return [e.status, e.statusCode].some((v) => Number(v) === 404) || /not.?found|does not exist/i.test(e.message ?? "");
+}
+
+// The body of a call that asks for something other than the minute's poll. The cron call has no
+// body at all, which reads as "no request".
+async function bodyOf(req: Request): Promise<Record<string, unknown>> {
+  try {
+    const v = await req.json();
+    return v && typeof v === "object" && !Array.isArray(v) ? v as Record<string, unknown> : {};
+  } catch {
+    return {};
+  }
+}
 
 Deno.serve(async (req) => {
   // Fail CLOSED, as daily-push does: an unset PUSH_SECRET must refuse, not run open.
@@ -35,6 +57,34 @@ Deno.serve(async (req) => {
 
   const supabase = adminClient();
   const now = new Date();
+  const season = Number(Deno.env.get("APIFOOTBALL_SEASON")) || seasonFor(now);
+  const write = async (path: string, text: string) => {
+    const { error } = await supabase.storage.from(BUCKET).upload(path, text, {
+      contentType: "application/json",
+      cacheControl: "30",
+      upsert: true,
+    });
+    if (error) {
+      console.error(`scores-poll: upload of ${path} failed: ${error.message}`);
+      throw new Error(error.message);
+    }
+  };
+  const read = async (path: string): Promise<string | null> => {
+    const { data, error } = await supabase.storage.from(BUCKET).download(path);
+    if (error) {
+      if (isMissing(error as { message?: string; status?: number; statusCode?: string | number })) return null;
+      throw new Error(error.message);
+    }
+    return await data.text();
+  };
+
+  // The one-off backfill. It does not read or write the state row.
+  const body = await bodyOf(req);
+  if (body.mode === "backfill") {
+    const out = await runBackfill(String(body.from ?? ""), { now, season, api: makeApiGet(apiKey), read, write });
+    console.log(`scores-poll: backfill ${JSON.stringify(out)}`);
+    return json(out, 200);
+  }
 
   // The state is read before any request goes out. If it cannot be read, nothing is fetched: a
   // poll that has lost its memory would refresh the schedule every minute.
@@ -46,22 +96,12 @@ Deno.serve(async (req) => {
   }
   const before = stateFromRow(row);
 
-  const season = Number(Deno.env.get("APIFOOTBALL_SEASON")) || seasonFor(now);
   const { summary, state, writeFailed } = await runPoll(before, {
     now,
     season,
     api: makeApiGet(apiKey),
-    write: async (path, text) => {
-      const { error } = await supabase.storage.from(BUCKET).upload(path, text, {
-        contentType: "application/json",
-        cacheControl: "30",
-        upsert: true,
-      });
-      if (error) {
-        console.error(`scores-poll: upload of ${path} failed: ${error.message}`);
-        throw new Error(error.message);
-      }
-    },
+    write,
+    archive: { read },
   });
 
   // Save the state only if the run changed it, so a quiet minute is a single read.
@@ -77,7 +117,7 @@ Deno.serve(async (req) => {
   const out = stateFailed
     ? { ...summary, ok: false, error: [summary.error, "state write failed"].filter(Boolean).join("; ") }
     : summary;
-  if (out.scheduleRefreshed || out.detailCalls || out.filesWritten || !out.ok) {
+  if (out.scheduleRefreshed || out.detailCalls || out.filesWritten || out.dayFilesWritten || !out.ok) {
     console.log(`scores-poll: ${JSON.stringify(out)}`);
   }
   return json(out, writeFailed || stateFailed ? 500 : 200);

@@ -6,6 +6,12 @@
    builds the list in the browser. Nothing from the feed is rendered at build time, so the HTML here
    never goes stale and the build needs no network.
 
+   HISTORY (2026-10-13). The same script reads days/index.json and days/<date>.json from that bucket
+   (the scores-poll function archives each Edmonton day) and shows a date menu with previous and next
+   day buttons above the list. The address carries the day as ?date=YYYY-MM-DD, so a past day can be
+   shared and the back button walks back through the days. No index, no controls: the page is then
+   exactly the live page it was.
+
    TEXT ONLY, BY RULE. No crests, logos or photos: the feed carries none (map.ts builds every object
    field by field), the page loads none, and img-src stays 'self' data:.
 
@@ -53,6 +59,18 @@ function styles() {
   return `<style>
     .scores-page { padding: 1.6rem 0 1rem; }
     .scores-page .lede { margin: 0 0 .5rem; color: var(--ink-soft); font-size: .95rem; }
+    .scores__nav { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 0 0 1rem; }
+    .scores__nav[hidden] { display: none; }
+    .scores__btn, .scores__pick { margin: 0; padding: .5rem .8rem; border: 1px solid var(--rule); border-radius: .5rem; background: none; color: var(--ink); font: inherit; font-size: .9rem; line-height: 1.2; }
+    .scores__btn { cursor: pointer; white-space: nowrap; }
+    .scores__btn:hover:not(:disabled), .scores__pick:hover { background: var(--bg-sunken); }
+    .scores__btn:disabled { color: var(--ink-muted); cursor: default; opacity: .55; }
+    .scores__btn:focus-visible, .scores__pick:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+    .scores__btn[hidden] { display: none; }
+    .scores__pick { flex: 1 1 9rem; min-width: 0; max-width: 100%; cursor: pointer; }
+    .scores__tz { flex: 1 0 100%; margin: .1rem 0 0; color: var(--ink-muted); font-size: .85rem; }
+    .scores__tz[hidden] { display: none; }
+    .scores__sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .scores__updated { margin: 0 0 1.4rem; min-height: 1.2em; color: var(--ink-muted); font-family: var(--font-mono); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
     .scores__group { margin: 0 0 2rem; }
     .scores__group h2 { margin: 0 0 .2rem; color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: 1.5rem; line-height: 1.2; }
@@ -133,7 +151,16 @@ const html = `${documentShell({
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Live scores</p>
       <h1>Live scores</h1>
       <p class="lede">${esc(SUBLINE)}</p>
+      <nav class="scores__nav" id="scores-nav" aria-label="Match history" hidden>
+        <button type="button" class="scores__btn" id="scores-prev">Previous day</button>
+        <label class="scores__sr" for="scores-date">Choose a day</label>
+        <select class="scores__pick" id="scores-date"></select>
+        <button type="button" class="scores__btn" id="scores-next">Next day</button>
+        <button type="button" class="scores__btn" id="scores-live" hidden>Back to live scores</button>
+        <p class="scores__tz" id="scores-tz" hidden>Days follow Edmonton time. Kickoff times are in your own time zone.</p>
+      </nav>
       <p class="scores__updated" id="scores-updated"></p>
+      <p class="scores__sr" id="scores-status" role="status" aria-live="polite"></p>
       <noscript>
         <p class="scores__noscript">The scores need JavaScript, which is off in this browser.</p>
       </noscript>

@@ -292,10 +292,17 @@ function render(p, allPages) {
       </button>
       <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
         <a class="masthead__panel-link" href="/">Front page</a>
+        <a class="masthead__panel-link" href="/scores/">Live scores</a>
+        <a class="masthead__panel-link" href="/desk/leagues/">Football Leagues</a>
         <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+        <a class="masthead__panel-link" href="/desk/world-cup/">International Football</a>
+        <a class="masthead__panel-link" href="/legends/">Legends</a>
+        <a class="masthead__panel-link" href="/reads/">Long reads</a>
+        <a class="masthead__panel-link" href="/glossary/">Quick answers</a>
+        <a class="masthead__panel-link" href="/posters/">Posters</a>
         <a class="masthead__panel-link" href="/duel/">Player duels</a>
         <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
-        <a class="masthead__panel-link" href="/scores/">Live scores</a>
+        <a class="masthead__panel-link" href="/about/#contact">Partner with us</a>
         <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
@@ -400,6 +407,9 @@ const EXTRA_URLS = [
   // capped the sitemap at the original ten entries when the glossary grew to sixty (2026-07-28).
   ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, lastmod: e.updated, changefreq: "monthly", priority: "0.5" })),
   { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
+  // The full poster page (build-posters-page.mjs, 2026-10-13): every Manchester United poster tile,
+  // moved off the front page when it was cut back to four. Indexable, static, no lastmod.
+  { loc: "/posters/", changefreq: "monthly", priority: "0.5" },
   // Tables and fixtures (build-daily-pages.mjs, the Wire build, 2026-09-26): a living page updated
   // in place once a day. Listed only while it has a block to show; build-daily-pages.mjs makes an
   // empty /tables/ noindex from the same test. /wire/ is deliberately NOT here: it is noindex

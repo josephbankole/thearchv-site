@@ -129,6 +129,8 @@ const targets = [
   // pair, hashed from scripts/shared/scores-client.js, and a connect-src that names the Supabase
   // storage host for this page alone.
   ["live scores: /scores/", join(DIST, "scores", "index.html")],
+  // The full poster page (build-posters-page.mjs, 2026-10-13): shared masthead + PostHog pair only.
+  ["posters: /posters/", join(DIST, "posters", "index.html")],
   // Section fronts and the branded 404 (build-section-pages.mjs, 2026-08-09) and the long-read
   // family (build-reads-pages.mjs, same pass). All carry the shared masthead + PostHog inline
   // scripts and no per-page script, so both hashes must be in each page's own CSP. The 404 is

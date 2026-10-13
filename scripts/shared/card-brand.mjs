@@ -9,8 +9,8 @@
    This is the one place the card palette and the card fonts live now. The values MIRROR the
    :root block in pageStyles() (scripts/shared/page-shell.mjs), src/style.css and
    public/content.css; none of those files import each other, so a colour change is four edits and
-   this comment is the map. Contrast on the two that carry words: ink on white is 15.54:1, accent
-   ink on white is 5.13:1.
+   this comment is the map. Contrast on the two that carry words: ink on the ground is 13.78:1,
+   accent ink on the ground is 5.58:1 (the ground moved from white to warm paper on 2026-10-13).
 
    Fonts are static TTF instances committed at scripts/fonts/. satori does not take variable fonts
    well and cannot read woff2 at all, which is why Anton-Regular.ttf sits there as a TTF
@@ -32,15 +32,15 @@ import sharp from "sharp";
 const FONTS_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "fonts");
 
 export const CARD = {
-  bg: "#FFFFFF",
-  bgSunken: "#F4F2F3",
+  bg: "#F4F1EA",
+  bgSunken: "#EAE6DC",
   ink: "#1E223D",
-  inkSoft: "#4A4F73",
-  inkMuted: "#5F6485",
+  inkSoft: "#3C4163",
+  inkMuted: "#4C5176",
   accentFill: "#F54F1B",
-  accentInk: "#C93A0F",
-  rule: "#DED9DB",
-  ruleSoft: "#EDEAEB",
+  accentInk: "#B23109",
+  rule: "#D9D3C5",
+  ruleSoft: "#E7E2D6",
 };
 
 // The soft lift under the masthead, as the page draws it: a wash of the sunken grey off the top

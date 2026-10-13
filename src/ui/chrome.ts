@@ -1,25 +1,13 @@
-// Page chrome: a thin scroll-progress bar and a vertical scroll-spy section nav.
-// These are affordances, not decoration, so they run even under prefers-reduced-motion.
-// All actual motion (the nav fade-in, smooth anchor scroll) is governed by CSS, which
-// is already disabled by the .reduced-motion class and scroll-behavior: auto. The JS
-// here only reflects scroll position and toggles an active state, both instant and safe.
+// Page chrome: a thin scroll-progress bar.
+// It is an affordance, not decoration, so it runs even under prefers-reduced-motion. The bar only
+// reflects scroll position (an instant transform); all actual motion is governed by CSS, which is
+// already disabled by the .reduced-motion class and scroll-behavior: auto.
+//
+// The vertical scroll-spy section nav that used to live here (.spynav) went on 2026-10-13: it
+// listed the front page's sections, and the front page now has exactly one (the archive), so the
+// "needs at least two real anchors" test it already carried would never pass again.
 
 import { trapFocus } from './focusTrap';
-
-type Section = { id: string; label: string; el: HTMLElement; link: HTMLAnchorElement };
-
-// Curated nav labels. Only sections actually present in the DOM are used, so the
-// markup and this list can drift apart without breaking.
-const NAV: Array<{ id: string; label: string }> = [
-  { id: 'football-leagues', label: 'Football leagues' },
-  { id: 'transfer-desk', label: 'Transfer desk' },
-  { id: 'world-cup', label: 'International Football' },
-  { id: 'archive', label: 'Archive' },
-  { id: 'legends', label: 'Legends' },
-  { id: 'long-reads', label: 'Long reads' },
-  { id: 'faq', label: 'Answers' },
-  { id: 'partnerships', label: 'Partner' },
-];
 
 export function initChrome(): void {
   const docEl = document.documentElement;
@@ -32,73 +20,11 @@ export function initChrome(): void {
   bar.appendChild(fill);
   document.body.appendChild(bar);
 
-  // ---- scroll-spy nav ----
-  const sections: Section[] = [];
-  const nav = document.createElement('nav');
-  nav.className = 'spynav';
-  nav.setAttribute('aria-label', 'Sections');
-  const list = document.createElement('ul');
-
-  for (const item of NAV) {
-    const el = document.getElementById(item.id);
-    if (!el) continue;
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = `#${item.id}`;
-    a.className = 'spynav__link';
-    a.innerHTML = `<span class="spynav__tick" aria-hidden="true"></span><span class="spynav__label">${item.label}</span>`;
-    li.appendChild(a);
-    list.appendChild(li);
-    sections.push({ id: item.id, label: item.label, el, link: a });
-  }
-
-  // Need at least two real anchors for the nav to be worth showing.
-  if (sections.length >= 2) {
-    nav.appendChild(list);
-    document.body.appendChild(nav);
-  }
-
-  let activeId = '';
-  let navShown = false;
-
-  function setActive(id: string): void {
-    if (id === activeId) return;
-    activeId = id;
-    for (const s of sections) {
-      const on = s.id === id;
-      s.link.classList.toggle('is-active', on);
-      if (on) s.link.setAttribute('aria-current', 'true');
-      else s.link.removeAttribute('aria-current');
-    }
-  }
-
   function measure(): void {
     const scrollTop = window.scrollY || docEl.scrollTop || 0;
     const max = (docEl.scrollHeight - window.innerHeight) || 1;
     const p = Math.min(1, Math.max(0, scrollTop / max));
     fill.style.transform = `scaleX(${p})`;
-
-    // Reveal the nav once the lead block is mostly behind us. Keeps the top of the front
-    // page clean, where the masthead and the sport tabs are already doing the orienting. The old
-    // reference point was the full-viewport hero, which the phase 2A rebuild removed.
-    const shouldShow = scrollTop > window.innerHeight * 0.6;
-    if (shouldShow !== navShown) {
-      navShown = shouldShow;
-      nav.classList.toggle('is-visible', shouldShow);
-    }
-
-    // Active section: the last one whose top has crossed ~42% of the viewport.
-    const line = window.innerHeight * 0.42;
-    let current = sections[0]?.id ?? '';
-    for (const s of sections) {
-      if (s.el.getBoundingClientRect().top <= line) current = s.id;
-    }
-    // At the very bottom, force the final section active (short last sections never
-    // cross the line otherwise).
-    if (scrollTop + window.innerHeight >= docEl.scrollHeight - 2) {
-      current = sections[sections.length - 1]?.id ?? current;
-    }
-    setActive(current);
   }
 
   let ticking = false;

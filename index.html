@@ -13,14 +13,12 @@
          Every indexable page family on the site carries the same directive (2026-08-04). -->
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://thearchv.ca/" />
-    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="theme-color" content="#F4F1EA" />
     <meta name="google-site-verification" content="_B_-X8W_yayn2TBLrrYkiolQcRNHZl93C00ZJts0iT0" />
     <meta name="p:domain_verify" content="4cda1b5a84d48f03aac1bfefc3f034dd" />
     <!-- PostHog (public client key, safe to commit). Read by src/analytics.ts; reaches the CI build since .env is gitignored. -->
     <meta name="posthog-key" content="phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm" />
     <meta name="posthog-host" content="https://us.i.posthog.com" />
-    <!-- Web3Forms partnership form. Destination is set in the Web3Forms dashboard for this access key (partnerships@josephbankole.ca as of 2026-07-22); changing the address here alone does NOT reroute submissions. Public-safe key. -->
-    <meta name="web3forms-key" content="256290c9-a666-4b8d-9d0b-f04b12d49ae4" />
 
     <!-- Open Graph / social -->
     <meta property="og:type" content="website" />
@@ -47,11 +45,18 @@
 
     <!-- Content Security Policy. GitHub Pages cannot send headers, so this meta is the ceiling.
          If the domain is fronted by a CDN (Cloudflare), promote these to real response headers
-         and add frame-ancestors + HSTS. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+         and add frame-ancestors + HSTS.
+         2026-10-13: connect-src names the Supabase storage host for the live scores strip
+         (src/components/scoresStrip.ts reads live/scores.json from it) and nowhere else; the
+         Web3Forms host left with the partnership form, so form-action is 'self' alone. The strip's
+         client is bundled, not inline, so the one hashed bootstrap script below is still the only
+         inline script on the page. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; form-action 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- JSON-LD: Organization + WebSite + FAQPage. No trademarked terms in structured data.
+    <!-- JSON-LD: Organization + WebSite. No trademarked terms in structured data. (The FAQPage node went on
+         2026-10-13 with the "Quick answers" block it described: FAQ markup has to match visible
+         content, and the six answers now live on /glossary/ and its entry pages.)
 
          THIS BLOCK IS NOW THE FRONT PAGE'S PRIMARY BRAND SIGNAL. Until phase 2A the h1 read
          "Football has a memory. We are the archive."; the rebuilt front page gives the h1 to the
@@ -145,10 +150,10 @@
     <!-- ================= FRONT PAGE CHROME (phase 2A, 2026-08-09) =================
          Masthead and sport tabs. The dateline strip above the masthead and the wire ticker
          below the tabs were removed on 2026-09-12 (site declutter): the dateline repeated the
-         "Today at the desk" date, and the wire repeated nine stories the bands, the brief and
+         "Today at the desk" date, and the wire repeated nine stories the brief and
          the today strip already carry, with a hidden duplicate track that held focusable links.
          Their markers, renderers and CSS went with them. The hamburger panel's links are phase 1's
-         (five internal destinations above the rule, the outbound four below it) and this
+         (thirteen internal destinations above the rule since 2026-10-13, the outbound three below it) and this
          markup is the reference copy: masthead() in scripts/shared/page-shell.mjs and the
          hand-built copy in scripts/build-content.mjs mirror it. Three copies, no shared
          import — change one, change all three. The gold slot is the app download since
@@ -179,10 +184,17 @@
         </button>
         <nav class="masthead__panel" id="masthead-panel" aria-label="Primary" hidden>
           <a class="masthead__panel-link" href="/">Front page</a>
+          <a class="masthead__panel-link" href="/scores/">Live scores</a>
+          <a class="masthead__panel-link" href="/desk/leagues/">Football Leagues</a>
           <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
+          <a class="masthead__panel-link" href="/desk/world-cup/">International Football</a>
+          <a class="masthead__panel-link" href="/legends/">Legends</a>
+          <a class="masthead__panel-link" href="/reads/">Long reads</a>
+          <a class="masthead__panel-link" href="/glossary/">Quick answers</a>
+          <a class="masthead__panel-link" href="/posters/">Posters</a>
           <a class="masthead__panel-link" href="/duel/">Player duels</a>
           <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
-          <a class="masthead__panel-link" href="/scores/">Live scores</a>
+          <a class="masthead__panel-link" href="/about/#contact">Partner with us</a>
           <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
           <span class="masthead__panel-sep" role="separator"></span>
           <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
@@ -212,6 +224,19 @@
     </div>
 
     <main id="top">
+      <!-- LIVE SCORES STRIP (2026-10-13, founder: "live scores across the top of the page, plus a
+           visible link to go to the scores page"). The link is server-rendered and never leaves:
+           it is pinned outside the scrolling track, so it is visible with the feed empty, failed
+           or slow. The match list is filled in the browser by src/components/scoresStrip.ts from
+           the public archv-scores/1 feed (the same one /scores/ reads); nothing from the feed is
+           rendered at build time, so this HTML never goes stale. Text only, no crests. -->
+      <section class="scores-strip" id="scores-strip" aria-label="Live scores">
+        <div class="wrap scores-strip__inner">
+          <a class="scores-strip__all" href="/scores/">All scores <span aria-hidden="true">&rarr;</span></a>
+          <ul class="scores-strip__track" id="scores-strip-track" aria-label="Matches" tabindex="0" hidden></ul>
+        </div>
+      </section>
+
       <!-- LEAD. The front-page lead story is the newest entry across the three football desks,
            rendered at build time, so it is in the HTML a crawler and a no-JS reader both get. -->
       <section class="lead" aria-label="Lead story">
@@ -230,211 +255,38 @@
         </div>
       </section>
 
-      <div class="wrap frontgrid">
-        <div class="frontgrid__main">
-          <!-- The three football desk bands. Section ids (#football-leagues, #transfer-desk,
-               #world-cup) are unchanged: the app's fallback share links resolve against them. -->
-          <!--archv:bands-->
-        </div>
-
-        <aside class="brief" aria-label="The desk brief">
+      <!-- THE DESK BRIEF. Moved from a side rail to its own full-width block on 2026-10-13, when the
+           three desk bands it sat beside came off the front page. The desks themselves are one tap
+           away: the masthead menu lists all three, and #football-leagues, #transfer-desk and
+           #world-cup still resolve (src/ui/movedAnchors.ts sends them to the desk pages). -->
+      <section class="brief" aria-label="The desk brief">
+        <div class="wrap">
           <!--archv:brief-->
-        </aside>
-      </div>
-
-      <div class="appstrip">
-        <div class="wrap appstrip__inner">
-          <div>
-            <h2 class="appstrip__title">The archive, in your pocket</h2>
-            <p class="appstrip__copy">The daily desk, player duels and an archive game a day. Free on the App Store.</p>
-          </div>
-          <a class="btn-solid" href="https://apps.apple.com/app/id6786508653">Download the app</a>
         </div>
-      </div>
+      </section>
 
-      <!-- 5. THE ARCHIVE — poster gallery -->
+      <!-- THE ARCHIVE. Four of the twenty-one Manchester United poster tiles; /posters/ holds the
+           rest (scripts/build-posters-page.mjs, from scripts/data/poster-tiles.json). Each tile is
+           one Etsy listing (thearchvca.etsy.com/listing/<id>); the image is the listing photo at
+           900x675 under public/shop/ and the alt is that photo's Etsy alt text. Keep in step with
+           src/data/posters.ts, whose header holds the inclusion rules (README.md, Commerce). -->
       <section class="archive" id="archive">
         <div class="wrap">
-          <p class="section-index">05 / The archive</p>
+          <p class="section-index">The archive</p>
           <h2 class="archive__title" data-reveal>From the archive.</h2>
           <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it.</p>
         </div>
-        <!-- Manchester United poster tiles, the men's side then Manchester United Women, each in
-             match-date order. One tile per Etsy listing (thearchvca.etsy.com/listing/<id>); the image
-             is the listing photo at 900x675 under public/shop/ and the alt is that photo's Etsy alt
-             text. Keep in step with src/data/posters.ts, whose header holds the inclusion rules
-             (README.md, Commerce). -->
         <div class="wrap archive__covers">
-          <h3 class="archive__reads-title">Manchester United posters</h3>
-          <p class="archive__covers-lede" data-reveal>Manchester United and Manchester United Women, one match to a poster, printed to order and shipped by our print partner.</p>
-          <h4 class="archive__covers-sub" id="covers-men">Manchester United, 1968 to 2025</h4>
-          <ul class="archive__covers-grid" aria-labelledby="covers-men" data-stagger>
-            <li><a href="https://thearchvca.etsy.com/listing/4521788550" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-london-1968.webp" alt="Framed poster of Manchester United 4-1 Benfica, the 1968 European Cup final at Wembley, hanging on a wall." loading="lazy" width="900" height="675" /><span>London 1968</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521790986" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-rotterdam-1991.webp" alt="Framed poster of Manchester United 2-1 Barcelona, the 1991 Cup Winners' Cup final in Rotterdam, hanging on a wall." loading="lazy" width="900" height="675" /><span>Rotterdam 1991</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521795943" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-manchester-1993.webp" alt="Framed poster of Manchester United 2-1 Sheffield Wednesday at Old Trafford, April 1993, hanging on a wall." loading="lazy" width="900" height="675" /><span>Manchester 1993</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521795838" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-london-1996.webp" alt="Framed poster of Manchester United 1-0 Liverpool, the 1996 FA Cup final at Wembley, hanging on a wall." loading="lazy" width="900" height="675" /><span>London 1996</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521798833" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-birmingham-1999.webp" alt="Framed poster of Manchester United 2-1 Arsenal, the 1999 FA Cup semi-final replay at Villa Park, hanging on a wall." loading="lazy" width="900" height="675" /><span>Birmingham 1999</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521782964" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-barcelona-1999.webp" alt="Framed poster of Manchester United 2-1 Bayern Munich, the 1999 Champions League final in Barcelona, hanging on a wall." loading="lazy" width="900" height="675" /><span>Barcelona 1999</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521779161" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-moscow-2008.webp" alt="Framed poster of Manchester United 1-1 Chelsea, the 2008 Champions League final in Moscow won on penalties, hanging on a wall." loading="lazy" width="900" height="675" /><span>Moscow 2008</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4527296455" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-manchester-2011.webp" alt="Framed poster of Manchester United 2-1 Manchester City, the February 2011 derby at Old Trafford, hanging on a wall." loading="lazy" width="900" height="675" /><span>Manchester 2011</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521787127" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-stockholm-2017.webp" alt="Framed poster of Manchester United 2-0 Ajax, the 2017 Europa League final in Stockholm, hanging on a wall." loading="lazy" width="900" height="675" /><span>Stockholm 2017</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521778670" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-merseyside-2023.webp" alt="Framed poster of Manchester United's 3-0 win at Everton, Goodison Park, November 2023, hanging on a wall." loading="lazy" width="900" height="675" /><span>Merseyside 2023</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4521798166" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-manchester-2025-lyon.webp" alt="Framed poster of Manchester United 5-4 Lyon, the 2025 Europa League quarter-final at Old Trafford, hanging on a wall." loading="lazy" width="900" height="675" /><span>Manchester 2025</span></a></li>
+          <ul class="archive__covers-grid" aria-label="Manchester United posters" data-stagger>
+              <li><a href="https://thearchvca.etsy.com/listing/4521788550" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-london-1968.webp" alt="Framed poster of Manchester United 4-1 Benfica, the 1968 European Cup final at Wembley, hanging on a wall." loading="lazy" width="900" height="675" /><span>London 1968</span></a></li>
+              <li><a href="https://thearchvca.etsy.com/listing/4521782964" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-barcelona-1999.webp" alt="Framed poster of Manchester United 2-1 Bayern Munich, the 1999 Champions League final in Barcelona, hanging on a wall." loading="lazy" width="900" height="675" /><span>Barcelona 1999</span></a></li>
+              <li><a href="https://thearchvca.etsy.com/listing/4521779161" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-moscow-2008.webp" alt="Framed poster of Manchester United 1-1 Chelsea, the 2008 Champions League final in Moscow won on penalties, hanging on a wall." loading="lazy" width="900" height="675" /><span>Moscow 2008</span></a></li>
+              <li><a href="https://thearchvca.etsy.com/listing/4527673755" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-london-2024.webp" alt="Framed poster on a wall: Manchester United Women's 4-0 win over Tottenham Hotspur in the 2024 Women's FA Cup final at Wembley, three players seen from behind." loading="lazy" width="900" height="675" /><span>London 2024 (Women)</span></a></li>
           </ul>
-          <h4 class="archive__covers-sub" id="covers-women">Manchester United Women, 2018 to 2025</h4>
-          <ul class="archive__covers-grid" aria-labelledby="covers-women" data-stagger>
-            <li><a href="https://thearchvca.etsy.com/listing/4539752764" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-birkenhead-2018.webp" alt="Framed poster on a wall: Manchester United Women's 1-0 win over Liverpool in Birkenhead, 2018, three players seen from behind in navy and gold." loading="lazy" width="900" height="675" /><span>Birkenhead 2018</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4539751302" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-sutton-coldfield-2018.webp" alt="Framed poster on a wall: Manchester United Women's 12-0 win at Aston Villa, Sutton Coldfield 2018, three players seen from behind in pink shirts." loading="lazy" width="900" height="675" /><span>Sutton Coldfield 2018</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4539732851" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-leigh-2019.webp" alt="Framed poster on a wall: Manchester United Women's 5-0 promotion win over Aston Villa, Leigh 2019, three players seen from behind in red and black." loading="lazy" width="900" height="675" /><span>Leigh 2019</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4539731211" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-manchester-2019.webp" alt="Framed poster on a wall: Manchester United Women v Manchester City, the first WSL Manchester derby, 2019, three players seen from behind in red and black." loading="lazy" width="900" height="675" /><span>Manchester 2019</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4539743978" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-manchester-2022.webp" alt="Framed poster on a wall: Manchester United Women's 3-1 win over Everton at Old Trafford, 2022, two players seen from behind." loading="lazy" width="900" height="675" /><span>Manchester 2022</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4517396908" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-london-2023.webp" alt="Framed poster on a wall: Manchester United Women v Chelsea, the 2023 Women's FA Cup final at Wembley, two players seen from behind." loading="lazy" width="900" height="675" /><span>London 2023</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4517398702" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-leigh-2024.webp" alt="Framed poster on a wall: Manchester United Women's 2-1 win over Chelsea in the 2024 Women's FA Cup semi-final, three players seen from behind." loading="lazy" width="900" height="675" /><span>Leigh 2024</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4527673755" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-london-2024.webp" alt="Framed poster on a wall: Manchester United Women's 4-0 win over Tottenham Hotspur in the 2024 Women's FA Cup final at Wembley, three players seen from behind." loading="lazy" width="900" height="675" /><span>London 2024</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4517399720" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-leigh-2025.webp" alt="Framed poster on a wall: Manchester United Women's 3-0 win over SK Brann in the 2025 Women's Champions League qualifier at Leigh, three players seen from behind." loading="lazy" width="900" height="675" /><span>Leigh 2025</span></a></li>
-            <li><a href="https://thearchvca.etsy.com/listing/4527680418" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-manchester-2025.webp" alt="Framed poster on a wall: Manchester United Women's 2-1 win over Paris Saint-Germain at Old Trafford, November 2025, three players seen from behind." loading="lazy" width="900" height="675" /><span>Manchester 2025</span></a></li>
-          </ul>
-          <a class="archive__covers-all" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="covers">All prints in the Etsy shop</a>
-        </div>
-        <!-- Static, crawlable links to the finals long-form pages. The SEO agent adds one line per final as it publishes. -->
-        <div class="wrap archive__reads">
-          <h3 class="archive__reads-title">Read the finals, in full</h3>
-          <ul class="archive__reads-list" data-stagger>
-            <li><a href="/finals/mexico-1970/">México 1970: the final that perfected the game</a></li>
-            <li><a href="/finals/azteca-1986/">Azteca 1986: the final Maradona dragged Argentina to</a></li>
-            <li><a href="/finals/italia-1990/">Italia 1990: the ugliest final, and the end of an era</a></li>
-            <li><a href="/finals/paris-1998/">Paris 1998: the night France turned blue</a></li>
-            <li><a href="/finals/yokohama-2002/">Yokohama 2002: Ronaldo's redemption</a></li>
-            <li><a href="/finals/berlin-2006/">Berlin 2006: decided from twelve yards</a></li>
-            <li><a href="/finals/johannesburg-2010/">Johannesburg 2010: minute 116</a></li>
-            <li><a href="/finals/maracana-2014/">Maracanã 2014: the substitute's volley</a></li>
-            <li><a href="/finals/lusail-2022/">Lusail 2022: the greatest final</a></li>
-          </ul>
-          <h3 class="archive__reads-title">The ARCHV explains</h3>
-          <ul class="archive__reads-list" data-stagger>
-            <li><a href="/explainers/biggest-world-cup-upsets/">The biggest upsets in World Cup history</a></li>
-            <li><a href="/explainers/most-world-cup-titles/">Most World Cup titles: every nation that has won</a></li>
-            <li><a href="/explainers/world-cup-golden-boot-history/">The World Cup Golden Boot: every top scorer, explained</a></li>
-            <li><a href="/explainers/why-var-takes-so-long/">Why a VAR check takes so long</a></li>
-            <li><a href="/explainers/how-transfer-fees-are-actually-paid/">How transfer fees are actually paid</a></li>
-            <li><a href="/explainers/release-clause-vs-buy-out-clause/">Release clause, buy-out clause, buy-back clause: the difference</a></li>
-            <li><a href="/explainers/false-9-hidegkuti-to-messi/">The false 9, from Hidegkuti to Messi</a></li>
-            <li><a href="/explainers/illustrated-football-portraits-history/">Illustrated football portraits: a history</a></li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 6. LEGENDS — the ARCHV Legends Series profiles -->
-      <section class="legends" id="legends">
-        <div class="wrap">
-          <p class="section-index">06 / Legends</p>
-          <h2 class="killers__title" data-reveal>The Legends<span class="dot">.</span></h2>
-          <p class="killers__lede" data-reveal>One football great, fully told. The players who bent the game to their will, drawn in the house style.</p>
-          <ul class="legends__list" id="legends-grid" aria-label="Legends Series profiles" data-stagger>
-            <!--archv:legends-->
-          </ul>
-          <a class="btn btn--ghost killers__follow" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow the series</a>
-        </div>
-      </section>
-
-      <!-- LONG READS — the ARCHV essays (origin: LinkedIn) -->
-      <section class="killers" id="long-reads">
-        <div class="wrap">
-          <p class="section-index">The writers' room · Long reads</p>
-          <h2 class="killers__title" data-reveal>Long reads<span class="dot">.</span></h2>
-          <p class="killers__lede" data-reveal>Football, read like a business. How the dynasties were built, how the money really moves, and why some giants quietly fell apart.</p>
-          <!-- Server-rendered at build time (phase 2B). Each essay is a native <details>, so it
-               opens on a click with no JS at all; src/components/longReads.ts only adds the
-               height animation and the expand event on top of what is already here. -->
-          <ol class="killers__list" id="long-reads-list" aria-label="Long-read essays">
-            <!--archv:longreads-->
-          </ol>
-          <!-- Every essay also has its own page at /reads/<slug>/ (scripts/build-reads-pages.mjs). -->
-          <a class="killers__all" href="/reads/">Every long read</a>
-          <a class="btn btn--ghost killers__follow" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow for the next one</a>
-        </div>
-      </section>
-
-      <!-- 7. PARTNERSHIPS -->
-      <!-- FAQ — answer blocks for AI/answer-engine extraction (verified, evergreen). -->
-      <section class="faq" id="faq">
-        <div class="wrap">
-          <p class="section-index">Football, explained</p>
-          <h2 class="killers__title" data-reveal>Quick answers<span class="dot">.</span></h2>
-          <p class="killers__lede" data-reveal>The questions fans actually search, answered plainly.</p>
-          <dl class="faq__list" data-stagger>
-            <div class="faq__item">
-              <dt>What does xG (expected goals) mean?</dt>
-              <dd>xG, or expected goals, is a statistic that rates the quality of a chance as a number between 0 and 1. It works by comparing a shot to thousands of past shots from similar positions and situations, then giving the probability that one like it ends in a goal.</dd>
-            </div>
-            <div class="faq__item">
-              <dt>What is a false 9 in football?</dt>
-              <dd>A false 9 is a centre-forward who drops deep into midfield instead of leading the line. The movement pulls central defenders out of position: if they follow, they leave space behind; if they hold, the false 9 is free to receive the ball and turn.</dd>
-            </div>
-            <div class="faq__item">
-              <dt>How does the offside rule work?</dt>
-              <dd>A player is in an offside position if they are nearer the opponent's goal line than both the ball and the second-to-last defender when the ball is played to them. It only becomes an offence if they then get involved, so simply standing in an offside position is not punished.</dd>
-            </div>
-            <div class="faq__item">
-              <dt>What is VAR in football?</dt>
-              <dd>VAR, the Video Assistant Referee, is an official who reviews replays and advises the referee on the pitch. It can step in on four kinds of decision only: goals, penalties, straight red cards, and mistaken identity, and only to correct a clear and obvious error the referee has missed.</dd>
-            </div>
-            <div class="faq__item">
-              <dt>What is pressing (and gegenpressing)?</dt>
-              <dd>Pressing is when a team without the ball chases the opponent in possession, closing down passing lanes to force a mistake and win the ball back high up the pitch. Gegenpressing, German for counter-pressing, is the specific version of it: pressing immediately after losing the ball, before the opponent can settle and build an attack.</dd>
-            </div>
-            <div class="faq__item">
-              <dt>What is a loan with an obligation to buy?</dt>
-              <dd>A loan with an obligation to buy is a transfer structure in which a player moves to a club temporarily, but that club must sign them permanently once agreed conditions are met, such as appearances played or promotion. It differs from a loan with an option to buy, where the permanent deal is a choice, not a requirement.</dd>
-            </div>
-          </dl>
-        </div>
-        <script type="application/ld+json">
-          {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              { "@type": "Question", "name": "What does xG (expected goals) mean?", "acceptedAnswer": { "@type": "Answer", "text": "xG, or expected goals, is a statistic that rates the quality of a chance as a number between 0 and 1. It works by comparing a shot to thousands of past shots from similar positions and situations, then giving the probability that one like it ends in a goal.", "url": "https://thearchv.ca/glossary/xg/" } },
-              { "@type": "Question", "name": "What is a false 9 in football?", "acceptedAnswer": { "@type": "Answer", "text": "A false 9 is a centre-forward who drops deep into midfield instead of leading the line. The movement pulls central defenders out of position: if they follow, they leave space behind; if they hold, the false 9 is free to receive the ball and turn.", "url": "https://thearchv.ca/glossary/false-9/" } },
-              { "@type": "Question", "name": "How does the offside rule work?", "acceptedAnswer": { "@type": "Answer", "text": "A player is in an offside position if they are nearer the opponent's goal line than both the ball and the second-to-last defender when the ball is played to them. It only becomes an offence if they then get involved, so simply standing in an offside position is not punished.", "url": "https://thearchv.ca/glossary/offside/" } },
-              { "@type": "Question", "name": "What is VAR in football?", "acceptedAnswer": { "@type": "Answer", "text": "VAR, the Video Assistant Referee, is an official who reviews replays and advises the referee on the pitch. It can step in on four kinds of decision only: goals, penalties, straight red cards, and mistaken identity, and only to correct a clear and obvious error the referee has missed.", "url": "https://thearchv.ca/glossary/var/" } },
-              { "@type": "Question", "name": "What is pressing (and gegenpressing)?", "acceptedAnswer": { "@type": "Answer", "text": "Pressing is when a team without the ball chases the opponent in possession, closing down passing lanes to force a mistake and win the ball back high up the pitch. Gegenpressing, German for counter-pressing, is the specific version of it: pressing immediately after losing the ball, before the opponent can settle and build an attack.", "url": "https://thearchv.ca/glossary/pressing/" } },
-              { "@type": "Question", "name": "What is a loan with an obligation to buy?", "acceptedAnswer": { "@type": "Answer", "text": "A loan with an obligation to buy is a transfer structure in which a player moves to a club temporarily, but that club must sign them permanently once agreed conditions are met, such as appearances played or promotion. It differs from a loan with an option to buy, where the permanent deal is a choice, not a requirement.", "url": "https://thearchv.ca/glossary/loan-with-obligation/" } }
-            ]
-          }
-        </script>
-      </section>
-
-      <section class="partner" id="partnerships">
-        <div class="wrap">
-          <p class="section-index">Partner with the archive</p>
-          <h2 class="partner__title" data-reveal>The fans are already here. Come and meet them.</h2>
-          <p class="partner__lede" data-reveal>The most obsessive fans in football gather here for the history, the debates, and the artwork they actually keep. The work is rights-clean and built to outlive the campaign. Tell us what you are building.</p>
-
-          <form class="form" id="partner-form" novalidate>
-            <div class="form__row">
-              <label class="field">
-                <span>Your name</span>
-                <input type="text" name="name" autocomplete="name" required />
-              </label>
-              <label class="field">
-                <span>Brand or company</span>
-                <input type="text" name="company" autocomplete="organization" required />
-              </label>
-            </div>
-            <label class="field">
-              <span>Email</span>
-              <input type="email" name="email" autocomplete="email" required />
-            </label>
-            <label class="field">
-              <span>What are you building?</span>
-              <textarea name="message" rows="4" required></textarea>
-            </label>
-            <!-- Honeypot: hidden from humans, catches bots. -->
-            <input type="text" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
-            <button class="btn btn--gold form__submit" type="submit">Send partnership enquiry</button>
-            <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
-          </form>
+          <p class="archive__covers-links">
+            <a class="archive__covers-all" href="/posters/">See all the posters</a>
+            <a class="archive__covers-all" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="covers">All prints in the Etsy shop</a>
+          </p>
         </div>
       </section>
     </main>
@@ -455,13 +307,15 @@
           <a class="btn btn--gold" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow on Instagram</a>
           <a class="btn btn--ghost" href="https://apps.apple.com/app/id6786508653">Download the app</a>
           <a class="btn btn--ghost" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="footer">Shop on Etsy</a>
-          <a class="btn btn--ghost" href="#partnerships">Partner with us</a>
+          <a class="btn btn--ghost" href="/about/#contact">Partner with us</a>
         </nav>
         <nav class="footer__links" aria-label="More" data-stagger>
           <a href="/desk/transfer/">Transfer Desk</a>
           <a href="/duel/">Player duels</a>
           <a href="/guess/">Daily archive game</a>
           <a href="/glossary/">Glossary</a>
+          <a href="/finals/">The finals</a>
+          <a href="/explainers/">Football, explained</a>
           <a href="/standards/">How we verify</a>
           <a href="/feed.xml">RSS</a>
           <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>

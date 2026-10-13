@@ -1,21 +1,21 @@
 /* content.css — standalone styles for generated article pages (finals, explainers, United).
    Deliberately independent of the hashed app bundle so article pages stay light, fast, and JS-free. */
-/* WHITE GROUND (phase 2A, 2026-08-09). Mirrors the :root block in src/style.css and
+/* WHITE GROUND (phase 2A, 2026-08-09), warm paper ground since 2026-10-13. Mirrors the :root block in src/style.css and
    pageStyles() in scripts/shared/page-shell.mjs. The three files do not import each other:
    change one, change all three. The legacy navy names are kept as aliases so every rule below
    keeps resolving; each one points at a white-system value. */
 :root{
-  --bg:#FFFFFF; --bg-sunken:#F4F2F3;
-  --ink:#1E223D;        /* 15.54:1 on white */
-  --ink-soft:#4A4F73;   /*  7.90:1 on white */
+  --bg:#F4F1EA; --bg-sunken:#EAE6DC;
+  --ink:#1E223D;        /* 13.78:1 on the ground */
+  --ink-soft:#3C4163;   /*  8.75:1 on the ground, 7.92:1 on sunken */
   /* Readable-muted TEXT token, successor to --cream-faint-text. The prototype's #7A7F9E is
-     3.92:1 on white and fails AA as text; #5F6485 is 5.76:1 on white and 5.16:1 on the
-     sunken grey, so every breadcrumb, date, caption and legal line clears the floor. */
-  --ink-muted:#5F6485;
-  --accent-fill:#F54F1B;  /* fill and rule only: 3.49:1 on white */
-  --accent-ink:#C93A0F;   /* text and links: 5.13:1 on white */
-  --on-accent:#FFFFFF;    /* on the --accent-ink fill: 5.13:1 */
-  --rule:#DED9DB; --rule-soft:#EDEAEB;
+     3.48:1 on the ground and fails AA as text; #4C5176 is 6.78:1 on the ground and 6.14:1 on
+     the sunken step, so every breadcrumb, date, caption and legal line clears the floor. */
+  --ink-muted:#4C5176;
+  --accent-fill:#F54F1B;  /* fill and rule only: 3.09:1 on the ground */
+  --accent-ink:#B23109;   /* text and links: 5.58:1 on the ground, 5.05:1 on sunken */
+  --on-accent:#FFFFFF;    /* on the --accent-ink fill: 6.29:1 */
+  --rule:#D9D3C5; --rule-soft:#E7E2D6;
 
   /* legacy aliases */
   --navy:var(--bg); --navy-deep:var(--bg-sunken); --navy-soft:var(--bg-sunken);
@@ -39,7 +39,7 @@ body{
   margin:0;background:var(--navy);color:var(--cream-dim);
   font-family:"Inter Tight",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   font-size:18px;line-height:1.65;
-  background-image:radial-gradient(60rem 30rem at 50% -10rem,var(--bg-sunken) 0%,rgba(255,255,255,0) 70%);
+  background-image:radial-gradient(60rem 30rem at 50% -10rem,var(--bg-sunken) 0%,rgba(244,241,234,0) 70%);
 }
 a{color:var(--gold);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -72,7 +72,7 @@ img{max-width:100%;height:auto;display:block}
 .masthead__toggle:hover{border-color:var(--cream)}
 .masthead__toggle:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .masthead__toggle-bar{display:block;width:18px;height:2px;background:var(--cream)}
-.masthead__panel{position:absolute;top:calc(100% + .5rem);right:0;z-index:20;min-width:13.5rem;max-width:calc(100vw - 2.5rem);background:var(--navy-deep);border:1px solid var(--cream-faint);border-radius:.5rem;padding:.35rem;display:flex;flex-direction:column;gap:.1rem;box-shadow:0 2px 4px rgba(30,34,61,.06),0 16px 34px -18px rgba(30,34,61,.26)}
+.masthead__panel{position:absolute;top:calc(100% + .5rem);right:0;z-index:20;min-width:13.5rem;max-width:calc(100vw - 2.5rem);background:var(--navy-deep);border:1px solid var(--cream-faint);border-radius:.5rem;padding:.35rem;display:flex;flex-direction:column;gap:.1rem;box-shadow:0 2px 4px rgba(30,34,61,.06),0 16px 34px -18px rgba(30,34,61,.26);max-height:calc(100vh - 7rem);max-height:calc(100svh - 7rem);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
 .masthead__panel[hidden]{display:none}
 .masthead__panel-link{display:block;padding:.65em .8em;border-radius:.35rem;font-size:.85rem;font-weight:600;color:var(--cream)}
 .masthead__panel-link:hover,.masthead__panel-link:focus-visible{background:rgba(30,34,61,.06);color:var(--accent-ink);text-decoration:none}

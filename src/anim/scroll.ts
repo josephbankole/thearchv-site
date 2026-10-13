@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Section titles that get the kinetic split-word reveal instead of the generic fade.
 const KINETIC_TITLES =
-  '.manifesto__title, .killers__title, .archive__title, .desk__title, .craft__title, .partner__title';
+  '.manifesto__title, .archive__title, .desk__title, .craft__title';
 
 // Split an element's text into word masks (.kin-w > .kin-w__i) so the inner spans can
 // rise into view. Existing child elements (e.g. the gold .dot span) are kept intact

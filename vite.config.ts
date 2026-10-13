@@ -1,8 +1,5 @@
 import { defineConfig, type Plugin } from 'vite';
-import {
-  renderLead, renderBands, renderBrief,
-  renderLegends, renderLongReads, renderToday,
-} from './src/render/home';
+import { renderLead, renderBrief, renderToday } from './src/render/home';
 
 /* Server-render the front page at build time (phase 2A).
 
@@ -27,10 +24,7 @@ function archvHome(): Plugin {
         const blocks: Record<string, () => string> = {
           '<!--archv:lead-->': renderLead,
           '<!--archv:today-->': renderToday,
-          '<!--archv:bands-->': renderBands,
           '<!--archv:brief-->': renderBrief,
-          '<!--archv:legends-->': renderLegends,
-          '<!--archv:longreads-->': renderLongReads,
         };
         let out = html;
         for (const [marker, render] of Object.entries(blocks)) {

@@ -553,6 +553,7 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <a class="masthead__panel-link" href="/desk/transfer/">Transfer Desk</a>
         <a class="masthead__panel-link" href="/duel/">Player duels</a>
         <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
+        <a class="masthead__panel-link" href="/scores/">Live scores</a>
         <a class="masthead__panel-link" href="/feed.xml">RSS feed</a>
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
@@ -727,13 +728,16 @@ export const POSTHOG_SCRIPT_HASH = scriptHash(extractScriptBody(posthogSnippet()
 // other family stays as it was rather than being silently tightened by a change made for one page.
 // Fonts are self-hosted from /fonts/ (2026-10-12), so style-src and font-src name no third
 // party. The old `googleFonts` flag is gone; a caller that still passes it is ignored.
-export function cspMeta({ scripts = [], posthog = false, frame = null, forms = null } = {}) {
+// `connect` adds named origins to connect-src (fetch/XHR) for ONE page. Opt-in and empty by default,
+// so every other page's policy is byte-identical; /scores/ passes the Supabase storage host.
+export function cspMeta({ scripts = [], posthog = false, frame = null, forms = null, connect = [] } = {}) {
   const scriptSrc = ["'self'", ...scripts.map((h) => `'${h}'`)];
   if (posthog) scriptSrc.push("https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com");
   const styleSrc = ["'self'", "'unsafe-inline'"]; // inline style="" attrs (e.g. the hidden App Store link)
   const fontSrc = ["'self'"];
   const connectSrc = ["'self'"];
   if (posthog) connectSrc.push("https://us.i.posthog.com", "https://us-assets.i.posthog.com", "https://eu.i.posthog.com", "https://eu-assets.i.posthog.com");
+  connectSrc.push(...connect);
   const frameSrc = frame ? ["'self'", frame] : ["'none'"];
   const content = [
     `default-src 'self'`,

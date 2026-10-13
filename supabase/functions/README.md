@@ -181,6 +181,10 @@ Functions cannot import from outside `supabase/functions`. To add a sport, add i
 `src/data/sports.ts` first, then to `_shared/sports.ts`, then deploy both functions.
 `_shared/sports_test.ts` fails if the two lists differ.
 
+### Cron timeouts
+
+The pg_cron jobs for daily-push and health-probe call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
+
 ### Migration
 
 `supabase/migrations/20261012160124_push_per_sport.sql` adds `push_tokens.sport`,
@@ -208,4 +212,134 @@ health-probe's push check) have unit tests that need no network and no permissio
 cd supabase/functions/daily-push && deno test
 cd supabase/functions/_shared && deno test
 cd supabase/functions/health-probe && deno test
+```
+
+## Live scores: scores-poll
+
+`scores-poll` keeps the live-scores files the app reads. It is not called by the app: pg_cron runs it
+every minute. It asks API-Football for the Premier League (league 39), the UEFA Champions League (2)
+and the FA WSL (44), maps the answers to the `archv-scores/1` and `archv-match/1` contract, and writes
+them to a public Storage bucket called `live`. Readers fetch those files from the CDN. The API key
+never leaves the function, and nothing in the files is a crest, a team logo or a player photo: the
+mapper builds each field by name and copies no URL across.
+
+| File | URL | Holds |
+| --- | --- | --- |
+| `scores.json` | `https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/scores.json` | every match from yesterday 00:00 to tomorrow 23:59 (America/Edmonton), sorted by kickoff then competition |
+| `match/<id>.json` | `.../public/live/match/<id>.json` | events, lineups, API-Football's player ratings and team stats for one match, once it has kicked off |
+
+Objects are uploaded with `contentType` `application/json` and `cacheControl` 30. supabase-js sends that
+as `Cache-Control: max-age=30` (not `public, max-age=30`); check the header on a read-back. A finished
+match's file stops changing about two hours after full time. Files are never deleted, so the bucket
+grows by about 7 KB for each match played.
+
+Ratings are API-Football's numbers. The files say so in `source`, and the app has to label them as
+theirs. WSL team names lose the API's trailing " W" ("Arsenal W" becomes "Arsenal"); the competition
+already says it is the women's league. Names are also tidied: the API sometimes double-encodes an accent
+(it sent "Martínez" as "MartÃ", a soft hyphen and "nez"), which the mapper repairs, and soft hyphens
+and zero-width characters are removed.
+
+### What a run does
+
+1. Reads its state row (`scores_poll_state`). If it cannot, it asks the API for nothing.
+2. Fetches the schedule: one request each for 39, 2 and 44, with `from` and `to` set to the UTC dates
+   that cover the window. It does this at most every 30 minutes, or at once when the Edmonton day has
+   rolled. If one competition fails, the others still update, the failed one keeps its matches, and the
+   schedule comes due again in five minutes. An answer that is a well-formed 200 with no matches in it
+   counts as a failure too when the function is holding matches for that competition, because a real
+   competition does not empty out of a three-day window and believing it would drop the night's matches
+   from `scores.json`. If all three fail, nothing changes and the function stays off the API for two
+   minutes.
+3. Makes at most one details call, `/fixtures?ids=a-b-c` with up to 20 ids. One answer returns events,
+   lineups, statistics and players. The call is made when a match is live, kicks off within 10 minutes
+   (or has kicked off and the API has not yet said live), or finished less than two hours ago. A match
+   that has kicked off and has no file yet is fetched once, which fills the bucket after a cold start or
+   a gap. With more than 20 candidates, live matches go first, then starting, then recently finished,
+   and the rest wait for the next minute. With no candidates there is no call. A failed details call
+   writes nothing and backs off for two minutes.
+4. Writes each match file first and `scores.json` last, only where the content (ignoring
+   `generatedAt`) differs from what it last wrote. A `detail` pointer in `scores.json` is set only for a
+   match that has kicked off and whose file exists, so the app never follows one to a 404. A quiet minute
+   writes nothing, so `generatedAt` can be old and says nothing about whether the poll is running.
+   "Differs" is judged on the content with every object's keys sorted, because Postgres hands the saved
+   matches back in its own key order.
+5. Saves its state if it changed and answers `{ ok, scheduleRefreshed, liveCount, detailCalls,
+   filesWritten, remaining }`, with `error` added when something failed. `remaining` is the API's own
+   `x-ratelimit-requests-remaining`, from the last answer that run had; it is null on a run that made no
+   request.
+
+An API error, a spent quota or an answer that is not the expected shape (HTTP other than 200, a
+non-empty `errors`, no `response` array) writes nothing and leaves the last good files in place. Failure
+reasons name an HTTP status or a field of the API's error object, never a request URL or the key.
+
+### Request budget
+
+The plan allows 7,500 requests a day. The schedule costs 3 requests every 30 minutes, 144 a day. Details
+cost at most 1 a minute and only while something is live, starting or just finished. The ceilings:
+
+| Day | Requests |
+| --- | --- |
+| Idle, nothing in play | 144 |
+| Busy Saturday, 10 Premier League and 6 WSL matches (estimate, not measured) | about 800: 144 schedule plus roughly 650 details |
+| A match in play round the clock | 1,584: 144 plus 1,440 |
+| A competition failing or answering empty all day (schedule due every 5 minutes) | 2,304: 864 schedule plus 1,440 details |
+| The state row unwritable all day (see below) | 5,760: 3 schedule plus 1 details, every minute |
+
+The last row is the one to watch. If the state read works and the state write fails (for example the
+database has gone read-only), the next run reloads the old state and finds the schedule due again, so
+every minute costs the schedule and a details call. The function answers 500 and logs
+`scores-poll: state write failed` when that happens, and the cron job's run history in `cron.job_run_details`
+shows it. It does not stop itself: a read failure stops the run before any request, but a write failure
+cannot be seen until after the requests are made. The same key may serve other things, so
+`remaining` in the run's answer is worth a glance now and then.
+
+### Before this goes live
+
+- **Read API-Football's terms in a browser: https://www.api-football.com/terms.** The fetch tools used to
+  build this get a 403 from that site, so nothing here is quoted from it. The questions are whether the
+  Pro plan allows serving their fixtures, lineups and ratings to our users from our own bucket (the
+  files are public, so anyone with the URL can read them, not only the app), and whether a credit line is
+  required. If public redistribution is restricted, the bucket stays and only how the app reads it
+  changes.
+- **The API key is the switch.** Without `APIFOOTBALL_KEY` the function answers
+  `{"ok":false,"error":"APIFOOTBALL_KEY not set"}`, makes no request and writes no file, so applying the
+  migration and deploying the function before the secret is set is harmless. Set the secret only once
+  the terms are read.
+- **The vault secret `push_secret` must exist before the migration is applied.** Check with
+  `select count(*) from vault.decrypted_secrets where name = 'push_secret'`; it must return 1. If it is
+  missing the migration only raises a warning, and every cron call is then refused with 401.
+
+### Secrets, bucket, state and cron
+
+```
+supabase secrets set APIFOOTBALL_KEY=<the API-Football key>
+```
+
+`PUSH_SECRET` is the one daily-push already uses (the function refuses every call when it is unset).
+`APIFOOTBALL_SEASON` is optional; without it the season is worked out from the date (the year it starts in,
+rolling over on 1 July), which is 2026 for 2026/27.
+
+`supabase/migrations/20261013170000_scores_live_feed.sql` creates the public `live` bucket (JSON only,
+2 MB a file; no client policies on `storage.objects`, so only the service role can write), the one-row
+`scores_poll_state` table (row-level security on, no client policies or privileges) and the pg_cron job
+`scores-poll` (`* * * * *`, `x-push-secret` read from `vault.decrypted_secrets` name `push_secret`,
+`timeout_milliseconds := 60000`). Apply it before deploying the function, in the same way as the push
+migration above (`supabase migration list --linked` first; apply the single file and record it if the
+history is incomplete).
+
+Deploy:
+```
+supabase functions deploy scores-poll --no-verify-jwt
+```
+
+### Tests
+
+The mapping, the window, the decisions and whole runs against the recorded API answers have unit tests
+that need no network and no permissions. The recorded answers are in `scores-poll/fixtures/`: real
+API-Football responses captured on 2026-10-13 (a finished Premier League match, a live Champions League
+match, a finished WSL match, the 2026 Champions League final that went to penalties, and the three
+schedules), with every logo, flag and photo URL, the referee and the coach photo removed.
+
+```
+cd supabase/functions/scores-poll && deno test
 ```

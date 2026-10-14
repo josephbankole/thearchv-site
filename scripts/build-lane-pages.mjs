@@ -56,9 +56,9 @@ const {
 // compact "From the glossary" strip above the footer (glossaryStrip below). Lanes link articles
 // but did not link the glossary; these give a reader the terms that lane leans on.
 const LANES = {
-  transfer: { ...LANE_META.transfer, days: transferDays, glossary: ["loan-with-obligation", "xg"], intro: "Manchester United transfer news, every move checked against two independent sources before it goes up. A deal marked VERIFIED is done and confirmed; one marked RUMOUR is a reported link, not yet a certainty, however loudly it is being talked about. New entries are drawn the same day the story breaks." },
-  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays, glossary: ["var", "offside"], intro: "World Cup 2026 and international football, men's and women's, every competition covered while it is being played. Every result and headline is checked against two independent sources before it goes up. A fresh entry is drawn for each day there is football on." },
-  leagues: { ...LANE_META.leagues, days: leaguesDays, glossary: ["pressing", "half-space"], intro: "The club season across the Premier League, the Champions League and the rest of Europe's top divisions: title races, promotions, relegation fights and the sackings behind them. Every entry is checked against two sources before it goes up, the same standard as the rest of the desk. New wraps are tracked day by day through the season, not just on match days." },
+  transfer: { ...LANE_META.transfer, days: transferDays, glossary: ["loan-with-obligation", "xg"], intro: "Manchester United transfer news. A deal marked VERIFIED is done and confirmed; one marked RUMOUR is a reported link, not yet a certainty." },
+  "world-cup": { ...LANE_META["world-cup"], days: worldCupDays, glossary: ["var", "offside"], intro: "World Cup 2026 and international football, men's and women's, every competition covered while it is being played." },
+  leagues: { ...LANE_META.leagues, days: leaguesDays, glossary: ["pressing", "half-space"], intro: "The club season across the Premier League, the Champions League and the rest of Europe's top divisions: title races, promotions, relegation fights and the sackings behind them." },
 };
 
 function laneCard(entry, laneKey) {

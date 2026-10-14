@@ -412,26 +412,26 @@ export const QUESTION_LANE_META = {
 // dashes. Football is not here: it keeps its own long-standing homepage and lane copy.
 export const SPORT_DESK_COPY = {
   nfl: {
-    lede: "The NFL desk, one answered question a day. The biggest thing fans are asking that week, checked against two independent sources before it goes up.",
-    holding: "The NFL desk is opening. Each day it takes the question fans are actually asking and answers it, checked against two independent sources. When a day has no honest answer, the desk files nothing and says so.",
+    lede: "The NFL desk, one answered question a day: the biggest thing fans are asking that week.",
+    holding: "The NFL desk opens soon.",
   },
   f1: {
-    lede: "The Formula 1 desk, one answered question a day. The question the paddock and the fans keep coming back to, checked against two independent sources before it goes up.",
-    holding: "The Formula 1 desk is opening. One question a day, the one the grid keeps circling, answered and checked against two independent sources. A day without a real answer ships nothing, and the run says so.",
+    lede: "The Formula 1 desk, one answered question a day: the one the paddock and the fans keep coming back to.",
+    holding: "The Formula 1 desk opens soon.",
   },
   tennis: {
-    lede: "The tennis desk, one answered question a day. The question fans are asking about the tour, checked against two independent sources before it goes up.",
-    holding: "The tennis desk is opening. Each day it answers the question fans are asking across the tour, checked against two independent sources. Quiet on the days that do not warrant a word.",
+    lede: "The tennis desk, one answered question a day: the one fans are asking about the tour.",
+    holding: "The tennis desk opens soon.",
   },
   golf: {
-    lede: "The golf desk, one answered question a day. The question fans keep asking through the season, checked against two independent sources before it goes up.",
-    holding: "The golf desk is opening. One question a day from the ones fans keep asking, answered and checked against two independent sources. Nothing is filed on a day without a real answer.",
+    lede: "The golf desk, one answered question a day: the one fans keep asking through the season.",
+    holding: "The golf desk opens soon.",
   },
   // Basketball runs weekly, not daily (founder order 2026-09-11): one lane, the NBA and the WNBA
   // covered equally, one question every Monday with the league alternating week to week.
   basketball: {
-    lede: "The basketball desk, the NBA and the WNBA covered equally. One answered question every Monday, checked against two independent named sources before it goes up.",
-    holding: "The basketball desk is opening. Every Monday it answers one question fans are asking, the NBA one week and the WNBA the next, checked against two independent named sources. Nothing is filed in a week without a real answer.",
+    lede: "The basketball desk, the NBA and the WNBA covered equally, with one answered question every Monday.",
+    holding: "The basketball desk opens soon.",
   },
 };
 

@@ -129,9 +129,9 @@
     var live = !!(m.status && m.status.live);
     var canOpen = live || !!(m.status && m.status.finished);
     var el = h(canOpen ? 'button' : 'div', 'scores__row' + (live ? ' is-live' : ''));
+    el.setAttribute('data-id', m.id);
     if (canOpen) {
       el.type = 'button';
-      el.setAttribute('data-id', m.id);
       el.setAttribute('aria-expanded', open[m.id] ? 'true' : 'false');
       el.setAttribute('aria-controls', 'm-' + m.id);
     }
@@ -366,6 +366,23 @@
     if (s !== sig) { sig = s; matches = d.matches; render(); }
     setStamp(d.generatedAt);
     refreshOpen();
+    openWanted();
+  }
+
+  // ?match=<id>, from the front-page scores strip: once that match is on screen, open its details
+  // (when it has any) and bring it into view. Runs once; later polls leave the reader alone.
+  var want = '';
+  try { want = new URLSearchParams(location.search).get('match') || ''; } catch (e) { want = ''; }
+  if (!/^\d+$/.test(want)) want = '';
+  function openWanted() {
+    if (!want || view || !byId[want]) return;
+    var id = want;
+    want = '';
+    var el = root.querySelector('[data-id="' + id + '"]');
+    if (!el) return;
+    if (el.tagName === 'BUTTON' && !open[id]) el.click();
+    try { el.scrollIntoView({ block: 'center' }); } catch (e) { el.scrollIntoView(); }
+    if (el.focus) el.focus({ preventScroll: true });
   }
 
   function load() {

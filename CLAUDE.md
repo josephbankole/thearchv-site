@@ -179,10 +179,10 @@ the three paler text tokens were darkened (the "white system" names in older not
   declare their own small `:root` (`/app`, `/start`, `/quiz`); they carry the same values.
 
 **The front page is rendered at build time, and the bundle enhances it.**
-`src/render/home.ts` builds the lead, the "Today at the desk" strip and the Desk Brief into the
+`src/render/home.ts` builds the lead, the Dispatch block (three newest long reads) and the Desk Brief into the
 HTML. **The front page was cut back on 2026-10-13 (founder) to five things: the live scores
-strip, the lead (the day's story), "Today at the desk", the Desk Brief and four poster tiles.**
-The three desk bands, the app block, the legends wall, the long reads, the FAQ and the
+strip, the lead (the day's story), the Dispatch block, the Desk Brief and four poster tiles.** The Dispatch block (the three newest long reads) replaced "Today at the desk" the same day (founder: it repeated the football leagues). Each scores-strip match links to `/scores/?match=<id>`, which opens that match's details.
+The three desk bands, the app block, the legends wall, the long-reads accordion, the FAQ and the
 partnership form are off it; see "The front page after the 2026-10-13 trim" below for where each
 went.
 `vite.config.ts` swaps them in through the `archvHome()` plugin, which runs in `npm run dev`

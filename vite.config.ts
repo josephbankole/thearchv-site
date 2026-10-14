@@ -1,5 +1,5 @@
 import { defineConfig, type Plugin } from 'vite';
-import { renderLead, renderBrief, renderToday } from './src/render/home';
+import { renderLead, renderBrief, renderReads } from './src/render/home';
 
 /* Server-render the front page at build time (phase 2A).
 
@@ -23,7 +23,7 @@ function archvHome(): Plugin {
       handler(html) {
         const blocks: Record<string, () => string> = {
           '<!--archv:lead-->': renderLead,
-          '<!--archv:today-->': renderToday,
+          '<!--archv:reads-->': renderReads,
           '<!--archv:brief-->': renderBrief,
         };
         let out = html;

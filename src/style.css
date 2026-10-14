@@ -612,44 +612,39 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .lead__art img { width: 100%; max-width: 160px; height: auto; display: block; border: 1px solid var(--rule); }
 .lead__art figcaption { margin-top: 0.4rem; font-size: 0.7rem; color: var(--ink-muted); }
 
-/* ---------- today at the desk (phase 3) ----------
-   A dated band between the lead and the front grid, listing what has been filed today across
-   every desk. Rendered by renderToday() in src/render/home.ts, which never fabricates a day: on
-   a quiet morning this collapses to one honest sentence, so every rule here has to read as well
-   with a single paragraph in it as with seven rows.
-
-   The rows are a grid rather than a flex row so the desk label, the headline and the read time
-   line up down the column at desktop, and they stack in source order under 720px, where three
-   items across a 375px phone would put the headline on four words a line. */
+/* ---------- the dispatch (long reads, 2026-10-13) ----------
+   The band between the lead and the Desk Brief, listing the three newest Dispatch issues.
+   Rendered by renderReads() in src/render/home.ts; it replaced "Today at the desk" in the same
+   slot and keeps its row grid: date, headline and read time line up down the column at desktop
+   and stack in source order under 720px. */
 /* padding-block: 0 is not tidiness. The global `section { padding-block: clamp(5rem,12vh,10rem) }`
    rhythm belongs to the long scrolling sections lower down the page; .lead and everything inside
-   .frontgrid already opt out of it on the line below this block, and .today sits between the two
+   .frontgrid already opt out of it on the line below this block, and .homereads sits between the two
    and would otherwise have inherited five rems of air on each side of a one-line strip. */
-.today { border-block: 1px solid var(--rule); background: var(--bg-raised); padding-block: 0; }
-.today__inner { padding-block: 1.25rem 1.4rem; }
-.today__title { display: inline; font-family: var(--display); font-weight: 400; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
-.today__date { display: inline; margin-left: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
-.today__none { margin: 0.7rem 0 0; font-family: var(--serif); font-size: 0.95rem; line-height: 1.5; color: var(--ink-soft); max-width: 62ch; }
-.today__none a { color: var(--accent-ink); border-bottom: 1px solid var(--rule); }
-.today__list { list-style: none; margin: 0.85rem 0 0; padding: 0; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-.today__item { background: var(--bg); }
-.today__item > a {
+.homereads { border-block: 1px solid var(--rule); background: var(--bg-raised); padding-block: 0; }
+.homereads__inner { padding-block: 1.25rem 1.4rem; }
+.homereads__title { display: inline; font-family: var(--display); font-weight: 400; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+.homereads__all { margin-left: 0.75rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.homereads__all:hover { border-bottom-color: currentColor; }
+.homereads__list { list-style: none; margin: 0.85rem 0 0; padding: 0; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.homereads__item { background: var(--bg); }
+.homereads__item > a {
   display: grid; grid-template-columns: 12rem 1fr auto; align-items: baseline;
   gap: 0.15rem 1rem; padding: 0.7rem 0.9rem;
 }
-.today__item > a:hover { background: var(--bg-raised); }
-.today__item > a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
-.today__desk { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
-.today__headline { font-family: var(--serif); font-size: 0.98rem; line-height: 1.35; color: var(--ink); }
-.today__item > a:hover .today__headline { color: var(--accent-ink); }
-.today__time { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--ink-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.homereads__item > a:hover { background: var(--bg-raised); }
+.homereads__item > a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
+.homereads__kicker { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
+.homereads__headline { font-family: var(--serif); font-size: 0.98rem; line-height: 1.35; color: var(--ink); }
+.homereads__item > a:hover .homereads__headline { color: var(--accent-ink); }
+.homereads__time { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--ink-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 @media (max-width: 720px) {
   /* Two rows: the desk label and the read time face each other on the first, the headline takes
      the full width of the second. No negative margins and no source reordering. */
-  .today__item > a { grid-template-columns: 1fr auto; gap: 0.25rem 0.8rem; }
-  .today__desk { grid-column: 1; grid-row: 1; }
-  .today__time { grid-column: 2; grid-row: 1; justify-self: end; }
-  .today__headline { grid-column: 1 / -1; grid-row: 2; }
+  .homereads__item > a { grid-template-columns: 1fr auto; gap: 0.25rem 0.8rem; }
+  .homereads__kicker { grid-column: 1; grid-row: 1; }
+  .homereads__time { grid-column: 2; grid-row: 1; justify-self: end; }
+  .homereads__headline { grid-column: 1 / -1; grid-row: 2; }
 }
 
 /* ---------- section rhythm ----------
@@ -688,10 +683,16 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .scores-strip__track:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
 .scores-strip__track:focus-within { -webkit-mask-image: none; mask-image: none; }
 .scores-strip__item {
-  flex: 0 0 auto; display: flex; align-items: center; gap: 0.7rem; padding: 0 1rem;
+  flex: 0 0 auto; display: flex;
   border-right: 1px solid var(--rule); white-space: nowrap; font-size: 0.86rem; color: var(--ink);
 }
-.scores-strip__item:first-child { padding-left: 0.75rem; }
+/* Each match is a link to its details on /scores/ (?match=<id>). No transform on hover or focus:
+   this sits inside a horizontal scroller (trap 3). */
+.scores-strip__link { display: flex; align-items: center; gap: 0.7rem; padding: 0 1rem; color: inherit; text-decoration: none; }
+.scores-strip__item:first-child .scores-strip__link { padding-left: 0.75rem; }
+.scores-strip__link:hover { background: var(--bg-raised); }
+.scores-strip__link:hover .scores-strip__team { text-decoration: underline; text-underline-offset: 2px; }
+.scores-strip__link:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
 .scores-strip__team { color: var(--ink); }
 .scores-strip__score { margin: 0 0.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .scores-strip__status { font-size: 0.76rem; font-variant-numeric: tabular-nums; color: var(--ink-muted); }

@@ -7,6 +7,8 @@
 // its own CSP hash and cannot be imported here, and this strip is a small client of its own, so the
 // two are kept in step by hand. Change the status wording in one, change the other.
 //
+// Each item links to /scores/?match=<id>, which opens that match's details (2026-10-13, founder).
+//
 // WHAT IT SHOWS. Live matches first, then today's results and fixtures in the reader's local time;
 // when nothing is live and nothing is on today, the next day that has fixtures. One row of text
 // items (no crests: the feed carries none and img-src stays 'self' data:), built with textContent
@@ -113,6 +115,11 @@ function item(m: Match): HTMLLIElement {
   const live = !!m.status?.live;
   const li = document.createElement('li');
   li.className = live ? 'scores-strip__item is-live' : 'scores-strip__item';
+  // The whole item opens the match on /scores/, which reads ?match=<id> and expands its details.
+  const link = document.createElement('a');
+  link.className = 'scores-strip__link';
+  link.href = `/scores/?match=${encodeURIComponent(String(m.id))}`;
+  li.appendChild(link);
 
   const a = m.home?.goals;
   const b = m.away?.goals;
@@ -122,7 +129,7 @@ function item(m: Match): HTMLLIElement {
   teams.appendChild(el('span', 'scores-strip__team', m.home?.name ?? ''));
   teams.appendChild(el('b', 'scores-strip__score', played ? `${a}–${b}` : 'v'));
   teams.appendChild(el('span', 'scores-strip__team', m.away?.name ?? ''));
-  li.appendChild(teams);
+  link.appendChild(teams);
 
   const status = el('span', 'scores-strip__status');
   if (live) {
@@ -132,7 +139,7 @@ function item(m: Match): HTMLLIElement {
   status.appendChild(document.createTextNode(statusText(m)));
   const p = m.penalties;
   if (p && p.home != null && p.away != null) status.appendChild(document.createTextNode(` (${p.home}-${p.away} pens)`));
-  li.appendChild(status);
+  link.appendChild(status);
   return li;
 }
 

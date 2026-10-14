@@ -116,7 +116,7 @@ for (const l of legends) {
 const DESTINATIONS = [
   ["The ARCHV front page", "The day's lead, the Desk Brief, live scores and a few posters.", "/", "The ARCHV"],
   ["Posters", "Every Manchester United and Manchester United Women poster in the ARCHV shop, one match to a poster.", "/posters/", "Sections"],
-  ["Transfer Desk", "Manchester United transfer news, every move checked against two independent sources.", "/desk/transfer/", "Desks"],
+  ["Transfer Desk", "Manchester United transfer news.", "/desk/transfer/", "Desks"],
   ["International Football", "World Cup 2026 and international football, men's and women's, every day there is football on.", "/desk/world-cup/", "Desks"],
   ["Football Leagues", "Title races, promotions, relegation fights and the sackings behind them.", "/desk/leagues/", "Desks"],
   ["NFL", "The NFL desk, one answered question a day.", "/nfl/", "Desks"],

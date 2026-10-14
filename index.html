@@ -245,13 +245,12 @@
         </div>
       </section>
 
-      <!-- TODAY AT THE DESK. Server-rendered from the same day data as everything else, and it
-           only ever lists entries carrying the build's own UTC date. On a day nothing has been
-           filed it says so and points at the last entry instead: see renderToday() in
-           src/render/home.ts for why that state is the whole reason the block exists. -->
-      <section class="today" aria-labelledby="today-title">
-        <div class="wrap today__inner">
-          <!--archv:today-->
+      <!-- LONG READS. The three newest essays, server-rendered by renderReads() in
+           src/render/home.ts. Replaced "Today at the desk" on 2026-10-13 (founder: it repeated the
+           football leagues). -->
+      <section class="homereads" aria-labelledby="homereads-title">
+        <div class="wrap homereads__inner">
+          <!--archv:reads-->
         </div>
       </section>
 

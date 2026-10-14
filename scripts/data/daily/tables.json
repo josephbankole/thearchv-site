@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T09:49:50.461Z",
+  "updatedAt": "2026-10-14T23:49:35.641Z",
   "sports": {
     "football": {
       "blocks": [
@@ -10,7 +10,7 @@
           "league": "premier-league",
           "title": "Premier League table",
           "asOf": "2026-10-14",
-          "fetchedAt": "2026-10-14T09:49:50.461Z",
+          "fetchedAt": "2026-10-14T23:49:35.641Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
@@ -269,13 +269,13 @@
           "league": "champions-league",
           "title": "Champions League: league phase",
           "asOf": "2026-10-14",
-          "fetchedAt": "2026-10-14T09:49:50.461Z",
+          "fetchedAt": "2026-10-14T23:49:35.641Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
           "lastFreshAsOf": "2026-10-14",
           "through": null,
-          "throughLabel": null,
+          "throughLabel": "After matchday 2",
           "compactRows": 8,
           "columns": [
             {
@@ -311,8 +311,8 @@
           ],
           "rows": [
             {
-              "name": "FC Barcelona",
-              "short": "Barça",
+              "name": "Paris Saint-Germain FC",
+              "short": "PSG",
               "cells": {
                 "pos": 1,
                 "p": 2,
@@ -321,10 +321,50 @@
               }
             },
             {
+              "name": "FC Barcelona",
+              "short": "Barça",
+              "cells": {
+                "pos": 2,
+                "p": 2,
+                "gd": 7,
+                "pts": 6
+              }
+            },
+            {
+              "name": "Aston Villa FC",
+              "short": "Aston Villa",
+              "cells": {
+                "pos": 3,
+                "p": 2,
+                "gd": 7,
+                "pts": 6
+              }
+            },
+            {
+              "name": "VfB Stuttgart",
+              "short": "Stuttgart",
+              "cells": {
+                "pos": 4,
+                "p": 2,
+                "gd": 5,
+                "pts": 6
+              }
+            },
+            {
+              "name": "Liverpool FC",
+              "short": "Liverpool",
+              "cells": {
+                "pos": 5,
+                "p": 2,
+                "gd": 4,
+                "pts": 6
+              }
+            },
+            {
               "name": "Sporting Clube de Portugal",
               "short": "Sporting CP",
               "cells": {
-                "pos": 2,
+                "pos": 6,
                 "p": 2,
                 "gd": 4,
                 "pts": 6
@@ -334,9 +374,29 @@
               "name": "Arsenal FC",
               "short": "Arsenal",
               "cells": {
-                "pos": 3,
+                "pos": 7,
                 "p": 2,
                 "gd": 4,
+                "pts": 6
+              }
+            },
+            {
+              "name": "Real Madrid CF",
+              "short": "Real Madrid",
+              "cells": {
+                "pos": 8,
+                "p": 2,
+                "gd": 2,
+                "pts": 6
+              }
+            },
+            {
+              "name": "Real Betis Balompié",
+              "short": "Real Betis",
+              "cells": {
+                "pos": 9,
+                "p": 2,
+                "gd": 2,
                 "pts": 6
               }
             },
@@ -344,29 +404,29 @@
               "name": "FC Bayern München",
               "short": "Bayern",
               "cells": {
-                "pos": 4,
+                "pos": 10,
                 "p": 2,
                 "gd": 5,
                 "pts": 4
               }
             },
             {
-              "name": "Paris Saint-Germain FC",
-              "short": "PSG",
+              "name": "FK Shakhtar Donetsk",
+              "short": "Shakhtar",
               "cells": {
-                "pos": 5,
-                "p": 1,
-                "gd": 5,
-                "pts": 3
+                "pos": 11,
+                "p": 2,
+                "gd": 2,
+                "pts": 4
               }
             },
             {
               "name": "Como 1907",
               "short": "Como",
               "cells": {
-                "pos": 6,
-                "p": 1,
-                "gd": 3,
+                "pos": 12,
+                "p": 2,
+                "gd": 2,
                 "pts": 3
               }
             },
@@ -375,28 +435,8 @@
               "short": "Man Utd",
               "highlight": true,
               "cells": {
-                "pos": 7,
+                "pos": 13,
                 "p": 2,
-                "gd": 2,
-                "pts": 3
-              }
-            },
-            {
-              "name": "VfB Stuttgart",
-              "short": "Stuttgart",
-              "cells": {
-                "pos": 8,
-                "p": 1,
-                "gd": 2,
-                "pts": 3
-              }
-            },
-            {
-              "name": "Manchester City FC",
-              "short": "Man City",
-              "cells": {
-                "pos": 9,
-                "p": 1,
                 "gd": 2,
                 "pts": 3
               }
@@ -405,28 +445,8 @@
               "name": "Villarreal CF",
               "short": "Villarreal",
               "cells": {
-                "pos": 10,
+                "pos": 14,
                 "p": 2,
-                "gd": 1,
-                "pts": 3
-              }
-            },
-            {
-              "name": "Aston Villa FC",
-              "short": "Aston Villa",
-              "cells": {
-                "pos": 11,
-                "p": 1,
-                "gd": 1,
-                "pts": 3
-              }
-            },
-            {
-              "name": "Real Betis Balompié",
-              "short": "Real Betis",
-              "cells": {
-                "pos": 11,
-                "p": 1,
                 "gd": 1,
                 "pts": 3
               }
@@ -435,48 +455,8 @@
               "name": "Club Atlético de Madrid",
               "short": "Atleti",
               "cells": {
-                "pos": 13,
+                "pos": 15,
                 "p": 2,
-                "gd": 1,
-                "pts": 3
-              }
-            },
-            {
-              "name": "Borussia Dortmund",
-              "short": "Dortmund",
-              "cells": {
-                "pos": 14,
-                "p": 1,
-                "gd": 1,
-                "pts": 3
-              }
-            },
-            {
-              "name": "Liverpool FC",
-              "short": "Liverpool",
-              "cells": {
-                "pos": 15,
-                "p": 1,
-                "gd": 1,
-                "pts": 3
-              }
-            },
-            {
-              "name": "Real Madrid CF",
-              "short": "Real Madrid",
-              "cells": {
-                "pos": 15,
-                "p": 1,
-                "gd": 1,
-                "pts": 3
-              }
-            },
-            {
-              "name": "PAE AEK",
-              "short": "AEK Athens",
-              "cells": {
-                "pos": 17,
-                "p": 1,
                 "gd": 1,
                 "pts": 3
               }
@@ -484,6 +464,26 @@
             {
               "name": "Club Brugge KV",
               "short": "Club Brugge",
+              "cells": {
+                "pos": 16,
+                "p": 2,
+                "gd": 0,
+                "pts": 3
+              }
+            },
+            {
+              "name": "Manchester City FC",
+              "short": "Man City",
+              "cells": {
+                "pos": 17,
+                "p": 2,
+                "gd": 0,
+                "pts": 3
+              }
+            },
+            {
+              "name": "Borussia Dortmund",
+              "short": "Dortmund",
               "cells": {
                 "pos": 18,
                 "p": 2,
@@ -502,10 +502,20 @@
               }
             },
             {
+              "name": "PAE AEK",
+              "short": "AEK Athens",
+              "cells": {
+                "pos": 20,
+                "p": 2,
+                "gd": -1,
+                "pts": 3
+              }
+            },
+            {
               "name": "RB Leipzig",
               "short": "RB Leipzig",
               "cells": {
-                "pos": 20,
+                "pos": 21,
                 "p": 2,
                 "gd": -2,
                 "pts": 3
@@ -515,9 +525,29 @@
               "name": "Sabah FK",
               "short": "Sabah",
               "cells": {
-                "pos": 21,
+                "pos": 22,
                 "p": 2,
                 "gd": -2,
+                "pts": 3
+              }
+            },
+            {
+              "name": "Feyenoord Rotterdam",
+              "short": "Feyenoord",
+              "cells": {
+                "pos": 23,
+                "p": 2,
+                "gd": -3,
+                "pts": 3
+              }
+            },
+            {
+              "name": "FK Bodø/Glimt",
+              "short": "Bodø/Glimt",
+              "cells": {
+                "pos": 24,
+                "p": 2,
+                "gd": -4,
                 "pts": 3
               }
             },
@@ -525,29 +555,9 @@
               "name": "AS Roma",
               "short": "Roma",
               "cells": {
-                "pos": 22,
-                "p": 1,
-                "gd": 0,
-                "pts": 1
-              }
-            },
-            {
-              "name": "FK Shakhtar Donetsk",
-              "short": "Shakhtar",
-              "cells": {
-                "pos": 22,
-                "p": 1,
-                "gd": 0,
-                "pts": 1
-              }
-            },
-            {
-              "name": "Fenerbahçe SK",
-              "short": "Fenerbahçe",
-              "cells": {
-                "pos": 24,
-                "p": 1,
-                "gd": 0,
+                "pos": 25,
+                "p": 2,
+                "gd": -1,
                 "pts": 1
               }
             },
@@ -555,7 +565,7 @@
               "name": "PSV",
               "short": "PSV",
               "cells": {
-                "pos": 25,
+                "pos": 26,
                 "p": 2,
                 "gd": -1,
                 "pts": 1
@@ -565,27 +575,27 @@
               "name": "Viking FK",
               "short": "Viking",
               "cells": {
-                "pos": 26,
+                "pos": 27,
                 "p": 2,
                 "gd": -2,
                 "pts": 1
               }
             },
             {
-              "name": "LASK Linz",
-              "short": "LASK",
+              "name": "Fenerbahçe SK",
+              "short": "Fenerbahçe",
               "cells": {
-                "pos": 27,
-                "p": 1,
-                "gd": -1,
-                "pts": 0
+                "pos": 28,
+                "p": 2,
+                "gd": -6,
+                "pts": 1
               }
             },
             {
               "name": "FC Internazionale Milano",
               "short": "Inter",
               "cells": {
-                "pos": 28,
+                "pos": 29,
                 "p": 2,
                 "gd": -2,
                 "pts": 0
@@ -595,9 +605,9 @@
               "name": "FC Porto",
               "short": "Porto",
               "cells": {
-                "pos": 29,
-                "p": 1,
-                "gd": -2,
+                "pos": 30,
+                "p": 2,
+                "gd": -3,
                 "pts": 0
               }
             },
@@ -605,7 +615,7 @@
               "name": "SK Slavia Praha",
               "short": "Slavia Praha",
               "cells": {
-                "pos": 30,
+                "pos": 31,
                 "p": 2,
                 "gd": -3,
                 "pts": 0
@@ -615,9 +625,19 @@
               "name": "SSC Napoli",
               "short": "Napoli",
               "cells": {
-                "pos": 31,
+                "pos": 32,
                 "p": 2,
                 "gd": -3,
+                "pts": 0
+              }
+            },
+            {
+              "name": "LASK Linz",
+              "short": "LASK",
+              "cells": {
+                "pos": 33,
+                "p": 2,
+                "gd": -4,
                 "pts": 0
               }
             },
@@ -625,18 +645,8 @@
               "name": "Lille OSC",
               "short": "Lille",
               "cells": {
-                "pos": 32,
+                "pos": 34,
                 "p": 2,
-                "gd": -4,
-                "pts": 0
-              }
-            },
-            {
-              "name": "Feyenoord Rotterdam",
-              "short": "Feyenoord",
-              "cells": {
-                "pos": 33,
-                "p": 1,
                 "gd": -4,
                 "pts": 0
               }
@@ -645,7 +655,7 @@
               "name": "Galatasaray SK",
               "short": "Galatasaray",
               "cells": {
-                "pos": 34,
+                "pos": 35,
                 "p": 2,
                 "gd": -5,
                 "pts": 0
@@ -655,19 +665,9 @@
               "name": "ŠK Slovan Bratislava",
               "short": "Slovan Bratislava",
               "cells": {
-                "pos": 35,
-                "p": 1,
-                "gd": -5,
-                "pts": 0
-              }
-            },
-            {
-              "name": "FK Bodø/Glimt",
-              "short": "Bodø/Glimt",
-              "cells": {
                 "pos": 36,
-                "p": 1,
-                "gd": -5,
+                "p": 2,
+                "gd": -8,
                 "pts": 0
               }
             }
@@ -688,7 +688,7 @@
           "league": null,
           "title": "Manchester United: next",
           "asOf": "2026-10-14",
-          "fetchedAt": "2026-10-14T09:49:50.461Z",
+          "fetchedAt": "2026-10-14T23:49:35.641Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
@@ -739,7 +739,7 @@
           "league": null,
           "title": "Manchester United: results",
           "asOf": "2026-10-14",
-          "fetchedAt": "2026-10-14T09:49:50.461Z",
+          "fetchedAt": "2026-10-14T23:49:35.641Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
@@ -800,7 +800,7 @@
           "league": "nfl",
           "title": "NFL standings",
           "asOf": "2026-10-14",
-          "fetchedAt": "2026-10-14T09:49:50.461Z",
+          "fetchedAt": "2026-10-14T23:49:35.641Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
@@ -1178,7 +1178,7 @@
           "league": "nfl",
           "title": "NFL: week 6",
           "asOf": "2026-10-14",
-          "fetchedAt": "2026-10-14T09:49:50.461Z",
+          "fetchedAt": "2026-10-14T23:49:35.641Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
@@ -1317,7 +1317,7 @@
           "league": "nfl",
           "title": "NFL: week 5 results",
           "asOf": "2026-10-14",
-          "fetchedAt": "2026-10-14T09:49:50.461Z",
+          "fetchedAt": "2026-10-14T23:49:35.641Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,

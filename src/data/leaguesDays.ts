@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-14",
+    day: "Wednesday",
+    headline: "Lisandro Martinez turns on the board after Manchester United lose in Madrid",
+    dek: "After a 2-0 defeat by Atletico Madrid, the defender named the club's director of football and said Michael Carrick had not been backed. Carrick declined to answer him.",
+    body: "Atletico Madrid beat Manchester United 2-0 at the Metropolitano in the Champions League league phase on Tuesday. Pablo Barrios scored inside the first minute, and Leny Yoro was sent off late on after the referee reviewed a foul on Jonathan David at the monitor (Sky Sports; The National). Manchester United have now gone five games without a win in all competitions (Sky Sports; beIN Sports).\n\nLisandro Martinez, speaking to Amazon Prime after the match, aimed at the people above the dressing room. \"I expect more from our technical director,\" he said, a reference to Jason Wilcox, the club's director of football (Sky Sports; beIN Sports; Hayters). Asked whether Michael Carrick had been backed in the summer window, he answered: \"I don't think so. He does his best\" (beIN Sports; Fabrizio Romano on X).\n\nHis case is that last season's side was a foundation that needed adding to. \"Now we expect more from the top,\" he said, while accepting that \"as players we have to do more\" (beIN Sports; Hayters).\n\nCarrick did not take it up. \"I've not seen it so I don't think now is the right time to comment on it,\" he said, describing it as a time for the squad to stay together and work through it (Hayters; Sportskeeda). He also disputed the red card, calling the contact on David \"very soft and slow\" and saying \"I just don't understand it\" (Yahoo Sports; The National).\n\nManchester United go to Leeds United in the Premier League on Sunday (Sky Sports; BBC Sport).\n\nSources: Sky Sports; beIN Sports; Hayters; The National; Yahoo Sports; Sportskeeda; BBC Sport.",
+    status: "verified",
+    publishedAt: "2026-10-14T06:30:30-04:00",
+    index: "noindex",
+    seoTitle: "Lisandro Martinez criticises Jason Wilcox after Madrid loss",
+    sources: [{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13598750/atletico-madrid-2-0-man-utd-leny-yoro-sent-off-as-michael-carricks-side-extend-winless-run-to-five-games","published":"2026-10-14"},{"outlet":"beIN Sports","url":"https://www.beinsports.com/en-asia/football/uefa-champions-league/articles/we-expect-more-from-the-top--martinez-slams-man-utd-hierarchy-after-atletico-defeat-2026-10-13","published":"2026-10-13"},{"outlet":"Hayters","url":"https://hayters.com/carrick-responds-to-martinezs-criticism-of-man-utd-leadership/","published":"2026-10-13"},{"outlet":"The National","url":"https://www.thenationalnews.com/sport/football/2026/10/14/man-united-ratings-vs-atletico-madrid-yoro-off-and-baleba-promising-on-another-tough-night-for-carrick/","published":"2026-10-14"}],
+    tier: "confirmed",
+    expires: "2026-10-18",
+  },
+  {
     date: "2026-10-12",
     day: "Monday",
     headline: "Neville blames effort, Rooney blames shape: Manchester United before Madrid",

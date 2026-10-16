@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-16",
+    day: "Friday",
+    headline: "Lisandro Martinez apologises, and Manchester United call the row closed",
+    dek: "The defender said sorry on Instagram after meeting the club's leadership and Michael Carrick. Sky Sports reports Jason Wilcox keeps his bosses' backing; the Guardian reports the frustration is shared in the dressing room.",
+    body: "Lisandro Martinez apologised on Thursday for the criticism he aimed at Manchester United's hierarchy after the 2-0 Champions League defeat by Atletico Madrid. He posted the apology on Instagram after a meeting with the club's leadership and head coach Michael Carrick (Reuters; The Independent).\n\n\"Today I met with the club's leadership and the manager,\" he wrote, calling it \"a very positive conversation\". He said \"the frustration of the defeat led me to express how I felt\" (Reuters; The Independent), and \"for that I want to apologise\" (The Independent). He ended: \"With this situation now behind us, we are fully focused on winning together\" (Reuters; The Independent).\n\nOn Tuesday night he had told Amazon Prime: \"I expect more from our technical director,\" a reference to director of football Jason Wilcox (Sky Sports; beIN Sports). United regard the matter as closed and have not said whether Martinez was fined (Reuters; The Independent).\n\nThe two sides of the row have not moved. Sky Sports News reported on Thursday that Wilcox retains the full support of his bosses and is working to a transfer strategy sanctioned by chief executive Omar Berrada and co-owner Sir Jim Ratcliffe, with United sources saying the club did not have the resources to fix every weakness in one window. Jamie Jackson reported for the Guardian that Martinez's view reflects the dressing room's general frustration at recruitment and squad depth, and Alex Crook reported for talkSPORT that Martinez is one of several senior players unhappy with the hierarchy.\n\nManchester United play Leeds United at Elland Road in the Premier League on Sunday (Sky Sports; BBC Sport).\n\nSources: Reuters; The Independent; Sky Sports; beIN Sports; the Guardian via the Irish Examiner; talkSPORT; BBC Sport.",
+    status: "verified",
+    publishedAt: "2026-10-16T06:30:49-04:00",
+    index: "noindex",
+    seoTitle: "Lisandro Martinez apologises after Manchester United meeting",
+    sources: [{"outlet":"Reuters via Al Jazeera","url":"https://www.aljazeera.com/sports/2026/10/15/martinez-apologises-for-man-united-outburst-after-carrick-talks","published":"2026-10-15"},{"outlet":"The Independent via Yahoo Sports","url":"https://sports.yahoo.com/articles/lisandro-martinez-apologises-angry-outburst-182425035.html","published":"2026-10-15"},{"outlet":"Sky Sports","url":"https://www.skysports.com/share/13599282","published":"2026-10-15"},{"outlet":"The Guardian via the Irish Examiner","url":"https://www.irishexaminer.com/sport/soccer/arid-41923996.html","published":"2026-10-14"}],
+    tier: "confirmed",
+    expires: "2026-10-18",
+  },
+  {
     date: "2026-10-14",
     day: "Wednesday",
     headline: "Lisandro Martinez turns on the board after Manchester United lose in Madrid",

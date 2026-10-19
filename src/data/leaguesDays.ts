@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-19",
+    day: "Monday",
+    headline: "Manchester United draw at Leeds United, and Michael Carrick says a good run is coming",
+    dek: "Bryan Mbeumo scored and Dominic Calvert-Lewin equalised in a 1-1 draw at Elland Road. Lisandro Martinez went off at half-time with a thigh problem, and United are six games without a win before Como away on Wednesday.",
+    body: "Leeds United and Manchester United drew 1-1 in the Premier League at Elland Road on Sunday 18 October (BBC Sport; ESPN).\n\nBryan Mbeumo gave United the lead in the 35th minute, turning in a low cross from Youri Tielemans for his fourth Premier League goal of the season (AFP; ESPN; BBC Sport). Dominic Calvert-Lewin equalised for Leeds in the 51st minute (AFP; ESPN).\n\nLisandro Martinez started, three days after apologising for criticising the club's hierarchy following the Champions League defeat at Atletico Madrid, and went off at half-time. \"He felt his thigh a little bit,\" Michael Carrick said (Evening Standard; Yahoo Sports). Noussair Mazraoui replaced him (BBC Sport; AFP). Jason Wilcox, the director of football, watched from the stands (BBC Sport; ESPN).\n\nThe draw leaves United 13th, with one league win from seven games, and six games without a win in all competitions (BBC Sport; ESPN; AFP). Carrick said afterwards he had no doubts the side could go on a good run (BBC Sport; ESPN).\n\nIn January, Ruben Amorim was sacked the day after United's 1-1 draw at Elland Road (CBS Sports; BBC Sport).\n\nUnited play Como away in the Champions League on Wednesday (BBC Sport; Evening Standard).\n\nSources: BBC Sport; ESPN; AFP via Al Jazeera; Evening Standard; Yahoo Sports; CBS Sports.",
+    status: "verified",
+    publishedAt: "2026-10-19T06:31:05-04:00",
+    index: "noindex",
+    seoTitle: "Leeds United 1-1 Manchester United: Martinez off injured",
+    sources: [{"outlet":"BBC Sport","url":"https://www.bbc.co.uk/sport/football/articles/c699zmgmx9vzo","published":"2026-10-18"},{"outlet":"ESPN","url":"https://www.espn.com/soccer/story/_/id/50210339/pressure-piles-michael-carrick-man-united-draw-leeds","published":"2026-10-18"},{"outlet":"AFP via Al Jazeera","url":"https://www.aljazeera.com/sports/2026/10/18/manchester-united-held-at-leeds-despite-improved-performance-under-carrick","published":"2026-10-18"},{"outlet":"Evening Standard via AOL","url":"https://www.aol.co.uk/articles/manchester-united-dealt-injury-worry-164025000.html","published":"2026-10-18"}],
+    tier: "confirmed",
+    expires: "2026-10-21",
+  },
+  {
     date: "2026-10-16",
     day: "Friday",
     headline: "Lisandro Martinez apologises, and Manchester United call the row closed",

@@ -9,14 +9,16 @@
 // location.replace, not assign: the dead anchor should not sit in the back-button history.
 //
 // Keep in step with the masthead menu (index.html, scripts/shared/page-shell.mjs,
-// scripts/build-content.mjs): every target here is a menu entry.
+// scripts/build-content.mjs): every target here is a menu entry. #faq went to /glossary/ until
+// 2026-10-20, when the menu's "Quick answers" became "Football, explained"; it now lands on the
+// glossary section of that page.
 const MOVED: Record<string, string> = {
   'football-leagues': '/desk/leagues/',
   'transfer-desk': '/desk/transfer/',
   'world-cup': '/desk/world-cup/',
   legends: '/legends/',
   'long-reads': '/reads/',
-  faq: '/glossary/',
+  faq: '/explainers/#glossary',
   partnerships: '/about/#contact',
 };
 

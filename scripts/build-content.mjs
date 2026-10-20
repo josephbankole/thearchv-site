@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr, ORG_REF, ORG_NODE, trustLinks } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr, ORG_REF, ORG_NODE } from "./shared/page-shell.mjs";
 // The frontmatter parser and the content/ walk moved to shared/content-pages.mjs on 2026-08-09,
 // so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
@@ -53,7 +53,7 @@ const SITE = "https://thearchv.ca";
 const SECTION = {
   finals: { label: "Finals", href: "/finals/", more: "More finals" },
   united: { label: "Manchester United", href: "/united/", more: "More United history" },
-  explainers: { label: "Explained", href: "/explainers/", more: "More explainers" },
+  explainers: { label: "Football, explained", href: "/explainers/", more: "More explainers" },
   notes: { label: "Notes", href: "/notes/", more: "More from the archive" },
 };
 const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More from the archive" };
@@ -298,7 +298,7 @@ function render(p, allPages) {
         <a class="masthead__panel-link" href="/desk/world-cup/">International Football</a>
         <a class="masthead__panel-link" href="/legends/">Legends</a>
         <a class="masthead__panel-link" href="/reads/">Long reads</a>
-        <a class="masthead__panel-link" href="/glossary/">Quick answers</a>
+        <a class="masthead__panel-link" href="/explainers/">Football, explained</a>
         <a class="masthead__panel-link" href="/posters/">Posters</a>
         <a class="masthead__panel-link" href="/duel/">Player duels</a>
         <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
@@ -329,14 +329,15 @@ function render(p, allPages) {
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
         <a href="/feed.xml">RSS</a>
+        <a href="/about/">About</a>
       </nav>
-      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>
@@ -390,23 +391,23 @@ const DUEL_PAIRS = await listPairsForSitemap();
 const { transferDays: HT, worldCupDays: HW, leaguesDays: HL, sportDays: HS } = await loadDayData();
 const HOME_LASTMOD = newestOf([...HT, ...HW, ...HL, ...Object.values(HS).flat()].map((e) => modifiedAt(e)));
 const EXTRA_URLS = [
+  // The one About page (build-about-page.mjs, 2026-10-19). It absorbed /standards/,
+  // /corrections/, /privacy/ and /authors/joseph-bankole/, which are now noindex redirect stubs
+  // and deliberately out of the sitemap.
   { loc: "/about/", changefreq: "monthly", priority: "0.5" },
-  { loc: "/corrections/", changefreq: "monthly", priority: "0.4" },
   { loc: "/start/", changefreq: "monthly", priority: "0.5" },
   { loc: "/app/", changefreq: "monthly", priority: "0.6" }, // founder 2026-07-28: indexable, carries SoftwareApplication schema
   { loc: "/quiz/", changefreq: "monthly", priority: "0.5" },
   // /dispatch/ is deliberately NOT here: the Dispatch is paused (D-2026-10-06a) and since
   // 2026-10-12 the page is a noindex notice pointing at /reads/, so it stays out of the sitemap.
-  { loc: "/privacy/", changefreq: "yearly", priority: "0.2" },
   { loc: "/support/", changefreq: "yearly", priority: "0.2" },
-  // Evergreen surfaces generated later in the chain (build-glossary-pages.mjs,
-  // build-standards-page.mjs). Listed here so they enter the sitemap through this one
-  // assembly point; the trailing slash matches each page's own <link rel="canonical">.
+  // Evergreen surfaces generated later in the chain (build-glossary-pages.mjs). Listed here so
+  // they enter the sitemap through this one assembly point; the trailing slash matches each
+  // page's own <link rel="canonical">.
   { loc: "/glossary/", lastmod: newestOf(glossaryEntries.map((e) => e.updated)), changefreq: "monthly", priority: "0.6" },
   // Entry rows are DERIVED from glossary-data.mjs, never hand-listed. The hand list silently
   // capped the sitemap at the original ten entries when the glossary grew to sixty (2026-07-28).
   ...glossaryEntries.map((e) => ({ loc: `/glossary/${e.slug}/`, lastmod: e.updated, changefreq: "monthly", priority: "0.5" })),
-  { loc: "/standards/", changefreq: "yearly", priority: "0.3" },
   // The full poster page (build-posters-page.mjs, 2026-10-13): every Manchester United poster tile,
   // moved off the front page when it was cut back to four. Indexable, static, no lastmod.
   { loc: "/posters/", changefreq: "monthly", priority: "0.5" },
@@ -415,10 +416,6 @@ const EXTRA_URLS = [
   // empty /tables/ noindex from the same test. /wire/ is deliberately NOT here: it is noindex
   // (other publishers' headlines) and must stay out of every sitemap.
   ...(tablesInSitemap() ? [{ loc: "/tables/", changefreq: "daily", priority: "0.5" }] : []),
-  // The author page (build-author-page.mjs, 2026-08-04). Every article page's byline and its
-  // NewsArticle author.url resolve here, so it has to be crawlable in its own right rather than
-  // only reachable from a byline. Listed at this one assembly point like /duel/ and /guess/.
-  { loc: "/authors/joseph-bankole/", changefreq: "monthly", priority: "0.5" },
   // Multi-sport section roots (build-sport-pages.mjs). Objects, not bare strings — a string
   // entry is silently skipped by the loop below. The /football/ alias is deliberately NOT here:
   // it is noindex and canonical to /, so it must stay out of the sitemap. The new sports' lane

@@ -5,6 +5,12 @@
 // Every object is built field by field from what the contract names, never copied across, so a
 // logo, a photo or any other URL in the API's reply cannot reach a file we publish (founder rule:
 // no crests, no team logos, no player photos). The same goes for referees and coach photos.
+//
+// Additive fields (2026-10-19, still archv-match/1, for the lineups graphic on /scores/): each lineup
+// player carries the API's player `id` and formation `grid` ("row:col", starters only), each rating
+// carries the player `id`, each lineup carries the team's shirt `colors` (six-digit hex only, checked
+// here, so the field can never hold a URL, a name or CSS), and stats gain saves, passes and pass
+// accuracy. The app decodes by named keys and ignores the rest, so no schema bump.
 
 export type CompetitionKey = "premier-league" | "champions-league" | "wsl";
 
@@ -65,14 +71,23 @@ export type MatchEvent = {
   related: string | null;
   detail: string | null;
 };
-export type LineupPlayer = { name: string; number: number | null; pos: "G" | "D" | "M" | "F" | null };
+export type LineupPlayer = {
+  name: string;
+  number: number | null;
+  pos: "G" | "D" | "M" | "F" | null;
+  id: number | null;
+  grid: string | null;
+};
+// A shirt's colours from the API's team.colors, each "#rrggbb". number and border may be missing.
+export type Kit = { primary: string; number: string | null; border: string | null };
 export type Lineup = {
   formation: string | null;
   coach: string | null;
   startXI: LineupPlayer[];
   subs: LineupPlayer[];
+  colors: { player: Kit | null; goalkeeper: Kit | null } | null;
 };
-export type Rating = { name: string; number: number | null; minutes: number | null; rating: number };
+export type Rating = { name: string; number: number | null; minutes: number | null; rating: number; id: number | null };
 export type Stats = {
   possession: string | null;
   shots: number | null;
@@ -83,6 +98,9 @@ export type Stats = {
   yellow: number | null;
   red: number | null;
   xg: string | null;
+  saves: number | null;
+  passes: number | null;
+  passAccuracy: string | null;
 };
 export type MatchFile = {
   schema: typeof MATCH_SCHEMA;
@@ -313,7 +331,19 @@ export function mapEvents(events: unknown, home: Side, away: Side): MatchEvent[]
 
 // ---------- lineups ----------
 
-function lineupPlayers(v: unknown): LineupPlayer[] {
+// API-Football's player id. 0 (sent for some WSL players) or anything that is not a positive whole
+// number means the API does not know the player, so it is null.
+function playerId(v: unknown): number | null {
+  const n = int(v);
+  return n !== null && n > 0 ? n : null;
+}
+
+// A starter's place on the API's formation grid, "row:col": row 1 is the goalkeeper and column 1 is
+// the team's left. Substitutes have none.
+const GRID = /^[1-9]\d?:[1-9]\d?$/;
+const gridOf = (v: unknown): string | null => typeof v === "string" && GRID.test(v) ? v : null;
+
+function lineupPlayers(v: unknown, starters: boolean): LineupPlayer[] {
   const out: LineupPlayer[] = [];
   for (const raw of list(v)) {
     const p = obj(obj(raw)?.player);
@@ -324,9 +354,32 @@ function lineupPlayers(v: unknown): LineupPlayer[] {
       name,
       number: int(p?.number),
       pos: pos === "G" || pos === "D" || pos === "M" || pos === "F" ? pos : null,
+      id: playerId(p?.id),
+      grid: starters ? gridOf(p?.grid) : null,
     });
   }
   return out;
+}
+
+// One colour from team.colors: six hex digits, with or without "#" (the API sends them bare), returned
+// as lowercase "#rrggbb". Anything else is null, so nothing but a colour can reach the file.
+export function hexColour(v: unknown): string | null {
+  return typeof v === "string" && /^#?[0-9a-f]{6}$/i.test(v) ? `#${v.replace(/^#/, "").toLowerCase()}` : null;
+}
+
+// One shirt (team.colors.player or team.colors.goalkeeper). No usable primary colour, no shirt.
+function kitOf(v: unknown): Kit | null {
+  const o = obj(v);
+  const primary = hexColour(o?.primary);
+  return primary ? { primary, number: hexColour(o?.number), border: hexColour(o?.border) } : null;
+}
+
+// The team's shirt colours, or null when the API sent neither shirt (often, for some fixtures).
+function coloursOf(team: unknown): Lineup["colors"] {
+  const c = obj(obj(team)?.colors);
+  const player = kitOf(c?.player);
+  const goalkeeper = kitOf(c?.goalkeeper);
+  return player || goalkeeper ? { player, goalkeeper } : null;
 }
 
 // The entry for one team out of an array the API keys by team.id. Never by position in the array.
@@ -341,14 +394,15 @@ function forTeam(entries: unknown, teamId: number): Obj | null {
 function lineupFor(entries: unknown, teamId: number): Lineup | null {
   const e = forTeam(entries, teamId);
   if (!e) return null;
-  const startXI = lineupPlayers(e.startXI);
+  const startXI = lineupPlayers(e.startXI, true);
   // A lineup with no starters is one that has not been announced yet.
   if (!startXI.length) return null;
   return {
     formation: str(e.formation),
     coach: str(obj(e.coach)?.name),
     startXI,
-    subs: lineupPlayers(e.substitutes),
+    subs: lineupPlayers(e.substitutes, false),
+    colors: coloursOf(e.team),
   };
 }
 
@@ -367,7 +421,7 @@ function ratingsFor(entries: unknown, teamId: number): Rating[] {
       ? Number(games.rating)
       : NaN;
     if (!name || !Number.isFinite(rating) || rating <= 0) continue;
-    out.push({ name, number: int(games?.number), minutes: int(games?.minutes), rating });
+    out.push({ name, number: int(games?.number), minutes: int(games?.minutes), rating, id: playerId(obj(p?.player)?.id) });
   }
   return out.sort((a, b) => b.rating - a.rating);
 }
@@ -382,15 +436,28 @@ function statValue(stats: unknown, type: string): unknown {
   return null;
 }
 
+// A percentage the API sends as "55%" or, now and then, as a bare 55.
+const percent = (v: unknown): string | null =>
+  typeof v === "string" && v ? v : typeof v === "number" ? `${v}%` : null;
+
+// "Passes %", or, when the API leaves it out (three of the five recorded replies), worked out from
+// "Passes accurate" over "Total passes", which is the same figure the API sends where it has it.
+function passAccuracy(stats: unknown): string | null {
+  const given = percent(statValue(stats, "Passes %"));
+  if (given) return given;
+  const total = int(statValue(stats, "Total passes"));
+  const accurate = int(statValue(stats, "Passes accurate"));
+  if (!total || total <= 0 || accurate === null || accurate < 0 || accurate > total) return null;
+  return `${Math.round((100 * accurate) / total)}%`;
+}
+
 function statsFor(entries: unknown, teamId: number): Stats | null {
   const e = forTeam(entries, teamId);
   if (!e) return null;
   const s = e.statistics;
-  const possession = statValue(s, "Ball Possession");
   const xg = statValue(s, "expected_goals");
   return {
-    possession: typeof possession === "string" && possession ? possession
-      : typeof possession === "number" ? `${possession}%` : null,
+    possession: percent(statValue(s, "Ball Possession")),
     shots: int(statValue(s, "Total Shots")),
     shotsOnTarget: int(statValue(s, "Shots on Goal")),
     corners: int(statValue(s, "Corner Kicks")),
@@ -399,6 +466,9 @@ function statsFor(entries: unknown, teamId: number): Stats | null {
     yellow: int(statValue(s, "Yellow Cards")),
     red: int(statValue(s, "Red Cards")),
     xg: typeof xg === "string" && xg ? xg : typeof xg === "number" ? String(xg) : null,
+    saves: int(statValue(s, "Goalkeeper Saves")),
+    passes: int(statValue(s, "Total passes")),
+    passAccuracy: passAccuracy(s),
   };
 }
 

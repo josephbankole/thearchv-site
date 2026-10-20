@@ -2,8 +2,10 @@
    tags with a missing or empty alt attribute. Run after `npm run build` (dist/ must exist).
    Every <img> on the site should carry a non-empty, descriptive alt: posters get the ARCHV
    illustration credit line, legend headshots get the player's name, lane/article/more-card
-   avatars get the headline or a generated "Illustration: <headline>" fallback. Glossary and
-   standards pages carry no <img> tags by design (verified below, not just assumed).
+   avatars get the headline or a generated "Illustration: <headline>" fallback. Glossary pages
+   carry no <img> tags by design (verified below, not just assumed). /about/ (which took in the
+   standards and author pages on 2026-10-19) carries the crest stand-in portrait and the desk
+   card avatars, all with alt.
 
    Excludes dist/lab/ from the pass/fail gate: that surface is the noindex,nofollow "Reading
    Room" prototype (public/lab/landing/index.html), not a crawlable page, and its one empty-alt

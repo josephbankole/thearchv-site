@@ -30,6 +30,9 @@ import {
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
 import { thumbSrcAttrs } from "./shared/thumbs.mjs";
+// A pure data module with no side effects, so importing it runs nothing. Never import another
+// builder (build-content.mjs, build-glossary-pages.mjs): builders run their build on import.
+import { glossaryEntries } from "./glossary-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -55,8 +58,12 @@ const FRONTS = {
     heading: "Manchester United, in depth",
     lede: "Manchester United in long form. The treble side, the academy that produced it, the European nights and the record fees, each with the numbers attached.",
   },
+  // The label is the breadcrumb name, "Football, explained" since 2026-10-20 to match the menu
+  // entry; `eyebrow` exists so this front's eyebrow does not repeat its h1. Fronts without one use
+  // their label, as before.
   explainers: {
-    label: "Explained",
+    label: "Football, explained",
+    eyebrow: "The ARCHV explains",
     heading: "Football, explained",
     lede: "The rules, the terms and the records, without the jargon. One question per page, answered in the first paragraph.",
   },
@@ -89,7 +96,7 @@ const LEGENDS_FRONT = {
 /* The head for the three page types this script writes. `robots` has NO default here, and that
    is the point: two of the three fronts are indexable and the 404 must not be, and this file is
    the one most likely to grow another page. It is spelled out at each call site instead. */
-function head({ title, description, url, robots, ld = null }) {
+function head({ title, description, url, robots, ld = null, extraHead = [] }) {
   return documentShell({
     title: clampTitle([title, "The ARCHV"]),
     metaDescription: clampDescription(description),
@@ -102,7 +109,39 @@ function head({ title, description, url, robots, ld = null }) {
     ogImage: `${SITE}/og.jpg`,
     csp: PAGE_CSP,
     jsonLd: ld,
+    extraHead,
   });
+}
+
+/* ---------- the glossary, inside Football, explained (2026-10-20) ----------
+   Founder: "Move glossary to football, explained." Every /glossary/ URL stays where it is (the
+   hub, the 62 entries, their canonicals, cards and the DefinedTermSet url): the entries are the
+   site's top search earners, and GitHub Pages cannot send a 301. What moved is the navigation.
+   /explainers/ carries this section, the menu's old "Quick answers" slot points here, #faq on the
+   front page redirects to #glossary (src/ui/movedAnchors.ts), and the glossary breadcrumbs run
+   The ARCHV / Football, explained / Glossary. A compact links-only list in glossary-data.mjs
+   order, styled by the .lane-glossary rules in pageStyles() that the lane fronts already use; the
+   one-line answers stay on /glossary/. Only the explainers front renders it, so /finals/,
+   /united/, /notes/ and /legends/ are byte-identical to what they were. */
+const GLOSSARY_STYLES = `<style>
+    .lane-glossary__note { color: var(--cream-dim); margin: 0 0 1rem; max-width: 42rem; }
+    /* The sport tab row is sticky (about 3.3rem); /#faq lands here through movedAnchors. */
+    #glossary { scroll-margin-top: 4rem; }
+  </style>`;
+
+function glossarySection() {
+  const links = glossaryEntries
+    .map((e) => `<li><a href="/glossary/${escAttr(e.slug)}/">${esc(e.title)}</a></li>`)
+    .join("\n          ");
+  return `
+      <section class="lane-glossary" id="glossary" aria-labelledby="glossary-title">
+        <h2 class="lane-glossary__title" id="glossary-title">The glossary</h2>
+        <p class="lane-glossary__note">Plain answers to the football questions fans actually search.</p>
+        <ul class="lane-glossary__list" aria-label="Glossary terms">
+          ${links}
+        </ul>
+        <a class="lane-glossary__all" href="/glossary/">Every term with its one-line answer</a>
+      </section>`;
 }
 
 // A content page's card. `datePublished` and `eyebrow` are optional in the frontmatter, so the
@@ -120,11 +159,15 @@ function contentCard(section, page) {
 // review). Every section front, /finals/ included (World Cup football), keeps Football current.
 function renderSection(section, front, pages) {
   const url = `${SITE}/${section}/`;
+  const withGlossary = section === "explainers";
+  const parts = pages.map((p) => ({ "@type": "Article", headline: p.title, url: `${SITE}/${section}/${p.slug}/` }));
+  if (withGlossary) parts.push({ "@type": "DefinedTermSet", name: "The ARCHV football glossary", url: `${SITE}/glossary/` });
   return `${head({
   title: front.heading,
   description: front.lede,
   url,
   robots: ROBOTS_INDEXABLE,
+  extraHead: withGlossary ? [GLOSSARY_STYLES] : [],
   ld: {
     "@context": "https://schema.org",
     "@graph": [
@@ -135,7 +178,7 @@ function renderSection(section, front, pages) {
         url,
         inLanguage: "en-GB",
         isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` },
-        hasPart: pages.map((p) => ({ "@type": "Article", headline: p.title, url: `${SITE}/${section}/${p.slug}/` })),
+        hasPart: parts,
       },
       {
         "@type": "BreadcrumbList",
@@ -152,12 +195,12 @@ function renderSection(section, front, pages) {
   <main class="wrap wrap--wide" id="main">
     <section class="lane">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(front.label)}</p>
-      <p class="lane__eyebrow">${esc(front.label)}</p>
+      <p class="lane__eyebrow">${esc(front.eyebrow || front.label)}</p>
       <h1>${esc(front.heading)}</h1>
       <p class="lane__lede">${esc(front.lede)}</p>
       <ul class="lane-list" aria-label="${escAttr(front.heading)}">
         ${pages.map((p) => contentCard(section, p)).join("\n        ")}
-      </ul>
+      </ul>${withGlossary ? glossarySection() : ""}
     </section>
   </main>
   ${footer()}

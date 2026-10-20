@@ -127,8 +127,8 @@
 ## What this site is
 
 Vite + TypeScript + GSAP. Not a single-page site: it is a page graph of static families
-(front page, lane fronts, article pages, sport sections, glossary, standards, duels, the
-daily game, the author page), and `npm run build` is a chain of generators, not one bundle.
+(front page, lane fronts, article pages, sport sections, glossary, the About page, duels, the
+daily game), and `npm run build` is a chain of generators, not one bundle.
 British voice, no em dashes, restrained register. CSP is strict: no inline scripts on the
 homepage beyond one hashed bootstrap, and every inline script in the static family is
 allowed by an exact sha256 (see the CSP section under Per-article pages). Reduced motion is
@@ -164,7 +164,8 @@ the three paler text tokens were darkened (the "white system" names in older not
   `@fontsource-variable`; every static page self-hosts the same wght woff2 files from
   `public/fonts/` (latin + latin-ext, `unicode-range`). The page shell writes them through
   `fontLinks()` (`FONT_FACE_CSS`, Inter Tight preloaded), `public/content.css` carries Inter Tight,
-  and the eight hand-built pages under `public/` carry a pasted copy. CSPs name no font host;
+  and the five hand-built pages under `public/` that need them (`/app`, `/start`, `/quiz`,
+  `/dispatch`, `/support`) carry a pasted copy. CSPs name no font host;
   `cspMeta()` no longer takes `googleFonts`. Change the faces in one place, change all three.
 - **The token block is duplicated in four files that do not import each other**:
   `src/style.css`, `pageStyles()` in `scripts/shared/page-shell.mjs`, `public/content.css`,
@@ -243,8 +244,10 @@ posters at the bottom of the page, the rest can live in sub pages."
 - **Where each removed section went.** Football Leagues, Transfer Desk and International Football
   bands: `/desk/leagues/`, `/desk/transfer/`, `/desk/world-cup/` (lane indexes; all three are in
   the masthead menu). The Legends: `/legends/`. Long reads: `/reads/`. Quick answers (FAQ): the six
-  answers are the glossary entries' own opening definitions, so `/glossary/` (menu label "Quick
-  answers"); the FAQPage JSON-LD came off the front page with the visible block. "The archive, in
+  answers are the glossary entries' own opening definitions, so the glossary, which since
+  2026-10-20 sits inside Football, explained (menu label "Football, explained", `/explainers/`;
+  `#faq` lands on `/explainers/#glossary`); the FAQPage JSON-LD came off the front page with the
+  visible block. "The archive, in
   your pocket" block: the menu's gold "Download the app" slot, the footer button and `/app/`. "The
   fans are already here" CTA: `/about/#contact` (menu "Partner with us" and the footer button);
   the Web3Forms form and `contactForm.ts` are gone, so partnership enquiries are the mailto on
@@ -259,11 +262,30 @@ posters at the bottom of the page, the rest can live in sub pages."
   Do not repoint the app; keep this map in step with the menu.
   The two meta-refresh stubs `public/desk/index.html` and `public/world-cup/index.html`, which used to
   refresh to `/#transfer-desk` and `/#world-cup`, now refresh (and canonical) straight to the lane pages.
+  Four more stubs are GENERATED, not hand-built, by `scripts/build-about-page.mjs` (2026-10-19):
+  `/standards/`, `/corrections/`, `/privacy/` and `/authors/joseph-bankole/`, each pointing into
+  `/about/`. See "The About page" below.
 - **The masthead menu** now lists thirteen internal destinations (front page, live scores, the
-  three desks, Legends, Long reads, Quick answers, Posters, Player duels, Daily archive game,
+  three desks, Legends, Long reads, Football, explained, Posters, Player duels, Daily archive game,
   Partner with us, RSS). Three copies, no shared import: `index.html`, `masthead()` in
   `scripts/shared/page-shell.mjs` and the hand-built nav in `scripts/build-content.mjs`. The panel
-  scrolls inside itself (`max-height` + `overflow-y: auto`) on a short phone.
+  scrolls inside itself (`max-height` + `overflow-y: auto`) on a short phone. "Quick answers"
+  (`/glossary/`) became "Football, explained" (`/explainers/`) on 2026-10-20.
+- **The footer has one links row (2026-10-20, founder: "fewer sections").** The trust row and
+  `trustLinks()` are gone; every footer carries one About link (`/about/`) and one YouTube link
+  (`https://www.youtube.com/@thearchvca`, new tab), and the Glossary and podcast links are out.
+  Four copies: `index.html` (the More row, plus its CTA row with Partner with us), `footer()` in
+  page-shell (Football, explained in Glossary's old place), and the hand-built rows in
+  `build-content.mjs` and `build-day-pages.mjs`. Change one, change them all, and check the built
+  dist, not the source.
+- **The glossary lives under Football, explained (2026-10-20).** Every `/glossary/` URL stayed (hub,
+  entries, canonicals, cards, DefinedTermSet url, sitemap rows): the entries are the site's top
+  search earners and Pages cannot 301. `/explainers/` carries a `#glossary` section listing every
+  term (`build-section-pages.mjs`, explainers front only, so the other fronts are byte-identical),
+  its CollectionPage `hasPart` names the DefinedTermSet, and the glossary breadcrumbs run The ARCHV
+  / Football, explained / Glossary in both the visible crumbs and the BreadcrumbList. The
+  explainers crumb label is "Football, explained" in `build-content.mjs`, `build-section-pages.mjs`
+  and `build-search.mjs`; the hub's eyebrow is "The ARCHV explains" so it does not repeat the h1.
 - The Desk Brief is a full-width block (was a side rail beside the bands) and the scroll-spy nav
   (`.spynav`) is gone, since the page has one section left.
 
@@ -324,6 +346,63 @@ Design of record: `docs/wire-design-2026-09-26/design-final.md`. Code: `scripts/
   read by name, never printed, never `VITE_`, never CI. Jolpica stays off until admin@jolpi.ca
   grants commercial use in writing.
 - Tests: `npm run test:wire` (node:test, fixtures only, no network), which runs inside `build`.
+
+## The live scores page, /scores/ (2026-10-13; match panels 2026-10-19)
+
+A static shell (`scripts/build-scores-page.mjs`: markup, all of the page's CSS, CSP) and one inline
+client that reads the public Supabase `live/` bucket in the browser (`scores.json`, `match/<id>.json`,
+`days/`). The scores-poll Edge Function writes those files; its rules are in
+`supabase/functions/README.md`. Noindex, out of the sitemap and search.
+
+- **One inline script, put together from two files.** `scripts/shared/scores-client.js` is the client;
+  `scripts/shared/scores-pitch.js` holds the pure lineup helpers (layout, rating join, colour checks),
+  spliced in at the client's `// @include scores-pitch.js` line by `scripts/shared/scores-script.mjs`.
+  The build hashes exactly that text and `npm run test:scores` (in `build`) tests exactly that text.
+  `scores-script.mjs` throws on `</script` and on `<!--` in either file: the first ends the element
+  early, the second makes `verify-csp-pages.mjs` (which strips comments before hashing) report a false
+  mismatch. Helper names all start with `pitch`, and a test fails on a clash with the client.
+- **An open match shows three panels** (founder, 2026-10-19): Summary (goals, cards, the top three
+  ratings a side, unchanged), Lineups (one pitch, away at the top, home at the bottom, a shirt per
+  player with number and rating, then substitutes) and Team stats (a table with split bars), side by
+  side in a scroll-snap track with a tab row above. `?match=<id>&panel=lineups|stats` opens a panel.
+  With neither lineups nor stats in the file, the summary shows alone, as before.
+- **The track is trap 3's kind of element.** It carries `overflow-y: hidden` with a comment, no
+  transform or translate may go inside it (pitch markings are centred with inset and auto margins), no
+  `touch-action`, and no smooth `scroll-behavior` (only a tab press animates, and never under reduced
+  motion). The client sets the track's height to the panel on show, so the taller panels beside it are
+  clipped by that same `overflow-y`. Each `.scores__panel` is `position: relative`, the containing
+  block for the hidden `.scores__sr` text inside it; without that the panels off to the side widened
+  the whole page. With a match open, `document.documentElement.scrollWidth` must equal `clientWidth`.
+- **The list rebuilds on every feed change**, so the client keeps `panelOf` (the panel on show),
+  `heightOf` and the focused tab or panel, builds every open panel first and measures afterwards, so
+  the page does not move. A rebuild waits while a finger is on a track. `enter()` resets all of it.
+  Nothing new may carry `data-id`: the row toggle and `?match=` look elements up by it.
+- **Shirts.** One plain T-shirt outline drawn as inline SVG, filled with the team's colour from the
+  feed: no crest, sponsor, stripe, trim or pattern, nothing that copies a real kit. The rights line
+  under "Editorial and rights lines" still binds, and anything kit-like added to the shirt would cross
+  it. Team colours are data, checked as six hex digits by the mapper and again by the client, and never
+  go into the token files. No colours (every file written before 2026-10-19 until a backfill) gives
+  neutral shirts: ink at home, white away. The number is about 10.5px bold, so it needs 4.5:1 on its
+  shirt: below that it becomes ink or white, and where neither reaches 4.5:1 (a mid-tone shirt) the
+  digits get an outline in the other. A shirt below 1.4:1 on the pitch gets a muted-ink outline.
+- **Colour fallback (2026-10-20).** A side with no colours in its file takes API-Football's own from
+  `scripts/data/team-colours.json`, embedded in the client by `scores-script.mjs` (so the hash covers
+  it): by team id, else by exact name among Premier League and Champions League teams, which is how a
+  WSL side gets its men's club's colours (the API sends the WSL almost none; one alias maps "Tottenham
+  Hotspur" to the PL's "Tottenham"), with the keeper neutral unless matched by id. File colours always
+  win. Refresh with `npm run team-colours` (a network read, so never in the build), then commit the JSON.
+- **Old files have no `grid`, ids or colours.** The pitch then comes from the formation plus the API's
+  order (keeper first, then each line from the team's right, so each line is reversed), checked in the
+  tests against the API's own grid for all ten recorded lineups. With neither a grid nor a formation
+  that adds up, the starters are listed, not drawn. Ratings join a player by id, then shirt number,
+  then exact name, because the API spells a player two ways ("R. Araujo", "Ronald Araújo"). Some
+  ratings come with player id 0 and no number (WSL, "Jade Rose" for "J. Rose"), so last of all a
+  lineup name "X. Surname" takes the one such rating with that initial and surname, or none.
+- Ratings are labelled as API-Football's wherever they show (D-2026-10-13a): the summary heading and,
+  on the lineups panel, the app's line "Ratings come from API-Football, not from The ARCHV."
+- **The in-app Browser pane cannot test the swipe.** While it is hidden it runs no animation frames and
+  fires no scroll events, so smooth tab scrolls and the swipe-follow logic do nothing there. Check those
+  on a real phone, with trap 3's scroll-ownership measurement.
 
 ## Site structure: the page graph (site depth pass, 2026-07-09)
 
@@ -505,40 +584,75 @@ their own JSON-LD. Only the head moved.
   autodiscovery, no og:image dimensions and no `twitter:site`. Those absences are passed
   explicitly (`stylesheet`, `rss: false`, `posthog: false`, `fonts: false`, `styles: false`,
   `ogImageSize: false`, `twitterSite: false`) rather than inferred from the stylesheet.
-- **One page is deliberately still hand-assembled**: the `/football/` courtesy alias in
-  `build-sport-pages.mjs`. It is a meta-refresh stub with no og or twitter tags at all, its own
-  inline `<style>` and a narrower viewport, so putting it through the shell would mean
-  parameters that exist for one page.
-- Two pages carry og:image with no `twitter:image` (`/standards/` and the glossary hub) and are
-  preserved that way with `twitterImage: false`. It reads as an oversight rather than a decision
+- **Five pages are deliberately still hand-assembled**: the `/football/` courtesy alias in
+  `build-sport-pages.mjs`, and the four About redirect stubs (`/standards/`, `/corrections/`,
+  `/privacy/`, `/authors/joseph-bankole/`) written by `stubPage()` in
+  `scripts/build-about-page.mjs`. Each is a noindex redirect stub with no og or twitter tags at
+  all and its own inline `<style>`; `/football/` also has a narrower viewport, and each About
+  stub carries one hashed `location.replace` script with the meta refresh in `<noscript>`.
+  Putting them through the shell would mean parameters that exist for a handful of stubs. Each
+  still writes its own robots and canonical out loud.
+- One page carries og:image with no `twitter:image` (the glossary hub; `/standards/` was the
+  other until it merged into `/about/`, which ships both) and is preserved that way with
+  `twitterImage: false`. It reads as an oversight rather than a decision
   and is worth a separate call; it was not fixed in passing.
 
-## The author page and the authorship signal (2026-08-04)
+## The About page, and where the trust pages went (2026-10-19)
 
-`scripts/build-author-page.mjs` emits one page, `/authors/joseph-bankole/`, in the same
-self-contained family as the lane and article pages (shared `page-shell.mjs` masthead,
-footer, CSP, brand CSS; no new inline CSS and no per-page inline script). It runs after
-`build-article-pages.mjs`; its sitemap row lives in `build-content.mjs`'s `EXTRA_URLS`,
-not in the script itself, and `verify-csp-pages.mjs` checks it.
+Founder, 2026-10-19: "fewer sections, merge how we verify, standards, corrections, privacy, contact
+and Joseph Bankole all to the About section". `scripts/build-about-page.mjs` emits one page,
+`/about/`, in the self-contained page-shell family (documentShell, `masthead(NO_SPORT)`, footer,
+pageStyles; its own CSS through `extraHead`). Sections in order: the lead and What we publish,
+`#who`, `#how-we-verify` (with `#how-made`), `#standards` (with `#funding`), `#corrections` (with
+`#report` and `#log`), `#privacy`, `#contact`, `#joseph-bankole` (with `#recent-work`,
+`#long-reads`, `#explainers`). Every old fragment id was kept. It replaced the hand-built
+`public/about/`, `public/corrections/` and `public/privacy/` and three generators
+(`build-standards-page.mjs`, `build-author-page.mjs`, `build-corrections-log.mjs`).
 
+- **The old URLs are generated redirect stubs**, written into dist by the same script after
+  `vite build`: `/standards/` -> `#how-we-verify`, `/corrections/` -> `#corrections`,
+  `/privacy/` -> `#privacy`, `/authors/joseph-bankole/` -> `#joseph-bankole`. Each is
+  `noindex,follow`, canonical `https://thearchv.ca/about/`, out of every sitemap, and carries one
+  hashed inline script that moves an allowed incoming fragment across with `location.replace`
+  (`/standards/#how-made`, `/corrections/#report` and `#log`, the author page's three list ids).
+  The meta refresh is the no-JS fallback and sits in `<noscript>` after the script, because a bare
+  0-second refresh races the script and can drop the fragment. `verify-csp-pages.mjs` checks all
+  four. **`/privacy/` must keep resolving**: it is the App Store privacy policy URL and the iOS
+  app's Settings link (`AppConfig.privacyURL`); slashless `/privacy` is 301ed by Pages.
+- **The privacy policy is a section now**, h2 "Privacy policy" with its own "Last updated" line,
+  rendered from `PRIVACY_UPDATED` in `build-about-page.mjs`. Change the policy and change that
+  constant with it (the policy promises as much). The policy's closing line (not affiliated with,
+  endorsed by, or licensed by FIFA, any club, federation, competition, or player) stays: it is the
+  only line on the page that names players, and `footer()`'s legal line is narrower.
+- In-prose links on `/about/` are underlined (`.about__section p a, .log a`), because the
+  page-shell family sets `a { text-decoration: none }` and the link colour against the body text
+  is under 3:1. The breadcrumb, "On this page" and the author's link lists stay plain.
+- **The corrections log** is gathered by `scripts/shared/corrections-log.mjs` (desk records in
+  `src/data/*Days.ts`, `scripts/data/corrections-evergreen.json`, dated note paragraphs) and
+  rendered at build time in `#log`: the newest ten rows, the rest inside one native `<details>`.
+  The AboutPage `dateModified` is the later of the newest row's date and `PRIVACY_UPDATED`.
 - **The author name is FROZEN as "Joseph Bankole"** (founder ruling 2026-08-04). Never vary
   it, and never introduce "Fola Bankole" anywhere on the site.
-- **`AUTHOR_URL` now points at the author page**, not josephbankole.ca. Every article's
-  visible byline and its `NewsArticle` `author.url` resolve on-site, which is what
-  consolidates the authorship entity here. josephbankole.ca was NOT dropped: it is the
-  second entry in `AUTHOR_SAMEAS`, so the two profiles stay linked as one Person.
-- The "recent bylined work" list is derived from the same day data the article pages are
-  built from, and the long reads from `content/`. Nothing on that page is hand-listed, so
-  no link on it can rot into a 404 when the desks move on.
-- **No founder headshot exists in this repo.** The page falls back to the brand crest and
+- **`AUTHOR_URL` is `/about/#joseph-bankole`**; the Person `@id` deliberately stays the legacy
+  `https://thearchv.ca/authors/joseph-bankole/#person` (an id is a name, not a link, so the
+  entity does not churn). Desk pages carry The ARCHV Desk byline and an Organization author
+  (Decision 1, 2026-09-23); `HOW_MADE_PATH` (`/about/#how-made`) is their "How this desk works"
+  link. josephbankole.ca stays in `AUTHOR_SAMEAS`. The bio and the derived lists live in
+  `scripts/shared/author-profile.mjs`; the list is headed "Latest from The ARCHV Desk" and must
+  never claim the desk's work as his.
+- The lists are derived from the same day data the article pages use and from `content/`, so
+  nothing on them is hand-listed and no link can rot into a 404.
+- **No founder headshot exists in this repo.** The profile falls back to the brand crest and
   says so in the build log. Drop a real one at `public/heads/joseph-bankole.webp` and the
   script picks it up with no other change. Do not generate a face: the site's imagery rule
   forbids it.
+- `index.html` carries a hand copy of `ORG_NODE` (founder and the policy URLs); change page-shell
+  and change it too. (It also copied `trustLinks()` until the footer trust row went on 2026-10-20.)
 
 `max-image-preview:large` rides on every indexable page family's robots meta (article,
-lane, sport, glossary, standards, duel, guess, author, the long-form content pages, the
+lane, sport, glossary, about, duel, guess, the long-form content pages, the
 hand-built `public/` pages and the homepage). The `noindex` families (legacy day pages,
-`/football/`, `/desk/`, `/world-cup/`, lab) are deliberately untouched.
+`/football/`, `/desk/`, `/world-cup/`, the four About stubs, lab) are deliberately untouched.
 
 ## Tier 0 design pass (2026-08-04, rolled back and re-landed the same day)
 

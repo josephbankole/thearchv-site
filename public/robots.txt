@@ -1,6 +1,6 @@
 # The ARCHV (thearchv.ca). The whole site is open to crawlers, search and AI alike.
 # Machine-readable summary of the publication: https://thearchv.ca/llms.txt
-# How the reporting is verified: https://thearchv.ca/standards/
+# How the reporting is verified: https://thearchv.ca/about/#how-we-verify
 
 User-agent: *
 Allow: /

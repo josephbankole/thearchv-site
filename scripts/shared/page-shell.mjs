@@ -29,31 +29,39 @@ export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 // visible "By ..." line on every article page and the Person object in that page's NewsArticle
 // JSON-LD. Google News and news aggregators want a named person rather than a masthead.
 //
-// AUTHOR_URL was https://josephbankole.ca until 2026-08-04. It now points at the on-site author
-// page (scripts/build-author-page.mjs) so the JSON-LD author.url resolves on ARCHV itself and the
-// authorship signal consolidates here rather than off-domain. josephbankole.ca is NOT dropped: it
-// stays in AUTHOR_SAMEAS below, which is what author.sameAs emits, so the two profiles remain
-// linked as one entity. Change these here and every generated page follows.
+// AUTHOR_URL was https://josephbankole.ca until 2026-08-04, then the on-site author page
+// /authors/joseph-bankole/. Since 2026-10-19 the profile is a section of the one About page
+// (scripts/build-about-page.mjs), so AUTHOR_URL is /about/#joseph-bankole and the old author URL
+// is a redirect stub. josephbankole.ca is NOT dropped: it stays in AUTHOR_SAMEAS below, so the two
+// profiles remain linked as one entity. Change these here and every generated page follows.
 export const AUTHOR_NAME = "Joseph Bankole";
-export const AUTHOR_PATH = "/authors/joseph-bankole/";
+export const AUTHOR_PATH = "/about/#joseph-bankole";
 export const AUTHOR_URL = `${SITE}${AUTHOR_PATH}`;
 export const AUTHOR_PERSONAL_URL = "https://josephbankole.ca";
-// The Person's sameAs: the profiles OFF this site that are the same man. The on-site author page
-// is the Person's url and @id, so it is not repeated in its own sameAs (search plan 3.6,
-// 2026-09-27). Order is stable so the JSON-LD diff stays readable.
+// The Person's sameAs: the profiles OFF this site that are the same man. The on-site profile
+// (/about/#joseph-bankole) is the Person's url, so it is not repeated in its own sameAs (search
+// plan 3.6, 2026-09-27). Order is stable so the JSON-LD diff stays readable.
 export const AUTHOR_LINKEDIN_URL = "https://www.linkedin.com/in/joseph-bankole/";
 export const AUTHOR_SAMEAS = [AUTHOR_PERSONAL_URL, AUTHOR_LINKEDIN_URL];
 
 /* ---------- one Organization, one Person (search plan 3.6, week 2, 2026-09-27) ----------
    Before this the Organization was declared under three ids (#org, #organization on /about/ and
    /corrections/, and an anonymous node on /standards/) and Joseph under two Person ids. Every
-   generated page now takes its node from here, and the hand-built pages (index.html, public/about,
-   public/corrections) carry a copy of ORG_NODE's fields: change one, change those three with it.
+   generated page now takes its node from here, and the one hand-built page left that carries it,
+   index.html, holds a copy of ORG_NODE's fields: change one, change both (/about/ and
+   /corrections/ were hand-built copies too until both became the generated /about/, 2026-10-19).
    ORG_NODE.founder is written out with type and name as well as the @id, so a page that carries the
    Organization but not the full Person still describes him without minting a second Person id.
-   An email field is added only once a thearchv.ca mailbox exists (founder item, plan 3.8). */
+   An email field is added only once a thearchv.ca mailbox exists (founder item, plan 3.8).
+
+   The policy URLs point into the one About page (2026-10-19): /about/#how-we-verify,
+   #standards, #corrections and #report. The old /standards/, /corrections/, /privacy/ and
+   /authors/joseph-bankole/ URLs are redirect stubs written by scripts/build-about-page.mjs.
+   PERSON_ID deliberately KEEPS the legacy /authors/joseph-bankole/#person IRI while the Person's
+   url moves to /about/#joseph-bankole: an @id is a name, not a link, and keeping it means no
+   entity churn for search engines that already know him by it. */
 export const ORG_ID = `${SITE}/#org`;
-export const PERSON_ID = `${AUTHOR_URL}#person`;
+export const PERSON_ID = `${SITE}/authors/joseph-bankole/#person`;
 export const ORG_REF = { "@id": ORG_ID };
 export const PERSON_REF = { "@type": "Person", "@id": PERSON_ID, name: AUTHOR_NAME, url: AUTHOR_URL };
 export const ORG_NODE = {
@@ -68,10 +76,10 @@ export const ORG_NODE = {
   logo: { "@type": "ImageObject", url: `${SITE}/brand/logo-badge@192.png`, width: 192, height: 192 },
   image: `${SITE}/og.jpg`,
   founder: PERSON_REF,
-  publishingPrinciples: `${SITE}/standards/`,
-  verificationFactCheckingPolicy: `${SITE}/standards/`,
-  correctionsPolicy: `${SITE}/corrections/`,
-  actionableFeedbackPolicy: `${SITE}/corrections/#report`,
+  publishingPrinciples: `${SITE}/about/#standards`,
+  verificationFactCheckingPolicy: `${SITE}/about/#how-we-verify`,
+  correctionsPolicy: `${SITE}/about/#corrections`,
+  actionableFeedbackPolicy: `${SITE}/about/#report`,
   ownershipFundingInfo: `${SITE}/about/#funding`,
   masthead: `${SITE}/about/#who`,
   sameAs: null, // filled below, once ORG_SAMEAS is defined
@@ -81,9 +89,10 @@ export const ORG_NODE = {
    Routine desk entries and question pages are made by the desks, not typed by a person, so they
    carry "The ARCHV Desk" and an Organization author. The Person byline is kept for pieces Joseph
    wrote himself. The disclosure names no model and no vendor, and it renders on dated pages and
-   /standards/ only, never on /shop/, /posters/, a pack page or a home store rail (D-2026-09-12k). */
+   /about/#how-made only, never on /shop/, /posters/, a pack page or a home store rail
+   (D-2026-09-12k). /standards/#how-made, the old target, is a stub that carries the fragment. */
 export const DESK_BYLINE = "The ARCHV Desk";
-export const HOW_MADE_PATH = "/standards/#how-made";
+export const HOW_MADE_PATH = "/about/#how-made";
 export const DESK_DISCLOSURE =
   "Drafted with automated writing tools from the sources named on this page, and checked before it could publish.";
 
@@ -556,7 +565,7 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <a class="masthead__panel-link" href="/desk/world-cup/">International Football</a>
         <a class="masthead__panel-link" href="/legends/">Legends</a>
         <a class="masthead__panel-link" href="/reads/">Long reads</a>
-        <a class="masthead__panel-link" href="/glossary/">Quick answers</a>
+        <a class="masthead__panel-link" href="/explainers/">Football, explained</a>
         <a class="masthead__panel-link" href="/posters/">Posters</a>
         <a class="masthead__panel-link" href="/duel/">Player duels</a>
         <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
@@ -601,36 +610,28 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
   </script>`;
 }
 
-// The trust links every footer carries (search plan 3.8, week 2): About, Standards, Corrections,
-// Privacy, Contact and the author page. One definition, used by footer() below and by the two
-// builders that write their own footer markup (build-content.mjs, build-day-pages.mjs). The
-// hand-built index.html footer carries the same six links; change one, change it too.
-export function trustLinks() {
-  return `<nav class="footer__links footer__links--trust" aria-label="About The ARCHV">
-        <a href="/about/">About</a>
-        <a href="/standards/">Standards</a>
-        <a href="/corrections/">Corrections</a>
-        <a href="/privacy/">Privacy</a>
-        <a href="/about/#contact">Contact</a>
-        <a href="${AUTHOR_PATH}">${AUTHOR_NAME}</a>
-      </nav>`;
-}
-
+// The footer's one links row (2026-10-20, founder: "fewer sections"). The trust row and
+// trustLinks() are gone: How we verify, Standards, Corrections, Privacy, Contact and the author
+// profile are all sections of /about/ (scripts/build-about-page.mjs), so the footer carries one
+// About link. The glossary sits inside Football, explained (/explainers/#glossary), and the one
+// outbound video link is YouTube. The hand-built footers in index.html, build-content.mjs and
+// build-day-pages.mjs carry the same About and YouTube links; change one, change them all.
 export function footer() {
   return `<footer class="footer">
     <div class="wrap">
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
         <a href="/feed.xml">RSS</a>
-        <a href="/glossary/">Glossary</a>
+        <a href="/explainers/">Football, explained</a>
+        <a href="/about/">About</a>
       </nav>
-      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>
@@ -1282,7 +1283,7 @@ export function pageStyles() {
     .footer__tag { color: var(--cream); margin: .5rem 0; }
     .footer__legal { color: var(--cream-faint-text); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
 
-    /* glossary (UNIT 1) + standards (UNIT 2): evergreen static surfaces */
+    /* glossary (UNIT 1) + standards (UNIT 2, now the /about/ page): evergreen static surfaces */
     .glossary { padding: 1.5rem 0 1rem; }
     .glossary .lane__lede { margin-bottom: 2.4rem; }
     .glossary__q { color: var(--cream); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 1.2rem; line-height: 1.3; margin: 1.6rem 0 .5rem; }
@@ -1328,7 +1329,7 @@ export function pageStyles() {
     .lane-card, .glossary-card { transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
     .lane-card:hover, .glossary-card:hover { box-shadow: var(--shadow-lift); }
 
-    /* ---------- author page (build-author-page.mjs) ---------- */
+    /* ---------- author profile (/about/#joseph-bankole, build-about-page.mjs; was the author page) ---------- */
     .author { padding: 1.5rem 0 .5rem; }
     .author__head { display: flex; align-items: center; gap: 1.25rem; margin: 0 0 1.6rem; flex-wrap: wrap; }
     .author__portrait {

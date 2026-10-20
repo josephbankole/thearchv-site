@@ -10,7 +10,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, ORG_REF, ORG_NODE, trustLinks } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, ORG_REF, ORG_NODE } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
@@ -142,11 +142,12 @@ function render(entry, sectionKey) {
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
+        <a href="/about/">About</a>
       </nav>
-      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>

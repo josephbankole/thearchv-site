@@ -94,7 +94,7 @@ for (const r of longReads) {
 }
 
 /* content pages: /finals/, /united/, /explainers/, /notes/ */
-const SECTION_LABEL = { finals: "Finals", united: "Manchester United", explainers: "Explained", notes: "Notes", legends: "Legends" };
+const SECTION_LABEL = { finals: "Finals", united: "Manchester United", explainers: "Football, explained", notes: "Notes", legends: "Legends" };
 for (const p of loadContentPages()) {
   add(p.title, p.description ?? p.eyebrow ?? "", `/${p.section}/${p.slug}/`, SECTION_LABEL[p.section] ?? p.section, p.datePublished ?? "");
 }
@@ -112,7 +112,9 @@ for (const l of legends) {
   add(l.name, `${l.years ? `${l.nation}, ${l.years}. ` : `${l.nation}. `}${l.bio ?? ""}`, "/legends/", "Legends");
 }
 
-/* the fixed destinations: fronts, sections, evergreen surfaces */
+/* the fixed destinations: fronts, sections, evergreen surfaces. Since 2026-10-20 the glossary sits
+   under the Football, explained grouping (it is a section of /explainers/, and its breadcrumbs say
+   so), and the trust pages are sections of /about/, grouped under About. */
 const DESTINATIONS = [
   ["The ARCHV front page", "The day's lead, the Desk Brief, live scores and a few posters.", "/", "The ARCHV"],
   ["Posters", "Every Manchester United and Manchester United Women poster in the ARCHV shop, one match to a poster.", "/posters/", "Sections"],
@@ -130,13 +132,13 @@ const DESTINATIONS = [
   ["Notes", "How the archive is put together, and the notes on method behind it.", "/notes/", "Sections"],
   ["The Legends", "One football great per entry, drawn in the house style.", "/legends/", "Sections"],
   ["Long reads", "Long-form from the archive: ownership, academies, accounting and television money.", "/reads/", "Sections"],
-  ["Glossary", "Sixty-odd football terms, defined in a sentence each.", "/glossary/", "Reference"],
-  ["Editorial standards", "The two-source rule, the correction policy and what the desk will not publish.", "/standards/", "Reference"],
+  ["Glossary", "Sixty-odd football terms, defined in a sentence each.", "/glossary/", "Football, explained"],
+  ["Editorial standards", "The two-source rule, the correction policy and what the desk will not publish.", "/about/#standards", "About"],
   ["Player duels", "Two players, the same stats, side by side.", "/duel/", "Games"],
   ["Daily archive game", "One historical player a day, four clues, five guesses.", "/guess/", "Games"],
-  ["Joseph Bankole", "The founder of The ARCHV and the person answerable for what it publishes.", "/authors/joseph-bankole/", "About"],
+  ["Joseph Bankole", "The founder of The ARCHV and the person answerable for what it publishes.", "/about/#joseph-bankole", "About"],
   ["About The ARCHV", "What the archive is, who runs it, and how to reach it.", "/about/", "About"],
-  ["Corrections", "Every correction the desk has made, dated and kept.", "/corrections/", "About"],
+  ["Corrections", "Every correction the desk has made, dated and kept.", "/about/#corrections", "About"],
 ];
 for (const [title, dek, url, lane] of DESTINATIONS) add(title, dek, url, lane);
 
@@ -173,8 +175,8 @@ const BROWSE = [
   ["/finals/", "The finals"],
   ["/united/", "Manchester United"],
   ["/explainers/", "Football, explained"],
-  ["/legends/", "The Legends"],
   ["/glossary/", "Glossary"],
+  ["/legends/", "The Legends"],
   ["/guess/", "Daily archive game"],
 ];
 

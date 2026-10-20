@@ -226,17 +226,47 @@ mapper builds each field by name and copies no URL across.
 | File | URL | Holds |
 | --- | --- | --- |
 | `scores.json` | `https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/scores.json` | every match from yesterday 00:00 to tomorrow 23:59 (America/Edmonton), sorted by kickoff then competition |
-| `match/<id>.json` | `.../public/live/match/<id>.json` | events, lineups, API-Football's player ratings and team stats for one match, once it has kicked off |
+| `match/<id>.json` | `.../public/live/match/<id>.json` | events, lineups (with grid places and shirt colours where the API has them), API-Football's player ratings and team stats for one match, once it has kicked off |
 | `days/<YYYY-MM-DD>.json` | `.../public/live/days/2026-10-13.json` | `archv-day/1`: every match that kicked off on that Edmonton day, the same MATCH objects as `scores.json` (postponed and cancelled fixtures included, with their status) |
 | `days/index.json` | `.../public/live/days/index.json` | `archv-days/1`: the days that have a file and their match counts, newest first |
 
 Objects are uploaded with `contentType` `application/json` and `cacheControl` 30. supabase-js sends that
 as `Cache-Control: max-age=30` (not `public, max-age=30`); check the header on a read-back. A finished
 match's file stops changing about two hours after full time. Files are never deleted, so the bucket
-grows by about 7 KB for each match played, and a few KB for each day.
+grows by about 9 KB for each match played, and a few KB for each day.
 
 Ratings are API-Football's numbers. The files say so in `source`, and the app has to label them as
-theirs. WSL team names lose the API's trailing " W" ("Arsenal W" becomes "Arsenal"); the competition
+theirs. The web page labels them too (/scores/, D-2026-10-13a).
+
+**Fields added on 2026-10-19, still `archv-match/1`.** They are additive, and the app decodes by named
+keys and ignores the rest, so the schema did not change. For the lineups graphic on /scores/:
+
+- each lineup player has `id` (API-Football's player id, null when the API sends 0 or nothing) and
+  `grid` (`"row:col"` on the API's formation grid, row 1 the goalkeeper, column 1 the team's left;
+  starters only, always null on `subs`);
+- each lineup has `colors`: `{ player, goalkeeper }`, each `{ primary, number, border }` as lowercase
+  `#rrggbb`, read from the API's `team.colors`. A value that is not six hex digits is dropped, a shirt
+  with no usable primary is null, and `colors` is null when the API sent neither shirt;
+- each rating has `id`, so the page can match a rating to a lineup player when the two names differ
+  ("R. Araujo" in the lineup, "Ronald Araújo" in the ratings) or the rating has no shirt number;
+- each side's stats gain `saves` ("Goalkeeper Saves"), `passes` ("Total passes") and `passAccuracy`
+  ("Passes %", a string like `"80%"`; when the API leaves that out, "Passes accurate" over "Total
+  passes", rounded, which is the same figure).
+
+A finished match's file is never fetched again by the minute's poll, so files written before the deploy
+get these fields only from a backfill (below), which rewrites every match file whose content has changed.
+The page works without them: it lays a lineup out from the formation and the API's order, matches ratings
+by shirt number then exact name, and draws neutral shirts when there are no colours. A rating the API sends
+with player id 0 and no shirt number (seen on WSL players) has neither key, so the page matches it last by
+initial and surname ("J. Rose" to "Jade Rose"), and only when exactly one rating fits.
+
+A file with no colours for a side gets them on /scores/ from `scripts/data/team-colours.json`: the
+colours API-Football sent for that team in its other files (most often at home), by team id, else by
+exact name among Premier League and Champions League teams, which covers the WSL, since the API sends
+WSL clubs almost no colours and their names match the men's clubs once " W" is gone. Refresh it with
+`npm run team-colours` and commit the JSON; it reads only this public bucket and costs no API quota.
+
+WSL team names lose the API's trailing " W" ("Arsenal W" becomes "Arsenal"); the competition
 already says it is the women's league. Names are also tidied: the API sometimes double-encodes an accent
 (it sent "Martínez" as "MartÃ", a soft hyphen and "nez"), which the mapper repairs, and soft hyphens
 and zero-width characters are removed.

@@ -125,11 +125,12 @@ function shortDate(iso: string): string {
 // The lead's sourcing line names the outlets the entry itself names (search plan 3.3). It used to
 // read "Checked against two sources" on every lead, whatever the entry said. With no sources
 // array (an entry filed before G4) it points at how we check instead of claiming a count. The
-// /standards/ link stays: it is the front page's only route to the verification policy.
+// how-we-verify link stays (/about/#how-we-verify since the 2026-10-19 About merge; it was
+// /standards/): it is the front page's only route to the verification policy.
 function leadSources(entry: DayEntry): string {
   const outlets = [...new Set(entrySources(entry).map((s) => s.outlet))];
-  if (!outlets.length) return '<span><a href="/standards/"><b>How we check</b></a></span>';
-  return `<span>Sources: <a href="/standards/"><b>${esc(outlets.join(', '))}</b></a></span>`;
+  if (!outlets.length) return '<span><a href="/about/#how-we-verify"><b>How we check</b></a></span>';
+  return `<span>Sources: <a href="/about/#how-we-verify"><b>${esc(outlets.join(', '))}</b></a></span>`;
 }
 
 /* ---------- the wire: REMOVED 2026-09-12 (site declutter) ----------
@@ -160,10 +161,10 @@ export function renderLead(): string {
 
   // THE DESK-IN-NUMBERS PANEL WAS REMOVED 2026-08-24 (founder), along with the illustrated
   // library band below. It was an <aside class="lead__panel"> carrying an entry count, a desk
-  // count, a "photographs used: 0" line and a note linking to /standards/.
+  // count, a "photographs used: 0" line and a note linking to /standards/ (now /about/#how-we-verify).
   // Two things inside it were NOT part of what was removed and are kept here rather than lost
   // with the container: the drawn lead portrait, which is the only art at the top of the page,
-  // now sits in the main column; and the /standards/ link, which was the front page's only route
+  // now sits in the main column; and the how-we-verify link, which was the front page's only route
   // to the verification policy, now rides on the "two sources" line in the meta row where the
   // claim it backs already was.
   // `.lead__grid` went to a single column in the same change. It was `1.7fr 1fr`, so leaving it

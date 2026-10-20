@@ -127,8 +127,8 @@
 ## What this site is
 
 Vite + TypeScript + GSAP. Not a single-page site: it is a page graph of static families
-(front page, lane fronts, article pages, sport sections, glossary, standards, duels, the
-daily game, the author page), and `npm run build` is a chain of generators, not one bundle.
+(front page, lane fronts, article pages, sport sections, glossary, the About page, duels, the
+daily game), and `npm run build` is a chain of generators, not one bundle.
 British voice, no em dashes, restrained register. CSP is strict: no inline scripts on the
 homepage beyond one hashed bootstrap, and every inline script in the static family is
 allowed by an exact sha256 (see the CSP section under Per-article pages). Reduced motion is
@@ -164,7 +164,8 @@ the three paler text tokens were darkened (the "white system" names in older not
   `@fontsource-variable`; every static page self-hosts the same wght woff2 files from
   `public/fonts/` (latin + latin-ext, `unicode-range`). The page shell writes them through
   `fontLinks()` (`FONT_FACE_CSS`, Inter Tight preloaded), `public/content.css` carries Inter Tight,
-  and the eight hand-built pages under `public/` carry a pasted copy. CSPs name no font host;
+  and the five hand-built pages under `public/` that need them (`/app`, `/start`, `/quiz`,
+  `/dispatch`, `/support`) carry a pasted copy. CSPs name no font host;
   `cspMeta()` no longer takes `googleFonts`. Change the faces in one place, change all three.
 - **The token block is duplicated in four files that do not import each other**:
   `src/style.css`, `pageStyles()` in `scripts/shared/page-shell.mjs`, `public/content.css`,
@@ -259,6 +260,9 @@ posters at the bottom of the page, the rest can live in sub pages."
   Do not repoint the app; keep this map in step with the menu.
   The two meta-refresh stubs `public/desk/index.html` and `public/world-cup/index.html`, which used to
   refresh to `/#transfer-desk` and `/#world-cup`, now refresh (and canonical) straight to the lane pages.
+  Four more stubs are GENERATED, not hand-built, by `scripts/build-about-page.mjs` (2026-10-19):
+  `/standards/`, `/corrections/`, `/privacy/` and `/authors/joseph-bankole/`, each pointing into
+  `/about/`. See "The About page" below.
 - **The masthead menu** now lists thirteen internal destinations (front page, live scores, the
   three desks, Legends, Long reads, Quick answers, Posters, Player duels, Daily archive game,
   Partner with us, RSS). Three copies, no shared import: `index.html`, `masthead()` in
@@ -509,36 +513,61 @@ their own JSON-LD. Only the head moved.
   `build-sport-pages.mjs`. It is a meta-refresh stub with no og or twitter tags at all, its own
   inline `<style>` and a narrower viewport, so putting it through the shell would mean
   parameters that exist for one page.
-- Two pages carry og:image with no `twitter:image` (`/standards/` and the glossary hub) and are
-  preserved that way with `twitterImage: false`. It reads as an oversight rather than a decision
+- One page carries og:image with no `twitter:image` (the glossary hub; `/standards/` was the
+  other until it merged into `/about/`, which ships both) and is preserved that way with
+  `twitterImage: false`. It reads as an oversight rather than a decision
   and is worth a separate call; it was not fixed in passing.
 
-## The author page and the authorship signal (2026-08-04)
+## The About page, and where the trust pages went (2026-10-19)
 
-`scripts/build-author-page.mjs` emits one page, `/authors/joseph-bankole/`, in the same
-self-contained family as the lane and article pages (shared `page-shell.mjs` masthead,
-footer, CSP, brand CSS; no new inline CSS and no per-page inline script). It runs after
-`build-article-pages.mjs`; its sitemap row lives in `build-content.mjs`'s `EXTRA_URLS`,
-not in the script itself, and `verify-csp-pages.mjs` checks it.
+Founder, 2026-10-19: "fewer sections, merge how we verify, standards, corrections, privacy, contact
+and Joseph Bankole all to the About section". `scripts/build-about-page.mjs` emits one page,
+`/about/`, in the self-contained page-shell family (documentShell, `masthead(NO_SPORT)`, footer,
+pageStyles; its own CSS through `extraHead`). Sections in order: the lead and What we publish,
+`#who`, `#how-we-verify` (with `#how-made`), `#standards` (with `#funding`), `#corrections` (with
+`#report` and `#log`), `#privacy`, `#contact`, `#joseph-bankole` (with `#recent-work`,
+`#long-reads`, `#explainers`). Every old fragment id was kept. It replaced the hand-built
+`public/about/`, `public/corrections/` and `public/privacy/` and three generators
+(`build-standards-page.mjs`, `build-author-page.mjs`, `build-corrections-log.mjs`).
 
+- **The old URLs are generated redirect stubs**, written into dist by the same script after
+  `vite build`: `/standards/` -> `#how-we-verify`, `/corrections/` -> `#corrections`,
+  `/privacy/` -> `#privacy`, `/authors/joseph-bankole/` -> `#joseph-bankole`. Each is
+  `noindex,follow`, canonical `https://thearchv.ca/about/`, out of every sitemap, and carries one
+  hashed inline script that moves an allowed incoming fragment across with `location.replace`
+  (`/standards/#how-made`, `/corrections/#report` and `#log`, the author page's three list ids).
+  The meta refresh is the no-JS fallback and sits in `<noscript>` after the script, because a bare
+  0-second refresh races the script and can drop the fragment. `verify-csp-pages.mjs` checks all
+  four. **`/privacy/` must keep resolving**: it is the App Store privacy policy URL and the iOS
+  app's Settings link (`AppConfig.privacyURL`); slashless `/privacy` is 301ed by Pages.
+- **The privacy policy is a section now**, h2 "Privacy policy" with its own "Last updated" line.
+  Change the policy and change that date with it (the policy promises as much).
+- **The corrections log** is gathered by `scripts/shared/corrections-log.mjs` (desk records in
+  `src/data/*Days.ts`, `scripts/data/corrections-evergreen.json`, dated note paragraphs) and
+  rendered at build time in `#log`: the newest ten rows, the rest inside one native `<details>`.
+  The AboutPage `dateModified` is the newest row's date.
 - **The author name is FROZEN as "Joseph Bankole"** (founder ruling 2026-08-04). Never vary
   it, and never introduce "Fola Bankole" anywhere on the site.
-- **`AUTHOR_URL` now points at the author page**, not josephbankole.ca. Every article's
-  visible byline and its `NewsArticle` `author.url` resolve on-site, which is what
-  consolidates the authorship entity here. josephbankole.ca was NOT dropped: it is the
-  second entry in `AUTHOR_SAMEAS`, so the two profiles stay linked as one Person.
-- The "recent bylined work" list is derived from the same day data the article pages are
-  built from, and the long reads from `content/`. Nothing on that page is hand-listed, so
-  no link on it can rot into a 404 when the desks move on.
-- **No founder headshot exists in this repo.** The page falls back to the brand crest and
+- **`AUTHOR_URL` is `/about/#joseph-bankole`**; the Person `@id` deliberately stays the legacy
+  `https://thearchv.ca/authors/joseph-bankole/#person` (an id is a name, not a link, so the
+  entity does not churn). Desk pages carry The ARCHV Desk byline and an Organization author
+  (Decision 1, 2026-09-23); `HOW_MADE_PATH` (`/about/#how-made`) is their "How this desk works"
+  link. josephbankole.ca stays in `AUTHOR_SAMEAS`. The bio and the derived lists live in
+  `scripts/shared/author-profile.mjs`; the list is headed "Latest from The ARCHV Desk" and must
+  never claim the desk's work as his.
+- The lists are derived from the same day data the article pages use and from `content/`, so
+  nothing on them is hand-listed and no link can rot into a 404.
+- **No founder headshot exists in this repo.** The profile falls back to the brand crest and
   says so in the build log. Drop a real one at `public/heads/joseph-bankole.webp` and the
   script picks it up with no other change. Do not generate a face: the site's imagery rule
   forbids it.
+- `index.html` carries a hand copy of `ORG_NODE` (founder and the policy URLs) and of
+  `trustLinks()`; change page-shell and change it too.
 
 `max-image-preview:large` rides on every indexable page family's robots meta (article,
-lane, sport, glossary, standards, duel, guess, author, the long-form content pages, the
+lane, sport, glossary, about, duel, guess, the long-form content pages, the
 hand-built `public/` pages and the homepage). The `noindex` families (legacy day pages,
-`/football/`, `/desk/`, `/world-cup/`, lab) are deliberately untouched.
+`/football/`, `/desk/`, `/world-cup/`, the four About stubs, lab) are deliberately untouched.
 
 ## Tier 0 design pass (2026-08-04, rolled back and re-landed the same day)
 

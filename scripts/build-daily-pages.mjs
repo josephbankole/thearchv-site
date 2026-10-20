@@ -87,7 +87,7 @@ const wireHtml = page({
       <p class="wire__subline">${esc(WIRE_SUBLINE)}</p>
 ${wireBody}
       ${renderWireFooter()}
-      <p class="wire__footer">How the Wire works: once a day we take the top story from each newsroom whose terms allow it, leave the headline exactly as written, and link to the publisher. Where we add a line of our own it is marked as our note. Our own reporting standards are on <a href="/standards/">How we verify</a>.</p>
+      <p class="wire__footer">How the Wire works: once a day we take the top story from each newsroom whose terms allow it, leave the headline exactly as written, and link to the publisher. Where we add a line of our own it is marked as our note. Our own reporting standards are on <a href="/about/#how-we-verify">How we verify</a>.</p>
     </article>`,
 });
 

@@ -131,12 +131,12 @@ const DESTINATIONS = [
   ["The Legends", "One football great per entry, drawn in the house style.", "/legends/", "Sections"],
   ["Long reads", "Long-form from the archive: ownership, academies, accounting and television money.", "/reads/", "Sections"],
   ["Glossary", "Sixty-odd football terms, defined in a sentence each.", "/glossary/", "Reference"],
-  ["Editorial standards", "The two-source rule, the correction policy and what the desk will not publish.", "/standards/", "Reference"],
+  ["Editorial standards", "The two-source rule, the correction policy and what the desk will not publish.", "/about/#how-we-verify", "Reference"],
   ["Player duels", "Two players, the same stats, side by side.", "/duel/", "Games"],
   ["Daily archive game", "One historical player a day, four clues, five guesses.", "/guess/", "Games"],
-  ["Joseph Bankole", "The founder of The ARCHV and the person answerable for what it publishes.", "/authors/joseph-bankole/", "About"],
+  ["Joseph Bankole", "The founder of The ARCHV and the person answerable for what it publishes.", "/about/#joseph-bankole", "About"],
   ["About The ARCHV", "What the archive is, who runs it, and how to reach it.", "/about/", "About"],
-  ["Corrections", "Every correction the desk has made, dated and kept.", "/corrections/", "About"],
+  ["Corrections", "Every correction the desk has made, dated and kept.", "/about/#corrections", "About"],
 ];
 for (const [title, dek, url, lane] of DESTINATIONS) add(title, dek, url, lane);
 

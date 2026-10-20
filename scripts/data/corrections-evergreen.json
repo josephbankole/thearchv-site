@@ -1,7 +1,7 @@
 {
   "_comment": [
     "Corrections and revisions on the evergreen pages (content/ and the glossary), one record each,",
-    "read by scripts/build-corrections-log.mjs to generate the /corrections/ log at build (search plan G12,",
+    "read by scripts/shared/corrections-log.mjs to generate the log at /about/#log at build (search plan G12,",
     "2026-10-04). Dated desk entries carry their own records in src/data/*Days.ts under `corrections`.",
     "was = what the page said, now = what is right, source = where it was checked. The first five rows",
     "moved here word for word from the hand-written log of 22 September 2026."

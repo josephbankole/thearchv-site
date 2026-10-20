@@ -65,8 +65,8 @@ function withInfogram(entry, section) {
 
 // The app feed carries an entry's fields as they are, publishedAt and updatedAt included (additive,
 // and unknown keys are ignored by the app's decoder). The one field kept out is `corrections`
-// (search plan G12, 2026-10-04): it holds each amended entry's replaced text for the /corrections/
-// log, which would double the size of a corrected entry in a feed the app downloads every day.
+// (search plan G12, 2026-10-04): it holds each amended entry's replaced text for the corrections
+// log (/about/#log), which would double the size of a corrected entry in a feed the app downloads every day.
 function feedFields(d) {
   const { corrections, ...rest } = d;
   return rest;

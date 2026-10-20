@@ -95,21 +95,26 @@ const targets = [
   // Paid-traffic landing page for the Meta ad (2026-07-21). Self-contained like /start, with
   // its own PostHog + click-tracking inline scripts, so its CSP hashes need the same guard.
   ["static: /app/", join(DIST, "app", "index.html")],
-  ["static: /about/", join(DIST, "about", "index.html")],
-  ["static: /corrections/", join(DIST, "corrections", "index.html")],
+  // The one About page (build-about-page.mjs, 2026-10-19): how we verify, standards, corrections,
+  // privacy, contact and Joseph Bankole as sections. Shared masthead + PostHog pair only.
+  ["about: /about/", join(DIST, "about", "index.html")],
   ...FOOTBALL_LANES.map((lane) => [`lane: /desk/${lane}/`, join(DIST, "desk", lane, "index.html")]),
-  // Evergreen surfaces (build-glossary-pages.mjs, build-standards-page.mjs): both carry the
-  // shared masthead + PostHog inline scripts, so their static hashes must be in each page's CSP.
+  // Evergreen surfaces (build-glossary-pages.mjs): the shared masthead + PostHog inline scripts,
+  // so their static hashes must be in each page's CSP.
   ["glossary hub: /glossary/", join(DIST, "glossary", "index.html")],
   ["glossary: /glossary/xg/", join(DIST, "glossary", "xg", "index.html")],
   // Glossary expansion (SEO/AEO pass, 2026-07-14): one of the six new entries, same page family
   // and shared masthead/PostHog CSP as every other glossary page — added so a slug-set change
   // to scripts/glossary-data.mjs is covered by this check, not just the four original terms.
   ["glossary: /glossary/pressing/", join(DIST, "glossary", "pressing", "index.html")],
-  ["standards: /standards/", join(DIST, "standards", "index.html")],
-  // Author page (build-author-page.mjs, 2026-08-04). Carries the shared masthead + PostHog
-  // inline scripts and no per-page script, so its two hashes must both be in its own CSP.
-  ["author: /authors/joseph-bankole/", join(DIST, "authors", "joseph-bankole", "index.html")],
+  // The four redirect stubs build-about-page.mjs writes where the merged pages used to be. Each
+  // carries ONE inline script (it moves an allowed fragment across to /about/) whose hash differs
+  // per stub, because each lists its own fragments and default section. /privacy/ is the App Store
+  // policy URL and the iOS app's Settings link, so a CSP break there is a broken policy link.
+  ["stub: /standards/", join(DIST, "standards", "index.html")],
+  ["stub: /corrections/", join(DIST, "corrections", "index.html")],
+  ["stub: /privacy/", join(DIST, "privacy", "index.html")],
+  ["stub: /authors/joseph-bankole/", join(DIST, "authors", "joseph-bankole", "index.html")],
   // Multi-sport page family (build-sport-pages.mjs + build-lane-pages.mjs, 2026-07-22): a sport
   // section page and a sport lane front both carry the shared masthead + PostHog inline scripts,
   // so their static hashes must be in each page's CSP. The /football/ alias carries a CSP meta but
@@ -152,11 +157,11 @@ const targets = [
   // scripts and no per-page script, so both hashes must be in each page's own CSP.
   ["wire: /wire/", join(DIST, "wire", "index.html")],
   ["tables: /tables/", join(DIST, "tables", "index.html")],
-  // The six hand-built public/ pages that shipped with no CSP at all until the 2026-10-06 audit.
-  // /privacy/ and /support/ are the app's own policy and help pages; /desk/, /world-cup/ and
-  // /start/start/ are script-free meta-refresh stubs; /lab/landing/ is the noindex prototype with
-  // one inline script. Listed so a missing meta or an unhashed script fails the build here.
-  ["static: /privacy/", join(DIST, "privacy", "index.html")],
+  // The hand-built public/ pages that shipped with no CSP at all until the 2026-10-06 audit.
+  // /support/ is the app's own help page (the privacy policy it sat beside is now /about/#privacy,
+  // 2026-10-19); /desk/, /world-cup/ and /start/start/ are script-free meta-refresh stubs;
+  // /lab/landing/ is the noindex prototype with one inline script. Listed so a missing meta or an
+  // unhashed script fails the build here.
   ["static: /support/", join(DIST, "support", "index.html")],
   ["stub: /desk/", join(DIST, "desk", "index.html")],
   ["stub: /world-cup/", join(DIST, "world-cup", "index.html")],

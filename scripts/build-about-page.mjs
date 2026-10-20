@@ -32,7 +32,7 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  SITE, NO_SPORT, esc, escAttr, masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  SITE, NO_SPORT, esc, escAttr, longDate, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   ROBOTS_NOINDEX_FOLLOW, cspMeta, scriptHash, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   ORG_REF, ORG_NODE, AUTHOR_NAME, AUTHOR_PERSONAL_URL,
 } from "./shared/page-shell.mjs";
@@ -58,6 +58,10 @@ const SOCIAL_DESCRIPTION =
 // button plus a zero-height panel: see the long-reads rule in CLAUDE.md).
 const LOG_VISIBLE = 10;
 
+// The privacy policy's "Last updated" day. Change the policy, change this (the policy promises
+// the date moves with it). It renders the visible line and feeds the AboutPage dateModified.
+const PRIVACY_UPDATED = "2026-10-19";
+
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
 /* ---------- page-local styles ----------
@@ -71,7 +75,11 @@ const ABOUT_STYLES = `<style>
     .about__section { margin-top: 2.5rem; padding-top: .4rem; border-top: 1px solid var(--rule); }
     .about .about__section > h2 { margin-top: 1.2rem; }
     .about h3 { color: var(--ink); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 1.15rem; line-height: 1.3; margin: 1.6rem 0 .5rem; }
-    .about .updated { color: var(--ink-muted); font-size: .9rem; }
+    .about .updated, .about .disclaimer { color: var(--ink-muted); font-size: .9rem; }
+    /* In-prose links carry an underline, so a link is not told apart by colour alone (the old
+       about, corrections and privacy pages kept the browser underline; mirrors .article__body a).
+       The breadcrumb, "On this page" and the author's link lists stay plain, as across the family. */
+    .about__section p a, .log a { text-decoration: underline; text-underline-offset: 3px; }
     /* "On this page": plain wrapping links, NOT a horizontal scroller (trap 3). */
     .onpage { margin: 0 0 .5rem; }
     .onpage__title { margin: 0 0 .1rem; font-family: var(--font-mono); font-size: .8rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); }
@@ -105,7 +113,10 @@ const ABOUT_STYLES = `<style>
 const corrections = await correctionsRows();
 const { rows } = corrections;
 const { recent, united, explainers } = await deskWork();
-const dateModified = rows.length ? correctionDay(rows[0].at) : null;
+// The later of the newest log row and the privacy policy's "Last updated" day (ISO dates compare
+// as strings), so the structured data never says the page changed before a date it shows.
+const newestLogDay = rows.length ? correctionDay(rows[0].at) : "";
+const dateModified = newestLogDay > PRIVACY_UPDATED ? newestLogDay : PRIVACY_UPDATED;
 
 /* ---------- the corrections log ---------- */
 const visibleRows = rows.slice(0, LOG_VISIBLE);
@@ -152,7 +163,8 @@ const explainerBlock = explainers.length
 /* ---------- JSON-LD ----------
    AboutPage + the Organization + the full Person + breadcrumbs. The Person keeps the legacy
    /authors/joseph-bankole/#person @id (PERSON_ID in page-shell.mjs) and its url is now
-   /about/#joseph-bankole. dateModified is the newest corrections log row. */
+   /about/#joseph-bankole. dateModified is the later of the newest corrections log row and
+   PRIVACY_UPDATED. */
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -167,7 +179,7 @@ const schema = {
       about: ORG_REF,
       mainEntity: ORG_REF,
       publisher: ORG_REF,
-      ...(dateModified ? { dateModified } : {}),
+      dateModified,
     },
     ORG_NODE,
     PERSON_NODE,
@@ -191,7 +203,11 @@ const schema = {
    - Privacy, "The website": the sentence after the fonts line used to say the partnerships form
      was delivered by Web3Forms. The form and Web3Forms left the site on 2026-10-13, so on
      2026-10-19 it was replaced with how partnership enquiries actually arrive, and the "Last
-     updated" date moved to 19 October 2026. Nothing else in the policy changed.
+     updated" date moved to 19 October 2026. Nothing else in the policy changed. Its closing
+     line (not affiliated with, endorsed by, or licensed by FIFA, any club, federation,
+     competition, or player) stays as the section's last line: footer() says something narrower
+     and never mentions players, and the #standards copy names no player either. #contact keeps
+     the old About's wording; the Instagram handle is in the policy's own Contact line above it.
    - Sections the old pages repeated were kept once: the old About's "How the work is checked",
      "When we get it wrong" and "Who we answer to" summaries, the standards page's "Corrections
      are added, not hidden" and the corrections page's "How we check things first time" each
@@ -347,7 +363,7 @@ const html = `${documentShell({
 
       <section class="about__section">
         <h2 id="privacy">Privacy policy</h2>
-        <p class="updated">Last updated 19 October 2026</p>
+        <p class="updated">Last updated ${esc(longDate(PRIVACY_UPDATED))}</p>
 
         <p>The ARCHV is an independent football publication. We publish an iOS app and this
         website. There are no ads on either, there are no accounts, and we do not track you
@@ -430,12 +446,14 @@ const html = `${documentShell({
         <p>Email <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a> or
         message <a href="https://instagram.com/thearchvfc">@thearchvfc</a> on Instagram.
         For app help, see <a href="/support/">support</a>.</p>
+
+        <p class="disclaimer">The ARCHV is not affiliated with, endorsed by, or licensed by
+        FIFA, any club, federation, competition, or player.</p>
       </section>
 
       <section class="about__section">
         <h2 id="contact">Getting in touch</h2>
-        <p>Write to <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>
-        or message <a href="https://instagram.com/thearchvfc">@thearchvfc</a> on Instagram.
+        <p>Write to <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>.
         Press and partnership enquiries reach the same inbox as corrections. If the question is
         about the app, <a href="/support/">support</a> is the faster route.</p>
       </section>

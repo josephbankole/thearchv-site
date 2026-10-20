@@ -133,7 +133,7 @@ const DESTINATIONS = [
   ["The Legends", "One football great per entry, drawn in the house style.", "/legends/", "Sections"],
   ["Long reads", "Long-form from the archive: ownership, academies, accounting and television money.", "/reads/", "Sections"],
   ["Glossary", "Sixty-odd football terms, defined in a sentence each.", "/glossary/", "Football, explained"],
-  ["Editorial standards", "The two-source rule, the correction policy and what the desk will not publish.", "/about/#how-we-verify", "About"],
+  ["Editorial standards", "The two-source rule, the correction policy and what the desk will not publish.", "/about/#standards", "About"],
   ["Player duels", "Two players, the same stats, side by side.", "/duel/", "Games"],
   ["Daily archive game", "One historical player a day, four clues, five guesses.", "/guess/", "Games"],
   ["Joseph Bankole", "The founder of The ARCHV and the person answerable for what it publishes.", "/about/#joseph-bankole", "About"],

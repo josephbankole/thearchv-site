@@ -37,11 +37,13 @@ const CONTENT = join(ROOT, "content");
    "applied by hand", that every fact had two sources (NFL and F1 ship on the official record,
    D-2026-08-28b), that a thin week ended with fewer entries, and that the archive held nine
    finals (content/finals/ holds 18). The desk pages now carry The ARCHV Desk byline, and the
-   long reads are not claimed for him until he names the ones he wrote. */
+   long reads are not claimed for him until he names the ones he wrote.
+   2026-10-20: "the standards page" became "the standards" in paragraph 3, the only change, since
+   the standards are now a section of the same About page the bio sits on. */
 export const BIO = [
   `Joseph Bankole founded The ARCHV and runs it. He sets its rules and is the person answerable for what it publishes.`,
   `Most of what you read here is built by a system rather than typed out one entry at a time. The routine desks publish on a schedule. Automated writing tools draft each entry and apply the house voice, and nothing reaches the page without clearing the same checks: a named source on every claim of fact (two independent ones, or the league's own record for NFL and Formula 1), every number re-read at the moment of publishing rather than the moment of drafting, and a dated freshness stamp. An entry that fails verification does not run. No person reads those entries before they go up, so they carry The ARCHV Desk byline and not his. Automating the routine work means the standard stops depending on how tired anyone is on a Tuesday.`,
-  `His name goes on the rules: the standards page, the corrections, and every call about what the archive will and will not carry. Someone has to be answerable for those.`,
+  `His name goes on the rules: the standards, the corrections, and every call about what the archive will and will not carry. Someone has to be answerable for those.`,
   `The subject is football history, mostly: transfers while the window is open, international football while it is on, the club season week by week, and an archive of 18 finals, ten of them World Cup finals from Mexico 1970 to MetLife 2026. The site also keeps question pages on the NFL, Formula 1, tennis, golf and basketball. No photographs, no club crests, no kit designs, no competition marks. Every face on the site is original illustration published as editorial commentary. That rule does not bend.`,
 ];
 

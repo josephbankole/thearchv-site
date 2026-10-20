@@ -527,10 +527,14 @@ their own JSON-LD. Only the head moved.
   autodiscovery, no og:image dimensions and no `twitter:site`. Those absences are passed
   explicitly (`stylesheet`, `rss: false`, `posthog: false`, `fonts: false`, `styles: false`,
   `ogImageSize: false`, `twitterSite: false`) rather than inferred from the stylesheet.
-- **One page is deliberately still hand-assembled**: the `/football/` courtesy alias in
-  `build-sport-pages.mjs`. It is a meta-refresh stub with no og or twitter tags at all, its own
-  inline `<style>` and a narrower viewport, so putting it through the shell would mean
-  parameters that exist for one page.
+- **Five pages are deliberately still hand-assembled**: the `/football/` courtesy alias in
+  `build-sport-pages.mjs`, and the four About redirect stubs (`/standards/`, `/corrections/`,
+  `/privacy/`, `/authors/joseph-bankole/`) written by `stubPage()` in
+  `scripts/build-about-page.mjs`. Each is a noindex redirect stub with no og or twitter tags at
+  all and its own inline `<style>`; `/football/` also has a narrower viewport, and each About
+  stub carries one hashed `location.replace` script with the meta refresh in `<noscript>`.
+  Putting them through the shell would mean parameters that exist for a handful of stubs. Each
+  still writes its own robots and canonical out loud.
 - One page carries og:image with no `twitter:image` (the glossary hub; `/standards/` was the
   other until it merged into `/about/`, which ships both) and is preserved that way with
   `twitterImage: false`. It reads as an oversight rather than a decision
@@ -558,12 +562,18 @@ pageStyles; its own CSS through `extraHead`). Sections in order: the lead and Wh
   0-second refresh races the script and can drop the fragment. `verify-csp-pages.mjs` checks all
   four. **`/privacy/` must keep resolving**: it is the App Store privacy policy URL and the iOS
   app's Settings link (`AppConfig.privacyURL`); slashless `/privacy` is 301ed by Pages.
-- **The privacy policy is a section now**, h2 "Privacy policy" with its own "Last updated" line.
-  Change the policy and change that date with it (the policy promises as much).
+- **The privacy policy is a section now**, h2 "Privacy policy" with its own "Last updated" line,
+  rendered from `PRIVACY_UPDATED` in `build-about-page.mjs`. Change the policy and change that
+  constant with it (the policy promises as much). The policy's closing line (not affiliated with,
+  endorsed by, or licensed by FIFA, any club, federation, competition, or player) stays: it is the
+  only line on the page that names players, and `footer()`'s legal line is narrower.
+- In-prose links on `/about/` are underlined (`.about__section p a, .log a`), because the
+  page-shell family sets `a { text-decoration: none }` and the link colour against the body text
+  is under 3:1. The breadcrumb, "On this page" and the author's link lists stay plain.
 - **The corrections log** is gathered by `scripts/shared/corrections-log.mjs` (desk records in
   `src/data/*Days.ts`, `scripts/data/corrections-evergreen.json`, dated note paragraphs) and
   rendered at build time in `#log`: the newest ten rows, the rest inside one native `<details>`.
-  The AboutPage `dateModified` is the newest row's date.
+  The AboutPage `dateModified` is the later of the newest row's date and `PRIVACY_UPDATED`.
 - **The author name is FROZEN as "Joseph Bankole"** (founder ruling 2026-08-04). Never vary
   it, and never introduce "Fola Bankole" anywhere on the site.
 - **`AUTHOR_URL` is `/about/#joseph-bankole`**; the Person `@id` deliberately stays the legacy

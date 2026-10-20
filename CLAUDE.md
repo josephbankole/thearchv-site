@@ -325,6 +325,51 @@ Design of record: `docs/wire-design-2026-09-26/design-final.md`. Code: `scripts/
   grants commercial use in writing.
 - Tests: `npm run test:wire` (node:test, fixtures only, no network), which runs inside `build`.
 
+## The live scores page, /scores/ (2026-10-13; match panels 2026-10-19)
+
+A static shell (`scripts/build-scores-page.mjs`: markup, all of the page's CSS, CSP) and one inline
+client that reads the public Supabase `live/` bucket in the browser (`scores.json`, `match/<id>.json`,
+`days/`). The scores-poll Edge Function writes those files; its rules are in
+`supabase/functions/README.md`. Noindex, out of the sitemap and search.
+
+- **One inline script, put together from two files.** `scripts/shared/scores-client.js` is the client;
+  `scripts/shared/scores-pitch.js` holds the pure lineup helpers (layout, rating join, colour checks),
+  spliced in at the client's `// @include scores-pitch.js` line by `scripts/shared/scores-script.mjs`.
+  The build hashes exactly that text and `npm run test:scores` (in `build`) tests exactly that text.
+  `scores-script.mjs` throws on `</script` and on `<!--` in either file: the first ends the element
+  early, the second makes `verify-csp-pages.mjs` (which strips comments before hashing) report a false
+  mismatch. Helper names all start with `pitch`, and a test fails on a clash with the client.
+- **An open match shows three panels** (founder, 2026-10-19): Summary (goals, cards, the top three
+  ratings a side, unchanged), Lineups (one pitch, away at the top, home at the bottom, a shirt per
+  player with number and rating, then substitutes) and Team stats (a table with split bars), side by
+  side in a scroll-snap track with a tab row above. `?match=<id>&panel=lineups|stats` opens a panel.
+  With neither lineups nor stats in the file, the summary shows alone, as before.
+- **The track is trap 3's kind of element.** It carries `overflow-y: hidden` with a comment, no
+  transform or translate may go inside it (pitch markings are centred with inset and auto margins), no
+  `touch-action`, and no smooth `scroll-behavior` (only a tab press animates, and never under reduced
+  motion). The client sets the track's height to the panel on show, so the taller panels beside it are
+  clipped by that same `overflow-y`.
+- **The list rebuilds on every feed change**, so the client keeps `panelOf` (the panel on show),
+  `heightOf` and the focused tab or panel, builds every open panel first and measures afterwards, so
+  the page does not move. A rebuild waits while a finger is on a track. `enter()` resets all of it.
+  Nothing new may carry `data-id`: the row toggle and `?match=` look elements up by it.
+- **Shirts.** One plain T-shirt outline drawn as inline SVG, filled with the team's colour from the
+  feed: no crest, sponsor, stripe, trim or pattern, nothing that copies a real kit. The rights line
+  under "Editorial and rights lines" still binds, and anything kit-like added to the shirt would cross
+  it. Team colours are data, checked as six hex digits by the mapper and again by the client, and never
+  go into the token files. No colours (every file written before 2026-10-19 until a backfill) gives
+  neutral shirts: ink at home, white away. A number below 3:1 on its shirt becomes ink or white, and a
+  shirt below 1.4:1 on the pitch gets a muted-ink outline.
+- **Old files have no `grid`, ids or colours.** The pitch then comes from the formation plus the API's
+  order (keeper first, then each line from the team's right, so each line is reversed), checked in the
+  tests against the API's own grid for all ten recorded lineups. Ratings join a player by id, then shirt
+  number, then exact name, because the API spells a player two ways ("R. Araujo", "Ronald Araújo").
+- Ratings are labelled as API-Football's wherever they show (D-2026-10-13a): the summary heading and,
+  on the lineups panel, the app's line "Ratings come from API-Football, not from The ARCHV."
+- **The in-app Browser pane cannot test the swipe.** While it is hidden it runs no animation frames and
+  fires no scroll events, so smooth tab scrolls and the swipe-follow logic do nothing there. Check those
+  on a real phone, with trap 3's scroll-ownership measurement.
+
 ## Site structure: the page graph (site depth pass, 2026-07-09)
 
 The site is a navigable graph, not one long homepage: home -> lane index -> article ->

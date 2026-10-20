@@ -4,6 +4,19 @@
   // textContent only, so nothing from the feed is ever parsed as markup. scores.json is the live
   // window (yesterday to tomorrow); days/index.json and days/<date>.json are the history behind the
   // date menu, and ?date=YYYY-MM-DD in the address shows one past day.
+  //
+  // PANELS (2026-10-19). An open match with lineups or stats shows three panels side by side in a
+  // scroll-snap track: Summary (goals, cards, top three ratings), Lineups (a pitch with a shirt per
+  // player) and Team stats. A swipe moves between them; the tab row above does the same for mouse and
+  // keyboard and follows the swipe. Rules that keep this working:
+  // - The list and every open panel are rebuilt on each feed change, so the panel a reader is on
+  //   (panelOf), the track's last height (heightOf) and the focused tab are put back after each rebuild,
+  //   all in one pass, so the page does not jump. A rebuild waits while a finger is on a track.
+  // - Nothing new carries data-id: the row toggle and ?match= look elements up by it.
+  // - The track never carries a transform (trap 3 in the repo CLAUDE.md); its CSS is in
+  //   build-scores-page.mjs.
+  // - Never write a closing script tag or an HTML comment opener in this file or in scores-pitch.js;
+  //   scores-script.mjs refuses both.
   var BASE = 'https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/';
   var POLL = 30000;
   var ORDER = ['premier-league', 'champions-league', 'wsl'];
@@ -16,6 +29,25 @@
   var DOWN_DAY = 'That day is not available right now. Try again in a moment.';
   var LIVE_LABEL = 'Live and recent';
   var TZ = 'America/Edmonton'; // the editorial day: the feed files matches under the Edmonton date
+  // The three panels, in swipe order. Lineups, Team stats and the lineup wording are the app's own
+  // (thearchv-app Localizable.strings), so the two read the same.
+  var TABS = ['Summary', 'Lineups', 'Team stats'];
+  var PANEL_KEYS = { lineups: 1, stats: 2 }; // ?panel= on a ?match= link
+  var NO_LINEUPS = 'Lineups are not available for this match.';
+  var NO_STATS = 'Team stats are not available for this match.';
+  var RATINGS_SOURCE = 'Ratings come from API-Football, not from The ARCHV.'; // D-2026-10-13a
+  // Team stats rows: the app's order and labels, then the three the feed added on 2026-10-19.
+  var STAT_ROWS = [
+    ['possession', 'Possession'], ['shots', 'Shots'], ['shotsOnTarget', 'Shots on target'],
+    ['corners', 'Corners'], ['fouls', 'Fouls'], ['offsides', 'Offsides'], ['yellow', 'Yellow cards'],
+    ['red', 'Red cards'], ['xg', 'Expected goals'], ['saves', 'Saves'], ['passes', 'Passes'],
+    ['passAccuracy', 'Pass accuracy']
+  ];
+  // A plain T-shirt on a 40 by 40 grid: no crest, no trim, no pattern, filled with the team's colour.
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var SHIRT = 'M14 4Q20 10 26 4L32 6L38 13L33 18L30 15.5V37H10V15.5L7 18L2 13L8 6Z';
+
+  // @include scores-pitch.js
 
   var root = document.getElementById('scores');
   var stamp = document.getElementById('scores-updated');
@@ -30,6 +62,11 @@
 
   var matches = [], byId = {}, sig = '', haveData = false;
   var open = {}, details = {};
+  // Per open match: the panel on show, the track's height when it last settled, and the live track.
+  var panelOf = {}, heightOf = {}, tracks = {};
+  // A finger on a track holds rebuilds back (touchedAt is when it went down, 0 when lifted and settled).
+  var touchedAt = 0, touchTimer = 0, staleList = false, stalePanels = {};
+  var pal = null;
   var timer = 0, pending = false;
   var live = null; // the last good scores.json
   var view = ''; // '' is the live window; otherwise the YYYY-MM-DD history day on show
@@ -152,6 +189,11 @@
   function render() {
     var f = document.activeElement;
     var fid = f && f.getAttribute ? f.getAttribute('data-id') : null;
+    // A focused tab or panel inside an open match, put back by its id after the rebuild.
+    var fel = f && f.id && /^[tp]-\d+-\d$/.test(f.id) ? f.id : null;
+    staleList = false;
+    stalePanels = {};
+    tracks = {};
     byId = {};
     if (!matches.length) { note(view ? EMPTY_DAY : EMPTY); return; }
 
@@ -205,11 +247,28 @@
     });
     root.textContent = '';
     root.appendChild(frag);
-    Object.keys(open).forEach(function (id) { if (open[id]) paint(id); });
+    // Build every open panel first and measure afterwards: measuring forces layout, and a layout
+    // taken while later panels are still empty could shorten the page and move the reader.
+    var built = [];
+    Object.keys(open).forEach(function (id) {
+      if (!open[id]) return;
+      var t = paint(id, true);
+      if (t) built.push(t);
+    });
+    built.forEach(settle);
     if (fid) {
+      // preventScroll: a reader further down the open match must not be pulled back up to its row.
       var again = root.querySelector('button[data-id="' + fid + '"]');
-      if (again) again.focus();
+      if (again) { try { again.focus({ preventScroll: true }); } catch (x) { again.focus(); } }
+    } else if (fel) {
+      refocus(fel);
     }
+  }
+
+  function refocus(elId) {
+    var e = elId && document.getElementById(elId);
+    if (!e) return;
+    try { e.focus({ preventScroll: true }); } catch (x) { e.focus(); }
   }
 
   function eventLine(e) {
@@ -241,16 +300,147 @@
       .slice(0, 3);
   }
 
-  function paint(id) {
+  // Draws an open match's details into its panel. With lineups or stats in the file, that is the tab
+  // row and the three-panel track; without either, the summary alone, as before the panels. Returns
+  // the track's state, or null. `later` leaves the measuring to the caller (render() batches it).
+  function paint(id, later) {
     var panel = document.getElementById('m-' + id);
     var m = byId[id];
-    if (!panel || panel.hidden || !m) return;
+    if (!panel || panel.hidden || !m) return null;
     var rec = details[id];
+    var ae = document.activeElement;
+    var back = ae && ae.id && panel.contains(ae) ? ae.id : null;
+    delete tracks[id];
     panel.textContent = '';
-    if (!rec) { panel.appendChild(h('p', 'scores__note', 'Loading match details.')); return; }
-    if (!rec.d) { panel.appendChild(h('p', 'scores__note', 'Match details are not available right now.')); return; }
+    if (!rec) { panel.appendChild(h('p', 'scores__note', 'Loading match details.')); return null; }
+    if (!rec.d) { panel.appendChild(h('p', 'scores__note', 'Match details are not available right now.')); return null; }
 
-    var evs = (rec.d.events || []).filter(function (e) { return e && SHOWN[e.type] && e.minute != null; });
+    var d = rec.d;
+    var hasLineups = !!(d.lineups && d.lineups.home && d.lineups.away &&
+      Array.isArray(d.lineups.home.startXI) && Array.isArray(d.lineups.away.startXI));
+    var hasStats = !!(d.stats && d.stats.home && d.stats.away);
+    if (!hasLineups && !hasStats) { summary(m, d, panel); return null; }
+
+    var t = { id: id, idx: panelOf[id] || 0, goal: null, raf: 0, tabs: [], panes: [] };
+    var list = h('div', 'scores__tabs');
+    list.setAttribute('role', 'tablist');
+    list.setAttribute('aria-label', 'Match details');
+    var track = h('div', 'scores__track');
+    t.track = track;
+    // The last settled height goes on first, so the page keeps its length through the rebuild.
+    if (heightOf[id]) track.style.height = heightOf[id] + 'px';
+    TABS.forEach(function (label, i) {
+      var tab = h('button', 'scores__tab', label);
+      tab.type = 'button';
+      tab.id = 't-' + id + '-' + i;
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-controls', 'p-' + id + '-' + i);
+      tab.addEventListener('click', function () { choose(t, i, false); });
+      list.appendChild(tab);
+      t.tabs.push(tab);
+      var pane = h('div', 'scores__panel');
+      pane.id = 'p-' + id + '-' + i;
+      pane.setAttribute('role', 'tabpanel');
+      pane.setAttribute('aria-labelledby', tab.id);
+      track.appendChild(pane);
+      t.panes.push(pane);
+    });
+    summary(m, d, t.panes[0]);
+    if (!hasLineups || !lineups(m, d, t.panes[1])) t.panes[1].appendChild(h('p', 'scores__note', NO_LINEUPS));
+    if (!hasStats || !stats(m, d.stats, t.panes[2])) t.panes[2].appendChild(h('p', 'scores__note', NO_STATS));
+
+    list.addEventListener('keydown', function (ev) {
+      var n = t.tabs.length;
+      var i = t.tabs.indexOf(document.activeElement);
+      if (i < 0) i = t.idx;
+      if (ev.key === 'ArrowRight') i = (i + 1) % n;
+      else if (ev.key === 'ArrowLeft') i = (i + n - 1) % n;
+      else if (ev.key === 'Home') i = 0;
+      else if (ev.key === 'End') i = n - 1;
+      else return;
+      ev.preventDefault();
+      choose(t, i, true);
+    });
+    track.addEventListener('scroll', function () {
+      if (!t.raf) t.raf = requestAnimationFrame(function () { t.raf = 0; follow(t); });
+    }, { passive: true });
+    // A hand on the track takes over from a tab's scroll.
+    ['pointerdown', 'wheel'].forEach(function (type) {
+      track.addEventListener(type, function () { t.goal = null; }, { passive: true });
+    });
+    mark(t, t.idx);
+    panel.appendChild(list);
+    panel.appendChild(track);
+    tracks[id] = t;
+    if (!later) {
+      settle(t);
+      refocus(back);
+    }
+    return t;
+  }
+
+  // ----- the track: which panel is on show, and how tall the track is.
+  function mark(t, idx) {
+    var was = -1;
+    t.panes.forEach(function (p, i) { if (p.contains(document.activeElement)) was = i; });
+    t.idx = idx;
+    panelOf[t.id] = idx;
+    t.tabs.forEach(function (tab, i) {
+      tab.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      tab.tabIndex = i === idx ? 0 : -1;
+    });
+    t.panes.forEach(function (p, i) {
+      if (i === idx) { p.tabIndex = 0; p.removeAttribute('aria-hidden'); }
+      else { p.removeAttribute('tabindex'); p.setAttribute('aria-hidden', 'true'); }
+    });
+    // Focus on the panel going out moves to the one coming in, or the browser drops it to the page.
+    if (was >= 0 && was !== idx) refocus(t.panes[idx].id);
+  }
+  // The track is as tall as the panel on show, so a short summary leaves no gap under it. Between two
+  // panels, mid-swipe, it is as tall as the taller one so neither is cut off.
+  function fit(t, a, b) {
+    var px = Math.max(t.panes[a].offsetHeight, t.panes[b].offsetHeight);
+    if (!px) return;
+    t.track.style.height = px + 'px';
+    if (a === b) heightOf[t.id] = px;
+  }
+  // After a rebuild or a resize: straight to the panel on show, with no animation.
+  function settle(t) {
+    var w = t.track.clientWidth;
+    if (w) t.track.scrollLeft = t.idx * w;
+    fit(t, t.idx, t.idx);
+  }
+  // On scroll: keep the height right and the tabs in step with where the track has come to rest.
+  function follow(t) {
+    var w = t.track.clientWidth;
+    if (!w) return;
+    var last = t.panes.length - 1;
+    var pos = Math.min(Math.max(t.track.scrollLeft / w, 0), last);
+    var near = Math.round(pos);
+    var still = Math.abs(pos - near) < 0.02;
+    if (still) fit(t, near, near);
+    else fit(t, Math.floor(pos), Math.ceil(pos));
+    // A tab's scroll is passing through: the tabs wait until it has come to rest on its panel.
+    if (t.goal !== null && (!still || near !== t.goal)) return;
+    t.goal = null;
+    if (near !== t.idx) mark(t, near);
+  }
+  function reduced() {
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+  // A tab (click or arrow key): select it now, then scroll there; instantly under reduced motion.
+  function choose(t, i, focusTab) {
+    mark(t, i);
+    if (focusTab) t.tabs[i].focus();
+    var left = i * t.track.clientWidth;
+    if (Math.abs(t.track.scrollLeft - left) < 1) { t.goal = null; fit(t, i, i); return; }
+    t.goal = i;
+    try { t.track.scrollTo({ left: left, behavior: reduced() ? 'auto' : 'smooth' }); } catch (e) { t.track.scrollLeft = left; }
+  }
+
+  // ----- panel 1: goals and cards, then API-Football's top three ratings a side (unchanged).
+  function summary(m, d, panel) {
+    var evs = (d.events || []).filter(function (e) { return e && SHOWN[e.type] && e.minute != null; });
     if (evs.length) {
       var ul = h('ul', 'scores__events');
       evs.forEach(function (e) { ul.appendChild(eventLine(e)); });
@@ -259,7 +449,7 @@
       panel.appendChild(h('p', 'scores__note', 'No goals or cards.'));
     }
 
-    var r = rec.d.ratings || {};
+    var r = d.ratings || {};
     var sides = [['home', m.home.name], ['away', m.away.name]].map(function (x) { return [x[1], topRated(r[x[0]])]; });
     if (sides[0][1].length || sides[1][1].length) {
       var box = h('div', 'scores__ratings');
@@ -283,15 +473,250 @@
     }
   }
 
+  // ----- panel 2: the lineups on one pitch, away at the top and home at the bottom.
+  // The page's own colours for neutral shirts and the contrast checks, read from its tokens.
+  function palette() {
+    if (pal) return pal;
+    var cs = null;
+    try { cs = window.getComputedStyle(document.documentElement); } catch (e) { cs = null; }
+    function token(name, fallback) { return (cs && pitchHex(cs.getPropertyValue(name).trim())) || fallback; }
+    pal = { ground: token('--bg', '#f4f1ea'), dark: token('--ink', '#1e223d'), light: '#ffffff', edge: token('--ink-muted', '#4c5176') };
+    return pal;
+  }
+  // One shirt: the plain outline, filled and edged from `kit`, with the shirt number on it.
+  function shirt(kit, number) {
+    var s = document.createElementNS(SVG_NS, 'svg');
+    s.setAttribute('class', 'pitch__shirt');
+    s.setAttribute('viewBox', '0 0 40 40');
+    s.setAttribute('aria-hidden', 'true');
+    s.setAttribute('focusable', 'false');
+    var p = document.createElementNS(SVG_NS, 'path');
+    p.setAttribute('d', SHIRT);
+    p.style.fill = kit.fill;
+    p.style.stroke = kit.stroke;
+    s.appendChild(p);
+    if (number != null) {
+      var n = document.createElementNS(SVG_NS, 'text');
+      n.setAttribute('x', '20');
+      n.setAttribute('y', '29');
+      n.setAttribute('text-anchor', 'middle');
+      n.style.fill = kit.number;
+      if (kit.halo) { // neither ink nor white reaches 4.5:1 on this shirt: outline the digits
+        n.setAttribute('class', 'pitch__halo');
+        n.style.stroke = kit.halo;
+      }
+      n.textContent = String(number);
+      s.appendChild(n);
+    }
+    return s;
+  }
+  // What a screen reader hears for one player.
+  function who(p, rating) {
+    var s = (p.number != null ? 'Number ' + p.number + ', ' : '') + p.name;
+    return rating != null ? s + ', rating ' + pitchOneDp(rating) : s;
+  }
+  function best(list) {
+    var top = null;
+    (list || []).forEach(function (r) { if (r && typeof r.rating === 'number' && (top === null || r.rating > top)) top = r.rating; });
+    return top;
+  }
+  // Team name, formation and coach, at that team's end of the pitch.
+  function caption(m, side, lu) {
+    var p = h('p', 'pitch__team pitch__team--' + side);
+    var name = h('strong', null, m[side].name);
+    name.id = 'lu-' + m.id + '-' + side;
+    p.appendChild(name);
+    if (lu.formation) {
+      var f = h('span', 'pitch__meta');
+      f.appendChild(h('span', 'scores__sr', 'Formation '));
+      f.appendChild(document.createTextNode(lu.formation));
+      p.appendChild(document.createTextNode(' '));
+      p.appendChild(f);
+    }
+    if (lu.coach) {
+      p.appendChild(document.createTextNode(' '));
+      p.appendChild(h('span', 'pitch__meta', 'Coach: ' + lu.coach));
+    }
+    return p;
+  }
+  // Two columns of names (home, away) with numbers and ratings: the substitutes, or the starters when
+  // a lineup cannot be laid out on the pitch.
+  function squad(m, d, key, heading) {
+    var L = d.lineups, R = d.ratings || {}, any = false;
+    var box = h('div', 'pitch__bench');
+    box.appendChild(h('h4', null, heading));
+    var cols = h('div', 'scores__cols');
+    ['home', 'away'].forEach(function (side) {
+      var col = h('div', 'scores__col');
+      col.appendChild(h('p', 'scores__team', m[side].name));
+      var ul = h('ul', 'pitch__list');
+      (L[side][key] || []).forEach(function (p) {
+        if (!p || !p.name) return;
+        any = true;
+        var r = pitchRating(p, R[side]);
+        var li = h('li');
+        var seen = [h('span', 'pitch__no', p.number != null ? String(p.number) : ''), h('span', null, p.name)];
+        if (r != null) seen.push(h('span', 'scores__num', pitchOneDp(r)));
+        seen.forEach(function (e) { e.setAttribute('aria-hidden', 'true'); li.appendChild(e); });
+        li.appendChild(h('span', 'scores__sr', who(p, r)));
+        ul.appendChild(li);
+      });
+      col.appendChild(ul);
+      cols.appendChild(col);
+    });
+    box.appendChild(cols);
+    return any ? box : null;
+  }
+  // Returns false when there is nothing to draw, so the caller says lineups are not available.
+  function lineups(m, d, into) {
+    var L = d.lineups, R = d.ratings || {}, P = palette();
+    var laid = { home: pitchRows(L.home), away: pitchRows(L.away) };
+    var rated = !!(best(R.home) !== null || best(R.away) !== null);
+    if (laid.home && laid.away) {
+      into.appendChild(caption(m, 'away', L.away));
+      var pitch = h('div', 'pitch');
+      var marks = h('div', 'pitch__marks');
+      marks.setAttribute('aria-hidden', 'true');
+      ['pitch__line', 'pitch__circle', 'pitch__box pitch__box--top', 'pitch__box pitch__box--bottom',
+        'pitch__goal pitch__goal--top', 'pitch__goal pitch__goal--bottom'].forEach(function (c) { marks.appendChild(h('span', c)); });
+      pitch.appendChild(marks);
+      // Rows run keeper first and left to right in the DOM for both teams, so a screen reader hears
+      // them the same way; the CSS turns the home half and the away rows round to face each other.
+      ['away', 'home'].forEach(function (side) {
+        var top = best(R[side]);
+        var half = h('div', 'pitch__half pitch__half--' + side);
+        half.setAttribute('role', 'group');
+        half.setAttribute('aria-labelledby', 'lu-' + m.id + '-' + side);
+        laid[side].rows.forEach(function (row, ri) {
+          var ul = h('ul', 'pitch__row');
+          row.forEach(function (p) {
+            var r = pitchRating(p, R[side]);
+            var kit = pitchKit(L[side].colors, p.pos === 'G' || ri === 0, side === 'home', P);
+            var li = h('li', 'pitch__p');
+            var fig = h('span', 'pitch__kit');
+            fig.setAttribute('aria-hidden', 'true');
+            fig.appendChild(shirt(kit, p.number));
+            if (r != null) fig.appendChild(h('span', 'pitch__rate' + (r === top ? ' is-top' : ''), pitchOneDp(r)));
+            li.appendChild(fig);
+            var nm = h('span', 'pitch__name', p.name);
+            nm.setAttribute('aria-hidden', 'true');
+            li.appendChild(nm);
+            li.appendChild(h('span', 'scores__sr', who(p, r)));
+            ul.appendChild(li);
+          });
+          half.appendChild(ul);
+        });
+        pitch.appendChild(half);
+      });
+      into.appendChild(pitch);
+      into.appendChild(caption(m, 'home', L.home));
+    } else {
+      var xi = squad(m, d, 'startXI', 'Starting XI');
+      if (!xi) return false;
+      into.appendChild(xi);
+    }
+    var subs = squad(m, d, 'subs', 'Substitutes');
+    if (subs) into.appendChild(subs);
+    if (rated) into.appendChild(h('p', 'pitch__src', RATINGS_SOURCE));
+    return true;
+  }
+
+  // ----- panel 3: team stats, home and away either side of the label, with a split bar under it.
+  // Returns false when no row has a figure.
+  function stats(m, S, into) {
+    var table = h('table', 'stats');
+    table.appendChild(h('caption', 'scores__sr', 'Team stats'));
+    var cg = h('colgroup');
+    cg.appendChild(h('col', 'stats__side'));
+    cg.appendChild(h('col'));
+    cg.appendChild(h('col', 'stats__side'));
+    table.appendChild(cg);
+    var head = h('thead'), hr = h('tr');
+    var th1 = h('th', null, m.home.name), th2 = h('th', null, m.away.name);
+    th1.scope = 'col';
+    th2.scope = 'col';
+    hr.appendChild(th1);
+    hr.appendChild(h('td'));
+    hr.appendChild(th2);
+    head.appendChild(hr);
+    table.appendChild(head);
+    var body = h('tbody'), rows = 0;
+    STAT_ROWS.forEach(function (s) {
+      var a = S.home[s[0]], b = S.away[s[0]];
+      if (a == null && b == null) return;
+      rows++;
+      var tr = h('tr');
+      tr.appendChild(h('td', null, a == null ? '-' : String(a)));
+      var th = h('th', null, s[1]);
+      th.scope = 'row';
+      var share = pitchShare(a, b);
+      if (share) {
+        var bar = h('span', 'stats__bar');
+        bar.setAttribute('aria-hidden', 'true');
+        var hb = h('span', 'stats__home'), ab = h('span', 'stats__away');
+        hb.style.width = share[0].toFixed(1) + '%';
+        ab.style.width = share[1].toFixed(1) + '%';
+        bar.appendChild(hb);
+        bar.appendChild(ab);
+        th.appendChild(bar);
+      }
+      tr.appendChild(th);
+      tr.appendChild(h('td', null, b == null ? '-' : String(b)));
+      body.appendChild(tr);
+    });
+    if (!rows) return false;
+    table.appendChild(body);
+    into.appendChild(table);
+    return true;
+  }
+
   function loadDetail(m) {
     if (!/^match\/\d+\.json$/.test(m.detail || '')) { details[m.id] = { d: null }; paint(m.id); return; }
     var wasLive = !!(m.status && m.status.live);
+    var was = details[m.id] && details[m.id].d ? JSON.stringify(details[m.id].d) : null;
     fetch(BASE + m.detail, { cache: 'no-cache' })
       .then(function (res) { if (!res.ok) throw new Error('detail'); return res.json(); })
       .then(function (d) { details[m.id] = { d: d, live: wasLive }; })
       .catch(function () { if (!details[m.id]) details[m.id] = { d: null }; })
-      .then(function () { paint(m.id); });
+      .then(function () {
+        // The same file again is not drawn again, so a reader on the pitch is left alone.
+        var now = details[m.id] && details[m.id].d ? JSON.stringify(details[m.id].d) : null;
+        if (was !== null && now === was && !stalePanels[m.id]) return;
+        if (busy()) { stalePanels[m.id] = 1; return; }
+        delete stalePanels[m.id];
+        paint(m.id);
+      });
   }
+
+  // ----- a finger on a track: rebuilds wait until it lifts and the swipe has come to rest.
+  function busy() { return touchedAt > 0 && Date.now() - touchedAt < 10000; }
+  root.addEventListener('touchstart', function (ev) {
+    var t = ev.target;
+    if (t && t.closest && t.closest('.scores__track')) { touchedAt = Date.now(); clearTimeout(touchTimer); }
+  }, { passive: true });
+  function lifted() {
+    if (!touchedAt) return;
+    clearTimeout(touchTimer);
+    touchTimer = setTimeout(function () {
+      touchedAt = 0;
+      if (staleList) { render(); return; }
+      var ids = Object.keys(stalePanels);
+      stalePanels = {};
+      ids.forEach(function (id) { paint(id); });
+    }, 700);
+  }
+  document.addEventListener('touchend', lifted, { passive: true });
+  document.addEventListener('touchcancel', lifted, { passive: true });
+
+  // A new width moves every open track back onto its panel and refits its height.
+  var resizing = 0;
+  window.addEventListener('resize', function () {
+    if (resizing) return;
+    resizing = requestAnimationFrame(function () {
+      resizing = 0;
+      Object.keys(tracks).forEach(function (id) { if (tracks[id].track.isConnected) settle(tracks[id]); });
+    });
+  });
 
   function refreshOpen() {
     Object.keys(open).forEach(function (id) {
@@ -303,6 +728,8 @@
   }
 
   root.addEventListener('click', function (ev) {
+    // Clicks inside an open match (the tabs) belong to the panels, never to the row toggle.
+    if (ev.target && ev.target.closest && ev.target.closest('.scores__detail')) return;
     var b = ev.target && ev.target.closest ? ev.target.closest('button[data-id]') : null;
     if (!b) return;
     var id = b.getAttribute('data-id');
@@ -363,7 +790,12 @@
     live = d;
     if (view) return; // a past day is on show; the live window waits in `live`
     var s = JSON.stringify(d.matches);
-    if (s !== sig) { sig = s; matches = d.matches; render(); }
+    if (s !== sig || staleList) {
+      sig = s;
+      matches = d.matches;
+      if (busy()) staleList = true; // drawn when the finger lifts
+      else render();
+    }
     setStamp(d.generatedAt);
     refreshOpen();
     openWanted();
@@ -371,8 +803,14 @@
 
   // ?match=<id>, from the front-page scores strip: once that match is on screen, open its details
   // (when it has any) and bring it into view. Runs once; later polls leave the reader alone.
-  var want = '';
-  try { want = new URLSearchParams(location.search).get('match') || ''; } catch (e) { want = ''; }
+  // &panel=lineups or &panel=stats opens that panel instead of the summary.
+  var want = '', wantPanel = 0;
+  try {
+    var q = new URLSearchParams(location.search);
+    want = q.get('match') || '';
+    var pk = q.get('panel');
+    wantPanel = Object.prototype.hasOwnProperty.call(PANEL_KEYS, pk) ? PANEL_KEYS[pk] : 0; // not ?panel=constructor
+  } catch (e) { want = ''; }
   if (!/^\d+$/.test(want)) want = '';
   function openWanted() {
     if (!want || view || !byId[want]) return;
@@ -380,6 +818,7 @@
     want = '';
     var el = root.querySelector('[data-id="' + id + '"]');
     if (!el) return;
+    if (wantPanel) panelOf[id] = wantPanel;
     if (el.tagName === 'BUTTON' && !open[id]) el.click();
     try { el.scrollIntoView({ block: 'center' }); } catch (e) { el.scrollIntoView(); }
     if (el.focus) el.focus({ preventScroll: true });
@@ -470,6 +909,11 @@
     clearTimeout(timer);
     timer = 0;
     open = {};
+    panelOf = {};
+    heightOf = {};
+    tracks = {};
+    staleList = false;
+    stalePanels = {};
     syncNav();
     announce();
     if (view) { loadDay(view); return; }

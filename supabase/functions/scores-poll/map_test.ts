@@ -117,6 +117,7 @@ Deno.test("mapMatch: nothing from the API's logo, flag, photo or referee fields 
   fx.league.logo = "https://media.api-sports.io/football/leagues/39.png";
   fx.fixture.referee = "A. Referee";
   fx.lineups[0].team.logo = "https://media.api-sports.io/football/teams/40.png";
+  fx.lineups[0].team.colors = { player: { primary: "https://media.api-sports.io/x.png" } };
   fx.lineups[0].coach.photo = "https://media.api-sports.io/football/coachs/1.png";
   fx.players[0].players[0].player.photo = "https://media.api-sports.io/football/players/1.png";
   fx.events[0].team.logo = "https://media.api-sports.io/football/teams/40.png";
@@ -273,7 +274,17 @@ Deno.test("ratings: rated players only, as numbers, best first, each team on its
   assertEquals(f.ratings!.away.length, rated("Manchester City"));
   // One spot check against the raw reply: Alisson, minutes and shirt number carried over.
   const alisson = f.ratings!.home.find((r) => r.name === "Alisson")!;
-  assertEquals(alisson, { name: "Alisson", number: 1, minutes: 90, rating: 5.5 });
+  assertEquals(alisson, { name: "Alisson", number: 1, minutes: 90, rating: 5.5, id: 280 });
+});
+
+Deno.test("ratings: the API player id is carried, and an id of 0 means unknown", () => {
+  const f = fileOf(IDS.wslFinished);
+  const all = [...f.ratings!.home, ...f.ratings!.away];
+  assert(all.every((r) => r.id === null || (Number.isInteger(r.id) && r.id > 0)), "positive ids or null");
+  // The recorded WSL reply rates some players under id 0 with no shirt number.
+  const unknown = all.filter((r) => r.id === null);
+  assert(unknown.length > 0, "the fixture has id-0 players");
+  assert(unknown.some((r) => r.name === "Olivia Smith" && r.number === null), "id 0 maps to null");
 });
 
 Deno.test("ratings: equal ratings keep the API's order; unparseable ones are left out", () => {
@@ -311,9 +322,40 @@ Deno.test("stats: possession, shots, cards and xg come across by name, per team"
   const f = fileOf(IDS.plFinished);
   assertEquals(f.stats!.home, {
     possession: "35%", shots: 13, shotsOnTarget: 6, corners: 5, fouls: 19,
-    offsides: 2, yellow: 4, red: 1, xg: "0.94",
+    offsides: 2, yellow: 4, red: 1, xg: "0.94", saves: 1, passes: 301, passAccuracy: "80%",
   });
   assertEquals(f.stats!.away.possession, "65%");
+});
+
+Deno.test("stats: saves, passes and pass accuracy are null when the API leaves them out", () => {
+  const fx = fixtureById(IDS.plFinished);
+  const liverpool = fx.statistics.find((s: { team: { id: number } }) => s.team.id === 40);
+  liverpool.statistics = liverpool.statistics.filter((s: { type: string }) =>
+    !["Goalkeeper Saves", "Total passes", "Passes %"].includes(s.type)
+  );
+  const f = mapMatchFile(fx, mapMatch(fx)!, NOW);
+  assertEquals([f.stats!.home.saves, f.stats!.home.passes, f.stats!.home.passAccuracy], [null, null, null]);
+  liverpool.statistics.push({ type: "Passes %", value: 77 }); // a bare number gets its sign
+  assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).stats!.home.passAccuracy, "77%");
+});
+
+Deno.test("stats: with no \"Passes %\", pass accuracy is accurate passes over total passes", () => {
+  // The PL reply has all three: 240 of 301 is the API's own "80%".
+  const fx = fixtureById(IDS.plFinished);
+  const liverpool = fx.statistics.find((s: { team: { id: number } }) => s.team.id === 40);
+  liverpool.statistics = liverpool.statistics.filter((s: { type: string }) => s.type !== "Passes %");
+  assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).stats!.home.passAccuracy, "80%");
+  // Three recorded replies leave "Passes %" out altogether.
+  assertEquals([fileOf(IDS.uclLive).stats!.home.passAccuracy, fileOf(IDS.uclLive).stats!.away.passAccuracy], ["89%", "82%"]);
+  assertEquals(fileOf(IDS.wslFinished).stats!.home.passAccuracy, "84%");
+  // No total, a zero total or more accurate passes than passes: null.
+  for (const total of [null, 0, 100]) {
+    const t = fixtureById(IDS.plFinished);
+    const side = t.statistics.find((s: { team: { id: number } }) => s.team.id === 40);
+    side.statistics = side.statistics.filter((s: { type: string }) => s.type !== "Passes %");
+    side.statistics.find((s: { type: string }) => s.type === "Total passes").value = total;
+    assertEquals(mapMatchFile(t, mapMatch(t)!, NOW).stats!.home.passAccuracy, null, String(total));
+  }
 });
 
 Deno.test("stats: a missing stat is null, a numeric string becomes a number, and stats pair up or are null", () => {
@@ -337,9 +379,77 @@ Deno.test("lineups: formation, coach, starters and subs, with a position only wh
   const f = fileOf(IDS.plFinished);
   const home = f.lineups!.home;
   assertEquals([home.formation, home.coach, home.startXI.length, home.subs.length], ["4-2-3-1", "Andoni Iraola", 11, 9]);
-  assertEquals(home.startXI[0], { name: "Alisson", number: 1, pos: "G" });
+  assertEquals(home.startXI[0], { name: "Alisson", number: 1, pos: "G", id: 280, grid: "1:1" });
   assert([...home.startXI, ...home.subs].every((p) => p.pos === null || "GDMF".includes(p.pos)), "positions");
   assertEquals(f.lineups!.away.coach, "Enzo Maresca");
+});
+
+Deno.test("lineups: every starter keeps the API's grid in the API's order; substitutes have none", () => {
+  for (const id of [IDS.plFinished, IDS.uclLive, IDS.uclFinished, IDS.wslFinished, IDS.uclFinalPens]) {
+    const raw = fixtureById(id);
+    const f = mapMatchFile(raw, matchOf(id), NOW);
+    for (const side of ["home", "away"] as const) {
+      const l = f.lineups![side];
+      const teamId = f.match[side].id;
+      const entry = raw.lineups.find((e: { team: { id: number } }) => e.team.id === teamId);
+      assertEquals(l.startXI.map((p) => p.grid), entry.startXI.map((p: { player: { grid: string } }) => p.player.grid), `${id} ${side}`);
+      assertEquals(l.startXI.map((p) => p.id), entry.startXI.map((p: { player: { id: number } }) => p.player.id), `${id} ${side} ids`);
+      assert(l.startXI.every((p) => /^\d+:\d+$/.test(p.grid!)), `${id} ${side}: all eleven have a grid`);
+      assert(l.subs.every((p) => p.grid === null), `${id} ${side}: no grid on the bench`);
+    }
+  }
+});
+
+Deno.test("lineups: a grid that is not row:col is dropped, an id of 0 is unknown, and a sub never gets a grid", () => {
+  const fx = fixtureById(IDS.plFinished);
+  const liverpool = fx.lineups.find((e: { team: { id: number } }) => e.team.id === 40);
+  liverpool.startXI[0].player.grid = "1:1; color:red";
+  liverpool.startXI[1].player.grid = "0:1";
+  liverpool.startXI[2].player.id = 0;
+  liverpool.substitutes[0].player.grid = "6:1";
+  const l = mapMatchFile(fx, mapMatch(fx)!, NOW).lineups!.home;
+  assertEquals([l.startXI[0].grid, l.startXI[1].grid, l.startXI[2].id, l.subs[0].grid], [null, null, null, null]);
+});
+
+Deno.test("lineups: shirt colours come across as #rrggbb, per shirt, and are null when the API has none", () => {
+  // The recorded replies carry no team.colors (stripped with the logos), so the shape is injected.
+  assertEquals(fileOf(IDS.plFinished).lineups!.home.colors, null);
+  const fx = fixtureById(IDS.plFinished);
+  const liverpool = fx.lineups.find((e: { team: { id: number } }) => e.team.id === 40);
+  liverpool.team.colors = {
+    player: { primary: "E41E2C", number: "FFFFFF", border: "e41e2c" },
+    goalkeeper: { primary: "#1A1A1A", number: "ffffff", border: null },
+  };
+  const l = mapMatchFile(fx, mapMatch(fx)!, NOW).lineups!;
+  assertEquals(l.home.colors, {
+    player: { primary: "#e41e2c", number: "#ffffff", border: "#e41e2c" },
+    goalkeeper: { primary: "#1a1a1a", number: "#ffffff", border: null },
+  });
+  assertEquals(l.away.colors, null);
+  // Only one shirt known: the other is null.
+  liverpool.team.colors = { player: null, goalkeeper: { primary: "00ff00" } };
+  assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).lineups!.home.colors, {
+    player: null,
+    goalkeeper: { primary: "#00ff00", number: null, border: null },
+  });
+});
+
+Deno.test("lineups: anything that is not six hex digits is refused, so no colour field can carry a URL or CSS", () => {
+  const fx = fixtureById(IDS.plFinished);
+  const liverpool = fx.lineups.find((e: { team: { id: number } }) => e.team.id === 40);
+  const bad = ["red", "#fff", "fff", "url(x)", "javascript:alert(1)", "ff0000; background:url(x)", " ff0000", "#ff00001", "", 0xff0000, null, {}];
+  for (const v of bad) {
+    liverpool.team.colors = { player: { primary: v, number: v, border: v }, goalkeeper: { primary: v } };
+    assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).lineups!.home.colors, null, JSON.stringify(v));
+  }
+  // A good primary with bad number and border keeps the shirt and drops the rest.
+  liverpool.team.colors = { player: { primary: "123abc", number: "url(x)", border: "#12" } };
+  assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).lineups!.home.colors, {
+    player: { primary: "#123abc", number: null, border: null },
+    goalkeeper: null,
+  });
+  liverpool.team.colors = "e41e2c";
+  assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).lineups!.home.colors, null);
 });
 
 Deno.test("lineups: matched to the teams by id, not by position in the array; null until announced", () => {

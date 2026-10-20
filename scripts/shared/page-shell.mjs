@@ -565,7 +565,7 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <a class="masthead__panel-link" href="/desk/world-cup/">International Football</a>
         <a class="masthead__panel-link" href="/legends/">Legends</a>
         <a class="masthead__panel-link" href="/reads/">Long reads</a>
-        <a class="masthead__panel-link" href="/glossary/">Quick answers</a>
+        <a class="masthead__panel-link" href="/explainers/">Football, explained</a>
         <a class="masthead__panel-link" href="/posters/">Posters</a>
         <a class="masthead__panel-link" href="/duel/">Player duels</a>
         <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
@@ -610,38 +610,28 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
   </script>`;
 }
 
-// The trust links every footer carries (search plan 3.8, week 2): About, Standards, Corrections,
-// Privacy, Contact and the author profile. One definition, used by footer() below and by the two
-// builders that write their own footer markup (build-content.mjs, build-day-pages.mjs). The
-// hand-built index.html footer carries the same six links; change one, change it too. Since
-// 2026-10-19 all six point into the one About page (scripts/build-about-page.mjs), so nothing
-// links to the redirect stubs at the old URLs.
-export function trustLinks() {
-  return `<nav class="footer__links footer__links--trust" aria-label="About The ARCHV">
-        <a href="/about/">About</a>
-        <a href="/about/#standards">Standards</a>
-        <a href="/about/#corrections">Corrections</a>
-        <a href="/about/#privacy">Privacy</a>
-        <a href="/about/#contact">Contact</a>
-        <a href="${AUTHOR_PATH}">${AUTHOR_NAME}</a>
-      </nav>`;
-}
-
+// The footer's one links row (2026-10-20, founder: "fewer sections"). The trust row and
+// trustLinks() are gone: How we verify, Standards, Corrections, Privacy, Contact and the author
+// profile are all sections of /about/ (scripts/build-about-page.mjs), so the footer carries one
+// About link. The glossary sits inside Football, explained (/explainers/#glossary), and the one
+// outbound video link is YouTube. The hand-built footers in index.html, build-content.mjs and
+// build-day-pages.mjs carry the same About and YouTube links; change one, change them all.
 export function footer() {
   return `<footer class="footer">
     <div class="wrap">
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
         <a href="/feed.xml">RSS</a>
-        <a href="/glossary/">Glossary</a>
+        <a href="/explainers/">Football, explained</a>
+        <a href="/about/">About</a>
       </nav>
-      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>

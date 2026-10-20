@@ -244,8 +244,10 @@ posters at the bottom of the page, the rest can live in sub pages."
 - **Where each removed section went.** Football Leagues, Transfer Desk and International Football
   bands: `/desk/leagues/`, `/desk/transfer/`, `/desk/world-cup/` (lane indexes; all three are in
   the masthead menu). The Legends: `/legends/`. Long reads: `/reads/`. Quick answers (FAQ): the six
-  answers are the glossary entries' own opening definitions, so `/glossary/` (menu label "Quick
-  answers"); the FAQPage JSON-LD came off the front page with the visible block. "The archive, in
+  answers are the glossary entries' own opening definitions, so the glossary, which since
+  2026-10-20 sits inside Football, explained (menu label "Football, explained", `/explainers/`;
+  `#faq` lands on `/explainers/#glossary`); the FAQPage JSON-LD came off the front page with the
+  visible block. "The archive, in
   your pocket" block: the menu's gold "Download the app" slot, the footer button and `/app/`. "The
   fans are already here" CTA: `/about/#contact` (menu "Partner with us" and the footer button);
   the Web3Forms form and `contactForm.ts` are gone, so partnership enquiries are the mailto on
@@ -264,10 +266,26 @@ posters at the bottom of the page, the rest can live in sub pages."
   `/standards/`, `/corrections/`, `/privacy/` and `/authors/joseph-bankole/`, each pointing into
   `/about/`. See "The About page" below.
 - **The masthead menu** now lists thirteen internal destinations (front page, live scores, the
-  three desks, Legends, Long reads, Quick answers, Posters, Player duels, Daily archive game,
+  three desks, Legends, Long reads, Football, explained, Posters, Player duels, Daily archive game,
   Partner with us, RSS). Three copies, no shared import: `index.html`, `masthead()` in
   `scripts/shared/page-shell.mjs` and the hand-built nav in `scripts/build-content.mjs`. The panel
-  scrolls inside itself (`max-height` + `overflow-y: auto`) on a short phone.
+  scrolls inside itself (`max-height` + `overflow-y: auto`) on a short phone. "Quick answers"
+  (`/glossary/`) became "Football, explained" (`/explainers/`) on 2026-10-20.
+- **The footer has one links row (2026-10-20, founder: "fewer sections").** The trust row and
+  `trustLinks()` are gone; every footer carries one About link (`/about/`) and one YouTube link
+  (`https://www.youtube.com/@thearchvca`, new tab), and the Glossary and podcast links are out.
+  Four copies: `index.html` (the More row, plus its CTA row with Partner with us), `footer()` in
+  page-shell (Football, explained in Glossary's old place), and the hand-built rows in
+  `build-content.mjs` and `build-day-pages.mjs`. Change one, change them all, and check the built
+  dist, not the source.
+- **The glossary lives under Football, explained (2026-10-20).** Every `/glossary/` URL stayed (hub,
+  entries, canonicals, cards, DefinedTermSet url, sitemap rows): the entries are the site's top
+  search earners and Pages cannot 301. `/explainers/` carries a `#glossary` section listing every
+  term (`build-section-pages.mjs`, explainers front only, so the other fronts are byte-identical),
+  its CollectionPage `hasPart` names the DefinedTermSet, and the glossary breadcrumbs run The ARCHV
+  / Football, explained / Glossary in both the visible crumbs and the BreadcrumbList. The
+  explainers crumb label is "Football, explained" in `build-content.mjs`, `build-section-pages.mjs`
+  and `build-search.mjs`; the hub's eyebrow is "The ARCHV explains" so it does not repeat the h1.
 - The Desk Brief is a full-width block (was a side rail beside the bands) and the scroll-spy nav
   (`.spynav`) is gone, since the page has one section left.
 
@@ -561,8 +579,8 @@ pageStyles; its own CSS through `extraHead`). Sections in order: the lead and Wh
   says so in the build log. Drop a real one at `public/heads/joseph-bankole.webp` and the
   script picks it up with no other change. Do not generate a face: the site's imagery rule
   forbids it.
-- `index.html` carries a hand copy of `ORG_NODE` (founder and the policy URLs) and of
-  `trustLinks()`; change page-shell and change it too.
+- `index.html` carries a hand copy of `ORG_NODE` (founder and the policy URLs); change page-shell
+  and change it too. (It also copied `trustLinks()` until the footer trust row went on 2026-10-20.)
 
 `max-image-preview:large` rides on every indexable page family's robots meta (article,
 lane, sport, glossary, about, duel, guess, the long-form content pages, the

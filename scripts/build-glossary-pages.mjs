@@ -34,6 +34,13 @@ const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const HUB_URL = `${SITE}/glossary/`;
 const HUB_TITLE = "The ARCHV glossary: football terms, explained";
 const HUB_INTRO = "Plain answers to the football questions fans actually search. Every entry defines the term first, then explains how it works.";
+// The glossary's parent in every breadcrumb, visible and BreadcrumbList, since 2026-10-20 (founder:
+// "Move glossary to football, explained"). The URLs did not move; /explainers/ carries the
+// glossary as its #glossary section (build-section-pages.mjs). The same label is the explainers
+// crumb in build-content.mjs, build-section-pages.mjs and build-search.mjs; it is spelled out here
+// rather than imported because a builder runs its build when imported.
+const PARENT_NAME = "Football, explained";
+const PARENT_PATH = "/explainers/";
 
 // First sentence of an answer, reused as the entry's meta description and as its one-line
 // summary on the hub. Answers are written definition-first, so sentence one is the definition.
@@ -109,8 +116,9 @@ function entrySchema(entry, url, image) {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-          { "@type": "ListItem", position: 2, name: "Glossary", item: HUB_URL },
-          { "@type": "ListItem", position: 3, name: entry.title, item: url },
+          { "@type": "ListItem", position: 2, name: PARENT_NAME, item: `${SITE}${PARENT_PATH}` },
+          { "@type": "ListItem", position: 3, name: "Glossary", item: HUB_URL },
+          { "@type": "ListItem", position: 4, name: entry.title, item: url },
         ],
       },
     ],
@@ -146,7 +154,7 @@ function renderEntry(entry, hasCard = false) {
   ${masthead(NO_SPORT)}
   <main class="wrap" id="main">
     <article class="glossary">
-      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/glossary/">Glossary</a> / ${esc(entry.title)}</p>
+      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${PARENT_PATH}">${esc(PARENT_NAME)}</a> / <a href="/glossary/">Glossary</a> / ${esc(entry.title)}</p>
       <p class="lane__eyebrow">The ARCHV glossary</p>
       <h1>${esc(entry.title)}</h1>
       <h2 class="glossary__q">${esc(entry.question)}</h2>${entry.updated ? `
@@ -196,7 +204,8 @@ function renderHub() {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-          { "@type": "ListItem", position: 2, name: "Glossary", item: HUB_URL },
+          { "@type": "ListItem", position: 2, name: PARENT_NAME, item: `${SITE}${PARENT_PATH}` },
+          { "@type": "ListItem", position: 3, name: "Glossary", item: HUB_URL },
         ],
       },
     ],
@@ -225,7 +234,7 @@ function renderHub() {
   ${masthead(NO_SPORT)}
   <main class="wrap wrap--wide" id="main">
     <section class="glossary">
-      <p class="breadcrumb"><a href="/">The ARCHV</a> / Glossary</p>
+      <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="${PARENT_PATH}">${esc(PARENT_NAME)}</a> / Glossary</p>
       <p class="lane__eyebrow">Football, explained</p>
       <h1>The glossary</h1>
       <p class="lane__lede">${esc(HUB_INTRO)}</p>

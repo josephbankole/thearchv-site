@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr, ORG_REF, ORG_NODE, trustLinks } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr, ORG_REF, ORG_NODE } from "./shared/page-shell.mjs";
 // The frontmatter parser and the content/ walk moved to shared/content-pages.mjs on 2026-08-09,
 // so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
@@ -53,7 +53,7 @@ const SITE = "https://thearchv.ca";
 const SECTION = {
   finals: { label: "Finals", href: "/finals/", more: "More finals" },
   united: { label: "Manchester United", href: "/united/", more: "More United history" },
-  explainers: { label: "Explained", href: "/explainers/", more: "More explainers" },
+  explainers: { label: "Football, explained", href: "/explainers/", more: "More explainers" },
   notes: { label: "Notes", href: "/notes/", more: "More from the archive" },
 };
 const sect = (s) => SECTION[s] || { label: "The Archive", href: "/", more: "More from the archive" };
@@ -298,7 +298,7 @@ function render(p, allPages) {
         <a class="masthead__panel-link" href="/desk/world-cup/">International Football</a>
         <a class="masthead__panel-link" href="/legends/">Legends</a>
         <a class="masthead__panel-link" href="/reads/">Long reads</a>
-        <a class="masthead__panel-link" href="/glossary/">Quick answers</a>
+        <a class="masthead__panel-link" href="/explainers/">Football, explained</a>
         <a class="masthead__panel-link" href="/posters/">Posters</a>
         <a class="masthead__panel-link" href="/duel/">Player duels</a>
         <a class="masthead__panel-link" href="/guess/">Daily archive game</a>
@@ -329,14 +329,15 @@ function render(p, allPages) {
       <nav class="footer__links" aria-label="Social">
         <a href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
         <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
         <a href="/feed.xml">RSS</a>
+        <a href="/about/">About</a>
       </nav>
-      ${trustLinks()}
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
       <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
     </div>

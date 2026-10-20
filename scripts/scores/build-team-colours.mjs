@@ -89,8 +89,15 @@ export function buildTable(matches, files) {
       if (side === "home") tally(rec.home, key, colours, kickoff);
     }
   }
-  // Most often wins; a tie goes to the more recent match, then to the key, so a rerun is stable.
-  const pick = (map) => [...map.entries()].sort(([ka, a], [kb, b]) => b.n - a.n || (b.last > a.last ? 1 : b.last < a.last ? -1 : 0) || (ka < kb ? -1 : ka > kb ? 1 : 0))[0][1];
+  // The outfield shirt worn most often wins, counted across every keeper shirt it was worn with (a
+  // keeper change must not split its count), then the keeper shirt worn most often with it; a tie
+  // goes to the more recent match, then to the key, so a rerun is stable.
+  const pick = (map) => {
+    const shirt = (t) => JSON.stringify(t.colours.player);
+    const worn = new Map();
+    for (const t of map.values()) worn.set(shirt(t), (worn.get(shirt(t)) || 0) + t.n);
+    return [...map.entries()].sort(([ka, a], [kb, b]) => worn.get(shirt(b)) - worn.get(shirt(a)) || b.n - a.n || (b.last > a.last ? 1 : b.last < a.last ? -1 : 0) || (ka < kb ? -1 : ka > kb ? 1 : 0))[0][1];
+  };
 
   const byId = {};
   const neutral = [];

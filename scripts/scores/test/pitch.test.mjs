@@ -423,6 +423,23 @@ test("team-colours script: most often worn at home, else any appearance; names f
   assert.equal(t.matches, 6);
 });
 
+test("team-colours script: keeper shirts do not split the count of the outfield shirt", () => {
+  const VIL = { id: 66, name: "Aston Villa" }, OPP = { id: 45, name: "Everton" };
+  const k = (p, g) => ({ player: { primary: p, number: "#ffffff", border: p }, goalkeeper: { primary: g, number: null, border: null } });
+  const m = (id, kickoff) => ({ id, competition: { key: "premier-league" }, kickoff, home: VIL, away: OPP, detail: `match/${id}.json` });
+  const matches = [m(1, "2026-09-01T14:00:00Z"), m(2, "2026-09-08T14:00:00Z"), m(3, "2026-09-29T14:00:00Z")];
+  const files = {
+    "match/1.json": { lineups: { home: { colors: k("#88002d", "#61f361") }, away: { colors: null } } },
+    "match/2.json": { lineups: { home: { colors: k("#88002d", "#f6e000") }, away: { colors: null } } },
+    // The most recent home match, in a change shirt: worn once, so it loses to the claret worn twice.
+    "match/3.json": { lineups: { home: { colors: k("#d1e2f6", "#61f361") }, away: { colors: null } } },
+  };
+  const e = buildTable(matches, files).byId[66];
+  assert.equal(e.player.primary, "#88002d");
+  // Of the claret matches, the more recent keeper shirt.
+  assert.equal(e.goalkeeper.primary, "#f6e000");
+});
+
 // ---------- ratings ----------
 
 test("ratings, live file: every starter is matched by number or, with no number, by exact name", () => {

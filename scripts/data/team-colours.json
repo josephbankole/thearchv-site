@@ -11,7 +11,7 @@
       "Tottenham Hotspur": "Tottenham"
     }
   },
-  "generatedAt": "2026-10-20T11:14:05.014Z",
+  "generatedAt": "2026-10-20T11:33:11.249Z",
   "byId": {
     "33": {
       "name": "Manchester United",
@@ -1636,24 +1636,6 @@
         "primary": "#fafb00",
         "number": "#000000",
         "border": "#fafb00"
-      }
-    },
-    "4898": {
-      "name": "Manchester United",
-      "competitions": [
-        "wsl"
-      ],
-      "from": "any",
-      "seen": 1,
-      "player": {
-        "primary": "#373737",
-        "number": "#ffffff",
-        "border": "#373737"
-      },
-      "goalkeeper": {
-        "primary": "#00ff00",
-        "number": "#000000",
-        "border": "#00ff00"
       }
     },
     "5354": {

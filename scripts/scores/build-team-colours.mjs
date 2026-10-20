@@ -123,6 +123,13 @@ export function buildTable(matches, files) {
   for (const [alias, target] of Object.entries(ALIASES)) {
     if (!named.has(alias) && named.has(target)) named.set(alias, named.get(target));
   }
+  // An entry built only from away games gives way to a namesake's home colours, so the side falls
+  // through to the name match: a club's home shirt is a better guess than one change shirt (WSL
+  // Manchester United's only coloured file had them in grey).
+  for (const [id, e] of Object.entries(byId)) {
+    const twin = named.get(e.name);
+    if (e.from === "any" && twin !== undefined && twin !== Number(id) && byId[twin].from === "home") delete byId[id];
+  }
   const byName = {};
   for (const n of [...named.keys()].sort()) {
     const id = named.get(n);

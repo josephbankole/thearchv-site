@@ -37,6 +37,7 @@
     "posters": "node scripts/build-posters-page.mjs",
     "test:wire": "node --test scripts/wire/test/*.test.mjs",
     "test:scores": "node --test scripts/scores/test/*.test.mjs",
+    "team-colours": "node scripts/scores/build-team-colours.mjs",
     "wire:fetch": "node scripts/wire/fetch-wire.mjs",
     "wire:finalise": "node scripts/wire/finalise-wire.mjs",
     "wire:verify": "node scripts/wire/verify-wire.mjs",

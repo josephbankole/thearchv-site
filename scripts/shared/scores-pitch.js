@@ -57,6 +57,59 @@
     return { fill: fill, number: num, halo: halo, stroke: stroke, neutral: false };
   }
 
+  // ----- shirt colours when the match file has none (2026-10-20).
+  // API-Football sends no colours for most WSL clubs, and not for every match elsewhere. The build
+  // embeds a table as the client's TEAM_COLOURS (scripts/data/team-colours.json, made with
+  // `npm run team-colours`): { i: { "<team id>": "pp,pn,pb,gp,gn,gb" }, n: { "<team name>": <team id> } }.
+  // Each value is six bare hex colours, the outfield primary, number and border and then the
+  // goalkeeper's, "" where the API had none: the colours that team wore most often at home. The names
+  // are Premier League and Champions League teams only, so a WSL side ("Chelsea", the API's " W"
+  // already gone) takes its men's club's colours. These are API-Football's colours, never ours.
+
+  // One table value as { player, goalkeeper }, or null. The whole value is refused when it is not
+  // exactly six comma-separated parts, when any part is neither empty nor six hex digits, or when it
+  // has no outfield primary.
+  function pitchTableKit(v) {
+    if (typeof v !== 'string') return null;
+    var a = v.split(',');
+    if (a.length !== 6) return null;
+    for (var i = 0; i < 6; i++) if (a[i] !== '' && !pitchHex(a[i])) return null;
+    var kit = function (p, n, b) {
+      var c = pitchHex(p);
+      return c ? { primary: c, number: pitchHex(n), border: pitchHex(b) } : null;
+    };
+    var player = kit(a[0], a[1], a[2]);
+    return player ? { player: player, goalkeeper: kit(a[3], a[4], a[5]) } : null;
+  }
+
+  // The colours one side is drawn in, for pitchKit. `colors` is the lineup's own (or missing), `team`
+  // the match's { id, name } for that side, `table` the TEAM_COLOURS object (or null).
+  // - The file's colours always win: with a usable outfield shirt in them they come back untouched.
+  // - Otherwise the table by the side's team id, else by its exact name. A malformed value is refused
+  //   and the next way is tried; none gives the file's colours back (often null: neutral shirts).
+  // - The keeper takes the table's goalkeeper shirt only when the entry is that same team's, found by
+  //   id. Found by name the entry is another team (the men's club), so the keeper stays neutral. A
+  //   goalkeeper shirt in the file still wins over both.
+  function pitchSideColors(colors, team, table) {
+    var c = colors && typeof colors === 'object' ? colors : null;
+    var usable = function (k) { return !!(k && typeof k === 'object' && pitchHex(k.primary)); };
+    if (c && usable(c.player)) return c;
+    var own = Object.prototype.hasOwnProperty;
+    var ids = table && typeof table === 'object' && table.i && typeof table.i === 'object' ? table.i : null;
+    var names = table && typeof table === 'object' && table.n && typeof table.n === 'object' ? table.n : null;
+    var hit = null, same = false, key;
+    if (ids && team && typeof team.id === 'number' && team.id > 0) {
+      key = String(team.id);
+      if (own.call(ids, key)) { hit = pitchTableKit(ids[key]); same = !!hit; }
+    }
+    if (!hit && ids && names && team && typeof team.name === 'string' && own.call(names, team.name)) {
+      key = String(names[team.name]);
+      if (/^[1-9]\d*$/.test(key) && own.call(ids, key)) hit = pitchTableKit(ids[key]);
+    }
+    if (!hit) return c;
+    return { player: hit.player, goalkeeper: c && usable(c.goalkeeper) ? c.goalkeeper : same ? hit.goalkeeper : null };
+  }
+
   // "4-2-3-1" as [4, 2, 3, 1], or null for anything that is not dash-separated whole numbers.
   function pitchFormation(s) {
     if (typeof s !== 'string' || !/^\d+(-\d+)+$/.test(s)) return null;

@@ -1,0 +1,3049 @@
+{
+  "schema": "archv-team-colours/1",
+  "note": "Shirt colours as API-Football sends them in team.colors, copied from the public live/ match files. These are API-Football's own colours, not ours. byId: per team id, the colours that team wore most often as the home side (any appearance when it never had colours at home). byName: Premier League and Champions League teams only, so a WSL side named like its men's club takes those colours. /scores/ uses this only when a match file has no colours of its own. Refresh: npm run team-colours, then commit.",
+  "source": {
+    "bucket": "https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/",
+    "days": 48,
+    "matches": 247,
+    "matchFiles": 238,
+    "sidesWithColours": 366,
+    "aliases": {
+      "Tottenham Hotspur": "Tottenham"
+    }
+  },
+  "generatedAt": "2026-10-20T11:14:05.014Z",
+  "byId": {
+    "33": {
+      "name": "Manchester United",
+      "competitions": [
+        "champions-league",
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ea0000",
+        "number": "#ffffff",
+        "border": "#ea0000"
+      },
+      "goalkeeper": {
+        "primary": "#19191b",
+        "number": "#c4c3c5",
+        "border": "#19191b"
+      }
+    },
+    "34": {
+      "name": "Newcastle",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#ffffff",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#fff04b",
+        "number": "#030303",
+        "border": "#fff04b"
+      }
+    },
+    "35": {
+      "name": "Bournemouth",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#fcfcfc",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#4fa7be",
+        "number": "#f9fafb",
+        "border": "#4fa7be"
+      }
+    },
+    "36": {
+      "name": "Fulham",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#000000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#59a5f2",
+        "number": "#b6dcf2",
+        "border": "#59a5f2"
+      }
+    },
+    "40": {
+      "name": "Liverpool",
+      "competitions": [
+        "champions-league",
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#e41e2c",
+        "number": "#ffffff",
+        "border": "#e41e2c"
+      },
+      "goalkeeper": {
+        "primary": "#338c86",
+        "number": "#d8e0d8",
+        "border": "#338c86"
+      }
+    },
+    "42": {
+      "name": "Arsenal",
+      "competitions": [
+        "champions-league",
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#e10000",
+        "number": "#ffffff",
+        "border": "#e10000"
+      },
+      "goalkeeper": {
+        "primary": "#e859f6",
+        "number": "#040404",
+        "border": "#e859f6"
+      }
+    },
+    "45": {
+      "name": "Everton",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#0237ab",
+        "number": "#ffffff",
+        "border": "#0237ab"
+      },
+      "goalkeeper": {
+        "primary": "#2dd77a",
+        "number": "#0d0d0d",
+        "border": "#2dd77a"
+      }
+    },
+    "47": {
+      "name": "Tottenham",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#e1430e",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#f65e8f",
+        "number": "#fdfcfc",
+        "border": "#f65e8f"
+      }
+    },
+    "49": {
+      "name": "Chelsea",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#1532c1",
+        "number": "#f7d444",
+        "border": "#1532c1"
+      },
+      "goalkeeper": {
+        "primary": "#1d5160",
+        "number": "#fcfcfc",
+        "border": "#1d5160"
+      }
+    },
+    "50": {
+      "name": "Manchester City",
+      "competitions": [
+        "champions-league",
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#abd1f5",
+        "number": "#f7f7f7",
+        "border": "#abd1f5"
+      },
+      "goalkeeper": {
+        "primary": "#41c59b",
+        "number": "#b1e346",
+        "border": "#41c59b"
+      }
+    },
+    "51": {
+      "name": "Brighton",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#20429d",
+        "number": "#fcfcfc",
+        "border": "#20429d"
+      },
+      "goalkeeper": {
+        "primary": "#fff200",
+        "number": "#faf4f4",
+        "border": "#fff200"
+      }
+    },
+    "52": {
+      "name": "Crystal Palace",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#e0dede",
+        "number": "#fcfcfc",
+        "border": "#e0dede"
+      },
+      "goalkeeper": {
+        "primary": "#a6ce8b",
+        "number": "#000400",
+        "border": "#a6ce8b"
+      }
+    },
+    "55": {
+      "name": "Brentford",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#000000",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#c597c6",
+        "number": "#080808",
+        "border": "#c597c6"
+      }
+    },
+    "57": {
+      "name": "Ipswich",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#0055aa",
+        "number": "#ffffff",
+        "border": "#0055aa"
+      },
+      "goalkeeper": {
+        "primary": "#63a8d1",
+        "number": "#ffffff",
+        "border": "#63a8d1"
+      }
+    },
+    "63": {
+      "name": "Leeds",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#fdf9f9",
+        "number": "#17277f",
+        "border": "#fdf9f9"
+      },
+      "goalkeeper": {
+        "primary": "#8ed797",
+        "number": "#0d3423",
+        "border": "#8ed797"
+      }
+    },
+    "64": {
+      "name": "Hull City",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#e96e24",
+        "number": "#ffffff",
+        "border": "#e96e24"
+      },
+      "goalkeeper": {
+        "primary": "#203e40",
+        "number": "#f9fafa",
+        "border": "#203e40"
+      }
+    },
+    "65": {
+      "name": "Nottingham Forest",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#e4232c",
+        "number": "#ffffff",
+        "border": "#e4232c"
+      },
+      "goalkeeper": {
+        "primary": "#4ba4dc",
+        "number": "#a1cdc4",
+        "border": "#4ba4dc"
+      }
+    },
+    "66": {
+      "name": "Aston Villa",
+      "competitions": [
+        "champions-league",
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#88002d",
+        "number": "#ffffff",
+        "border": "#88002d"
+      },
+      "goalkeeper": {
+        "primary": "#61f361",
+        "number": "#121212",
+        "border": "#61f361"
+      }
+    },
+    "79": {
+      "name": "Lille",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#df0000",
+        "number": "#ffffff",
+        "border": "#df0000"
+      },
+      "goalkeeper": {
+        "primary": "#f3f554",
+        "number": "#030303",
+        "border": "#f3f554"
+      }
+    },
+    "80": {
+      "name": "Lyon",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#466db6",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#c95509",
+        "number": "#ffffff",
+        "border": "#c95509"
+      }
+    },
+    "85": {
+      "name": "Paris Saint Germain",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#18345e",
+        "number": "#ffffff",
+        "border": "#18345e"
+      },
+      "goalkeeper": {
+        "primary": "#00ac00",
+        "number": "#fcfcfc",
+        "border": "#00ac00"
+      }
+    },
+    "116": {
+      "name": "Lens",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffed29",
+        "number": "#e9393c",
+        "border": "#ffed29"
+      },
+      "goalkeeper": {
+        "primary": "#49b32c",
+        "number": "#ffffff",
+        "border": "#49b32c"
+      }
+    },
+    "157": {
+      "name": "Bayern München",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#f23a3a",
+        "number": "#ffffff",
+        "border": "#f23a3a"
+      },
+      "goalkeeper": {
+        "primary": "#69d68d",
+        "number": "#000000",
+        "border": "#69d68d"
+      }
+    },
+    "165": {
+      "name": "Borussia Dortmund",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffda27",
+        "number": "#000000",
+        "border": "#ffda27"
+      },
+      "goalkeeper": {
+        "primary": "#4525ff",
+        "number": "#ffbe00",
+        "border": "#4525ff"
+      }
+    },
+    "172": {
+      "name": "VfB Stuttgart",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#c90311",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#fb3487",
+        "number": "#ffffff",
+        "border": "#fb3487"
+      }
+    },
+    "173": {
+      "name": "RB Leipzig",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#ff0000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#1976e6",
+        "number": "#f0edeb",
+        "border": "#1976e6"
+      }
+    },
+    "197": {
+      "name": "PSV Eindhoven",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#e51323",
+        "number": "#ffffff",
+        "border": "#e51323"
+      },
+      "goalkeeper": {
+        "primary": "#8fdda9",
+        "number": "#000000",
+        "border": "#8fdda9"
+      }
+    },
+    "209": {
+      "name": "Feyenoord",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "any",
+      "seen": 1,
+      "player": {
+        "primary": "#73c9f9",
+        "number": "#ffffff",
+        "border": "#73c9f9"
+      },
+      "goalkeeper": {
+        "primary": "#8efd71",
+        "number": "#0d0d0d",
+        "border": "#8efd71"
+      }
+    },
+    "212": {
+      "name": "FC Porto",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#013388",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#def187",
+        "number": "#12244d",
+        "border": "#def187"
+      }
+    },
+    "228": {
+      "name": "Sporting CP",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#187312",
+        "number": "#ffffff",
+        "border": "#187312"
+      },
+      "goalkeeper": {
+        "primary": "#d8ff38",
+        "number": "#fcfcfc",
+        "border": "#d8ff38"
+      }
+    },
+    "247": {
+      "name": "Celtic",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#d1c19e",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#f3e444",
+        "number": "#121111",
+        "border": "#f3e444"
+      }
+    },
+    "254": {
+      "name": "Heart Of Midlothian",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#54243a",
+        "number": "#ffffff",
+        "border": "#54243a"
+      },
+      "goalkeeper": {
+        "primary": "#e406cf",
+        "number": "#ffffff",
+        "border": "#e406cf"
+      }
+    },
+    "278": {
+      "name": "Vikingur Reykjavik",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#080808",
+        "number": "#ffffff",
+        "border": "#080808"
+      },
+      "goalkeeper": {
+        "primary": "#48c7b1",
+        "number": "#ffffff",
+        "border": "#48c7b1"
+      }
+    },
+    "327": {
+      "name": "Bodo/Glimt",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#fde001",
+        "number": "#000000",
+        "border": "#fde001"
+      },
+      "goalkeeper": {
+        "primary": "#f6f4f3",
+        "number": "#f0efef",
+        "border": "#f6f4f3"
+      }
+    },
+    "340": {
+      "name": "Gornik Zabrze",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#b6a220",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#de6f29",
+        "number": "#f2f2f2",
+        "border": "#de6f29"
+      }
+    },
+    "347": {
+      "name": "Lech Poznan",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#002f8d",
+        "number": "#ffffff",
+        "border": "#002f8d"
+      },
+      "goalkeeper": {
+        "primary": "#ccf03b",
+        "number": "#ffffff",
+        "border": "#ccf03b"
+      }
+    },
+    "354": {
+      "name": "The New Saints",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#cca105",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#ff3705",
+        "number": "#ffffff",
+        "border": "#ff3705"
+      }
+    },
+    "406": {
+      "name": "Aarhus",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#003366",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#050505",
+        "number": "#ffffff",
+        "border": "#050505"
+      }
+    },
+    "413": {
+      "name": "NEC Nijmegen",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#dd2b29",
+        "number": "#ffffff",
+        "border": "#dd2b29"
+      },
+      "goalkeeper": {
+        "primary": "#3c93e7",
+        "number": "#000000",
+        "border": "#3c93e7"
+      }
+    },
+    "492": {
+      "name": "Napoli",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#4596d9",
+        "number": "#ffffff",
+        "border": "#4596d9"
+      },
+      "goalkeeper": {
+        "primary": "#e94113",
+        "number": "#fcfcfc",
+        "border": "#e94113"
+      }
+    },
+    "497": {
+      "name": "AS Roma",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "any",
+      "seen": 1,
+      "player": {
+        "primary": "#990000",
+        "number": "#f0a400",
+        "border": "#990000"
+      },
+      "goalkeeper": {
+        "primary": "#5aed6f",
+        "number": "#000000",
+        "border": "#5aed6f"
+      }
+    },
+    "505": {
+      "name": "Inter",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#024ec0",
+        "number": "#0dd6f6",
+        "border": "#024ec0"
+      },
+      "goalkeeper": {
+        "primary": "#fbcb4c",
+        "number": "#0a0a0a",
+        "border": "#fbcb4c"
+      }
+    },
+    "529": {
+      "name": "Barcelona",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#282e60",
+        "number": "#efc006",
+        "border": "#282e60"
+      },
+      "goalkeeper": {
+        "primary": "#e46c3b",
+        "number": "#050505",
+        "border": "#e46c3b"
+      }
+    },
+    "530": {
+      "name": "Atletico Madrid",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#3b60c0",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#216e3d",
+        "number": "#ffffff",
+        "border": "#216e3d"
+      }
+    },
+    "533": {
+      "name": "Villarreal",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffff00",
+        "number": "#0b2037",
+        "border": "#ffff00"
+      },
+      "goalkeeper": {
+        "primary": "#b34463",
+        "number": "#fbfdf8",
+        "border": "#b34463"
+      }
+    },
+    "541": {
+      "name": "Real Madrid",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#18484b",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#e75400",
+        "number": "#ffffff",
+        "border": "#e75400"
+      }
+    },
+    "543": {
+      "name": "Real Betis",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "any",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#0d0d0d",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#b6c0b7",
+        "number": "#f9f7f6",
+        "border": "#b6c0b7"
+      }
+    },
+    "550": {
+      "name": "Shakhtar Donetsk",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "any",
+      "seen": 1,
+      "player": {
+        "primary": "#fcf8ec",
+        "number": "#d02c21",
+        "border": "#fcf8ec"
+      },
+      "goalkeeper": {
+        "primary": "#f5922c",
+        "number": "#ffffff",
+        "border": "#f5922c"
+      }
+    },
+    "553": {
+      "name": "Olympiakos Piraeus",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#a81617",
+        "number": "#f7f3f3",
+        "border": "#a81617"
+      },
+      "goalkeeper": {
+        "primary": "#1786c6",
+        "number": "#e4edf9",
+        "border": "#1786c6"
+      }
+    },
+    "560": {
+      "name": "Slavia Praha",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#1e48a9",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#dad133",
+        "number": "#ffffff",
+        "border": "#dad133"
+      }
+    },
+    "563": {
+      "name": "Hapoel Beer Sheva",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#3c3b3c",
+        "number": "#ffffff",
+        "border": "#3c3b3c"
+      }
+    },
+    "569": {
+      "name": "Club Brugge KV",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#fb8501",
+        "number": "#0a0a0a",
+        "border": "#fb8501"
+      }
+    },
+    "574": {
+      "name": "Vardar Skopje",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#990033",
+        "number": "#dd0000",
+        "border": "#990033"
+      },
+      "goalkeeper": {
+        "primary": "#ff9900",
+        "number": "#ffffff",
+        "border": "#ff9900"
+      }
+    },
+    "575": {
+      "name": "AEK Athens FC",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#f9d801",
+        "number": "#000000",
+        "border": "#f9d801"
+      },
+      "goalkeeper": {
+        "primary": "#427ed8",
+        "number": "#ffffff",
+        "border": "#427ed8"
+      }
+    },
+    "598": {
+      "name": "FK Crvena Zvezda",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#121111",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#818181",
+        "number": "#ffffff",
+        "border": "#818181"
+      }
+    },
+    "611": {
+      "name": "Fenerbahçe",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 4,
+      "player": {
+        "primary": "#f2ea82",
+        "number": "#ffffff",
+        "border": "#f2ea82"
+      },
+      "goalkeeper": {
+        "primary": "#9dd05f",
+        "number": "#ffffff",
+        "border": "#9dd05f"
+      }
+    },
+    "620": {
+      "name": "Dinamo Zagreb",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#052d72",
+        "number": "#ffffff",
+        "border": "#052d72"
+      },
+      "goalkeeper": {
+        "primary": "#f09e2d",
+        "number": "#ffffff",
+        "border": "#f09e2d"
+      }
+    },
+    "628": {
+      "name": "Sparta Praha",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#9b3644",
+        "number": "#ffffff",
+        "border": "#9b3644"
+      },
+      "goalkeeper": {
+        "primary": "#3be483",
+        "number": "#e8d664",
+        "border": "#3be483"
+      }
+    },
+    "632": {
+      "name": "Universitatea Craiova",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#ff0000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#fff100",
+        "number": "#000000",
+        "border": "#fff100"
+      }
+    },
+    "637": {
+      "name": "Sturm Graz",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#242126",
+        "number": "#ffffff",
+        "border": "#242126"
+      },
+      "goalkeeper": {
+        "primary": "#5be201",
+        "number": "#ffffff",
+        "border": "#5be201"
+      }
+    },
+    "645": {
+      "name": "Galatasaray",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#fc8c1a",
+        "number": "#fdfcfc",
+        "border": "#fc8c1a"
+      },
+      "goalkeeper": {
+        "primary": "#b565aa",
+        "number": "#f8fcfb",
+        "border": "#b565aa"
+      }
+    },
+    "646": {
+      "name": "Levski Sofia",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#024093",
+        "number": "#ffffff",
+        "border": "#024093"
+      },
+      "goalkeeper": {
+        "primary": "#88f553",
+        "number": "#ffffff",
+        "border": "#88f553"
+      }
+    },
+    "652": {
+      "name": "Shamrock Rovers",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#000000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#44a8da",
+        "number": "#000000",
+        "border": "#44a8da"
+      }
+    },
+    "656": {
+      "name": "Slovan Bratislava",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#709cbe",
+        "number": "#16182d",
+        "border": "#709cbe"
+      },
+      "goalkeeper": {
+        "primary": "#c71818",
+        "number": "#050505",
+        "border": "#c71818"
+      }
+    },
+    "664": {
+      "name": "Kairat Almaty",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#000000",
+        "number": "#dd0000",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#e6e3e4",
+        "number": "#367aae",
+        "border": "#e6e3e4"
+      }
+    },
+    "667": {
+      "name": "Lincoln Red Imps FC",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#18488d",
+        "number": "#f7f7f7",
+        "border": "#18488d"
+      }
+    },
+    "673": {
+      "name": "Sutjeska",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#094ca1",
+        "number": "#ffffff",
+        "border": "#094ca1"
+      },
+      "goalkeeper": {
+        "primary": "#000000",
+        "number": "#fff100",
+        "border": "#000000"
+      }
+    },
+    "687": {
+      "name": "Flora Tallinn",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#249603",
+        "number": "#ffffff",
+        "border": "#249603"
+      },
+      "goalkeeper": {
+        "primary": "#ff6600",
+        "number": "#000000",
+        "border": "#ff6600"
+      }
+    },
+    "701": {
+      "name": "KI Klaksvik",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#1c41b0",
+        "number": "#ffffff",
+        "border": "#1c41b0"
+      },
+      "goalkeeper": {
+        "primary": "#157a78",
+        "number": "#f9f5f5",
+        "border": "#157a78"
+      }
+    },
+    "746": {
+      "name": "Sunderland",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#000000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#244a30",
+        "number": "#050505",
+        "border": "#244a30"
+      }
+    },
+    "759": {
+      "name": "Viking",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#080042",
+        "number": "#ffffff",
+        "border": "#080042"
+      },
+      "goalkeeper": {
+        "primary": "#ffff00",
+        "number": "#000000",
+        "border": "#ffff00"
+      }
+    },
+    "895": {
+      "name": "Como",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#044aa0",
+        "number": "#ffffff",
+        "border": "#044aa0"
+      },
+      "goalkeeper": {
+        "primary": "#e4e027",
+        "number": "#f2f5f7",
+        "border": "#e4e027"
+      }
+    },
+    "1012": {
+      "name": "FC Thun",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#05a739",
+        "number": "#ffffff",
+        "border": "#05a739"
+      }
+    },
+    "1026": {
+      "name": "Lask Linz",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#f5f4f6",
+        "number": "#000000",
+        "border": "#f5f4f6"
+      },
+      "goalkeeper": {
+        "primary": "#e7e435",
+        "number": "#fbf9f9",
+        "border": "#e7e435"
+      }
+    },
+    "1165": {
+      "name": "KuPS",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ffef2f",
+        "number": "#cd5313",
+        "border": "#ffef2f"
+      },
+      "goalkeeper": {
+        "primary": "#0ea6eb",
+        "number": "#696c7d",
+        "border": "#0ea6eb"
+      }
+    },
+    "1346": {
+      "name": "Coventry",
+      "competitions": [
+        "premier-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#99ccff",
+        "number": "#f67659",
+        "border": "#99ccff"
+      },
+      "goalkeeper": {
+        "primary": "#1f6650",
+        "number": "#ffffff",
+        "border": "#1f6650"
+      }
+    },
+    "1393": {
+      "name": "Union St. Gilloise",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#f9d635",
+        "number": "#0f0f0f",
+        "border": "#f9d635"
+      },
+      "goalkeeper": {
+        "primary": "#33c93e",
+        "number": "#f0f0f0",
+        "border": "#33c93e"
+      }
+    },
+    "2240": {
+      "name": "Mjallby AIF",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#fae567",
+        "number": "#000000",
+        "border": "#fae567"
+      },
+      "goalkeeper": {
+        "primary": "#fc981f",
+        "number": "#1b1717",
+        "border": "#fc981f"
+      }
+    },
+    "2260": {
+      "name": "Tre Fiori",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#fff000",
+        "number": "#0000ff",
+        "border": "#fff000"
+      },
+      "goalkeeper": {
+        "primary": "#0080ff",
+        "number": "#000000",
+        "border": "#0080ff"
+      }
+    },
+    "2271": {
+      "name": "Petrocub",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#f53f38",
+        "number": "#ffffff",
+        "border": "#f53f38"
+      }
+    },
+    "2402": {
+      "name": "Gyori ETO FC",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#006666",
+        "number": "#ffffff",
+        "border": "#006666"
+      },
+      "goalkeeper": {
+        "primary": "#6633cc",
+        "number": "#cccc66",
+        "border": "#6633cc"
+      }
+    },
+    "3327": {
+      "name": "Egnatia Rrogozhinë",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#2f8c62",
+        "number": "#ffffff",
+        "border": "#2f8c62"
+      },
+      "goalkeeper": {
+        "primary": "#f1f291",
+        "number": "#0a0909",
+        "border": "#f1f291"
+      }
+    },
+    "3342": {
+      "name": "Inter Club d'Escaldes",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#0000ff",
+        "number": "#ffffff",
+        "border": "#0000ff"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#000000",
+        "border": "#fafb00"
+      }
+    },
+    "3364": {
+      "name": "Borac Banja Luka",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#e7001e",
+        "number": "#ffffff",
+        "border": "#e7001e"
+      },
+      "goalkeeper": {
+        "primary": "#912ff1",
+        "number": "#050505",
+        "border": "#912ff1"
+      }
+    },
+    "3402": {
+      "name": "Omonia Nicosia",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#2a656d",
+        "number": "#c2bf96",
+        "border": "#2a656d"
+      },
+      "goalkeeper": {
+        "primary": "#c3ed1d",
+        "number": "#ffffff",
+        "border": "#c3ed1d"
+      }
+    },
+    "3502": {
+      "name": "FC Iberia 1999",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#11df33",
+        "number": "#222226",
+        "border": "#11df33"
+      }
+    },
+    "3683": {
+      "name": "Ararat-Armenia",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#cc0000",
+        "number": "#ffffff",
+        "border": "#cc0000"
+      },
+      "goalkeeper": {
+        "primary": "#00ff00",
+        "number": "#dd0000",
+        "border": "#00ff00"
+      }
+    },
+    "3872": {
+      "name": "Kauno Žalgiris",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#006600",
+        "number": "#ffffff",
+        "border": "#006600"
+      },
+      "goalkeeper": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      }
+    },
+    "4360": {
+      "name": "Celje",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 3,
+      "player": {
+        "primary": "#1a2e6b",
+        "number": "#ffe55b",
+        "border": "#1a2e6b"
+      },
+      "goalkeeper": {
+        "primary": "#e7ff00",
+        "number": "#0d0d0d",
+        "border": "#e7ff00"
+      }
+    },
+    "4625": {
+      "name": "Floriana",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#009040",
+        "number": "#000000",
+        "border": "#009040"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#000000",
+        "border": "#fafb00"
+      }
+    },
+    "4898": {
+      "name": "Manchester United",
+      "competitions": [
+        "wsl"
+      ],
+      "from": "any",
+      "seen": 1,
+      "player": {
+        "primary": "#373737",
+        "number": "#ffffff",
+        "border": "#373737"
+      },
+      "goalkeeper": {
+        "primary": "#00ff00",
+        "number": "#000000",
+        "border": "#00ff00"
+      }
+    },
+    "5354": {
+      "name": "Larne",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 2,
+      "player": {
+        "primary": "#c82831",
+        "number": "#ffffff",
+        "border": "#c82831"
+      },
+      "goalkeeper": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      }
+    },
+    "7808": {
+      "name": "ML Vitebsk",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#e7d835",
+        "number": "#080808",
+        "border": "#e7d835"
+      },
+      "goalkeeper": {
+        "primary": "#1dc760",
+        "number": "#000000",
+        "border": "#1dc760"
+      }
+    },
+    "10124": {
+      "name": "Riga",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#0000cc",
+        "number": "#dd0000",
+        "border": "#0000cc"
+      },
+      "goalkeeper": {
+        "primary": "#ff0000",
+        "number": "#000000",
+        "border": "#ff0000"
+      }
+    },
+    "13976": {
+      "name": "Sabah FA",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 5,
+      "player": {
+        "primary": "#034ea2",
+        "number": "#222226",
+        "border": "#034ea2"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#222226",
+        "border": "#fafb00"
+      }
+    },
+    "14281": {
+      "name": "Drita",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#1a64c7",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#0e6ab0",
+        "number": "#000000",
+        "border": "#0e6ab0"
+      }
+    },
+    "15406": {
+      "name": "London City Lionesses",
+      "competitions": [
+        "wsl"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#86b2ef",
+        "number": "#222226",
+        "border": "#86b2ef"
+      },
+      "goalkeeper": {
+        "primary": "#59ff00",
+        "number": "#222226",
+        "border": "#59ff00"
+      }
+    },
+    "15847": {
+      "name": "Atert Bissen",
+      "competitions": [
+        "champions-league"
+      ],
+      "from": "home",
+      "seen": 1,
+      "player": {
+        "primary": "#f0ea05",
+        "number": "#000000",
+        "border": "#f0ea05"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#000000",
+        "border": "#fafb00"
+      }
+    }
+  },
+  "byName": {
+    "AEK Athens FC": {
+      "id": 575,
+      "player": {
+        "primary": "#f9d801",
+        "number": "#000000",
+        "border": "#f9d801"
+      },
+      "goalkeeper": {
+        "primary": "#427ed8",
+        "number": "#ffffff",
+        "border": "#427ed8"
+      }
+    },
+    "AS Roma": {
+      "id": 497,
+      "player": {
+        "primary": "#990000",
+        "number": "#f0a400",
+        "border": "#990000"
+      },
+      "goalkeeper": {
+        "primary": "#5aed6f",
+        "number": "#000000",
+        "border": "#5aed6f"
+      }
+    },
+    "Aarhus": {
+      "id": 406,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#003366",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#050505",
+        "number": "#ffffff",
+        "border": "#050505"
+      }
+    },
+    "Ararat-Armenia": {
+      "id": 3683,
+      "player": {
+        "primary": "#cc0000",
+        "number": "#ffffff",
+        "border": "#cc0000"
+      },
+      "goalkeeper": {
+        "primary": "#00ff00",
+        "number": "#dd0000",
+        "border": "#00ff00"
+      }
+    },
+    "Arsenal": {
+      "id": 42,
+      "player": {
+        "primary": "#e10000",
+        "number": "#ffffff",
+        "border": "#e10000"
+      },
+      "goalkeeper": {
+        "primary": "#e859f6",
+        "number": "#040404",
+        "border": "#e859f6"
+      }
+    },
+    "Aston Villa": {
+      "id": 66,
+      "player": {
+        "primary": "#88002d",
+        "number": "#ffffff",
+        "border": "#88002d"
+      },
+      "goalkeeper": {
+        "primary": "#61f361",
+        "number": "#121212",
+        "border": "#61f361"
+      }
+    },
+    "Atert Bissen": {
+      "id": 15847,
+      "player": {
+        "primary": "#f0ea05",
+        "number": "#000000",
+        "border": "#f0ea05"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#000000",
+        "border": "#fafb00"
+      }
+    },
+    "Atletico Madrid": {
+      "id": 530,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#3b60c0",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#216e3d",
+        "number": "#ffffff",
+        "border": "#216e3d"
+      }
+    },
+    "Barcelona": {
+      "id": 529,
+      "player": {
+        "primary": "#282e60",
+        "number": "#efc006",
+        "border": "#282e60"
+      },
+      "goalkeeper": {
+        "primary": "#e46c3b",
+        "number": "#050505",
+        "border": "#e46c3b"
+      }
+    },
+    "Bayern München": {
+      "id": 157,
+      "player": {
+        "primary": "#f23a3a",
+        "number": "#ffffff",
+        "border": "#f23a3a"
+      },
+      "goalkeeper": {
+        "primary": "#69d68d",
+        "number": "#000000",
+        "border": "#69d68d"
+      }
+    },
+    "Bodo/Glimt": {
+      "id": 327,
+      "player": {
+        "primary": "#fde001",
+        "number": "#000000",
+        "border": "#fde001"
+      },
+      "goalkeeper": {
+        "primary": "#f6f4f3",
+        "number": "#f0efef",
+        "border": "#f6f4f3"
+      }
+    },
+    "Borac Banja Luka": {
+      "id": 3364,
+      "player": {
+        "primary": "#e7001e",
+        "number": "#ffffff",
+        "border": "#e7001e"
+      },
+      "goalkeeper": {
+        "primary": "#912ff1",
+        "number": "#050505",
+        "border": "#912ff1"
+      }
+    },
+    "Borussia Dortmund": {
+      "id": 165,
+      "player": {
+        "primary": "#ffda27",
+        "number": "#000000",
+        "border": "#ffda27"
+      },
+      "goalkeeper": {
+        "primary": "#4525ff",
+        "number": "#ffbe00",
+        "border": "#4525ff"
+      }
+    },
+    "Bournemouth": {
+      "id": 35,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#fcfcfc",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#4fa7be",
+        "number": "#f9fafb",
+        "border": "#4fa7be"
+      }
+    },
+    "Brentford": {
+      "id": 55,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#000000",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#c597c6",
+        "number": "#080808",
+        "border": "#c597c6"
+      }
+    },
+    "Brighton": {
+      "id": 51,
+      "player": {
+        "primary": "#20429d",
+        "number": "#fcfcfc",
+        "border": "#20429d"
+      },
+      "goalkeeper": {
+        "primary": "#fff200",
+        "number": "#faf4f4",
+        "border": "#fff200"
+      }
+    },
+    "Celje": {
+      "id": 4360,
+      "player": {
+        "primary": "#1a2e6b",
+        "number": "#ffe55b",
+        "border": "#1a2e6b"
+      },
+      "goalkeeper": {
+        "primary": "#e7ff00",
+        "number": "#0d0d0d",
+        "border": "#e7ff00"
+      }
+    },
+    "Celtic": {
+      "id": 247,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#d1c19e",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#f3e444",
+        "number": "#121111",
+        "border": "#f3e444"
+      }
+    },
+    "Chelsea": {
+      "id": 49,
+      "player": {
+        "primary": "#1532c1",
+        "number": "#f7d444",
+        "border": "#1532c1"
+      },
+      "goalkeeper": {
+        "primary": "#1d5160",
+        "number": "#fcfcfc",
+        "border": "#1d5160"
+      }
+    },
+    "Club Brugge KV": {
+      "id": 569,
+      "player": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#fb8501",
+        "number": "#0a0a0a",
+        "border": "#fb8501"
+      }
+    },
+    "Como": {
+      "id": 895,
+      "player": {
+        "primary": "#044aa0",
+        "number": "#ffffff",
+        "border": "#044aa0"
+      },
+      "goalkeeper": {
+        "primary": "#e4e027",
+        "number": "#f2f5f7",
+        "border": "#e4e027"
+      }
+    },
+    "Coventry": {
+      "id": 1346,
+      "player": {
+        "primary": "#99ccff",
+        "number": "#f67659",
+        "border": "#99ccff"
+      },
+      "goalkeeper": {
+        "primary": "#1f6650",
+        "number": "#ffffff",
+        "border": "#1f6650"
+      }
+    },
+    "Crystal Palace": {
+      "id": 52,
+      "player": {
+        "primary": "#e0dede",
+        "number": "#fcfcfc",
+        "border": "#e0dede"
+      },
+      "goalkeeper": {
+        "primary": "#a6ce8b",
+        "number": "#000400",
+        "border": "#a6ce8b"
+      }
+    },
+    "Dinamo Zagreb": {
+      "id": 620,
+      "player": {
+        "primary": "#052d72",
+        "number": "#ffffff",
+        "border": "#052d72"
+      },
+      "goalkeeper": {
+        "primary": "#f09e2d",
+        "number": "#ffffff",
+        "border": "#f09e2d"
+      }
+    },
+    "Drita": {
+      "id": 14281,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#1a64c7",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#0e6ab0",
+        "number": "#000000",
+        "border": "#0e6ab0"
+      }
+    },
+    "Egnatia Rrogozhinë": {
+      "id": 3327,
+      "player": {
+        "primary": "#2f8c62",
+        "number": "#ffffff",
+        "border": "#2f8c62"
+      },
+      "goalkeeper": {
+        "primary": "#f1f291",
+        "number": "#0a0909",
+        "border": "#f1f291"
+      }
+    },
+    "Everton": {
+      "id": 45,
+      "player": {
+        "primary": "#0237ab",
+        "number": "#ffffff",
+        "border": "#0237ab"
+      },
+      "goalkeeper": {
+        "primary": "#2dd77a",
+        "number": "#0d0d0d",
+        "border": "#2dd77a"
+      }
+    },
+    "FC Iberia 1999": {
+      "id": 3502,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#11df33",
+        "number": "#222226",
+        "border": "#11df33"
+      }
+    },
+    "FC Porto": {
+      "id": 212,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#013388",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#def187",
+        "number": "#12244d",
+        "border": "#def187"
+      }
+    },
+    "FC Thun": {
+      "id": 1012,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#05a739",
+        "number": "#ffffff",
+        "border": "#05a739"
+      }
+    },
+    "FK Crvena Zvezda": {
+      "id": 598,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#121111",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#818181",
+        "number": "#ffffff",
+        "border": "#818181"
+      }
+    },
+    "Fenerbahçe": {
+      "id": 611,
+      "player": {
+        "primary": "#f2ea82",
+        "number": "#ffffff",
+        "border": "#f2ea82"
+      },
+      "goalkeeper": {
+        "primary": "#9dd05f",
+        "number": "#ffffff",
+        "border": "#9dd05f"
+      }
+    },
+    "Feyenoord": {
+      "id": 209,
+      "player": {
+        "primary": "#73c9f9",
+        "number": "#ffffff",
+        "border": "#73c9f9"
+      },
+      "goalkeeper": {
+        "primary": "#8efd71",
+        "number": "#0d0d0d",
+        "border": "#8efd71"
+      }
+    },
+    "Flora Tallinn": {
+      "id": 687,
+      "player": {
+        "primary": "#249603",
+        "number": "#ffffff",
+        "border": "#249603"
+      },
+      "goalkeeper": {
+        "primary": "#ff6600",
+        "number": "#000000",
+        "border": "#ff6600"
+      }
+    },
+    "Floriana": {
+      "id": 4625,
+      "player": {
+        "primary": "#009040",
+        "number": "#000000",
+        "border": "#009040"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#000000",
+        "border": "#fafb00"
+      }
+    },
+    "Fulham": {
+      "id": 36,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#000000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#59a5f2",
+        "number": "#b6dcf2",
+        "border": "#59a5f2"
+      }
+    },
+    "Galatasaray": {
+      "id": 645,
+      "player": {
+        "primary": "#fc8c1a",
+        "number": "#fdfcfc",
+        "border": "#fc8c1a"
+      },
+      "goalkeeper": {
+        "primary": "#b565aa",
+        "number": "#f8fcfb",
+        "border": "#b565aa"
+      }
+    },
+    "Gornik Zabrze": {
+      "id": 340,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#b6a220",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#de6f29",
+        "number": "#f2f2f2",
+        "border": "#de6f29"
+      }
+    },
+    "Gyori ETO FC": {
+      "id": 2402,
+      "player": {
+        "primary": "#006666",
+        "number": "#ffffff",
+        "border": "#006666"
+      },
+      "goalkeeper": {
+        "primary": "#6633cc",
+        "number": "#cccc66",
+        "border": "#6633cc"
+      }
+    },
+    "Hapoel Beer Sheva": {
+      "id": 563,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#3c3b3c",
+        "number": "#ffffff",
+        "border": "#3c3b3c"
+      }
+    },
+    "Heart Of Midlothian": {
+      "id": 254,
+      "player": {
+        "primary": "#54243a",
+        "number": "#ffffff",
+        "border": "#54243a"
+      },
+      "goalkeeper": {
+        "primary": "#e406cf",
+        "number": "#ffffff",
+        "border": "#e406cf"
+      }
+    },
+    "Hull City": {
+      "id": 64,
+      "player": {
+        "primary": "#e96e24",
+        "number": "#ffffff",
+        "border": "#e96e24"
+      },
+      "goalkeeper": {
+        "primary": "#203e40",
+        "number": "#f9fafa",
+        "border": "#203e40"
+      }
+    },
+    "Inter": {
+      "id": 505,
+      "player": {
+        "primary": "#024ec0",
+        "number": "#0dd6f6",
+        "border": "#024ec0"
+      },
+      "goalkeeper": {
+        "primary": "#fbcb4c",
+        "number": "#0a0a0a",
+        "border": "#fbcb4c"
+      }
+    },
+    "Inter Club d'Escaldes": {
+      "id": 3342,
+      "player": {
+        "primary": "#0000ff",
+        "number": "#ffffff",
+        "border": "#0000ff"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#000000",
+        "border": "#fafb00"
+      }
+    },
+    "Ipswich": {
+      "id": 57,
+      "player": {
+        "primary": "#0055aa",
+        "number": "#ffffff",
+        "border": "#0055aa"
+      },
+      "goalkeeper": {
+        "primary": "#63a8d1",
+        "number": "#ffffff",
+        "border": "#63a8d1"
+      }
+    },
+    "KI Klaksvik": {
+      "id": 701,
+      "player": {
+        "primary": "#1c41b0",
+        "number": "#ffffff",
+        "border": "#1c41b0"
+      },
+      "goalkeeper": {
+        "primary": "#157a78",
+        "number": "#f9f5f5",
+        "border": "#157a78"
+      }
+    },
+    "Kairat Almaty": {
+      "id": 664,
+      "player": {
+        "primary": "#000000",
+        "number": "#dd0000",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#e6e3e4",
+        "number": "#367aae",
+        "border": "#e6e3e4"
+      }
+    },
+    "Kauno Žalgiris": {
+      "id": 3872,
+      "player": {
+        "primary": "#006600",
+        "number": "#ffffff",
+        "border": "#006600"
+      },
+      "goalkeeper": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      }
+    },
+    "KuPS": {
+      "id": 1165,
+      "player": {
+        "primary": "#ffef2f",
+        "number": "#cd5313",
+        "border": "#ffef2f"
+      },
+      "goalkeeper": {
+        "primary": "#0ea6eb",
+        "number": "#696c7d",
+        "border": "#0ea6eb"
+      }
+    },
+    "Larne": {
+      "id": 5354,
+      "player": {
+        "primary": "#c82831",
+        "number": "#ffffff",
+        "border": "#c82831"
+      },
+      "goalkeeper": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      }
+    },
+    "Lask Linz": {
+      "id": 1026,
+      "player": {
+        "primary": "#f5f4f6",
+        "number": "#000000",
+        "border": "#f5f4f6"
+      },
+      "goalkeeper": {
+        "primary": "#e7e435",
+        "number": "#fbf9f9",
+        "border": "#e7e435"
+      }
+    },
+    "Lech Poznan": {
+      "id": 347,
+      "player": {
+        "primary": "#002f8d",
+        "number": "#ffffff",
+        "border": "#002f8d"
+      },
+      "goalkeeper": {
+        "primary": "#ccf03b",
+        "number": "#ffffff",
+        "border": "#ccf03b"
+      }
+    },
+    "Leeds": {
+      "id": 63,
+      "player": {
+        "primary": "#fdf9f9",
+        "number": "#17277f",
+        "border": "#fdf9f9"
+      },
+      "goalkeeper": {
+        "primary": "#8ed797",
+        "number": "#0d3423",
+        "border": "#8ed797"
+      }
+    },
+    "Lens": {
+      "id": 116,
+      "player": {
+        "primary": "#ffed29",
+        "number": "#e9393c",
+        "border": "#ffed29"
+      },
+      "goalkeeper": {
+        "primary": "#49b32c",
+        "number": "#ffffff",
+        "border": "#49b32c"
+      }
+    },
+    "Levski Sofia": {
+      "id": 646,
+      "player": {
+        "primary": "#024093",
+        "number": "#ffffff",
+        "border": "#024093"
+      },
+      "goalkeeper": {
+        "primary": "#88f553",
+        "number": "#ffffff",
+        "border": "#88f553"
+      }
+    },
+    "Lille": {
+      "id": 79,
+      "player": {
+        "primary": "#df0000",
+        "number": "#ffffff",
+        "border": "#df0000"
+      },
+      "goalkeeper": {
+        "primary": "#f3f554",
+        "number": "#030303",
+        "border": "#f3f554"
+      }
+    },
+    "Lincoln Red Imps FC": {
+      "id": 667,
+      "player": {
+        "primary": "#ff0000",
+        "number": "#ffffff",
+        "border": "#ff0000"
+      },
+      "goalkeeper": {
+        "primary": "#18488d",
+        "number": "#f7f7f7",
+        "border": "#18488d"
+      }
+    },
+    "Liverpool": {
+      "id": 40,
+      "player": {
+        "primary": "#e41e2c",
+        "number": "#ffffff",
+        "border": "#e41e2c"
+      },
+      "goalkeeper": {
+        "primary": "#338c86",
+        "number": "#d8e0d8",
+        "border": "#338c86"
+      }
+    },
+    "Lyon": {
+      "id": 80,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#466db6",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#c95509",
+        "number": "#ffffff",
+        "border": "#c95509"
+      }
+    },
+    "ML Vitebsk": {
+      "id": 7808,
+      "player": {
+        "primary": "#e7d835",
+        "number": "#080808",
+        "border": "#e7d835"
+      },
+      "goalkeeper": {
+        "primary": "#1dc760",
+        "number": "#000000",
+        "border": "#1dc760"
+      }
+    },
+    "Manchester City": {
+      "id": 50,
+      "player": {
+        "primary": "#abd1f5",
+        "number": "#f7f7f7",
+        "border": "#abd1f5"
+      },
+      "goalkeeper": {
+        "primary": "#41c59b",
+        "number": "#b1e346",
+        "border": "#41c59b"
+      }
+    },
+    "Manchester United": {
+      "id": 33,
+      "player": {
+        "primary": "#ea0000",
+        "number": "#ffffff",
+        "border": "#ea0000"
+      },
+      "goalkeeper": {
+        "primary": "#19191b",
+        "number": "#c4c3c5",
+        "border": "#19191b"
+      }
+    },
+    "Mjallby AIF": {
+      "id": 2240,
+      "player": {
+        "primary": "#fae567",
+        "number": "#000000",
+        "border": "#fae567"
+      },
+      "goalkeeper": {
+        "primary": "#fc981f",
+        "number": "#1b1717",
+        "border": "#fc981f"
+      }
+    },
+    "NEC Nijmegen": {
+      "id": 413,
+      "player": {
+        "primary": "#dd2b29",
+        "number": "#ffffff",
+        "border": "#dd2b29"
+      },
+      "goalkeeper": {
+        "primary": "#3c93e7",
+        "number": "#000000",
+        "border": "#3c93e7"
+      }
+    },
+    "Napoli": {
+      "id": 492,
+      "player": {
+        "primary": "#4596d9",
+        "number": "#ffffff",
+        "border": "#4596d9"
+      },
+      "goalkeeper": {
+        "primary": "#e94113",
+        "number": "#fcfcfc",
+        "border": "#e94113"
+      }
+    },
+    "Newcastle": {
+      "id": 34,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#ffffff",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#fff04b",
+        "number": "#030303",
+        "border": "#fff04b"
+      }
+    },
+    "Nottingham Forest": {
+      "id": 65,
+      "player": {
+        "primary": "#e4232c",
+        "number": "#ffffff",
+        "border": "#e4232c"
+      },
+      "goalkeeper": {
+        "primary": "#4ba4dc",
+        "number": "#a1cdc4",
+        "border": "#4ba4dc"
+      }
+    },
+    "Olympiakos Piraeus": {
+      "id": 553,
+      "player": {
+        "primary": "#a81617",
+        "number": "#f7f3f3",
+        "border": "#a81617"
+      },
+      "goalkeeper": {
+        "primary": "#1786c6",
+        "number": "#e4edf9",
+        "border": "#1786c6"
+      }
+    },
+    "Omonia Nicosia": {
+      "id": 3402,
+      "player": {
+        "primary": "#2a656d",
+        "number": "#c2bf96",
+        "border": "#2a656d"
+      },
+      "goalkeeper": {
+        "primary": "#c3ed1d",
+        "number": "#ffffff",
+        "border": "#c3ed1d"
+      }
+    },
+    "PSV Eindhoven": {
+      "id": 197,
+      "player": {
+        "primary": "#e51323",
+        "number": "#ffffff",
+        "border": "#e51323"
+      },
+      "goalkeeper": {
+        "primary": "#8fdda9",
+        "number": "#000000",
+        "border": "#8fdda9"
+      }
+    },
+    "Paris Saint Germain": {
+      "id": 85,
+      "player": {
+        "primary": "#18345e",
+        "number": "#ffffff",
+        "border": "#18345e"
+      },
+      "goalkeeper": {
+        "primary": "#00ac00",
+        "number": "#fcfcfc",
+        "border": "#00ac00"
+      }
+    },
+    "Petrocub": {
+      "id": 2271,
+      "player": {
+        "primary": "#000000",
+        "number": "#ffffff",
+        "border": "#000000"
+      },
+      "goalkeeper": {
+        "primary": "#f53f38",
+        "number": "#ffffff",
+        "border": "#f53f38"
+      }
+    },
+    "RB Leipzig": {
+      "id": 173,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#ff0000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#1976e6",
+        "number": "#f0edeb",
+        "border": "#1976e6"
+      }
+    },
+    "Real Betis": {
+      "id": 543,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#0d0d0d",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#b6c0b7",
+        "number": "#f9f7f6",
+        "border": "#b6c0b7"
+      }
+    },
+    "Real Madrid": {
+      "id": 541,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#18484b",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#e75400",
+        "number": "#ffffff",
+        "border": "#e75400"
+      }
+    },
+    "Riga": {
+      "id": 10124,
+      "player": {
+        "primary": "#0000cc",
+        "number": "#dd0000",
+        "border": "#0000cc"
+      },
+      "goalkeeper": {
+        "primary": "#ff0000",
+        "number": "#000000",
+        "border": "#ff0000"
+      }
+    },
+    "Sabah FA": {
+      "id": 13976,
+      "player": {
+        "primary": "#034ea2",
+        "number": "#222226",
+        "border": "#034ea2"
+      },
+      "goalkeeper": {
+        "primary": "#fafb00",
+        "number": "#222226",
+        "border": "#fafb00"
+      }
+    },
+    "Shakhtar Donetsk": {
+      "id": 550,
+      "player": {
+        "primary": "#fcf8ec",
+        "number": "#d02c21",
+        "border": "#fcf8ec"
+      },
+      "goalkeeper": {
+        "primary": "#f5922c",
+        "number": "#ffffff",
+        "border": "#f5922c"
+      }
+    },
+    "Shamrock Rovers": {
+      "id": 652,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#000000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#44a8da",
+        "number": "#000000",
+        "border": "#44a8da"
+      }
+    },
+    "Slavia Praha": {
+      "id": 560,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#1e48a9",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#dad133",
+        "number": "#ffffff",
+        "border": "#dad133"
+      }
+    },
+    "Slovan Bratislava": {
+      "id": 656,
+      "player": {
+        "primary": "#709cbe",
+        "number": "#16182d",
+        "border": "#709cbe"
+      },
+      "goalkeeper": {
+        "primary": "#c71818",
+        "number": "#050505",
+        "border": "#c71818"
+      }
+    },
+    "Sparta Praha": {
+      "id": 628,
+      "player": {
+        "primary": "#9b3644",
+        "number": "#ffffff",
+        "border": "#9b3644"
+      },
+      "goalkeeper": {
+        "primary": "#3be483",
+        "number": "#e8d664",
+        "border": "#3be483"
+      }
+    },
+    "Sporting CP": {
+      "id": 228,
+      "player": {
+        "primary": "#187312",
+        "number": "#ffffff",
+        "border": "#187312"
+      },
+      "goalkeeper": {
+        "primary": "#d8ff38",
+        "number": "#fcfcfc",
+        "border": "#d8ff38"
+      }
+    },
+    "Sturm Graz": {
+      "id": 637,
+      "player": {
+        "primary": "#242126",
+        "number": "#ffffff",
+        "border": "#242126"
+      },
+      "goalkeeper": {
+        "primary": "#5be201",
+        "number": "#ffffff",
+        "border": "#5be201"
+      }
+    },
+    "Sunderland": {
+      "id": 746,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#000000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#244a30",
+        "number": "#050505",
+        "border": "#244a30"
+      }
+    },
+    "Sutjeska": {
+      "id": 673,
+      "player": {
+        "primary": "#094ca1",
+        "number": "#ffffff",
+        "border": "#094ca1"
+      },
+      "goalkeeper": {
+        "primary": "#000000",
+        "number": "#fff100",
+        "border": "#000000"
+      }
+    },
+    "The New Saints": {
+      "id": 354,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#cca105",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#ff3705",
+        "number": "#ffffff",
+        "border": "#ff3705"
+      }
+    },
+    "Tottenham": {
+      "id": 47,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#e1430e",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#f65e8f",
+        "number": "#fdfcfc",
+        "border": "#f65e8f"
+      }
+    },
+    "Tottenham Hotspur": {
+      "id": 47,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#e1430e",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#f65e8f",
+        "number": "#fdfcfc",
+        "border": "#f65e8f"
+      }
+    },
+    "Tre Fiori": {
+      "id": 2260,
+      "player": {
+        "primary": "#fff000",
+        "number": "#0000ff",
+        "border": "#fff000"
+      },
+      "goalkeeper": {
+        "primary": "#0080ff",
+        "number": "#000000",
+        "border": "#0080ff"
+      }
+    },
+    "Union St. Gilloise": {
+      "id": 1393,
+      "player": {
+        "primary": "#f9d635",
+        "number": "#0f0f0f",
+        "border": "#f9d635"
+      },
+      "goalkeeper": {
+        "primary": "#33c93e",
+        "number": "#f0f0f0",
+        "border": "#33c93e"
+      }
+    },
+    "Universitatea Craiova": {
+      "id": 632,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#ff0000",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#fff100",
+        "number": "#000000",
+        "border": "#fff100"
+      }
+    },
+    "Vardar Skopje": {
+      "id": 574,
+      "player": {
+        "primary": "#990033",
+        "number": "#dd0000",
+        "border": "#990033"
+      },
+      "goalkeeper": {
+        "primary": "#ff9900",
+        "number": "#ffffff",
+        "border": "#ff9900"
+      }
+    },
+    "VfB Stuttgart": {
+      "id": 172,
+      "player": {
+        "primary": "#ffffff",
+        "number": "#c90311",
+        "border": "#ffffff"
+      },
+      "goalkeeper": {
+        "primary": "#fb3487",
+        "number": "#ffffff",
+        "border": "#fb3487"
+      }
+    },
+    "Viking": {
+      "id": 759,
+      "player": {
+        "primary": "#080042",
+        "number": "#ffffff",
+        "border": "#080042"
+      },
+      "goalkeeper": {
+        "primary": "#ffff00",
+        "number": "#000000",
+        "border": "#ffff00"
+      }
+    },
+    "Vikingur Reykjavik": {
+      "id": 278,
+      "player": {
+        "primary": "#080808",
+        "number": "#ffffff",
+        "border": "#080808"
+      },
+      "goalkeeper": {
+        "primary": "#48c7b1",
+        "number": "#ffffff",
+        "border": "#48c7b1"
+      }
+    },
+    "Villarreal": {
+      "id": 533,
+      "player": {
+        "primary": "#ffff00",
+        "number": "#0b2037",
+        "border": "#ffff00"
+      },
+      "goalkeeper": {
+        "primary": "#b34463",
+        "number": "#fbfdf8",
+        "border": "#b34463"
+      }
+    }
+  }
+}

@@ -46,6 +46,11 @@
   // A plain T-shirt on a 40 by 40 grid: no crest, no trim, no pattern, filled with the team's colour.
   var SVG_NS = 'http://www.w3.org/2000/svg';
   var SHIRT = 'M14 4Q20 10 26 4L32 6L38 13L33 18L30 15.5V37H10V15.5L7 18L2 13L8 6Z';
+  // Shirt colours for a side whose match file has none (2026-10-20): API-Football's own colours from
+  // that team's other matches, or, by name, from the men's club a WSL side is named after. The build
+  // replaces this line with the table from scripts/data/team-colours.json (scores-script.mjs);
+  // pitchSideColors() in scores-pitch.js reads it. Null here means neutral shirts, as before.
+  var TEAM_COLOURS = null; // @team-colours
 
   // @include scores-pitch.js
 
@@ -571,6 +576,8 @@
   function lineups(m, d, into) {
     var L = d.lineups, R = d.ratings || {}, P = palette();
     var laid = { home: pitchRows(L.home), away: pitchRows(L.away) };
+    // The file's colours when it has them, else the build's table by team id, else by name.
+    var kits = { home: pitchSideColors(L.home.colors, m.home, TEAM_COLOURS), away: pitchSideColors(L.away.colors, m.away, TEAM_COLOURS) };
     var rated = !!(best(R.home) !== null || best(R.away) !== null);
     if (laid.home && laid.away) {
       into.appendChild(caption(m, 'away', L.away));
@@ -591,7 +598,7 @@
           var ul = h('ul', 'pitch__row');
           row.forEach(function (p) {
             var r = pitchRating(p, R[side]);
-            var kit = pitchKit(L[side].colors, p.pos === 'G' || ri === 0, side === 'home', P);
+            var kit = pitchKit(kits[side], p.pos === 'G' || ri === 0, side === 'home', P);
             var li = h('li', 'pitch__p');
             var fig = h('span', 'pitch__kit');
             fig.setAttribute('aria-hidden', 'true');

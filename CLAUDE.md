@@ -385,6 +385,12 @@ client that reads the public Supabase `live/` bucket in the browser (`scores.jso
   neutral shirts: ink at home, white away. The number is about 10.5px bold, so it needs 4.5:1 on its
   shirt: below that it becomes ink or white, and where neither reaches 4.5:1 (a mid-tone shirt) the
   digits get an outline in the other. A shirt below 1.4:1 on the pitch gets a muted-ink outline.
+- **Colour fallback (2026-10-20).** A side with no colours in its file takes API-Football's own from
+  `scripts/data/team-colours.json`, embedded in the client by `scores-script.mjs` (so the hash covers
+  it): by team id, else by exact name among Premier League and Champions League teams, which is how a
+  WSL side gets its men's club's colours (the API sends the WSL almost none; one alias maps "Tottenham
+  Hotspur" to the PL's "Tottenham"), with the keeper neutral unless matched by id. File colours always
+  win. Refresh with `npm run team-colours` (a network read, so never in the build), then commit the JSON.
 - **Old files have no `grid`, ids or colours.** The pitch then comes from the formation plus the API's
   order (keeper first, then each line from the team's right, so each line is reversed), checked in the
   tests against the API's own grid for all ten recorded lineups. With neither a grid nor a formation

@@ -260,6 +260,12 @@ by shirt number then exact name, and draws neutral shirts when there are no colo
 with player id 0 and no shirt number (seen on WSL players) has neither key, so the page matches it last by
 initial and surname ("J. Rose" to "Jade Rose"), and only when exactly one rating fits.
 
+A file with no colours for a side gets them on /scores/ from `scripts/data/team-colours.json`: the
+colours API-Football sent for that team in its other files (most often at home), by team id, else by
+exact name among Premier League and Champions League teams, which covers the WSL, since the API sends
+WSL clubs almost no colours and their names match the men's clubs once " W" is gone. Refresh it with
+`npm run team-colours` and commit the JSON; it reads only this public bucket and costs no API quota.
+
 WSL team names lose the API's trailing " W" ("Arsenal W" becomes "Arsenal"); the competition
 already says it is the women's league. Names are also tidied: the API sometimes double-encodes an accent
 (it sent "Martínez" as "MartÃ", a soft hyphen and "nez"), which the mapper repairs, and soft hyphens

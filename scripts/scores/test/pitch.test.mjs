@@ -12,7 +12,8 @@ import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
-import { scoresClientSource, PITCH_INCLUDE } from "../../shared/scores-script.mjs";
+import { scoresClientSource, teamColoursEmbed, PITCH_INCLUDE, TEAM_COLOURS_LINE, TEAM_COLOURS_FILE } from "../../shared/scores-script.mjs";
+import { buildTable } from "../build-team-colours.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const PITCH_SRC = readFileSync(join(ROOT, "scripts", "shared", "scores-pitch.js"), "utf8");
@@ -25,7 +26,7 @@ const RAW = ["premier-league-finished", "champions-league-live", "champions-leag
 // The helpers, loaded the way the page runs them: plain function declarations in one scope.
 const ctx = vm.createContext({});
 vm.runInContext(PITCH_SRC, ctx);
-const { pitchHex, pitchContrast, pitchKit, pitchFormation, pitchRows, pitchRating, pitchOneDp, pitchShare } = ctx;
+const { pitchHex, pitchContrast, pitchKit, pitchFormation, pitchRows, pitchRating, pitchOneDp, pitchShare, pitchTableKit, pitchSideColors } = ctx;
 // vm results come from another realm, so compare through JSON.
 const plain = (v) => JSON.parse(JSON.stringify(v));
 const names = (rows) => plain(rows.map((r) => r.map((p) => p.name)));
@@ -45,6 +46,8 @@ const asLineup = (e, withGrid) => ({
 test("client: the include line is replaced by the helpers, and the result parses as one script", () => {
   const src = scoresClientSource(ROOT);
   assert.equal(src.includes(PITCH_INCLUDE), false);
+  assert.equal(src.includes(TEAM_COLOURS_LINE), false);
+  assert.ok(src.includes(`  var TEAM_COLOURS = ${JSON.stringify(teamColoursEmbed(ROOT))};\n`), "the table is in the shipped text");
   assert.ok(src.includes("function pitchRows("));
   assert.doesNotThrow(() => new vm.Script(src));
   assert.equal(/<\/script/i.test(src), false);
@@ -74,16 +77,20 @@ test("scoresClientSource refuses a missing include line, a closing script tag an
   const dir = mkdtempSync(join(tmpdir(), "scores-script-"));
   try {
     mkdirSync(join(dir, "scripts", "shared"), { recursive: true });
+    mkdirSync(join(dir, "scripts", "data"), { recursive: true });
     const put = (client, pitch) => {
       writeFileSync(join(dir, "scripts", "shared", "scores-client.js"), client);
       writeFileSync(join(dir, "scripts", "shared", "scores-pitch.js"), pitch);
     };
+    writeFileSync(join(dir, TEAM_COLOURS_FILE), readFileSync(join(ROOT, TEAM_COLOURS_FILE)));
     put(CLIENT_SRC, PITCH_SRC);
     assert.equal(scoresClientSource(dir), scoresClientSource(ROOT));
     put(CLIENT_SRC.replace(PITCH_INCLUDE, ""), PITCH_SRC);
     assert.throws(() => scoresClientSource(dir), /exactly once/);
     put(CLIENT_SRC + PITCH_INCLUDE, PITCH_SRC);
     assert.throws(() => scoresClientSource(dir), /exactly once/);
+    put(CLIENT_SRC.replace(TEAM_COLOURS_LINE, ""), PITCH_SRC);
+    assert.throws(() => scoresClientSource(dir), /@team-colours/);
     put(CLIENT_SRC, PITCH_SRC + "\n  var x = '</scr' + 'ipt>'.length; // '</script>'\n");
     assert.throws(() => scoresClientSource(dir), /closing script tag/);
     put(CLIENT_SRC, PITCH_SRC + "\n  var y = '<!--';\n");
@@ -237,6 +244,183 @@ test("kit: a shirt that would vanish on the pitch is outlined in the muted ink; 
   assert.equal(pitchKit({ player: { primary: "#f6eee0" } }, false, false, PAL).stroke, "#4c5176");
   assert.equal(pitchKit({ player: { primary: "#e41e2c", border: "#1a1a1a" } }, false, false, PAL).stroke, "#1a1a1a");
   assert.equal(pitchKit({ player: { primary: "#e41e2c", border: "nope" } }, false, false, PAL).stroke, "#e41e2c");
+});
+
+// ---------- the colour table, for files with no colours (2026-10-20) ----------
+
+// A table in the shape the client carries: Liverpool (40) and Chelsea (49) by id, their names by name.
+const TABLE = {
+  i: { 40: "e41e2c,ffffff,e41e2c,338c86,d8e0d8,338c86", 49: "1532c1,f7d444,1532c1,1d5160,fcfcfc,1d5160" },
+  n: { Liverpool: 40, Chelsea: 49 },
+};
+const LIVERPOOL = { id: 40, name: "Liverpool" };
+
+test("table: a side with no colours takes its own team's entry by id, keeper included", () => {
+  const c = pitchSideColors(null, LIVERPOOL, TABLE);
+  assert.deepEqual(plain(c), {
+    player: { primary: "#e41e2c", number: "#ffffff", border: "#e41e2c" },
+    goalkeeper: { primary: "#338c86", number: "#d8e0d8", border: "#338c86" },
+  });
+  assert.deepEqual(plain(pitchKit(c, false, true, PAL)), { fill: "#e41e2c", number: "#ffffff", halo: null, stroke: "#e41e2c", neutral: false });
+  assert.equal(pitchKit(c, true, true, PAL).fill, "#338c86");
+  // The id wins over the name: a team with its own entry never takes a namesake's.
+  assert.equal(pitchSideColors(null, { id: 40, name: "Chelsea" }, TABLE).player.primary, "#e41e2c");
+  // A file whose colours hold no usable outfield shirt counts as none.
+  assert.equal(pitchSideColors({ player: { primary: "url(x)" }, goalkeeper: null }, LIVERPOOL, TABLE).player.primary, "#e41e2c");
+});
+
+test("table: a WSL side named like its men's club takes those colours by name, with a neutral keeper", () => {
+  // Chelsea W is team 1853 and the site names it "Chelsea"; the API sends it no colours.
+  const c = pitchSideColors(null, { id: 1853, name: "Chelsea" }, TABLE);
+  assert.equal(pitchKit(c, false, true, PAL).fill, "#1532c1");
+  assert.equal(pitchKit(c, false, true, PAL).neutral, false);
+  // The men's goalkeeper shirt belongs to another team, so the keeper is drawn neutral.
+  assert.equal(c.goalkeeper, null);
+  assert.deepEqual(plain(pitchKit(c, true, true, PAL)), plain(pitchKit(null, true, true, PAL)));
+  // Exact names only.
+  assert.equal(pitchSideColors(null, { id: 1853, name: "chelsea" }, TABLE), null);
+  assert.equal(pitchSideColors(null, { id: 1853, name: "Chelsea W" }, TABLE), null);
+  // The live Chelsea v Tottenham Hotspur file (WSL, no colours) against the shipped table: both sides
+  // are coloured by name, Tottenham Hotspur through the table's alias for the Premier League's "Tottenham".
+  const shipped = teamColoursEmbed(ROOT);
+  for (const side of ["home", "away"]) {
+    assert.equal(LIVE.lineups[side].colors, undefined);
+    const team = { id: LIVE.match[side].id, name: LIVE.match[side].name };
+    const k = pitchSideColors(LIVE.lineups[side].colors, team, shipped);
+    assert.equal(pitchKit(k, false, side === "home", PAL).neutral, false, team.name);
+    assert.equal(pitchKit(k, true, side === "home", PAL).neutral, true, `${team.name} keeper`);
+  }
+});
+
+test("table: colours in the file always win over the table", () => {
+  const own = { player: { primary: "#00a650", number: "#ffffff", border: "#00a650" }, goalkeeper: null };
+  // Returned untouched, and the keeper does not borrow the table's goalkeeper shirt.
+  assert.equal(pitchSideColors(own, LIVERPOOL, TABLE), own);
+  assert.equal(pitchKit(pitchSideColors(own, LIVERPOOL, TABLE), true, true, PAL).neutral, true);
+  // A goalkeeper shirt in the file beats the table's, even when the outfield comes from the table.
+  const keeperOnly = { player: null, goalkeeper: { primary: "#00ff00", number: null, border: null } };
+  const mixed = pitchSideColors(keeperOnly, LIVERPOOL, TABLE);
+  assert.equal(mixed.player.primary, "#e41e2c");
+  assert.equal(mixed.goalkeeper.primary, "#00ff00");
+  assert.equal(pitchSideColors(keeperOnly, { id: 1853, name: "Chelsea" }, TABLE).goalkeeper.primary, "#00ff00");
+});
+
+test("table: no entry, or no table, gives the neutral shirt as before", () => {
+  for (const [colors, team, table] of [
+    [null, { id: 1845, name: "Birmingham City" }, TABLE],
+    [undefined, LIVERPOOL, null],
+    [null, LIVERPOOL, {}],
+    [null, null, TABLE],
+    [null, { id: "40", name: "Nowhere" }, TABLE], // ids are numbers in the feed
+    [null, { name: "toString" }, TABLE], // nothing inherited is a hit
+    [null, { name: "__proto__" }, TABLE],
+  ]) {
+    const c = pitchSideColors(colors, team, table);
+    assert.equal(c, colors === undefined ? null : colors);
+    assert.equal(pitchKit(c, false, true, PAL).neutral, true, JSON.stringify(team));
+    assert.equal(pitchKit(c, true, false, PAL).neutral, true, JSON.stringify(team));
+  }
+});
+
+test("table: a malformed value is refused whole, and the next way is tried", () => {
+  assert.deepEqual(plain(pitchTableKit("e41e2c,ffffff,e41e2c,,,")), { player: { primary: "#e41e2c", number: "#ffffff", border: "#e41e2c" }, goalkeeper: null });
+  assert.deepEqual(plain(pitchTableKit("#E41E2C,,,,,")), { player: { primary: "#e41e2c", number: null, border: null }, goalkeeper: null });
+  for (const bad of [
+    "url(x),ffffff,e41e2c,,,", // not a colour
+    "e41e2c,ffffff,e41e2c,338c86,d8e0d8", // five parts
+    "e41e2c,ffffff,e41e2c,338c86,d8e0d8,338c86,000000", // seven
+    "e41e2c,ffffff,e41e2c,338c86,d8e0d8,red", // one bad part spoils the lot
+    ",ffffff,e41e2c,338c86,d8e0d8,338c86", // no outfield primary
+    "e41e2c;background:url(x),,,,,",
+    ["e41e2c", "ffffff", "e41e2c", "", "", ""],
+    { player: { primary: "e41e2c" } },
+    "", null, 0xe41e2c,
+  ]) {
+    assert.equal(pitchTableKit(bad), null, JSON.stringify(bad));
+    // Refused by id with nothing by name: neutral.
+    assert.equal(pitchKit(pitchSideColors(null, { id: 7, name: "X" }, { i: { 7: bad }, n: {} }), false, true, PAL).neutral, true, JSON.stringify(bad));
+  }
+  // Refused by id, then found by name: the name's entry, keeper neutral.
+  const c = pitchSideColors(null, { id: 7, name: "Chelsea" }, { i: { 7: "url(x),,,,,", 49: TABLE.i[49] }, n: { Chelsea: 49 } });
+  assert.deepEqual([c.player.primary, c.goalkeeper], ["#1532c1", null]);
+  // A name pointing at no entry, or at junk, is no hit.
+  assert.equal(pitchSideColors(null, { id: 1853, name: "Chelsea" }, { i: {}, n: { Chelsea: 49 } }), null);
+  assert.equal(pitchSideColors(null, { id: 1853, name: "Chelsea" }, { i: { 49: TABLE.i[49] }, n: { Chelsea: "49; x" } }), null);
+});
+
+test("table: the shipped table is well formed, and a malformed data file fails the build", () => {
+  const t = teamColoursEmbed(ROOT);
+  const ids = Object.keys(t.i);
+  assert.ok(ids.length >= 50, `only ${ids.length} teams`);
+  for (const id of ids) assert.notEqual(pitchTableKit(t.i[id]), null, id);
+  for (const [name, id] of Object.entries(t.n)) assert.ok(Object.hasOwn(t.i, String(id)), name);
+  const doc = JSON.parse(readFileSync(join(ROOT, TEAM_COLOURS_FILE), "utf8"));
+  assert.match(doc.note, /API-Football's own colours, not ours/);
+
+  const dir = mkdtempSync(join(tmpdir(), "team-colours-"));
+  try {
+    mkdirSync(join(dir, "scripts", "data"), { recursive: true });
+    const tryDoc = (d) => { writeFileSync(join(dir, TEAM_COLOURS_FILE), JSON.stringify(d)); return () => teamColoursEmbed(dir); };
+    const base = { schema: "archv-team-colours/1", byId: { 40: { player: { primary: "#e41e2c", number: "#ffffff", border: null }, goalkeeper: null } }, byName: { Liverpool: { id: 40, player: { primary: "#e41e2c", number: "#ffffff", border: null }, goalkeeper: null } } };
+    assert.deepEqual(tryDoc(base)(), { i: { 40: "e41e2c,ffffff,,,," }, n: { Liverpool: 40 } });
+    const broken = (f) => { const d = structuredClone(base); f(d); return tryDoc(d); };
+    assert.throws(broken((d) => { d.byId[40].player.primary = "url(x)"; }), /byId\.40\.player\.primary/);
+    assert.throws(broken((d) => { d.byId[40].player.border = "red"; }), /byId\.40\.player\.border/);
+    assert.throws(broken((d) => { d.byId[40].goalkeeper = { primary: "nope" }; }), /goalkeeper\.primary/);
+    assert.throws(broken((d) => { d.byId.x = d.byId[40]; }), /not a team id/);
+    assert.throws(broken((d) => { d.byName.Liverpool.id = 41; }), /points at no byId entry/);
+    assert.throws(broken((d) => { d.byName.Liverpool.player.number = "#000000"; }), /disagrees/);
+    assert.throws(broken((d) => { d.schema = "x"; }), /schema/);
+    // A "<" in a name is escaped in the client text, so no name can close the script element.
+    tryDoc({ ...base, byName: { "</script><!--": base.byName.Liverpool } });
+    mkdirSync(join(dir, "scripts", "shared"), { recursive: true });
+    writeFileSync(join(dir, "scripts", "shared", "scores-client.js"), CLIENT_SRC);
+    writeFileSync(join(dir, "scripts", "shared", "scores-pitch.js"), PITCH_SRC);
+    const src = scoresClientSource(dir);
+    assert.ok(src.includes('"\\u003c/script>\\u003c!--":40'));
+    assert.doesNotThrow(() => new vm.Script(src));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("team-colours script: most often worn at home, else any appearance; names from the Premier League and Champions League only", () => {
+  const kit = (p) => ({ player: { primary: p, number: "#ffffff", border: p }, goalkeeper: { primary: "#111111", number: null, border: null } });
+  const m = (id, comp, home, away, kickoff) => ({ id, competition: { key: comp }, kickoff, home, away, detail: `match/${id}.json` });
+  const LIV = { id: 40, name: "Liverpool" }, EVE = { id: 45, name: "Everton" }, LIVW = { id: 1847, name: "Liverpool" }, POR = { id: 212, name: "FC Porto" };
+  const SPURS = { id: 47, name: "Tottenham" }, CITYW = { id: 1854, name: "Manchester City" }, LDN = { id: 15406, name: "London City Lionesses" };
+  const matches = [
+    m(1, "premier-league", LIV, EVE, "2026-09-01T14:00:00Z"),
+    m(2, "premier-league", EVE, LIV, "2026-09-08T14:00:00Z"),
+    m(3, "premier-league", LIV, SPURS, "2026-09-15T14:00:00Z"),
+    m(4, "champions-league", SPURS, POR, "2026-09-16T19:00:00Z"),
+    m(5, "wsl", LIVW, CITYW, "2026-09-20T12:00:00Z"),
+    m(6, "wsl", LDN, LIVW, "2026-09-27T12:00:00Z"),
+    m(3, "premier-league", LIV, SPURS, "2026-09-15T14:00:00Z"), // the same match on two days counts once
+  ];
+  const files = {
+    "match/1.json": { lineups: { home: { colors: kit("#e41e2c") }, away: { colors: kit("#003399") } } },
+    "match/2.json": { lineups: { home: { colors: kit("#003399") }, away: { colors: kit("#00a650") } } },
+    "match/3.json": { lineups: { home: { colors: kit("#e41e2c") }, away: { colors: null } } },
+    "match/4.json": { lineups: { home: { colors: { player: { primary: "url(x)" } } }, away: { colors: kit("#ffffff") } } },
+    "match/5.json": { lineups: { home: { colors: null }, away: { colors: null } } },
+    "match/6.json": { lineups: { home: { colors: kit("#86b2ef") }, away: { colors: null } } },
+  };
+  const t = buildTable(matches, files);
+  // Liverpool: red twice at home beats green once away.
+  assert.deepEqual([t.byId[40].player.primary, t.byId[40].from, t.byId[40].seen], ["#e41e2c", "home", 2]);
+  // Porto never had colours at home here, so its away appearance stands in.
+  assert.deepEqual([t.byId[212].player.primary, t.byId[212].from], ["#ffffff", "any"]);
+  // A bad colour is not counted (Spurs' only home file had one), and a team never coloured is left out.
+  assert.equal(t.byId[47], undefined);
+  assert.equal(t.byId[1847], undefined);
+  assert.deepEqual(plain(t.neutral.map((n) => n.id)), [47, 1847, 1854]);
+  // byName: Premier League and Champions League only, so the WSL's London City is reachable by id alone.
+  assert.equal(t.byId[15406].player.primary, "#86b2ef");
+  assert.equal(t.byName["London City Lionesses"], undefined);
+  assert.deepEqual(Object.keys(t.byName).sort(), ["Everton", "FC Porto", "Liverpool"]);
+  assert.equal(t.byName.Liverpool.id, 40);
+  assert.equal(t.matches, 6);
 });
 
 // ---------- ratings ----------

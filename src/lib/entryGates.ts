@@ -20,8 +20,9 @@
  *   G9  freshness: an indexable page whose `reviewBy` has passed, or whose copy promises a later
  *       update, is listed by scripts/check-freshness.mjs.
  *
- * GATES_ENFORCE is false for the warn-only week: the G1 evidence check, the G6 post-expiry rule
- * and G9 only WARN. The follow-on task flips it on 19 October if the week ran clean. Nothing in
+ * GATES_ENFORCE was false for the warn-only week (11 to 18 October): the G1 evidence check, the G6
+ * post-expiry rule and G9 only warned. ENFORCED from 19 October 2026 (the week ran clean: 29 of 29
+ * finished deploys green, 0 failed): those rules now render noindex,follow. Nothing in
  * this file can fail the build on a data condition (plan §6): public/media rides the same deploy.
  * The one thing live from day one is the default itself, as canon D-2026-09-22d orders: an entry
  * filed with `index: "noindex"` renders noindex,follow, stays in sitemap.xml with its real
@@ -29,7 +30,7 @@
  */
 import { wordCount } from './readTime';
 
-export const GATES_ENFORCE = false;
+export const GATES_ENFORCE = true;
 
 export type Tier = 'confirmed' | 'reported' | 'rumour';
 export interface EntrySource {
@@ -199,7 +200,8 @@ function withLaterRules(e: GateEntry, today: string, d: IndexDecision): IndexDec
   if (!indexDecision(base, '2026-10-11').index) fail('a pre-G1 entry stays indexable');
   if (indexDecision({ ...base, index: 'noindex' }, '2026-10-11').index) fail('index "noindex" renders noindex');
   const thin = indexDecision({ ...base, index: 'index' }, '2026-10-11');
-  if (!thin.index || !thin.warnOnly || !thin.reasons.length) fail('thin index entry warns, stays indexable this week');
+  if (!thin.reasons.length) fail('a thin index entry names what it lacks');
+  if (GATES_ENFORCE ? thin.index || thin.warnOnly : !thin.index || !thin.warnOnly) fail('a thin index entry is noindex when enforced, a warning otherwise');
   if (entryTier({ ...base, body: 'X (RUMOUR).' }) !== 'rumour') fail('a (RUMOUR) body reads as rumour');
   if (chipLabel({ ...base, tier: 'confirmed', sources: [{ outlet: 'A', url: 'https://a.com/x' }, { outlet: 'B', url: 'https://b.com/y' }] })?.text !== 'Confirmed · 2 sources') fail('confirmed chip counts sources');
   if (chipLabel({ ...base, status: 'pending' }) !== null) fail('pending keeps its own chip');

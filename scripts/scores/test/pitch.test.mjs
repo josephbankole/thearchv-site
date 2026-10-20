@@ -156,7 +156,7 @@ test("rows: the formation fallback puts every recorded starter where the API's g
   assert.equal(checked, 10);
 });
 
-test("rows: a bad or repeated grid falls back to the formation; a formation that does not add up falls back to positions", () => {
+test("rows: a bad or repeated grid falls back to the formation; with neither, no pitch (the page lists names)", () => {
   const liverpool = asLineup(RAW[0].lineups.find((e) => e.team.id === 40), true);
   const dup = structuredClone(liverpool);
   dup.startXI[2].grid = dup.startXI[1].grid;
@@ -167,18 +167,13 @@ test("rows: a bad or repeated grid falls back to the formation; a formation that
 
   const off = structuredClone(LIVE.lineups.away);
   off.formation = "4-4-2-1"; // adds up to 11 outfield players, not 10
-  const byPos = pitchRows(off);
-  assert.equal(byPos.how, "pos");
-  assert.deepEqual(names(byPos.rows).map((r) => r.length), [1, 4, 5, 1]);
-  assert.deepEqual(names(byPos.rows)[1], ["J. Blakstad", "Amanda Nildén", "T. Koga", "Ella morris"]);
-
+  assert.equal(pitchRows(off), null);
   const keeperless = structuredClone(LIVE.lineups.away);
   keeperless.startXI[0].pos = "D";
-  assert.equal(pitchRows(keeperless).how, "pos"); // first starter is not a keeper
-
-  const unknown = structuredClone(off);
-  unknown.startXI[3].pos = null;
-  assert.equal(pitchRows(unknown), null); // nothing to stand behind: the page lists names instead
+  assert.equal(pitchRows(keeperless), null); // first starter is not a keeper
+  // Positions alone would put two midfield lines in one row: Liverpool's 4-2-3-1 with no grid and no
+  // formation would stand Munoz (right wing) in the centre and Mac Allister (left of the pair) right of it.
+  assert.equal(pitchRows({ ...liverpool, formation: null, startXI: liverpool.startXI.map((p) => ({ ...p, grid: null })) }), null);
   assert.equal(pitchRows({ startXI: [] }), null);
   assert.equal(pitchRows(null), null);
 });
@@ -201,23 +196,40 @@ test("contrast: matches the WCAG figures the repo quotes", () => {
 });
 
 test("kit: no colours means neutral shirts, ink at home and white away; a keeper never borrows the outfield shirt", () => {
-  assert.deepEqual(plain(pitchKit(null, false, true, PAL)), { fill: "#1e223d", number: "#f4f1ea", stroke: "#1e223d", neutral: true });
-  assert.deepEqual(plain(pitchKit(undefined, false, false, PAL)), { fill: "#ffffff", number: "#1e223d", stroke: "#4c5176", neutral: true });
+  assert.deepEqual(plain(pitchKit(null, false, true, PAL)), { fill: "#1e223d", number: "#f4f1ea", halo: null, stroke: "#1e223d", neutral: true });
+  assert.deepEqual(plain(pitchKit(undefined, false, false, PAL)), { fill: "#ffffff", number: "#1e223d", halo: null, stroke: "#4c5176", neutral: true });
   const outfieldOnly = { player: { primary: "#e41e2c", number: "#ffffff", border: "#e41e2c" }, goalkeeper: null };
   assert.equal(pitchKit(outfieldOnly, true, true, PAL).neutral, true);
-  assert.deepEqual(plain(pitchKit(outfieldOnly, false, true, PAL)), { fill: "#e41e2c", number: "#ffffff", stroke: "#e41e2c", neutral: false });
+  assert.deepEqual(plain(pitchKit(outfieldOnly, false, true, PAL)), { fill: "#e41e2c", number: "#ffffff", halo: null, stroke: "#e41e2c", neutral: false });
   assert.equal(pitchKit({ player: { primary: "url(x)" } }, false, true, PAL).neutral, true);
 });
 
-test("kit: a number below 3:1 on the shirt becomes ink or white, whichever reads better", () => {
+test("kit: a number below 4.5:1 on the shirt becomes ink or white, whichever reads better", () => {
   // White on yellow is 1.07:1: ink instead.
   assert.equal(pitchKit({ player: { primary: "#ffff00", number: "#ffffff" } }, false, true, PAL).number, "#1e223d");
   // Navy on dark navy: white instead.
   assert.equal(pitchKit({ player: { primary: "#0a1931", number: "#000080" } }, false, true, PAL).number, "#ffffff");
   // A missing number colour is chosen the same way.
   assert.equal(pitchKit({ player: { primary: "#e41e2c" } }, false, true, PAL).number, "#ffffff");
-  // A good pairing is left alone.
-  assert.equal(pitchKit({ player: { primary: "#0a1931", number: "#f2c200" } }, false, true, PAL).number, "#f2c200");
+  // A good pairing is left alone, with no outline.
+  const good = pitchKit({ player: { primary: "#0a1931", number: "#f2c200" } }, false, true, PAL);
+  assert.deepEqual([good.number, good.halo], ["#f2c200", null]);
+  // The number is about 10.5px bold, so 3:1 is not enough: yellow on white (1.07:1) becomes ink.
+  assert.equal(pitchKit({ player: { primary: "#ffffff", number: "#ffff00" } }, false, true, PAL).number, "#1e223d");
+});
+
+test("kit: on a mid-tone shirt where neither ink nor white reaches 4.5:1, the number gets an outline in the other", () => {
+  // White on pure red is 4.00:1 and ink 3.89:1: white stays, outlined in ink.
+  const red = pitchKit({ player: { primary: "#ff0000", number: "#ffffff" } }, false, true, PAL);
+  assert.deepEqual([red.number, red.halo], ["#ffffff", "#1e223d"]);
+  assert.ok(pitchContrast(red.number, red.halo) >= 4.5);
+  // 4.49:1 is still under the line.
+  assert.equal(pitchKit({ player: { primary: "#ef0107", number: "#ffffff" } }, false, true, PAL).halo, "#1e223d");
+  // Mid grey: white 3.95:1, ink 3.93:1.
+  const grey = pitchKit({ player: { primary: "#808080" } }, false, true, PAL);
+  assert.deepEqual([grey.number, grey.halo], ["#ffffff", "#1e223d"]);
+  // An API colour that clears 4.5:1 is kept and needs no outline.
+  assert.equal(pitchKit({ player: { primary: "#e41e2c", number: "#ffffff" } }, false, true, PAL).halo, null);
 });
 
 test("kit: a shirt that would vanish on the pitch is outlined in the muted ink; otherwise the API's border, else the fill", () => {
@@ -266,6 +278,38 @@ test("ratings: the number joins names the API spells two ways; the id wins over 
   assert.equal(pitchRating({ name: "A", number: 4 }, [{ name: "a", number: null, rating: 6.5 }]), null); // exact names only
   assert.equal(pitchRating({ name: "A", number: 4 }, null), null);
   assert.equal(pitchRating({ name: "A", number: 4 }, [{ name: "A", number: 4, rating: "7" }]), null); // not a number
+});
+
+test("ratings, WSL reply: a rating with player id 0 and no number joins by initial and surname, once", () => {
+  // API-Football sent "Jade Rose" (id 0, number null) for the lineup's "J. Rose", and five more like her.
+  const fx = RAW[3];
+  const rated = (teamId) => fx.players.find((e) => e.team.id === teamId).players
+    .filter((p) => Number(p.statistics[0].games.rating) > 0)
+    .map((p) => ({ name: p.player.name, number: p.statistics[0].games.number ?? null, minutes: p.statistics[0].games.minutes, rating: Number(p.statistics[0].games.rating), id: p.player.id || null }));
+  for (const e of fx.lineups) {
+    const lineup = asLineup(e, true);
+    const R = rated(e.team.id);
+    const missing = lineup.startXI.filter((p) => pitchRating(p, R) === null).map((p) => p.name);
+    assert.deepEqual(plain(missing), [], e.team.name);
+    // Every rating row is taken by exactly one player, starters and substitutes together.
+    const taken = [...lineup.startXI, ...lineup.subs].map((p) => pitchRating(p, R.map((r, i) => ({ ...r, rating: i + 1 })))).filter((x) => x !== null);
+    assert.equal(new Set(taken).size, taken.length, `${e.team.name}: a rating joined twice`);
+    assert.equal(taken.length, R.length, `${e.team.name}: a rating left over`);
+  }
+  const city = fx.lineups.find((e) => e.team.name === "Manchester City W");
+  const cityR = rated(city.team.id);
+  const by = (name) => asLineup(city, true).startXI.concat(asLineup(city, true).subs).find((p) => p.name === name);
+  assert.equal(pitchRating(by("J. Rose"), cityR), 6.45);
+  assert.equal(pitchRating(by("L. Blindkilde"), cityR), 6.1); // "Laura Blindkilde Brown"
+
+  const p = { name: "J. Rose", number: 4, id: 9 };
+  assert.equal(pitchRating(p, [{ name: "Jade Rosé", number: null, rating: 6, id: null }]), 6); // accents folded
+  assert.equal(pitchRating(p, [{ name: "Jade Rose", number: null, rating: 6, id: null }, { name: "Jo Rose", number: null, rating: 7, id: null }]), null); // two fit
+  assert.equal(pitchRating(p, [{ name: "Jade Rose", number: 5, rating: 6, id: null }]), null); // has a number: someone else
+  assert.equal(pitchRating(p, [{ name: "Jade Rose", number: null, rating: 6, id: 12 }]), null); // has an id: someone else
+  assert.equal(pitchRating(p, [{ name: "Kate Rose", number: null, rating: 6, id: null }]), null); // wrong initial
+  assert.equal(pitchRating(p, [{ name: "Jade Roseby", number: null, rating: 6, id: null }]), null); // whole words only
+  assert.equal(pitchRating({ name: "Rose", number: 4 }, [{ name: "Jade Rose", number: null, rating: 6, id: null }]), null); // no initial
 });
 
 test("one decimal and split bars", () => {

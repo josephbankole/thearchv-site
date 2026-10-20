@@ -257,8 +257,9 @@
     });
     built.forEach(settle);
     if (fid) {
+      // preventScroll: a reader further down the open match must not be pulled back up to its row.
       var again = root.querySelector('button[data-id="' + fid + '"]');
-      if (again) again.focus();
+      if (again) { try { again.focus({ preventScroll: true }); } catch (x) { again.focus(); } }
     } else if (fel) {
       refocus(fel);
     }
@@ -380,6 +381,8 @@
 
   // ----- the track: which panel is on show, and how tall the track is.
   function mark(t, idx) {
+    var was = -1;
+    t.panes.forEach(function (p, i) { if (p.contains(document.activeElement)) was = i; });
     t.idx = idx;
     panelOf[t.id] = idx;
     t.tabs.forEach(function (tab, i) {
@@ -390,6 +393,8 @@
       if (i === idx) { p.tabIndex = 0; p.removeAttribute('aria-hidden'); }
       else { p.removeAttribute('tabindex'); p.setAttribute('aria-hidden', 'true'); }
     });
+    // Focus on the panel going out moves to the one coming in, or the browser drops it to the page.
+    if (was >= 0 && was !== idx) refocus(t.panes[idx].id);
   }
   // The track is as tall as the panel on show, so a short summary leaves no gap under it. Between two
   // panels, mid-swipe, it is as tall as the taller one so neither is cut off.
@@ -415,7 +420,8 @@
     var still = Math.abs(pos - near) < 0.02;
     if (still) fit(t, near, near);
     else fit(t, Math.floor(pos), Math.ceil(pos));
-    if (t.goal !== null && !still) return; // a tab's scroll is passing through
+    // A tab's scroll is passing through: the tabs wait until it has come to rest on its panel.
+    if (t.goal !== null && (!still || near !== t.goal)) return;
     t.goal = null;
     if (near !== t.idx) mark(t, near);
   }
@@ -495,6 +501,10 @@
       n.setAttribute('y', '29');
       n.setAttribute('text-anchor', 'middle');
       n.style.fill = kit.number;
+      if (kit.halo) { // neither ink nor white reaches 4.5:1 on this shirt: outline the digits
+        n.setAttribute('class', 'pitch__halo');
+        n.style.stroke = kit.halo;
+      }
       n.textContent = String(number);
       s.appendChild(n);
     }
@@ -798,7 +808,8 @@
   try {
     var q = new URLSearchParams(location.search);
     want = q.get('match') || '';
-    wantPanel = PANEL_KEYS[q.get('panel')] || 0;
+    var pk = q.get('panel');
+    wantPanel = Object.prototype.hasOwnProperty.call(PANEL_KEYS, pk) ? PANEL_KEYS[pk] : 0; // not ?panel=constructor
   } catch (e) { want = ''; }
   if (!/^\d+$/.test(want)) want = '';
   function openWanted() {

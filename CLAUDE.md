@@ -348,7 +348,9 @@ client that reads the public Supabase `live/` bucket in the browser (`scores.jso
   transform or translate may go inside it (pitch markings are centred with inset and auto margins), no
   `touch-action`, and no smooth `scroll-behavior` (only a tab press animates, and never under reduced
   motion). The client sets the track's height to the panel on show, so the taller panels beside it are
-  clipped by that same `overflow-y`.
+  clipped by that same `overflow-y`. Each `.scores__panel` is `position: relative`, the containing
+  block for the hidden `.scores__sr` text inside it; without that the panels off to the side widened
+  the whole page. With a match open, `document.documentElement.scrollWidth` must equal `clientWidth`.
 - **The list rebuilds on every feed change**, so the client keeps `panelOf` (the panel on show),
   `heightOf` and the focused tab or panel, builds every open panel first and measures afterwards, so
   the page does not move. A rebuild waits while a finger is on a track. `enter()` resets all of it.
@@ -358,12 +360,16 @@ client that reads the public Supabase `live/` bucket in the browser (`scores.jso
   under "Editorial and rights lines" still binds, and anything kit-like added to the shirt would cross
   it. Team colours are data, checked as six hex digits by the mapper and again by the client, and never
   go into the token files. No colours (every file written before 2026-10-19 until a backfill) gives
-  neutral shirts: ink at home, white away. A number below 3:1 on its shirt becomes ink or white, and a
-  shirt below 1.4:1 on the pitch gets a muted-ink outline.
+  neutral shirts: ink at home, white away. The number is about 10.5px bold, so it needs 4.5:1 on its
+  shirt: below that it becomes ink or white, and where neither reaches 4.5:1 (a mid-tone shirt) the
+  digits get an outline in the other. A shirt below 1.4:1 on the pitch gets a muted-ink outline.
 - **Old files have no `grid`, ids or colours.** The pitch then comes from the formation plus the API's
   order (keeper first, then each line from the team's right, so each line is reversed), checked in the
-  tests against the API's own grid for all ten recorded lineups. Ratings join a player by id, then shirt
-  number, then exact name, because the API spells a player two ways ("R. Araujo", "Ronald Araújo").
+  tests against the API's own grid for all ten recorded lineups. With neither a grid nor a formation
+  that adds up, the starters are listed, not drawn. Ratings join a player by id, then shirt number,
+  then exact name, because the API spells a player two ways ("R. Araujo", "Ronald Araújo"). Some
+  ratings come with player id 0 and no number (WSL, "Jade Rose" for "J. Rose"), so last of all a
+  lineup name "X. Surname" takes the one such rating with that initial and surname, or none.
 - Ratings are labelled as API-Football's wherever they show (D-2026-10-13a): the summary heading and,
   on the lineups panel, the app's line "Ratings come from API-Football, not from The ARCHV."
 - **The in-app Browser pane cannot test the swipe.** While it is hidden it runs no animation frames and

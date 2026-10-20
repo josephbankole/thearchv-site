@@ -440,6 +440,17 @@ function statValue(stats: unknown, type: string): unknown {
 const percent = (v: unknown): string | null =>
   typeof v === "string" && v ? v : typeof v === "number" ? `${v}%` : null;
 
+// "Passes %", or, when the API leaves it out (three of the five recorded replies), worked out from
+// "Passes accurate" over "Total passes", which is the same figure the API sends where it has it.
+function passAccuracy(stats: unknown): string | null {
+  const given = percent(statValue(stats, "Passes %"));
+  if (given) return given;
+  const total = int(statValue(stats, "Total passes"));
+  const accurate = int(statValue(stats, "Passes accurate"));
+  if (!total || total <= 0 || accurate === null || accurate < 0 || accurate > total) return null;
+  return `${Math.round((100 * accurate) / total)}%`;
+}
+
 function statsFor(entries: unknown, teamId: number): Stats | null {
   const e = forTeam(entries, teamId);
   if (!e) return null;
@@ -457,7 +468,7 @@ function statsFor(entries: unknown, teamId: number): Stats | null {
     xg: typeof xg === "string" && xg ? xg : typeof xg === "number" ? String(xg) : null,
     saves: int(statValue(s, "Goalkeeper Saves")),
     passes: int(statValue(s, "Total passes")),
-    passAccuracy: percent(statValue(s, "Passes %")),
+    passAccuracy: passAccuracy(s),
   };
 }
 

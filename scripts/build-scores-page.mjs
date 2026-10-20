@@ -134,7 +134,10 @@ function styles() {
        puts the panel back instantly after each 30-second rebuild, and animates only a tab press. */
     .scores__track { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; align-items: start; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-behavior: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .scores__track::-webkit-scrollbar { display: none; }
-    .scores__panel { min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+    /* position: relative makes each panel the containing block of the visually hidden .scores__sr
+       text inside it (position: absolute). Without it that text is placed against main, outside the
+       track, and the panels off to the side widen the whole page. Not a transform, so trap 3 holds. */
+    .scores__panel { position: relative; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
     .scores__panel:focus { outline: none; }
     .scores__panel:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
 
@@ -161,6 +164,7 @@ function styles() {
     .pitch__shirt { display: block; width: 100%; height: 100%; }
     .pitch__shirt path { stroke-width: 1.3; stroke-linejoin: round; }
     .pitch__shirt text { font-family: 'Inter Tight', system-ui, sans-serif; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .pitch__shirt .pitch__halo { paint-order: stroke; stroke-width: 2.4px; stroke-linejoin: round; }
     .pitch__rate { position: absolute; top: -.3rem; left: 1.55rem; padding: 0 .22rem; border: 1px solid var(--rule); border-radius: .3rem; background: var(--bg-sunken); color: var(--ink); font-size: .64rem; font-weight: 600; line-height: 1.35; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .pitch__rate.is-top { border-color: var(--accent-ink); background: var(--accent-ink); color: #fff; }
     .pitch__name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: .2rem 0 0; color: var(--ink); font-size: .68rem; line-height: 1.2; overflow-wrap: break-word; }

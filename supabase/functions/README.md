@@ -233,7 +233,7 @@ mapper builds each field by name and copies no URL across.
 Objects are uploaded with `contentType` `application/json` and `cacheControl` 30. supabase-js sends that
 as `Cache-Control: max-age=30` (not `public, max-age=30`); check the header on a read-back. A finished
 match's file stops changing about two hours after full time. Files are never deleted, so the bucket
-grows by about 7 KB for each match played, and a few KB for each day.
+grows by about 9 KB for each match played, and a few KB for each day.
 
 Ratings are API-Football's numbers. The files say so in `source`, and the app has to label them as
 theirs. The web page labels them too (/scores/, D-2026-10-13a).
@@ -250,12 +250,15 @@ keys and ignores the rest, so the schema did not change. For the lineups graphic
 - each rating has `id`, so the page can match a rating to a lineup player when the two names differ
   ("R. Araujo" in the lineup, "Ronald Araújo" in the ratings) or the rating has no shirt number;
 - each side's stats gain `saves` ("Goalkeeper Saves"), `passes` ("Total passes") and `passAccuracy`
-  ("Passes %", a string like `"80%"`).
+  ("Passes %", a string like `"80%"`; when the API leaves that out, "Passes accurate" over "Total
+  passes", rounded, which is the same figure).
 
 A finished match's file is never fetched again by the minute's poll, so files written before the deploy
 get these fields only from a backfill (below), which rewrites every match file whose content has changed.
 The page works without them: it lays a lineup out from the formation and the API's order, matches ratings
-by shirt number then exact name, and draws neutral shirts when there are no colours.
+by shirt number then exact name, and draws neutral shirts when there are no colours. A rating the API sends
+with player id 0 and no shirt number (seen on WSL players) has neither key, so the page matches it last by
+initial and surname ("J. Rose" to "Jade Rose"), and only when exactly one rating fits.
 
 WSL team names lose the API's trailing " W" ("Arsenal W" becomes "Arsenal"); the competition
 already says it is the women's league. Names are also tidied: the API sometimes double-encodes an accent

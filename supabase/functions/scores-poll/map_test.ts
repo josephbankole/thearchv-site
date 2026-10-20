@@ -339,6 +339,25 @@ Deno.test("stats: saves, passes and pass accuracy are null when the API leaves t
   assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).stats!.home.passAccuracy, "77%");
 });
 
+Deno.test("stats: with no \"Passes %\", pass accuracy is accurate passes over total passes", () => {
+  // The PL reply has all three: 240 of 301 is the API's own "80%".
+  const fx = fixtureById(IDS.plFinished);
+  const liverpool = fx.statistics.find((s: { team: { id: number } }) => s.team.id === 40);
+  liverpool.statistics = liverpool.statistics.filter((s: { type: string }) => s.type !== "Passes %");
+  assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).stats!.home.passAccuracy, "80%");
+  // Three recorded replies leave "Passes %" out altogether.
+  assertEquals([fileOf(IDS.uclLive).stats!.home.passAccuracy, fileOf(IDS.uclLive).stats!.away.passAccuracy], ["89%", "82%"]);
+  assertEquals(fileOf(IDS.wslFinished).stats!.home.passAccuracy, "84%");
+  // No total, a zero total or more accurate passes than passes: null.
+  for (const total of [null, 0, 100]) {
+    const t = fixtureById(IDS.plFinished);
+    const side = t.statistics.find((s: { team: { id: number } }) => s.team.id === 40);
+    side.statistics = side.statistics.filter((s: { type: string }) => s.type !== "Passes %");
+    side.statistics.find((s: { type: string }) => s.type === "Total passes").value = total;
+    assertEquals(mapMatchFile(t, mapMatch(t)!, NOW).stats!.home.passAccuracy, null, String(total));
+  }
+});
+
 Deno.test("stats: a missing stat is null, a numeric string becomes a number, and stats pair up or are null", () => {
   const fx = fixtureById(IDS.plFinished);
   const liverpool = fx.statistics.find((s: { team: { id: number } }) => s.team.id === 40);

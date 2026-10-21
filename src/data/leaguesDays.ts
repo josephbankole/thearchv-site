@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-21",
+    day: "Wednesday",
+    headline: "Erik ten Hag blames Manchester United's board, and Michael Carrick says he needs no reassurance",
+    dek: "Ten Hag told The Athletic the board fuelled a toxic culture. Before Como in the Champions League, Carrick said he had not felt it, called it Erik's opinion and said he needs no reassurance.",
+    body: "Erik ten Hag has accused Manchester United's board of fuelling a \"toxic culture\", in an interview with The Athletic two years after he was sacked in October 2024 (beIN Sports; Yahoo Sports). He also said the board did not keep its word on transfers (Irish Examiner; Yahoo Sports).\n\nMichael Carrick answered on Tuesday at his press conference before Wednesday's Champions League match against Como at the Stadio Giuseppe Sinigaglia. Asked whether he had felt any toxicity since coming back to the club, he said he had not. \"That's Erik's opinion,\" he said of the criticism of the board, and he called it wrong for him to comment (beIN Sports; Yahoo Sports).\n\nAsked whether he felt backed by the people above him, he said: \"I don't need any reassurance.\" He added: \"I know we've got to win football games for everything to flow and everything to fit into place\" (Al Jazeera; Irish Examiner).\n\nUnited have won two of their 10 games in all competitions, are six without a win and have made the club's worst league start in 40 years (Al Jazeera; Irish Examiner). They are 13th in the Premier League (BBC Sport; AFP). Their last win was 4-0 against Sabah in the Champions League opener in September (Irish Examiner; New Straits Times).\n\nCarrick travelled without Lisandro Martinez, Luke Shaw, Kobbie Mainoo, Marcus Rashford, Benjamin Sesko, Patrick Dorgu and Ayden Heaven (Al Jazeera; Irish Examiner). Leny Yoro is suspended after his red card in the 2-0 defeat at Atletico Madrid (Irish Examiner; Yahoo Sports). Como, coached by Cesc Fabregas, beat RB Leipzig 4-1 on their Champions League debut (New Straits Times; Kuwait Times).\n\nSources: beIN Sports; Yahoo Sports; Irish Examiner; Al Jazeera; BBC Sport; AFP; New Straits Times; Kuwait Times.",
+    status: "verified",
+    publishedAt: "2026-10-21T06:31:02-04:00",
+    index: "noindex",
+    seoTitle: "Michael Carrick rejects Erik ten Hag's toxic culture claim",
+    sources: [{"outlet":"beIN Sports","url":"https://www.beinsports.com/en-us/soccer/uefa-champions-league/articles/carrick-disagrees-with-ten-hags-toxic-man-utd-claims-2026-10-20","published":"2026-10-20"},{"outlet":"Irish Examiner","url":"https://www.irishexaminer.com/sport/soccer/arid-41926823.html","published":"2026-10-20"},{"outlet":"Al Jazeera","url":"https://www.aljazeera.com/sports/2026/10/21/man-uniteds-carrick-doesnt-need-reassurance-despite-teams-horror-start","published":"2026-10-21"},{"outlet":"Yahoo Sports","url":"https://sports.yahoo.com/articles/manchester-united-boss-michael-carrick-200607920.html","published":"2026-10-20"}],
+    tier: "confirmed",
+    expires: "2026-10-22",
+  },
+  {
     date: "2026-10-19",
     day: "Monday",
     headline: "Manchester United draw at Leeds United, and Michael Carrick says a good run is coming",

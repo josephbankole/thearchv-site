@@ -7,6 +7,19 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-23",
+    day: "Friday",
+    headline: "Bruno Fernandes blames the pressing plan for Como, and Michael Carrick blames the running",
+    dek: "After Manchester United lost 4-1 to Como in the Champions League, the captain said the staff chose not to press man-to-man. Carrick said United half-pressed man-to-man after half-time and that a team that does not run does not win.",
+    body: "Manchester United's 4-1 defeat by Como in the Champions League on Wednesday 21 October left the captain and the head coach giving different reasons for it (Irish Examiner; Football365; Brit Brief).\n\nBruno Fernandes told TNT Sports after the game: \"It's a decision from the staff to not press man-to-man.\" He said that left space in behind, that Como grew in confidence with the ball, and that it was for the manager and the staff to address rather than him (Irish Examiner; Football365).\n\nMichael Carrick disputed that at his press conference. \"We actually half-pressed man-to-man the second half and then conceded a goal from that,\" he said, and then: \"If you don't run, and you don't run forward, and you don't run back, you ain't going to win\" (Football365; Brit Brief). \"It wasn't just the goals, if I'm totally honest,\" he said of a performance he called unacceptable (Football365; Brit Brief).\n\nComo scored after two minutes. Nico Paz scored twice, Anastasios Douvikas and Jacobo Ramon got the others, and Joshua Zirkzee scored for United in stoppage time (Football365; Sky Sports; NBC Sports). United had gone six games without a win before the trip (Al Jazeera; Irish Examiner), so Como makes it seven.\n\nIt is the second public split at the club this month. Lisandro Martinez criticised the hierarchy after the 2-0 defeat at Atletico Madrid and apologised two days later (BBC Sport; ESPN). Manchester United play Bournemouth at Old Trafford on Sunday (Al Jazeera; Irish Examiner).\n\nSources: Irish Examiner; Football365; Brit Brief; Sky Sports; NBC Sports; Al Jazeera; BBC Sport; ESPN.",
+    status: "verified",
+    publishedAt: "2026-10-23T06:29:04-04:00",
+    index: "noindex",
+    seoTitle: "Bruno Fernandes criticises Carrick tactics after Como loss",
+    sources: [{"outlet":"Irish Examiner","url":"https://www.irishexaminer.com/sport/soccer/arid-41927324.html","published":"2026-10-21"},{"outlet":"Football365","url":"https://www.football365.com/news/carrick-bites-back-at-bruno-fernandes-in-man-utd-war-of-words-if-you-dont-run-you-aint-gonna-win","published":"2026-10-21"},{"outlet":"Brit Brief","url":"https://britbrief.co.uk/sports/football/carrick-hits-back-at-fernandes-after-como-defeat.html","published":"2026-10-21"},{"outlet":"Al Jazeera","url":"https://www.aljazeera.com/sports/2026/10/21/man-uniteds-carrick-doesnt-need-reassurance-despite-teams-horror-start","published":"2026-10-21"}],
+    tier: "confirmed",
+  },
+  {
     date: "2026-10-21",
     day: "Wednesday",
     headline: "Erik ten Hag blames Manchester United's board, and Michael Carrick says he needs no reassurance",

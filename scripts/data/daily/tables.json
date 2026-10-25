@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-23T09:49:40.261Z",
+  "updatedAt": "2026-10-24T23:55:23.548Z",
   "sports": {
     "football": {
       "blocks": [
@@ -9,12 +9,12 @@
           "kind": "standings",
           "league": "premier-league",
           "title": "Premier League table",
-          "asOf": "2026-10-23",
-          "fetchedAt": "2026-10-23T09:49:40.261Z",
+          "asOf": "2026-10-24",
+          "fetchedAt": "2026-10-24T23:55:23.548Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-23",
+          "lastFreshAsOf": "2026-10-24",
           "through": null,
           "throughLabel": null,
           "compactRows": 6,
@@ -56,8 +56,8 @@
               "short": "Man City",
               "cells": {
                 "pos": 1,
-                "p": 7,
-                "gd": 12,
+                "p": 8,
+                "gd": 11,
                 "pts": 21
               }
             },
@@ -66,9 +66,9 @@
               "short": "Arsenal",
               "cells": {
                 "pos": 2,
-                "p": 7,
-                "gd": 6,
-                "pts": 18
+                "p": 8,
+                "gd": 8,
+                "pts": 21
               }
             },
             {
@@ -86,8 +86,8 @@
               "short": "Chelsea",
               "cells": {
                 "pos": 4,
-                "p": 7,
-                "gd": 4,
+                "p": 8,
+                "gd": 2,
                 "pts": 13
               }
             },
@@ -102,10 +102,20 @@
               }
             },
             {
+              "name": "Aston Villa FC",
+              "short": "Aston Villa",
+              "cells": {
+                "pos": 6,
+                "p": 8,
+                "gd": -3,
+                "pts": 11
+              }
+            },
+            {
               "name": "Brentford FC",
               "short": "Brentford",
               "cells": {
-                "pos": 6,
+                "pos": 7,
                 "p": 7,
                 "gd": 5,
                 "pts": 10
@@ -115,7 +125,7 @@
               "name": "Leeds United FC",
               "short": "Leeds",
               "cells": {
-                "pos": 7,
+                "pos": 8,
                 "p": 7,
                 "gd": 3,
                 "pts": 10
@@ -125,20 +135,10 @@
               "name": "Everton FC",
               "short": "Everton",
               "cells": {
-                "pos": 8,
-                "p": 7,
-                "gd": 1,
-                "pts": 10
-              }
-            },
-            {
-              "name": "Hull City AFC",
-              "short": "Hull City",
-              "cells": {
                 "pos": 9,
-                "p": 7,
-                "gd": 1,
-                "pts": 9
+                "p": 8,
+                "gd": -1,
+                "pts": 10
               }
             },
             {
@@ -146,26 +146,46 @@
               "short": "Ipswich Town",
               "cells": {
                 "pos": 10,
-                "p": 7,
+                "p": 8,
                 "gd": -4,
+                "pts": 10
+              }
+            },
+            {
+              "name": "Hull City AFC",
+              "short": "Hull City",
+              "cells": {
+                "pos": 11,
+                "p": 7,
+                "gd": 1,
                 "pts": 9
+              }
+            },
+            {
+              "name": "Tottenham Hotspur FC",
+              "short": "Spurs",
+              "cells": {
+                "pos": 12,
+                "p": 8,
+                "gd": -2,
+                "pts": 9
+              }
+            },
+            {
+              "name": "Fulham FC",
+              "short": "Fulham",
+              "cells": {
+                "pos": 13,
+                "p": 8,
+                "gd": -2,
+                "pts": 8
               }
             },
             {
               "name": "Newcastle United FC",
               "short": "Newcastle",
               "cells": {
-                "pos": 11,
-                "p": 7,
-                "gd": -4,
-                "pts": 8
-              }
-            },
-            {
-              "name": "Aston Villa FC",
-              "short": "Aston Villa",
-              "cells": {
-                "pos": 12,
+                "pos": 14,
                 "p": 7,
                 "gd": -4,
                 "pts": 8
@@ -176,7 +196,7 @@
               "short": "Man Utd",
               "highlight": true,
               "cells": {
-                "pos": 13,
+                "pos": 15,
                 "p": 7,
                 "gd": 0,
                 "pts": 7
@@ -186,7 +206,7 @@
               "name": "Crystal Palace FC",
               "short": "Palace",
               "cells": {
-                "pos": 14,
+                "pos": 16,
                 "p": 7,
                 "gd": -8,
                 "pts": 7
@@ -196,18 +216,18 @@
               "name": "AFC Bournemouth",
               "short": "Bournemouth",
               "cells": {
-                "pos": 15,
+                "pos": 17,
                 "p": 7,
                 "gd": -4,
                 "pts": 6
               }
             },
             {
-              "name": "Tottenham Hotspur FC",
-              "short": "Spurs",
+              "name": "Nottingham Forest FC",
+              "short": "Nott'm Forest",
               "cells": {
-                "pos": 16,
-                "p": 7,
+                "pos": 18,
+                "p": 8,
                 "gd": -4,
                 "pts": 6
               }
@@ -216,30 +236,10 @@
               "name": "Coventry City FC",
               "short": "Coventry",
               "cells": {
-                "pos": 17,
-                "p": 7,
-                "gd": -8,
-                "pts": 6
-              }
-            },
-            {
-              "name": "Fulham FC",
-              "short": "Fulham",
-              "cells": {
-                "pos": 18,
-                "p": 7,
-                "gd": -3,
-                "pts": 5
-              }
-            },
-            {
-              "name": "Nottingham Forest FC",
-              "short": "Nott'm Forest",
-              "cells": {
                 "pos": 19,
-                "p": 7,
-                "gd": -4,
-                "pts": 5
+                "p": 8,
+                "gd": -9,
+                "pts": 6
               }
             },
             {
@@ -268,12 +268,12 @@
           "kind": "standings",
           "league": "champions-league",
           "title": "Champions League: league phase",
-          "asOf": "2026-10-23",
-          "fetchedAt": "2026-10-23T09:49:40.261Z",
+          "asOf": "2026-10-24",
+          "fetchedAt": "2026-10-24T23:55:23.548Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-23",
+          "lastFreshAsOf": "2026-10-24",
           "through": null,
           "throughLabel": "After matchday 3",
           "compactRows": 8,
@@ -687,12 +687,12 @@
           "kind": "fixtures",
           "league": null,
           "title": "Manchester United: next",
-          "asOf": "2026-10-23",
-          "fetchedAt": "2026-10-23T09:49:40.261Z",
+          "asOf": "2026-10-24",
+          "fetchedAt": "2026-10-24T23:55:23.548Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-23",
+          "lastFreshAsOf": "2026-10-24",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
@@ -738,12 +738,12 @@
           "kind": "results",
           "league": null,
           "title": "Manchester United: results",
-          "asOf": "2026-10-23",
-          "fetchedAt": "2026-10-23T09:49:40.261Z",
+          "asOf": "2026-10-24",
+          "fetchedAt": "2026-10-24T23:55:23.548Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-23",
+          "lastFreshAsOf": "2026-10-24",
           "through": "2026-10-21",
           "throughLabel": null,
           "compactRows": null,
@@ -799,12 +799,12 @@
           "kind": "standings",
           "league": "nfl",
           "title": "NFL standings",
-          "asOf": "2026-10-23",
-          "fetchedAt": "2026-10-23T09:49:40.261Z",
+          "asOf": "2026-10-24",
+          "fetchedAt": "2026-10-24T23:55:23.548Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-23",
+          "lastFreshAsOf": "2026-10-24",
           "through": "2026-10-22",
           "throughLabel": null,
           "compactRows": 1,
@@ -1177,12 +1177,12 @@
           "kind": "fixtures",
           "league": "nfl",
           "title": "NFL: week 7",
-          "asOf": "2026-10-23",
-          "fetchedAt": "2026-10-23T09:49:40.261Z",
+          "asOf": "2026-10-24",
+          "fetchedAt": "2026-10-24T23:55:23.548Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-23",
+          "lastFreshAsOf": "2026-10-24",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
@@ -1308,12 +1308,12 @@
           "kind": "results",
           "league": "nfl",
           "title": "NFL: week 6 results",
-          "asOf": "2026-10-23",
-          "fetchedAt": "2026-10-23T09:49:40.261Z",
+          "asOf": "2026-10-24",
+          "fetchedAt": "2026-10-24T23:55:23.548Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-10-23",
+          "lastFreshAsOf": "2026-10-24",
           "through": "2026-10-19",
           "throughLabel": null,
           "compactRows": null,

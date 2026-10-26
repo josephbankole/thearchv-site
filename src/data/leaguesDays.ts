@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-26",
+    day: "Monday",
+    headline: "Bournemouth win 3-0 at Old Trafford with Bruno Fernandes benched, and Michael Carrick's job is in the board's hands",
+    dek: "Manchester United lost 3-0 to Bournemouth in the Premier League on Sunday with their captain on the bench for 90 minutes. Sky Sports News says insiders at the club now think Carrick will be relieved of his duties, with Eddie Howe and Julian Nagelsmann the front runners.",
+    body: "Bournemouth beat Manchester United 3-0 in the Premier League at Old Trafford on Sunday 25 October (Sky Sports; Football365). Rayan volleyed in Justin Kluivert's free-kick on 38 minutes, Marcus Tavernier scored five minutes later after Leny Yoro slipped, and Evanilson beat Senne Lammens to the ball on 71 (Sky Sports). United are eight games without a win in all competitions and 16th, one point above the relegation zone (Sky Sports).\n\nMichael Carrick left Bruno Fernandes on the bench for the whole game. After the 4-1 defeat at Como on Wednesday, the captain told TNT Sports it was \"a decision from the staff to not press man-to-man\" (Irish Examiner), which Gary Neville called \"a direct attack on the manager\" (Sky Sports). Carrick sent on Matheus Cunha at half-time instead (Sky Sports).\n\nSky Sports News reports that the hierarchy were weighing alternatives before Bournemouth and will now speed that up, and that insiders expect Carrick to be relieved of his duties. The decision sits with director of football Jason Wilcox and chief executive Omar Berrada, who make a recommendation to co-owner Sir Jim Ratcliffe (Sky Sports News).\n\nIf Carrick goes, Sky names Howe and Nagelsmann as the front runners. Wilcox is thought to favour a coach with Premier League experience, and Howe has been out of work since resigning at Newcastle in July. Nagelsmann knows head of recruitment Christopher Vivell from RB Leipzig and has been free since Germany went out to Paraguay in the World Cup round of 32. Neither would need compensation paid. Unai Emery and Antonio Conte have also been considered but are not thought to be favourites (Sky Sports News).\n\nThe Stretford End sang Carrick's name as he walked down the tunnel, then booed the players and turned on the Glazers, Ratcliffe and Wilcox (Sky Sports). Carrick told Sky Sports: \"What is next? I don't know. I'll always do what's best for this football club.\"\n\nSources: Sky Sports; Sky Sports News; Football365; Irish Examiner.",
+    status: "verified",
+    publishedAt: "2026-10-26T06:30:21-04:00",
+    index: "noindex",
+    seoTitle: "Manchester United 0-3 Bournemouth: Carrick expected to go",
+    sources: [{"outlet":"Sky Sports","url":"https://www.skysports.com/football/manchester-united-vs-bournemouth/report/559522","published":"2026-10-25"},{"outlet":"Football365","url":"https://www.football365.com/news/man-utd-reach-decision-sack-carrick-bournemouth","published":"2026-10-25"},{"outlet":"Irish Examiner","url":"https://www.irishexaminer.com/sport/soccer/arid-41927324.html","published":"2026-10-21"}],
+    tier: "reported",
+    expires: "2026-10-28",
+  },
+  {
     date: "2026-10-23",
     day: "Friday",
     headline: "Bruno Fernandes blames the pressing plan for Como, and Michael Carrick blames the running",

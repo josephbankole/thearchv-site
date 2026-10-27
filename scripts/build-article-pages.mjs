@@ -26,6 +26,7 @@ import { entryArt } from "./shared/illustrated.mjs";
 import { pageCard } from "./shared/page-card.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
+import { retroNoindex, retroNoindexReport } from "./shared/retro-noindex.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 import { sentences, abbreviationStop } from "./shared/sentences.mjs";
 
@@ -537,7 +538,12 @@ const decisions = new Map();
 for (const section of sections) {
   for (const entry of section.days) {
     const id = `${section.base}${entry.date}/`;
-    const d = indexDecision(entry, TODAY);
+    // Search plan item (a): a page on the staged retroactive list (plan 1.2) is noindex,follow
+    // whatever its own fields say. It keeps its sitemap row below.
+    const retro = retroNoindex(id);
+    const d = retro
+      ? { index: false, reasons: [`retro noindex batch ${retro.batch}, ${retro.date} (plan 1.2)`], warnOnly: false }
+      : indexDecision(entry, TODAY);
     decisions.set(entry, d);
     if (!d.index) census.noindex.push(`${id} (${d.reasons.join("; ")})`);
     else if (d.reasons.length) census.warn.push(`${id} (${d.reasons.join("; ")})`);
@@ -555,6 +561,7 @@ const show = (label, list) => {
   for (const line of list.slice(0, 20)) console.warn(`  ${line}`);
   if (list.length > 20) console.warn(`  ... and ${list.length - 20} more`);
 };
+retroNoindexReport("build-article-pages", (p) => !p.startsWith("/duel/"));
 console.log(`[build-article-pages] gates (warn-only: ${!GATES_ENFORCE}): ${census.noindex.length} noindex, ${census.warn.length} would-be noindex once enforced`);
 show("G1/G6/G9 would be noindex once enforced", census.warn);
 show("G4 sources", census.g4);

@@ -26,12 +26,13 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, jsLiteral,
-  masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  masthead, footer, documentShell, ROBOTS_INDEXABLE, ROBOTS_NOINDEX_FOLLOW,
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { CARD, CARD_GROUND, div, text, accentRule, wordmark, renderCard, artPng } from "./shared/card-brand.mjs";
 import { percentileBar, percentileBarStyles } from "./shared/percentile-bar.mjs";
 import { loadDataset, listPairs, compareStat, formatValue, providerName } from "./shared/football-data.mjs";
+import { retroNoindex, retroNoindexReport } from "./shared/retro-noindex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -419,7 +420,9 @@ function renderPair({ a, b, slug }, hasCard) {
   metaDescription: description,
   description,
   socialTitle: title,
-  robots: ROBOTS_INDEXABLE,
+  // Search plan item (a): a pair on the staged retroactive list (plan 1.2) is noindex,follow. The
+  // page stays live, linked from /duel/ and in sitemap.xml.
+  robots: retroNoindex(`/duel/${slug}/`) ? ROBOTS_NOINDEX_FOLLOW : ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,
   ogType: "website",
@@ -688,4 +691,5 @@ for (const pair of pairs) {
   writeFileSync(join(dir, "index.html"), renderPair(pair, hasCard));
 }
 
+retroNoindexReport("build-duel-pages", (p) => p.startsWith("/duel/"));
 console.log(`[build-duel-pages] provider "${providerName}": ${players.length} player(s), ${pairs.length} duel page(s), ${cards} share card(s) to ${OUT}/duel/`);

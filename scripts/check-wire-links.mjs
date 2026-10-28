@@ -7,7 +7,10 @@
      backstop that should never fire: it tests the path with the same regexes pick.mjs uses, never
      the query or fragment;
    - an <img> appears inside the Wire or tables content (no publisher thumbnails, logos or crests);
-   - the wire CSS region in page-shell.mjs gains an animation, marquee or headline clamp.
+   - the wire CSS region in page-shell.mjs, or in src/style.css once the homepage carries the Wire
+     block (2026-10-28), gains an animation, marquee or headline clamp.
+   The homepage block is checked like a sport strip when it is there; with no current edition it
+   renders nothing and there is nothing to check.
    The CSS is checked in source because Vite bundles every stylesheet into one file, so a region
    cannot be scoped in dist (design-final D6). */
 import { readFileSync, existsSync, readdirSync } from "node:fs";
@@ -41,6 +44,17 @@ export function wireLinkProblems(tag, sources = SOURCES) {
   return problems;
 }
 
+/* The problems with one file's wire CSS region (/* wire:start ... wire:end *\/), as strings. A
+   missing region is a problem only when `required`. */
+export function wireCssProblems(text, label, required = true) {
+  const a = text.indexOf("/* wire:start"), b = text.indexOf("/* wire:end */");
+  if (a < 0 || b < 0) return required ? [`${label}: wire CSS region markers missing`] : [];
+  // Strip the region's own comments before scanning, so the rule can name what it forbids.
+  const css = text.slice(a, b).replace(/\/\*[\s\S]*?\*\//g, "");
+  return ["@keyframes", "animation", "marquee", "line-clamp", "text-overflow", "transition", "overflow-x"]
+    .filter((bad) => css.includes(bad)).map((bad) => `${label} wire CSS region contains "${bad}"`);
+}
+
 function checkPage(label, file, regions) {
   if (!existsSync(file)) { errors.push(`${label}: missing ${file}`); return 0; }
   const html = readFileSync(file, "utf8");
@@ -69,15 +83,16 @@ if (isMain(import.meta.url)) {
     links += checkPage(`/${s.urlBase}/`, join(DIST, s.urlBase, "index.html"), [['class="wire wire--strip"', 'class="wire__more"><a href="/wire/'], ['class="tables tables--strip"', 'class="wire__more"><a href="/tables/']]);
   }
 
-  const shell = readFileSync(join(ROOT, "scripts", "shared", "page-shell.mjs"), "utf8");
-  const a = shell.indexOf("/* wire:start"), b = shell.indexOf("/* wire:end */");
-  if (a < 0 || b < 0) errors.push("page-shell.mjs: wire CSS region markers missing");
-  else {
-    // Strip the region's own comments before scanning, so the rule can name what it forbids.
-    const css = shell.slice(a, b).replace(/\/\*[\s\S]*?\*\//g, "");
-    for (const bad of ["@keyframes", "animation", "marquee", "line-clamp", "text-overflow", "transition", "overflow-x"]) {
-      if (css.includes(bad)) errors.push(`page-shell.mjs wire CSS region contains "${bad}"`);
-    }
+  const homeFile = join(DIST, "index.html");
+  links += checkPage("/", homeFile, [['class="wire wire--home"', 'class="wire__more"><a href="/wire/']]);
+  const homeHasWire = existsSync(homeFile) && readFileSync(homeFile, "utf8").includes('class="wire wire--home"');
+
+  for (const [label, file, required] of [
+    ["page-shell.mjs", join(ROOT, "scripts", "shared", "page-shell.mjs"), true],
+    // The front page's CSS lives in src/style.css; its region is required once the block ships.
+    ["src/style.css", join(ROOT, "src", "style.css"), homeHasWire],
+  ]) {
+    for (const p of wireCssProblems(existsSync(file) ? readFileSync(file, "utf8") : "", label, required)) errors.push(p);
   }
 
   if (errors.length) {

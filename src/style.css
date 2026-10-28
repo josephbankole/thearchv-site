@@ -566,6 +566,39 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    scrollers trap 3 in CLAUDE.md guards; removing it left `.rail` and `.sportnav`. The poster `.rail`
    went on 2026-10-12, so `.sportnav` is the one left, still carrying `overflow-y: hidden`. */
 
+/* wire:start. The Wire on the front page (founder, 2026-10-28), between the lead and the
+   Dispatch: the day's edition as a static list, rendered by renderHomeWire() in
+   scripts/wire/lib/home.mjs with the same item markup as /wire/ (whose styles live in the
+   page-shell copy of this region). Calm by rule, as there: nothing here may animate, transition,
+   transform, scroll sideways or clamp a headline, and scripts/check-wire-links.mjs fails the build
+   if this region gains @keyframes, animation, marquee, line-clamp or text-overflow. Existing tokens
+   only; the two fill-only tokens (--accent-fill, --ink-faint) are never text here. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* padding-block: 0 opts out of the global section rhythm, as .homereads does below. */
+.wire--home { padding-block: 0; border-bottom: 1px solid var(--rule); }
+.wire--home > .wrap { padding-block: 1.6rem 1.8rem; }
+.wire--home .wire__title { margin: 0 0 0.3rem; font-family: var(--display); font-weight: 400; font-size: 1.35rem; line-height: 1.1; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.wire--home .wire__subline { margin: 0 0 0.35rem; font-size: 0.95rem; color: var(--ink-soft); }
+.wire--home .wire__edition { margin: 0 0 0.9rem; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); }
+.wire--home .wire__stale { font-family: inherit; letter-spacing: 0; text-transform: none; }
+.wire--home .wire__list { list-style: none; margin: 0; padding: 0; max-width: 46rem; }
+.wire--home .wire-item { padding: 0.85rem 0; border-top: 1px solid var(--rule-soft); }
+.wire--home .wire-item:first-child { border-top: 0; padding-top: 0.2rem; }
+/* The publisher's name before the headline, in the mono micro-label face the kickers use. */
+.wire--home .wire-item__meta { margin: 0 0 0.3rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
+.wire--home .wire-item__source { font-weight: 700; color: var(--ink-muted); }
+.wire--home .wire-item__headline { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 1.08rem; line-height: 1.35; overflow-wrap: anywhere; }
+.wire--home .wire-item__headline a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 0.2em; }
+.wire--home .wire-item__headline a:hover { text-decoration-color: var(--ink); }
+.wire--home .wire-item__headline a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+.wire--home .wire-item__note { margin: 0.45rem 0 0; padding-left: 0.75rem; border-left: 2px solid var(--rule); font-family: var(--serif); font-style: italic; font-size: 0.98rem; line-height: 1.5; color: var(--ink-soft); }
+.wire--home .wire-item__note-label { margin-right: 0.35rem; font-family: var(--grotesque); font-style: normal; font-variant: small-caps; letter-spacing: 0.06em; color: var(--ink-muted); }
+.wire--home .wire__footer { margin: 0.9rem 0 0; font-size: 0.82rem; line-height: 1.5; color: var(--ink-muted); }
+.wire--home .wire__more { margin: 0.6rem 0 0; font-size: 0.9rem; }
+.wire--home .wire__more a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 0.2em; }
+.wire--home .wire__more a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+/* wire:end */
+
 /* ---------- shared front-page type ---------- */
 .kicker {
   display: inline-flex; align-items: center; gap: 0.6rem;

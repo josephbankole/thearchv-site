@@ -1,9 +1,10 @@
 {
-  "_note": "The twenty-one Manchester United poster tiles shown on /posters/ (moved off the front page on 2026-10-13). One tile per Etsy listing; image is the listing photo at 900x675 under public/shop/ and alt is that photo's Etsy alt text. Keep in step with src/data/posters.ts (inclusion rules in its header) and with the four tiles in index.html.",
+  "_note": "The twenty-one Manchester United poster tiles shown on /posters/ (moved off the front page on 2026-10-13). One tile per Etsy listing; image is the listing photo at 900x675 under public/shop/ and alt is that photo's Etsy alt text. Keep in step with src/data/posters.ts (inclusion rules in its header). `home` (1 to 4) picks the four front-page tiles and their order: the homepage renders them from here (renderCovers in src/render/home.ts) and build-feed.mjs publishes the same four as /feed/home-covers.json for the app, so rotating the front-page posters is one edit here plus a deploy. A home tile must be a 900x675 webp; the build fails otherwise.",
   "tiles": [
     {
       "group": "men",
       "listing": "4521788550",
+      "home": 1,
       "image": "/shop/united-london-1968.webp",
       "label": "London 1968",
       "alt": "Framed poster of Manchester United 4-1 Benfica, the 1968 European Cup final at Wembley, hanging on a wall."
@@ -39,6 +40,7 @@
     {
       "group": "men",
       "listing": "4521782964",
+      "home": 2,
       "image": "/shop/united-barcelona-1999.webp",
       "label": "Barcelona 1999",
       "alt": "Framed poster of Manchester United 2-1 Bayern Munich, the 1999 Champions League final in Barcelona, hanging on a wall."
@@ -46,6 +48,7 @@
     {
       "group": "men",
       "listing": "4521779161",
+      "home": 3,
       "image": "/shop/united-moscow-2008.webp",
       "label": "Moscow 2008",
       "alt": "Framed poster of Manchester United 1-1 Chelsea, the 2008 Champions League final in Moscow won on penalties, hanging on a wall."
@@ -130,6 +133,7 @@
     {
       "group": "women",
       "listing": "4527673755",
+      "home": 4,
       "image": "/shop/united-women-london-2024.webp",
       "label": "London 2024",
       "alt": "Framed poster on a wall: Manchester United Women's 4-0 win over Tottenham Hotspur in the 2024 Women's FA Cup final at Wembley, three players seen from behind."

@@ -607,7 +607,7 @@ report:
    writing). Nothing deploys on a red suite.
 2. **Commit first** on `preview`, so the deployed code is the repo's code.
 3. **The table migration.** `list_migrations` and confirm `20261013170000_scores_live_feed` is
-   recorded. Then `apply_migration` with `supabase/migrations/20261029120000_scores_season_mode.sql`.
+   recorded. Then `apply_migration` with `supabase/migrations/20261028185520_scores_season_mode.sql`.
    The MCP records its own timestamp as the version: rename the file to that version and commit the
    rename. Read back: `select id, season, updated_at from public.scores_season_state;` returns one row,
    and `select relrowsecurity from pg_class where relname = 'scores_season_state';` is true.

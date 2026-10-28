@@ -1,4 +1,4 @@
--- Season mode's cron job (2026-10-29). Applied AFTER 20261029120000_scores_season_mode.sql and after
+-- Season mode's cron job (2026-10-29). Applied AFTER 20261028185520_scores_season_mode.sql and after
 -- the function carrying season mode is deployed and its hand calls have been checked (README, season
 -- mode deploy, step 5). The founder confirmed the API-Football terms on 2026-10-28 ("Allowed,
 -- publish all"), which is the precondition this migration was held for. Idempotent: an existing job

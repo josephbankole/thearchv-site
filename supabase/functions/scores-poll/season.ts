@@ -78,16 +78,16 @@ export const isStep = (v: unknown): v is Step =>
 
 // ---------- the state row ----------
 
-export const BUILT_KEYS = ["days", "teams", "previews", "teamsFailed", "previewsFailed"] as const;
+export const BUILT_KEYS = ["days", "teams", "previews", "daysFailed", "teamsFailed", "previewsFailed"] as const;
 export type BuiltKey = typeof BUILT_KEYS[number];
 
 export type SeasonState = {
   season: number | null; // the season the held matches belong to
   listedAt: Partial<Record<CompetitionKey, string>>;
   matches: Partial<Record<CompetitionKey, Match[]>>;
-  // A build's last full run, plus, for teams and previews, the last run that failed part way (a
-  // failed storage listing, a failed write or an unreadable file), so a failure waits for the next
-  // listing or six hours like a success does instead of being due again on every call.
+  // A build's last full run, plus, for each build, the last run that failed part way (a failed
+  // storage listing, a failed write or an unreadable file), so a failure waits for the next listing
+  // or six hours like a success does instead of being due again on every call.
   builtAt: Partial<Record<BuiltKey, string>>;
   fileHashes: Record<string, string>;
   remaining: number | null;
@@ -218,14 +218,14 @@ const newest = (stamps: readonly (string | undefined)[]): number =>
 
 // The first build step that is due, or null. Days and teams are due when a listing is newer than
 // their last build, or every six hours; previews every six hours, or when the days were rebuilt
-// after them (a new listing reached the days first). For teams and previews a failed run counts
-// as the last build here, so a failure retries on that cadence and never starves the steps after.
+// after them (a new listing reached the days first). For every build a failed run counts as the
+// last build here, so a failure retries on that cadence and never starves the steps after. The
+// previews compare against the days' last full build only: a failed days run published nothing new.
 export function dueBuild(s: SeasonState, now: Date): BuildStep | null {
   const t = now.getTime();
   const listed = newest(Object.values(s.listedAt));
   const at = (k: BuiltKey) => Date.parse(s.builtAt[k] ?? "");
-  const last = (k: "days" | "teams" | "previews") =>
-    k === "days" ? at(k) : newest([s.builtAt[k], s.builtAt[`${k}Failed`]]);
+  const last = (k: "days" | "teams" | "previews") => newest([s.builtAt[k], s.builtAt[`${k}Failed`]]);
   const stale = (k: "days" | "teams" | "previews") => !Number.isFinite(last(k)) || t - last(k) >= BUILD_EVERY_MS;
   if (stale("days") || listed > last("days")) return "build:days";
   if (stale("teams") || listed > last("teams")) return "build:teams";

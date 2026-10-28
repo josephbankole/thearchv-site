@@ -461,11 +461,12 @@ paths the mode owns now, so a quiet six hours writes nothing and the record does
   " W", whatever competition the row is from. No venue, round, logo, flag or referee is copied. An empty
   reply is "never met"; a non-empty reply in which no row can be placed is a failure, keeps the
   previous block and logs `h2h-unmapped <id>`.
-- **The head-to-head shape is UNVERIFIED.** No `/fixtures/headtohead` reply has been recorded (the API
-  docs refuse automated reads). `fixtures/h2h-synthetic.json` is SYNTHETIC, built from the recorded
-  fixture object shape, which API-Football documents as the same for this endpoint. The first live
-  reply after deploy is to be captured (logo and photo URLs stripped, as for the other fixtures) into
-  `fixtures/h2h-recorded.json` with a test against it, and this note then removed.
+- **The head-to-head shape, checked live on 2026-10-28.** The first live `build:previews` call made
+  28 `/fixtures/headtohead` requests, logged no `h2h-unmapped` error and wrote 87 previews. Chelsea v
+  Manchester United (fixture 1557450) shows 10 meetings: Chelsea 2, draws 4, Manchester United 4,
+  which matches the results listed in the block. No raw reply was recorded (there is no API key on the
+  laptop), so `fixtures/h2h-recorded.json` does not exist and the tests still run on
+  `fixtures/h2h-synthetic.json`, which is SYNTHETIC, built from the recorded fixture object shape.
 - **Guards, before any request, in this order.** A state row that cannot be read means no request at
   all. `backoff_until` in the future (30 minutes after any failed request) means no request, but the
   builds still run. `remaining` below 1,500 READ TODAY (UTC) means no request, and the answer says
@@ -639,9 +640,8 @@ report:
    sides to `_shared/clubs.json`. Then confirm with curl that `teams/index.json`, `teams/33.json`,
    `days/ahead.json` and one `preview/<id>.json` exist and parse with their schemas
    (`archv-teams/1`, `archv-team/1`, `archv-days-ahead/1`, `archv-preview/1`).
-6. **Capture the first live head-to-head reply** into `fixtures/h2h-recorded.json` (logo, flag and
-   photo URLs removed), add a test against it in the same session, and remove the "unverified" note
-   above.
+6. **Check the head-to-head shape** against the first live previews call (see "The head-to-head
+   shape" above). Done on 2026-10-28 from the written previews; no raw reply was captured.
 7. **The cron and the players.** `apply_migration` with
    `supabase/migrations/20261028192438_scores_season_cron.sql` (rename to the returned version, as in
    step 3) and check `select jobname, schedule from cron.job where jobname = 'scores-season';`. Set the
@@ -654,3 +654,17 @@ report:
    first Saturday after deploy record the busy-day count in the budget table above.
 9. **The site.** Deploy per site trap 2 (`bash scripts/deploy-site.sh`), since this code lives in
    the site repo.
+
+**Outcome, 2026-10-28.**
+
+- Migrations applied as `20261028185520_scores_season_mode` and `20261028192438_scores_season_cron`.
+- `scores-poll` deployed through the Supabase MCP. Version 7 matched the repo file for file. Versions
+  5 and 6 had the backslash-u escapes in `map.ts` decoded into raw characters by the deploy; the fix
+  builds those regex classes from code points, so the source carries no such escape. The `daysFailed`
+  fix (`season.ts`, `season_run.ts`) came after version 7 and is not deployed yet.
+- Hand calls all `ok`: the three listings at 1 request each; `build:days` 16 files, `build:teams` 66,
+  `build:previews` 87 with 28 head-to-head requests.
+- Cron `scores-season` at `7,22,37,52 * * * *`.
+- `PUBLISH_PLAYERS=1` set by the founder in the dashboard.
+- Backfill from 2026-07-07 done in one call: 17 requests, 273 match files rewritten with `players`.
+  The next-day rerun is not needed, because no match was played on 27 or 28 October.

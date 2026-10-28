@@ -24,3 +24,6 @@ points at `fixtures/daily/`.
   shapes, for offline tests.
 - `daily/wire.json`, `daily/tables.json`: a finished edition and tables file for the
   verification build and the page tests.
+- `feed-items-golden.json`: the `items` array `buildWireFeed` produced for `daily/wire.json` before
+  the 2026-10-28 change (club tags, ranked football extras), so the test can prove `items` is byte
+  for byte the same apart from the added `clubs`. Regenerate only for a deliberate, versioned change.

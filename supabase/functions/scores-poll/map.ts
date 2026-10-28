@@ -11,6 +11,14 @@
 // carries the player `id`, each lineup carries the team's shirt `colors` (six-digit hex only, checked
 // here, so the field can never hold a URL, a name or CSS), and stats gain saves, passes and pass
 // accuracy. The app decodes by named keys and ignores the rest, so no schema bump.
+//
+// Additive fields (2026-10-29, still archv-match/1, for the app's match centre): `players`, one line per
+// player who took part, per side, with the handful of figures the Players panel shows (minutes,
+// rating, goals, assists, shots, passes, tackles, cards, and saves and goals conceded for a
+// goalkeeper). It is built from the same /fixtures?ids= reply as the ratings, so it costs no request.
+// It is null unless the caller says the figures may be published (PUBLISH_PLAYERS=1, read once in
+// index.ts), because republishing them is a rights question settled outside this code. `ratings`
+// is unchanged and still carries the ratings alone.
 
 export type CompetitionKey = "premier-league" | "champions-league" | "wsl";
 
@@ -102,6 +110,31 @@ export type Stats = {
   passes: number | null;
   passAccuracy: string | null;
 };
+// One player's line in `players`. Only the figures a surface shows are carried: every extra field
+// widens what we republish. `sub` is worked out from the lineup, not taken from the API's
+// games.substitute, which the WSL sends as false for every player.
+export type PlayerLine = {
+  id: number | null;
+  name: string;
+  number: number | null;
+  pos: "G" | "D" | "M" | "F" | null;
+  minutes: number | null;
+  captain: boolean;
+  sub: boolean;
+  rating: number | null;
+  goals: number | null;
+  assists: number | null;
+  conceded: number | null; // goalkeepers only
+  saves: number | null; // goalkeepers only
+  shots: number | null;
+  shotsOn: number | null;
+  passes: number | null;
+  passesAccurate: number | null; // a count of accurate passes, not a percentage
+  keyPasses: number | null;
+  tackles: number | null;
+  yellow: number | null;
+  red: number | null;
+};
 export type MatchFile = {
   schema: typeof MATCH_SCHEMA;
   generatedAt: string;
@@ -111,6 +144,7 @@ export type MatchFile = {
   lineups: { home: Lineup; away: Lineup } | null;
   ratings: { home: Rating[]; away: Rating[] } | null;
   stats: { home: Stats; away: Stats } | null;
+  players: { home: PlayerLine[]; away: PlayerLine[] } | null;
 };
 
 // ---------- small readers ----------
@@ -119,12 +153,23 @@ type Obj = Record<string, unknown>;
 const obj = (v: unknown): Obj | null => v && typeof v === "object" && !Array.isArray(v) ? v as Obj : null;
 const list = (v: unknown): unknown[] => Array.isArray(v) ? v : [];
 
+// Character classes built from code points, so the source carries no backslash-u escapes for a deploy
+// path to decode into raw invisible characters (the MCP upload did exactly that on 2026-10-28).
+const cp = (n: number) => String.fromCodePoint(n);
+const range = (a: number, b: number) => `${cp(a)}-${cp(b)}`;
+// A UTF-8 lead byte read as Latin-1 (U+00C2 to U+00F4) followed by a continuation byte (U+0080 to U+00BF).
+const MOJIBAKE = new RegExp(`[${range(0xc2, 0xf4)}][${range(0x80, 0xbf)}]`);
+// Soft hyphen, zero-width space to right-to-left mark, word joiner, byte-order mark.
+const INVISIBLE = new RegExp(`[${cp(0xad)}${range(0x200b, 0x200f)}${cp(0x2060)}${cp(0xfeff)}]`, "g");
+// Combining diacritical marks, stripped after NFD.
+const COMBINING = new RegExp(`[${range(0x300, 0x36f)}]`, "g");
+
 // Some names reach us double-encoded: UTF-8 bytes read as Latin-1, so "Martínez" arrives as
 // "MartÃ" + U+00AD + "nez" (seen in a live Champions League reply, 2026-10-13). When every
 // character is a single byte, a mojibake pair is present and the bytes decode as UTF-8, decode
 // them. Anything else is left as it came.
 function repairEncoding(s: string): string {
-  if (!/[\u00c2-\u00f4][\u0080-\u00bf]/.test(s)) return s;
+  if (!MOJIBAKE.test(s)) return s;
   const bytes = new Uint8Array(s.length);
   for (let i = 0; i < s.length; i++) {
     const c = s.charCodeAt(i);
@@ -141,7 +186,7 @@ function repairEncoding(s: string): string {
 // Text for a published file: encoding repaired, then soft hyphens, zero-width characters and byte
 // order marks removed, which have no business in a name or a venue.
 export function tidy(s: string): string {
-  return repairEncoding(s).replace(/[\u00ad\u200b-\u200f\u2060\ufeff]/g, "").trim();
+  return repairEncoding(s).replace(INVISIBLE, "").trim();
 }
 
 const str = (v: unknown): string | null => {
@@ -426,6 +471,127 @@ function ratingsFor(entries: unknown, teamId: number): Rating[] {
   return out.sort((a, b) => b.rating - a.rating);
 }
 
+// ---------- players ----------
+
+const POSITIONS = new Set(["G", "D", "M", "F"]);
+const position = (v: unknown): PlayerLine["pos"] => {
+  const p = str(v);
+  return p && POSITIONS.has(p) ? p as PlayerLine["pos"] : null;
+};
+
+// Folded for comparing names: lower case, accents off, dots and extra spaces gone.
+const fold = (s: string): string[] =>
+  s.normalize("NFD").replace(COMBINING, "").toLowerCase().replace(/\./g, " ").split(/\s+/).filter(Boolean);
+
+// Whether a lineup's short name ("J. Rose", "L. Blindkilde") can be the player block's full name
+// ("Jade Rose", "Laura Blindkilde Brown"): the same first initial, and the short name's surname words
+// in order somewhere after the full name's first word. Only used when the id and the exact name
+// have both failed, and only when exactly one lineup player fits.
+function sameInitialAndSurname(short: string, full: string): boolean {
+  const s = fold(short);
+  const f = fold(full);
+  if (s.length < 2 || f.length < 2 || s[0].length !== 1 || f[0][0] !== s[0]) return false;
+  const rest = s.slice(1);
+  for (let i = 1; i + rest.length <= f.length; i++) {
+    if (rest.every((w, j) => f[i + j] === w)) return true;
+  }
+  return false;
+}
+
+// A pass count the API sends as a string ("45" accurate passes of 53). A whole, non-negative count
+// no larger than the passes made, or null: a percentage or a fraction is not what this field means.
+function accurateCount(v: unknown, passes: number | null): number | null {
+  const n = typeof v === "string" && /^\s*\d+\s*$/.test(v) ? Number(v) : typeof v === "number" ? v : NaN;
+  if (!Number.isInteger(n) || n < 0) return null;
+  return passes !== null && n > passes ? null : n;
+}
+
+// A rating as a number. The WSL sends "0" for a player it has not rated, so 0 and below are null.
+function ratingOf(v: unknown): number | null {
+  const n = typeof v === "string" || typeof v === "number" ? Number(v) : NaN;
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+// Each side's player lines, from the API's players block for that team, with the side's mapped
+// lineup filling what the block leaves out. Built field by field (no copy of the API's player
+// object, so its photo URL cannot come across). A player who neither played a minute nor got a
+// rating (an unused substitute) is left out. Starters first, then substitutes, each in the API's
+// order, so the file stays byte-stable; the app does its own sorting.
+function playersFor(entries: unknown, teamId: number, lineup: Lineup | null): PlayerLine[] {
+  const e = forTeam(entries, teamId);
+  const starters = lineup?.startXI ?? [];
+  const bench = lineup?.subs ?? [];
+  const everyone = [...starters, ...bench];
+  const isStarter = new Set(starters);
+  // Lineup players already taken (by id up front, by name as the players resolve in order), so a
+  // name fallback never hands one lineup entry to two players.
+  const claimed = new Set<LineupPlayer>();
+  const raws = list(e?.players).map((raw) => {
+    const p = obj(raw);
+    return { p, id: playerId(obj(p?.player)?.id), name: str(obj(p?.player)?.name) };
+  });
+  for (const r of raws) {
+    const hit = r.id === null ? undefined : everyone.find((l) => l.id === r.id);
+    if (hit) claimed.add(hit);
+  }
+  const lineupOf = (id: number | null, name: string): LineupPlayer | null => {
+    if (id !== null) {
+      const byId = everyone.find((l) => l.id === id);
+      if (byId) return byId;
+    }
+    const free = everyone.filter((l) => !claimed.has(l));
+    const exact = free.filter((l) => l.name === name);
+    const hits = exact.length === 1 ? exact : free.filter((l) => sameInitialAndSurname(l.name, name));
+    if (hits.length !== 1) return null;
+    // A name hit is claimed too, so a second id-less player cannot land on the same entry.
+    claimed.add(hits[0]);
+    return hits[0];
+  };
+
+  const first: PlayerLine[] = [];
+  const later: PlayerLine[] = [];
+  for (const { p, id, name } of raws) {
+    if (!name) continue;
+    const s = obj(list(p?.statistics)[0]);
+    const games = obj(s?.games);
+    const goals = obj(s?.goals);
+    const shots = obj(s?.shots);
+    const passes = obj(s?.passes);
+    const cards = obj(s?.cards);
+    const minutes = int(games?.minutes);
+    const rating = ratingOf(games?.rating);
+    if (!((minutes !== null && minutes > 0) || rating !== null)) continue;
+    const l = lineupOf(id, name);
+    const pos = position(games?.position) ?? l?.pos ?? null;
+    const keeper = pos === "G";
+    const passCount = int(passes?.total);
+    const line: PlayerLine = {
+      id,
+      name,
+      number: int(games?.number) ?? l?.number ?? null,
+      pos,
+      minutes,
+      captain: games?.captain === true,
+      sub: !(l && isStarter.has(l)),
+      rating,
+      goals: int(goals?.total),
+      assists: int(goals?.assists),
+      conceded: keeper ? int(goals?.conceded) : null,
+      saves: keeper ? int(goals?.saves) : null,
+      shots: int(shots?.total),
+      shotsOn: int(shots?.on),
+      passes: passCount,
+      passesAccurate: accurateCount(passes?.accuracy, passCount),
+      keyPasses: int(passes?.key),
+      tackles: int(obj(s?.tackles)?.total),
+      yellow: int(cards?.yellow),
+      red: int(cards?.red),
+    };
+    (line.sub ? later : first).push(line);
+  }
+  return [...first, ...later];
+}
+
 // ---------- stats ----------
 
 function statValue(stats: unknown, type: string): unknown {
@@ -476,8 +642,14 @@ function statsFor(entries: unknown, teamId: number): Stats | null {
 
 // One fixture from the details call as a match/<id>.json document. `match` is the MATCH as it
 // appears in scores.json (with its detail pointer). Lineups, ratings and stats are null until the
-// API has them, and a half-filled pair is null too: the app shows both teams or neither.
-export function mapMatchFile(fx: unknown, match: Match, generatedAt: string): MatchFile {
+// API has them, and a half-filled pair is null too: the app shows both teams or neither. `players`
+// is the same, and is always null unless `publishPlayers` is true (PUBLISH_PLAYERS, see index.ts).
+export function mapMatchFile(
+  fx: unknown,
+  match: Match,
+  generatedAt: string,
+  publishPlayers = false,
+): MatchFile {
   const f = obj(fx);
   const { home, away } = match;
 
@@ -490,6 +662,9 @@ export function mapMatchFile(fx: unknown, match: Match, generatedAt: string): Ma
   const sh = statsFor(f?.statistics, home.id);
   const sa = statsFor(f?.statistics, away.id);
 
+  const ph = publishPlayers ? playersFor(f?.players, home.id, lh) : [];
+  const pa = publishPlayers ? playersFor(f?.players, away.id, la) : [];
+
   return {
     schema: MATCH_SCHEMA,
     generatedAt,
@@ -499,5 +674,6 @@ export function mapMatchFile(fx: unknown, match: Match, generatedAt: string): Ma
     lineups: lh && la ? { home: lh, away: la } : null,
     ratings: rh.length || ra.length ? { home: rh, away: ra } : null,
     stats: sh && sa ? { home: sh, away: sa } : null,
+    players: ph.length && pa.length ? { home: ph, away: pa } : null,
   };
 }

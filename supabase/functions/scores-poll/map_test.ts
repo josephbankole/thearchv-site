@@ -316,6 +316,150 @@ Deno.test("ratings: null when the API has rated nobody yet", () => {
   assertEquals(mapMatchFile(fx, mapMatch(fx)!, NOW).ratings, null);
 });
 
+// ---------- players ----------
+
+const ALL_IDS = [IDS.plFinished, IDS.uclLive, IDS.uclFinished, IDS.wslFinished, IDS.uclFinalPens];
+const playersOf = (fx: unknown) => mapMatchFile(fx, mapMatch(fx)!, NOW, true).players;
+const sideEntry = (fx: { players: { team: { id: number } }[] }, teamId: number) =>
+  // deno-lint-ignore no-explicit-any
+  fx.players.find((p) => p.team.id === teamId) as any;
+
+Deno.test("players: every recorded detail reply maps player lines for both sides", () => {
+  for (const id of ALL_IDS) {
+    const p = playersOf(fixtureById(id));
+    assert(p !== null && p.home.length > 0 && p.away.length > 0, `${id}: both sides have lines`);
+    for (const line of [...p!.home, ...p!.away]) {
+      assert((line.minutes ?? 0) > 0 || line.rating !== null, `${id} ${line.name}: took part`);
+      assert(line.pos === null || "GDMF".includes(line.pos), `${id} ${line.name}: position`);
+    }
+  }
+});
+
+Deno.test("players: off unless the caller says the figures may be published", () => {
+  for (const id of ALL_IDS) {
+    assertEquals(mapMatchFile(fixtureById(id), matchOf(id), NOW).players, null, String(id));
+    assertEquals(mapMatchFile(fixtureById(id), matchOf(id), NOW, false).players, null, String(id));
+  }
+});
+
+Deno.test("players: Virgil van Dijk's line, with accurate passes a count and no keeper figures", () => {
+  const p = playersOf(fixtureById(IDS.plFinished))!;
+  const vvd = p.home.find((l) => l.name === "Virgil van Dijk")!;
+  assertEquals(vvd, {
+    id: 290, name: "Virgil van Dijk", number: 4, pos: "D", minutes: 90, captain: true, sub: false,
+    rating: 6.3, goals: null, assists: 0, conceded: null, saves: null, shots: null, shotsOn: null,
+    passes: 53, passesAccurate: 45, keyPasses: null, tackles: null, yellow: 1, red: 0,
+  });
+  // A goalkeeper keeps saves and goals conceded.
+  const alisson = p.home.find((l) => l.name === "Alisson")!;
+  assertEquals([alisson.pos, alisson.conceded, alisson.saves, alisson.passes, alisson.passesAccurate], ["G", 3, 1, 24, 16]);
+});
+
+Deno.test("players: WSL ids of 0 and ratings of \"0\" read as unknown; sub, number and position come from the lineup", () => {
+  const raw = fixtureById(IDS.wslFinished);
+  // The premise: the WSL reply calls every player a starter.
+  const every = raw.players.flatMap((t: { players: { statistics: { games: { substitute: boolean } }[] }[] }) => t.players);
+  assertEquals(every.length, 40);
+  assert(every.every((p: { statistics: { games: { substitute: boolean } }[] }) => p.statistics[0].games.substitute === false), "all 40 say substitute: false");
+
+  const p = playersOf(raw)!;
+  for (const side of ["home", "away"] as const) {
+    assertEquals(p[side].filter((l) => !l.sub).length, 11, `${side}: eleven starters`);
+    // Starters first, then substitutes.
+    const firstSub = p[side].findIndex((l) => l.sub);
+    assert(p[side].slice(firstSub).every((l) => l.sub), `${side}: starters before substitutes`);
+  }
+  // A bench player who did not come on (0 minutes, rating "0") is not listed.
+  assert(!p.home.some((l) => l.name === "Mayzee Davies" || l.name === "Gracie Prior"), "unused subs are absent");
+  assert(!p.away.some((l) => l.name === "S. Catley"), "unused subs are absent");
+
+  // The five Manchester City players the API sends with id 0 and no position or number.
+  const city = raw.lineups.find((e: { team: { id: number } }) => e.team.id === 1854);
+  const lineup = [...city.startXI, ...city.substitutes].map((x: { player: { name: string; number: number; pos: string | null } }) => x.player);
+  const expected: Record<string, [string, boolean]> = {
+    "Jade Rose": ["J. Rose", false],
+    "Niamh Charles": ["N. Charles", false],
+    "Yui Hasegawa": ["Y. Hasegawa", false],
+    "Grace Clinton": ["G. Clinton", true],
+    "Laura Blindkilde Brown": ["L. Blindkilde", true],
+  };
+  for (const [full, [short, sub]] of Object.entries(expected)) {
+    const line = p.home.find((l) => l.name === full)!;
+    const l = lineup.find((x: { name: string }) => x.name === short)!;
+    assert(line, full);
+    assertEquals([line.id, line.number, line.pos, line.sub], [null, l.number, l.pos, sub], full);
+  }
+  // A rating of "0" with minutes played is null, not zero.
+  const fx = fixtureById(IDS.wslFinished);
+  const home = sideEntry(fx, 1854);
+  home.players.find((x: { player: { name: string } }) => x.player.name === "K. Shaw").statistics[0].games.rating = "0";
+  assertEquals(playersOf(fx)!.home.find((l) => l.name === "K. Shaw")!.rating, null);
+});
+
+Deno.test("players: two id-less players never share one lineup entry by name", () => {
+  // A second City player with id 0 whose name also fits "J. Rose", missing from the lineup (the
+  // bench list left her out). "Jade Rose" takes the entry first; this one must not land on it too.
+  const fx = fixtureById(IDS.wslFinished);
+  const home = sideEntry(fx, 1854);
+  const jade = home.players.find((x: { player: { name: string } }) => x.player.name === "Jade Rose");
+  const jill = structuredClone(jade);
+  jill.player.name = "Jill Rose";
+  jill.statistics[0].games.minutes = 12;
+  home.players.push(jill);
+  const p = playersOf(fx)!;
+  const line = p.home.find((l) => l.name === "Jill Rose")!;
+  assertEquals([line.sub, line.number, line.pos], [true, null, null]);
+  assertEquals(p.home.find((l) => l.name === "Jade Rose")!.sub, false);
+  assertEquals(p.home.filter((l) => !l.sub).length, 11, "still eleven starters");
+});
+
+Deno.test("players: more accurate passes than passes, or a percentage, is null", () => {
+  const fx = fixtureById(IDS.plFinished);
+  const stats = sideEntry(fx, 40).players.find((x: { player: { id: number } }) => x.player.id === 290).statistics[0];
+  stats.passes.accuracy = "54";
+  assertEquals(playersOf(fx)!.home.find((l) => l.id === 290)!.passesAccurate, null);
+  for (const bad of ["85%", "45.5", "-1", "", null]) {
+    stats.passes.accuracy = bad;
+    assertEquals(playersOf(fx)!.home.find((l) => l.id === 290)!.passesAccurate, null, String(bad));
+  }
+  stats.passes.accuracy = "53";
+  assertEquals(playersOf(fx)!.home.find((l) => l.id === 290)!.passesAccurate, 53);
+});
+
+Deno.test("players: an unused substitute is absent; a rated player with no minutes stays", () => {
+  const fx = fixtureById(IDS.plFinished);
+  const players = sideEntry(fx, 40).players;
+  const target = players[players.length - 1];
+  target.statistics[0].games.minutes = null;
+  target.statistics[0].games.rating = null;
+  assert(!playersOf(fx)!.home.some((l) => l.name === target.player.name), "neither minutes nor a rating: absent");
+  target.statistics[0].games.rating = "6.0";
+  assert(playersOf(fx)!.home.some((l) => l.name === target.player.name), "a rating alone keeps the line");
+  // One side with no lines at all: neither side is published.
+  sideEntry(fx, 50).players = [];
+  assertEquals(playersOf(fx), null);
+});
+
+Deno.test("players: a photo URL on every player does not reach the file", () => {
+  for (const id of ALL_IDS) {
+    const fx = fixtureById(id);
+    for (const team of fx.players) {
+      for (const p of team.players) p.player.photo = "https://media.example/p.png";
+    }
+    const text = JSON.stringify(playersOf(fx));
+    assert(text.length > 100, `${id}: there are lines to check`);
+    assert(!/http|photo/i.test(text), `${id}: no URL or photo field`);
+  }
+});
+
+Deno.test("players: ratings are byte for byte what they were before players existed", async () => {
+  // Snapshot of the ratings for the five recorded replies, taken from map.ts before players was added.
+  const text = JSON.stringify(DETAIL_FIXTURES.map((fx) => mapMatchFile(fx, mapMatch(fx)!, NOW, true).ratings));
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  assertEquals([text.length, hex], [11066, "b5a84cef88c3c842c75c208d5c4c2443e271065780279c28c332ccf75a136de9"]);
+});
+
 // ---------- stats ----------
 
 Deno.test("stats: possession, shots, cards and xg come across by name, per team", () => {
@@ -473,7 +617,7 @@ Deno.test("match file: envelope, and the WSL file shows club names", () => {
     [f.schema, f.source, f.generatedAt, f.match.detail],
     ["archv-match/1", "API-Football", NOW, "match/1607697.json"],
   );
-  assertEquals(Object.keys(f), ["schema", "generatedAt", "source", "match", "events", "lineups", "ratings", "stats"]);
+  assertEquals(Object.keys(f), ["schema", "generatedAt", "source", "match", "events", "lineups", "ratings", "stats", "players"]);
   assertEquals([f.match.home.name, f.match.away.name], ["Manchester City", "Arsenal"]);
   assertEquals([f.match.home.goals, f.match.away.goals], [4, 2]);
   assert(f.lineups !== null && f.ratings !== null && f.stats !== null, "a finished WSL match has all three");
@@ -484,6 +628,7 @@ Deno.test("match file: a fixture with nothing but a score is still a valid file"
   const bare = { fixture: fx.fixture, league: fx.league, teams: fx.teams, goals: fx.goals, score: fx.score };
   const f = mapMatchFile(bare, mapMatch(bare)!, NOW);
   assertEquals([f.events, f.lineups, f.ratings, f.stats], [[], null, null, null]);
+  assertEquals(mapMatchFile(bare, mapMatch(bare)!, NOW, true).players, null);
 });
 
 // ---------- text ----------

@@ -15,6 +15,7 @@ import {
   COMPETITIONS,
   detailPath,
   hasKickedOff,
+  isNotStarted,
   mapMatch,
   mapMatchFile,
   type Match,
@@ -33,6 +34,7 @@ import {
   planWrites,
   SCHEDULE_EVERY_MS,
   scheduleDue,
+  START_LEAD_MS,
   trackFinished,
   windowFor,
 } from "./plan.ts";
@@ -68,6 +70,8 @@ export type Deps = {
   // when there is no such file, and throws when it cannot tell. Left out, the run writes exactly
   // what it wrote before the archive existed.
   archive?: { read: (path: string) => Promise<string | null> };
+  // Whether match files carry per-player lines (map.ts `players`). index.ts reads PUBLISH_PLAYERS.
+  publishPlayers?: boolean;
 };
 
 export type Summary = {
@@ -122,6 +126,9 @@ export async function runPoll(
   let scheduleFetchedAt = state.scheduleFetchedAt;
   let windowDay = state.windowDay;
   let scheduleRefreshed = false;
+  // How many competitions this minute's schedule refresh got good answers for (hoisted: the archive
+  // writes tomorrow's file only after a complete refresh).
+  let good = 0;
 
   // 1. The schedule: one request a competition, for the three-day window.
   if (scheduleDue(state, now)) {
@@ -149,7 +156,7 @@ export async function runPoll(
       }
       return { fresh, held };
     });
-    const good = outcomes.filter((o) => o.fresh !== null).length;
+    good = outcomes.filter((o) => o.fresh !== null).length;
     if (good === 0) {
       // Nothing came back we can use: keep the last good state and files, and leave the API alone
       // for a couple of minutes.
@@ -201,9 +208,12 @@ export async function runPoll(
   //    written again.
   const stamp = now.toISOString();
   const willHave = new Set(fetched.map((f) => detailPath(f.match.id)));
+  // A match points at its file once it has kicked off, or when it kicks off within the details
+  // lead (the confirmed lineups are fetched then), and only when the file is there.
   const pointed = (m: Match, fileExists: (path: string) => boolean): Match => {
     const path = detailPath(m.id);
-    return hasKickedOff(m.status.code) && fileExists(path) ? { ...m, detail: path } : m;
+    const soon = isNotStarted(m.status.code) && Date.parse(m.kickoff) - now.getTime() <= START_LEAD_MS;
+    return (hasKickedOff(m.status.code) || soon) && fileExists(path) ? { ...m, detail: path } : m;
   };
   // Writes the files whose content changed and answers how many went up.
   const upload = async (files: OutFile[]): Promise<number> => {
@@ -224,7 +234,7 @@ export async function runPoll(
 
   filesWritten += await upload(fetched.map(({ match, fx }) => ({
     path: detailPath(match.id),
-    body: mapMatchFile(fx, pointed(match, (p) => p in hashes || willHave.has(p)), stamp),
+    body: mapMatchFile(fx, pointed(match, (p) => p in hashes || willHave.has(p)), stamp, deps.publishPlayers ?? false),
   })));
 
   // The day archive: the window's days, and the index entries for them. After the match files, so
@@ -235,9 +245,16 @@ export async function runPoll(
     const days = [addDays(win.today, -1), win.today, addDays(win.today, 1)];
     const byDay = groupByDay(matches.map((m) => pointed(m, (p) => p in hashes)));
     // A day with no matches gets a file only if it had one: a day emptied by a reschedule must not
-    // keep showing its old matches.
+    // keep showing its old matches. Tomorrow may have a file this run does not know about (season
+    // mode writes days ahead), so it also gets one, empty if need be, after a COMPLETE schedule
+    // refresh. After a partial one, the failed competition's matches come from the old window and
+    // can lack tomorrow's, and writing then would wipe season mode's correct file.
+    const tomorrow = addDays(win.today, 1);
     const files: OutFile[] = days
-      .filter((d) => byDay.has(d) || dayPath(d) in hashes)
+      .filter((d) =>
+        byDay.has(d) || dayPath(d) in hashes ||
+        (d === tomorrow && scheduleRefreshed && good === COMPETITIONS.length)
+      )
       .map((d) => ({ path: dayPath(d), body: buildDayFile(d, byDay.get(d) ?? [], stamp) }));
     dayFilesWritten += await upload(files);
     archiveKeep.push(...days.map(dayPath), INDEX_PATH);

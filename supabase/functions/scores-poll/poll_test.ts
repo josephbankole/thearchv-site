@@ -14,7 +14,7 @@ import {
 } from "./poll.ts";
 import { mapMatch, type Match } from "./map.ts";
 import { scheduleDue } from "./plan.ts";
-import { assert, assertEquals, DETAIL_FIXTURES, fixtureById, IDS, SCHEDULES } from "./testkit.ts";
+import { assert, assertEquals, DETAIL_FIXTURES, fixtureById, IDS, memoryStore, SCHEDULES } from "./testkit.ts";
 
 const matchOf = (id: number): Match => mapMatch(fixtureById(id))!;
 
@@ -379,4 +379,53 @@ Deno.test("the state row round-trips, and a damaged row reads as empty", () => {
     stateFromRow({ schedule_fetched_at: 5, window_day: "", matches: "x", finished_at: [1], file_hashes: { a: 1, b: "ok" }, backoff_until: {} }),
     { ...EMPTY_STATE, fileHashes: { b: "ok" } },
   );
+});
+
+// ---------- season mode's days, and lineups before kickoff (2026-10-29) ----------
+
+// The archive on, with a store that keeps reads too.
+async function archived(state: PollState, now: Date, store: ReturnType<typeof memoryStore>, apiOpts: Parameters<typeof fakeApi>[0] = {}) {
+  const { api, calls } = fakeApi(apiOpts);
+  const out = await runPoll(state, { now, season: 2026, api, write: store.write, archive: { read: store.read } });
+  return { ...out, calls };
+}
+
+Deno.test("tomorrow: a complete refresh writes tomorrow's file, empty if need be, once", async () => {
+  // 07:00 on the 14th in Edmonton: the recorded schedules have nothing on the 15th.
+  const store = memoryStore();
+  const t = new Date("2026-10-14T13:00:00Z");
+  const a = await archived(EMPTY_STATE, t, store);
+  assertEquals(JSON.parse(store.files.get("days/2026-10-15.json")!).matches, []);
+  // Season mode may have put a file there; the poll's empty one replaces it only because the
+  // refresh was complete, and from then on it is hash-gated like any other day.
+  const before = store.writes.filter((p) => p === "days/2026-10-15.json").length;
+  const b = await archived(a.state, new Date(t.getTime() + 31 * MIN), store);
+  assertEquals(b.summary.scheduleRefreshed, true);
+  assertEquals(store.writes.filter((p) => p === "days/2026-10-15.json").length, before);
+});
+
+Deno.test("tomorrow: a partial refresh at the day's rollover leaves tomorrow's file alone", async () => {
+  const store = memoryStore();
+  const first = await archived(EMPTY_STATE, at(T0), store);
+  // Season mode's file for the 15th, which the poll has never written.
+  store.files.set("days/2026-10-15.json", '{"schema":"archv-day/1","matches":["season mode"]}');
+  const next = await archived(first.state, new Date("2026-10-14T13:00:00Z"), store, {
+    fail: (p) => p.includes("league=2&") ? "HTTP 500" : null,
+  });
+  assertEquals(next.summary.scheduleRefreshed, true);
+  assert(!store.writes.includes("days/2026-10-15.json"), "tomorrow is not touched");
+  assertEquals(store.files.get("days/2026-10-15.json"), '{"schema":"archv-day/1","matches":["season mode"]}');
+});
+
+Deno.test("a match about to kick off points at its file, so its confirmed lineups open a few minutes early", async () => {
+  // 16:40 on the 14th: Feyenoord v Como and Lask Linz v Liverpool kick off at 16:45 and are fetched.
+  const store = fakeStore();
+  const r = await minute(EMPTY_STATE, at("2026-10-14T16:40:00Z"), store);
+  const ids = detailCalls(r.calls)[0].split("ids=")[1].split("-").map(Number);
+  assert(ids.includes(1635665), "fetched ten minutes out");
+  const m = scoresOf(store).matches.find((x: Match) => x.id === 1635665);
+  assertEquals([m.status.code, m.detail], ["NS", "match/1635665.json"]);
+  // Further out, a not-started match still has no pointer.
+  const later = scoresOf(store).matches.find((x: Match) => x.id === 1635690);
+  assertEquals([later.status.code, later.detail], ["NS", null]);
 });

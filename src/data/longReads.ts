@@ -8,6 +8,7 @@ export interface LongRead {
   meta: string;     // subject · era
   date: string;     // ISO, for ordering
   body: string;     // full essay; paragraphs separated by a blank line
+  sport?: string;   // feed sport key (football, nfl, f1, tennis, golf, basketball) or "multi"
 }
 
 export const longReads: LongRead[] = [

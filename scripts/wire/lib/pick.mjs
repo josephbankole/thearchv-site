@@ -1,10 +1,21 @@
-/* pick.mjs: the top item per source per day. The rule is stated in design-final B4 and is the
+/* pick.mjs: the top items per source per day. The rule is stated in design-final B4 and is the
    only thing here: walk the feed in document order, drop bad links, excluded paths, excluded
    titles, stale or future items and anything already seen, then take the first survivor that
    matches a `prefer` phrase, else the first survivor (editorial order), or the newest survivor
-   (chronological order). The next two survivors become alternates for a desk veto. */
+   (chronological order). The next two survivors become alternates for a desk veto (for a
+   multi-item source, the next two club-tagged survivors come first).
+
+   A source may take more than one story a day (`maxItems`, default 1; espn-soccer is 6 since
+   2026-10-28, spec B1.2). Rank 1 is still the story above, whatever it names. A rank 2 or later
+   story is kept ONLY when tagClubs() finds a club in its headline: an untagged extra shows on no
+   surface, so taking it would widen what we take from the publisher for nothing. Editorial order
+   for those extras: the prefer match, then the club-tagged survivors, each in feed order. */
 import { canonicalUrl, titleKey, urlKey, guidKey, itemId, linkAllowed } from "./canon.mjs";
 import { parseFeedDate, dateInZone } from "./time.mjs";
+import { tagClubs } from "./clubs.mjs";
+
+export const MAX_ITEMS_CAP = 6;
+export const maxItemsOf = (source) => Math.max(1, Math.min(MAX_ITEMS_CAP, Number.isInteger(source?.maxItems) ? source.maxItems : 1));
 
 const HOUR = 3600000;
 
@@ -35,7 +46,9 @@ export function addSeen(seen, it) {
 
 export const isSeen = (seen, c) => (c.guidKey && seen.guid.has(c.guidKey)) || (c.urlKey && seen.url.has(c.urlKey)) || seen.title.has(c.titleKey);
 
-/* items: parsed feed items. Returns { pick, alternates, rejected, reason }. */
+/* items: parsed feed items. Returns { picks, pick, alternates, rejected, reason }: picks are
+   1 to maxItems candidates carrying `rank` (1-based), pick is picks[0] (kept for the callers and
+   tests that read it), alternates are the next two survivors after the picks. */
 export function pickTop(items, source, { defaults, seen, nowMs, maxAgeHours }) {
   const filters = compileFilters(defaults, source);
   const maxAge = (maxAgeHours ?? source.maxAgeHours ?? defaults.maxAgeHours ?? 36) * HOUR;
@@ -90,10 +103,30 @@ export function pickTop(items, source, { defaults, seen, nowMs, maxAgeHours }) {
       : counts.seen && !counts.filtered && !counts.stale ? "all-seen"
       : counts.filtered && !counts.seen && !counts.stale ? "all-filtered"
       : "no-fresh-item";
-    return { pick: null, alternates: [], rejected, reason };
+    return { picks: [], pick: null, alternates: [], rejected, reason };
   }
-  const [pick, ...rest] = ordered;
+  const max = maxItemsOf(source);
+  const picks = [{ ...ordered[0], rank: 1 }];
+  if (max > 1) {
+    // Within one feed the same story can appear twice (a re-sent item); it is taken once.
+    const taken = seenFromEditions([]);
+    addSeen(taken, ordered[0]);
+    const rest = ordered.slice(1);
+    const extras = [...rest.filter((c) => c.preferMatched), ...rest.filter((c) => !c.preferMatched)]
+      .filter((c) => tagClubs(c.headline).length);
+    for (const c of extras) {
+      if (picks.length >= max) break;
+      if (isSeen(taken, c)) continue;
+      addSeen(taken, c);
+      picks.push({ ...c, rank: picks.length + 1 });
+    }
+  }
+  const pickedIds = new Set(picks.map((p) => p.id));
+  let rest = ordered.filter((c) => !pickedIds.has(c.id));
+  // A multi-item source puts its club-tagged survivors first, so a veto on any rank can be
+  // refilled at the tail by a story that may stand at rank 2 or later (finalise-wire.mjs).
+  if (max > 1) rest = [...rest.filter((c) => tagClubs(c.headline).length), ...rest.filter((c) => !tagClubs(c.headline).length)];
   const alternates = rest.slice(0, 2).map(({ id, headline, url, publishedAt, publishedDate, timePrecision, summary, position, guidKey, urlKey, titleKey }) =>
     ({ id, headline, url, publishedAt, publishedDate, timePrecision, summary, position, guidKey, urlKey, titleKey }));
-  return { pick, alternates, rejected, reason: null };
+  return { picks, pick: picks[0], alternates, rejected, reason: null };
 }

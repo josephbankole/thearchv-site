@@ -7,7 +7,8 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { linkAllowed } from "./canon.mjs";
-import { compileFilters } from "./pick.mjs";
+import { compileFilters, MAX_ITEMS_CAP } from "./pick.mjs";
+import { tagClubs } from "./clubs.mjs";
 
 export const WIRE_SCHEMA = "archv-wire/1";
 export const TABLES_SCHEMA = "archv-tables/1";
@@ -15,6 +16,9 @@ export const SPORT_KEYS = ["football", "nfl", "f1", "tennis", "golf", "basketbal
 export const TABLE_KINDS = ["standings", "ranking", "fixtures", "results", "event"];
 export const EDITION_MAX_AGE_DAYS = 7;
 export const BLOCK_MAX_AGE_DAYS = 14;
+// The football club-news window in the feed's `recent` block: the newest edition and the six days
+// before it (spec B1.7). KEEP = 7 editions in finalise-wire.mjs already holds that many.
+export const RECENT_DAYS = 7;
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SOURCES = JSON.parse(readFileSync(join(HERE, "..", "sources.json"), "utf8"));
@@ -68,8 +72,14 @@ export function sanitiseItem(it, { quiet = false, sources = SOURCES } = {}) {
     firstSeenAt: isIso(it.firstSeenAt) ? it.firstSeenAt : null,
     guidKey: it.guidKey ?? null, urlKey: it.urlKey ?? null, titleKey: it.titleKey ?? null,
     note,
+    // 1 is the story /wire/ and the shelves show; 2 to 6 are the club-tagged extras (spec B1.4).
+    rank: Number.isInteger(it.rank) && it.rank >= 1 && it.rank <= MAX_ITEMS_CAP ? it.rank : 1,
   };
 }
+
+// The rank-1 items of an edition: the one story per source that /wire/, the sport strips, the
+// homepage block and the feed's `items` carry. Extras live only in the feed's `recent`.
+export const rankOne = (items) => items.filter((i) => (i.rank ?? 1) === 1);
 
 export function sanitiseWire(raw, opts = {}) {
   const out = { version: 1, updatedAt: isIso(raw?.updatedAt) ? raw.updatedAt : null, editions: [] };
@@ -168,18 +178,49 @@ export function currentEdition(wire, today) {
 // through an international break or an off week.
 export const blockVisible = (b, today) => b.heldDays <= 3 && daysBetween(b.lastFreshAsOf || b.asOf, today) <= BLOCK_MAX_AGE_DAYS;
 
+const isoDay = (date, delta) => new Date(Date.parse(date + "T00:00:00Z") + delta * 86400000).toISOString().slice(0, 10);
+
+const feedItem = (i) => ({
+  id: i.id, sport: i.sport, league: i.league, source: { id: i.sourceId, name: i.source },
+  headline: i.headline, url: i.url, publishedAt: i.publishedAt, publishedDate: i.publishedDate,
+  timePrecision: i.timePrecision, note: i.note,
+  // Additive (2026-10-28): the club keys the headline names, from clubs.json, computed here at
+  // build time so a fix to the club table retags the whole window on the next build.
+  clubs: tagClubs(i.headline),
+});
+
+/* `recent`, additive (spec B1.7): football items of every rank from the editions dated within
+   RECENT_DAYS of the newest edition with items, newest edition first, rank ascending, one entry
+   per id. null with no edition. Shipped app builds read only `items`, so six football headlines
+   never land in their Football shelf unannounced. */
+export function buildRecent(wire) {
+  const ed = latestEdition(wire);
+  if (!ed) return null;
+  const to = ed.date, from = isoDay(to, -(RECENT_DAYS - 1));
+  const seen = new Set();
+  const items = [];
+  for (const e of wire.editions.filter((x) => x.date >= from && x.date <= to).sort((a, b) => (a.date < b.date ? 1 : -1))) {
+    const football = e.items.filter((i) => i.sport === "football").map((i, n) => ({ i, n }))
+      .sort((a, b) => (a.i.rank ?? 1) - (b.i.rank ?? 1) || a.n - b.n);
+    for (const { i } of football) {
+      if (seen.has(i.id)) continue;
+      seen.add(i.id);
+      const { clubs, ...rest } = feedItem(i);
+      items.push({ ...rest, rank: i.rank ?? 1, editionDate: e.date, clubs });
+    }
+  }
+  return { sport: "football", from, to, items };
+}
+
 export function buildWireFeed(wire, { generatedAt, sources = SOURCES }) {
   const ed = latestEdition(wire);
   return {
     schema: WIRE_SCHEMA,
     generatedAt,
     edition: ed ? { date: ed.date, status: ed.status, timeZone: sources.editionTimeZone } : null,
-    items: ed ? ed.items.map((i) => ({
-      id: i.id, sport: i.sport, league: i.league, source: { id: i.sourceId, name: i.source },
-      headline: i.headline, url: i.url, publishedAt: i.publishedAt, publishedDate: i.publishedDate,
-      timePrecision: i.timePrecision, note: i.note,
-    })) : [],
+    items: ed ? rankOne(ed.items).map(feedItem) : [],
     footer: sources.footer,
+    recent: buildRecent(wire),
   };
 }
 

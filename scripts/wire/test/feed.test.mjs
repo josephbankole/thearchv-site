@@ -23,10 +23,10 @@ test("wire feed shape: versioned, latest edition only, never a days/lead/wrap ke
   const f = buildWireFeed(wire, { generatedAt: "2026-09-27T09:33:10Z", sources: SOURCES });
   assert.equal(f.schema, WIRE_SCHEMA);
   for (const k of ["days", "lead", "wrap"]) assert.equal(k in f, false, k);
-  assert.deepEqual(Object.keys(f), ["schema", "generatedAt", "edition", "items", "footer"]);
+  assert.deepEqual(Object.keys(f), ["schema", "generatedAt", "edition", "items", "footer", "recent"]);
   assert.deepEqual(f.edition, { date: "2026-09-27", status: "partial", timeZone: "America/Toronto" });
   const it = f.items[0];
-  assert.deepEqual(Object.keys(it), ["id", "sport", "league", "source", "headline", "url", "publishedAt", "publishedDate", "timePrecision", "note"]);
+  assert.deepEqual(Object.keys(it), ["id", "sport", "league", "source", "headline", "url", "publishedAt", "publishedDate", "timePrecision", "note", "clubs"]);
   assert.deepEqual(Object.keys(it.source), ["id", "name"]);
   assert.ok(f.items.every((i) => !("summary" in i) && !("body" in i) && !("image" in i)));
   assert.ok(f.items.some((i) => i.note === null), "an item without a note is valid");
@@ -400,4 +400,68 @@ test("a source whose attribution already credits The ARCHV is not told 'Adapted 
   }
   const wiki = { ...tables.sports.football.blocks[0], source: { name: "Wikipedia", attribution: "Source: Wikipedia", url: null, licence: "CC BY-SA 4.0", licenceUrl: null, adapted: true } };
   assert.match(foot(wiki), /Source: Wikipedia Adapted by The ARCHV\. CC BY-SA 4\.0\./);
+});
+
+/* ---------- club tags and the 7-day football window (spec B1.7, 2026-10-28) ---------- */
+
+test("items are byte-identical to the pre-change feed for a one-per-source edition, apart from the added clubs", () => {
+  const golden = load("./fixtures/feed-items-golden.json");
+  const f = buildWireFeed(wire, { generatedAt: "2026-09-27T09:33:10Z", sources: SOURCES });
+  assert.equal(JSON.stringify(f.items.map(({ clubs, ...rest }) => rest)), JSON.stringify(golden));
+  assert.deepEqual(f.items.map((i) => i.clubs), golden.map((g) => (g.headline.startsWith("Manchester United") ? ["manchester-united"] : [])));
+});
+
+// An edition with ranked football extras, built through the sanitiser like the real file.
+const fb = (date, n, rank, headline, extra = {}) => ({
+  id: `espn-soccer:${date.replace(/-/g, "")}${n}`, sport: "football", league: null, sourceId: "espn-soccer", source: "ESPN",
+  headline, url: `https://www.espn.com/soccer/story/_/id/${n}/${date}`, publishedAt: null, publishedDate: date,
+  timePrecision: "date", note: null, rank, ...extra,
+});
+const nfl = (date) => ({ ...fb(date, 99, 1, "Placeholder Packers sign veteran guard"), id: `espn-nfl:${date}`, sport: "nfl", sourceId: "espn-nfl", url: `https://www.espn.com/nfl/story/_/id/99/${date}` });
+const windowWire = () => sanitiseWire({ version: 1, updatedAt: "2026-10-28T09:40:00Z", editions: [
+  { date: "2026-10-29", status: "partial", items: [], missing: [] },
+  { date: "2026-10-28", status: "complete", items: [fb("2026-10-28", 1, 1, "Man Utd sack manager", { note: "A note that is only checked by the gate, not here." }), fb("2026-10-28", 3, 3, "Celtic go top"), fb("2026-10-28", 2, 2, "Arsenal beat Chelsea"), nfl("2026-10-28")], missing: [] },
+  { date: "2026-10-25", status: "complete", items: [fb("2026-10-25", 1, 1, "Fixture Rovers stun Placeholder Athletic"), fb("2026-10-25", 2, 2, "Barça held at home")], missing: [] },
+  { date: "2026-10-22", status: "complete", items: [fb("2026-10-22", 1, 1, "Liverpool lose at home"), { ...fb("2026-10-25", 2, 2, "Barça held at home") }], missing: [] },
+  { date: "2026-10-21", status: "complete", items: [fb("2026-10-21", 1, 1, "Ajax appoint coach")], missing: [] },
+] }, { quiet: true, sources: SOURCES });
+
+test("recent: football of every rank from the newest edition and the six days before it, newest first, rank ascending, de-duplicated", () => {
+  const f = buildWireFeed(windowWire(), { generatedAt: "x", sources: SOURCES });
+  for (const k of ["days", "lead", "wrap"]) assert.equal(k in f, false, k);
+  assert.deepEqual(Object.keys(f.recent), ["sport", "from", "to", "items"]);
+  assert.equal(f.recent.sport, "football");
+  assert.equal(f.recent.to, "2026-10-28", "the newest edition WITH items, not the empty one");
+  assert.equal(f.recent.from, "2026-10-22");
+  assert.deepEqual(f.recent.items.map((i) => [i.editionDate, i.rank, i.headline]), [
+    ["2026-10-28", 1, "Man Utd sack manager"],
+    ["2026-10-28", 2, "Arsenal beat Chelsea"],
+    ["2026-10-28", 3, "Celtic go top"],
+    ["2026-10-25", 1, "Fixture Rovers stun Placeholder Athletic"],
+    ["2026-10-25", 2, "Barça held at home"],
+    ["2026-10-22", 1, "Liverpool lose at home"],
+  ]);
+  assert.ok(f.recent.items.every((i) => i.sport === "football"));
+  const it = f.recent.items[1];
+  assert.deepEqual(Object.keys(it), ["id", "sport", "league", "source", "headline", "url", "publishedAt", "publishedDate", "timePrecision", "note", "rank", "editionDate", "clubs"]);
+  assert.deepEqual(it.clubs, ["arsenal", "chelsea"]);
+  // items stays one story per source: rank 1 only.
+  assert.deepEqual(f.items.map((i) => i.headline), ["Man Utd sack manager", "Placeholder Packers sign veteran guard"]);
+  assert.ok(f.items.every((i) => !("rank" in i)));
+});
+
+test("recent is null with no edition, and the pages keep showing rank 1 only", () => {
+  assert.equal(buildWireFeed(sanitiseWire({ editions: [] }), { generatedAt: "x", sources: SOURCES }).recent, null);
+  const html = renderWireStrip(windowWire(), "football", "2026-10-28");
+  assert.match(html, /Man Utd sack manager/);
+  assert.ok(!/Arsenal beat Chelsea|Celtic go top/.test(html));
+  assert.match(html, /One story per source/);
+});
+
+test("rank is sanitised to an integer from 1 to 6, defaulting to 1", () => {
+  const base = fb("2026-10-28", 1, 1, "Man Utd sack manager");
+  const opts = { quiet: true, sources: SOURCES };
+  assert.equal(sanitiseItem({ ...base, rank: undefined }, opts).rank, 1);
+  assert.equal(sanitiseItem({ ...base, rank: 4 }, opts).rank, 4);
+  for (const bad of [0, 7, 2.5, "2", -1]) assert.equal(sanitiseItem({ ...base, rank: bad }, opts).rank, 1, String(bad));
 });

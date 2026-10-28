@@ -247,6 +247,12 @@
         </div>
       </section>
 
+      <!-- THE WIRE (founder, 2026-10-28). The day's Wire edition as a static list, one headline per
+           source, server-rendered by renderHomeWire() in scripts/wire/lib/home.mjs. The marker
+           becomes the whole <section> or nothing, so no empty block ships when the edition is
+           more than seven days old. Not the old marquee removed on 2026-09-12. -->
+      <!--archv:wire-->
+
       <!-- LONG READS. The three newest essays, server-rendered by renderReads() in
            src/render/home.ts. Replaced "Today at the desk" on 2026-10-13 (founder: it repeated the
            football leagues). -->
@@ -269,8 +275,11 @@
       <!-- THE ARCHIVE. Four of the twenty-one Manchester United poster tiles; /posters/ holds the
            rest (scripts/build-posters-page.mjs, from scripts/data/poster-tiles.json). Each tile is
            one Etsy listing (thearchvca.etsy.com/listing/<id>); the image is the listing photo at
-           900x675 under public/shop/ and the alt is that photo's Etsy alt text. Keep in step with
-           src/data/posters.ts, whose header holds the inclusion rules (README.md, Commerce). -->
+           900x675 under public/shop/ and the alt is that photo's Etsy alt text. Since 2026-10-28
+           the four come from the tiles carrying a `home` order in poster-tiles.json, through
+           renderCovers() in src/render/home.ts, and the app's Home reads the same four from
+           /feed/home-covers.json: rotate them there, not here. Inclusion rules: the header of
+           src/data/posters.ts (README.md, Commerce). -->
       <section class="archive" id="archive">
         <div class="wrap">
           <p class="section-index">The archive</p>
@@ -279,10 +288,7 @@
         </div>
         <div class="wrap archive__covers">
           <ul class="archive__covers-grid" aria-label="Manchester United posters" data-stagger>
-              <li><a href="https://thearchvca.etsy.com/listing/4521788550" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-london-1968.webp" alt="Framed poster of Manchester United 4-1 Benfica, the 1968 European Cup final at Wembley, hanging on a wall." loading="lazy" width="900" height="675" /><span>London 1968</span></a></li>
-              <li><a href="https://thearchvca.etsy.com/listing/4521782964" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-barcelona-1999.webp" alt="Framed poster of Manchester United 2-1 Bayern Munich, the 1999 Champions League final in Barcelona, hanging on a wall." loading="lazy" width="900" height="675" /><span>Barcelona 1999</span></a></li>
-              <li><a href="https://thearchvca.etsy.com/listing/4521779161" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-moscow-2008.webp" alt="Framed poster of Manchester United 1-1 Chelsea, the 2008 Champions League final in Moscow won on penalties, hanging on a wall." loading="lazy" width="900" height="675" /><span>Moscow 2008</span></a></li>
-              <li><a href="https://thearchvca.etsy.com/listing/4527673755" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="/shop/united-women-london-2024.webp" alt="Framed poster on a wall: Manchester United Women's 4-0 win over Tottenham Hotspur in the 2024 Women's FA Cup final at Wembley, three players seen from behind." loading="lazy" width="900" height="675" /><span>London 2024 (Women)</span></a></li>
+              <!--archv:covers-->
           </ul>
           <p class="archive__covers-links">
             <a class="archive__covers-all" href="/posters/">See all the posters</a>

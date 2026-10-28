@@ -229,6 +229,10 @@ mapper builds each field by name and copies no URL across.
 | `match/<id>.json` | `.../public/live/match/<id>.json` | events, lineups (with grid places and shirt colours where the API has them), API-Football's player ratings and team stats for one match, once it has kicked off |
 | `days/<YYYY-MM-DD>.json` | `.../public/live/days/2026-10-13.json` | `archv-day/1`: every match that kicked off on that Edmonton day, the same MATCH objects as `scores.json` (postponed and cancelled fixtures included, with their status) |
 | `days/index.json` | `.../public/live/days/index.json` | `archv-days/1`: the days that have a file and their match counts, newest first |
+| `days/ahead.json` | `.../public/live/days/ahead.json` | `archv-days-ahead/1`, season mode: the days from tomorrow to 28 days on that have fixtures, and their counts, oldest first |
+| `teams/index.json` | `.../public/live/teams/index.json` | `archv-teams/1`, season mode: every club in `_shared/clubs.json` with its in-scope men's and women's team ids |
+| `teams/<id>.json` | `.../public/live/teams/33.json` | `archv-team/1`, season mode: one team's season in our three competitions, past and future, kickoff order |
+| `preview/<id>.json` | `.../public/live/preview/<fixtureId>.json` | `archv-preview/1`, season mode: head to head and each side's last lineup, for a match that has not kicked off |
 
 Objects are uploaded with `contentType` `application/json` and `cacheControl` 30. supabase-js sends that
 as `Cache-Control: max-age=30` (not `public, max-age=30`); check the header on a read-back. A finished
@@ -265,6 +269,20 @@ colours API-Football sent for that team in its other files (most often at home),
 exact name among Premier League and Champions League teams, which covers the WSL, since the API sends
 WSL clubs almost no colours and their names match the men's clubs once " W" is gone. Refresh it with
 `npm run team-colours` and commit the JSON; it reads only this public bucket and costs no API quota.
+
+**Per-player lines, added on 2026-10-29, still `archv-match/1`.** A match file gains `players`:
+`{ home, away }`, one line per player who took part (played a minute or got a rating; an unused
+substitute is left out), starters first and then substitutes, each in the API's order. A line carries
+`id`, `name`, `number`, `pos`, `minutes`, `captain`, `sub`, `rating`, `goals`, `assists`, `shots`,
+`shotsOn`, `passes`, `passesAccurate`, `keyPasses`, `tackles`, `yellow` and `red`, plus `saves` and
+`conceded` for a goalkeeper (null for anyone else). Nothing else from the API's player block is
+copied, the photo least of all. Three traps the mapper handles: `passesAccurate` is a COUNT the API
+sends as a string ("45" of 53), not a percentage; the WSL sends `substitute: false` for every player,
+so `sub` comes from the lineup (by id, then exact name, then a unique "J. Rose" for "Jade Rose"
+match); and the WSL sends id 0, no number, no position and a rating of "0" for some players, which
+read as null, with number and position taken from the lineup. `players` is null unless both sides
+have a line, and ALWAYS null unless the function's secret `PUBLISH_PLAYERS` is `1`. It costs no
+request: it comes out of the same `/fixtures?ids=` answer as the ratings. `ratings` is unchanged.
 
 WSL team names lose the API's trailing " W" ("Arsenal W" becomes "Arsenal"); the competition
 already says it is the women's league. Names are also tidied: the API sometimes double-encodes an accent
@@ -379,6 +397,111 @@ select id, status_code, content::jsonb as answer
 from net._http_response order by id desc limit 3;
 ```
 
+### Season mode: teams, days ahead and previews (2026-10-29)
+
+A POST with the body `{"mode":"season"}`, made every 15 minutes by its own pg_cron job
+`scores-season` (`7,22,37,52 * * * *`), keeps the files that look forward: `days/<date>.json` for the
+days from 2 to 28 days on and `days/ahead.json`, `teams/index.json` and every `teams/<id>.json`, and
+`preview/<fixtureId>.json`. It is the same function. It has its own one-row state,
+`public.scores_season_state`, and never reads or writes `scores_poll_state`, so the minute poll's
+memory, hashes and pruning are exactly as they were. The code is `season.ts` (the decisions and the
+builders), `preview.ts` (head to head and last lineups) and `season_run.ts` (one call, with its I/O
+handed in).
+
+Each call does ONE step:
+
+| Step | When | Requests | Writes |
+| --- | --- | --- | --- |
+| `list:premier-league` | the :07 call of 00, 06, 12 and 18 UTC | 1 (`/fixtures?league=39&season=`) | the state row only |
+| `list:champions-league` | the :22 call of those hours | 1 | the state row only |
+| `list:wsl` | the :37 call of those hours | 1 | the state row only |
+| `build:days` | any other call, when a listing is newer than the last build or the build is 6 hours old | 0 | `days/<date>.json` for +2 to +28, `days/ahead.json` |
+| `build:teams` | the same rule, once the days are built | 0 (one paginated `storage.list("match/")`) | `teams/index.json`, `teams/<id>.json` |
+| `build:previews` | every 6 hours, or after the days are rebuilt | up to 40 head-to-head | `preview/<id>.json` |
+
+A call with nothing due reads the state row and answers `{ "ok": true, "step": null, ... }`. Every
+write is hash-gated against the mode's own `file_hashes`, which is pruned on every state write to the
+paths the mode owns now, so a quiet six hours writes nothing and the record does not grow.
+
+- **The days.** Season mode never writes yesterday, today or tomorrow (the poll's) and never reads or
+  writes `days/index.json`, which still ends at today. `days/ahead.json` has its own schema so a
+  misplaced file can never decode as history. An owned day that loses its matches gets an empty file.
+  The poll writes tomorrow, empty if need be, only after a complete schedule refresh, so a partial
+  refresh at Edmonton midnight cannot wipe season mode's file for the new tomorrow.
+- **The teams.** In scope is every team in a held listing outside the qualifying rounds
+  (`Qualifying`, `Preliminary`, `Play-offs`), about 70. Club keys, aliases and team ids come from
+  `_shared/clubs.json` (archv-clubs/1, the same file the Wire tagger reads). A team the table does not
+  cover gets an `auto: true` entry with the key `team-<id>`, which the app never offers in its picker;
+  the run log names each one so the table gets fixed. A match points at `match/<id>.json` when the
+  storage listing found that file. A failed storage listing writes no team file (rebuilt without it,
+  every pointer would go) and is stamped as `teamsFailed` in `built_at`, so the step retries after the
+  next listing or 6 hours and `build:previews` still gets its turn. Team files are up to 6 hours
+  behind on live state by design: the app overlays `scores.json` by match id.
+- **The previews.** One for every in-scope match that has not kicked off and starts within 28 days.
+  `lastLineup` is each side's lineup from its newest earlier finished match in our three
+  competitions, read from the match files already in the bucket (at most three tries, a missing file
+  or one with no lineups falls to the next), with its date, competition and opponent. It costs no
+  request. `h2h` is filled only inside 7 days of kickoff, from `/fixtures/headtohead?h2h=<home>-<away>&last=10`.
+  The preview file in Storage is its memory: a block that has been fetched is reused with no request
+  unless the listings show a finished meeting of the two sides after it was fetched (a second leg), or
+  the match is inside 48 hours and the block is older than that mark (one refresh). A preview whose
+  own file, or one of its lineup match files, cannot be read (an error, not a 404) is left as it is
+  this run: rebuilt blind it would write `h2h` or `lastLineup` as null over a good block, or pay a
+  second time for a block already held. That, or a failed preview write, is stamped as
+  `previewsFailed` in `built_at`, so the retry waits for the 6-hour cadence (or a rebuild of the
+  days) instead of coming back every 15 minutes. There is no `preview/index.json`; a 404 means "no
+  preview".
+- **Head-to-head rows.** Every competition's meetings are kept, cups included, each labelled with its
+  competition (the API's `league.id` and `league.name`, with our key for 39, 2 and 44), on the
+  founder's answer of 2026-10-28 ("Allowed, publish all"). Friendlies are dropped: league ids 10
+  (international friendlies), 666 (women's friendlies) and 667 (club friendlies), and any row whose
+  league says "Friendly" by type or name. Only finished rows, the fixture itself left out, newest first,
+  at most ten. The summary counts by team id from the fixture's point of view, wherever each meeting
+  was played; a shootout counts as a draw on the score. In a WSL preview every team name loses its
+  " W", whatever competition the row is from. No venue, round, logo, flag or referee is copied. An empty
+  reply is "never met"; a non-empty reply in which no row can be placed is a failure, keeps the
+  previous block and logs `h2h-unmapped <id>`.
+- **The head-to-head shape is UNVERIFIED.** No `/fixtures/headtohead` reply has been recorded (the API
+  docs refuse automated reads). `fixtures/h2h-synthetic.json` is SYNTHETIC, built from the recorded
+  fixture object shape, which API-Football documents as the same for this endpoint. The first live
+  reply after deploy is to be captured (logo and photo URLs stripped, as for the other fixtures) into
+  `fixtures/h2h-recorded.json` with a test against it, and this note then removed.
+- **Guards, before any request, in this order.** A state row that cannot be read means no request at
+  all. `backoff_until` in the future (30 minutes after any failed request) means no request, but the
+  builds still run. `remaining` below 1,500 READ TODAY (UTC) means no request, and the answer says
+  `quota-reserve`; a value read yesterday never blocks today. A state row whose `updated_at` is older
+  than one of its own stamps, or more than 6 hours old, means the last state write failed, so the
+  call makes no request and runs a build only. The 6-hour half applies only once the row carries a
+  listing or build stamp: the migration's insert sets `updated_at` with nothing behind it, so a first
+  call more than 6 hours later still lists. Until a listing has landed, the builds write nothing
+  (the answer says `nothing listed yet`), so a first deploy cannot publish an empty `days/ahead.json`
+  or a teams index with no teams. Every reply refreshes `remaining`, and the
+  head-to-head loop stops on a reply showing fewer than 1,500, on the first failed reply (and backs
+  off), and on the first failed preview write. At most three head-to-head requests are in flight.
+  Every step stops starting new work after 100 seconds.
+- **A season rolls over** when the season worked out from the date (or `APIFOOTBALL_SEASON`) differs
+  from the row's `season`: the held listings and their stamps are cleared, so an empty new-season
+  listing is believed and last season's fixtures leave the team files. An empty listing while holding
+  the same season's matches is refused, as in the poll.
+- **Hand calls.** `{"mode":"season","step":"<step>"}` forces one step (`list:<key>`, `build:days`,
+  `build:teams`, `build:previews`). It needs the push secret like every call here, and the guards still
+  apply to a listing. Make hand calls between cron slots (at :12, say), never on one, so two calls never
+  race on the state row.
+- **CPU.** The heaviest calls are one listing (380 Premier League fixtures, mapped once) and one build
+  (about 70 team files hashed, or up to about 120 previews). Both are estimated inside the 2-second
+  allowance. If the first real `build:teams` or `build:previews` logs CPU near the limit, split it
+  (`build:teams:men` and `:women`; `build:previews:near` for 7 days and `:far` for 8 to 28): only the
+  step table changes.
+
+The answer of a season call, for example:
+
+```
+{ "ok": true, "step": "build:previews", "requests": 6, "remaining": 7342, "filesWritten": 14,
+  "writeFailed": false, "h2hRequests": 6, "previews": 41 }
+```
+
+It answers 500 when an upload or the state write failed.
+
 ### Request budget
 
 The plan allows 7,500 requests a day. The schedule costs 3 requests every 30 minutes, 144 a day. Details
@@ -392,6 +515,10 @@ cost at most 1 a minute and only while something is live, starting or just finis
 | A competition failing or answering empty all day (schedule due every 5 minutes) | 2,304: 864 schedule plus 1,440 details |
 | The state row unwritable all day (see below) | 5,760: 3 schedule plus 1 details, every minute |
 | A backfill from the start of the season (once, then again only to repair) | about 3 plus one per 20 matches played: 38 for a full 700-match season, about a dozen at the moment |
+| Season mode's listings | 12 a day, always: fixed cron slots, no state needed to cap them |
+| Season mode's head to head | about 5 a typical day (fixtures entering the 7-day horizon and the 48-hour refresh), about 40 in one call on a busy week; worst case 40 a call, and with preview writes failing it stops at the first failure, so a stuck bucket costs at most 160 a day |
+| Last lineups and per-player lines | 0: read from the bucket, and from the same details answer |
+| All together | about 160 to 200 a typical day, about 850 on a busy one, about 5,930 at worst, under 7,500. The 1,500 reserve, read live from each reply, stops season mode first |
 
 The last row is the one to watch. If the state read works and the state write fails (for example the
 database has gone read-only), the next run reloads the old state and finds the schedule due again, so
@@ -440,9 +567,10 @@ Deploy:
 supabase functions deploy scores-poll --no-verify-jwt
 ```
 
-The function's own files are `index.ts`, `api.ts`, `backfill.ts`, `days.ts`, `map.ts`, `plan.ts` and
-`poll.ts`, plus `../_shared/cors.ts` and `../_shared/push_guard.ts`. Nothing else in the folder (tests,
-`testkit.ts`, `fixtures/`) is deployed. Deploying changes nothing until something calls the new code: the
+The function's own files are `index.ts`, `api.ts`, `backfill.ts`, `days.ts`, `map.ts`, `plan.ts`,
+`poll.ts`, `season.ts`, `preview.ts` and `season_run.ts`, plus `../_shared/cors.ts`,
+`../_shared/push_guard.ts` and `../_shared/clubs.json`. Nothing else in the folder (tests, `testkit.ts`,
+`season_testkit.ts`, `app_fixtures.ts`, `deno.json`, `fixtures/`) is deployed. Deploying changes nothing until something calls the new code: the
 cron call carries no body, so the minute's poll runs as before and now also keeps `days/`; the backfill
 runs only when called with its body.
 
@@ -457,3 +585,72 @@ schedules), with every logo, flag and photo URL, the referee and the coach photo
 ```
 cd supabase/functions/scores-poll && deno test
 ```
+
+Season mode's tests (`season_test.ts`, `preview_test.ts`, `season_run_test.ts`, `clubs_test.ts`) run on
+`fixtures/season-*.json`, copies of the three recorded schedule replies with the parameters of a season
+listing, which `season_testkit.ts` re-dates around the test clock into a spread of past and future
+kickoffs (only dates, statuses and goals change), and on `fixtures/h2h-synthetic.json` (SYNTHETIC, see
+above). `deno task app-fixtures [dir]` writes the server-side sample files the iOS app's model tests
+decode (`match-with-players.json`, `teams-index.json`, `team-33.json`, `preview.json`, `ahead.json`) by
+running the real builders over the recorded replies; by default into
+`../thearchv-app/TheARCHVTests/Fixtures/` beside this repo. Run it after a change to any of those
+shapes and commit the app's copies with the change.
+
+### Season mode deploy (package S3, 2026-10-29)
+
+Founder answer, 2026-10-28, on the API-Football terms: "Allowed, publish all". So the cron IS
+scheduled, `PUBLISH_PLAYERS` is set to `1`, and head to head keeps every competition except
+friendlies. Deploy through the Supabase MCP, in this order, with the proof of each step in the run
+report:
+
+1. **Tests.** `cd supabase/functions/scores-poll && deno test`: all green (170 at the time of
+   writing). Nothing deploys on a red suite.
+2. **Commit first** on `preview`, so the deployed code is the repo's code.
+3. **The table migration.** `list_migrations` and confirm `20261013170000_scores_live_feed` is
+   recorded. Then `apply_migration` with `supabase/migrations/20261028185520_scores_season_mode.sql`.
+   The MCP records its own timestamp as the version: rename the file to that version and commit the
+   rename. Read back: `select id, season, updated_at from public.scores_season_state;` returns one row,
+   and `select relrowsecurity from pg_class where relname = 'scores_season_state';` is true.
+4. **The function.** `deploy_edge_function`, name `scores-poll`, entrypoint `index.ts`,
+   `verify_jwt: false`, files `scores-poll/{index,api,backfill,days,map,plan,poll,season,preview,season_run}.ts`,
+   `_shared/cors.ts`, `_shared/push_guard.ts`, `_shared/clubs.json`. This deploy changes the minute
+   poll too (the `players` key, tomorrow's file, the early lineup pointer). **Smoke check:** the next
+   two `scores-poll` rows in `net._http_response` are 200, and `scores.json` still parses as
+   `archv-scores/1` (`curl -s <public url>/scores.json | jq .schema`). **Rollback:** redeploy the same
+   file list from the previous commit.
+5. **Hand calls**, between cron slots (at :12 or :42, never on :07, :22, :37 or :52), one at a time,
+   reading each answer back from `net._http_response` before the next:
+
+   ```sql
+   select net.http_post(
+     url := 'https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/scores-poll',
+     headers := jsonb_build_object(
+       'Content-Type', 'application/json',
+       'x-push-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'push_secret')
+     ),
+     body := jsonb_build_object('mode', 'season', 'step', 'list:premier-league'),
+     timeout_milliseconds := 120000
+   ) as request_id;
+   ```
+
+   Then the same with `list:champions-league`, `list:wsl`, `build:days`, `build:teams` and
+   `build:previews`. Each answer is `ok: true`; the three listings make one request each, the two
+   builds none, and the previews call at most 40. Note any `autoClubs` in the teams answer and add those
+   sides to `_shared/clubs.json`. Then confirm with curl that `teams/index.json`, `teams/33.json`,
+   `days/ahead.json` and one `preview/<id>.json` exist and parse with their schemas
+   (`archv-teams/1`, `archv-team/1`, `archv-days-ahead/1`, `archv-preview/1`).
+6. **Capture the first live head-to-head reply** into `fixtures/h2h-recorded.json` (logo, flag and
+   photo URLs removed), add a test against it in the same session, and remove the "unverified" note
+   above.
+7. **The cron and the players.** `apply_migration` with
+   `supabase/migrations/20261028192438_scores_season_cron.sql` (rename to the returned version, as in
+   step 3) and check `select jobname, schedule from cron.job where jobname = 'scores-season';`. Set the
+   secret `PUBLISH_PLAYERS=1`. Then the player-stats backfill: POST `{"mode":"backfill","from":"2026-07-07"}`
+   and repeat with the returned `next` until `done: true` (about 17 requests; every match file is
+   rewritten once with `players`, day files compare unchanged). Spot-check `match/1557441.json` for
+   `players`. The backfill stops at yesterday, so run it once more the next day with `from` set to the
+   deploy date.
+8. **Measure.** Read `remaining` in `net._http_response` before and after one full day, and on the
+   first Saturday after deploy record the busy-day count in the budget table above.
+9. **The site.** Deploy per site trap 2 (`bash scripts/deploy-site.sh`), since this code lives in
+   the site repo.

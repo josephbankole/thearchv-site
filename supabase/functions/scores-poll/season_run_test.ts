@@ -186,6 +186,21 @@ Deno.test("build:days: the forward files and ahead.json, never days/index.json; 
   assertEquals(again.summary.filesWritten, 0);
 });
 
+Deno.test("build:days: a failed write waits for the cadence, so build:teams and build:previews still run", async () => {
+  const s = built((x) => (x.builtAt = {}));
+  const store = memoryStore({ failOn: (p) => p.startsWith("days/") });
+  const r = await call({ state: s, store });
+  assertEquals([r.summary.step, r.summary.writeFailed, r.after!.builtAt.days], ["build:days", true, undefined]);
+  assertEquals(r.after!.builtAt.daysFailed, NOW.toISOString());
+  const next = new Date(NOW.getTime() + 15 * 60_000);
+  const r2 = await call({ state: { ...r.after!, updatedAt: NOW.toISOString() }, store, now: next });
+  assertEquals(r2.summary.step, "build:teams");
+  const r3 = await call({ state: { ...r2.after!, updatedAt: next.toISOString() }, store, now: new Date(next.getTime() + 15 * 60_000) });
+  assertEquals(r3.summary.step, "build:previews");
+  const later = await call({ state: { ...r.after!, updatedAt: NOW.toISOString() }, store, now: new Date(NOW.getTime() + 6 * H) });
+  assertEquals(later.summary.step, "build:days");
+});
+
 Deno.test("build:teams: team files with pointers from the storage listing; a second run writes nothing", async () => {
   const store = memoryStore();
   store.files.set(detailPath(1557425), "{}");

@@ -180,9 +180,11 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
       }
     }
   } else if (step === "build:days") {
-    // 2b. The future day files and days/ahead.json. 0 requests.
+    // 2b. The future day files and days/ahead.json. 0 requests. A failed write stamps daysFailed,
+    //     so the step retries on the build cadence and build:teams and build:previews still run.
     const out = buildAhead(held, now, hashes, stamp);
     if (await upload(out.files)) state.builtAt = { ...state.builtAt, days: stamp };
+    else state.builtAt = { ...state.builtAt, daysFailed: stamp };
   } else if (step === "build:teams") {
     // 2c. The team files and teams/index.json. 0 requests, one paginated storage listing for the
     //     detail pointers. A failed listing writes nothing (rebuilt without it, every file would

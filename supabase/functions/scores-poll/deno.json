@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "app-fixtures": "deno run --allow-read --allow-write app_fixtures.ts"
+  }
+}

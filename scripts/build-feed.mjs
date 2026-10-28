@@ -13,6 +13,7 @@ import { byDateDesc, LANE_META, SPORTS, laneByFeedKey, articlePath } from "./sha
 import { loadDayData } from "./shared/day-data.mjs";
 import { infogramEligible, infogramAlt, infogramRelPath } from "./shared/infogram.mjs";
 import { withAppArt } from "./shared/app-art.mjs";
+import { resolveLongReadSport } from "./shared/longread-sport.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.FEED_OUT || join(ROOT, "dist", "feed");
@@ -38,6 +39,9 @@ const {
 
 /* ---------- compose the feeds ---------- */
 const SITE = "https://thearchv.ca";
+
+/* Long-read sport tags (2026-10-28): the entry's own `sport`, else the backfill table. */
+const longReadSport = (r) => resolveLongReadSport(r, readPath(r.title), { warn: (m) => console.warn(`[build-feed] ${m}`) });
 // Lane segment in the article URL differs from the internal `section` key for World Cup
 // (section "worldcup", URL lane "world-cup"). The mapping lives on LANE_META.feedKey in
 // page-shell.mjs — declared once, derived here (2026-08-12 review).
@@ -162,9 +166,15 @@ const feeds = {
     // `body` is always clean plain paragraphs, so app builds that render it as plain Text never
     // print ** or [text](url). `bodyMarkdown` rides alongside only when the body carries markdown
     // (the Dispatch copies, 2026-09-11); builds from 1.5.4 prefer it. Plain essays are unchanged.
+    // `sport` (2026-10-28, additive): one of the feed's sport keys, or "multi" for an issue that
+    // covers every sport, so the app can show the Dispatch on each sport tab
+    // (scripts/shared/longread-sport.mjs). Old app builds ignore the key.
     longReads: longReads.map((r) => {
       const plain = longreadParagraphs(r.body).join("\n\n");
       const out = { ...r, body: plain, url: `${SITE}${readPath(r.title)}` };
+      const sport = longReadSport(r);
+      if (sport) out.sport = sport;
+      else delete out.sport;
       if (plain !== r.body) out.bodyMarkdown = r.body;
       return out;
     }),

@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-28",
+    day: "Wednesday",
+    headline: "Manchester United were expected to sack Michael Carrick, and on Tuesday he took training",
+    dek: "After the 3-0 home defeat by Bournemouth, Sky Sports News reported that insiders expected Carrick to go. Following talks between Omar Berrada, Jason Wilcox, the Glazer family and Sir Jim Ratcliffe, he stays as head coach for Saturday's Premier League match at Chelsea.",
+    body: "Michael Carrick will stay as Manchester United head coach, the Manchester Evening News reported on Tuesday 27 October, after crunch talks involving chief executive Omar Berrada, director of football Jason Wilcox, the Glazer family and co-owner Sir Jim Ratcliffe. Carrick took training at Carrington on Tuesday morning and is preparing for the trip to Chelsea as normal (Manchester Evening News). NBC Sports noted the BBC and Sky Sports reported the same decision.\n\nA day earlier, Sky Sports News had reported that insiders expected Carrick to be relieved of his duties after the 3-0 defeat by Bournemouth at Old Trafford on Sunday, with Wilcox and Berrada making the recommendation to Ratcliffe and Eddie Howe and Julian Nagelsmann named as the front runners (Sky Sports News).\n\nHe keeps the job on two wins in 12 matches in all competitions and seven points from eight Premier League games, with Manchester United 16th and one point above the relegation zone (Manchester Evening News).\n\nCarrick said leaving Bruno Fernandes on the bench for all 90 minutes against Bournemouth was a \"pure football\" decision and not a punishment (Manchester Evening News). The captain had told TNT Sports after the 4-1 defeat at Como that it was \"a decision from the staff to not press man-to-man\" (Irish Examiner). Fernandes was at Carrington on Tuesday too (Manchester Evening News).\n\nSupporters sang Carrick's name and applauded him at full time on Sunday, then booed the players and chanted against the owners and the club's decision-makers (NBC Sports). \"It's a tough situation, there's no hiding from it,\" Carrick said afterwards. \"I love what I do and I feel the responsibility - we'll have to wait and see\" (Manchester Evening News).\n\nSources: Manchester Evening News; NBC Sports; Sky Sports News; Irish Examiner.",
+    status: "verified",
+    publishedAt: "2026-10-28T06:29:54-04:00",
+    index: "noindex",
+    seoTitle: "Michael Carrick stays as Manchester United head coach",
+    sources: [{"outlet":"Manchester Evening News (via Yahoo Sports)","url":"https://uk.sports.yahoo.com/news/michael-carricks-telling-response-man-124043373.html","published":"2026-10-27"},{"outlet":"NBC Sports","url":"https://www.nbcsports.com/soccer/news/reports-michael-carrick-to-stay-on-as-manchester-united-manager","published":"2026-10-27"},{"outlet":"Irish Examiner","url":"https://www.irishexaminer.com/sport/soccer/arid-41927324.html","published":"2026-10-21"}],
+    tier: "confirmed",
+    expires: "2026-10-31",
+  },
+  {
     date: "2026-10-26",
     day: "Monday",
     headline: "Bournemouth win 3-0 at Old Trafford with Bruno Fernandes benched, and Michael Carrick's job is in the board's hands",

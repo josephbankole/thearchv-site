@@ -14,20 +14,35 @@
 // of them, days/index.json. A POST with the body {"mode":"backfill","from":"YYYY-MM-DD"} fills that
 // history in for the season so far (backfill.ts); the cron call has no body and is unaffected.
 //
+// Season mode (season.ts, season_run.ts), from 2026-10-29: a POST with the body {"mode":"season"},
+// made every 15 minutes by its own pg_cron job, keeps the files that look ahead: days/<date>.json for
+// the days +2 to +28 and days/ahead.json, teams/index.json and teams/<id>.json, and
+// preview/<fixtureId>.json. It has its own state row (scores_season_state) and never reads or writes
+// the minute poll's. A hand call may add "step" (list:<key>, build:days, build:teams,
+// build:previews) to force one step; like every call here it needs the push secret.
+//
 // Secrets required:
 //   APIFOOTBALL_KEY     the API-Football key (sent in a header, never logged or put in a URL)
 //   PUSH_SECRET         the guard, matched against the x-push-secret header from the cron call
 // Optional:
 //   APIFOOTBALL_SEASON  overrides the season (the year it starts in); default is worked out from the date
+//   PUBLISH_PLAYERS     "1" puts the per-player lines (map.ts `players`) in the match files; anything
+//                       else leaves them null. Read once per call, here.
 import { adminClient, json } from "../_shared/cors.ts";
 import { makeApiGet } from "./api.ts";
 import { runBackfill } from "./backfill.ts";
+import { isStep } from "./season.ts";
+import { runSeasonStep } from "./season_run.ts";
 import { rowFromState, runPoll, stateFromRow } from "./poll.ts";
 import { canonicalJson, seasonFor } from "./plan.ts";
 
 const BUCKET = "live";
 const STATE_COLUMNS =
   "schedule_fetched_at, window_day, matches, finished_at, file_hashes, backoff_until";
+const SEASON_COLUMNS =
+  "season, listed_at, matches, built_at, file_hashes, remaining, remaining_at, backoff_until, updated_at";
+// Names a storage listing returns per page, the API's maximum.
+const LIST_PAGE = 1000;
 
 // Whether a Storage error means "no such object" rather than "could not look". The two must not be
 // confused: a missing index is an empty one, an unreadable index must not be overwritten.
@@ -58,6 +73,7 @@ Deno.serve(async (req) => {
   const supabase = adminClient();
   const now = new Date();
   const season = Number(Deno.env.get("APIFOOTBALL_SEASON")) || seasonFor(now);
+  const publishPlayers = Deno.env.get("PUBLISH_PLAYERS") === "1";
   const write = async (path: string, text: string) => {
     const { error } = await supabase.storage.from(BUCKET).upload(path, text, {
       contentType: "application/json",
@@ -81,9 +97,57 @@ Deno.serve(async (req) => {
   // The one-off backfill. It does not read or write the state row.
   const body = await bodyOf(req);
   if (body.mode === "backfill") {
-    const out = await runBackfill(String(body.from ?? ""), { now, season, api: makeApiGet(apiKey), read, write });
+    const out = await runBackfill(String(body.from ?? ""), {
+      now,
+      season,
+      api: makeApiGet(apiKey),
+      read,
+      write,
+      publishPlayers,
+    });
     console.log(`scores-poll: backfill ${JSON.stringify(out)}`);
     return json(out, 200);
+  }
+
+  // Season mode: its own state row, its own hashes; never reads or writes scores_poll_state.
+  if (body.mode === "season") {
+    const listMatchFiles = async (): Promise<Set<number>> => {
+      const ids = new Set<number>();
+      for (let offset = 0;; offset += LIST_PAGE) {
+        const { data, error } = await supabase.storage.from(BUCKET).list("match", {
+          limit: LIST_PAGE,
+          offset,
+          sortBy: { column: "name", order: "asc" },
+        });
+        if (error) throw new Error(error.message);
+        for (const f of data ?? []) {
+          const m = /^(\d+)\.json$/.exec(f.name);
+          if (m) ids.add(Number(m[1]));
+        }
+        if (!data || data.length < LIST_PAGE) return ids;
+      }
+    };
+    const out = await runSeasonStep({
+      now,
+      season,
+      api: makeApiGet(apiKey),
+      read,
+      write,
+      listMatchFiles,
+      loadState: async () => {
+        const { data, error } = await supabase
+          .from("scores_season_state").select(SEASON_COLUMNS).eq("id", 1).maybeSingle();
+        if (error) throw new Error(error.message);
+        return data;
+      },
+      saveState: async (row) => {
+        const { error } = await supabase.from("scores_season_state").upsert(row);
+        if (error) throw new Error(error.message);
+      },
+      step: isStep(body.step) ? body.step : null,
+    });
+    console.log(`scores-poll: season ${JSON.stringify(out)}`);
+    return json(out, out.writeFailed ? 500 : 200);
   }
 
   // The state is read before any request goes out. If it cannot be read, nothing is fetched: a
@@ -102,6 +166,7 @@ Deno.serve(async (req) => {
     api: makeApiGet(apiKey),
     write,
     archive: { read },
+    publishPlayers,
   });
 
   // Save the state only if the run changed it, so a quiet minute is a single read.

@@ -512,7 +512,8 @@ function playersFor(entries: unknown, teamId: number, lineup: Lineup | null): Pl
   const bench = lineup?.subs ?? [];
   const everyone = [...starters, ...bench];
   const isStarter = new Set(starters);
-  // Lineup players claimed by id, so a name fallback never hands one lineup entry to two players.
+  // Lineup players already taken (by id up front, by name as the players resolve in order), so a
+  // name fallback never hands one lineup entry to two players.
   const claimed = new Set<LineupPlayer>();
   const raws = list(e?.players).map((raw) => {
     const p = obj(raw);
@@ -529,9 +530,11 @@ function playersFor(entries: unknown, teamId: number, lineup: Lineup | null): Pl
     }
     const free = everyone.filter((l) => !claimed.has(l));
     const exact = free.filter((l) => l.name === name);
-    if (exact.length === 1) return exact[0];
-    const loose = free.filter((l) => sameInitialAndSurname(l.name, name));
-    return loose.length === 1 ? loose[0] : null;
+    const hits = exact.length === 1 ? exact : free.filter((l) => sameInitialAndSurname(l.name, name));
+    if (hits.length !== 1) return null;
+    // A name hit is claimed too, so a second id-less player cannot land on the same entry.
+    claimed.add(hits[0]);
+    return hits[0];
   };
 
   const first: PlayerLine[] = [];

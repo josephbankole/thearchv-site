@@ -396,6 +396,23 @@ Deno.test("players: WSL ids of 0 and ratings of \"0\" read as unknown; sub, numb
   assertEquals(playersOf(fx)!.home.find((l) => l.name === "K. Shaw")!.rating, null);
 });
 
+Deno.test("players: two id-less players never share one lineup entry by name", () => {
+  // A second City player with id 0 whose name also fits "J. Rose", missing from the lineup (the
+  // bench list left her out). "Jade Rose" takes the entry first; this one must not land on it too.
+  const fx = fixtureById(IDS.wslFinished);
+  const home = sideEntry(fx, 1854);
+  const jade = home.players.find((x: { player: { name: string } }) => x.player.name === "Jade Rose");
+  const jill = structuredClone(jade);
+  jill.player.name = "Jill Rose";
+  jill.statistics[0].games.minutes = 12;
+  home.players.push(jill);
+  const p = playersOf(fx)!;
+  const line = p.home.find((l) => l.name === "Jill Rose")!;
+  assertEquals([line.sub, line.number, line.pos], [true, null, null]);
+  assertEquals(p.home.find((l) => l.name === "Jade Rose")!.sub, false);
+  assertEquals(p.home.filter((l) => !l.sub).length, 11, "still eleven starters");
+});
+
 Deno.test("players: more accurate passes than passes, or a percentage, is null", () => {
   const fx = fixtureById(IDS.plFinished);
   const stats = sideEntry(fx, 40).players.find((x: { player: { id: number } }) => x.player.id === 290).statistics[0];

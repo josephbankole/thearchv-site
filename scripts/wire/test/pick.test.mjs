@@ -1,6 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdtempSync, rmSync, readdirSync, copyFileSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { parseFeed } from "../lib/feed-parse.mjs";
 import { pickTop, seenFromEditions } from "../lib/pick.mjs";
@@ -176,4 +178,85 @@ test("the betting filter catches betting picks and lines but keeps trade and dra
     "Opening lines for Week 4",
     "Point spread and betting lines for every game",
   ]) assert.equal(one(drop).pick, null, drop);
+});
+
+/* ---------- several football items a day (spec B1.2, 2026-10-28) ---------- */
+
+// A day's soccer feed in ESPN's editorial order, invented headlines, every one fresh at NOW.
+const SOCCER_DAY = [
+  "Arsenal beat Chelsea in the London derby",
+  "Fixture Rovers stun Placeholder Athletic late on",
+  "Man Utd sack manager after cup exit",
+  "Leeds United win at home again",
+  "Liverpool Montevideo sign Placeholder Striker",
+  "Barça held by Real Madrid in the Clasico",
+  "Celtic go top after a late winner",
+  "Inter Miami draw again in the east",
+  "Ajax appoint Placeholder Coach until the summer",
+  "Napoli lose at home for the first time",
+  "Juventus sign Placeholder Defender on loan",
+].map((title, i) => ({ title, link: `https://www.espn.com/soccer/story/_/id/${91000000 + i}/story-${i}`, published: "Sat, 26 Sep 2026 20:00:00 EST", guid: `US-EN-${91000000 + i}`, position: i }));
+const soccer6 = () => ({ ...src("espn-soccer"), maxItems: 6 });
+
+test("maxItems 6: up to six picks ranked 1 to 6, United first, then club-tagged stories in feed order", () => {
+  const r = pickTop(SOCCER_DAY, soccer6(), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.deepEqual(r.picks.map((p) => p.rank), [1, 2, 3, 4, 5, 6]);
+  assert.deepEqual(r.picks.map((p) => p.headline), [
+    "Man Utd sack manager after cup exit",
+    "Arsenal beat Chelsea in the London derby",
+    "Leeds United win at home again",
+    "Barça held by Real Madrid in the Clasico",
+    "Celtic go top after a late winner",
+    "Ajax appoint Placeholder Coach until the summer",
+  ]);
+  assert.equal(r.pick, r.picks[0], "pick is still picks[0] for the callers that read it");
+  // The alternates are the next two after the picks: the club-tagged ones first.
+  assert.deepEqual(r.alternates.map((a) => a.headline), ["Napoli lose at home for the first time", "Juventus sign Placeholder Defender on loan"]);
+});
+
+test("an untagged survivor is never taken at rank 2 or later, and rank 1 is taken whatever it names", () => {
+  const untagged = new Set(["Fixture Rovers stun Placeholder Athletic late on", "Liverpool Montevideo sign Placeholder Striker", "Inter Miami draw again in the east"]);
+  const r = pickTop(SOCCER_DAY, soccer6(), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.ok(r.picks.slice(1).every((p) => !untagged.has(p.headline)));
+  // No United story and an untagged lead: the lead is still rank 1, as it always was.
+  const day = SOCCER_DAY.filter((x) => !/Man Utd/.test(x.title)).slice(1);
+  const r2 = pickTop(day, soccer6(), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.equal(r2.picks[0].headline, "Fixture Rovers stun Placeholder Athletic late on");
+  assert.ok(r2.picks.slice(1).every((p) => !untagged.has(p.headline)));
+  // A feed with no club in it gives exactly one pick.
+  const plain = SOCCER_DAY.filter((x) => untagged.has(x.title));
+  assert.equal(pickTop(plain, soccer6(), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW }).picks.length, 1);
+});
+
+test("a source with the default maxItems returns exactly today's single pick and alternates", () => {
+  const r = pickTop(SOCCER_DAY, src("espn-soccer"), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.equal(r.picks.length, 1);
+  assert.equal(r.pick.rank, 1);
+  assert.equal(r.pick.headline, "Man Utd sack manager after cup exit");
+  assert.deepEqual(r.alternates.map((a) => a.headline), ["Arsenal beat Chelsea in the London derby", "Fixture Rovers stun Placeholder Athletic late on"]);
+  // The shipped fixture feed still gives the same pick as before the change.
+  const old = pickTop(items("espn-soccer"), src("espn-soccer"), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.deepEqual(old.picks, [old.pick]);
+});
+
+test("fetchWire writes one candidate per pick with its rank, and every pick joins the seen set", async () => {
+  const reg = structuredClone(SOURCES);
+  reg.sources.find((s) => s.id === "espn-soccer").maxItems = 6;
+  const dir = mkdtempSync(join(tmpdir(), "wire-feeds-"));
+  try {
+    for (const f of readdirSync(FEEDS)) copyFileSync(join(FEEDS, f), join(dir, f));
+    const rss = `<?xml version="1.0"?><rss version="2.0"><channel><title>Fixture feed</title><link>https://www.espn.com</link>\n${SOCCER_DAY.map((x) =>
+      `<item><title><![CDATA[${x.title}]]></title><link>${x.link}</link><description><![CDATA[x]]></description><pubDate>${x.published}</pubDate><guid isPermaLink="false">${x.guid}</guid></item>`).join("\n")}\n</channel></rss>\n`;
+    writeFileSync(join(dir, "espn-soccer.xml"), rss);
+    const c = await fetchWire({ date: "2026-09-27", nowMs: NOW, history: { editions: [] }, offline: dir, sources: reg });
+    const soccer = c.candidates.filter((x) => x.sourceId === "espn-soccer");
+    assert.deepEqual(soccer.map((x) => x.rank), [1, 2, 3, 4, 5, 6]);
+    assert.ok(soccer.every((x) => JSON.stringify(x.alternates) === JSON.stringify(soccer[0].alternates)), "the same alternates on each");
+    assert.ok(c.candidates.filter((x) => x.sourceId !== "espn-soccer").every((x) => x.rank === 1));
+    // Tomorrow, none of today's six is taken again.
+    const { wire } = finalise({ candidates: c, prev: { editions: [] }, nowIso: "2026-09-27T09:10:00Z", sources: reg });
+    const next = await fetchWire({ date: "2026-09-28", nowMs: NOW, history: wire, offline: dir, sources: reg });
+    const taken = new Set(soccer.map((x) => x.id));
+    assert.ok(!next.candidates.some((x) => taken.has(x.id)));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });

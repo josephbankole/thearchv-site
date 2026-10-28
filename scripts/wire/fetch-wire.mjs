@@ -1,5 +1,6 @@
-/* fetch-wire.mjs: fetch every enabled source in sources.json, pick the top item per source by
-   the rule in lib/pick.mjs, and write a DATED candidates file. It writes no prose: the one-line
+/* fetch-wire.mjs: fetch every enabled source in sources.json, pick the top item (or items, up to
+   the source's maxItems) per source by the rule in lib/pick.mjs, and write a DATED candidates
+   file. One candidate per pick, each with its `rank` and the source's same alternates list. It writes no prose: the one-line
    ARCHV note is added later by the daily desk, and an item is valid with or without it.
 
    node scripts/wire/fetch-wire.mjs [--date YYYY-MM-DD] [--now ISO] [--history wire.json]
@@ -33,8 +34,10 @@ export async function fetchWire({ date, nowMs, history, offline, sources = SOURC
     const r = pickTop(parsed.items, source, { defaults: sources.defaults, seen, nowMs });
     rejected.push(...r.rejected);
     if (!r.pick) { missing.push({ sourceId: source.id, reason: r.reason }); continue; }
-    addSeen(seen, r.pick); // the same story across two feeds is taken once, first source wins
-    candidates.push({ ...r.pick, firstSeenAt: fetchedAt, alternates: r.alternates });
+    for (const p of r.picks) {
+      addSeen(seen, p); // the same story across two feeds is taken once, first source wins
+      candidates.push({ ...p, firstSeenAt: fetchedAt, alternates: r.alternates });
+    }
   }
   return { version: 1, date, fetchedAt, candidates, missing, rejected };
 }
@@ -52,6 +55,7 @@ if (isMain(import.meta.url)) {
   for (const m of result.missing) console.log(`[fetch-wire]   missing ${m.sourceId}: ${m.reason}`);
   const sporadic = new Set(SOURCES.sources.filter((s) => s.sporadic).map((s) => s.id));
   const requiredMissing = result.missing.filter((m) => !sporadic.has(m.sourceId)).length;
-  console.log(`[fetch-wire] ${date}: ${result.candidates.length} picked, ${requiredMissing} required source(s) missing -> ${out}`);
+  const extras = result.candidates.filter((c) => c.rank > 1).length;
+  console.log(`[fetch-wire] ${date}: ${result.candidates.length} picked (${extras} club-tagged extra${extras === 1 ? "" : "s"}), ${requiredMissing} required source(s) missing -> ${out}`);
   process.exit(result.candidates.length === 0 ? 1 : requiredMissing ? 3 : 0);
 }

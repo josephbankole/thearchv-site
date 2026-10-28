@@ -1,0 +1,727 @@
+{
+ "_synthetic": "SYNTHETIC, not a recorded reply: no /fixtures/headtohead answer has been captured yet (the API docs refuse automated reads). Built from the recorded fixture object shape, which API-Football documents as the same for headtohead. See supabase/functions/README.md.",
+ "get": "fixtures/headtohead",
+ "parameters": {
+  "h2h": "40-50",
+  "last": "10"
+ },
+ "errors": [],
+ "results": 11,
+ "paging": {
+  "current": 1,
+  "total": 1
+ },
+ "response": [
+  {
+   "fixture": {
+    "id": 1208001,
+    "timezone": "UTC",
+    "date": "2025-11-09T16:30:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 39,
+    "name": "Premier League",
+    "country": "England",
+    "season": 2024,
+    "round": "Regular Season - 1"
+   },
+   "teams": {
+    "home": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    },
+    "away": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 3,
+    "away": 0
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 3,
+     "away": 0
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208002,
+    "timezone": "UTC",
+    "date": "2025-02-23T16:30:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 39,
+    "name": "Premier League",
+    "country": "England",
+    "season": 2024,
+    "round": "Regular Season - 1"
+   },
+   "teams": {
+    "home": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    },
+    "away": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 0,
+    "away": 2
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 0,
+     "away": 2
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208003,
+    "timezone": "UTC",
+    "date": "2024-03-10T15:45:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 39,
+    "name": "Premier League",
+    "country": "England",
+    "season": 2024,
+    "round": "Regular Season - 1"
+   },
+   "teams": {
+    "home": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    },
+    "away": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 1,
+    "away": 1
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 1,
+     "away": 1
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208004,
+    "timezone": "UTC",
+    "date": "2024-04-21T14:00:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 45,
+    "name": "FA Cup",
+    "country": "England",
+    "season": 2024,
+    "round": "Semi-finals"
+   },
+   "teams": {
+    "home": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    },
+    "away": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 2,
+    "away": 1
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 2,
+     "away": 1
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208005,
+    "timezone": "UTC",
+    "date": "2023-11-01T19:45:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "PEN",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 48,
+    "name": "League Cup",
+    "country": "England",
+    "season": 2024,
+    "round": "Round of 16"
+   },
+   "teams": {
+    "home": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    },
+    "away": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 1,
+    "away": 1
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 1,
+     "away": 1
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": 5,
+     "away": 4
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208006,
+    "timezone": "UTC",
+    "date": "2024-07-28T23:00:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 667,
+    "name": "Friendlies Clubs",
+    "country": "England",
+    "season": 2024,
+    "round": "Club Friendlies 1",
+    "type": "Friendly"
+   },
+   "teams": {
+    "home": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    },
+    "away": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 4,
+    "away": 2
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 4,
+     "away": 2
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208007,
+    "timezone": "UTC",
+    "date": "2026-11-08T16:30:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "NS",
+     "elapsed": null,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 39,
+    "name": "Premier League",
+    "country": "England",
+    "season": 2024,
+    "round": "Regular Season - 1"
+   },
+   "teams": {
+    "home": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    },
+    "away": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": null,
+    "away": null
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": null,
+     "away": null
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1557600,
+    "timezone": "UTC",
+    "date": "2026-11-01T16:30:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "NS",
+     "elapsed": null,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 39,
+    "name": "Premier League",
+    "country": "England",
+    "season": 2024,
+    "round": "Regular Season - 1"
+   },
+   "teams": {
+    "home": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    },
+    "away": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": null,
+    "away": null
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": null,
+     "away": null
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208008,
+    "timezone": "UTC",
+    "date": "2023-08-27T15:30:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    },
+    "referee": "A. Referee"
+   },
+   "league": {
+    "id": 39,
+    "name": "Premier League",
+    "country": "England",
+    "season": 2024,
+    "round": "Regular Season - 1",
+    "logo": "https://media.api-sports.io/football/leagues/39.png",
+    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+   },
+   "teams": {
+    "home": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null,
+     "logo": "https://media.api-sports.io/football/teams/50.png"
+    },
+    "away": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null,
+     "logo": "https://media.api-sports.io/football/teams/40.png"
+    }
+   },
+   "goals": {
+    "home": 2,
+    "away": 2
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 2,
+     "away": 2
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   },
+   "players": [
+    {
+     "player": {
+      "id": 1,
+      "photo": "https://media.api-sports.io/football/players/1.png"
+     }
+    }
+   ]
+  },
+  {
+   "fixture": {
+    "id": 1208009,
+    "timezone": "UTC",
+    "date": "2023-03-01T20:00:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "teams": {
+    "home": {
+     "id": 40,
+     "name": "Liverpool",
+     "winner": null
+    },
+    "away": {
+     "id": 50,
+     "name": "Manchester City",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 1,
+    "away": 0
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 1,
+     "away": 0
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  },
+  {
+   "fixture": {
+    "id": 1208010,
+    "timezone": "UTC",
+    "date": "2025-01-29T19:00:00+00:00",
+    "timestamp": 0,
+    "periods": {
+     "first": null,
+     "second": null
+    },
+    "venue": {
+     "id": 1,
+     "name": "A Stadium",
+     "city": "A City"
+    },
+    "status": {
+     "long": "x",
+     "short": "FT",
+     "elapsed": 90,
+     "extra": null
+    }
+   },
+   "league": {
+    "id": 46,
+    "name": "FA WSL Cup",
+    "country": "England",
+    "season": 2024,
+    "round": "Semi-finals"
+   },
+   "teams": {
+    "home": {
+     "id": 1850,
+     "name": "Arsenal W",
+     "winner": null
+    },
+    "away": {
+     "id": 1854,
+     "name": "Manchester City W",
+     "winner": null
+    }
+   },
+   "goals": {
+    "home": 2,
+    "away": 1
+   },
+   "score": {
+    "halftime": {
+     "home": null,
+     "away": null
+    },
+    "fulltime": {
+     "home": 2,
+     "away": 1
+    },
+    "extratime": {
+     "home": null,
+     "away": null
+    },
+    "penalty": {
+     "home": null,
+     "away": null
+    }
+   }
+  }
+ ]
+}

@@ -2,7 +2,8 @@
    Wire content file. It writes no prose. A note that fails lib/grounding.mjs is dropped and the
    item still publishes without it; a desk veto takes the first alternate that is neither vetoed
    nor already in the edition (which then carries no note unless the notes file has one for the
-   alternate's id).
+   alternate's id). A source with several ranked picks is renumbered after its vetoes, so the next
+   pick up becomes rank 1; a note on a rank 2 or later item is refused (the desk notes rank 1 only).
 
    node scripts/wire/finalise-wire.mjs --candidates c.json [--notes notes.json]
         [--prev scripts/data/daily/wire.json] [--out scripts/data/daily/wire.json] [--check-only] [--replace] [--now ISO]
@@ -22,6 +23,7 @@ import { parseArgs, isMain } from "./lib/args.mjs";
 import { checkNote } from "./lib/grounding.mjs";
 import { seenFromEditions, addSeen, isSeen } from "./lib/pick.mjs";
 import { SOURCES, sanitiseWire, sanitiseItem } from "./lib/schema.mjs";
+import { tagClubs } from "./lib/clubs.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const KEEP = 7;
@@ -49,26 +51,46 @@ export function finalise({ candidates, notes = { notes: {}, vetoes: {} }, prev =
   // Every pick nobody vetoed publishes as itself, so a replacement must not repeat one of them (B3).
   const taken = seenFromEditions([]);
   for (const c of list) if (!isVetoed(c)) addSeen(taken, c);
+  // One source may carry several ranked picks (espn-soccer, up to 6). After vetoes the surviving
+  // picks are renumbered 1..n in their original order, so the next one up takes rank 1 (the only
+  // rank /wire/ and the app's shelves show), and alternates only refill the tail (spec B1.4). A
+  // refill at rank 2 or later must name a club, the same rule pickTop applies to every extra.
+  const bySource = new Map();
   for (const c of list) {
-    let chosen = c;
-    if (isVetoed(c)) {
-      const alt = (c.alternates || []).find((a) => !isVetoed(a) && !isSeen(taken, a));
-      if (!alt) { missing.push({ sourceId: c.sourceId, reason: "vetoed-no-alternate" }); continue; }
-      chosen = { ...c, ...alt };
+    if (!bySource.has(c.sourceId)) bySource.set(c.sourceId, []);
+    bySource.get(c.sourceId).push(c);
+  }
+  for (const [sourceId, group] of bySource) {
+    group.sort((a, b) => (a.rank || 1) - (b.rank || 1));
+    const head = group[0];
+    const kept = group.filter((c) => !isVetoed(c)).map((c) => ({ c, chosen: c }));
+    let need = group.length - kept.length;
+    for (const alt of head.alternates || []) {
+      if (need <= 0) break;
+      if (isVetoed(alt) || isSeen(taken, alt)) continue;
+      if (kept.length >= 1 && !tagClubs(alt.headline).length) continue;
+      kept.push({ c: head, chosen: { ...head, ...alt } });
       addSeen(taken, alt);
+      need--;
     }
-    let note = notes.notes?.[chosen.id] ?? null;
-    if (note != null) {
-      const r = checkNote(note, { headline: chosen.headline, summary: chosen.summary, sourceName: c.sourceName });
-      if (!r.ok) { rejectedNotes.push({ id: chosen.id, note, errors: r.errors }); note = null; }
-    }
-    const item = sanitiseItem({
-      id: chosen.id, sport: c.sport, league: c.league, sourceId: c.sourceId, source: c.sourceName,
-      headline: chosen.headline, url: chosen.url, publishedAt: chosen.publishedAt, publishedDate: chosen.publishedDate,
-      timePrecision: chosen.timePrecision, firstSeenAt: c.firstSeenAt,
-      guidKey: chosen.guidKey, urlKey: chosen.urlKey, titleKey: chosen.titleKey, note,
-    }, { sources });
-    if (item) items.push(item);
+    if (!kept.length) { missing.push({ sourceId, reason: "vetoed-no-alternate" }); continue; }
+    kept.forEach(({ c, chosen }, i) => {
+      const rank = i + 1;
+      let note = notes.notes?.[chosen.id] ?? null;
+      // The desk notes rank 1 only; an extra story publishes headline-only (spec B1.5).
+      if (note != null && rank > 1) { rejectedNotes.push({ id: chosen.id, note, errors: ["note-rank-1-only"] }); note = null; }
+      if (note != null) {
+        const r = checkNote(note, { headline: chosen.headline, summary: chosen.summary, sourceName: c.sourceName });
+        if (!r.ok) { rejectedNotes.push({ id: chosen.id, note, errors: r.errors }); note = null; }
+      }
+      const item = sanitiseItem({
+        id: chosen.id, sport: c.sport, league: c.league, sourceId: c.sourceId, source: c.sourceName,
+        headline: chosen.headline, url: chosen.url, publishedAt: chosen.publishedAt, publishedDate: chosen.publishedDate,
+        timePrecision: chosen.timePrecision, firstSeenAt: c.firstSeenAt,
+        guidKey: chosen.guidKey, urlKey: chosen.urlKey, titleKey: chosen.titleKey, note, rank,
+      }, { sources });
+      if (item) items.push(item);
+    });
   }
 
   const prior = (prev.editions || []).find((e) => e.date === candidates.date);
@@ -124,5 +146,5 @@ if (isMain(import.meta.url)) {
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, JSON.stringify(wire, null, 2) + "\n");
   const ed = wire.editions[0];
-  console.log(`[finalise-wire] ${ed.date} ${ed.status}: ${ed.items.length} item(s), ${ed.items.filter((i) => i.note).length} with a note -> ${out}`);
+  console.log(`[finalise-wire] ${ed.date} ${ed.status}: ${ed.items.length} item(s) (${ed.items.filter((i) => i.rank > 1).length} extra), ${ed.items.filter((i) => i.note).length} with a note -> ${out}`);
 }

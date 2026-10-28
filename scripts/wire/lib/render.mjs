@@ -5,7 +5,7 @@
    is the feed's own URL, escaped for the attribute and otherwise untouched. A renderer with
    nothing to show returns '' so no empty section ever ships. */
 import { esc, escAttr } from "../../shared/page-shell.mjs";
-import { SOURCES, SPORT_KEYS, currentEdition, blockVisible, daysBetween } from "./schema.mjs";
+import { SOURCES, SPORT_KEYS, currentEdition, blockVisible, daysBetween, rankOne } from "./schema.mjs";
 
 // '' for a date it cannot read: content never throws the build (the sanitiser drops bad dates first).
 const fmt = (iso, opts) => {
@@ -51,9 +51,10 @@ export function renderEditionLine(ed, today) {
 
 export const renderWireFooter = () => `<p class="wire__footer">${esc(SOURCES.footer)}</p>`;
 
-/* A sport's items, in feed order (basketball: NBA then WNBA, as equals). */
+/* A sport's rank-1 items, in feed order (basketball: NBA then WNBA, as equals). The club-tagged
+   extras (rank 2 to 6) are for the feed's `recent` block only, so "One story per source" stays true. */
 export function wireItemsFor(ed, sportKey) {
-  const items = ed.items.filter((i) => i.sport === sportKey);
+  const items = rankOne(ed.items).filter((i) => i.sport === sportKey);
   if (sportKey === "basketball") items.sort((a, b) => (a.league === b.league ? 0 : a.league === "nba" ? -1 : 1));
   return items;
 }

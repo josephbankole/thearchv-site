@@ -22,7 +22,7 @@
   "sources": [
     {
       "id": "espn-soccer", "enabled": true, "sport": "football", "league": null, "name": "ESPN",
-      "feedUrl": "https://www.espn.com/espn/rss/soccer/news", "format": "rss", "order": "editorial", "sporadic": false,
+      "feedUrl": "https://www.espn.com/espn/rss/soccer/news", "format": "rss", "order": "editorial", "sporadic": false, "maxItems": 6,
       "timeZoneHint": "America/New_York", "timePrecision": "date",
       "prefer": ["Manchester United", "Man United", "Man Utd"], "exclude": [], "linkHosts": ["espn.com"],
       "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,

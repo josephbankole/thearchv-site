@@ -43,6 +43,7 @@ export type BackfillDeps = {
   write: (path: string, text: string) => Promise<void>;
   clock?: () => number; // ms; tests pass their own
   budgetMs?: number;
+  publishPlayers?: boolean; // per-player lines in the match files (PUBLISH_PLAYERS, index.ts)
 };
 
 export type BackfillSummary = {
@@ -235,7 +236,7 @@ export async function runBackfill(from: string, deps: BackfillDeps): Promise<Bac
         returned.add(m.id);
         jobs.push(async () => {
           try {
-            const body = mapMatchFile(fx, { ...own, detail: detailPath(own.id) }, stamp);
+            const body = mapMatchFile(fx, { ...own, detail: detailPath(own.id) }, stamp, deps.publishPlayers ?? false);
             const out = await putIfChanged(detailPath(own.id), body);
             if (out === "written") counts.matchFilesWritten++;
             else counts.matchFilesUnchanged++;

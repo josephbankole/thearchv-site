@@ -163,11 +163,13 @@ Deno.test("the Edmonton day rolling adds the new day and leaves the older ones",
   ]);
   // The 12th has left the window; its file stays as it was last written.
   assert(store.files.has("days/2026-10-12.json"), "a day file is never deleted");
-  // Its hash goes with it; the window's days and the index keep theirs. The 15th has no matches
-  // and never had a file, so it has none.
+  // Its hash goes with it; the window's days and the index keep theirs. The 15th has no matches,
+  // but it is tomorrow and the refresh was complete, so it gets an empty file (season mode may have
+  // written one the poll does not know about; see poll_test.ts).
   assertEquals(Object.keys(next.state.fileHashes).filter((p) => p.startsWith("days/")).sort(), [
-    "days/2026-10-13.json", "days/2026-10-14.json", INDEX_PATH,
+    "days/2026-10-13.json", "days/2026-10-14.json", "days/2026-10-15.json", INDEX_PATH,
   ]);
+  assertEquals(json(store, "days/2026-10-15.json").matches, []);
 });
 
 Deno.test("an unreadable index is left alone and scores.json still goes up", async () => {

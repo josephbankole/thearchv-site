@@ -78,11 +78,17 @@ export const isStep = (v: unknown): v is Step =>
 
 // ---------- the state row ----------
 
+export const BUILT_KEYS = ["days", "teams", "previews", "teamsFailed", "previewsFailed"] as const;
+export type BuiltKey = typeof BUILT_KEYS[number];
+
 export type SeasonState = {
   season: number | null; // the season the held matches belong to
   listedAt: Partial<Record<CompetitionKey, string>>;
   matches: Partial<Record<CompetitionKey, Match[]>>;
-  builtAt: Partial<Record<"days" | "teams" | "previews", string>>;
+  // A build's last full run, plus, for teams and previews, the last run that failed part way (a
+  // failed storage listing, a failed write or an unreadable file), so a failure waits for the next
+  // listing or six hours like a success does instead of being due again on every call.
+  builtAt: Partial<Record<BuiltKey, string>>;
   fileHashes: Record<string, string>;
   remaining: number | null;
   remainingAt: string | null;
@@ -137,7 +143,7 @@ export function seasonStateFromRow(row: Record<string, unknown> | null | undefin
     season: whole(row.season),
     listedAt: stamps(row.listed_at, keys),
     matches,
-    builtAt: stamps(row.built_at, ["days", "teams", "previews"] as const),
+    builtAt: stamps(row.built_at, BUILT_KEYS),
     fileHashes: hashes,
     remaining: whole(row.remaining),
     remainingAt: iso(row.remaining_at),
@@ -178,6 +184,8 @@ export type Guards = { apiAllowed: boolean; reason: string | null };
 // reserve recorded TODAY (UTC; a value read yesterday says nothing about today's count); and the
 // last state write having failed (the row's updated_at older than a stamp it holds, or older than
 // six hours), because then nothing this call learns is remembered and every call would pay again.
+// The six-hour half needs a row the cron has used: the migration's insert stamps updated_at with
+// no listing or build behind it, so a first deploy more than six hours later must still list.
 export function apiGuards(s: SeasonState, now: Date): Guards {
   const t = now.getTime();
   if (s.backoffUntil && Date.parse(s.backoffUntil) > t) return { apiAllowed: false, reason: "backing off" };
@@ -190,7 +198,8 @@ export function apiGuards(s: SeasonState, now: Date): Guards {
   if (s.updatedAt) {
     const updated = Date.parse(s.updatedAt);
     const stamps = [...Object.values(s.listedAt), ...Object.values(s.builtAt)].map((v) => Date.parse(v ?? ""));
-    if (stamps.some((x) => x > updated) || t - updated > STALE_ROW_MS) {
+    const used = stamps.length > 0;
+    if (stamps.some((x) => x > updated) || (used && t - updated > STALE_ROW_MS)) {
       return { apiAllowed: false, reason: "state write failed earlier" };
     }
   }
@@ -209,15 +218,18 @@ const newest = (stamps: readonly (string | undefined)[]): number =>
 
 // The first build step that is due, or null. Days and teams are due when a listing is newer than
 // their last build, or every six hours; previews every six hours, or when the days were rebuilt
-// after them (a new listing reached the days first).
+// after them (a new listing reached the days first). For teams and previews a failed run counts
+// as the last build here, so a failure retries on that cadence and never starves the steps after.
 export function dueBuild(s: SeasonState, now: Date): BuildStep | null {
   const t = now.getTime();
   const listed = newest(Object.values(s.listedAt));
-  const at = (k: "days" | "teams" | "previews") => Date.parse(s.builtAt[k] ?? "");
-  const stale = (k: "days" | "teams" | "previews") => !Number.isFinite(at(k)) || t - at(k) >= BUILD_EVERY_MS;
-  if (stale("days") || listed > at("days")) return "build:days";
-  if (stale("teams") || listed > at("teams")) return "build:teams";
-  if (stale("previews") || at("days") > at("previews")) return "build:previews";
+  const at = (k: BuiltKey) => Date.parse(s.builtAt[k] ?? "");
+  const last = (k: "days" | "teams" | "previews") =>
+    k === "days" ? at(k) : newest([s.builtAt[k], s.builtAt[`${k}Failed`]]);
+  const stale = (k: "days" | "teams" | "previews") => !Number.isFinite(last(k)) || t - last(k) >= BUILD_EVERY_MS;
+  if (stale("days") || listed > last("days")) return "build:days";
+  if (stale("teams") || listed > last("teams")) return "build:teams";
+  if (stale("previews") || at("days") > last("previews")) return "build:previews";
   return null;
 }
 

@@ -153,8 +153,13 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
 
   const step = choice.step;
   const held = heldMatches(state);
+  // Before any listing has landed, an empty held set says nothing about the season: a build would
+  // publish an ahead.json with no days and a teams index with no teams over whatever is there.
+  const nothingListed = held.length === 0 && Object.keys(state.listedAt).length === 0;
 
-  if (step?.startsWith("list:")) {
+  if (step && !step.startsWith("list:") && nothingListed) {
+    extra.skipped = "nothing listed yet";
+  } else if (step?.startsWith("list:")) {
     // 2a. A listing: one request for the competition's whole season.
     const key = step.slice(5);
     const comp = COMPETITIONS.find((c) => c.key === key)!;
@@ -180,30 +185,42 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
     if (await upload(out.files)) state.builtAt = { ...state.builtAt, days: stamp };
   } else if (step === "build:teams") {
     // 2c. The team files and teams/index.json. 0 requests, one paginated storage listing for the
-    //     detail pointers. A failed listing leaves every match without a pointer this run.
+    //     detail pointers. A failed listing writes nothing (rebuilt without it, every file would
+    //     lose its pointers) and stamps teamsFailed, so the step retries on the build cadence and
+    //     build:previews behind it still runs.
     let files: Set<number> | null = null;
     try {
       files = await deps.listMatchFiles();
     } catch {
-      errors.push("listing match/ failed, no detail pointers this run");
+      errors.push("listing match/ failed, team files left as they were");
     }
-    const out = buildTeams(held, files, deps.season, stamp);
-    if (out.autoKeys.length) {
-      extra.autoClubs = out.autoKeys;
-      console.log(`scores-poll: season teams not in clubs.json: ${out.autoKeys.join(", ")}`);
+    if (files) {
+      const out = buildTeams(held, files, deps.season, stamp);
+      if (out.autoKeys.length) {
+        extra.autoClubs = out.autoKeys;
+        console.log(`scores-poll: season teams not in clubs.json: ${out.autoKeys.join(", ")}`);
+      }
+      if (await upload(out.files)) state.builtAt = { ...state.builtAt, teams: stamp };
+      else state.builtAt = { ...state.builtAt, teamsFailed: stamp };
+    } else {
+      state.builtAt = { ...state.builtAt, teamsFailed: stamp };
     }
-    if (await upload(out.files) && files) state.builtAt = { ...state.builtAt, teams: stamp };
   } else if (step === "build:previews") {
     // 2d. The previews. Head to head is the only request, inside 7 days of kickoff, at most 40 a
     //     call and 3 at once; the loop stops asking on the first failed reply and on a reply with
-    //     under 1,500 left, and stops altogether on the first failed write.
+    //     under 1,500 left, and stops altogether on the first failed write. A fixture whose stored
+    //     preview or lineup source cannot be read is left as it is: rebuilt blind, it would write
+    //     h2h or lastLineup null over a good file, or pay again for an h2h already held. A failed
+    //     write or a skipped fixture stamps previewsFailed, so the retry waits for the cadence.
     const targets = previewTargets(held, now);
     let asking = guards.apiAllowed;
     let h2hRequests = 0;
     let complete = true;
+    let failed = false;
+    // Reads keep their errors (null means no such file), and one read serves both sides.
     const reads = new Map<string, Promise<string | null>>();
     const readOnce = (path: string) => {
-      if (!reads.has(path)) reads.set(path, deps.read(path).catch(() => null));
+      if (!reads.has(path)) reads.set(path, deps.read(path));
       return reads.get(path)!;
     };
     const lastLineup = async (m: Match, teamId: number): Promise<LastLineup | null> => {
@@ -213,33 +230,34 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
       }
       return null;
     };
-    const previewOf = async (m: Match): Promise<OutFile> => {
+    // The fixture's preview, or null when something it needs could not be read.
+    const previewOf = async (m: Match): Promise<OutFile | null> => {
       const near = Date.parse(m.kickoff) - now.getTime() <= H2H_WINDOW_MS;
-      let h2h: H2h | null = null;
-      if (near) {
-        let prev: H2h | null = null;
-        try {
-          prev = storedH2h(await deps.read(previewPath(m.id)));
-        } catch {
-          // Cannot tell what is there: treat it as nothing held.
-        }
-        h2h = prev;
-        if (shouldFetchH2h(m, prev, held, now) && asking && h2hRequests < MAX_H2H_REQUESTS) {
-          h2hRequests++;
-          const r = await call(`/fixtures/headtohead?h2h=${m.home.id}-${m.away.id}&last=10`);
-          if (!r.ok) {
-            if (asking) errors.push(`h2h: ${r.reason}`);
-            asking = false;
-            backOff();
-          } else {
-            if (r.remaining !== null && r.remaining < QUOTA_RESERVE) asking = false;
-            const built = buildH2h(r.fixtures, m, stamp);
-            if (built) h2h = built;
-            else errors.push(`h2h-unmapped ${m.id}`);
-          }
+      let prev: H2h | null = null;
+      let home: LastLineup | null;
+      let away: LastLineup | null;
+      try {
+        if (near) prev = storedH2h(await deps.read(previewPath(m.id)));
+        [home, away] = await Promise.all([lastLineup(m, m.home.id), lastLineup(m, m.away.id)]);
+      } catch {
+        errors.push(`preview ${m.id}: storage read failed, left as it was`);
+        return null;
+      }
+      let h2h: H2h | null = prev;
+      if (near && shouldFetchH2h(m, prev, held, now) && asking && h2hRequests < MAX_H2H_REQUESTS) {
+        h2hRequests++;
+        const r = await call(`/fixtures/headtohead?h2h=${m.home.id}-${m.away.id}&last=10`);
+        if (!r.ok) {
+          if (asking) errors.push(`h2h: ${r.reason}`);
+          asking = false;
+          backOff();
+        } else {
+          if (r.remaining !== null && r.remaining < QUOTA_RESERVE) asking = false;
+          const built = buildH2h(r.fixtures, m, stamp);
+          if (built) h2h = built;
+          else errors.push(`h2h-unmapped ${m.id}`);
         }
       }
-      const [home, away] = await Promise.all([lastLineup(m, m.home.id), lastLineup(m, m.away.id)]);
       return { path: previewPath(m.id), body: buildPreview({ ...m, detail: null }, h2h, { home, away }, stamp) };
     };
     for (let i = 0; i < targets.length; i += H2H_PARALLEL) {
@@ -247,9 +265,11 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
         complete = false;
         break;
       }
-      const group = await Promise.all(targets.slice(i, i + H2H_PARALLEL).map(previewOf));
+      const made = await Promise.all(targets.slice(i, i + H2H_PARALLEL).map(previewOf));
+      const group = made.filter((f): f is OutFile => f !== null);
+      if (group.length < made.length) failed = true;
       if (!await upload(group)) {
-        complete = false;
+        failed = true;
         break;
       }
     }
@@ -259,7 +279,8 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
     }
     extra.h2hRequests = h2hRequests;
     extra.previews = targets.length;
-    if (complete) state.builtAt = { ...state.builtAt, previews: stamp };
+    if (failed) state.builtAt = { ...state.builtAt, previewsFailed: stamp };
+    else if (complete) state.builtAt = { ...state.builtAt, previews: stamp };
   }
 
   // 3. The hashes, pruned to what this mode owns now, and the state, saved only when it changed.

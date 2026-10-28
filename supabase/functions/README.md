@@ -433,8 +433,10 @@ paths the mode owns now, so a quiet six hours writes nothing and the record does
   `_shared/clubs.json` (archv-clubs/1, the same file the Wire tagger reads). A team the table does not
   cover gets an `auto: true` entry with the key `team-<id>`, which the app never offers in its picker;
   the run log names each one so the table gets fixed. A match points at `match/<id>.json` when the
-  storage listing found that file. Team files are up to 6 hours behind on live state by design: the
-  app overlays `scores.json` by match id.
+  storage listing found that file. A failed storage listing writes no team file (rebuilt without it,
+  every pointer would go) and is stamped as `teamsFailed` in `built_at`, so the step retries after the
+  next listing or 6 hours and `build:previews` still gets its turn. Team files are up to 6 hours
+  behind on live state by design: the app overlays `scores.json` by match id.
 - **The previews.** One for every in-scope match that has not kicked off and starts within 28 days.
   `lastLineup` is each side's lineup from its newest earlier finished match in our three
   competitions, read from the match files already in the bucket (at most three tries, a missing file
@@ -442,8 +444,13 @@ paths the mode owns now, so a quiet six hours writes nothing and the record does
   request. `h2h` is filled only inside 7 days of kickoff, from `/fixtures/headtohead?h2h=<home>-<away>&last=10`.
   The preview file in Storage is its memory: a block that has been fetched is reused with no request
   unless the listings show a finished meeting of the two sides after it was fetched (a second leg), or
-  the match is inside 48 hours and the block is older than that mark (one refresh). There is no
-  `preview/index.json`; a 404 means "no preview".
+  the match is inside 48 hours and the block is older than that mark (one refresh). A preview whose
+  own file, or one of its lineup match files, cannot be read (an error, not a 404) is left as it is
+  this run: rebuilt blind it would write `h2h` or `lastLineup` as null over a good block, or pay a
+  second time for a block already held. That, or a failed preview write, is stamped as
+  `previewsFailed` in `built_at`, so the retry waits for the 6-hour cadence (or a rebuild of the
+  days) instead of coming back every 15 minutes. There is no `preview/index.json`; a 404 means "no
+  preview".
 - **Head-to-head rows.** Every competition's meetings are kept, cups included, each labelled with its
   competition (the API's `league.id` and `league.name`, with our key for 39, 2 and 44), on the
   founder's answer of 2026-10-28 ("Allowed, publish all"). Friendlies are dropped: league ids 10
@@ -464,7 +471,11 @@ paths the mode owns now, so a quiet six hours writes nothing and the record does
   builds still run. `remaining` below 1,500 READ TODAY (UTC) means no request, and the answer says
   `quota-reserve`; a value read yesterday never blocks today. A state row whose `updated_at` is older
   than one of its own stamps, or more than 6 hours old, means the last state write failed, so the
-  call makes no request and runs a build only. Every reply refreshes `remaining`, and the
+  call makes no request and runs a build only. The 6-hour half applies only once the row carries a
+  listing or build stamp: the migration's insert sets `updated_at` with nothing behind it, so a first
+  call more than 6 hours later still lists. Until a listing has landed, the builds write nothing
+  (the answer says `nothing listed yet`), so a first deploy cannot publish an empty `days/ahead.json`
+  or a teams index with no teams. Every reply refreshes `remaining`, and the
   head-to-head loop stops on a reply showing fewer than 1,500, on the first failed reply (and backs
   off), and on the first failed preview write. At most three head-to-head requests are in flight.
   Every step stops starting new work after 100 seconds.

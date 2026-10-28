@@ -121,6 +121,20 @@ Deno.test("an earlier failed state write: no request, a build only; a failed wri
   assert(/state write failed/.test(f.summary.error!), f.summary.error);
 });
 
+Deno.test("a first deploy more than six hours after the migration still lists, and builds wait for it", async () => {
+  // The row as the migration's insert leaves it: nothing listed or built, updated_at long ago.
+  const fresh: SeasonState = { ...EMPTY_SEASON_STATE, updatedAt: new Date(NOW.getTime() - 7 * H).toISOString() };
+  const b = await call({ state: fresh, step: "build:days" });
+  assertEquals([b.summary.step, b.summary.skipped, b.store.writes.length], ["build:days", "nothing listed yet", 0]);
+  const t = await call({ state: fresh, step: "build:teams" });
+  assertEquals([t.summary.skipped, t.store.writes.length], ["nothing listed yet", 0]);
+  const r = await call({ state: fresh, step: "list:premier-league" });
+  assertEquals([r.calls.length, r.summary.step], [1, "list:premier-league"]);
+  assert(r.after!.matches["premier-league"]!.length > 0, "listed");
+  const slot = await call({ state: fresh, now: SLOT_PL });
+  assertEquals(slot.summary.step, "list:premier-league");
+});
+
 // ---------- listings ----------
 
 Deno.test("a listing slot: one request, the competition's matches replaced and stamped", async () => {
@@ -184,10 +198,22 @@ Deno.test("build:teams: team files with pointers from the storage listing; a sec
   assertEquals(r.summary.filesWritten, 66);
   const again = await call({ store, step: "build:teams", state: r.after! });
   assertEquals(again.summary.filesWritten, 0);
-  // A failed listing still writes the files, with no pointers, and the step is not stamped.
-  const blind = await call({ step: "build:teams", listFails: true });
-  assertEquals(blind.after!.builtAt.teams, undefined);
+  // A failed listing writes nothing (the pointers stay as they were) and is not stamped as built.
+  const blind = await call({ store, step: "build:teams", state: r.after!, listFails: true });
+  assertEquals(blind.summary.filesWritten, 0);
+  assertEquals(blind.after!.builtAt.teams, r.after!.builtAt.teams);
+  assertEquals(json(store, "teams/33.json").matches.find((m: Match) => m.id === 1557425).detail, detailPath(1557425));
   assert(/listing match\/ failed/.test(blind.summary.error!), blind.summary.error);
+});
+
+Deno.test("build:teams: a failed storage listing waits for the cadence, so build:previews still runs", async () => {
+  const s = built((x) => (x.builtAt = { days: x.builtAt.days }));
+  const r = await call({ state: s, listFails: true });
+  assertEquals([r.summary.step, r.summary.filesWritten], ["build:teams", 0]);
+  assertEquals(r.after!.builtAt.teamsFailed, NOW.toISOString());
+  const next = new Date(NOW.getTime() + 15 * 60_000);
+  const r2 = await call({ state: { ...r.after!, updatedAt: NOW.toISOString() }, now: next, listFails: true });
+  assertEquals(r2.summary.step, "build:previews");
 });
 
 // ---------- build:previews ----------
@@ -315,6 +341,57 @@ Deno.test("build:previews: the first failed preview write stops the call", async
   const r = await call({ state, store, step: "build:previews" });
   assert(r.calls.length <= 3, `made ${r.calls.length}`);
   assertEquals([r.summary.writeFailed, r.after!.builtAt.previews], [true, undefined]);
+  // The failure is stamped, so the next calls do not retry it (and its h2h) every 15 minutes.
+  assertEquals(r.after!.builtAt.previewsFailed, NOW.toISOString());
+  const next = await call({ state: { ...r.after!, updatedAt: NOW.toISOString() }, store, now: new Date(NOW.getTime() + 15 * 60_000) });
+  assertEquals([next.summary.step, next.calls.length], [null, 0]);
+  const later = await call({ state: { ...r.after!, updatedAt: NOW.toISOString() }, store, now: new Date(NOW.getTime() + 6 * H) });
+  assertEquals(later.summary.step, "build:days");
+});
+
+// The same files as `from`, with some paths unreadable.
+function unreadableCopy(from: ReturnType<typeof memoryStore>, bad: (path: string) => boolean) {
+  const store = memoryStore({ unreadable: bad });
+  for (const [k, v] of from.files) store.files.set(k, v);
+  return store;
+}
+
+Deno.test("build:previews: a preview that cannot be read is left as it was, with no request", async () => {
+  const { state, store } = withDerby();
+  const first = await call({ state, store, step: "build:previews" });
+  const good = store.files.get(previewPath(1557600))!;
+  assert(JSON.parse(good).h2h !== null, "the derby has a head to head");
+  const later = new Date(NOW.getTime() + H);
+  const next = { ...first.after!, updatedAt: NOW.toISOString() };
+  // With the API open: not paid for twice.
+  const blind = unreadableCopy(store, (p) => p === previewPath(1557600));
+  const r = await call({ state: next, store: blind, now: later, step: "build:previews" });
+  assert(!r.calls.some((c) => c.includes("h2h=40-50")), "no second h2h for the derby");
+  assertEquals(blind.files.get(previewPath(1557600)), good);
+  assert(/preview 1557600: storage read failed/.test(r.summary.error!), r.summary.error);
+  assertEquals([r.after!.builtAt.previews, r.after!.builtAt.previewsFailed], [first.after!.builtAt.previews, later.toISOString()]);
+  // Backing off: the good block is not replaced with null.
+  const off = { ...next, backoffUntil: new Date(later.getTime() + 10 * 60_000).toISOString() };
+  const blind2 = unreadableCopy(store, (p) => p === previewPath(1557600));
+  await call({ state: off, store: blind2, now: later, step: "build:previews" });
+  assertEquals(blind2.files.get(previewPath(1557600)), good);
+});
+
+Deno.test("build:previews: a lineup source that cannot be read leaves the preview as it was", async () => {
+  const { state, store } = withDerby();
+  const first = await call({ state, store, step: "build:previews" });
+  const good = store.files.get(previewPath(1557600))!;
+  assert(JSON.parse(good).lastLineup.home !== null, "the derby has a last lineup");
+  const blind = unreadableCopy(store, (p) => p === detailPath(1557424));
+  const r = await call({
+    state: { ...first.after!, updatedAt: NOW.toISOString() },
+    store: blind,
+    now: new Date(NOW.getTime() + H),
+    step: "build:previews",
+  });
+  assertEquals(blind.files.get(previewPath(1557600)), good);
+  assert(!blind.writes.includes(previewPath(1557600)), "not rewritten");
+  assertEquals(r.summary.ok, false);
 });
 
 Deno.test("build:previews: a reply nothing can be read from keeps the old block and stamps nothing", async () => {

@@ -109,6 +109,26 @@ Deno.test("guards: an earlier failed state write means no request, only builds",
   // A forced listing is refused too; a forced build is not.
   assertEquals(chooseStep(stale, NOW, "list:wsl"), { step: null, skipped: "state write failed earlier" });
   assertEquals(chooseStep(stale, NOW, "build:teams").step, "build:teams");
+  // A row nothing has stamped yet (the migration's insert) is not stale, however old.
+  const unused = { ...EMPTY_SEASON_STATE, updatedAt: ago(30 * H) };
+  assertEquals(apiGuards(unused, NOW).apiAllowed, true);
+  assertEquals(chooseStep(unused, NOW, "list:wsl").step, "list:wsl");
+});
+
+Deno.test("step choice: a failed teams or previews run waits for the next listing or six hours", () => {
+  const s = heldState();
+  const teamsFailed = { ...s, builtAt: { days: ago(0), teamsFailed: ago(0) } };
+  assertEquals(dueBuild(teamsFailed, NOW), "build:previews");
+  assertEquals(dueBuild({ ...teamsFailed, builtAt: { ...teamsFailed.builtAt, previews: ago(0) } }, NOW), null);
+  const previewsFailed = { ...s, builtAt: { days: ago(H), teams: ago(H), previewsFailed: ago(0) } };
+  assertEquals(dueBuild(previewsFailed, NOW), null);
+  assertEquals(dueBuild(previewsFailed, new Date(NOW.getTime() + 6 * H)), "build:days");
+  // Days rebuilt after the failure: previews retry.
+  const daysNewer = { ...s, builtAt: { days: ago(0), teams: ago(0), previewsFailed: ago(H) } };
+  assertEquals(dueBuild(daysNewer, NOW), "build:previews");
+  // A new listing after a failed teams run retries it.
+  const relisted = { ...teamsFailed, listedAt: { ...s.listedAt, wsl: new Date(NOW.getTime() + 1).toISOString() } };
+  assertEquals(dueBuild({ ...relisted, builtAt: { ...relisted.builtAt, days: new Date(NOW.getTime() + 2).toISOString() } }, new Date(NOW.getTime() + 3)), "build:teams");
 });
 
 Deno.test("forced steps: only the four kinds are accepted", () => {

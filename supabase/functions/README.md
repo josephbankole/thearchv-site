@@ -643,7 +643,7 @@ report:
    photo URLs removed), add a test against it in the same session, and remove the "unverified" note
    above.
 7. **The cron and the players.** `apply_migration` with
-   `supabase/migrations/20261029120100_scores_season_cron.sql` (rename to the returned version, as in
+   `supabase/migrations/20261028192438_scores_season_cron.sql` (rename to the returned version, as in
    step 3) and check `select jobname, schedule from cron.job where jobname = 'scores-season';`. Set the
    secret `PUBLISH_PLAYERS=1`. Then the player-stats backfill: POST `{"mode":"backfill","from":"2026-07-07"}`
    and repeat with the returned `next` until `done: true` (about 17 requests; every match file is

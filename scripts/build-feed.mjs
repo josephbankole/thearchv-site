@@ -294,3 +294,81 @@ const storefront = {
 };
 writeFileSync(join(OUT, "storefront.json"), JSON.stringify(storefront, null, 2));
 console.log(`[build-feed] storefront feed → ${OUT}/storefront.json (${storefrontItems.length} items)`);
+
+/* ---------- home covers feed (archv-home-covers/1, 2026-10-28, standalone file) ----------
+   The four poster tiles the front page shows, for the app's Home. Sourced from the tiles carrying a
+   `home` order in scripts/data/poster-tiles.json, the same field src/render/home.ts renders the
+   homepage's four from, so the site and the app rotate together from one edit and a deploy, with
+   no app build. Outside the `feeds` loop, like storefront, so index.json and its buildHash do not
+   move. Storefront items carry a price and a different lifecycle, so they are not mixed in here.
+   `url` is the plain listing form the homepage links to (the homepage block is held byte for byte
+   to its pre-2026-10-28 markup). width and height are read from each webp's own header: a home tile
+   that is not 900x675 fails the build, and one whose image is missing under public/ is skipped
+   with a log line. */
+const HOME_COVERS_SCHEMA = "archv-home-covers/1";
+const HOME_COVERS_MAX = 4;
+const HOME_COVER_SIZE = { width: 900, height: 675 };
+
+// Width and height from a WebP header (lossy VP8, lossless VP8L or extended VP8X), or null.
+function webpSize(buf) {
+  if (buf.length < 30 || buf.toString("ascii", 0, 4) !== "RIFF" || buf.toString("ascii", 8, 12) !== "WEBP") return null;
+  const chunk = buf.toString("ascii", 12, 16);
+  if (chunk === "VP8 ") {
+    if (buf[23] !== 0x9d || buf[24] !== 0x01 || buf[25] !== 0x2a) return null;
+    return { width: buf.readUInt16LE(26) & 0x3fff, height: buf.readUInt16LE(28) & 0x3fff };
+  }
+  if (chunk === "VP8L") {
+    if (buf[20] !== 0x2f) return null;
+    const bits = buf.readUInt32LE(21);
+    return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+  }
+  if (chunk === "VP8X") return { width: buf.readUIntLE(24, 3) + 1, height: buf.readUIntLE(27, 3) + 1 };
+  return null;
+}
+
+const { tiles: posterTiles } = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "poster-tiles.json"), "utf8"));
+const homeCoverItems = [];
+for (const t of posterTiles.filter((t) => Number.isInteger(t.home)).sort((a, b) => a.home - b.home).slice(0, HOME_COVERS_MAX)) {
+  const src = join(ROOT, "public", t.image);
+  if (!existsSync(src)) {
+    console.warn(`[build-feed] home cover ${t.listing} (${t.label}): image missing at public${t.image}, skipped`);
+    continue;
+  }
+  const size = webpSize(readFileSync(src));
+  if (!size || size.width !== HOME_COVER_SIZE.width || size.height !== HOME_COVER_SIZE.height) {
+    throw new Error(
+      `[build-feed] home cover ${t.listing} (${t.label}): ${t.image} is ${size ? `${size.width}x${size.height}` : "not a readable webp"}, expected ${HOME_COVER_SIZE.width}x${HOME_COVER_SIZE.height}`
+    );
+  }
+  homeCoverItems.push({
+    id: t.listing,
+    label: t.group === "women" ? `${t.label} (Women)` : t.label,
+    alt: t.alt,
+    image: `${SITE}${t.image}`,
+    width: size.width,
+    height: size.height,
+    url: `${SHOP_URL}/listing/${t.listing}`,
+  });
+}
+const homeCovers = {
+  schema: HOME_COVERS_SCHEMA,
+  lastUpdated,
+  shopUrl: SHOP_URL,
+  title: "From the archive.",
+  lede: "Football history, drawn down to the one moment that decided it.",
+  items: homeCoverItems,
+};
+writeFileSync(join(OUT, "home-covers.json"), JSON.stringify(homeCovers, null, 2));
+console.log(`[build-feed] home covers feed → ${OUT}/home-covers.json (${homeCoverItems.length} items)`);
+
+/* ---------- team colours (archv-team-colours/1, published 2026-10-28) ----------
+   scripts/data/team-colours.json copied to /feed/team-colours.json byte for byte, so the app's
+   lineups pitch has the same shirt-colour fallback the /scores/ client embeds. It is API-Football's
+   own hex colours and nothing else (no crest, kit or image), which is why it is fit to publish.
+   Refreshing it stays `npm run team-colours`, a network read, never part of the build. */
+{
+  const raw = readFileSync(join(ROOT, "scripts", "data", "team-colours.json"), "utf8");
+  if (JSON.parse(raw).schema !== "archv-team-colours/1") throw new Error("[build-feed] team-colours.json is not archv-team-colours/1");
+  writeFileSync(join(OUT, "team-colours.json"), raw);
+  console.log(`[build-feed] team colours → ${OUT}/team-colours.json`);
+}

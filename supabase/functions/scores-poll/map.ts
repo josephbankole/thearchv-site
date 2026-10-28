@@ -153,12 +153,23 @@ type Obj = Record<string, unknown>;
 const obj = (v: unknown): Obj | null => v && typeof v === "object" && !Array.isArray(v) ? v as Obj : null;
 const list = (v: unknown): unknown[] => Array.isArray(v) ? v : [];
 
+// Character classes built from code points, so the source carries no backslash-u escapes for a deploy
+// path to decode into raw invisible characters (the MCP upload did exactly that on 2026-10-28).
+const cp = (n: number) => String.fromCodePoint(n);
+const range = (a: number, b: number) => `${cp(a)}-${cp(b)}`;
+// A UTF-8 lead byte read as Latin-1 (U+00C2 to U+00F4) followed by a continuation byte (U+0080 to U+00BF).
+const MOJIBAKE = new RegExp(`[${range(0xc2, 0xf4)}][${range(0x80, 0xbf)}]`);
+// Soft hyphen, zero-width space to right-to-left mark, word joiner, byte-order mark.
+const INVISIBLE = new RegExp(`[${cp(0xad)}${range(0x200b, 0x200f)}${cp(0x2060)}${cp(0xfeff)}]`, "g");
+// Combining diacritical marks, stripped after NFD.
+const COMBINING = new RegExp(`[${range(0x300, 0x36f)}]`, "g");
+
 // Some names reach us double-encoded: UTF-8 bytes read as Latin-1, so "Martínez" arrives as
 // "MartÃ" + U+00AD + "nez" (seen in a live Champions League reply, 2026-10-13). When every
 // character is a single byte, a mojibake pair is present and the bytes decode as UTF-8, decode
 // them. Anything else is left as it came.
 function repairEncoding(s: string): string {
-  if (!/[\u00c2-\u00f4][\u0080-\u00bf]/.test(s)) return s;
+  if (!MOJIBAKE.test(s)) return s;
   const bytes = new Uint8Array(s.length);
   for (let i = 0; i < s.length; i++) {
     const c = s.charCodeAt(i);
@@ -175,7 +186,7 @@ function repairEncoding(s: string): string {
 // Text for a published file: encoding repaired, then soft hyphens, zero-width characters and byte
 // order marks removed, which have no business in a name or a venue.
 export function tidy(s: string): string {
-  return repairEncoding(s).replace(/[\u00ad\u200b-\u200f\u2060\ufeff]/g, "").trim();
+  return repairEncoding(s).replace(INVISIBLE, "").trim();
 }
 
 const str = (v: unknown): string | null => {
@@ -470,7 +481,7 @@ const position = (v: unknown): PlayerLine["pos"] => {
 
 // Folded for comparing names: lower case, accents off, dots and extra spaces gone.
 const fold = (s: string): string[] =>
-  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\./g, " ").split(/\s+/).filter(Boolean);
+  s.normalize("NFD").replace(COMBINING, "").toLowerCase().replace(/\./g, " ").split(/\s+/).filter(Boolean);
 
 // Whether a lineup's short name ("J. Rose", "L. Blindkilde") can be the player block's full name
 // ("Jade Rose", "Laura Blindkilde Brown"): the same first initial, and the short name's surname words

@@ -1,5 +1,10 @@
 import { defineConfig, type Plugin } from 'vite';
-import { renderLead, renderBrief, renderReads } from './src/render/home';
+import { renderLead, renderBrief, renderReads, renderCovers } from './src/render/home';
+// The Wire's own loaders, shared with /wire/ and the sport strips (scripts/wire/). loadDaily()
+// reads scripts/data/daily/wire.json and works out the edition date in the Wire's time zone
+// (WIRE_TODAY and WIRE_DATA_DIR pin both for a test build, as on /wire/).
+import { renderHomeWire } from './scripts/wire/lib/home.mjs';
+import { loadDaily } from './scripts/wire/lib/content.mjs';
 
 /* Server-render the front page at build time (phase 2A).
 
@@ -23,8 +28,15 @@ function archvHome(): Plugin {
       handler(html) {
         const blocks: Record<string, () => string> = {
           '<!--archv:lead-->': renderLead,
+          // The Wire block (founder, 2026-10-28), between the lead and the Dispatch. The renderer
+          // returns the whole <section> or '' when there is no edition from the last 7 days.
+          '<!--archv:wire-->': () => {
+            const { wire, today } = loadDaily();
+            return renderHomeWire(wire, today);
+          },
           '<!--archv:reads-->': renderReads,
           '<!--archv:brief-->': renderBrief,
+          '<!--archv:covers-->': renderCovers,
         };
         let out = html;
         for (const [marker, render] of Object.entries(blocks)) {

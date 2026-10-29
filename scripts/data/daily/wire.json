@@ -1,7 +1,230 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-28T09:51:05.531Z",
+  "updatedAt": "2026-10-29T09:50:45.851Z",
   "editions": [
+    {
+      "date": "2026-10-29",
+      "status": "complete",
+      "items": [
+        {
+          "id": "espn-soccer:09b892abb0cf",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Transfer rumors, news: Everton eye loan for Man United's Rashford",
+          "url": "https://www.espn.com/soccer/story/_/id/50315695/transfer-rumors-news-everton-eye-loan-man-uniteds-rashford",
+          "publishedAt": "2026-10-29T08:27:34.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "09b892abb0cf",
+          "urlKey": "b0831dd2c712",
+          "titleKey": "8e30d0e25c8f",
+          "note": "ESPN reports Everton are weighing up a January loan for Marcus Rashford, the Manchester United forward.",
+          "rank": 1
+        },
+        {
+          "id": "espn-soccer:618950a57223",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Roared on by the Kop, Iraola's version of Liverpool is starting to take shape",
+          "url": "https://www.espn.com/soccer/story/_/id/50312278/roared-kop-iraolas-version-liverpool-starting-take-shape",
+          "publishedAt": "2026-10-29T08:23:36.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "618950a57223",
+          "urlKey": "ffeee086b661",
+          "titleKey": "42ccd57009b6",
+          "note": null,
+          "rank": 2
+        },
+        {
+          "id": "espn-soccer:600242ae107f",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Iraola on Bournemouth Carabao Cup draw: 'Only team that I don't want'",
+          "url": "https://www.espn.com/soccer/story/_/id/50312281/iraola-bournemouth-draw-carabao-cup",
+          "publishedAt": "2026-10-29T08:52:44.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "600242ae107f",
+          "urlKey": "8565753e51fd",
+          "titleKey": "35707cd3484f",
+          "note": null,
+          "rank": 3
+        },
+        {
+          "id": "espn-soccer:b593d64dbfcd",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Maresca: Man City 'never practiced penalties' before shootout win",
+          "url": "https://www.espn.com/soccer/story/_/id/50312020/man-city-never-practiced-penalties-shootout-win",
+          "publishedAt": "2026-10-29T08:52:44.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "b593d64dbfcd",
+          "urlKey": "a6f9f95779e4",
+          "titleKey": "b8fcf28079d0",
+          "note": null,
+          "rank": 4
+        },
+        {
+          "id": "espn-soccer:fa527a36d962",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Bayern coach Kompany discharged from hospital after collapse at training",
+          "url": "https://www.espn.com/soccer/story/_/id/50312241/bayern-munich-vincent-kompany-hospital-discharged",
+          "publishedAt": "2026-10-29T08:52:44.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "fa527a36d962",
+          "urlKey": "0d71671ba71b",
+          "titleKey": "47f100cb04e4",
+          "note": null,
+          "rank": 5
+        },
+        {
+          "id": "espn-soccer:a226e35b6e53",
+          "sport": "football",
+          "league": null,
+          "sourceId": "espn-soccer",
+          "source": "ESPN",
+          "headline": "Arsenal's Russo revels in 'special' UWCL hat trick",
+          "url": "https://www.espn.com/soccer/story/_/id/50312001/alessia-russo-revels-special-women-champions-league-hat-trick-arsenal",
+          "publishedAt": "2026-10-29T08:52:44.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "a226e35b6e53",
+          "urlKey": "a04c8a850027",
+          "titleKey": "888fd3b3f50a",
+          "note": null,
+          "rank": 6
+        },
+        {
+          "id": "espn-nfl:47ff85d9f142",
+          "sport": "nfl",
+          "league": null,
+          "sourceId": "espn-nfl",
+          "source": "ESPN",
+          "headline": "Let's rank the best players who might switch teams before the NFL trade deadline",
+          "url": "https://www.espn.com/nfl/story/_/id/50278445/2026-nfl-trade-deadline-ranking-top-25-candidates-available",
+          "publishedAt": "2026-10-29T07:47:49.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "47ff85d9f142",
+          "urlKey": "bf217422c92c",
+          "titleKey": "01dc449f36b0",
+          "note": "Per ESPN, the top players who might move before the Nov. 10 deadline now sit in one ranked list.",
+          "rank": 1
+        },
+        {
+          "id": "espn-f1:2822e5d7490a",
+          "sport": "f1",
+          "league": null,
+          "sourceId": "espn-f1",
+          "source": "ESPN",
+          "headline": "Sergio Pérez's F1 second act: Red Bull regrets, redemption and a fresh start at Cadillac",
+          "url": "https://www.espn.com/f1/story/_/id/50310746/sergio-perez-f1-second-act-red-bull-regrets-cadillac-contract",
+          "publishedAt": "2026-10-29T09:19:21.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "2822e5d7490a",
+          "urlKey": "000b9b3c13bc",
+          "titleKey": "788d60349874",
+          "note": "Pérez is preparing for his 300th grand prix, with Cadillac as the fresh start after his Red Bull exit.",
+          "rank": 1
+        },
+        {
+          "id": "espn-tennis:e16b3b49d413",
+          "sport": "tennis",
+          "league": null,
+          "sourceId": "espn-tennis",
+          "source": "ESPN",
+          "headline": "Eala rallies past Gibson, sets up Schnaider rematch in Toray Pan Pacific Open quarters",
+          "url": "https://www.espn.com/tennis/story/_/id/50306965/alex-eala-rallies-talia-gibson-toray-pan-pacific-open",
+          "publishedAt": "2026-10-29T05:36:17.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "e16b3b49d413",
+          "urlKey": "24fe937aca5f",
+          "titleKey": "ab77e4e74e52",
+          "note": "Alex Eala came from behind against Talia Gibson, and Schnaider waits again in the quarters.",
+          "rank": 1
+        },
+        {
+          "id": "espn-golf:75f7af2a8e1b",
+          "sport": "golf",
+          "league": null,
+          "sourceId": "espn-golf",
+          "source": "ESPN",
+          "headline": "Defending champ Laopakdee back on top after 1st round at Asia-Pacific Amateur",
+          "url": "https://www.espn.com/golf/story/_/id/50315039/fifa-laopakdee-first-round-lead-asia-pacific-amateur",
+          "publishedAt": "2026-10-29T07:54:39.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "75f7af2a8e1b",
+          "urlKey": "fe4493f4ae58",
+          "titleKey": "b28552c61a3f",
+          "note": "An 8-under 63 put Fifa Laopakdee of Thailand three strokes clear after the first round at the Asia-Pacific Amateur.",
+          "rank": 1
+        },
+        {
+          "id": "espn-nba:be1dcdeecce1",
+          "sport": "basketball",
+          "league": "nba",
+          "sourceId": "espn-nba",
+          "source": "ESPN",
+          "headline": "Hornets bench Reid at half for not meeting 'our standards'",
+          "url": "https://www.espn.com/nba/story/_/id/50313376/hornets-bench-reid-half-not-meeting-our-standards",
+          "publishedAt": "2026-10-29T05:23:41.000Z",
+          "publishedDate": "2026-10-29",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "be1dcdeecce1",
+          "urlKey": "5c7c81d8378d",
+          "titleKey": "b40c9e34742f",
+          "note": "According to the Hornets, newly acquired Naz Reid sat the second half against the Pistons for not meeting team standards.",
+          "rank": 1
+        },
+        {
+          "id": "espn-wnba:c398e12a6b90",
+          "sport": "basketball",
+          "league": "wnba",
+          "sourceId": "espn-wnba",
+          "source": "ESPN",
+          "headline": "Valkyries clinch the title or Dream stay alive? Previewing Game 6 of the WNBA Finals",
+          "url": "https://www.espn.com/wnba/story/_/id/50303751/finals-2026-game-6-preview-atlanta-valkyries",
+          "publishedAt": "2026-10-28T13:25:09.000Z",
+          "publishedDate": "2026-10-28",
+          "timePrecision": "date",
+          "firstSeenAt": "2026-10-29T09:50:03.700Z",
+          "guidKey": "c398e12a6b90",
+          "urlKey": "3b0d2ac5ddd4",
+          "titleKey": "e69ee6843805",
+          "note": "Golden State can close out the title in Game 6, while Atlanta needs its offense going to stay alive.",
+          "rank": 1
+        }
+      ],
+      "missing": []
+    },
     {
       "date": "2026-10-28",
       "status": "complete",
@@ -21,7 +244,8 @@
           "guidKey": "1a047c2208ed",
           "urlKey": "85b2c1d637a9",
           "titleKey": "0b5a9449713a",
-          "note": "Four goals from Kai Rooney carried Manchester United's Under-18s to a 6-0 scoreline against Burnley on Tuesday."
+          "note": "Four goals from Kai Rooney carried Manchester United's Under-18s to a 6-0 scoreline against Burnley on Tuesday.",
+          "rank": 1
         },
         {
           "id": "espn-nfl:3ad4dc58df82",
@@ -38,7 +262,8 @@
           "guidKey": "3ad4dc58df82",
           "urlKey": "70647be3b9bf",
           "titleKey": "a1f19d4bbe21",
-          "note": "According to ESPN, with DeForest Buckner and Quenton Nelson headed to contending teams, the open question is Jonathan Taylor."
+          "note": "According to ESPN, with DeForest Buckner and Quenton Nelson headed to contending teams, the open question is Jonathan Taylor.",
+          "rank": 1
         },
         {
           "id": "espn-f1:36449a4102cf",
@@ -55,7 +280,8 @@
           "guidKey": "36449a4102cf",
           "urlKey": "111156f538c3",
           "titleKey": "e40bba76353f",
-          "note": "Artemis II commander Reid Wiseman went to the moon and came back admiring Mercedes and the engineering of F1."
+          "note": "Artemis II commander Reid Wiseman went to the moon and came back admiring Mercedes and the engineering of F1.",
+          "rank": 1
         },
         {
           "id": "espn-tennis:653108c7d4c8",
@@ -72,7 +298,8 @@
           "guidKey": "653108c7d4c8",
           "urlKey": "a7e9b958926a",
           "titleKey": "83c2ce8cb13d",
-          "note": "For Stan Wawrinka, Tuesday brought the final match of an illustrious career, played on familiar ground."
+          "note": "For Stan Wawrinka, Tuesday brought the final match of an illustrious career, played on familiar ground.",
+          "rank": 1
         },
         {
           "id": "espn-golf:ad3b334117de",
@@ -89,7 +316,8 @@
           "guidKey": "ad3b334117de",
           "urlKey": "c1aec039cd3d",
           "titleKey": "bf368652b132",
-          "note": "If the ESPN report holds, Tiger Woods plays for Jupiter Links GC when TGL kicks off, barring another physical setback."
+          "note": "If the ESPN report holds, Tiger Woods plays for Jupiter Links GC when TGL kicks off, barring another physical setback.",
+          "rank": 1
         },
         {
           "id": "espn-nba:ea21e0648658",
@@ -106,7 +334,8 @@
           "guidKey": "ea21e0648658",
           "urlKey": "a9c81a37e510",
           "titleKey": "7484dc0413c2",
-          "note": null
+          "note": null,
+          "rank": 1
         },
         {
           "id": "espn-wnba:4866110505b2",
@@ -123,7 +352,8 @@
           "guidKey": "4866110505b2",
           "urlKey": "cb2c5cbe06d7",
           "titleKey": "065e4125d822",
-          "note": "JuJu Watkins, Madison Booker and Hannah Hidalgo make up the projected top three in the first ESPN mock draft for 2027."
+          "note": "JuJu Watkins, Madison Booker and Hannah Hidalgo make up the projected top three in the first ESPN mock draft for 2027.",
+          "rank": 1
         }
       ],
       "missing": []
@@ -147,7 +377,8 @@
           "guidKey": "5f35bb92a6f6",
           "urlKey": "b823ee10d980",
           "titleKey": "cd1b1bf109d8",
-          "note": "Omar Berrada and Jason Wilcox held talks over the head coach's future before Michael Carrick arrived at Carrington."
+          "note": "Omar Berrada and Jason Wilcox held talks over the head coach's future before Michael Carrick arrived at Carrington.",
+          "rank": 1
         },
         {
           "id": "espn-nfl:b483a2e9b687",
@@ -164,7 +395,8 @@
           "guidKey": "b483a2e9b687",
           "urlKey": "c8a55e532f00",
           "titleKey": "cb70a76cc031",
-          "note": "For Dallas, Williams rushed for a career-high 155 yards and added a touchdown."
+          "note": "For Dallas, Williams rushed for a career-high 155 yards and added a touchdown.",
+          "rank": 1
         },
         {
           "id": "espn-f1:58b7171865d6",
@@ -181,7 +413,8 @@
           "guidKey": "58b7171865d6",
           "urlKey": "6c21d6776814",
           "titleKey": "21e6fa740eb0",
-          "note": "Kimi Antonelli outscored George Russell and Lewis Hamilton at the Singapore Grand Prix, which leaves Mexico City as a possible title stop."
+          "note": "Kimi Antonelli outscored George Russell and Lewis Hamilton at the Singapore Grand Prix, which leaves Mexico City as a possible title stop.",
+          "rank": 1
         },
         {
           "id": "espn-tennis:e4fd1a14aa80",
@@ -198,7 +431,8 @@
           "guidKey": "e4fd1a14aa80",
           "urlKey": "d535c4bdd0b3",
           "titleKey": "3e9a1be09e39",
-          "note": "Retired for two years, Rafael Nadal brings 22 Grand Slam titles to an exhibition court early next year."
+          "note": "Retired for two years, Rafael Nadal brings 22 Grand Slam titles to an exhibition court early next year.",
+          "rank": 1
         },
         {
           "id": "espn-golf:3cdf7f1df993",
@@ -215,7 +449,8 @@
           "guidKey": "3cdf7f1df993",
           "urlKey": "59842d0f4645",
           "titleKey": "23af087868e0",
-          "note": "The order blocking renovation plans at East Potomac Golf Course stays in place after a federal judge agreed to extend it."
+          "note": "The order blocking renovation plans at East Potomac Golf Course stays in place after a federal judge agreed to extend it.",
+          "rank": 1
         },
         {
           "id": "espn-nba:9e933147f830",
@@ -232,7 +467,8 @@
           "guidKey": "9e933147f830",
           "urlKey": "2f301b52d946",
           "titleKey": "bbc4b02886e8",
-          "note": "According to ESPN, Jaylen Brown's representative disputes both claims, the trade request and the list of demands given to Boston."
+          "note": "According to ESPN, Jaylen Brown's representative disputes both claims, the trade request and the list of demands given to Boston.",
+          "rank": 1
         },
         {
           "id": "espn-wnba:07d9519e1016",
@@ -249,7 +485,8 @@
           "guidKey": "07d9519e1016",
           "urlKey": "99340390f336",
           "titleKey": "c160ce7ada83",
-          "note": "A 64-55 result built on Golden State's defense puts the Valkyries one win from the title, with Kiah Stokes at center."
+          "note": "A 64-55 result built on Golden State's defense puts the Valkyries one win from the title, with Kiah Stokes at center.",
+          "rank": 1
         }
       ],
       "missing": []
@@ -273,7 +510,8 @@
           "guidKey": "9f8d086363f1",
           "urlKey": "937a2f239717",
           "titleKey": "1f9741c2e50f",
-          "note": "ESPN argues that whoever replaces Michael Carrick inherits a squad that continues to fail the club and its fans."
+          "note": "ESPN argues that whoever replaces Michael Carrick inherits a squad that continues to fail the club and its fans.",
+          "rank": 1
         },
         {
           "id": "espn-nfl:dc3bcb530421",
@@ -290,7 +528,8 @@
           "guidKey": "dc3bcb530421",
           "urlKey": "eafc8aa03fd3",
           "titleKey": "6f8b8533f0b3",
-          "note": "JSN and the defense from Seattle's Super Bowl championship season proved too much for the Chiefs."
+          "note": "JSN and the defense from Seattle's Super Bowl championship season proved too much for the Chiefs.",
+          "rank": 1
         },
         {
           "id": "espn-f1:9124f391e8ac",
@@ -307,7 +546,8 @@
           "guidKey": "9124f391e8ac",
           "urlKey": "efd581371754",
           "titleKey": "7dcb0024912c",
-          "note": "Per ESPN, Kimi Antonelli isn't F1 world champion just yet, but after Austin it is only a matter of time for Mercedes."
+          "note": "Per ESPN, Kimi Antonelli isn't F1 world champion just yet, but after Austin it is only a matter of time for Mercedes.",
+          "rank": 1
         },
         {
           "id": "espn-tennis:05f573b82d1f",
@@ -324,7 +564,8 @@
           "guidKey": "05f573b82d1f",
           "urlKey": "6dbcc627b8bd",
           "titleKey": "3c9bf13a9f3a",
-          "note": "Alex Eala opened the Toray Pan Pacific Open by seeing off Mika Stojsavljevic in straight sets."
+          "note": "Alex Eala opened the Toray Pan Pacific Open by seeing off Mika Stojsavljevic in straight sets.",
+          "rank": 1
         },
         {
           "id": "espn-golf:8d2401cbb06e",
@@ -341,7 +582,8 @@
           "guidKey": "8d2401cbb06e",
           "urlKey": "8628d5448090",
           "titleKey": "0850f3605809",
-          "note": "One eagle and three straight birdies erased a four-shot deficit and gave Rory Sabbatini his first PGA Tour Champions title."
+          "note": "One eagle and three straight birdies erased a four-shot deficit and gave Rory Sabbatini his first PGA Tour Champions title.",
+          "rank": 1
         },
         {
           "id": "espn-nba:dda621acd687",
@@ -358,7 +600,8 @@
           "guidKey": "dda621acd687",
           "urlKey": "69fbccb30992",
           "titleKey": "2297dd01c590",
-          "note": null
+          "note": null,
+          "rank": 1
         },
         {
           "id": "espn-wnba:c0a8fb98bc02",
@@ -375,7 +618,8 @@
           "guidKey": "c0a8fb98bc02",
           "urlKey": "5ed854722c87",
           "titleKey": "b3a524817308",
-          "note": "With the Valkyries forcing a Game 6, the Dream are still working out where and when the game will be played."
+          "note": "With the Valkyries forcing a Game 6, the Dream are still working out where and when the game will be played.",
+          "rank": 1
         }
       ],
       "missing": []
@@ -399,7 +643,8 @@
           "guidKey": "eb361f02d56e",
           "urlKey": "aeb9684a743a",
           "titleKey": "04be231cf3b1",
-          "note": "ESPN reports Arsenal, Manchester United and Liverpool are all monitoring Bayern Munich forward Lennart Karl."
+          "note": "ESPN reports Arsenal, Manchester United and Liverpool are all monitoring Bayern Munich forward Lennart Karl.",
+          "rank": 1
         },
         {
           "id": "espn-nfl:60b5cd65ecc7",
@@ -416,7 +661,8 @@
           "guidKey": "60b5cd65ecc7",
           "urlKey": "5261f42b0f77",
           "titleKey": "bc2829546884",
-          "note": "Per ESPN, Josh Simmons later apologized after Andy Reid and Patrick Mahomes sent him out of a team meeting."
+          "note": "Per ESPN, Josh Simmons later apologized after Andy Reid and Patrick Mahomes sent him out of a team meeting.",
+          "rank": 1
         },
         {
           "id": "espn-f1:c5ee2fdc15c2",
@@ -433,7 +679,8 @@
           "guidKey": "c5ee2fdc15c2",
           "urlKey": "135de35c3208",
           "titleKey": "25784e457588",
-          "note": "Kimi Antonelli inches closer to a first Formula 1 world championship off an overdue pole at the United States Grand Prix."
+          "note": "Kimi Antonelli inches closer to a first Formula 1 world championship off an overdue pole at the United States Grand Prix.",
+          "rank": 1
         },
         {
           "id": "espn-tennis:358271ded141",
@@ -450,7 +697,8 @@
           "guidKey": "358271ded141",
           "urlKey": "6a24d91d9702",
           "titleKey": "a172484f90ab",
-          "note": "For Leylah Fernandez the final ended 6-2, 6-2, and for Elena Rybakina it brought a first trophy as the top ranked player."
+          "note": "For Leylah Fernandez the final ended 6-2, 6-2, and for Elena Rybakina it brought a first trophy as the top ranked player.",
+          "rank": 1
         },
         {
           "id": "espn-golf:9f2ed94c3e73",
@@ -467,7 +715,8 @@
           "guidKey": "9f2ed94c3e73",
           "urlKey": "f519ff1849b3",
           "titleKey": "dc2ed4790bfd",
-          "note": "Raging wind at Port Royal leaves PGA Tour officials to figure out how to conclude the Butterfield Bermuda Championship."
+          "note": "Raging wind at Port Royal leaves PGA Tour officials to figure out how to conclude the Butterfield Bermuda Championship.",
+          "rank": 1
         },
         {
           "id": "espn-nba:d876e2ca6023",
@@ -484,7 +733,8 @@
           "guidKey": "d876e2ca6023",
           "urlKey": "89bf8af6c0fb",
           "titleKey": "528d0f31d06b",
-          "note": null
+          "note": null,
+          "rank": 1
         },
         {
           "id": "espn-wnba:947999accc73",
@@ -501,7 +751,8 @@
           "guidKey": "947999accc73",
           "urlKey": "04187afe1902",
           "titleKey": "6487bf65dcf5",
-          "note": "A night of stellar Valkyries defense leaves the series with the Dream tied going forward."
+          "note": "A night of stellar Valkyries defense leaves the series with the Dream tied going forward.",
+          "rank": 1
         }
       ],
       "missing": []
@@ -525,7 +776,8 @@
           "guidKey": "39aada425677",
           "urlKey": "68590c173861",
           "titleKey": "22531eeab712",
-          "note": null
+          "note": null,
+          "rank": 1
         },
         {
           "id": "espn-nfl:f88b9f18eac4",
@@ -542,7 +794,8 @@
           "guidKey": "f88b9f18eac4",
           "urlKey": "52fe614ecf95",
           "titleKey": "987f9c440b2c",
-          "note": "For the Baltimore Ravens, Tyler Huntley gets the start against the Cincinnati Bengals as Lamar Jackson deals with a high ankle sprain."
+          "note": "For the Baltimore Ravens, Tyler Huntley gets the start against the Cincinnati Bengals as Lamar Jackson deals with a high ankle sprain.",
+          "rank": 1
         },
         {
           "id": "espn-f1:dfbd03c3ac0a",
@@ -559,7 +812,8 @@
           "guidKey": "dfbd03c3ac0a",
           "urlKey": "7167f239c151",
           "titleKey": "282ffb8f8446",
-          "note": "Kimi Antonelli starts the United States race from pole with the world title within reach."
+          "note": "Kimi Antonelli starts the United States race from pole with the world title within reach.",
+          "rank": 1
         },
         {
           "id": "espn-tennis:ccb770bc46e3",
@@ -576,7 +830,8 @@
           "guidKey": "ccb770bc46e3",
           "urlKey": "92177321a808",
           "titleKey": "86b30a2416ab",
-          "note": "Both sets went Elena Rybakina's way against Diana Shnaider, 6-3 and 7-5, and Leylah Fernandez waits in the final."
+          "note": "Both sets went Elena Rybakina's way against Diana Shnaider, 6-3 and 7-5, and Leylah Fernandez waits in the final.",
+          "rank": 1
         },
         {
           "id": "espn-golf:3b2453f9d62c",
@@ -593,7 +848,8 @@
           "guidKey": "3b2453f9d62c",
           "urlKey": "f0e3d7e32a7e",
           "titleKey": "eed36801905c",
-          "note": "A course record tied in the third round gives Yuto Katsuragawa a two-stroke lead going into the final day."
+          "note": "A course record tied in the third round gives Yuto Katsuragawa a two-stroke lead going into the final day.",
+          "rank": 1
         },
         {
           "id": "espn-nba:7fe77e3c8cfe",
@@ -610,7 +866,8 @@
           "guidKey": "7fe77e3c8cfe",
           "urlKey": "99ae5c53958d",
           "titleKey": "ab4bdc45f648",
-          "note": "ESPN looks at why star contract negotiations have shifted and why OKC is preparing for more roster changes."
+          "note": "ESPN looks at why star contract negotiations have shifted and why OKC is preparing for more roster changes.",
+          "rank": 1
         },
         {
           "id": "espn-wnba:1dae1ce68c89",
@@ -627,7 +884,8 @@
           "guidKey": "1dae1ce68c89",
           "urlKey": "1162e02430ab",
           "titleKey": "5da840f184fb",
-          "note": "Golden State held Angel Reese to eight points in Atlanta, and the WNBA Finals stand level at 2-2."
+          "note": "Golden State held Angel Reese to eight points in Atlanta, and the WNBA Finals stand level at 2-2.",
+          "rank": 1
         }
       ],
       "missing": []
@@ -651,7 +909,8 @@
           "guidKey": "3e6d198ff01d",
           "urlKey": "5c1a420d1606",
           "titleKey": "d1269614b1d1",
-          "note": "ESPN reports Manchester United are monitoring Nico Paz ahead of next season, with Chelsea also keen on the Como midfielder."
+          "note": "ESPN reports Manchester United are monitoring Nico Paz ahead of next season, with Chelsea also keen on the Como midfielder.",
+          "rank": 1
         },
         {
           "id": "espn-nfl:4c2600c64e12",
@@ -668,7 +927,8 @@
           "guidKey": "4c2600c64e12",
           "urlKey": "e807338de253",
           "titleKey": "63fc99ed436d",
-          "note": "Per ESPN, the Bears never trailed the Pats, though the lead never seemed comfortable for Caleb Williams."
+          "note": "Per ESPN, the Bears never trailed the Pats, though the lead never seemed comfortable for Caleb Williams.",
+          "rank": 1
         },
         {
           "id": "espn-f1:bdca1a6cb855",
@@ -685,7 +945,8 @@
           "guidKey": "bdca1a6cb855",
           "urlKey": "07c6ff448e0b",
           "titleKey": "68d51e465f5a",
-          "note": "Max Verstappen points to a recent X-ray of his own back as he names Austin's Circuit of the Americas among the bumpy venues."
+          "note": "Max Verstappen points to a recent X-ray of his own back as he names Austin's Circuit of the Americas among the bumpy venues.",
+          "rank": 1
         },
         {
           "id": "espn-tennis:8e4e065aa61e",
@@ -702,7 +963,8 @@
           "guidKey": "8e4e065aa61e",
           "urlKey": "ab8c83f842ac",
           "titleKey": "7651edd65bc9",
-          "note": null
+          "note": null,
+          "rank": 1
         },
         {
           "id": "espn-golf:b5c7f918f618",
@@ -719,7 +981,8 @@
           "guidKey": "b5c7f918f618",
           "urlKey": "c85db4a88e34",
           "titleKey": "5c66aa00cce8",
-          "note": "A 9-under 62 on Thursday was the best score of the year for Chandler Blanchet, built on a pair of eagles."
+          "note": "A 9-under 62 on Thursday was the best score of the year for Chandler Blanchet, built on a pair of eagles.",
+          "rank": 1
         },
         {
           "id": "espn-nba:81ae4ed58329",
@@ -736,7 +999,8 @@
           "guidKey": "81ae4ed58329",
           "urlKey": "143234166936",
           "titleKey": "57ae31af1da6",
-          "note": "Booed at the half while trailing by 24, the Sixers answered with 32 points from Tyrese Maxey and a 114-106 finish against the Cavs."
+          "note": "Booed at the half while trailing by 24, the Sixers answered with 32 points from Tyrese Maxey and a 114-106 finish against the Cavs.",
+          "rank": 1
         },
         {
           "id": "espn-wnba:6f8a8754af70",
@@ -753,133 +1017,8 @@
           "guidKey": "6f8a8754af70",
           "urlKey": "339e81c2070f",
           "titleKey": "61d79ebca31c",
-          "note": "According to ESPN, the league's 30th season brings a vote on its 30 best players and a new name at the top of the list."
-        }
-      ],
-      "missing": []
-    },
-    {
-      "date": "2026-10-22",
-      "status": "complete",
-      "items": [
-        {
-          "id": "espn-soccer:1289d7d66986",
-          "sport": "football",
-          "league": null,
-          "sourceId": "espn-soccer",
-          "source": "ESPN",
-          "headline": "Man United players were abysmal in Como, but it's Carrick who faces consequences",
-          "url": "https://www.espn.com/soccer/story/_/id/50241016/manchester-united-players-were-abysmal-como-michael-carrick-faces-consequences",
-          "publishedAt": "2026-10-22T07:51:10.000Z",
-          "publishedDate": "2026-10-22",
-          "timePrecision": "date",
-          "firstSeenAt": "2026-10-22T09:49:46.247Z",
-          "guidKey": "1289d7d66986",
-          "urlKey": "8f96aa9e5ad2",
-          "titleKey": "c8935adf69b5",
-          "note": "Michael Carrick apologized after the 4-1 loss at Como, yet ESPN puts the Manchester United manager's own job on the line."
-        },
-        {
-          "id": "espn-nfl:cab33c27c3dd",
-          "sport": "nfl",
-          "league": null,
-          "sourceId": "espn-nfl",
-          "source": "ESPN",
-          "headline": "Colts right to give Steichen more time? Eagles to trade stars? Solak on Week 6",
-          "url": "https://www.espn.com/nfl/story/_/id/50220836/week-7-seven-things-solak-thinks-eagles-rams-colts",
-          "publishedAt": "2026-10-22T02:00:35.000Z",
-          "publishedDate": "2026-10-21",
-          "timePrecision": "date",
-          "firstSeenAt": "2026-10-22T09:49:46.247Z",
-          "guidKey": "cab33c27c3dd",
-          "urlKey": "dc0c3be53b52",
-          "titleKey": "60c6dbc352af",
-          "note": "For Week 7, Solak weighs the MVP case for Caleb Williams alongside Matthew Stafford's play and the direction of the Browns."
-        },
-        {
-          "id": "espn-f1:e12160d604a6",
-          "sport": "f1",
-          "league": null,
-          "sourceId": "espn-f1",
-          "source": "ESPN",
-          "headline": "Horner: Mercedes tried to hire me before Wolff",
-          "url": "https://www.espn.com/f1/story/_/id/50217546/christian-horner-toto-wolff-mercedes-red-bull",
-          "publishedAt": "2026-10-22T07:59:11.000Z",
-          "publishedDate": "2026-10-22",
-          "timePrecision": "date",
-          "firstSeenAt": "2026-10-22T09:49:46.247Z",
-          "guidKey": "e12160d604a6",
-          "urlKey": "27556208be5b",
-          "titleKey": "1328270f3f96",
-          "note": "The 2012 offer Christian Horner rejected was for the team principal role his future rival Toto Wolff later filled."
-        },
-        {
-          "id": "espn-tennis:371819ccd7d5",
-          "sport": "tennis",
-          "league": null,
-          "sourceId": "espn-tennis",
-          "source": "ESPN",
-          "headline": "Kostyuk retires from Ningbo match, hands Muchova WTA Finals slot",
-          "url": "https://www.espn.com/tennis/story/_/id/50237865/kostyuk-retires-ningbo-match-hands-muchova-wta-finals-slot",
-          "publishedAt": "2026-10-21T20:13:19.000Z",
-          "publishedDate": "2026-10-21",
-          "timePrecision": "date",
-          "firstSeenAt": "2026-10-22T09:49:46.247Z",
-          "guidKey": "371819ccd7d5",
-          "urlKey": "f126b0a1a8ff",
-          "titleKey": "b6139a6bf57f",
-          "note": "The last spot in the season-ending WTA Finals goes to Karolina Muchova after a second-round retirement in Ningbo."
-        },
-        {
-          "id": "espn-golf:dcd17fac3bed",
-          "sport": "golf",
-          "league": null,
-          "sourceId": "espn-golf",
-          "source": "ESPN",
-          "headline": "Oosthuizen joins LIV exodus, says he'll return to Euro tour",
-          "url": "https://www.espn.com/golf/story/_/id/50236481/louis-oosthuizen-leaving-liv-golf-return-european-tour",
-          "publishedAt": "2026-10-21T14:28:16.000Z",
-          "publishedDate": "2026-10-21",
-          "timePrecision": "date",
-          "firstSeenAt": "2026-10-22T09:49:46.247Z",
-          "guidKey": "dcd17fac3bed",
-          "urlKey": "3c37c1023a0d",
-          "titleKey": "d8d93795139b",
-          "note": "One of LIV Golf's members since its inception in 2022, Louis Oosthuizen now plans a return to the DP World Tour."
-        },
-        {
-          "id": "espn-nba:1d5a64ffe670",
-          "sport": "basketball",
-          "league": "nba",
-          "sourceId": "espn-nba",
-          "source": "ESPN",
-          "headline": "Warriors rookie Lendeborg says he 'lost all respect' for Luka after testy matchup",
-          "url": "https://www.espn.com/nba/story/_/id/50245902/warriors-yaxel-lendeborg-lost-all-respect-luka-doncic",
-          "publishedAt": "2026-10-22T06:56:20.000Z",
-          "publishedDate": "2026-10-22",
-          "timePrecision": "date",
-          "firstSeenAt": "2026-10-22T09:49:46.247Z",
-          "guidKey": "1d5a64ffe670",
-          "urlKey": "281cc9e8a1a8",
-          "titleKey": "d85975efea91",
-          "note": "In his professional debut, Yaxel Lendeborg drew the Lakers superstar and called it an interesting first game for him."
-        },
-        {
-          "id": "espn-wnba:8d469bd7966e",
-          "sport": "basketball",
-          "league": "wnba",
-          "sourceId": "espn-wnba",
-          "source": "ESPN",
-          "headline": "How the Dream ran over the Valkyries to take a 2-1 lead in the WNBA Finals",
-          "url": "https://www.espn.com/wnba/story/_/id/50240316/finals-game-3-golden-state-valkyries-atlanta-dream",
-          "publishedAt": "2026-10-22T03:12:26.000Z",
-          "publishedDate": "2026-10-21",
-          "timePrecision": "date",
-          "firstSeenAt": "2026-10-22T09:49:46.247Z",
-          "guidKey": "8d469bd7966e",
-          "urlKey": "dc20ec583a0c",
-          "titleKey": "bd10d5f9dadd",
-          "note": "A 26-point margin over the Valkyries put the Dream ahead in the series."
+          "note": "According to ESPN, the league's 30th season brings a vote on its 30 best players and a new name at the top of the list.",
+          "rank": 1
         }
       ],
       "missing": []

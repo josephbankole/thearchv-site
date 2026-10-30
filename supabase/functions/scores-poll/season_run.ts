@@ -133,9 +133,11 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
     state.backoffUntil = new Date(now.getTime() + SEASON_BACKOFF_MS).toISOString();
   };
   // Writes the files whose content changed (hash-gated against what this mode last wrote) and
-  // answers whether every upload went up.
-  const upload = async (files: readonly OutFile[]): Promise<boolean> => {
-    const planned = await planWrites(files, hashes);
+  // answers whether every upload went up. `refresh` writes all of them regardless: the app treats
+  // a team or preview file over 24 hours old as stale by its generatedAt, and a fixture's file can
+  // go days without changing, so an unchanged file still has to be restamped on the build cadence.
+  const upload = async (files: readonly OutFile[], refresh = false): Promise<boolean> => {
+    const planned = await planWrites(files, refresh ? {} : hashes);
     let ok = true;
     await pool(planned.map((p) => async () => {
       try {
@@ -202,7 +204,7 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
         extra.autoClubs = out.autoKeys;
         console.log(`scores-poll: season teams not in clubs.json: ${out.autoKeys.join(", ")}`);
       }
-      if (await upload(out.files)) state.builtAt = { ...state.builtAt, teams: stamp };
+      if (await upload(out.files, true)) state.builtAt = { ...state.builtAt, teams: stamp };
       else state.builtAt = { ...state.builtAt, teamsFailed: stamp };
     } else {
       state.builtAt = { ...state.builtAt, teamsFailed: stamp };
@@ -270,7 +272,7 @@ export async function runSeasonStep(deps: SeasonDeps): Promise<SeasonSummary> {
       const made = await Promise.all(targets.slice(i, i + H2H_PARALLEL).map(previewOf));
       const group = made.filter((f): f is OutFile => f !== null);
       if (group.length < made.length) failed = true;
-      if (!await upload(group)) {
+      if (!await upload(group, true)) {
         failed = true;
         break;
       }

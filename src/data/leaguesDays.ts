@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-10-30",
+    day: "Friday",
+    headline: "Bruno Fernandes keeps the armband, and Michael Carrick says winning settles the rest",
+    dek: "Michael Carrick said on Thursday that Bruno Fernandes remains Manchester United captain, four days after benching him against Bournemouth. Benjamin Sesko is reported out until at least January, and Chelsea away is next in the Premier League on Saturday.",
+    body: "Michael Carrick said on Thursday 29 October that Bruno Fernandes remains Manchester United captain, four days after leaving him on the bench for all of the 3-0 Premier League defeat by Bournemouth (Sky Sports). Harry Maguire wore the armband that afternoon. Asked about it before Saturday's trip to Chelsea, Carrick said: \"There's no decision to be made on that.\" Asked whether Fernandes is too emotional for the job: \"He's the captain of our football club.\"\n\nThe row began at Como, where Fernandes told TNT Sports after the 4-1 Champions League defeat that it was \"a decision from the staff to not press man-to-man\" (Irish Examiner). Carrick has held to his explanation for the benching: \"It was a decision for the game. That's it. Bruno is fully committed to this football club. I've got no issues with that, we move forward.\" Sky Sports News reports the two held clear-the-air talks on Tuesday.\n\nThe head coach is on the same test. Bournemouth extended the club's worst-ever start to a Premier League season, and chief executive Omar Berrada and director of football Jason Wilcox met at Carrington this week to discuss next steps (Sky Sports). \"I don't need assurances from anyone,\" Carrick said. His own definition of leadership: \"It all comes down to what happens on the football pitch and whether you win or not in the end.\"\n\nHe travels without Benjamin Sesko, who talkSPORT reports is out until at least January with a shin problem (GOAL). That leaves a January plan, and only a plan, with the window shut: The Athletic's Laurie Whitwell and Beren Cross report that recruitment staff are \"trying to establish if a move when the window opens is feasible\" for Leeds United striker Dominic Calvert-Lewin, while calling his departure \"remote\" (RUMOUR, via The Hard Tackle).\n\nSources: Sky Sports; Irish Examiner; GOAL; The Hard Tackle.",
+    status: "verified",
+    publishedAt: "2026-10-30T06:29:01-04:00",
+    index: "noindex",
+    seoTitle: "Carrick keeps Bruno Fernandes as Manchester United captain",
+    sources: [{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13605331/manchester-united-michael-carrick-ready-to-move-forward-with-bruno-fernandes-as-captain-and-doesnt-require-assurances-on-his-future","published":"2026-10-29"},{"outlet":"GOAL","url":"https://www.goal.com/en-us/news/benjamin-sesko-injury-update-man-utd/bltbe6be35a8ca211a0","published":"2026-10-28"},{"outlet":"Irish Examiner","url":"https://www.irishexaminer.com/sport/soccer/arid-41927324.html","published":"2026-10-21"},{"outlet":"The Hard Tackle","url":"https://thehardtackle.com/transfer-news/2026/10/30/manchester-united-eye-january-move-for-dominic-calvert-lewin","published":"2026-10-30"}],
+    tier: "reported",
+    expires: "2026-10-31",
+  },
+  {
     date: "2026-10-28",
     day: "Wednesday",
     headline: "Manchester United were expected to sack Michael Carrick, and on Tuesday he took training",

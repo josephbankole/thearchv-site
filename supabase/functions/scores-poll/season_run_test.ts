@@ -201,7 +201,7 @@ Deno.test("build:days: a failed write waits for the cadence, so build:teams and 
   assertEquals(later.summary.step, "build:days");
 });
 
-Deno.test("build:teams: team files with pointers from the storage listing; a second run writes nothing", async () => {
+Deno.test("build:teams: team files with pointers from the storage listing; a second run restamps them", async () => {
   const store = memoryStore();
   store.files.set(detailPath(1557425), "{}");
   const r = await call({ store, step: "build:teams" });
@@ -211,8 +211,11 @@ Deno.test("build:teams: team files with pointers from the storage listing; a sec
   assertEquals(mu.matches.find((m: Match) => m.id === 1557425).detail, detailPath(1557425));
   assertEquals(json(store, TEAMS_INDEX_PATH).schema, "archv-teams/1");
   assertEquals(r.summary.filesWritten, 66);
-  const again = await call({ store, step: "build:teams", state: r.after! });
-  assertEquals(again.summary.filesWritten, 0);
+  // Unchanged content is written again: the app reads a team file over 24 hours old as stale.
+  const later = new Date(NOW.getTime() + 6 * 3_600_000);
+  const again = await call({ store, step: "build:teams", state: r.after!, now: later });
+  assertEquals(again.summary.filesWritten, 66);
+  assertEquals(json(store, "teams/33.json").generatedAt, later.toISOString());
   // A failed listing writes nothing (the pointers stay as they were) and is not stamped as built.
   const blind = await call({ store, step: "build:teams", state: r.after!, listFails: true });
   assertEquals(blind.summary.filesWritten, 0);

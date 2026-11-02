@@ -7,6 +7,19 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-02",
+    day: "Monday",
+    headline: "Erik ten Hag says relegation is possible, and the table gives Manchester United no room to argue",
+    dek: "Manchester United are 17th in the Premier League after nine games, above Crystal Palace on goal difference alone. Erik ten Hag told ESPN NL relegation is \"certainly possible\". Michael Carrick says winning is the way up.",
+    body: "Manchester United are 17th in the Premier League after nine games, with seven points and a goal difference of minus five. Crystal Palace sit 18th on the same seven points with minus 12, so goal difference is the only thing between United and the bottom three (BBC Sport table, 2 November).\n\nErik ten Hag, who managed the club from 2022 until October 2024, was asked about relegation after Saturday's 2-0 defeat at Chelsea. \"In the Premier League it's certainly possible, because all the teams are simply strong,\" he told ESPN NL. \"They're all strong squads, all good managers.\"\n\nBBC Sport's Simon Stone has the record. He notes that United have not been in the relegation zone nine or more games into a season since November 1986, and that their lowest position at this stage since then was 17th, in 1989-90. The current run is nine games without a win in all competitions, the worst since 1988-89. At seven points from nine games, the pace would not reach 30 points over a season.\n\nMichael Carrick's answer, given after the Chelsea defeat, points the other way. \"You can look at it like that, or you can look at how far you can move up the league quite quickly if you win football matches,\" he said. \"That's the way it's got to be approached.\" He knows the other ending. Carrick was in the West Ham squad relegated in 2002-03 with 42 points, still the highest total to go down in a 38-game Premier League season (BBC Sport).\n\nRoma are next in the Champions League on Tuesday. Aston Villa follow at Old Trafford on Sunday 8 November, without Lisandro Martinez, who is suspended after his red card at Chelsea.\n\nSources: BBC Sport; ESPN NL via AOL.",
+    status: "verified",
+    publishedAt: "2026-11-02T06:32:20-05:00",
+    index: "noindex",
+    seoTitle: "Manchester United relegation possible, says Erik ten Hag",
+    sources: [{"outlet":"BBC Sport","url":"https://www.bbc.co.uk/sport/football/articles/c8g47wl06vkqo","published":"2026-10-31"},{"outlet":"AOL (relaying ESPN NL)","url":"https://www.aol.co.uk/articles/erik-ten-hag-makes-manchester-094832000.html","published":"2026-11-02"}],
+    tier: "reported",
+  },
+  {
     date: "2026-10-30",
     day: "Friday",
     headline: "Bruno Fernandes keeps the armband, and Michael Carrick says winning settles the rest",

@@ -7,6 +7,19 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-04",
+    day: "Wednesday",
+    headline: "Bruno Fernandes accepts his benching in public after Manchester United come from two down to beat Roma",
+    dek: "Manchester United beat Roma 3-2 in the Champions League at Old Trafford after trailing 2-0. Bruno Fernandes, who scored the penalty that started the comeback, said his benching at Bournemouth was right if it was a punishment.",
+    body: "Manchester United beat Roma 3-2 in the Champions League at Old Trafford on Tuesday night, from 2-0 down, for their first win in 10 games and their first in 54 days (Sky Sports).\n\nRoma led through Matias Soule and a Donyell Malen penalty, and United were booed off at half-time. Matheus Cunha won a penalty that Bruno Fernandes scored after a retake. A poor Leonardo Balerdi clearance let Cunha equalise, and he scored the winner from Shea Lacey's pass before he was sent off.\n\nFernandes then spoke to Amazon Prime about being left out against Bournemouth after his public criticism of Michael Carrick following the Como defeat. \"The manager took a decision of putting myself on the bench because I wasn't performing at that level,\" he said. \"Everyone felt that that was a punishment for the words that I had. If it was, it was right.\" He added that there had been \"a lot of lies around many things that have happened in this club\", and that it did not change his belief in the manager. Asked whether the win was a turning point, he said: \"It should be.\"\n\nCarrick was more measured. \"I am not getting too carried away with things, but it is an important night,\" he said (Sky Sports). ESPN reported the same line.\n\nThe Premier League position has not changed. United are 17th, out of the bottom three on goal difference alone (BBC Sport, 2 November). Aston Villa visit Old Trafford on Sunday 8 November, with Lisandro Martinez suspended.\n\nSources: Sky Sports; ESPN; BBC Sport.",
+    status: "verified",
+    publishedAt: "2026-11-04T06:29:52-05:00",
+    index: "noindex",
+    seoTitle: "Bruno Fernandes says benching was right after Roma win",
+    sources: [{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13607206/man-utd-3-2-roma-matheus-cunha-scores-two-and-is-sent-off-in-wild-comeback-to-end-nine-game-winless-run","published":"2026-11-03"},{"outlet":"ESPN","url":"https://www.espn.com/soccer/story/_/id/50373345/michael-carrick-man-united-comeback-win-roma-important-night","published":"2026-11-03"}],
+    tier: "confirmed",
+  },
+  {
     date: "2026-11-02",
     day: "Monday",
     headline: "Erik ten Hag says relegation is possible, and the table gives Manchester United no room to argue",

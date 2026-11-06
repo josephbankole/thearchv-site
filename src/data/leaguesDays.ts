@@ -7,6 +7,19 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-06",
+    day: "Friday",
+    headline: "Forty years after Sir Alex Ferguson, Avram Glazer says Manchester United do not need to win to make money",
+    dek: "Manchester United appointed Sir Alex Ferguson on 6 November 1986. Co-chairman Avram Glazer told a Deutsche Bank conference in September that a club of United's size does not need sporting success to be a commercial power, The Athletic reported.",
+    body: "Manchester United appointed Sir Alex Ferguson as manager on 6 November 1986, replacing Ron Atkinson (manutd.com). Forty years later, the club's co-chairman has made the case that winning is no longer what holds up the business.\n\nAvram Glazer spoke at the first Deutsche Bank Sports Investment Conference in London in September, one of his rare public appearances. According to The Athletic, as reported by the Evening Standard on 5 November, he said teams on the scale of Manchester United do not need success on the pitch to keep their commercial power, and compared the club with the New York Yankees and the Dallas Cowboys.\n\nBoth American examples have waited a long time. The Yankees last won the World Series in 2009 and the Cowboys last won the Super Bowl in 1995 (Evening Standard). Manchester United have not won the Premier League since 2013, Ferguson's last season.\n\nThe remarks surfaced in the same week that supporters protested against the owners at Old Trafford. During the 3-2 Champions League win over Roma on Tuesday, fans threw tennis balls from the Stretford End onto the pitch and briefly delayed play, and around 4,000 green and gold balloons were released before kick-off (Evening Standard). The protests target the Glazer family, the majority shareholders, and Sir Jim Ratcliffe's INEOS, which runs the football side.\n\nThe win over Roma ended a run of nine games without a victory. Bruno Fernandes said afterwards that there had been \"a lot of lies around many things that have happened in this club\" (Sky Sports, 3 November), speaking about his benching and the coverage around it.\n\nManchester United host Aston Villa in the Premier League on Sunday 8 November.\n\nSources: manutd.com; Evening Standard (citing The Athletic); Sky Sports.",
+    status: "verified",
+    publishedAt: "2026-11-06T06:31:03-05:00",
+    index: "noindex",
+    seoTitle: "Avram Glazer: Manchester United need not win to make money",
+    sources: [{"outlet":"Evening Standard","url":"https://www.standard.co.uk/sport/football/man-utd-avram-glazer-ineos-ratcliffe-b1303664.html","published":"2026-11-05"},{"outlet":"Manchester United","url":"https://www.manutd.com/en/news/detail/sir-alex-ferguson-35-years-since-legendary-man-utd-manager-appointed-6-november-2021","published":"2021-11-06"},{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13607206/man-utd-3-2-roma-matheus-cunha-scores-two-and-is-sent-off-in-wild-comeback-to-end-nine-game-winless-run","published":"2026-11-03"}],
+    tier: "reported",
+  },
+  {
     date: "2026-11-04",
     day: "Wednesday",
     headline: "Bruno Fernandes accepts his benching in public after Manchester United come from two down to beat Roma",

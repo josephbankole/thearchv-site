@@ -7,6 +7,19 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-09",
+    day: "Monday",
+    headline: "Dorgu came off the bench to save Manchester United against Aston Villa. Carrick still backed Dalot",
+    dek: "Patrick Dorgu set up one goal and scored the 96th-minute equaliser as Manchester United drew 4-4 with Aston Villa at Old Trafford on Sunday. Michael Carrick defended Diogo Dalot, the player Dorgu replaced, and United go into the international break 18th.",
+    body: "Manchester United drew 4-4 with Aston Villa in the Premier League at Old Trafford on Sunday 8 November, after trailing 2-0 inside four minutes and 4-2 going into stoppage time (RTÉ; avfc.co.uk).\n\nAlysson and Nicolas Jackson scored for Villa in the opening four minutes. Bruno Fernandes replied from the penalty spot and Youri Tielemans equalised against his former club before half-time. John McGinn scored a penalty three minutes into the second half after Diogo Dalot fouled Alysson, and Leon Goretzka made it 4-2 after Leny Yoro headed a free-kick onto his own crossbar (avfc.co.uk).\n\nTwo substitutes rescued the point. Joshua Zirkzee turned in a Patrick Dorgu cross in stoppage time, and Dorgu headed in a Fernandes corner six minutes into added time (avfc.co.uk). Dorgu had replaced Dalot after 65 minutes, a substitution RTÉ reported was greeted by a huge cheer.\n\nAsked whether supporter frustration should cost Dalot his place, head coach Michael Carrick said: \"Diogo gives absolutely everything. He's played in different positions. He's played left-back. He's played really well at times.\" He added: \"Picking the team and who plays the next game, that's a whole different decision\" (Goal).\n\nManchester United go into the November international break 18th, with one win, five draws and four defeats from 10 league games, their lowest top-flight position at this stage since they were 20th in 1986-87 (Goal). Supporters also protested against the owners, with a banner reading \"we don't want a new stadium, we want new owners\" and chants against the Glazer family, Sir Jim Ratcliffe and director of football Jason Wilcox (RTÉ).\n\nSources: RTÉ; Aston Villa (avfc.co.uk); Goal.",
+    status: "verified",
+    publishedAt: "2026-11-09T06:27:31-05:00",
+    index: "noindex",
+    seoTitle: "Manchester United 4-4 Aston Villa: Dorgu rescues a point",
+    sources: [{"outlet":"RTÉ","url":"https://www.rte.ie/sport/soccer/2026/1108/1598454-man-utd-claw-back-draw-with-stoppage-time-goals-v-villa/","published":"2026-11-08"},{"outlet":"Aston Villa","url":"https://www.avfc.co.uk/news/2026/november/08/report-manchester-united-4-4-aston-villa","published":"2026-11-08"},{"outlet":"Goal","url":"https://www.livescore.com/en/news/football/premier-league/michael-carrick-defends-diogo-dalot-against-calls-to-drop-him-after-patrick-dorgu-stars-off-the-bench-in-manchester-uniteds-4-4-draw-with-aston-villa-goal/","published":"2026-11-08"}],
+    tier: "confirmed",
+  },
+  {
     date: "2026-11-06",
     day: "Friday",
     headline: "Forty years after Sir Alex Ferguson, Avram Glazer says Manchester United do not need to win to make money",

@@ -85,6 +85,9 @@ const DAY_LANES = [
 const EXTRAS = {
   posters: { module: "data/posters.ts", kind: "data", line: `export { posters } from "./data/posters.ts";` },
   legends: { module: "data/legends.ts", kind: "data", line: `export { legends } from "./data/legends.ts";` },
+  // src/data/answers.ts (search plan G7, 2026-11-09): living answers and living story pages. Written by
+  // the commit script's `answer` mode as well as by hand, so it is DATA and goes through the guard.
+  answers: { module: "data/answers.ts", kind: "data", line: `export { answers } from "./data/answers.ts";` },
   longReads: { module: "data/longReads.ts", kind: "data", line: `export { longReads } from "./data/longReads.ts";` },
   giantKillers: { module: "data/giantKillers.ts", kind: "data", line: `export { upsets, giantKillersIntro, giantKillersOutro } from "./data/giantKillers.ts";` },
   // readSlug is CODE that happens to live in src/data/, and its own header says why it sits there

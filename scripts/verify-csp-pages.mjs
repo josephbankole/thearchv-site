@@ -101,6 +101,9 @@ const targets = [
   ...FOOTBALL_LANES.map((lane) => [`lane: /desk/${lane}/`, join(DIST, "desk", lane, "index.html")]),
   // Evergreen surfaces (build-glossary-pages.mjs): the shared masthead + PostHog inline scripts,
   // so their static hashes must be in each page's CSP.
+  // Living story and answer pages (build-answer-pages.mjs, search plan G7, 2026-11-09): masthead and
+  // PostHog only, no per-page script.
+  ["answers: /answers/lewis-hall-manchester-united/", join(DIST, "answers", "lewis-hall-manchester-united", "index.html")],
   ["glossary hub: /glossary/", join(DIST, "glossary", "index.html")],
   ["glossary: /glossary/xg/", join(DIST, "glossary", "xg", "index.html")],
   // Glossary expansion (SEO/AEO pass, 2026-07-14): one of the six new entries, same page family

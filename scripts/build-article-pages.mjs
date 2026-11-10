@@ -29,6 +29,8 @@ import { appendUrls } from "./shared/sitemap.mjs";
 import { retroNoindex, retroNoindexReport } from "./shared/retro-noindex.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 import { sentences, abbreviationStop } from "./shared/sentences.mjs";
+import { makeLiving } from "./shared/living-answers.mjs";
+import { loadContentPages } from "./shared/content-pages.mjs";
 
 /* ---------- evergreen links (founder order 2026-09-11) ----------
    A question that comes back every season (the NFL roster cutdown, how FedEx Cup points work) used
@@ -37,13 +39,26 @@ import { sentences, abbreviationStop } from "./shared/sentences.mjs";
    `evergreen: "<glossary slug>"` and the page links to it under the answer. An unknown slug stops
    the build, the same rule relatedList() applies to the glossary's own cross-links: a typo is a
    build error, never a silent broken link. */
-const GLOSSARY_BY_SLUG = new Map(glossaryEntries.map((g) => [g.slug, g]));
+/* Since search plan G7 (2026-11-09) the slug may carry a family prefix, "answers:", "explainer:",
+   "united:" or "finals:", resolved by scripts/shared/living-answers.mjs. A bare slug is still a
+   glossary slug, so every entry filed before then renders byte-identically. */
+const { answers } = await loadDayData({ days: false, extras: ["answers"] });
+const LIVING = makeLiving({ answers, glossaryEntries, contentPages: loadContentPages() });
 function evergreenLink(entry, where) {
-  if (!entry.evergreen) return "";
-  const g = GLOSSARY_BY_SLUG.get(entry.evergreen);
-  if (!g) throw new Error(`[build-article-pages] ${where}: evergreen slug "${entry.evergreen}" is not in scripts/glossary-data.mjs`);
+  const t = LIVING.evergreenTarget(entry.evergreen, where);
+  if (!t) return "";
   return `
-        <p class="article__evergreen">The standing answer, kept up to date: <a href="/glossary/${escAttr(g.slug)}/">${esc(g.title)}</a></p>`;
+        <p class="article__evergreen">The standing answer, kept up to date: <a href="${escAttr(t.href)}">${esc(t.title)}</a></p>`;
+}
+
+/* G7 forward link (plan 1.3): a dated page that a living story page collects says so at the top,
+   above the standfirst. Its URL, text and index state do not change. */
+function forwardLine(section, entry) {
+  const stories = LIVING.storiesFor(section.base, entry.date);
+  if (!stories.length) return "";
+  const links = stories.map((a) => `<a href="/answers/${escAttr(a.slug)}/">${esc(a.title)}</a>`).join(" · ");
+  return `
+        <p class="article__evergreen">This is one update in a running story. The whole story, kept current: ${links}</p>`;
 }
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -141,9 +156,9 @@ function sourcesList(sources) {
 function expiryLine(entry, section) {
   if (!isExpired(entry, TODAY)) return "";
   const kind = section.laneKey === "questions" ? "answer" : "story";
-  const g = entry.evergreen ? GLOSSARY_BY_SLUG.get(entry.evergreen) : null;
+  const g = LIVING.evergreenTarget(entry.evergreen, `${section.base}${entry.date}/`);
   const to = g
-    ? `Current answer: <a href="/glossary/${escAttr(g.slug)}/">${esc(g.title)}</a>`
+    ? `Current answer: <a href="${escAttr(g.href)}">${esc(g.title)}</a>`
     : `Latest: <a href="${escAttr(section.base)}">${esc(section.label)}</a>`;
   return `
         <p class="article__evergreen">This ${kind} was for ${esc(longDate(entry.expires))}. ${to}</p>`;
@@ -510,7 +525,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
         <a class="btn btn--ghost" id="share-x" href="${escAttr(xIntent)}" target="_blank" rel="noopener noreferrer">Share on X</a>
         <button class="btn btn--ghost" id="share-copy" type="button">Copy link</button>
       </div>${figure}
-      <div class="article__body">${expiryLine(entry, section)}
+      <div class="article__body">${expiryLine(entry, section)}${forwardLine(section, entry)}
         <p><strong>${esc(entry.dek)}</strong></p>
         ${bodyHtml(entry.body, entrySources(entry))}${evergreenLink(entry, `${section.base}${entry.date}/`)}
       </div>

@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-11",
+    day: "Wednesday",
+    headline: "Manchester United open talks with Pochettino while Carrick waits on Monaco",
+    dek: "Mauricio Pochettino is ready to accept the Manchester United job, BBC Sport reports, as Omar Berrada and Jason Wilcox meet Sir Jim Ratcliffe in Monaco to decide Michael Carrick's future with the club 18th in the Premier League.",
+    body: "Michael Carrick arrived at Manchester United's Carrington training ground on Wednesday 11 November while the club's chief executive and director of football met Sir Jim Ratcliffe in Monaco to decide whether he stays as head coach (BBC Sport).\n\nOmar Berrada and Jason Wilcox flew out for one of their regular strategy meetings with Ratcliffe, and BBC Sport reports their recommendation is expected to be that Carrick goes. Ratcliffe has control of football operations, but the Glazer family, who hold six of the 12 seats on the board, still have to sign off any decision. BBC Sport says Carrick is expected to be relieved of his duties within 48 hours, and that Berrada and Wilcox want to tell him face to face.\n\nManchester United have opened talks with Mauricio Pochettino about replacing him, Sami Mokbel reported for BBC Sport (RUMOUR). Pochettino, the USA head coach, is ready to accept the job if it is formally offered, and United would have to pay $10m (£7.5m) to release him from a contract he signed in August. Sky Sports News reported the buyout at around £7m and said Pochettino is open to talks. United have discussed the job with him three times before, in 2018, 2022 and 2024.\n\nSky Sports News also reported on Tuesday why the club had not rushed: supporters are not calling for Carrick to be sacked, the players are still playing for him, and the hierarchy was not convinced a change of head coach would fix the team's problems. BBC Sport says one alternative is extra coaching support for Carrick, naming Bayern Munich coach Aaron Danks.\n\nManchester United are 18th with one win from 10 Premier League games and none since August, their lowest position at this stage of a top-flight season since they were 20th in 1986-87 (BBC Sport). They have conceded 30 goals in 15 games in all competitions. Their next match is against Liverpool at Anfield on 22 November.\n\nSources: BBC Sport; Sky Sports.",
+    status: "verified",
+    publishedAt: "2026-11-11T06:29:06-05:00",
+    index: "noindex",
+    seoTitle: "Pochettino ready to replace Carrick at Manchester United",
+    sources: [{"outlet":"BBC Sport","url":"https://www.bbc.com/sport/football/articles/cqvg25pj36mvo","published":"2026-11-11"},{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13610412/michael-carrick-future-man-utd-head-coach-position-increasingly-in-doubt-with-mauricio-pochettino-open-to-talks","published":"2026-11-10"}],
+    tier: "reported",
+    expires: "2026-11-12",
+  },
+  {
     date: "2026-11-09",
     day: "Monday",
     headline: "Dorgu came off the bench to save Manchester United against Aston Villa. Carrick still backed Dalot",

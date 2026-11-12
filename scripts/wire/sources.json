@@ -70,7 +70,9 @@
         "conditions": ["verbatim headline, never truncated", "feed URL unmodified", "credit ESPN as text", "no advertising in or beside the item"] }
     },
     {
-      "id": "espn-wnba", "enabled": true, "sport": "basketball", "league": "wnba", "name": "ESPN",
+      "id": "espn-wnba", "enabled": false,
+      "disabledReason": "Paused by the founder on 2026-11-12 for the WNBA off-season (no fresh item since 8 Nov). Re-enable when the 2027 WNBA season opens in May.",
+      "sport": "basketball", "league": "wnba", "name": "ESPN",
       "feedUrl": "https://www.espn.com/espn/rss/wnba/news", "format": "rss", "order": "editorial", "sporadic": false,
       "timeZoneHint": "America/New_York", "timePrecision": "date", "prefer": [], "exclude": [], "linkHosts": ["espn.com"],
       "terms": { "url": "https://www.espn.com/espn/news/story?page=rssinfo", "checked": "2026-09-26", "snapshotSha256": null,

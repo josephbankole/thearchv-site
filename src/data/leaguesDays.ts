@@ -7,6 +7,21 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-13",
+    day: "Friday",
+    headline: "Manchester United sack Michael Carrick and agree a deal with Mauricio Pochettino",
+    dek: "Manchester United sacked Michael Carrick on Thursday 12 November with the club in the Premier League relegation zone, and Sky Sports and BBC Sport report that USA head coach Mauricio Pochettino is expected to replace him before the trip to Liverpool on 22 November.",
+    body: "Manchester United sacked Michael Carrick as head coach on Thursday 12 November, less than six months after he signed a contract to 2028. In a statement that morning the club said it had reached \"the extremely difficult conclusion that a change is necessary in order to achieve our ambitions\" (Sky Sports). Carrick was told face to face at 8.30am, Sky Sports reported.\n\nThe decision was ratified by co-owner Sir Jim Ratcliffe at a meeting in Monaco on Wednesday, on the recommendation of chief executive Omar Berrada and director of football Jason Wilcox (Sky Sports). United are in the relegation zone with one win from 10 Premier League games. Carrick won three of his 15 matches this season, after winning 12 of 17 as interim head coach last season to finish third. Steve Holland, Jonny Evans, Jonathan Woodgate, Travis Binnion and goalkeeping coach Craig Mawson have also left (Sky Sports).\n\nManchester United have agreed a deal with Mauricio Pochettino to become head coach, and he is expected to sign a two-and-a-half-year contract, Sky Sports reported on Thursday. United told the United States Soccer Federation they intend to activate a $10m (£7m) release clause in his contract, BBC Sport reported. Pochettino will take charge of both USA matches against Haiti before travelling to Manchester, and his first United game is expected to be against Liverpool at Anfield on 22 November. The club had considered him for the job three times before.\n\nOn Friday, BBC Sport's Simon Stone reported that captain Bruno Fernandes, 32, has rejected a second contract offer. His deal runs out at the end of the season, and BBC Sport says United are almost certain to trigger a 12-month extension to 2028 before 1 January if no new deal is agreed.\n\nSources: BBC Sport; Sky Sports.",
+    status: "verified",
+    publishedAt: "2026-11-13T06:27:39-05:00",
+    index: "noindex",
+    seoTitle: "Pochettino to replace Carrick as Manchester United coach",
+    evergreen: "release-clause",
+    sources: [{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13611745/mauricio-pochettino-manchester-united-agree-two-and-a-half-year-deal-with-usa-manager-to-replace-michael-carrick","published":"2026-11-12"},{"outlet":"BBC Sport","url":"https://www.bbc.co.uk/sport/football/articles/cqdr1jlr1707o","published":"2026-11-12"}],
+    tier: "confirmed",
+    expires: "2026-11-22",
+  },
+  {
     date: "2026-11-11",
     day: "Wednesday",
     headline: "Manchester United open talks with Pochettino while Carrick waits on Monaco",

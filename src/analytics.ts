@@ -1,7 +1,7 @@
 // Privacy-friendly PostHog wiring.
 // - No key configured => everything is a safe no-op (zero network, zero cookies).
-// - Lean + privacy-first: autocapture OFF, session recording OFF, respects Do Not Track,
-//   localStorage persistence (no third-party cookies), only explicit events are sent.
+// - Lean + privacy-first: autocapture OFF, session recording OFF, nothing loads under Global
+//   Privacy Control or Do Not Track, localStorage persistence (no third-party cookies), only explicit events are sent.
 //
 // Configure by EITHER:
 //   build env:  VITE_POSTHOG_KEY=phc_xxx  VITE_POSTHOG_HOST=https://us.i.posthog.com
@@ -20,8 +20,23 @@ function readConfig() {
   return { key, host };
 }
 
+// Global Privacy Control or Do Not Track: PostHog is never imported, so no script, no identifier
+// in storage and no events, and track() drops everything. respect_dnt below stays as a second line
+// for DNT. The static pages' snippet and josephbankole.ca apply the same rule (2026-11-15).
+function privacySignal(): boolean {
+  const nav = navigator as Navigator & { globalPrivacyControl?: boolean; msDoNotTrack?: string };
+  const win = window as Window & { doNotTrack?: string };
+  return (
+    nav.globalPrivacyControl === true ||
+    nav.doNotTrack === '1' ||
+    nav.doNotTrack === 'yes' ||
+    win.doNotTrack === '1' ||
+    nav.msDoNotTrack === '1'
+  );
+}
+
 export function isConfigured(): boolean {
-  return !!readConfig().key;
+  return !!readConfig().key && !privacySignal();
 }
 
 /* ---------- trailing-slash path normalisation (2026-08-04) ----------
@@ -59,6 +74,7 @@ export function track(event: string, props?: Record<string, unknown>): void {
 export async function initAnalytics(): Promise<void> {
   const { key, host } = readConfig();
   if (!key) return; // dormant until a key is provided
+  if (privacySignal()) return; // the reader asked not to be tracked
 
   const { default: posthog } = await import('posthog-js');
   posthog.init(key, {

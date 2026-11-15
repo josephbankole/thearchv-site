@@ -124,6 +124,7 @@ function statusText(m: Match): string {
   if (s.finished) return c === 'AET' ? 'AET' : c === 'AWD' ? 'Awarded' : c === 'WO' ? 'W/O' : 'FT';
   if (c === 'PST') return 'Postponed';
   if (c === 'CANC') return 'Cancelled';
+  if (c === 'ABD') return 'Abandoned';
   const t = new Date(m.kickoff ?? '');
   return c === 'TBD' || Number.isNaN(t.getTime())
     ? 'TBC'

@@ -24,6 +24,12 @@
   // half-time break, so a quiet interval never reads as one. Same rule as feedPaused() in
   // src/components/scoresStrip.ts, kept in step by hand.
   var STALE_MS = 25 * 60000;
+  // The longest a match can honestly still be live after its kickoff: two halves, the break,
+  // stoppage, extra time, a shootout and room for a short delay. A match the feed still calls live
+  // past this is a frozen figure, even while the rest of the feed keeps moving, so it loses its
+  // live flag and stops the 30 second poll. Same limit as ScoresFreshness.liveMaxSinceKickoff in
+  // the app.
+  var LIVE_MAX_MS = 3.5 * 3600000;
   var ORDER = ['premier-league', 'champions-league', 'wsl'];
   var NAMES = { 'premier-league': 'Premier League', 'champions-league': 'Champions League', 'wsl': "Women's Super League" };
   // Goals and cards only. Substitutions, VAR notes and missed penalties stay out.
@@ -164,6 +170,7 @@
     if (s.finished) return c === 'AET' ? 'AET' : c === 'AWD' ? 'Awarded' : c === 'WO' ? 'W/O' : 'FT';
     if (c === 'PST') return 'Postponed';
     if (c === 'CANC') return 'Cancelled';
+    if (c === 'ABD') return 'Abandoned';
     var t = new Date(m.kickoff);
     return c === 'TBD' || isNaN(t.getTime()) ? 'TBC' : hm(t);
   }
@@ -815,13 +822,21 @@
     }
     return false;
   }
-  // The same feed with the live flag taken off its live matches, so a stopped feed never shows a
-  // match as live. paused is set here, never by the feed.
-  function markPaused(d) {
+  // True when the feed calls a match live more than LIVE_MAX_MS after its kickoff. A match with no
+  // usable kickoff cannot be judged and is taken at its word.
+  function staleLive(m, now) {
+    if (!m || !m.status || !m.status.live) return false;
+    var t = Date.parse(m.kickoff);
+    return !isNaN(t) && now - t > LIVE_MAX_MS;
+  }
+  // The same feed with the live flag taken off its live matches (or only those `only` picks), so a
+  // stopped feed or a frozen match never shows as live. paused is set here, never by the feed.
+  function markPaused(d, only) {
     return {
       generatedAt: d.generatedAt,
       matches: d.matches.map(function (m) {
         if (!m || !m.status || !m.status.live) return m;
+        if (only && !only(m)) return m;
         var st = {};
         for (var k in m.status) if (Object.prototype.hasOwnProperty.call(m.status, k)) st[k] = m.status[k];
         st.live = false;
@@ -834,10 +849,21 @@
     };
   }
 
+  // The feed with any match that is live long past its kickoff marked paused, or the feed itself
+  // when there is none.
+  function markStale(d) {
+    var now = Date.now();
+    for (var i = 0; i < d.matches.length; i++) {
+      if (staleLive(d.matches[i], now)) return markPaused(d, function (m) { return staleLive(m, now); });
+    }
+    return d;
+  }
+
   function apply(d) {
     haveData = true;
     paused = feedPaused(d);
     if (paused) d = markPaused(d);
+    else d = markStale(d);
     live = d;
     if (view) return; // a past day is on show; the live window waits in `live`
     var s = JSON.stringify(d.matches);
@@ -918,7 +944,7 @@
 
   function showDay(date, d) {
     if (view !== date) return; // the reader has moved on
-    matches = d.matches;
+    matches = markStale(d).matches;
     sig = '';
     render();
     if (stamp) stamp.textContent = 'Matches on ' + dayText(date);

@@ -690,7 +690,7 @@ export function posthogSnippet() {
       if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
       return v.replace(/^([^?#]*[^\\/?#])(?=[?#]|$)/, function (m) { return /\\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
     }
-    posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,capture_pageleave:true,disable_session_recording:true,persistence:'localStorage',person_profiles:'identified_only',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
+    posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,capture_pageleave:true,disable_session_recording:true,disable_surveys:true,persistence:'localStorage',person_profiles:'identified_only',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>`;
 }
 

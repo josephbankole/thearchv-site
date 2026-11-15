@@ -237,6 +237,10 @@ const schema = {
      competition, or player) stays as the section's last line: footer() says something narrower
      and never mentions players, and the #standards copy names no player either. #contact keeps
      the old About's wording; the Instagram handle is in the policy's own Contact line above it.
+   - Privacy, "How long we keep it" (audits be-support-6, be-support-11, privacy-compliance-1,
+     2026-11-15): each period is the one the scheduled purges in supabase/migrations delete on.
+     Change a purge, change the line here, and move PRIVACY_UPDATED. The periods are defaults
+     the founder can change.
    - Sections the old pages repeated were kept once: the old About's "How the work is checked",
      "When we get it wrong" and "Who we answer to" summaries, the standards page's "Corrections
      are added, not hidden" and the corrections page's "How we check things first time" each
@@ -492,6 +496,19 @@ const html = `${documentShell({
         your browser and operating system), and the page you signed up on, in the same
         Supabase database. We use the address to tell you when the Android app is
         ready.</p>
+
+        <h3>How long we keep it</h3>
+        <ul class="about__list">
+          <li><strong>Support conversations.</strong> Deleted 12 months after the conversation
+          is closed, with every message in it.</li>
+          <li><strong>Push tokens.</strong> When you turn daily push off, the token and the
+          details stored with it are deleted 30 days later.</li>
+          <li><strong>Waitlist emails.</strong> Deleted 90 days after we email the waitlist to
+          say the Android app is ready.</li>
+          <li><strong>Support lookups.</strong> Each time the app checks a support conversation
+          for replies, our server notes the anonymous id and the time, so it can limit how
+          often that happens. Those notes are deleted after seven days.</li>
+        </ul>
 
         <h3>Deleting your data</h3>
         <p>Deleting the app removes everything stored on the device, but not what has

@@ -507,6 +507,8 @@ const html = `${documentShell({
         settings default.</p>
 
         <h3>Contact</h3>
+        <p>Joseph Bankole is responsible for protecting your personal information on this site
+        and in the app.</p>
         <p>Email <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a> or
         message <a href="https://instagram.com/thearchvfc">@thearchvfc</a> on Instagram.
         For app help, see <a href="/support/">support</a>.</p>

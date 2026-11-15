@@ -37,14 +37,25 @@ function walk(dir) {
   return files;
 }
 
-// Every content page with both a slug and a section, in whatever order the filesystem walk
-// returns them (unchanged from the original: build-content.mjs never sorted this list).
+// Every content page with both a slug and a section, newest datePublished first, then by slug
+// (site-build-10, 2026-11-15). This used to be filesystem order, which is name order on the Mac and
+// unsorted on the Linux runner, so the six related links build-content.mjs takes from the front of
+// this list differed between a local preview and the deployed site. A page without a
+// datePublished sorts after the dated ones.
 // Returns [] when there is no content/ directory at all, which is what the caller checks.
+export const byNewestThenSlug = (a, b) => {
+  const da = String(a.datePublished || ""), db = String(b.datePublished || "");
+  if (da !== db) return da < db ? 1 : -1;
+  const sa = String(a.slug), sb = String(b.slug);
+  return sa < sb ? -1 : sa > sb ? 1 : 0;
+};
+
 export function loadContentPages() {
   if (!existsSync(CONTENT_DIR)) return [];
   return walk(CONTENT_DIR)
     .map((f) => { const { data, body } = parse(readFileSync(f, "utf8")); return { ...data, body }; })
-    .filter((p) => p.slug && p.section);
+    .filter((p) => p.slug && p.section)
+    .sort(byNewestThenSlug);
 }
 
 export const hasContentDir = () => existsSync(CONTENT_DIR);

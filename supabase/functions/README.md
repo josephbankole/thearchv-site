@@ -253,7 +253,7 @@ supabase functions deploy register-push --no-verify-jwt
 ### Dead-token cleanup is bounded per run
 
 After the fan-out, `daily-push` deletes the tokens APNs reported as `BadDeviceToken` or
-`Unregistered`, at most **25 per run** (`MAX_TOKEN_DELETIONS_PER_RUN` in `daily-push/index.ts`).
+`Unregistered`, at most **25 per run** (`MAX_TOKEN_DELETIONS_PER_RUN` in `daily-push/run.ts`).
 It always deletes when there is anything dead: there is no dead-token count that switches cleanup
 off, which is what stops a table full of junk tokens staying poisoned for good. When there are more
 than 25 dead in one run the response carries `tokenDeletionAnomaly` with `deadTokens`,
@@ -366,7 +366,9 @@ supabase migration repair --status applied 20261012160124
 ### Tests
 
 The pure parts (the guard, the sport list and grouping, the APNs headers, the fan-out pool and
-health-probe's push check) have unit tests that need no network and no permissions:
+health-probe's push check) have unit tests that need no network and no permissions, and so does
+daily-push's run itself (`daily-push/run_test.ts`: the lead recorded before any claim or send, a
+failed record or claim, the claim chunks, the deletion cap and the paged token read):
 
 ```
 cd supabase/functions/daily-push && deno test

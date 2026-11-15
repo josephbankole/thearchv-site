@@ -89,9 +89,9 @@ const TODAY = torontoIso().slice(0, 10);
 // root as the anchor. Every downstream string in render() is built from these fields, so nothing
 // football-shaped changed value.
 const sections = [
-  { sportKey: "football", laneKey: "transfer", label: LANE_META.transfer.label, seoSuffix: LANE_META.transfer.seoSuffix, anchor: LANE_META.transfer.anchor, base: "/desk/transfer/", days: transferDays },
-  { sportKey: "football", laneKey: "world-cup", label: LANE_META["world-cup"].label, seoSuffix: LANE_META["world-cup"].seoSuffix, anchor: LANE_META["world-cup"].anchor, base: "/desk/world-cup/", days: worldCupDays },
-  { sportKey: "football", laneKey: "leagues", label: LANE_META.leagues.label, seoSuffix: LANE_META.leagues.seoSuffix, anchor: LANE_META.leagues.anchor, base: "/desk/leagues/", days: leaguesDays },
+  { sportKey: "football", laneKey: "transfer", label: LANE_META.transfer.label, seoSuffix: LANE_META.transfer.seoSuffix, anchor: LANE_META.transfer.anchor, base: "/desk/transfer/", parent: "/desk/transfer/", days: transferDays },
+  { sportKey: "football", laneKey: "world-cup", label: LANE_META["world-cup"].label, seoSuffix: LANE_META["world-cup"].seoSuffix, anchor: LANE_META["world-cup"].anchor, base: "/desk/world-cup/", parent: "/desk/world-cup/", days: worldCupDays },
+  { sportKey: "football", laneKey: "leagues", label: LANE_META.leagues.label, seoSuffix: LANE_META.leagues.seoSuffix, anchor: LANE_META.leagues.anchor, base: "/desk/leagues/", parent: "/desk/leagues/", days: leaguesDays },
 ];
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
@@ -104,6 +104,9 @@ for (const sport of SPORTS) {
       seoSuffix: `${sport.label} ${laneMeta.seoSuffix}`.trim(),
       anchor: `${sport.urlBase}/`,
       base: `/${sport.urlBase}/${laneKey}/`,
+      // The breadcrumb parent: the sport root, which is where the lane front canonicalises
+      // (build-lane-pages.mjs). Football's parent is its own lane front.
+      parent: `/${sport.urlBase}/`,
       days: SPORT_DAYS[sport.key] || [],
     });
   }
@@ -278,7 +281,7 @@ function questionAnswer(dek, body) {
   check("St. at the cap", capDek, capPara, capDek);
 })();
 
-function schema(entry, url, label, faq, images, sources = []) {
+function schema(entry, url, label, parentUrl, faq, images, sources = []) {
   const graph = [
     {
         // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
@@ -353,7 +356,7 @@ function schema(entry, url, label, faq, images, sources = []) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-      { "@type": "ListItem", position: 2, name: label, item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: label, item: parentUrl },
       { "@type": "ListItem", position: 3, name: entry.headline, item: url },
     ],
   });
@@ -507,7 +510,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
   // Per-page CSP: the share-row script embeds this page's url, so its hash is not constant
   // across the family, and form-action is narrowed to 'self' (no form on the page).
   csp: pageCsp,
-  jsonLd: schema(entry, url, lane.label, faq, schemaImages, entrySources(entry)),
+  jsonLd: schema(entry, url, lane.label, `${SITE}${lane.parent}`, faq, schemaImages, entrySources(entry)),
   extraHead: [APP_CTA_STYLES],
 })}
 <body>

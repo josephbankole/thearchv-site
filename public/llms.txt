@@ -1,11 +1,11 @@
 # The ARCHV
 
-> The ARCHV is an illustrated football publication at thearchv.ca. It files daily, two-source-verified reporting on Manchester United transfers, international football and the football leagues.
+> The ARCHV is an illustrated football publication at thearchv.ca. It files daily reporting on Manchester United transfers, international football and the football leagues, with every claim checked against a trusted, named source.
 
 ## Key pages
 
 - [Homepage](https://thearchv.ca/): the archive, the daily desks and the Manchester United posters sold on Etsy.
-- [Manchester United transfer news](https://thearchv.ca/desk/transfer/): every United move, checked against two sources and drawn the same day.
+- [Manchester United transfer news](https://thearchv.ca/desk/transfer/): every United move, checked against at least one trusted, named source and drawn the same day.
 - [International football and the World Cup](https://thearchv.ca/desk/world-cup/): men's and women's international football, every competition, every match day.
 - [Football leagues](https://thearchv.ca/desk/leagues/): title races, promotions, sackings and the tables behind them.
 - [Start here](https://thearchv.ca/start/): a short introduction to what The ARCHV is and how to follow it.
@@ -15,7 +15,7 @@
 
 ## Editorial standards
 
-Every claim is checked against two sources before publication, individual moves are labelled CONFIRMED, REPORTED or RUMOUR, corrections are appended and dated rather than quietly changed, and all artwork is original illustration. The full policy is set out at [How we verify](https://thearchv.ca/about/#how-we-verify).
+Every claim is checked against at least one trusted, named source before publication, individual moves are labelled CONFIRMED, REPORTED or RUMOUR, corrections are appended and dated rather than quietly changed, and all artwork is original illustration. The full policy is set out at [How we verify](https://thearchv.ca/about/#how-we-verify).
 
 ## Citation
 

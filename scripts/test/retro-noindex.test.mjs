@@ -2,10 +2,11 @@
 // batch's sitemapUntil date, then drops out; an unlisted page always keeps its row.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { retroInSitemap, isIndexable } from "../shared/retro-noindex.mjs";
+import { retroInSitemap, isIndexable, retroNoindexFileProblems } from "../shared/retro-noindex.mjs";
 
 const DATA = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "data", "retro-noindex.json"), "utf8"));
 
@@ -39,4 +40,27 @@ test("isIndexable refuses a listed path whatever indexDecision says", () => {
   }
   assert.equal(isIndexable({}, "/desk/transfer/2099-01-01/", "2099-01-02", yes), true);
   assert.equal(isIndexable({}, "/desk/transfer/2099-01-01/", "2099-01-02", no), false);
+});
+
+// site-build-11: a present but broken list file is a build failure, a missing one only a warning.
+test("retroNoindexFileProblems passes the committed file", () => {
+  assert.deepEqual(retroNoindexFileProblems(), { missing: false, problems: [] });
+});
+
+test("retroNoindexFileProblems refuses a broken file and lets a missing one through", () => {
+  const dir = mkdtempSync(join(tmpdir(), "retro-noindex-"));
+  try {
+    const file = join(dir, "retro-noindex.json");
+    assert.deepEqual(retroNoindexFileProblems(join(dir, "absent.json")), { missing: true, problems: [] });
+    writeFileSync(file, '{"batches": [{"batch": 1, "paths": ["/duel/a-v-b/",]}]}');
+    assert.match(retroNoindexFileProblems(file).problems[0], /does not parse/);
+    writeFileSync(file, '{"_about": "x"}');
+    assert.deepEqual(retroNoindexFileProblems(file).problems, ["has no batches array"]);
+    writeFileSync(file, '{"batches": [{"batch": 2}]}');
+    assert.deepEqual(retroNoindexFileProblems(file).problems, ["batch 2 has no paths array"]);
+    writeFileSync(file, '{"batches": [{"batch": 3, "paths": ["/duel/a-v-b/", "duel/c-v-d"]}]}');
+    assert.deepEqual(retroNoindexFileProblems(file).problems, ['batch 3 has a bad path "duel/c-v-d"']);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

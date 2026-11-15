@@ -9,8 +9,12 @@
  * (retroInSitemap), so Search Console does not report it as "Submitted URL marked noindex" for good.
  *
  * Nothing here can fail the build (plan §6): a missing or malformed file warns and lists nothing.
+ * The generators stay lenient, so the strict check sits in front of them instead:
+ * scripts/check-retro-noindex.mjs runs retroNoindexFileProblems() at the head of the build and
+ * stops it when the file is present but unreadable, because a lenient read of a broken file would
+ * flip every listed page back to index,follow on the next deploy with only a warn line to show.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -51,6 +55,30 @@ function load() {
   }
   if (map.size > 135) console.warn(`[retro-noindex] WARN ${map.size} paths listed, over the plan's cap of 135`);
   return map;
+}
+
+/* What is wrong with the list file, for the head-of-build check. `missing` is true when there is no
+   file at all, which stays a warning (no staged list). Any problem in a file that IS there comes back
+   in `problems`: it does not parse, it has no batches array, a batch has no paths array, or a path
+   is not a site path with both slashes. load() above would skip each of those and carry on. */
+export function retroNoindexFileProblems(file = FILE) {
+  if (!existsSync(file)) return { missing: true, problems: [] };
+  const problems = [];
+  let raw;
+  try {
+    raw = JSON.parse(readFileSync(file, "utf8"));
+  } catch (err) {
+    return { missing: false, problems: [`does not parse: ${err && err.message ? err.message : err}`] };
+  }
+  if (!raw || !Array.isArray(raw.batches)) return { missing: false, problems: ["has no batches array"] };
+  raw.batches.forEach((b, i) => {
+    const name = b && b.batch != null ? `batch ${b.batch}` : `batches[${i}]`;
+    if (!b || !Array.isArray(b.paths)) { problems.push(`${name} has no paths array`); return; }
+    for (const p of b.paths) {
+      if (typeof p !== "string" || !p.startsWith("/") || !p.endsWith("/")) problems.push(`${name} has a bad path ${JSON.stringify(p)}`);
+    }
+  });
+  return { missing: false, problems };
 }
 
 const LISTED = load();

@@ -6,7 +6,7 @@
 begin;
 
 -- push_tokens_rate_cap: 60 new tokens an hour, 5 per device; a token that already has a row is
--- never counted, so an opt-out through the upsert path always lands (20261115120100).
+-- never counted, so an opt-out through the upsert path always lands (20261115120400).
 do $$
 declare
   i int;
@@ -70,7 +70,7 @@ begin
   raise notice 'ticket_messages_hourly_cap: ok';
 end $$;
 
--- push_tokens_token_format (20261115120000): validated, so no out-of-shape row can sit in a
+-- push_tokens_token_format (20261115120300): validated, so no out-of-shape row can sit in a
 -- claim_push_tokens chunk and fail the whole UPDATE; a malformed token is refused on insert.
 do $$
 declare

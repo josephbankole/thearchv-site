@@ -21,7 +21,7 @@ import { resolveSport, unknownSportKey } from "../_shared/sports.ts";
 // hard 64. Anything outside that is junk APNs could only ever answer BadDeviceToken for, and every
 // junk row it creates spends one of the 60 registration slots an hour that the entire install base
 // shares. The same rule is mirrored as a CHECK constraint on push_tokens.token
-// (migration 20261115120000_push_token_format_check.sql) so a future writer cannot skip it — change
+// (migration 20261115120300_push_token_format_check.sql) so a future writer cannot skip it — change
 // one and you must change the other.
 const APNS_TOKEN_RE = /^[0-9a-f]{64,200}$/;
 
@@ -83,7 +83,7 @@ export async function handleRegisterPush(
   // meant a saturated hourly cap could refuse a user's opt-out and keep sending them notifications
   // they had switched off. An UPDATE creates no row, so it is outside what the cap counts and
   // cannot be blocked by it, and updated_at still moves (push_tokens_set_updated_at). The trigger
-  // also skips a token that already has a row (20261115120100), so the race below is covered too.
+  // also skips a token that already has a row (20261115120400), so the race below is covered too.
   // First registrations still go through the upsert and are still capped.
   const lookup = await deps.store.exists(token);
   if (lookup.error) {

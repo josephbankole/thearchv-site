@@ -137,7 +137,7 @@ An attempt that ends in an Anthropic API error makes no paid call, so it gives i
 daily ceiling back (`triage_permit_release`). triage-drain takes the tickets with the fewest failed
 attempts first, then the oldest, so a ticket that keeps failing cannot hold up the queue.
 
-Deploy order for this: apply `supabase/migrations/20261115120200_triage_attempts.sql` first (the
+Deploy order for this: apply `supabase/migrations/20261115120500_triage_attempts.sql` first (the
 drain orders by its new column), then deploy `support-triage`, `triage-drain` and `ticket-reply`.
 The migration also moves tickets already stuck at `new` or `l1_working` for over an hour to
 `pending_triage`, so the next drain picks them up. To see how many that is before applying:
@@ -799,7 +799,7 @@ report:
 ## Push-token format check (deploy order matters)
 
 `register-push` now refuses a token that is not 64 to 200 lowercase hex characters, and
-`supabase/migrations/20261115120000_push_token_format_check.sql` mirrors that rule as a CHECK
+`supabase/migrations/20261115120300_push_token_format_check.sql` mirrors that rule as a CHECK
 constraint on `push_tokens.token`. The iOS client has always sent exactly 64 lowercase hex, so no
 shipped build is affected; the upper bound leaves room for Apple lengthening device tokens. Keep
 the regex in `register-push/handler.ts` and the one in the migration identical.
@@ -823,13 +823,13 @@ supabase functions deploy register-push --no-verify-jwt
 
 # 3. Then the cleanup and the constraint, in one transaction. Apply the one file and record it
 #    (see the note on `supabase migration list --linked` under daily-push's Migration).
-psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120000_push_token_format_check.sql
-supabase migration repair --status applied 20261115120000
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120300_push_token_format_check.sql
+supabase migration repair --status applied 20261115120300
 
 # 4. Then the cap exemption: a token that already has a row is no longer counted by the hourly
 #    insert cap, so an opt-out or a sport change always lands whatever the hour's count.
-psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120100_push_token_cap_exemptions.sql
-supabase migration repair --status applied 20261115120100
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120400_push_token_cap_exemptions.sql
+supabase migration repair --status applied 20261115120400
 
 # 5. Then the bounded cleanup.
 supabase functions deploy daily-push --no-verify-jwt

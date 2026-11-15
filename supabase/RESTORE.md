@@ -30,10 +30,11 @@ touched at all (`20261115130000`), so set the secret and apply that one again.
 Apply every file in `thearchv-site/supabase/migrations/` and `gallery-app/server/supabase/migrations/`
 in one combined order, oldest timestamp first. Every file is safe to apply twice.
 
-Two files share a timestamp: `20261115120000_push_token_format_check.sql` here and
-`20261115120000_salon_waitlist_throttle.sql` in gallery-app. The migration history keeps one row per
-version, so the second one applied under that version is not recorded. Apply both by hand in the SQL
-editor, or rename one to a free version before using the CLI.
+The migration history keeps one row per version, so no two files across the two repos may share a
+timestamp: the CLI records the first one it meets and skips the other without a word. The versions
+`20261115120000` and `20261115120100` belong to gallery-app (`salon_waitlist_throttle` and
+`salon_waitlist_closed_at_opening`); this repo's files from the same day start at `20261115120300`.
+Before adding a migration to either repo, list both folders and pick a version neither uses.
 
 Then check the jobs:
 

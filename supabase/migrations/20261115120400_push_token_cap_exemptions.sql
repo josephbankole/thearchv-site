@@ -4,7 +4,7 @@
 -- BEFORE INSERT row triggers before it resolves ON CONFLICT. register-push wrote every call through
 -- an upsert, so once the shared hourly count was reached every call was refused, including a
 -- reader switching the daily push off and a known device refreshing its row. register-push now
--- updates a known token in place (20261115120000 and the function change that ships with it), and
+-- updates a known token in place (20261115120300 and the function change that ships with it), and
 -- this makes the database hold the same line for any writer:
 --
 --   * A token that already has a row is never capped. The write resolves to an update of that row

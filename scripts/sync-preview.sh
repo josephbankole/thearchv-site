@@ -2,7 +2,7 @@
 # sync-preview.sh — run at the START of any thearchv.ca UI session.
 #
 # The daily engine commits the trackers (the three football lanes, the four new-sport lanes
-# and longReads: see DATA_FILES below, which is the authoritative list)
+# and longReads: see DATA_FILES in scripts/data-files.sh, which is the authoritative list)
 # straight to `main` via the GitHub Contents API. UI work happens on `preview`.
 # Left alone, the two branches drift and the eventual preview->main deploy hits
 # conflicts + index.lock pain. This script pulls main's latest into preview first,
@@ -19,10 +19,9 @@ cd "$(dirname "$0")/.."   # repo root
 git() { command git -c maintenance.auto=false "$@"; }
 
 # main-owned files: the engine writes these directly to main. On any conflict, main wins.
-DATA_FILES="src/data/transferDays.ts src/data/worldCupDays.ts src/data/leaguesDays.ts \
-src/data/nflDays.ts src/data/f1Days.ts src/data/tennisDays.ts src/data/golfDays.ts \
-src/data/basketballDays.ts src/data/longReads.ts \
-scripts/data/daily/wire.json scripts/data/daily/tables.json"
+# The list lives in scripts/data-files.sh, shared with sync-preview.sh and the deploy guard.
+# shellcheck source=scripts/data-files.sh
+. scripts/data-files.sh
 
 # Wait for the index lock, never delete it. Deleting another process's lock is a race, not a cure
 # for one: two writers on .git/index corrupt it, which is itself a source of the stash and merge

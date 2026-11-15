@@ -15,7 +15,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Runs before the build and blocks it: a push that shrinks or rewinds any desk-written data
+  # file (DATA_FILES in scripts/data-files.sh) never reaches Pages. It compares against the
+  # commit main pointed at before this push, so a multi-commit push is judged as a whole.
+  data-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fail if desk data files shrank
+        env:
+          BASE_SHA: ${{ github.event.before }}
+        run: bash scripts/check-data-shrink.sh "$BASE_SHA"
+
   build:
+    needs: data-guard
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

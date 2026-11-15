@@ -3,18 +3,9 @@
 // The Supabase gateway rejects calls without a valid project key, so the surface is not open to the
 // whole internet even though we deploy with --no-verify-jwt (there is no user JWT in a no-login app).
 
-export const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
-
-export function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
-}
+// corsHeaders and json live in http.ts, which imports nothing, so pure handler code can use them
+// in tests. Re-exported here so every existing import keeps working.
+export { corsHeaders, json } from "./http.ts";
 
 // Service-role client. SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are injected automatically into
 // every Edge Function by the platform, so there is no secret to set by hand. The service role

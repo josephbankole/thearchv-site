@@ -44,6 +44,25 @@ curl -i -X POST \
 
 A `201` with a `ticket_id` means it works. Check the row in the Supabase Table Editor.
 
+## How the app-facing functions are laid out
+
+`register-push` and `ticket-intake` keep their request handling in `handler.ts`, which takes the
+environment and a small database interface as arguments, and `index.ts` only wires that to the
+service-role client. `handler_test.ts` beside each one runs the handler against fakes: the guard
+modes (missing, wrong and unset header), `opt_in: false` landing as an update with the hourly cap
+full, the cap markers mapping to 429, and the input checks. `_shared/appGuard_test.ts` covers both
+guards on their own. `corsHeaders` and `json` live in `_shared/http.ts`, which imports nothing, and
+`_shared/cors.ts` re-exports them, so a function that deploys `_shared/cors.ts` must deploy
+`_shared/http.ts` with it.
+
+The database caps have a check script of their own, `supabase/tests/rate_caps.sql`. Run it only
+against a local database (`supabase start`); it works inside a transaction it rolls back, and it
+refuses to start if the tables already hold rows:
+
+```
+psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -f supabase/tests/rate_caps.sql
+```
+
 ## Automatic triage: support-triage
 
 `support-triage` runs the L1 agent automatically the moment a ticket is inserted. It reads the new
@@ -225,6 +244,8 @@ health-probe's push check) have unit tests that need no network and no permissio
 cd supabase/functions/daily-push && deno test
 cd supabase/functions/_shared && deno test
 cd supabase/functions/health-probe && deno test
+cd supabase/functions/register-push && deno test
+cd supabase/functions/ticket-intake && deno test
 ```
 
 ## Live scores: scores-poll
@@ -583,7 +604,7 @@ supabase functions deploy scores-poll --no-verify-jwt
 
 The function's own files are `index.ts`, `api.ts`, `backfill.ts`, `days.ts`, `map.ts`, `plan.ts`,
 `poll.ts`, `season.ts`, `preview.ts` and `season_run.ts`, plus `../_shared/cors.ts`,
-`../_shared/push_guard.ts` and `../_shared/clubs.json`. Nothing else in the folder (tests, `testkit.ts`,
+`../_shared/http.ts`, `../_shared/push_guard.ts` and `../_shared/clubs.json`. Nothing else in the folder (tests, `testkit.ts`,
 `season_testkit.ts`, `app_fixtures.ts`, `deno.json`, `fixtures/`) is deployed. Deploying changes nothing until something calls the new code: the
 cron call carries no body, so the minute's poll runs as before and now also keeps `days/`; the backfill
 runs only when called with its body.
@@ -627,7 +648,7 @@ report:
    and `select relrowsecurity from pg_class where relname = 'scores_season_state';` is true.
 4. **The function.** `deploy_edge_function`, name `scores-poll`, entrypoint `index.ts`,
    `verify_jwt: false`, files `scores-poll/{index,api,backfill,days,map,plan,poll,season,preview,season_run}.ts`,
-   `_shared/cors.ts`, `_shared/push_guard.ts`, `_shared/clubs.json`. This deploy changes the minute
+   `_shared/cors.ts`, `_shared/http.ts`, `_shared/push_guard.ts`, `_shared/clubs.json`. This deploy changes the minute
    poll too (the `players` key, tomorrow's file, the early lineup pointer). **Smoke check:** the next
    two `scores-poll` rows in `net._http_response` are 200, and `scores.json` still parses as
    `archv-scores/1` (`curl -s <public url>/scores.json | jq .schema`). **Rollback:** redeploy the same

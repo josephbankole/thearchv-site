@@ -12,7 +12,10 @@ export { corsHeaders, json } from "./http.ts";
 // Service-role client. SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are injected automatically into
 // every Edge Function by the platform, so there is no secret to set by hand. The service role
 // bypasses RLS, which is exactly why all table access lives here and never in the app.
-import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
+// The version is pinned exactly, so every function deploy ships the same supabase-js whenever it
+// goes out, and a one-function hotfix does not pick up a newer 2.x the others never ran. This is
+// the only supabase-js import in supabase/functions; bump it here on purpose, then redeploy them all.
+import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2.118.0";
 
 export function adminClient(): SupabaseClient {
   return createClient(

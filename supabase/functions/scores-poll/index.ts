@@ -37,7 +37,7 @@ import { nextWriteFailedSince, rowFromState, runPoll, stateFromRow } from "./pol
 import { canonicalJson, seasonFor } from "./plan.ts";
 
 const BUCKET = "live";
-// Every column, so a row from before migration 20261115130200 (no write_failed_since) still reads.
+// Every column, so a row from before migration 20261115170200 (no write_failed_since) still reads.
 const STATE_COLUMNS = "*";
 const SEASON_COLUMNS =
   "season, listed_at, matches, built_at, file_hashes, remaining, remaining_at, backoff_until, updated_at";

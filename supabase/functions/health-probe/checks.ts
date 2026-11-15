@@ -36,7 +36,7 @@ export function scoresPollStale(row: Record<string, unknown> | null | undefined,
 
 // scores_poll_state.write_failed_since: have uploads been failing long enough that scores.json is
 // frozen? schedule_fetched_at keeps moving through a storage outage, so scoresPollStale cannot
-// see one. A row from before migration 20261115130200 has no such column and reads as healthy.
+// see one. A row from before migration 20261115170200 has no such column and reads as healthy.
 export function scoresWriteFailing(row: Record<string, unknown> | null | undefined, now: Date): string | null {
   const a = age(row?.write_failed_since, now);
   if (a === null || a <= WRITE_FAILED_ALERT_MS) return null;

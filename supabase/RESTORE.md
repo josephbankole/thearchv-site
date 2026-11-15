@@ -23,7 +23,7 @@ applying anything (dashboard, Vault, or `select vault.create_secret('<value>', '
 
 A migration that schedules a cron job raises a warning when its secret is missing. The scores jobs are
 then scheduled but refused with 401; the daily-push, health-probe and triage-drain jobs are not
-touched at all (`20261115130000`), so set the secret and apply that one again.
+touched at all (`20261115170000`), so set the secret and apply that one again.
 
 ## 2. Migrations, in timestamp order across both repos
 

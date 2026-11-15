@@ -1,6 +1,6 @@
 // What one sport's daily-push fan-out delivered, written by daily-push after it sends and read by
 // health-probe. The columns are on push_state (football) and push_sport_state (every other sport),
-// added by migration 20261115130100_push_run_outcome.sql. Pure, for push_run_test.ts.
+// added by migration 20261115170100_push_run_outcome.sql. Pure, for push_run_test.ts.
 
 // The most dead tokens one daily-push run deletes (MAX_TOKEN_DELETIONS_PER_RUN in
 // daily-push/index.ts). More than this in one sport's run means cleanup cannot keep up, which is the

@@ -209,7 +209,7 @@ first reader starts with the next new story rather than an old one.
 
 After each fan-out, daily-push writes what it delivered onto the same row: `last_run_at`,
 `last_run_claimed`, `last_run_sent`, `last_run_failed`, `last_run_dead` and up to five
-`last_run_reasons` (`_shared/push_run.ts`, migration `20261115130100_push_run_outcome.sql`, which goes
+`last_run_reasons` (`_shared/push_run.ts`, migration `20261115170100_push_run_outcome.sql`, which goes
 in before either function is deployed). The lead is recorded as sent before the sends, so these are
 the only place a run that APNs refused (a revoked key, a wrong `APNS_ENV`) shows up. health-probe
 alerts, as `push-run:<sport>`, when a sport's last run in the past 48 hours sent nothing, failed more
@@ -259,7 +259,7 @@ for every token) costs at most 25 rows a run rather than the table, and a large 
 run. Raise the constant if a one-off drain needs to go faster, and watch the anomaly field while it
 does.
 
-The schedule is a migration, `supabase/migrations/20261115130000_health_and_cron_from_repo.sql`. It
+The schedule is a migration, `supabase/migrations/20261115170000_health_and_cron_from_repo.sql`. It
 runs `archv-daily-push` hourly (it only sends when a sport has a new lead, so the one-a-day promise
 holds), `health-probe` every 30 minutes and `triage-drain` hourly at :20. Each call reads its guard
 secret from Vault (`push_secret`, `triage_secret`) when it runs, so no secret sits in `cron.job`.
@@ -313,8 +313,8 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `salon-mirror` | the `salon-art` bucket lists fewer than 452 JPEGs (the 15 Nov 2026 catalog's count; raise `MIRROR_MIN_FILES` in `checks.ts` when the catalog adds works), or one of 3 files picked at random does not answer 200 at its public URL |
 | `push-run`, `push-sport`, `scores-*` | also when the state row cannot be read |
 
-Deploy health-probe after the push migration (`20261115130100`): without its columns `push-run`
-reports a read error. `scores-write` needs migration `20261115130200`; before it, scores-poll does
+Deploy health-probe after the push migration (`20261115170100`): without its columns `push-run`
+reports a read error. `scores-write` needs migration `20261115170200`; before it, scores-poll does
 not track failed uploads and the check stays quiet, so either order is safe.
 
 ### Alerts that do not depend on email

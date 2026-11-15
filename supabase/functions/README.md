@@ -130,7 +130,7 @@ alike, and the functions email him for both:
 | A triage attempt fails (API error or unreadable answer) | `pending_triage`, `triage_attempts` up by one | nobody yet; triage-drain retries within the hour |
 | The third attempt fails | `l2_working`, tier `l2` | founder email, "Triage failed" |
 | The user replies on an L1 ticket that was resolved (or left at `l1_working`) | `pending_triage` | nobody; triage-drain triages it with the whole conversation |
-| The user replies on an L2 or L3 ticket | reopened if it was resolved | founder email, "Ticket follow-up", for the first user message since anyone else wrote |
+| The user replies on an L2 or L3 ticket | reopened if it was resolved | founder email, "Ticket follow-up", at most one per ticket every 6 hours (each email leaves an internal system note that sets the clock) |
 
 An attempt that ends in an Anthropic API error makes no paid call, so it gives its place under the
 daily ceiling back (`triage_permit_release`). triage-drain takes the tickets with the fewest failed

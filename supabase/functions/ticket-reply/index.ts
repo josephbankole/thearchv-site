@@ -3,7 +3,7 @@
 import { adminClient } from "../_shared/cors.ts";
 import { realEnv } from "../_shared/http.ts";
 import { sendFounderMail } from "../_shared/zoho.ts";
-import { handleTicketReply, type ReplyStore, type ReplyTicket } from "./handler.ts";
+import { FOUNDER_NOTICE, handleTicketReply, type ReplyStore, type ReplyTicket } from "./handler.ts";
 
 Deno.serve((req) => {
   const supabase = adminClient();
@@ -34,6 +34,28 @@ Deno.serve((req) => {
     },
     async setStatus(ticketId, status) {
       const { error } = await supabase.from("tickets").update({ status }).eq("id", ticketId);
+      return error ? { error: error.message } : {};
+    },
+    async lastFounderNotice(ticketId) {
+      const { data, error } = await supabase
+        .from("ticket_messages")
+        .select("created_at")
+        .eq("ticket_id", ticketId)
+        .eq("internal", true)
+        .eq("author", "system")
+        .eq("body", FOUNDER_NOTICE)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      // On a read error, treat it as no notice: an extra email beats a lost follow-up.
+      if (error) console.error("ticket-reply: notice read failed", error.message);
+      const at = (data as { created_at?: string } | null)?.created_at;
+      return at ? Date.parse(at) : null;
+    },
+    async addNote(ticketId, body) {
+      const { error } = await supabase
+        .from("ticket_messages")
+        .insert({ ticket_id: ticketId, author: "system", body, internal: true });
       return error ? { error: error.message } : {};
     },
   };

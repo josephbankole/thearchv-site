@@ -1,6 +1,6 @@
 // Unit tests for ticket-reply (handler.ts). Run: `deno test` from this dir. No network, no
 // permissions: the environment, the database and the mailer are fakes.
-import { handleTicketReply, type ReplyStore, type ReplyTicket } from "./handler.ts";
+import { FOLLOW_UP_QUIET_MS, handleTicketReply, type ReplyStore, type ReplyTicket } from "./handler.ts";
 
 function assertEquals(actual: unknown, expected: unknown, msg = ""): void {
   const a = JSON.stringify(actual);
@@ -11,9 +11,16 @@ function assertEquals(actual: unknown, expected: unknown, msg = ""): void {
 const SECRET = "s3cret";
 const env = (k: string) => (k === "ARCHV_APP_SECRET" ? SECRET : undefined);
 
-function world(ticket: Partial<ReplyTicket>, thread: { author: string; body: string }[] = [], insertError?: string) {
+const T0 = Date.UTC(2026, 10, 15, 12);
+
+function world(
+  ticket: Partial<ReplyTicket>,
+  thread: { author: string; body: string }[] = [],
+  insertError?: string,
+  lastNotice: number | null = null,
+) {
   const t: ReplyTicket = { id: "t1", device_id: "d1", status: "resolved_l1", tier: "l1", category: "bug", body: "hi", ...ticket };
-  const state = { status: t.status, inserted: [] as string[], mails: [] as string[] };
+  const state = { status: t.status, inserted: [] as string[], mails: [] as string[], notes: [] as string[], clock: T0, notice: lastNotice };
   const store: ReplyStore = {
     getTicket: (id) => Promise.resolve({ ticket: id === t.id ? t : null }),
     thread: () => Promise.resolve(thread),
@@ -26,12 +33,18 @@ function world(ticket: Partial<ReplyTicket>, thread: { author: string; body: str
       state.status = status;
       return Promise.resolve({});
     },
+    lastFounderNotice: () => Promise.resolve(state.notice),
+    addNote: (_id, body) => {
+      state.notes.push(body);
+      state.notice = state.clock;
+      return Promise.resolve({});
+    },
   };
   const mail = (subject: string) => {
     state.mails.push(subject);
     return Promise.resolve(true);
   };
-  return { deps: { env, store, mail }, state };
+  return { deps: { env, store, mail, now: () => state.clock }, state };
 }
 
 const post = (body: unknown, header: string | null = SECRET) =>
@@ -93,10 +106,41 @@ Deno.test("a resolved L2 ticket is reopened as l2_working, an L3 one as escalate
   assertEquals(three.state.status, "escalated_l3");
 });
 
-Deno.test("a second user message in a row does not email again", async () => {
-  const w = world({ tier: "l2", status: "l2_working" }, [{ author: "l1", body: "Passed on." }, { author: "user", body: "hello?" }]);
+Deno.test("a second follow-up soon after the first does not email again", async () => {
+  const w = world({ tier: "l2", status: "l2_working" }, [{ author: "l1", body: "Passed on." }]);
   await quietly(() => handleTicketReply(reply(), w.deps));
-  assertEquals(w.state.mails, []);
+  w.state.clock += 60 * 1000;
+  await quietly(() => handleTicketReply(reply("hello?"), w.deps));
+  assertEquals(w.state.mails.length, 1);
+  assertEquals(w.state.notes.length, 1, "one notice note per email");
+});
+
+Deno.test("a ticket whose thread is only the user's message still emails the founder", async () => {
+  // A ticket that failed triage reaches the founder with no L1 reply on the thread.
+  const w = world({ tier: "l2", status: "l2_working" }, [{ author: "user", body: "hi" }]);
+  await quietly(() => handleTicketReply(reply(), w.deps));
+  assertEquals(w.state.mails, ["Ticket follow-up (L2): bug"]);
+});
+
+Deno.test("a follow-up a day after the last email emails again, though the user wrote last", async () => {
+  const w = world(
+    { tier: "l3", status: "escalated_l3" },
+    [{ author: "user", body: "hi" }, { author: "user", body: "any news?" }],
+    undefined,
+    T0 - 24 * 60 * 60 * 1000,
+  );
+  await quietly(() => handleTicketReply(reply("still waiting"), w.deps));
+  assertEquals(w.state.mails, ["Ticket follow-up (L3): bug"]);
+  const quiet = world({ tier: "l3", status: "escalated_l3" }, [], undefined, T0 - FOLLOW_UP_QUIET_MS + 1000);
+  await quietly(() => handleTicketReply(reply(), quiet.deps));
+  assertEquals(quiet.state.mails, [], "inside the quiet window");
+});
+
+Deno.test("a failed email leaves no notice, so the next follow-up tries again", async () => {
+  const w = world({ tier: "l2", status: "l2_working" });
+  const deps = { ...w.deps, mail: () => Promise.resolve(false) };
+  await quietly(() => handleTicketReply(reply(), deps));
+  assertEquals(w.state.notes, []);
 });
 
 Deno.test("someone else's ticket is 404, and the cap marker is 429", async () => {

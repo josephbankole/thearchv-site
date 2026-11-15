@@ -7,8 +7,11 @@
 //     ticket still waiting for triage ('new', 'pending_triage') is left as it is: when triage runs
 //     it reads the thread, this message included.
 //   * An L2 or L3 ticket emails the founder, who handles both tiers. A resolved one is reopened
-//     first. Only the first user message since anyone else last wrote on the thread sends an
-//     email, so a run of messages is one email, not twenty.
+//     first. Each email leaves an internal system note, and no second email goes for the same
+//     ticket until FOLLOW_UP_QUIET_MS has passed since that note, so a run of messages is one
+//     email, not twenty, while a message hours or days later always reaches the founder. This
+//     does not depend on who wrote last: the founder replies outside the thread, so the last
+//     public author can stay 'user' for good.
 //
 // index.ts wires this to the database and the mailer; handler_test.ts tests it.
 import { corsHeaders, type Env, json } from "../_shared/http.ts";
@@ -21,6 +24,11 @@ const REOPEN_STATUS: Record<string, string> = {
   l3: "escalated_l3",
 };
 const RESOLVED = new Set(["resolved_l1", "resolved_l2", "resolved", "closed"]);
+
+// The internal note body that marks a follow-up email to the founder, and how long after one the
+// next follow-up on that ticket stays quiet.
+export const FOUNDER_NOTICE = "founder notified of a user follow-up";
+export const FOLLOW_UP_QUIET_MS = 6 * 60 * 60 * 1000;
 
 export type ReplyTicket = {
   id: string;
@@ -38,11 +46,20 @@ export type ReplyStore = {
   thread(ticketId: string): Promise<ThreadMessage[]>;
   insertMessage(row: { ticket_id: string; author: string; body: string }): Promise<{ error?: string }>;
   setStatus(ticketId: string, status: string): Promise<{ error?: string }>;
+  // When the newest FOUNDER_NOTICE note on this ticket was written, in ms since the epoch, or null.
+  lastFounderNotice(ticketId: string): Promise<number | null>;
+  // Writes an internal system note (never shown to the user).
+  addNote(ticketId: string, body: string): Promise<{ error?: string }>;
 };
 
 export async function handleTicketReply(
   req: Request,
-  deps: { env: Env; store: ReplyStore; mail: (subject: string, content: string) => Promise<boolean> },
+  deps: {
+    env: Env;
+    store: ReplyStore;
+    mail: (subject: string, content: string) => Promise<boolean>;
+    now?: () => number;
+  },
 ): Promise<Response> {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
@@ -97,14 +114,21 @@ export async function handleTicketReply(
     const { error } = await deps.store.setStatus(ticket_id, REOPEN_STATUS[tier] ?? "l2_working");
     if (error) console.error("ticket-reply: reopen failed", error);
   }
-  const lastAuthor = before.length ? before[before.length - 1].author : null;
-  if (lastAuthor !== "user") {
+  const now = (deps.now ?? Date.now)();
+  const last = await deps.store.lastFounderNotice(ticket_id);
+  if (last === null || now - last >= FOLLOW_UP_QUIET_MS) {
     const label = `follow-up on an ${tier.toUpperCase()} ticket`;
     const sent = await deps.mail(
       `Ticket follow-up (${tier.toUpperCase()}): ${ticket.category ?? "ticket"}`,
       founderMail(ticket, label, [...before, { author: "user", body }], "", ""),
     );
-    if (!sent) console.error(JSON.stringify({ fn: "ticket-reply", ticket: ticket_id, mail: "not sent" }));
+    if (sent) {
+      const { error } = await deps.store.addNote(ticket_id, FOUNDER_NOTICE);
+      if (error) console.error("ticket-reply: notice note failed", error);
+    } else {
+      // No note, so the next follow-up tries the email again.
+      console.error(JSON.stringify({ fn: "ticket-reply", ticket: ticket_id, mail: "not sent" }));
+    }
   }
   return json({ ok: true }, 200);
 }

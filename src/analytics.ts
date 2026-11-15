@@ -67,6 +67,9 @@ export async function initAnalytics(): Promise<void> {
     capture_pageview: true,
     capture_pageleave: true,
     disable_session_recording: true,
+    // Same three privacy switches as the static pages' snippet (public/app, /start, /quiz,
+    // /dispatch): replay and surveys stay off in code whatever the PostHog project toggles say.
+    disable_surveys: true,
     respect_dnt: true,
     persistence: 'localStorage',
     person_profiles: 'identified_only',

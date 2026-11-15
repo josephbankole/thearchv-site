@@ -9,20 +9,41 @@
 -- characters. The shipped iOS client produces exactly 64 (a 32-byte token rendered with
 -- `String(format: "%02x", $0)`); the upper bound leaves room for Apple lengthening device tokens
 -- without a migration. Keep this constraint and APNS_TOKEN_RE in
--- supabase/functions/register-push/index.ts in step — they are deliberately identical.
+-- supabase/functions/register-push/handler.ts in step: they are deliberately identical.
 --
--- NOT VALID on purpose. Existing rows are not scanned and not rejected: the table may already hold
--- legacy rows that do not match, and failing this migration on them would be worse than leaving
--- them for daily-push's cleanup to remove (a CHECK constraint never blocks a DELETE, so cleanup
--- still drains them). The constraint IS enforced for every subsequent insert and update, which is
--- what closes the hole. Once the table is clean, promote it with the one-liner in
--- supabase/functions/README.md:
---   alter table public.push_tokens validate constraint push_tokens_token_format;
+-- The table is cleaned BEFORE the constraint goes on, and the constraint is added fully validated.
+-- (An earlier draft added it NOT VALID and left legacy rows for daily-push to remove. That does
+-- not work: Postgres checks a CHECK constraint on every UPDATE, valid or not, and
+-- claim_push_tokens (20261012160124) claims a whole chunk of tokens in one UPDATE, so one
+-- out-of-shape row would fail every claim in its chunk on every run and never be removed.)
+--
+--   1. Hex tokens stored in upper or mixed case are lowercased, unless the lowercase form already
+--      has its own row (or another case variant got there first, newest last_seen wins), in which
+--      case the duplicate is dropped in step 2.
+--   2. Every row still out of shape is deleted. No such row can ever take a push.
+--   3. The constraint is added and validated over the now-clean table.
+--
+-- Safe to run twice: on a clean table steps 1 and 2 touch nothing, and the constraint is dropped
+-- and re-added. Run the count query in supabase/functions/README.md first to see how many rows
+-- steps 1 and 2 will change.
+
+update public.push_tokens as t
+   set token = lower(t.token)
+ where t.id in (
+   select distinct on (lower(u.token)) u.id
+     from public.push_tokens as u
+    where u.token ~ '^[0-9a-fA-F]{64,200}$'
+      and u.token <> lower(u.token)
+      and not exists (select 1 from public.push_tokens as d where d.token = lower(u.token))
+    order by lower(u.token), u.last_seen desc
+ );
+
+delete from public.push_tokens
+ where token !~ '^[0-9a-f]{64,200}$';
 
 alter table public.push_tokens
   drop constraint if exists push_tokens_token_format;
 
 alter table public.push_tokens
   add constraint push_tokens_token_format
-  check (token ~ '^[0-9a-f]{64,200}$')
-  not valid;
+  check (token ~ '^[0-9a-f]{64,200}$');

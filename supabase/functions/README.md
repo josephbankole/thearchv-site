@@ -746,38 +746,38 @@ report:
 `supabase/migrations/20261115120000_push_token_format_check.sql` mirrors that rule as a CHECK
 constraint on `push_tokens.token`. The iOS client has always sent exactly 64 lowercase hex, so no
 shipped build is affected; the upper bound leaves room for Apple lengthening device tokens. Keep
-the regex in `register-push/index.ts` and the one in the migration identical.
+the regex in `register-push/handler.ts` and the one in the migration identical.
+
+The migration cleans the table before it adds the constraint, and adds it validated. It lowercases
+hex tokens stored in upper or mixed case and deletes every row still out of shape. It cannot be
+added NOT VALID and left for later: Postgres checks a CHECK constraint on every UPDATE, and
+`claim_push_tokens` claims a whole chunk of tokens in one UPDATE, so one legacy row out of shape
+would fail that chunk's claim on every run.
 
 Deploy in this order:
 
 ```
-# 1. The function first, so the boundary check is already turning away anything the constraint
+# 1. See what the migration will change. Neither kind of row can take a push today.
+psql "$SUPABASE_DB_URL" -c "select count(*) filter (where token ~ '^[0-9a-fA-F]{64,200}$' and token <> lower(token)) as to_lowercase, count(*) filter (where token !~ '^[0-9a-fA-F]{64,200}$') as to_delete from public.push_tokens;"
+
+# 2. The function, so the boundary check is already turning away anything the constraint
 #    would reject. The other way round, an old deployment would hand a malformed token to the
 #    database and the caller would see a 500 instead of a clean 400.
 supabase functions deploy register-push --no-verify-jwt
 
-# 2. Then the constraint. It is added NOT VALID: existing rows are neither scanned nor rejected,
-#    while every later insert and update is checked. Apply the one file and record it (see the
-#    note on `supabase migration list --linked` under daily-push's Migration).
+# 3. Then the cleanup and the constraint, in one transaction. Apply the one file and record it
+#    (see the note on `supabase migration list --linked` under daily-push's Migration).
 psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120000_push_token_format_check.sql
 supabase migration repair --status applied 20261115120000
 
-# 3. Then the cap exemption: a token that already has a row is no longer counted by the hourly
+# 4. Then the cap exemption: a token that already has a row is no longer counted by the hourly
 #    insert cap, so an opt-out or a sport change always lands whatever the hour's count.
 psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120100_push_token_cap_exemptions.sql
 supabase migration repair --status applied 20261115120100
 
-# 4. Then the bounded cleanup.
+# 5. Then the bounded cleanup.
 supabase functions deploy daily-push --no-verify-jwt
 ```
 
-Legacy rows that predate the constraint are left for `daily-push` to remove as APNs reports them
-dead (a CHECK constraint never blocks a DELETE). Once none are left, promote the constraint with
-one line in the SQL editor:
-
-```sql
--- What is still out of shape?
-select count(*) from public.push_tokens where token !~ '^[0-9a-f]{64,200}$';
--- When that is 0:
-alter table public.push_tokens validate constraint push_tokens_token_format;
-```
+To confirm afterwards, `select convalidated from pg_constraint where conname = 'push_tokens_token_format';`
+returns `t`.

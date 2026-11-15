@@ -70,4 +70,34 @@ begin
   raise notice 'ticket_messages_hourly_cap: ok';
 end $$;
 
+-- push_tokens_token_format (20261115120000): validated, so no out-of-shape row can sit in a
+-- claim_push_tokens chunk and fail the whole UPDATE; a malformed token is refused on insert.
+do $$
+declare
+  refused boolean := false;
+  claimed int;
+begin
+  if not (select convalidated from pg_constraint where conname = 'push_tokens_token_format') then
+    raise exception 'FAIL token format: push_tokens_token_format is not validated';
+  end if;
+
+  begin
+    insert into public.push_tokens (device_id, token) values ('fmt-device', 'not-a-token');
+  exception when check_violation then
+    refused := true;
+  end;
+  if not refused then
+    raise exception 'FAIL token format: a malformed token was stored';
+  end if;
+
+  select count(*) into claimed
+    from public.claim_push_tokens(
+      array[lpad(to_hex(2), 64, '0'), lpad(to_hex(3), 64, '0'), 'not-a-token'], current_date);
+  if claimed <> 2 then
+    raise exception 'FAIL token format: claim_push_tokens returned % rows, expected 2', claimed;
+  end if;
+
+  raise notice 'push_tokens_token_format: ok';
+end $$;
+
 rollback;

@@ -463,6 +463,12 @@ const html = `${documentShell({
           per cent), which sections come into view, and clicks on links to the App Store, our
           Etsy shop, Instagram and our long reads. A long read click records the link's
           address and its text.</li>
+          <li><strong>On story pages.</strong> A tap on the share, post to X or copy link
+          buttons, with the story's address.</li>
+          <li><strong>On the start and app pages.</strong> Taps on their buttons and links,
+          such as the App Store badge, the story link and the follow button, with where the
+          link goes. The start page also records when you scroll most of the way down it, and
+          whether its card for today's story loaded.</li>
           <li><strong>On the games.</strong> On the quiz, the daily archive game and the player
           comparisons, an event when you play, finish or share one.</li>
           <li><strong>Browser details.</strong> Every event carries details that PostHog's own

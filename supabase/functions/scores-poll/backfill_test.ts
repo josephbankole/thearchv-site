@@ -264,6 +264,30 @@ Deno.test("the index only grows: older days are kept, and the days it rebuilds a
   ]);
 });
 
+Deno.test("a day the minute poll adds to the index while a backfill runs is kept", async () => {
+  const season = seasonOf("2026-10-08", 6, 7);
+  const store = memoryStore();
+  const fake = fakeApi(season);
+  let pollWrote = false;
+  const api: ApiGet = (path) => {
+    if (path.includes("ids=") && !pollWrote) {
+      // The poll merges today into the index between the backfill's first read and its first write.
+      pollWrote = true;
+      store.files.set(INDEX_PATH, JSON.stringify({
+        schema: "archv-days/1",
+        generatedAt: NOW.toISOString(),
+        days: [{ date: "2026-10-14", count: 5 }],
+      }));
+    }
+    return fake.api(path);
+  };
+  const { summary } = await run("2026-10-08", season, store, { api: { api, calls: fake.calls } });
+  assertEquals(summary.ok, true);
+  const days = json(store, INDEX_PATH).days;
+  assertEquals(days[0], { date: "2026-10-14", count: 5 });
+  assertEquals(days.length, 7);
+});
+
 Deno.test("an index it cannot read stops the run before any request or write", async () => {
   const season = seasonOf("2026-10-12", 2, 3);
   const bad = memoryStore();

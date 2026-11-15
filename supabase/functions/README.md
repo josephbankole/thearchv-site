@@ -873,3 +873,34 @@ supabase functions deploy daily-push --no-verify-jwt
 
 To confirm afterwards, `select convalidated from pg_constraint where conname = 'push_tokens_token_format';`
 returns `t`.
+
+## Abuse controls on android-waitlist
+
+`android-waitlist` is the one public endpoint that takes an unauthenticated write from anyone, and
+the publishable key it needs ships in the `/app/` page. Its layers, cheapest to defeat last:
+
+1. **Origin refusal.** A request whose `Origin` header is present and not `https://thearchv.ca` or
+   `https://www.thearchv.ca` is refused with a 403 before the body is read, so another site's page
+   cannot write here. A request with no `Origin` (curl, a script) is not affected, so this stops
+   browsers, not scripts.
+2. **Per-IP cap.** At most 5 signups an hour from one client IP, claimed through the
+   `waitlist_rate_claim` RPC (`supabase/migrations/20261115180000_android_waitlist_source_caps.sql`)
+   before the insert, so one host cannot spend the whole hour's ceiling and lock real visitors
+   out. Only a SHA-256 of the IP is stored, in `waitlist_rate_hits`. The forwarded IP can be
+   rotated by a determined caller, so this raises the cost of a flood; it does not authenticate
+   anyone. A limiter error lets the signup through, because the global ceiling still holds.
+3. **Global 300 an hour** (`20260722120000`), unchanged, as the last resort.
+
+Deploy the migration before the function, or either order: the function treats a missing RPC as a
+limiter error and lets the signup through, and nothing else calls the RPC.
+
+### Still open, and the founder's call
+
+- **A challenge (Cloudflare Turnstile).** `verifyChallenge()` in `android-waitlist/index.ts` is
+  scaffolded and does nothing until `WAITLIST_CAPTCHA_SECRET` is set. Turning it on needs a site
+  key and the widget on `public/app/index.html` sending `captcha_token`, then the deploy, then the
+  secret, in that order, so no real signup is refused part way.
+- **Double opt-in.** Anyone can still put someone else's address on the list. Fixing that needs a
+  `confirmed_at` column, a confirmation email from a mail sender, and a confirm endpoint. Until it
+  lands, quote the total as addresses submitted, not addresses confirmed, and do not mail the list
+  without a confirmation step.

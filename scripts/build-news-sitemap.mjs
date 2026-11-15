@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 import { byDateDesc, SPORTS } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { publishedAt, torontoIso } from "./shared/entry-dates.mjs";
+import { isIndexable } from "./shared/retro-noindex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -65,8 +66,9 @@ const reads = longReads.map((r) => ({
 const cutoff = Date.now() - WINDOW_MS;
 const items = lanes
   .flatMap(({ base, days }) => days.map((d) => ({ ...d, path: `${base}${d.date}/` })))
-  // G1 (search plan week 4, 2026-10-11): a noindex page leaves the news sitemap at once (plan 1.2).
-  .filter((it) => indexDecision(it, TODAY).index)
+  // G1 (search plan week 4, 2026-10-11): a noindex page leaves the news sitemap at once (plan 1.2),
+  // whether its own fields say so or it is on the staged retro noindex list.
+  .filter((it) => isIndexable(it, it.path, TODAY, indexDecision))
   .concat(reads)
   .filter((it) => Date.parse(publishedAt(it)) >= cutoff)
   .sort(byDateDesc);

@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { retroInSitemap } from "../shared/retro-noindex.mjs";
+import { retroInSitemap, isIndexable } from "../shared/retro-noindex.mjs";
 
 const DATA = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "data", "retro-noindex.json"), "utf8"));
 
@@ -28,4 +28,15 @@ test("a listed path keeps its row through sitemapUntil and loses it the day afte
 
 test("an unlisted path always keeps its row", () => {
   assert.equal(retroInSitemap("/desk/transfer/2099-01-01/", "2100-01-01"), true);
+});
+
+// site-build-5: feed.xml and news-sitemap.xml skip a listed page even when its own fields say index.
+test("isIndexable refuses a listed path whatever indexDecision says", () => {
+  const yes = () => ({ index: true });
+  const no = () => ({ index: false });
+  for (const b of DATA.batches) {
+    assert.equal(isIndexable({}, b.paths[0], b.date, yes), false, b.paths[0]);
+  }
+  assert.equal(isIndexable({}, "/desk/transfer/2099-01-01/", "2099-01-02", yes), true);
+  assert.equal(isIndexable({}, "/desk/transfer/2099-01-01/", "2099-01-02", no), false);
 });

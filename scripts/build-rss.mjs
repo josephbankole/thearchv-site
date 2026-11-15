@@ -18,6 +18,7 @@ import { byDateDesc, esc, escAttr, SPORTS, laneByFeedKey } from "./shared/page-s
 import { loadDayData } from "./shared/day-data.mjs";
 import { sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { publishedAt, rfc822, newest, torontoIso } from "./shared/entry-dates.mjs";
+import { isIndexable } from "./shared/retro-noindex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -90,8 +91,9 @@ const readItems = longReads.map((r) => ({
 
 const items = lanes
   .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
-  // G1 (search plan week 4, 2026-10-11): a dated entry filed noindex is not syndicated.
-  .filter((it) => indexDecision(it, TODAY).index)
+  // G1 (search plan week 4, 2026-10-11): a dated entry filed noindex is not syndicated, and nor is
+  // a page on the staged retro noindex list (plan 1.2), which its article page renders noindex.
+  .filter((it) => isIndexable(it, `${it.base}${it.date}/`, TODAY, indexDecision))
   .concat(readItems)
   .sort(byDateDesc)
   .slice(0, MAX_ITEMS);

@@ -63,6 +63,16 @@ export function retroNoindex(path) {
   return hit;
 }
 
+/* Whether a dated entry at `path` is indexable on `today`: not on the staged retro list, and
+   indexDecision (src/lib/entryGates.ts, passed in because this module never loads the TS data)
+   says index. The feeds that advertise pages (feed.xml, news-sitemap.xml) use this so a page the
+   article generator renders noindex,follow is never syndicated or sent to Google News. Does not
+   count as a render for retroNoindexReport. */
+export function isIndexable(entry, path, today, indexDecision) {
+  if (LISTED.has(path)) return false;
+  return indexDecision(entry, today).index;
+}
+
 /* Whether a site path keeps its sitemap.xml row on `today` (YYYY-MM-DD, Toronto). An unlisted path
    always does; a listed one does until its batch's sitemapUntil, inclusive. Does not count as a
    render for retroNoindexReport. */

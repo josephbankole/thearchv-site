@@ -177,10 +177,16 @@ function ogAsset(it) {
 // The article as a self-contained HTML fragment: standfirst, illustration, body, rights notice.
 // Absolute image URL because the fragment is read far away from thearchv.ca. No width/height:
 // the real pixel size is not read here, and a wrong dimension is worse than none.
+/* content:encoded is republished away from thearchv.ca (Flipboard, Microsoft Start and other
+   readers) with no xml:base, so a site-root link such as href="/reads/x/" from the long-read
+   markdown would resolve against the reader's host. Make every site-root href absolute; a
+   protocol-relative "//" href is left alone (longreadMd never emits one). */
+const absoluteLinks = (html) => String(html).replace(/(<a\b[^>]*?\shref=")\/(?!\/)/g, `$1${SITE}/`);
+
 function contentHtml(entry, img) {
   const parts = [`<p><strong>${esc(entry.dek)}</strong></p>`];
   if (img) parts.push(`<figure><img src="${escAttr(img.url)}" alt="${escAttr(img.alt)}" /></figure>`);
-  parts.push(entry.html ?? bodyHtml(entry.body));
+  parts.push(absoluteLinks(entry.html ?? bodyHtml(entry.body)));
   parts.push(`<p>${esc(RIGHTS)}</p>`);
   return parts.filter(Boolean).join("\n");
 }

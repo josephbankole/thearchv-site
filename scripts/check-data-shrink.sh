@@ -1,38 +1,55 @@
 #!/usr/bin/env bash
 # check-data-shrink.sh: refuse a push that shrinks or rewinds a desk-written data file.
 #
-# Usage:  bash scripts/check-data-shrink.sh <base-sha>
+# Usage:  bash scripts/check-data-shrink.sh <base-sha> [<fallback-sha> ...]
 #
-# deploy.yml runs this as a job the build needs, with <base-sha> set to the commit main
-# pointed at before the push (github.event.before), so a push of several commits is judged
-# as a whole and a red result stops the Pages deploy. With no usable base it falls back to
-# HEAD~1. The file list is DATA_FILES in scripts/data-files.sh.
+# deploy.yml runs this as a job the build needs. The first argument is the commit the last
+# successful "Deploy to GitHub Pages" run built, so the check is always against what is live:
+# a blocked push stays blocked on every later push until the data is restored, instead of
+# becoming the base the next desk commit is judged against. The second is the commit main
+# pointed at before the push (github.event.before). The first candidate that exists and is an
+# ancestor of HEAD is used; with none, HEAD~1. The file list is DATA_FILES in scripts/data-files.sh.
 #
 # Checks, per file, against the base:
-#   *.ts            number of `date: "YYYY-MM-DD"` entries must not drop
+#   answers.ts      number of `slug: "..."` entries must not drop
+#   other *.ts      number of `date: "YYYY-MM-DD"` entries must not drop
 #   wire.json       edition count must not drop; newest edition date and updatedAt must not go back
 #   tables.json     sports count must not drop; updatedAt must not go back
 #
-# A deliberate removal: put [data-shrink-ok] in a commit message in the pushed range.
+# A deliberate removal: a commit in base..HEAD carries a git trailer (a line in the message's
+# last paragraph) whose key is Data-Shrink-OK and whose value says why. Text in the body of a
+# message does not count.
 set -euo pipefail
 cd "$(dirname "$0")/.."   # repo root
 # shellcheck source=scripts/data-files.sh
 . scripts/data-files.sh
 
-base="${1:-}"
-if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ] \
-   || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
-  echo "No usable base commit ('${base}'); comparing against HEAD~1."
-  base="HEAD~1"
+usable() {
+  local c="$1"
+  [ -n "$c" ] && [ "$c" != "0000000000000000000000000000000000000000" ] \
+    && git cat-file -e "${c}^{commit}" 2>/dev/null \
+    && git merge-base --is-ancestor "$c" HEAD 2>/dev/null
+}
+
+base=""
+for cand in "$@"; do
+  if usable "$cand"; then base="$cand"; break; fi
+  echo "Base candidate '${cand}' is missing or not an ancestor of HEAD; trying the next."
+done
+if [ -z "$base" ]; then
   if ! git cat-file -e "HEAD~1^{commit}" 2>/dev/null; then
-    echo "No parent commit either; nothing to compare. Passing."
+    echo "No usable base and no parent commit; nothing to compare. Passing."
     exit 0
   fi
+  echo "No usable base commit; comparing against HEAD~1."
+  base="HEAD~1"
 fi
 echo "Comparing data files at HEAD against ${base}."
 
-if git log --format=%B "${base}..HEAD" | grep -qF '[data-shrink-ok]'; then
-  echo "::warning::[data-shrink-ok] found in a pushed commit message; data shrink guard skipped."
+ok_reason="$(git log --format='%(trailers:key=Data-Shrink-OK,valueonly,separator=%x20)' "${base}..HEAD" \
+  | grep -m1 '[^[:space:]]' || true)"
+if [ -n "$ok_reason" ]; then
+  echo "::warning::Data-Shrink-OK trailer found in base..HEAD (${ok_reason}); data shrink guard skipped."
   exit 0
 fi
 
@@ -41,11 +58,17 @@ trap 'rm -rf "$tmp"' EXIT
 fail=0
 
 count_dates() { grep -oE "date: [\"'][0-9-]+[\"']" "$1" | wc -l | tr -d ' '; }
+count_slugs() { grep -cE '^[[:space:]]*slug: "' "$1" || true; }
 
 for f in $DATA_FILES; do
   prev="$tmp/prev_$(basename "$f")"
-  if ! git show "${base}:${f}" > "$prev" 2>/dev/null; then
+  if [ -z "$(git ls-tree "$base" -- "$f")" ]; then
     echo "$f: not in base (new file), skipping."
+    continue
+  fi
+  if ! git show "${base}:${f}" > "$prev"; then
+    echo "::error::$f could not be read at ${base}."
+    fail=1
     continue
   fi
   if [ ! -f "$f" ]; then
@@ -54,6 +77,14 @@ for f in $DATA_FILES; do
     continue
   fi
   case "$f" in
+    */answers.ts)
+      p=$(count_slugs "$prev"); c=$(count_slugs "$f")
+      echo "$f: entries previous=$p current=$c"
+      if [ "$c" -lt "$p" ]; then
+        echo "::error::$f has fewer entries ($c) than ${base} ($p)."
+        fail=1
+      fi
+      ;;
     *.ts)
       p=$(count_dates "$prev"); c=$(count_dates "$f")
       echo "$f: entries previous=$p current=$c"
@@ -85,7 +116,7 @@ for f in $DATA_FILES; do
 done
 
 if [ "$fail" -ne 0 ]; then
-  echo "::error::A data file shrank or went back in time. This looks like a clobbering merge (for example an outdated preview branch overwriting main). The deploy is stopped. If the removal is deliberate, push a commit whose message contains [data-shrink-ok]."
+  echo "::error::A data file shrank or went back in time. This looks like a clobbering merge (for example an outdated preview branch overwriting main). The deploy is stopped. If the removal is deliberate, push a commit whose message ends with a Data-Shrink-OK trailer giving the reason."
   exit 1
 fi
 echo "Data shrink guard: passed."

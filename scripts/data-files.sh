@@ -6,5 +6,5 @@
 # Add a new desk-written data file here and all three pick it up.
 DATA_FILES="src/data/transferDays.ts src/data/worldCupDays.ts src/data/leaguesDays.ts \
 src/data/nflDays.ts src/data/f1Days.ts src/data/tennisDays.ts src/data/golfDays.ts \
-src/data/basketballDays.ts src/data/longReads.ts \
+src/data/basketballDays.ts src/data/longReads.ts src/data/answers.ts \
 scripts/data/daily/wire.json scripts/data/daily/tables.json"

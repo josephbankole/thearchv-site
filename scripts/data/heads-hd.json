@@ -1,19 +1,8 @@
 {
   "schema": "archv.heads-hd/1",
   "size": 600,
-  "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered 2026-09-11 on the founder's prompt, verbatim, from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters).",
+  "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered 2026-09-11 on the founder's prompt, verbatim, from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters). 'withdrawn' holds rows taken off the site and the app on purpose, with the date and the reason; their files must not be served (scripts/shared/app-art.mjs refuses them, scripts/check-portrait-provenance.mjs fails the build if one is still registered).",
   "entries": [
-    {
-      "out": "amad",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115404_09614411-969b-42ca-aafd-a9fc64c83ed0.png",
-      "frame": "none",
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559906_102167030.jpg?fmt=jpg&f=CENTER&w=1200",
-        "job": "09614411-969b-42ca-aafd-a9fc64c83ed0",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
     {
       "out": "anderson",
       "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260622_092639_1a1fde91-827e-4873-877d-7a6e0d99050c.png",
@@ -566,39 +555,6 @@
       }
     },
     {
-      "out": "kobbie-mainoo",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115116_8a0128c3-f981-4fd3-ac8f-30ee1492f7a7.png",
-      "frame": "none",
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896330/media_102559979_102167103.jpg?fmt=jpg&f=CENTER&w=1200",
-        "job": "8a0128c3-f981-4fd3-ac8f-30ee1492f7a7",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
-      "out": "matheus-cunha",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115236_78344fc4-2464-4de5-8a70-9cb8d4839014.png",
-      "frame": "none",
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559903_102167027.jpg?fmt=jpg&f=CENTER&w=1200",
-        "job": "78344fc4-2464-4de5-8a70-9cb8d4839014",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
-      "out": "cristian-orozco",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_131101_e0c11e7c-48d3-4c9d-92b8-042b2e804e5f.png",
-      "frame": "none",
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://scoreplay-mam-media.s3.amazonaws.com/472/5702995/media_118426046_118036182.jpg",
-        "job": "e0c11e7c-48d3-4c9d-92b8-042b2e804e5f",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
-      }
-    },
-    {
       "out": "scott",
       "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115535_170a0b62-98bc-464f-bdb5-85c000f515aa.png",
       "frame": "none",
@@ -635,17 +591,6 @@
       }
     },
     {
-      "out": "alejandro-balde",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_af893e7f-6555-4b8d-8946-321e2e436ac4.png",
-      "frame": "none",
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/e6ad1688-d559-4991-a2a0-3c7fbfd1b14f/03-Balde.png?width=670&height=790",
-        "job": "af893e7f-6555-4b8d-8946-321e2e436ac4",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
       "out": "matthias-jaissle",
       "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_220e9a27-a343-441e-9ff4-91a3bad43ed8.png",
       "frame": "none",
@@ -675,55 +620,6 @@
         "page": "https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2658_(cropped2).jpg",
         "job": "01662a22-f37d-4130-a1c9-b9ca34a7c4c5",
         "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-      }
-    },
-    {
-      "out": "altay-bayindir",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_ca9ea6a5-e964-4da7-82a3-80f62644e124.png",
-      "frame": "none",
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://rccelta.es/app/uploads/2026/08/Altay-Bayindir.png",
-        "job": "ca9ea6a5-e964-4da7-82a3-80f62644e124",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
-      }
-    },
-    {
-      "out": "ian-maatsen",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_d41d5951-b7af-4cbc-a155-4d190f5f0a5e.png",
-      "frame": "none",
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://images.gc.avfcservices.co.uk/d013bd00-a79b-11f1-91b9-a70ca6456fb1.png",
-        "job": "d41d5951-b7af-4cbc-a155-4d190f5f0a5e",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
-      "out": "anthony-gordon",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_9106cc4d-13f1-405b-b635-a2ce914a514d.png",
-      "frame": "none",
-      "marks": [
-        [
-          1392,
-          1945,
-          1735,
-          2048,
-          "box"
-        ],
-        [
-          1388,
-          1945,
-          1526,
-          2048,
-          "box"
-        ]
-      ],
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/8dfb11f8-dbb7-46e8-ab7e-4bb47f44d05e/00-Gordon.png?width=670&height=790",
-        "job": "9106cc4d-13f1-405b-b635-a2ce914a514d",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
       }
     },
     {
@@ -1118,49 +1014,6 @@
       }
     },
     {
-      "out": "jackson-koivun",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122103_7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7.png",
-      "frame": "none",
-      "marks": [
-        [
-          755,
-          30,
-          1465,
-          280
-        ],
-        [
-          1495,
-          290,
-          1560,
-          385
-        ],
-        [
-          640,
-          1255,
-          775,
-          1525
-        ],
-        [
-          1445,
-          1270,
-          1540,
-          1555
-        ],
-        [
-          1470,
-          1925,
-          1700,
-          2048
-        ]
-      ],
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_66701.png",
-        "job": "7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
       "out": "wyndham-clark",
       "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122103_a8ebee84-8da7-4bf4-a1b6-a8c6b69cb5b8.png",
       "frame": "none",
@@ -1392,47 +1245,6 @@
       }
     },
     {
-      "out": "chris-gotterup",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_b09fa3ee-4dda-4b6e-95b5-e2789c64d812.png",
-      "frame": "none",
-      "marks": [
-        [
-          893,
-          236,
-          985,
-          325,
-          "flat"
-        ],
-        [
-          980,
-          252,
-          1075,
-          308,
-          "flat"
-        ],
-        [
-          1070,
-          236,
-          1178,
-          290,
-          "flat"
-        ],
-        [
-          958,
-          264,
-          1002,
-          302,
-          "flat"
-        ]
-      ],
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59095.png",
-        "job": "b09fa3ee-4dda-4b6e-95b5-e2789c64d812",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
       "out": "sungjae-im",
       "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_3181a786-43d8-4d93-961a-16a070e98191.png",
       "frame": "none",
@@ -1492,79 +1304,6 @@
       }
     },
     {
-      "out": "ryan-gerard",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_41d72a4f-ea5f-469e-a6c7-9d64cc1925da.png",
-      "frame": "none",
-      "marks": [
-        [
-          855,
-          195,
-          1110,
-          420
-        ],
-        [
-          625,
-          200,
-          860,
-          505
-        ],
-        [
-          1105,
-          230,
-          1362,
-          440
-        ],
-        [
-          1455,
-          498,
-          1497,
-          560
-        ],
-        [
-          1470,
-          555,
-          1512,
-          600
-        ],
-        [
-          527,
-          1585,
-          582,
-          1690
-        ],
-        [
-          545,
-          1675,
-          585,
-          1728
-        ],
-        [
-          790,
-          220,
-          900,
-          450
-        ],
-        [
-          1070,
-          220,
-          1150,
-          440
-        ],
-        [
-          800,
-          312,
-          885,
-          382
-        ]
-      ],
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59018.png",
-        "job": "41d72a4f-ea5f-469e-a6c7-9d64cc1925da",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
       "out": "patrick-cantlay",
       "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_803c875a-9853-4820-a563-a116da812737.png",
       "frame": "none",
@@ -1612,187 +1351,6 @@
         "page": "https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg",
         "job": "803c875a-9853-4820-a563-a116da812737",
         "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-      }
-    },
-    {
-      "out": "michael-thorbjornsen",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_d04ecac3-a6fd-46dd-84a4-c737d2b160c8.png",
-      "frame": "none",
-      "marks": [
-        [
-          628,
-          255,
-          800,
-          462
-        ],
-        [
-          795,
-          240,
-          1000,
-          420
-        ],
-        [
-          995,
-          238,
-          1180,
-          400
-        ],
-        [
-          1175,
-          255,
-          1330,
-          420
-        ],
-        [
-          1325,
-          290,
-          1445,
-          470
-        ],
-        [
-          765,
-          280,
-          830,
-          420
-        ],
-        [
-          960,
-          250,
-          1030,
-          400
-        ],
-        [
-          1140,
-          260,
-          1210,
-          410
-        ],
-        [
-          1295,
-          300,
-          1365,
-          450
-        ],
-        [
-          598,
-          370,
-          650,
-          440
-        ],
-        [
-          486,
-          528,
-          526,
-          545
-        ],
-        [
-          477,
-          544,
-          525,
-          561
-        ],
-        [
-          473,
-          560,
-          517,
-          581
-        ],
-        [
-          470,
-          580,
-          515,
-          601
-        ],
-        [
-          468,
-          600,
-          515,
-          621
-        ],
-        [
-          464,
-          620,
-          511,
-          641
-        ],
-        [
-          461,
-          640,
-          509,
-          661
-        ],
-        [
-          458,
-          660,
-          505,
-          681
-        ],
-        [
-          457,
-          680,
-          498,
-          706
-        ],
-        [
-          480,
-          528,
-          522,
-          562
-        ],
-        [
-          472,
-          560,
-          515,
-          620
-        ],
-        [
-          464,
-          618,
-          508,
-          680
-        ],
-        [
-          458,
-          678,
-          500,
-          708
-        ],
-        [
-          1528,
-          560,
-          1577,
-          590
-        ],
-        [
-          1522,
-          588,
-          1588,
-          616
-        ],
-        [
-          1540,
-          614,
-          1590,
-          642
-        ],
-        [
-          1558,
-          640,
-          1590,
-          662
-        ],
-        [
-          1568,
-          660,
-          1592,
-          686
-        ]
-      ],
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_57364.png",
-        "job": "d04ecac3-a6fd-46dd-84a4-c737d2b160c8",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
       }
     },
     {
@@ -2077,82 +1635,6 @@
         "page": "https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg",
         "job": "b306699e-2787-49ea-9d1f-44a2aff9ea3e",
         "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
-      }
-    },
-    {
-      "out": "michael-brennan",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_94cb14ab-7a4d-4be9-ac37-6859c2d3436d.png",
-      "frame": "none",
-      "marks": [
-        [
-          728,
-          265,
-          900,
-          525,
-          "flat"
-        ],
-        [
-          895,
-          262,
-          1140,
-          470,
-          "flat"
-        ],
-        [
-          1135,
-          300,
-          1385,
-          480,
-          "flat"
-        ],
-        [
-          1460,
-          555,
-          1497,
-          612,
-          "flat"
-        ],
-        [
-          1474,
-          605,
-          1503,
-          668,
-          "flat"
-        ],
-        [
-          1452,
-          1390,
-          1560,
-          1672,
-          "flat"
-        ],
-        [
-          860,
-          290,
-          935,
-          450,
-          "flat"
-        ],
-        [
-          1100,
-          300,
-          1170,
-          450,
-          "flat"
-        ],
-        [
-          1466,
-          592,
-          1500,
-          622,
-          "flat"
-        ]
-      ],
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_61522.png",
-        "job": "94cb14ab-7a4d-4be9-ac37-6859c2d3436d",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
       }
     },
     {
@@ -2597,44 +2079,6 @@
       }
     },
     {
-      "out": "chris-olave",
-      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_81e5ede4-1ff4-4a88-8a49-570d0b848336.png",
-      "frame": "none",
-      "marks": [
-        [
-          1076,
-          356,
-          1170,
-          452
-        ],
-        [
-          1165,
-          372,
-          1206,
-          452
-        ],
-        [
-          634,
-          634,
-          672,
-          700
-        ],
-        [
-          628,
-          695,
-          668,
-          776
-        ]
-      ],
-      "identity": {
-        "method": "reference-render",
-        "reference": "https://static.www.nfl.com/image/upload/t_headshot_desktop/league/onmxufsprtvglhejg94o",
-        "page": "https://commons.wikimedia.org/wiki/File:IX8A4137_(45339431234)_(cropped).jpg",
-        "job": "81e5ede4-1ff4-4a88-8a49-570d0b848336",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
-      }
-    },
-    {
       "out": "bijan-robinson",
       "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_e12c9a64-44fe-4573-9930-85ebd2bab8a3.png",
       "frame": "none",
@@ -2798,6 +2242,620 @@
       "identity": {
         "method": "bank-row",
         "note": "player-headshot-bank.md 2026-09-12 multisport Answer Desk row, job 5bb170bd. FOUNDER QC PENDING."
+      }
+    }
+  ],
+  "withdrawn": [
+    {
+      "out": "amad",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115404_09614411-969b-42ca-aafd-a9fc64c83ed0.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559906_102167030.jpg?fmt=jpg&f=CENTER&w=1200",
+        "job": "09614411-969b-42ca-aafd-a9fc64c83ed0",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "kobbie-mainoo",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115116_8a0128c3-f981-4fd3-ac8f-30ee1492f7a7.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896330/media_102559979_102167103.jpg?fmt=jpg&f=CENTER&w=1200",
+        "job": "8a0128c3-f981-4fd3-ac8f-30ee1492f7a7",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "matheus-cunha",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_115236_78344fc4-2464-4de5-8a70-9cb8d4839014.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559903_102167027.jpg?fmt=jpg&f=CENTER&w=1200",
+        "job": "78344fc4-2464-4de5-8a70-9cb8d4839014",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "cristian-orozco",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_131101_e0c11e7c-48d3-4c9d-92b8-042b2e804e5f.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://scoreplay-mam-media.s3.amazonaws.com/472/5702995/media_118426046_118036182.jpg",
+        "job": "e0c11e7c-48d3-4c9d-92b8-042b2e804e5f",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "alejandro-balde",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122549_af893e7f-6555-4b8d-8946-321e2e436ac4.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/e6ad1688-d559-4991-a2a0-3c7fbfd1b14f/03-Balde.png?width=670&height=790",
+        "job": "af893e7f-6555-4b8d-8946-321e2e436ac4",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "altay-bayindir",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_ca9ea6a5-e964-4da7-82a3-80f62644e124.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://rccelta.es/app/uploads/2026/08/Altay-Bayindir.png",
+        "job": "ca9ea6a5-e964-4da7-82a3-80f62644e124",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo), padded for framing. Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "ian-maatsen",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_124556_d41d5951-b7af-4cbc-a155-4d190f5f0a5e.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://images.gc.avfcservices.co.uk/d013bd00-a79b-11f1-91b9-a70ca6456fb1.png",
+        "job": "d41d5951-b7af-4cbc-a155-4d190f5f0a5e",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "anthony-gordon",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122550_9106cc4d-13f1-405b-b635-a2ce914a514d.png",
+      "frame": "none",
+      "marks": [
+        [
+          1392,
+          1945,
+          1735,
+          2048,
+          "box"
+        ],
+        [
+          1388,
+          1945,
+          1526,
+          2048,
+          "box"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://www.fcbarcelona.com/photo-resources/2026/07/21/8dfb11f8-dbb7-46e8-ab7e-4bb47f44d05e/00-Gordon.png?width=670&height=790",
+        "job": "9106cc4d-13f1-405b-b635-a2ce914a514d",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "jackson-koivun",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122103_7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7.png",
+      "frame": "none",
+      "marks": [
+        [
+          755,
+          30,
+          1465,
+          280
+        ],
+        [
+          1495,
+          290,
+          1560,
+          385
+        ],
+        [
+          640,
+          1255,
+          775,
+          1525
+        ],
+        [
+          1445,
+          1270,
+          1540,
+          1555
+        ],
+        [
+          1470,
+          1925,
+          1700,
+          2048
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_66701.png",
+        "job": "7f1be34c-cdb7-44bf-ac0a-ecc126af8bd7",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "chris-gotterup",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_b09fa3ee-4dda-4b6e-95b5-e2789c64d812.png",
+      "frame": "none",
+      "marks": [
+        [
+          893,
+          236,
+          985,
+          325,
+          "flat"
+        ],
+        [
+          980,
+          252,
+          1075,
+          308,
+          "flat"
+        ],
+        [
+          1070,
+          236,
+          1178,
+          290,
+          "flat"
+        ],
+        [
+          958,
+          264,
+          1002,
+          302,
+          "flat"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59095.png",
+        "job": "b09fa3ee-4dda-4b6e-95b5-e2789c64d812",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "ryan-gerard",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122316_41d72a4f-ea5f-469e-a6c7-9d64cc1925da.png",
+      "frame": "none",
+      "marks": [
+        [
+          855,
+          195,
+          1110,
+          420
+        ],
+        [
+          625,
+          200,
+          860,
+          505
+        ],
+        [
+          1105,
+          230,
+          1362,
+          440
+        ],
+        [
+          1455,
+          498,
+          1497,
+          560
+        ],
+        [
+          1470,
+          555,
+          1512,
+          600
+        ],
+        [
+          527,
+          1585,
+          582,
+          1690
+        ],
+        [
+          545,
+          1675,
+          585,
+          1728
+        ],
+        [
+          790,
+          220,
+          900,
+          450
+        ],
+        [
+          1070,
+          220,
+          1150,
+          440
+        ],
+        [
+          800,
+          312,
+          885,
+          382
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_59018.png",
+        "job": "41d72a4f-ea5f-469e-a6c7-9d64cc1925da",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "michael-thorbjornsen",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122315_d04ecac3-a6fd-46dd-84a4-c737d2b160c8.png",
+      "frame": "none",
+      "marks": [
+        [
+          628,
+          255,
+          800,
+          462
+        ],
+        [
+          795,
+          240,
+          1000,
+          420
+        ],
+        [
+          995,
+          238,
+          1180,
+          400
+        ],
+        [
+          1175,
+          255,
+          1330,
+          420
+        ],
+        [
+          1325,
+          290,
+          1445,
+          470
+        ],
+        [
+          765,
+          280,
+          830,
+          420
+        ],
+        [
+          960,
+          250,
+          1030,
+          400
+        ],
+        [
+          1140,
+          260,
+          1210,
+          410
+        ],
+        [
+          1295,
+          300,
+          1365,
+          450
+        ],
+        [
+          598,
+          370,
+          650,
+          440
+        ],
+        [
+          486,
+          528,
+          526,
+          545
+        ],
+        [
+          477,
+          544,
+          525,
+          561
+        ],
+        [
+          473,
+          560,
+          517,
+          581
+        ],
+        [
+          470,
+          580,
+          515,
+          601
+        ],
+        [
+          468,
+          600,
+          515,
+          621
+        ],
+        [
+          464,
+          620,
+          511,
+          641
+        ],
+        [
+          461,
+          640,
+          509,
+          661
+        ],
+        [
+          458,
+          660,
+          505,
+          681
+        ],
+        [
+          457,
+          680,
+          498,
+          706
+        ],
+        [
+          480,
+          528,
+          522,
+          562
+        ],
+        [
+          472,
+          560,
+          515,
+          620
+        ],
+        [
+          464,
+          618,
+          508,
+          680
+        ],
+        [
+          458,
+          678,
+          500,
+          708
+        ],
+        [
+          1528,
+          560,
+          1577,
+          590
+        ],
+        [
+          1522,
+          588,
+          1588,
+          616
+        ],
+        [
+          1540,
+          614,
+          1590,
+          642
+        ],
+        [
+          1558,
+          640,
+          1590,
+          662
+        ],
+        [
+          1568,
+          660,
+          1592,
+          686
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_57364.png",
+        "job": "d04ecac3-a6fd-46dd-84a4-c737d2b160c8",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "michael-brennan",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_94cb14ab-7a4d-4be9-ac37-6859c2d3436d.png",
+      "frame": "none",
+      "marks": [
+        [
+          728,
+          265,
+          900,
+          525,
+          "flat"
+        ],
+        [
+          895,
+          262,
+          1140,
+          470,
+          "flat"
+        ],
+        [
+          1135,
+          300,
+          1385,
+          480,
+          "flat"
+        ],
+        [
+          1460,
+          555,
+          1497,
+          612,
+          "flat"
+        ],
+        [
+          1474,
+          605,
+          1503,
+          668,
+          "flat"
+        ],
+        [
+          1452,
+          1390,
+          1560,
+          1672,
+          "flat"
+        ],
+        [
+          860,
+          290,
+          935,
+          450,
+          "flat"
+        ],
+        [
+          1100,
+          300,
+          1170,
+          450,
+          "flat"
+        ],
+        [
+          1466,
+          592,
+          1500,
+          622,
+          "flat"
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://pga-tour-res.cloudinary.com/image/upload/headshots_61522.png",
+        "job": "94cb14ab-7a4d-4be9-ac37-6859c2d3436d",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
+      }
+    },
+    {
+      "out": "chris-olave",
+      "source": "https://d8j0ntlcm91z4.cloudfront.net/user_3EYxWWaCOckmLgYMAE2OyJqeh3I/hf_20260911_122906_81e5ede4-1ff4-4a88-8a49-570d0b848336.png",
+      "frame": "none",
+      "marks": [
+        [
+          1076,
+          356,
+          1170,
+          452
+        ],
+        [
+          1165,
+          372,
+          1206,
+          452
+        ],
+        [
+          634,
+          634,
+          672,
+          700
+        ],
+        [
+          628,
+          695,
+          668,
+          776
+        ]
+      ],
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://static.www.nfl.com/image/upload/t_headshot_desktop/league/onmxufsprtvglhejg94o",
+        "page": "https://commons.wikimedia.org/wiki/File:IX8A4137_(45339431234)_(cropped).jpg",
+        "job": "81e5ede4-1ff4-4a88-8a49-570d0b848336",
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo (official club photo). Likeness checked by eye against the reference."
+      },
+      "withdrawn": {
+        "on": "2026-11-15",
+        "reason": "Rendered from an official club, tour or league photo with no licence recorded (audit gap4-1). Off the site and the app feed until it is re-rendered from a licensed or Commons reference."
       }
     }
   ]

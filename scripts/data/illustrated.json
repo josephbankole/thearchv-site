@@ -425,50 +425,6 @@
       "alt": "Illustrated ARCHV portrait of Manchester United player Karl Darlow"
     },
     {
-      "slug": "kobbie-mainoo",
-      "name": "Kobbie Mainoo",
-      "club": "Manchester United",
-      "src": "/heads/hd/kobbie-mainoo.webp",
-      "hd": "/heads/hd/kobbie-mainoo.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of Manchester United player Kobbie Mainoo",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'kobbie-mainoo' in scripts/data/heads-hd.json (https://dynamic-crop-cdn.scoreplay.io/472/4896330/media_102559979_102167103.jpg?fmt=jpg&f=CENTER&w=1200); likeness checked by eye against it."
-    },
-    {
-      "slug": "matheus-cunha",
-      "name": "Matheus Cunha",
-      "club": "Manchester United",
-      "src": "/heads/hd/matheus-cunha.webp",
-      "hd": "/heads/hd/matheus-cunha.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of Manchester United player Matheus Cunha",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'matheus-cunha' in scripts/data/heads-hd.json (https://dynamic-crop-cdn.scoreplay.io/472/4896326/media_102559903_102167027.jpg?fmt=jpg&f=CENTER&w=1200); likeness checked by eye against it."
-    },
-    {
-      "slug": "amad-diallo",
-      "name": "Amad Diallo",
-      "club": "Manchester United",
-      "src": "/heads/hd/amad.webp",
-      "hd": "/heads/hd/amad.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of Manchester United player Amad Diallo",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'amad' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Manchester_United_v_BSC_Young_Boys,_8_December_2021_(17)_(cropped).jpg); likeness checked by eye against it."
-    },
-    {
-      "slug": "cristian-orozco",
-      "name": "Cristian Orozco",
-      "club": "Manchester United",
-      "src": "/heads/hd/cristian-orozco.webp",
-      "hd": "/heads/hd/cristian-orozco.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of Manchester United player Cristian Orozco",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'cristian-orozco' in scripts/data/heads-hd.json (https://scoreplay-mam-media.s3.amazonaws.com/472/5702995/media_118426046_118036182.jpg); likeness checked by eye against it."
-    },
-    {
       "slug": "alex-scott",
       "name": "Alex Scott",
       "club": "AFC Bournemouth",
@@ -502,17 +458,6 @@
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'eddie-howe' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Eddie_Howe_24052026_(2).jpg); likeness checked by eye against it."
     },
     {
-      "slug": "alejandro-balde",
-      "name": "Alejandro Balde",
-      "nation": "Spain",
-      "src": "/heads/hd/alejandro-balde.webp",
-      "hd": "/heads/hd/alejandro-balde.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of footballer Alejandro Balde",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'alejandro-balde' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Esapana-inglaterra-74_(48899354493).jpg); likeness checked by eye against it."
-    },
-    {
       "slug": "matthias-jaissle",
       "name": "Matthias Jaissle",
       "sport": "football",
@@ -533,39 +478,6 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of footballer David Raum",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'david-raum' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2658_(cropped2).jpg); likeness checked by eye against it."
-    },
-    {
-      "slug": "altay-bayindir",
-      "name": "Altay Bayindir",
-      "nation": "Turkey",
-      "src": "/heads/hd/altay-bayindir.webp",
-      "hd": "/heads/hd/altay-bayindir.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of footballer Altay Bayindir",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'altay-bayindir' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Altay_Bayindir.jpg); likeness checked by eye against it."
-    },
-    {
-      "slug": "ian-maatsen",
-      "name": "Ian Maatsen",
-      "nation": "Netherlands",
-      "src": "/heads/hd/ian-maatsen.webp",
-      "hd": "/heads/hd/ian-maatsen.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of footballer Ian Maatsen",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'ian-maatsen' in scripts/data/heads-hd.json (https://images.gc.avfcservices.co.uk/d013bd00-a79b-11f1-91b9-a70ca6456fb1.png); likeness checked by eye against it."
-    },
-    {
-      "slug": "anthony-gordon",
-      "name": "Anthony Gordon",
-      "nation": "England",
-      "src": "/heads/hd/anthony-gordon.webp",
-      "hd": "/heads/hd/anthony-gordon.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of footballer Anthony Gordon",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'anthony-gordon' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Team_England_England_v_Ghana_at_2026_Fifa_World_Cup_by_YantsImages_03_(Anthony_Gordon).jpg); likeness checked by eye against it."
     },
     {
       "slug": "tim-krul",
@@ -631,7 +543,7 @@
       "width": 600,
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Bianca Andreescu",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'bianca-andreescu' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Bianca_Andreescu_(2026_US_Open)_06_(cropped).jpg); likeness checked by eye against it."
+      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'bianca-andreescu' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Bianca_Andreescu_(2026_US_Open)_05.jpg); likeness checked by eye against it."
     },
     {
       "slug": "terence-atmane",
@@ -686,7 +598,7 @@
       "width": 600,
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Elena Rybakina",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'elena-rybakina' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Elena_Rybakina_(2025_DC_Open)_04_(cropped).jpg); likeness checked by eye against it."
+      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'elena-rybakina' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Elena_Rybakina_2023_US_Open_69_cropped.jpg); likeness checked by eye against it."
     },
     {
       "slug": "coco-gauff",
@@ -777,17 +689,6 @@
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'katherine-sebov' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Sebov_RGQ23.jpg); likeness checked by eye against it."
     },
     {
-      "slug": "jackson-koivun",
-      "name": "Jackson Koivun",
-      "sport": "golf",
-      "src": "/heads/hd/jackson-koivun.webp",
-      "hd": "/heads/hd/jackson-koivun.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of golfer Jackson Koivun",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'jackson-koivun' in scripts/data/heads-hd.json (https://pga-tour-res.cloudinary.com/image/upload/headshots_66701.png); likeness checked by eye against it."
-    },
-    {
       "slug": "wyndham-clark",
       "name": "Wyndham Clark",
       "sport": "golf",
@@ -832,17 +733,6 @@
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'viktor-hovland' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg); likeness checked by eye against it."
     },
     {
-      "slug": "chris-gotterup",
-      "name": "Chris Gotterup",
-      "sport": "golf",
-      "src": "/heads/hd/chris-gotterup.webp",
-      "hd": "/heads/hd/chris-gotterup.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of golfer Chris Gotterup",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'chris-gotterup' in scripts/data/heads-hd.json (https://pga-tour-res.cloudinary.com/image/upload/headshots_59095.png); likeness checked by eye against it."
-    },
-    {
       "slug": "sungjae-im",
       "name": "Sungjae Im",
       "sport": "golf",
@@ -865,17 +755,6 @@
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'sam-burns' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg); likeness checked by eye against it."
     },
     {
-      "slug": "ryan-gerard",
-      "name": "Ryan Gerard",
-      "sport": "golf",
-      "src": "/heads/hd/ryan-gerard.webp",
-      "hd": "/heads/hd/ryan-gerard.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of golfer Ryan Gerard",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'ryan-gerard' in scripts/data/heads-hd.json (https://pga-tour-res.cloudinary.com/image/upload/headshots_59018.png); likeness checked by eye against it."
-    },
-    {
       "slug": "patrick-cantlay",
       "name": "Patrick Cantlay",
       "sport": "golf",
@@ -885,17 +764,6 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of golfer Patrick Cantlay",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'patrick-cantlay' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg); likeness checked by eye against it."
-    },
-    {
-      "slug": "michael-thorbjornsen",
-      "name": "Michael Thorbjornsen",
-      "sport": "golf",
-      "src": "/heads/hd/michael-thorbjornsen.webp",
-      "hd": "/heads/hd/michael-thorbjornsen.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of golfer Michael Thorbjornsen",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'michael-thorbjornsen' in scripts/data/heads-hd.json (https://pga-tour-res.cloudinary.com/image/upload/headshots_57364.png); likeness checked by eye against it."
     },
     {
       "slug": "gary-woodland",
@@ -918,17 +786,6 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of golfer Scottie Scheffler",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'scottie-scheffler' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg); likeness checked by eye against it."
-    },
-    {
-      "slug": "michael-brennan",
-      "name": "Michael Brennan",
-      "sport": "golf",
-      "src": "/heads/hd/michael-brennan.webp",
-      "hd": "/heads/hd/michael-brennan.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of golfer Michael Brennan",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'michael-brennan' in scripts/data/heads-hd.json (https://pga-tour-res.cloudinary.com/image/upload/headshots_61522.png); likeness checked by eye against it."
     },
     {
       "slug": "kimi-antonelli",
@@ -995,17 +852,6 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of NFL player Nick Chubb",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'nick-chubb' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Nick_Chubb_(53142361391).jpg); likeness checked by eye against it."
-    },
-    {
-      "slug": "chris-olave",
-      "name": "Chris Olave",
-      "sport": "american football",
-      "src": "/heads/hd/chris-olave.webp",
-      "hd": "/heads/hd/chris-olave.webp",
-      "width": 600,
-      "height": 600,
-      "alt": "Illustrated ARCHV portrait of NFL player Chris Olave",
-      "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'chris-olave' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:IX8A4137_(45339431234)_(cropped).jpg); likeness checked by eye against it."
     },
     {
       "slug": "bijan-robinson",

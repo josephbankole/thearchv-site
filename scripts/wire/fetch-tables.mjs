@@ -35,12 +35,15 @@ export async function fetchTables({ prev, only, offline, nowMs, env, pause }) {
   for (const [sport, mod] of Object.entries(MODULES)) {
     if (only && !only.includes(sport)) continue;
     let result;
+    let error = null;
+    // The exception text stays in the local report. The feed is public, so a held block only
+    // ever carries the fixed code.
     try { result = await mod.run({ get, today, env, pause }); }
-    catch (err) { result = { blocks: [], failed: {}, skipped: `error:${err.message}` }; }
+    catch (err) { error = String(err?.message ?? err); result = { blocks: [], failed: {}, skipped: "module-error" }; }
     const blocks = (result.blocks || []).map((b) => fresh(b, { today, fetchedAt }));
     const merged = inOrder(mergeSport(prev.sports[sport]?.blocks, { ...result, blocks }, today), mod.ORDER);
     if (merged.length) out.sports[sport] = { blocks: merged }; else delete out.sports[sport];
-    report[sport] = { fresh: blocks.map((b) => b.id), held: merged.filter((b) => b.status === "held").map((b) => `${b.id} (${b.heldReason})`), skipped: result.skipped || null };
+    report[sport] = { fresh: blocks.map((b) => b.id), held: merged.filter((b) => b.status === "held").map((b) => `${b.id} (${b.heldReason})`), skipped: result.skipped || null, ...(error ? { error } : {}) };
   }
   return { tables: sanitiseTables(out), report };
 }
@@ -60,7 +63,7 @@ if (isMain(import.meta.url)) {
   let clean = true;
   for (const [sport, r] of Object.entries(report)) {
     if (r.held.length || r.skipped) clean = false;
-    console.log(`[fetch-tables] ${sport}: fresh ${r.fresh.join(", ") || "none"}${r.held.length ? ` | held ${r.held.join(", ")}` : ""}${r.skipped ? ` | skipped ${r.skipped}` : ""}`);
+    console.log(`[fetch-tables] ${sport}: fresh ${r.fresh.join(", ") || "none"}${r.held.length ? ` | held ${r.held.join(", ")}` : ""}${r.skipped ? ` | skipped ${r.skipped}` : ""}${r.error ? ` (${r.error})` : ""}`);
   }
   console.log(`[fetch-tables] -> ${out}`);
   process.exit(clean ? 0 : 3);

@@ -9,7 +9,7 @@ import * as football from "../tables/football.mjs";
 import { fromFootballData, fromFootballDataCl, fromOpenfootball, sanityLeaguePhase, fdCompetition, fdRound, fdScore } from "../tables/football.mjs";
 import { fresh, mergeSport, inOrder } from "../tables/common.mjs";
 import { sanitiseBlock, sanitiseTables } from "../lib/schema.mjs";
-import { fetchTables } from "../fetch-tables.mjs";
+import { fetchTables, MODULES } from "../fetch-tables.mjs";
 import { renderTableBlock } from "../lib/render.mjs";
 import { wait429 } from "../lib/http.mjs";
 
@@ -260,4 +260,26 @@ test("a 429 waits as long as football-data.org says its 10-a-minute window has l
   assert.equal(wait429(h({ "X-RequestCounter-Reset": "300" })), 60);
   assert.equal(wait429(h({})), 30);
   assert.equal(wait429(h({ "X-RequestCounter-Reset": "soon" })), 30);
+});
+
+test("a module that throws holds its blocks with the fixed code module-error; the exception text stays in the local report", async () => {
+  const { result: day } = await capture(() => football.run({ get: stub(), today: TODAY, env: TOKEN }));
+  const prev = sanitiseTables({ version: 1, updatedAt: `${TODAY}T09:10:00.000Z`, sports: { football: { blocks: day.blocks.map((b) => fresh(b, { today: TODAY, fetchedAt: `${TODAY}T09:10:00.000Z` })) } } });
+  const secret = "Cannot read properties of undefined (reading 'x') at https://api.example.test/v4?token=abc";
+  const real = MODULES.football;
+  MODULES.football = { ...real, run: async () => { throw new TypeError(secret); } };
+  try {
+    const { result: { tables, report } } = await capture(() => fetchTables({ prev, only: ["football"], offline: null, nowMs: Date.parse("2026-10-13T16:00:00Z"), env: {}, pause: 0 }));
+    const blocks = tables.sports.football.blocks;
+    assert.ok(blocks.length > 0);
+    for (const b of blocks) {
+      assert.equal(b.status, "held");
+      assert.equal(b.heldReason, "module-error");
+    }
+    assert.ok(!JSON.stringify(tables).includes("api.example.test"), "no exception text in the feed");
+    assert.equal(report.football.skipped, "module-error");
+    assert.equal(report.football.error, secret);
+  } finally {
+    MODULES.football = real;
+  }
 });

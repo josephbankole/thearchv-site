@@ -17,8 +17,12 @@ Say what you found, how to reproduce it and what it affects.
 - The scripts that fetch the Wire headlines and the tables each day.
 
 The site's content security policy allows the Supabase project the app uses and PostHog
-analytics. No keys or tokens belong in this repo; `.gitignore` and a check in the deploy
-workflow refuse key, certificate and env files.
+analytics.
+
+The pages carry two keys on purpose: the PostHog project key and the Supabase publishable
+key. Both are public client keys, built to sit in a web page, and are not a leak. No secret
+key, service-role key, signing key or token belongs in this repo. `.gitignore` and a check in
+the deploy workflow refuse key, certificate and env files.
 
 ## History
 

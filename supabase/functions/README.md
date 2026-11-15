@@ -46,12 +46,14 @@ A `201` with a `ticket_id` means it works. Check the row in the Supabase Table E
 
 ## How the app-facing functions are laid out
 
-`register-push` and `ticket-intake` keep their request handling in `handler.ts`, which takes the
+`register-push`, `ticket-intake` and `ticket-reply` keep their request handling in `handler.ts`, which takes the
 environment and a small database interface as arguments, and `index.ts` only wires that to the
 service-role client. `handler_test.ts` beside each one runs the handler against fakes: the guard
 modes (missing, wrong and unset header), `opt_in: false` landing as an update with the hourly cap
-full, the cap markers mapping to 429, and the input checks. `_shared/appGuard_test.ts` covers both
-guards on their own. `corsHeaders` and `json` live in `_shared/http.ts`, which imports nothing, and
+full, the cap markers mapping to 429, where a follow-up goes, and the input checks.
+`_shared/appGuard_test.ts` covers both guards on their own, and `_shared/triage_test.ts` runs the
+triage core (`_shared/triage.ts`) against a fake database, model and mailer. The real triage
+dependencies are built in `_shared/triage_db.ts`. `corsHeaders` and `json` live in `_shared/http.ts`, which imports nothing, and
 `_shared/cors.ts` re-exports them, so a function that deploys `_shared/cors.ts` must deploy
 `_shared/http.ts` with it.
 
@@ -77,14 +79,13 @@ supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
 # A random guard so only the webhook can call this paid endpoint. Make one up, any long string.
 supabase secrets set TRIAGE_SECRET=<a-long-random-string>
 
-# Optional: email the founder when a ticket escalates to L3. Skipped cleanly until these are set.
-supabase secrets set RESEND_API_KEY=re_...
-supabase secrets set FOUNDER_EMAIL=folaban@gmail.com
-supabase secrets set SUPPORT_FROM_EMAIL="The ARCHV <support@mail.thearchv.ca>"   # must be a Resend-verified domain
+# The founder email (Zoho Mail, Canadian data centre, see _shared/zoho.ts). Skipped cleanly until
+# all five are set, and every ticket is still recorded in the database either way.
+supabase secrets set ZOHO_CLIENT_ID=... ZOHO_CLIENT_SECRET=... ZOHO_REFRESH_TOKEN=... ZOHO_ACCOUNT_ID=...
+supabase secrets set FOUNDER_EMAIL=<the founder's address>
+# Optional: override the triage model without a code change.
+supabase secrets set TRIAGE_MODEL=<model id>
 ```
-
-After adding the Resend secrets, redeploy so the function picks up the L3-email code:
-`supabase functions deploy support-triage --no-verify-jwt`
 
 Deploy:
 ```
@@ -102,8 +103,28 @@ To test end to end: run the `ticket-intake` curl above, then check the ticket ro
 its status should move to `resolved_l1`, `l2_working`, or `escalated_l3`, and `ticket_messages`
 should hold the L1 reply.
 
-L2 still runs as the `archv-support-l2` Claude agent (it does deeper investigation that suits a
-human-in-the-loop or scheduled run rather than a per-ticket function). L3 is you.
+### Who picks up what
+
+There is no L2 agent. Nothing reads `l2_working` on its own, so the founder handles L2 and L3
+alike, and the functions email him for both:
+
+| What happens | Ticket ends up | Who is told |
+| --- | --- | --- |
+| L1 resolves it | `resolved_l1` | nobody |
+| L1 escalates to L2 | `l2_working`, tier `l2` | founder email, "L2 escalation" |
+| L1 escalates to L3 | `escalated_l3`, tier `l3` | founder email, "L3 escalation" |
+| The model answers with an action it was not offered | `l2_working`, tier `l2` | founder email, "L2 escalation (unreadable triage action)" |
+| A triage attempt fails (API error or unreadable answer) | `pending_triage`, `triage_attempts` up by one | nobody yet; triage-drain retries within the hour |
+| The third attempt fails | `l2_working`, tier `l2` | founder email, "Triage failed" |
+| The user replies on an L1 ticket that was resolved (or left at `l1_working`) | `pending_triage` | nobody; triage-drain triages it with the whole conversation |
+| The user replies on an L2 or L3 ticket | reopened if it was resolved | founder email, "Ticket follow-up", for the first user message since anyone else wrote |
+
+An attempt that ends in an Anthropic API error makes no paid call, so it gives its place under the
+daily ceiling back (`triage_permit_release`). triage-drain takes the tickets with the fewest failed
+attempts first, then the oldest, so a ticket that keeps failing cannot hold up the queue.
+
+Deploy order for this: apply `supabase/migrations/20261115120200_triage_attempts.sql` first (the
+drain orders by its new column), then deploy `support-triage`, `triage-drain` and `ticket-reply`.
 
 ## Daily push: daily-push
 
@@ -246,6 +267,7 @@ cd supabase/functions/_shared && deno test
 cd supabase/functions/health-probe && deno test
 cd supabase/functions/register-push && deno test
 cd supabase/functions/ticket-intake && deno test
+cd supabase/functions/ticket-reply && deno test
 ```
 
 ## Live scores: scores-poll

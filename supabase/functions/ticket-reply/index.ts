@@ -1,71 +1,41 @@
-// ticket-reply: the user adds a message to their own ticket.
-// POST { device_id, ticket_id, body } -> { ok }
-// Verifies ownership, appends the message, and reopens a resolved ticket so an agent picks it up
-// again at the tier that last handled it.
-import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
-import { checkAppSecret } from "../_shared/appGuard.ts";
+// ticket-reply entry point. The request handling lives in handler.ts (tested in handler_test.ts);
+// this file only wires it to the service-role client and the founder mailer.
+import { adminClient } from "../_shared/cors.ts";
+import { realEnv } from "../_shared/http.ts";
+import { sendFounderMail } from "../_shared/zoho.ts";
+import { handleTicketReply, type ReplyStore, type ReplyTicket } from "./handler.ts";
 
-// Reopening: map the ticket's tier to the "working" status the right agent watches.
-const REOPEN_STATUS: Record<string, string> = {
-  l1: "l1_working",
-  l2: "l2_working",
-  l3: "escalated_l3",
-};
-const RESOLVED = new Set(["resolved_l1", "resolved_l2", "resolved", "closed"]);
-
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-  if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
-
-  // Hard app-secret guard (go-live 2026-07-16): missing or wrong x-archv-app -> 401.
-  const guardResp = checkAppSecret(req, "ticket-reply");
-  if (guardResp) return guardResp;
-
-  let payload: Record<string, unknown>;
-  try {
-    payload = await req.json();
-  } catch {
-    return json({ error: "invalid json" }, 400);
-  }
-
-  const device_id = typeof payload.device_id === "string" ? payload.device_id.trim() : "";
-  const ticket_id = typeof payload.ticket_id === "string" ? payload.ticket_id : "";
-  const body = typeof payload.body === "string" ? payload.body.trim() : "";
-  if (!device_id) return json({ error: "device_id required" }, 400);
-  if (device_id.length > 128) return json({ error: "device_id too long" }, 400);
-  if (!ticket_id) return json({ error: "ticket_id required" }, 400);
-  if (body.length < 1) return json({ error: "body required" }, 400);
-  if (body.length > 5000) return json({ error: "body too long" }, 400);
-
+Deno.serve((req) => {
   const supabase = adminClient();
-
-  const { data: ticket, error: tErr } = await supabase
-    .from("tickets")
-    .select("id, device_id, status, tier")
-    .eq("id", ticket_id)
-    .maybeSingle();
-  if (tErr) { console.error("ticket-reply: ticket db error", tErr.message); return json({ error: "server_error" }, 500); }
-  if (!ticket || ticket.device_id !== device_id) return json({ error: "not found" }, 404);
-
-  const { error: mErr } = await supabase.from("ticket_messages").insert({
-    ticket_id,
-    author: "user",
-    body,
-  });
-  if (mErr) {
-    // The DB-side cap (ticket_messages_hourly_cap trigger, 2026-10-06) aborts the insert with this marker.
-    if (/ticket_reply_rate_limited/.test(mErr.message)) {
-      return json({ error: "rate limited, please try again later" }, 429);
-    }
-    console.error("ticket-reply: message db error", mErr.message);
-    return json({ error: "server_error" }, 500);
-  }
-
-  // If the ticket had been closed off, reopen it for the tier that last owned it.
-  if (RESOLVED.has(ticket.status)) {
-    const next = REOPEN_STATUS[ticket.tier] ?? "l1_working";
-    await supabase.from("tickets").update({ status: next }).eq("id", ticket_id);
-  }
-
-  return json({ ok: true }, 200);
+  const store: ReplyStore = {
+    async getTicket(id) {
+      const { data, error } = await supabase
+        .from("tickets")
+        .select("id, device_id, status, tier, category, body, app_version")
+        .eq("id", id)
+        .maybeSingle();
+      return error ? { error: error.message } : { ticket: data as ReplyTicket | null };
+    },
+    async thread(ticketId) {
+      const { data, error } = await supabase
+        .from("ticket_messages")
+        .select("author, body")
+        .eq("ticket_id", ticketId)
+        .eq("internal", false)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) console.error("ticket-reply: thread read failed", error.message);
+      // The newest 50, put back in order: the last entry is the newest message.
+      return ((data ?? []) as { author: string; body: string }[]).reverse();
+    },
+    async insertMessage(row) {
+      const { error } = await supabase.from("ticket_messages").insert(row);
+      return error ? { error: error.message } : {};
+    },
+    async setStatus(ticketId, status) {
+      const { error } = await supabase.from("tickets").update({ status }).eq("id", ticketId);
+      return error ? { error: error.message } : {};
+    },
+  };
+  return handleTicketReply(req, { env: realEnv, store, mail: sendFounderMail });
 });

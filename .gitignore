@@ -28,3 +28,11 @@ CLAUDE-SECURITY-*/
 
 # Wire desk run directory (candidates files; never committed, design-final B5)
 .wire-run/
+
+# Internal planning and design documents: kept on the founder's Mac only, never in this public repo.
+/docs/
+/FLIP-DAY.md
+/PR_DESCRIPTION.md
+/posthog-setup-report.md
+/GLOSSARY-EXPANSION-PROPOSAL.md
+/ANIMATION-PLAN.md

@@ -14,6 +14,26 @@ const COMPLETION = [
   // Headline-style present for plural subjects ("United sign", "the Bears trade"): same assertion.
   "sign", "trade", "fire", "sack", "complete", "win", "agree", "confirm", "join", "release", "retire",
   "lose", "hire", "appoint",
+  // Other events a note must never assert unless the item says so in the same form: exits,
+  // discipline, crime, injury, death and moves (an audit probe passed "arrested and charged",
+  // "dismissed its manager" and "is injured"). Nouns that state an event count too.
+  "dismissed", "dismisses", "dismiss", "axed", "axes", "axe", "ousted", "ousts", "oust",
+  "resigned", "resigns", "resign", "resignation", "quit", "quits", "departed", "departs", "departure",
+  "exited", "exits", "leaves", "leaving", "replaced", "replaces",
+  "sold", "sells", "sell", "bought", "buys", "buy", "loaned", "loans", "loan", "transferred",
+  "extended", "extends", "renewed", "renews",
+  "arrested", "arrests", "arrest", "charged", "charges", "accused", "accuses", "convicted", "sentenced",
+  "jailed", "investigated", "alleged", "allegations", "allegation",
+  "suspended", "suspends", "suspend", "suspension", "banned", "bans", "ban", "fined",
+  "injured", "injures", "injure", "injury", "injuries", "tore", "torn", "ruptured", "suffered", "suffers",
+  "died", "dies", "die", "dead", "death", "killed",
+  "withdrew", "withdraws", "withdrawn", "cancelled", "canceled", "postponed", "abandoned",
+  "relegated", "promoted", "eliminated", "qualified", "scored",
+];
+// The same rule for events that take two words.
+const COMPLETION_PHRASES = [
+  "ruled out", "rules out", "rule out", "stepped down", "steps down", "step down", "knocked out",
+  "parted ways", "parts ways", "part ways",
 ];
 const NEGATION = /\b(not|no|never|without|nor)\b|n't\b/gi;
 const NARRATION = ["why it matters", "here's why", "heres why", "the part most people miss", "that's the point", "worth watching"];
@@ -81,6 +101,9 @@ export function checkNote(note, { headline = "", summary = "", sourceName = "" }
   const srcWords = new Set(words(src));
   const noteWords = words(nn);
   for (const v of COMPLETION) if (noteWords.includes(v) && !srcWords.has(v)) errors.push(`completion-verb-not-in-item:${v}`);
+  const noteText = ` ${noteWords.join(" ")} `;
+  const srcText = ` ${words(src).join(" ")} `;
+  for (const p of COMPLETION_PHRASES) if (noteText.includes(` ${p} `) && !srcText.includes(` ${p} `)) errors.push(`completion-verb-not-in-item:${p}`);
   const noteNeg = (nn.match(NEGATION) || []).map((x) => x.toLowerCase());
   const srcNeg = new Set((src.match(NEGATION) || []).map((x) => x.toLowerCase()));
   for (const x of noteNeg) if (!srcNeg.has(x)) errors.push(`negation-not-in-item:${x}`);

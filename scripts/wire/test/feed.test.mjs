@@ -174,6 +174,27 @@ test("the notes gate refuses base-form completion verbs the item does not use", 
   assert.ok(checkNote("ESPN reports the Bears win again, and the defence is the thing to watch.", { headline: "Bears face Lions", summary: "", sourceName: "ESPN" }).errors.includes("completion-verb-not-in-item:win"));
 });
 
+test("the notes gate refuses exits, discipline, crime, injury and death the item does not state", () => {
+  const item = { headline: "Amorim under pressure as Manchester United slump continues", summary: "", sourceName: "ESPN" };
+  const errs = (n) => checkNote(n, item).errors;
+  const hits = (n, v) => errs(n).includes(`completion-verb-not-in-item:${v}`);
+  assert.ok(hits("The manager was arrested and charged after the match at the stadium.", "arrested"));
+  assert.ok(hits("The manager was arrested and charged after the match at the stadium.", "charged"));
+  assert.ok(hits("Manchester United dismissed its manager after the match at the stadium.", "dismissed"));
+  assert.ok(hits("The squad is injured as Manchester United head into the next run of games.", "injured"));
+  assert.ok(hits("Amorim is suspended for the next game as the Manchester United run goes on.", "suspended"));
+  assert.ok(hits("Amorim is banned for the next game as the Manchester United run goes on.", "banned"));
+  assert.ok(hits("Amorim resigned after the game as the Manchester United run went on and on.", "resigned"));
+  assert.ok(hits("A fan died at the ground as the Manchester United run went on and on.", "died"));
+  assert.ok(hits("Manchester United sold the striker as the run went on and the board looked on.", "sold"));
+  assert.ok(hits("Manchester United loaned the striker out as the run went on for the club.", "loaned"));
+  assert.ok(hits("Amorim stepped down after the game as the Manchester United run went on.", "stepped down"));
+  assert.ok(hits("The striker is ruled out of the next game for Manchester United this week.", "ruled out"));
+  // The same word in the item is fine: the note only repeats what the source says.
+  const out = { headline: "Manchester United striker ruled out with injury", summary: "", sourceName: "ESPN" };
+  assert.deepEqual(checkNote("ESPN says the striker is ruled out, so the next game is the one to watch.", out).errors, []);
+});
+
 test("a note or veto id that matches no candidate is reported, and a notes file for another day is refused", () => {
   const typo = { date: "2026-09-27", notes: { "espn-soccer:f02ff836625X": "ESPN reports the absence on the word of sources, so the length is the thing to watch." }, vetoes: { "espn-nba:typo": "betting" } };
   const r = fin(candidates, typo);

@@ -237,6 +237,10 @@ const schema = {
      competition, or player) stays as the section's last line: footer() says something narrower
      and never mentions players, and the #standards copy names no player either. #contact keeps
      the old About's wording; the Instagram handle is in the policy's own Contact line above it.
+   - Privacy, waitlist paragraph (audit be-support-6, 2026-11-15): the IP hash sentence matches
+     waitlist_rate_hits in supabase/migrations/20261115180000, pruned on each claim. The 90 day
+     line is a promise with no purge job yet: one must exist before the launch email is sent.
+     Other retention periods stay off this page until their purges exist.
    - Sections the old pages repeated were kept once: the old About's "How the work is checked",
      "When we get it wrong" and "Who we answer to" summaries, the standards page's "Corrections
      are added, not hidden" and the corrections page's "How we check things first time" each
@@ -491,7 +495,10 @@ const html = `${documentShell({
         stores your email address, your browser's user agent (the line of text that names
         your browser and operating system), and the page you signed up on, in the same
         Supabase database. We use the address to tell you when the Android app is
-        ready.</p>
+        ready, and delete it 90 days after that email goes out. To stop one source flooding
+        the list, our server also keeps a one-way hash of the IP address you joined from,
+        with a count of sign-ups from it in that hour. Old counts are removed as new sign-ups
+        come in.</p>
 
         <h3>Deleting your data</h3>
         <p>Deleting the app removes everything stored on the device, but not what has

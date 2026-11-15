@@ -8,6 +8,10 @@
 --   * triage_record_failure(ticket) adds one and returns the new count, in one statement.
 --   * triage_permit_release() gives back one call from today's triage_daily counter, for an
 --     attempt that ended in an Anthropic API error and so made no paid call.
+--   * Tickets already stranded by the old behaviour are put back in the queue once: a webhook
+--     ticket left at 'new' and a reopened L1 ticket left at 'l1_working' go to 'pending_triage',
+--     where triage-drain triages them with the thread. Only rows untouched for an hour move, so a
+--     ticket whose webhook triage is still running is left to finish.
 --
 -- Apply before deploying support-triage and triage-drain: the drain's query orders by the new
 -- column. Safe to run twice.
@@ -51,3 +55,8 @@ end;
 $$;
 revoke execute on function public.triage_permit_release() from public, anon, authenticated;
 grant execute on function public.triage_permit_release() to service_role;
+
+update public.tickets
+   set status = 'pending_triage'
+ where status in ('new', 'l1_working')
+   and updated_at < now() - interval '1 hour';

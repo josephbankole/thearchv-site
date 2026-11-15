@@ -138,6 +138,9 @@ attempts first, then the oldest, so a ticket that keeps failing cannot hold up t
 
 Deploy order for this: apply `supabase/migrations/20261115120200_triage_attempts.sql` first (the
 drain orders by its new column), then deploy `support-triage`, `triage-drain` and `ticket-reply`.
+The migration also moves tickets already stuck at `new` or `l1_working` for over an hour to
+`pending_triage`, so the next drain picks them up. To see how many that is before applying:
+`select status, count(*) from public.tickets where status in ('new','l1_working') and updated_at < now() - interval '1 hour' group by status;`
 
 ## Daily push: daily-push
 

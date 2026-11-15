@@ -306,8 +306,8 @@ const html = `${documentShell({
         <h2 id="how-we-verify">How we verify</h2>
         <p>The ARCHV is a football-history publication. We treat the game's present the way we treat its past, by checking it before we publish. This page sets out how we decide what to run, and how confident we are when we run it.</p>
 
-        <h3>Two sources before we publish</h3>
-        <p>Nothing goes up as fact on a single source, with one standing exception: on the NFL and Formula 1 desks, the league's own official record is enough on its own, and it is named on the page. Everywhere else, a claim, a fee, a date or a scoreline is checked against at least two independent outlets before we treat it as settled. Two write-ups of the same original scoop are not two sources; we want outlets that did the reporting separately.</p>
+        <h3>A trusted, named source before we publish</h3>
+        <p>Nothing goes up as fact without a trusted source, and the source is named on the page. Trusted means an established outlet or reporter, or the body itself on the record: a club, a league, UEFA or FIFA. On the NFL and Formula 1 desks, the league's own official record is that source. One trusted source is enough to publish a claim, a fee, a date or a scoreline. It is not always enough to call it confirmed, and the labels below say how firm each entry is. When two trusted sources disagree, we drop the number or name both.</p>
 
         <h3>Breaking news: the REPORTED tier</h3>
         <p>Transfer news moves faster than confirmation, and the best of it often breaks through one reporter. When a named journalist with a strong record breaks a story alone, we may run it marked REPORTED, with the reporter and outlet named every time.</p>

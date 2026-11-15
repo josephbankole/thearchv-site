@@ -228,7 +228,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <title>The ARCHV</title>
     <link>${SITE}/</link>
     <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Daily, two-source-verified football reporting from The ARCHV: Manchester United transfers, international football and the leagues.</description>
+    <description>Football reporting from The ARCHV, with a trusted source named for every claim: Manchester United transfers, international football and the leagues.</description>
     <language>en-GB</language>
     <lastBuildDate>${lastBuild}</lastBuildDate>
 ${itemXml}

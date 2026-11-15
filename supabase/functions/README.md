@@ -13,6 +13,19 @@ key and never sees the service role key.
 
 ## Deploy
 
+**Before any function deploy, run every suite and deploy nothing on red:**
+
+```
+bash supabase/functions/test.sh
+```
+
+It runs `deno test --no-remote` in each folder here that holds a `*_test.ts` file, and the
+`Edge Function tests` workflow (`.github/workflows/supabase-functions-test.yml`) runs the same
+script on every push and pull request that touches `supabase/functions/`. Deploys go out by hand
+(CLI or the Supabase MCP), so that workflow only helps if its run for the commit being deployed is
+green: check it, or run the script, first. In a sparse checkout without `src/`, the `_shared`
+suite cannot find `src/data/sports.ts` and fails for that reason alone.
+
 You need the Supabase CLI once. Install it (`brew install supabase/tap/supabase`), then from
 `thearchv-site/`:
 
@@ -662,8 +675,8 @@ scheduled, `PUBLISH_PLAYERS` is set to `1`, and head to head keeps every competi
 friendlies. Deploy through the Supabase MCP, in this order, with the proof of each step in the run
 report:
 
-1. **Tests.** `cd supabase/functions/scores-poll && deno test`: all green (170 at the time of
-   writing). Nothing deploys on a red suite.
+1. **Tests.** `bash supabase/functions/test.sh`: all green (scores-poll alone had 170 at the time
+   of writing). Nothing deploys on a red suite.
 2. **Commit first** on `preview`, so the deployed code is the repo's code.
 3. **The table migration.** `list_migrations` and confirm `20261013170000_scores_live_feed` is
    recorded. Then `apply_migration` with `supabase/migrations/20261028185520_scores_season_mode.sql`.

@@ -75,9 +75,12 @@ export const wasUpdated = (entry) => modifiedAt(entry) !== publishedAt(entry);
 /** RFC 822 for RSS pubDate, in the instant's own offset. */
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const ZONED = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
 export function rfc822(iso) {
-  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(String(iso));
-  if (!m) return rfc822(fallbackPublished(iso));
+  // A bare YYYY-MM-DD takes 05:00 Toronto. Anything else is a malformed date: stop with its value
+  // rather than retrying the same string forever (site-build-6).
+  const m = ZONED.exec(String(iso)) || ZONED.exec(fallbackPublished(iso));
+  if (!m) throw new Error(`rfc822: entry date is not YYYY-MM-DD or a zoned ISO time: ${JSON.stringify(iso)}`);
   const [, y, mo, d, hh, mm, ss = "00", zone] = m;
   const weekday = WEEKDAYS[new Date(Date.UTC(+y, +mo - 1, +d)).getUTCDay()];
   const z = zone === "Z" ? "+0000" : zone.replace(":", "");

@@ -1,5 +1,5 @@
-// health-probe's checks on the scores poller, season mode, the API quota, the football lead and the
-// two public sign-up surfaces. Pure, so checks_test.ts runs them with no network and no database:
+// health-probe's checks on the scores poller, season mode, the API quota, the football lead, the
+// two public sign-up surfaces and the support-ticket queue. Pure, so checks_test.ts runs them with no network and no database:
 // index.ts does the reads and hands the results in. Each returns the failure detail, or null.
 
 // The minute poll refreshes the three-day schedule every 30 minutes (SCHEDULE_EVERY_MS in
@@ -87,4 +87,16 @@ export function salonStoreProblem(status: number, body: unknown): string | null 
 export function waitlistDown(status: number): string | null {
   if (status === 404 || status >= 500) return `preflight answered ${status}`;
   return null;
+}
+
+// Support tickets waiting for triage that nothing has touched for TICKET_STUCK_MS: a webhook
+// triage that never ran leaves a ticket at 'new', and a drain that is not running, or cannot keep
+// up, leaves them at 'pending_triage'. Every triage attempt updates the row, so a ticket the drain
+// is still retrying stays under the line. Only the count goes in the alert, never ticket content.
+export const TICKET_STUCK_MS = 2 * 60 * 60 * 1000;
+export const TICKET_WAITING_STATUSES = ["new", "pending_triage"] as const;
+
+export function ticketsStuck(count: number | null): string | null {
+  if (count === null || count <= 0) return null;
+  return `${count} ticket${count === 1 ? "" : "s"} waiting at new or pending_triage, untouched for over ${TICKET_STUCK_MS / 3_600_000}h`;
 }

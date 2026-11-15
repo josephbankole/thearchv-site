@@ -6,6 +6,7 @@ import {
   salonStoreProblem,
   scoresPollStale,
   seasonStale,
+  ticketsStuck,
   waitlistDown,
 } from "./checks.ts";
 import { pushCheckDue, sportPushOverdue } from "./push_check.ts";
@@ -107,4 +108,11 @@ Deno.test("push checks run from 08:00 to 20:59 Edmonton, not while daily-push ho
   assertEquals(pushCheckDue(new Date("2026-11-16T03:59:00Z")), true, "20:59");
   assertEquals(pushCheckDue(new Date("2026-11-16T04:00:00Z")), false, "21:00");
   assertEquals(pushCheckDue(new Date("2026-11-15T12:00:00Z")), false, "05:00, a lead from last night is still waiting for 07:00");
+});
+
+Deno.test("tickets: any stuck ticket alerts by count only, none or an unknown count does not", () => {
+  assertEquals(ticketsStuck(0), null);
+  assertEquals(ticketsStuck(null), null);
+  assertEquals(ticketsStuck(1), "1 ticket waiting at new or pending_triage, untouched for over 2h");
+  assertEquals(ticketsStuck(4), "4 tickets waiting at new or pending_triage, untouched for over 2h");
 });

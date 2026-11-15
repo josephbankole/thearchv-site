@@ -128,6 +128,7 @@ alike, and the functions email him for both:
 | L1 escalates to L3 | `escalated_l3`, tier `l3` | founder email, "L3 escalation" |
 | The model answers with an action it was not offered | `l2_working`, tier `l2` | founder email, "L2 escalation (unreadable triage action)" |
 | A triage attempt fails (API error or unreadable answer) | `pending_triage`, `triage_attempts` up by one | nobody yet; triage-drain retries within the hour |
+| A ticket waits at `new` or `pending_triage` with nothing touching it for over 2 hours (the webhook never ran, or the drain is not running or not keeping up) | unchanged | founder email from health-probe, "ARCHV health: tickets failing", with the count only |
 | The third attempt fails | `l2_working`, tier `l2` | founder email, "Triage failed" |
 | The user replies on an L1 ticket that was resolved (or left at `l1_working`) | `pending_triage` | nobody; triage-drain triages it with the whole conversation |
 | The user replies on an L2 or L3 ticket | reopened if it was resolved | founder email, "Ticket follow-up", at most one per ticket every 6 hours (each email leaves an internal system note that sets the clock) |
@@ -279,6 +280,7 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `api-quota` | API-Football's count left today, as season mode last read it, is below 1,500 |
 | `salon-store` | the Salon shop switch (`GET /functions/v1/salon-store`) is not a 200 `gallery-store/1` document |
 | `android-waitlist` | the waitlist's preflight answers 404 or 5xx, or nothing |
+| `tickets` | any support ticket has sat at `new` or `pending_triage` with nothing touching it for over 2h. The email gives the count only |
 | `push-run`, `push-sport`, `scores-*` | also when the state row cannot be read |
 
 Deploy health-probe after the push migration (`20261115130100`): without its columns `push-run`

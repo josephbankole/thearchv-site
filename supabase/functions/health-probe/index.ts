@@ -17,6 +17,7 @@
 //   (g) scores-poll has refreshed its schedule within 2h; season mode has listed within 7h; the
 //       API-Football count left today is not below 1,500; salon-store answers its gallery-store/1
 //       switch; android-waitlist answers its preflight (checks.ts)
+//   (h) no support ticket has sat at 'new' or 'pending_triage' untouched for over 2h (a count only)
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
 // Debounced per check: health_alert_state records the last alert time, and a check will not
@@ -39,6 +40,9 @@ import {
   salonStoreProblem,
   scoresPollStale,
   seasonStale,
+  TICKET_STUCK_MS,
+  TICKET_WAITING_STATUSES,
+  ticketsStuck,
   waitlistDown,
 } from "./checks.ts";
 import { pushCheckDue, pushOverdue, sportPushOverdue } from "./push_check.ts";
@@ -290,6 +294,19 @@ Deno.serve(async (req) => {
     if (detail) failures.push({ check: "android-waitlist", detail });
   } catch (e) {
     failures.push({ check: "android-waitlist", detail: `unreachable: ${String(e).slice(0, 120)}` });
+  }
+
+  // (h) tickets: the triage queue is moving. A count, never a ticket's content (ticketsStuck in
+  // checks.ts).
+  {
+    const cutoff = new Date(now.getTime() - TICKET_STUCK_MS).toISOString();
+    const { count, error } = await supabase
+      .from("tickets")
+      .select("id", { count: "exact", head: true })
+      .in("status", [...TICKET_WAITING_STATUSES])
+      .lt("updated_at", cutoff);
+    const detail = error ? `read error: ${error.message.slice(0, 120)}` : ticketsStuck(count ?? null);
+    if (detail) failures.push({ check: "tickets", detail });
   }
 
   // (d) alert, debounced per check: 6h between alerts for the same failing check. A failed email

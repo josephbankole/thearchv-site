@@ -4,6 +4,17 @@ dist
 *.local
 .vite
 .env
+.env.*
+!.env.example
+
+# Keys and certificates (an APNs .p8 or a signing cert must never reach this public repo)
+*.p8
+*.pem
+*.p12
+secrets/
+
+# Agent-log rows written from inside this checkout belong in the Obsidian vault, never here
+AI-Memory/
 
 # build junk
 vite.config.ts.timestamp-*.mjs

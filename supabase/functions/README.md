@@ -888,10 +888,15 @@ the publishable key it needs ships in the `/app/` page. Its layers, cheapest to 
    browsers, not scripts.
 2. **Per-IP cap.** At most 5 signups an hour from one client IP, claimed through the
    `waitlist_rate_claim` RPC (`supabase/migrations/20261115180000_android_waitlist_source_caps.sql`)
-   before the insert, so one host cannot spend the whole hour's ceiling and lock real visitors
-   out. Only a SHA-256 of the IP is stored, in `waitlist_rate_hits`. The forwarded IP can be
-   rotated by a determined caller, so this raises the cost of a flood; it does not authenticate
-   anyone. A limiter error lets the signup through, because the global ceiling still holds.
+   before the insert. The key is `cf-connecting-ip`, which Cloudflare sets itself and the caller
+   cannot override, with the first `x-forwarded-for` entry as a fallback only when that header
+   does not arrive (`android-waitlist/client_ip.ts`). This stops a browser or a simple script
+   from spending the hour's ceiling. It does not stop a script with many addresses, or one that
+   writes its own `x-forwarded-for` on a route without `cf-connecting-ip`: that is what the
+   challenge below is for. Only a SHA-256 of the IP is stored, in `waitlist_rate_hits`. A limiter
+   error lets the signup through, because the global ceiling still holds.
+   After the first deploy, check one request in the function's logs or with a temporary log line
+   that `cf-connecting-ip` arrives; if it does not, the cap is running on the fallback.
 3. **Global 300 an hour** (`20260722120000`), unchanged, as the last resort.
 
 Deploy the migration before the function, or either order: the function treats a missing RPC as a

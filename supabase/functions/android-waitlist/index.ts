@@ -25,6 +25,8 @@
 // None of these confirms that an address belongs to the person who typed it; that needs double
 // opt-in (README), so the total counts addresses submitted, not confirmed.
 
+import { clientIp as clientIpFromHeaders } from "./client_ip.ts";
+
 const ORIGINS = ["https://thearchv.ca", "https://www.thearchv.ca"];
 const MAX_PER_HOUR = 300;
 
@@ -52,13 +54,9 @@ const json = (body: unknown, status: number, origin: string | null) =>
 const EMAIL =
   /^[^\s@,;<>()[\]\\]{1,64}@[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-// The first hop in x-forwarded-for is the client as the platform edge saw it. It is
-// caller-influenced (a spoofed header can prepend a value) and requests reach this function
-// through a CDN and the project gateway, so this is defence in depth behind the global cap,
-// never a trust boundary. Empty when absent; the per-IP cap is then skipped rather than putting
-// every such caller in one bucket, and the global ceiling still applies.
-const clientIp = (req: Request): string =>
-  (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim();
+// Which header the per-IP cap keys on, and why, is in client_ip.ts. Empty when nothing usable
+// arrived; the per-IP cap is then skipped and the global ceiling still applies.
+const clientIp = (req: Request): string => clientIpFromHeaders(req.headers);
 
 // A stable opaque key for the counter table, so no raw address is persisted. SHA-256 lives in
 // the edge runtime's Web Crypto; hex-encode the digest.
@@ -181,8 +179,9 @@ Deno.serve(async (req) => {
   const challenge = await verifyChallenge(req, body, origin);
   if (challenge) return challenge;
 
-  // Per-IP cap, ahead of the global ceiling, so one host cannot spend the whole hour's budget and
-  // lock the real form out. Skipped when the platform passed no client IP.
+  // Per-IP cap, ahead of the global ceiling, so one browser or simple script cannot spend the whole
+  // hour's budget. A caller with many addresses is the challenge's job. Skipped when no usable
+  // client IP arrived.
   const ip = clientIp(req);
   if (ip && !(await withinCap(restBase, auth, await hashKey("ip", ip), PER_IP_MAX_PER_HOUR))) {
     return json({ error: "rate_limited" }, 429, origin);

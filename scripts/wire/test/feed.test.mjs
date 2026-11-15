@@ -486,3 +486,30 @@ test("rank is sanitised to an integer from 1 to 6, defaulting to 1", () => {
   assert.equal(sanitiseItem({ ...base, rank: 4 }, opts).rank, 4);
   for (const bad of [0, 7, 2.5, "2", -1]) assert.equal(sanitiseItem({ ...base, rank: bad }, opts).rank, 1, String(bad));
 });
+
+test("a fixtures block never shows a game dated before today, on the page or in the feed (site-wire-ci-3)", () => {
+  const mu = { ...tables.sports.football.blocks.find((b) => b.id === "mu-next"), asOf: "2026-10-12", lastFreshAsOf: "2026-10-12", heldDays: 0 };
+  const html = renderTableBlock(mu, { today: "2026-10-12" });
+  assert.ok(!/10 Oct/.test(html), "the 10 October game is gone");
+  assert.match(html, /18 Oct/);
+  const past = renderTableBlock({ ...mu, asOf: "2026-10-26", lastFreshAsOf: "2026-10-26" }, { today: "2026-10-26" });
+  assert.match(past, /No fixture listed yet\./, "every game played: the empty text, never played games");
+  assert.ok(!/tblock__match/.test(past));
+  // Results keep their past rows.
+  const res = tables.sports.football.blocks.find((b) => b.kind === "results");
+  if (res) assert.equal((renderTableBlock({ ...res, asOf: "2026-10-26", lastFreshAsOf: "2026-10-26", heldDays: 0 }, { today: "2026-10-26" }).match(/tblock__match"/g) || []).length, res.rows.length);
+  const nfl = tables.sports.nfl.blocks.find((b) => b.id === "nfl-week");
+  assert.equal((renderTableBlock(nfl, { today: "2026-09-28" }).match(/tblock__match"/g) || []).length, 1);
+  // The feed applies the same rule, from an explicit day or from generatedAt in the edition zone.
+  const feedRows = (opts) => buildTablesFeed(tables, opts).sports.football.blocks.find((b) => b.id === "mu-next").rows.map((r) => r.date);
+  assert.deepEqual(feedRows({ generatedAt: "2026-10-12T09:00:00Z", today: "2026-10-12" }), ["2026-10-18", "2026-10-25"]);
+  const pinned = process.env.WIRE_TODAY;
+  delete process.env.WIRE_TODAY;
+  try {
+    assert.deepEqual(feedRows({ generatedAt: "2026-10-19T03:00:00Z" }), ["2026-10-18", "2026-10-25"], "03:00 UTC on the 19th is still the 18th in Toronto, so the 18th's game stays");
+    assert.deepEqual(feedRows({ generatedAt: "2026-10-19T12:00:00Z" }), ["2026-10-25"]);
+  } finally {
+    if (pinned !== undefined) process.env.WIRE_TODAY = pinned;
+  }
+  assert.equal(buildTablesFeed(tables, { generatedAt: "2026-10-19T03:00:00Z", today: "2026-10-19" }).sports.football.blocks.find((b) => b.id === "pl-table").rows.length, 20, "standings are untouched");
+});

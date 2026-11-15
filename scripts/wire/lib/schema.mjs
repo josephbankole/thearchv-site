@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { linkAllowed } from "./canon.mjs";
 import { compileFilters, MAX_ITEMS_CAP } from "./pick.mjs";
 import { tagClubs } from "./clubs.mjs";
+import { dateInZone } from "./time.mjs";
 
 export const WIRE_SCHEMA = "archv-wire/1";
 export const TABLES_SCHEMA = "archv-tables/1";
@@ -224,6 +225,24 @@ export function buildWireFeed(wire, { generatedAt, sources = SOURCES }) {
   };
 }
 
-export function buildTablesFeed(tables, { generatedAt }) {
-  return { schema: TABLES_SCHEMA, generatedAt, updatedAt: tables.updatedAt, sports: tables.sports };
+/* A fixtures block lists games still to come. Its rows are filtered at fetch time only, so a held
+   copy, or a fresh block the desk has not refetched while other commits rebuild, can still carry
+   games dated before today. Drop those at build time; rows with no date are kept. Other kinds
+   pass through unchanged. */
+export const upcomingRows = (b, today) =>
+  b.kind === "fixtures" && isDate(today) ? b.rows.filter((r) => !isDate(r.date) || r.date >= today) : b.rows;
+
+// The build day in the edition time zone: WIRE_TODAY when a build pins it (content.mjs), else the
+// day of generatedAt. null when neither reads as a date, and then nothing is filtered.
+function feedToday(generatedAt) {
+  if (process.env.WIRE_TODAY) return process.env.WIRE_TODAY;
+  const ms = Date.parse(generatedAt);
+  return Number.isNaN(ms) ? null : dateInZone(ms, SOURCES.editionTimeZone);
+}
+
+export function buildTablesFeed(tables, { generatedAt, today = feedToday(generatedAt) }) {
+  const sports = Object.fromEntries(Object.entries(tables.sports).map(([k, s]) => [
+    k, { ...s, blocks: s.blocks.map((b) => (b.kind === "fixtures" ? { ...b, rows: upcomingRows(b, today) } : b)) },
+  ]));
+  return { schema: TABLES_SCHEMA, generatedAt, updatedAt: tables.updatedAt, sports };
 }

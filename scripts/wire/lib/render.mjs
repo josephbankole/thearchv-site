@@ -5,7 +5,7 @@
    is the feed's own URL, escaped for the attribute and otherwise untouched. A renderer with
    nothing to show returns '' so no empty section ever ships. */
 import { esc, escAttr } from "../../shared/page-shell.mjs";
-import { SOURCES, SPORT_KEYS, currentEdition, blockVisible, daysBetween, rankOne } from "./schema.mjs";
+import { SOURCES, SPORT_KEYS, currentEdition, blockVisible, daysBetween, rankOne, upcomingRows } from "./schema.mjs";
 
 // '' for a date it cannot read: content never throws the build (the sanitiser drops bad dates first).
 const fmt = (iso, opts) => {
@@ -159,6 +159,8 @@ function renderEventRows(b) {
 
 export function renderTableBlock(b, { compact = false, today } = {}) {
   if (today && !blockVisible(b, today)) return "";
+  // A fixture dated before today is never shown as still to come.
+  if (today) b = { ...b, rows: upcomingRows(b, today) };
   let inner;
   if (!b.rows.length) {
     if (!b.emptyText) return "";

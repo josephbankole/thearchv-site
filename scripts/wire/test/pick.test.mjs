@@ -260,3 +260,17 @@ test("fetchWire writes one candidate per pick with its rank, and every pick join
     assert.ok(!next.candidates.some((x) => taken.has(x.id)));
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test("ci-12: a headline that still carries markup is dropped as markup-in-title, never edited", () => {
+  const xml = `<?xml version="1.0"?><rss version="2.0"><channel>
+<item><title><![CDATA[Placeholder Coach <em>out</em> at Placeholder City]]></title><link>https://www.espn.com/nfl/story/_/id/1/a</link><pubDate>Sat, 26 Sep 2026 20:00:00 EST</pubDate><guid>m1</guid></item>
+<item><title>Placeholder Coach &lt;b&gt;sacked&lt;/b&gt;</title><link>https://www.espn.com/nfl/story/_/id/2/b</link><pubDate>Sat, 26 Sep 2026 20:00:00 EST</pubDate><guid>m2</guid></item>
+<item><title>Placeholder Rovers 3 &lt; 4 Placeholder City, and fans &lt;3 it</title><link>https://www.espn.com/nfl/story/_/id/3/c</link><pubDate>Sat, 26 Sep 2026 20:00:00 EST</pubDate><guid>m3</guid></item>
+</channel></rss>`;
+  const r = pickTop(parseFeed(xml).items, src("espn-nfl"), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.equal(r.pick.headline, "Placeholder Rovers 3 < 4 Placeholder City, and fans <3 it");
+  assert.deepEqual(r.rejected.filter((x) => x.reason === "markup-in-title").map((x) => x.headline.slice(0, 16)), ["Placeholder Coac", "Placeholder Coac"]);
+  const only = pickTop(parseFeed(xml).items.slice(0, 2), src("espn-nfl"), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.equal(only.pick, null);
+  assert.equal(only.reason, "all-filtered");
+});

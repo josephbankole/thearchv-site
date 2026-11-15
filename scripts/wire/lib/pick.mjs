@@ -18,6 +18,8 @@ export const MAX_ITEMS_CAP = 6;
 export const maxItemsOf = (source) => Math.max(1, Math.min(MAX_ITEMS_CAP, Number.isInteger(source?.maxItems) ? source.maxItems : 1));
 
 const HOUR = 3600000;
+// A tag-like run in a decoded headline: "<em>", "</b>", "<br/>", "<!--". "a < b" and "<3" do not match.
+const MARKUP_RE = /<\/?[a-z][a-z0-9:-]*(?:\s[^<>]*)?\/?>|<!--/i;
 
 export function compileFilters(defaults, source) {
   const titles = [...(defaults.exclude || []), ...(source.exclude || [])].map((p) => ({ p, re: new RegExp(p, "i") }));
@@ -59,6 +61,8 @@ export function pickTop(items, source, { defaults, seen, nowMs, maxAgeHours }) {
   for (const it of items) {
     const reject = (reason) => rejected.push({ sourceId: source.id, headline: it.title, reason });
     if (!it.title) { reject("no-title"); counts.filtered++; continue; }
+    // The headline is kept verbatim, so one that still carries markup is dropped, never edited.
+    if (MARKUP_RE.test(it.title)) { reject("markup-in-title"); counts.filtered++; continue; }
     if (!linkAllowed(it.link, source.linkHosts || [])) { reject("bad-link"); counts.filtered++; continue; }
     const path = new URL(it.link).pathname.toLowerCase();
     const badPath = filters.paths.find((f) => f.re.test(path));

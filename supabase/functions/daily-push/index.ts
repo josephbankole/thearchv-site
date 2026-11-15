@@ -16,6 +16,7 @@
 import { adminClient, json } from "../_shared/cors.ts";
 import { DEFAULT_SPORT, SPORT_KEYS, type SportKey } from "../_shared/sports.ts";
 import { batchByEncodedLength, describeError, NETWORK_REASON, runPool, sendAndClassify } from "./fanout.ts";
+import { runOutcomeRow } from "../_shared/push_run.ts";
 import {
   apnsHeaders,
   decideSend,
@@ -348,10 +349,21 @@ async function pushSport(run: Run, sport: SportKey): Promise<Record<string, unkn
   const body = story.headline ? String(story.headline) : "A new story has landed.";
   const payload = JSON.stringify({ aps: { alert: { title: "The ARCHV", body }, sound: "default" }, archv: routeFor(story) });
   const headers = apnsHeaders(jwt, run.apns.bundleId, sport, run.today, new Date());
-  const { sent, failed } = await fanOut(run, sport, claimed, headers, payload);
+  const { sent, failed, dead, reasons } = await fanOut(run, sport, claimed, headers, payload);
+
+  // g. What the fan-out delivered, on the same row as the lead (push_run.ts). The lead was recorded
+  //    as sent before any send, so without this a run where APNs refused every token looked like a
+  //    good one to health-probe. A failed write is logged and reported, never retried as a send.
+  const outcomeError = await recordOutcome(
+    run.supabase,
+    sport,
+    runOutcomeRow({ claimed: claimed.length, sent, failed, dead, reasons }, new Date()),
+  );
+  if (outcomeError) console.error(`daily-push: ${sport} run outcome not recorded: ${outcomeError}`);
+  const outcomeNote = outcomeError ? { outcomeRecorded: false } : {};
   return claimFailure
-    ? { ok: false, sent, failed, error: `token claim failed part way: ${claimFailure.slice(0, 120)}` }
-    : { ok: true, sent, failed };
+    ? { ok: false, sent, failed, ...outcomeNote, error: `token claim failed part way: ${claimFailure.slice(0, 120)}` }
+    : { ok: true, sent, failed, ...outcomeNote };
 }
 
 // Fan-out in bounded concurrent batches, not one-at-a-time. The old sequential loop awaited
@@ -378,10 +390,12 @@ async function fanOut(
   tokens: string[],
   headers: Record<string, string>,
   payload: string,
-): Promise<{ sent: number; failed: number }> {
+): Promise<{ sent: number; failed: number; dead: number; reasons: Record<string, number> }> {
   const fanoutStart = Date.now();
   let sent = 0;
   let failed = 0;
+  let dead = 0;
+  const reasons: Record<string, number> = {};
   let firstNetworkError = "";
 
   try {
@@ -409,7 +423,11 @@ async function fanOut(
         } else {
           failed++;
           run.failureReasons[c.reasonKey] = (run.failureReasons[c.reasonKey] ?? 0) + 1;
-          if (c.dead) run.dead.push(token);
+          reasons[c.reasonKey] = (reasons[c.reasonKey] ?? 0) + 1;
+          if (c.dead) {
+            run.dead.push(token);
+            dead++;
+          }
           // One sample of a thrown send for the log, not one line per token: when APNs is
           // unreachable every send throws. describeError has already masked the token.
           if (c.reasonKey === NETWORK_REASON && !firstNetworkError) firstNetworkError = c.detail ?? "";
@@ -430,6 +448,7 @@ async function fanOut(
     const untallied = tokens.length - sent - failed;
     failed += untallied;
     run.failureReasons.worker_error = (run.failureReasons.worker_error ?? 0) + untallied;
+    reasons.worker_error = (reasons.worker_error ?? 0) + untallied;
     console.error(`daily-push: ${sport} fan-out worker threw, ${untallied} sends untallied: ${describeError(e)}`);
   }
   if (firstNetworkError) {
@@ -438,7 +457,7 @@ async function fanOut(
   console.log(`daily-push: ${sport} fan-out done — ${tokens.length} tokens in ${Date.now() - fanoutStart}ms, sent=${sent}, failed=${failed}`);
   run.sent += sent;
   run.failed += failed;
-  return { sent, failed };
+  return { sent, failed, dead, reasons };
 }
 
 // Asset readiness check: a plain HEAD, treating any network failure as not-ready (fail
@@ -466,6 +485,19 @@ async function recordSent(supabase: Supabase, sport: SportKey, leadKey: string):
       ? await supabase.from("push_state").upsert({ id: 1, last_build_hash: leadKey, last_sent_at: sentAt })
       : await supabase.from("push_sport_state").upsert({ sport, last_lead_key: leadKey, last_sent_at: sentAt });
     return error ? error.message || "unknown upsert error" : null;
+  } catch (e) {
+    return describeError(e);
+  }
+}
+
+// Writes one sport's run outcome onto the row recordSent wrote, which exists by now. Returns null
+// when written and the error text when not; never throws.
+async function recordOutcome(supabase: Supabase, sport: SportKey, row: Record<string, unknown>): Promise<string | null> {
+  try {
+    const { error } = sport === DEFAULT_SPORT
+      ? await supabase.from("push_state").update(row).eq("id", 1)
+      : await supabase.from("push_sport_state").update(row).eq("sport", sport);
+    return error ? error.message || "unknown update error" : null;
   } catch (e) {
     return describeError(e);
   }

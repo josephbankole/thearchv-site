@@ -180,6 +180,14 @@ Football's state is the `push_state` row, where `last_build_hash` holds the foot
 other sport has a row in `push_sport_state`. A sport with no readers still records its lead, so its
 first reader starts with the next new story rather than an old one.
 
+After each fan-out, daily-push writes what it delivered onto the same row: `last_run_at`,
+`last_run_claimed`, `last_run_sent`, `last_run_failed`, `last_run_dead` and up to five
+`last_run_reasons` (`_shared/push_run.ts`, migration `20261115130100_push_run_outcome.sql`, which goes
+in before either function is deployed). The lead is recorded as sent before the sends, so these are
+the only place a run that APNs refused (a revoked key, a wrong `APNS_ENV`) shows up. health-probe
+alerts, as `push-run:<sport>`, when a sport's last run in the past 48 hours sent nothing, failed more
+than half its sends, or found more than 25 dead tokens.
+
 health-probe watches football's row. It alerts when `last_sent_at` is more than 76 hours old and
 today.json's lead is one daily-push would still send, which it works out with the same guard
 daily-push uses (`_shared/push_guard.ts`). A week with no new football lead raises no alert. Deploy

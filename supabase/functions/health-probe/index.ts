@@ -8,6 +8,8 @@
 //   (c) push_state row is readable and, while today.json's lead is one daily-push has not sent,
 //       last_sent_at is not older than 76h, but ONLY checked 11:00-23:59 UTC (before 11:00 UTC
 //       the day's push legitimately has not fired yet)
+//   (c2) the last daily-push fan-out of every sport delivered: not zero sent, not more than half
+//       failed, not more dead tokens than one run deletes (../_shared/push_run.ts)
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
 // Debounced per check: health_alert_state records the last alert time, and a check will not
@@ -19,6 +21,8 @@
 // Guarded with x-push-secret, matched against the PUSH_SECRET vault secret — the same pattern
 // daily-push's pg_cron caller uses.
 import { adminClient, json } from "../_shared/cors.ts";
+import { pushRunFailing } from "../_shared/push_run.ts";
+import { DEFAULT_SPORT } from "../_shared/sports.ts";
 import { sendFounderMail } from "../_shared/zoho.ts";
 import { type AlertDeps, dispatchAlerts, type Failure, pingUrl } from "./alert.ts";
 import { pushOverdue } from "./push_check.ts";
@@ -127,6 +131,32 @@ Deno.serve(async (req) => {
     } else {
       const detail = pushOverdue(state, todayDoc, now, PUSH_STALE_MS);
       if (detail) failures.push({ check: "push_state", detail });
+    }
+  }
+
+  // (c2) push-run: what the last fan-out of each sport delivered (pushRunFailing in
+  //      ../_shared/push_run.ts). daily-push records the lead before it sends, so last_sent_at stays
+  //      fresh even when APNs refuses every token; this reads what it recorded after the sends.
+  {
+    const runColumns = "last_run_at, last_run_claimed, last_run_sent, last_run_failed, last_run_dead, last_run_reasons";
+    const { data: football, error: footballError } = await supabase
+      .from("push_state").select(runColumns).eq("id", 1).maybeSingle();
+    const { data: others, error: othersError } = await supabase
+      .from("push_sport_state").select(`sport, ${runColumns}`);
+    const readError = footballError ?? othersError;
+    if (readError) {
+      failures.push({ check: "push-run", detail: `read error: ${readError.message.slice(0, 120)}` });
+    } else {
+      const rows: [string, Record<string, unknown> | null][] = [
+        [DEFAULT_SPORT, football as Record<string, unknown> | null],
+        ...((others ?? []) as Record<string, unknown>[])
+          .filter((r) => typeof r.sport === "string" && r.sport !== DEFAULT_SPORT)
+          .map((r): [string, Record<string, unknown>] => [r.sport as string, r]),
+      ];
+      for (const [sport, row] of rows) {
+        const detail = pushRunFailing(row, now);
+        if (detail) failures.push({ check: `push-run:${sport}`, detail });
+      }
     }
   }
 

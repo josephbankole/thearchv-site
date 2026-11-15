@@ -18,7 +18,9 @@
    through preview.
 2. **Deploy is a script, not a push.** Work on branch `preview`, commit, then run
    `bash scripts/deploy-site.sh` from the repo root. It merges preview into main with
-   the engine's data files winning (--ours) and pushes; GitHub Pages builds main.
+   the engine's data files winning (--ours), prints what the merge changes, and asks before it
+   pushes; GitHub Pages builds main. Without a terminal (an agent session) it will not push
+   unless you pass `--yes`, so read the printed diff first, then re-run with `--yes`.
    Pages builds flake: if the change is not live in ~4 minutes, check the run
    (`pages build and deployment` via the API with the PAT; the PAT cannot re-run
    workflows), then retrigger with an empty commit on main. Always verify live with

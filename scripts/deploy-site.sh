@@ -5,7 +5,8 @@
 # start of the session this is a clean fast-forward; if the engine added newer tracker
 # entries to main since then, they win automatically.
 #
-# Usage:  bash scripts/deploy-site.sh
+# Usage:  bash scripts/deploy-site.sh          (asks before it pushes main)
+#         bash scripts/deploy-site.sh --yes    (no prompt; required when stdin is not a terminal)
 #
 # ###########################################################################################
 # ## READ THIS BEFORE RUNNING IT, 2026-08-04. THIS SCRIPT MERGES preview INTO main.         ##
@@ -28,9 +29,20 @@
 # failure; it is this.
 #
 # Either way, look at what the merge actually changed before you let it push. This script now
-# prints that diff, so the answer is on screen rather than assumed.
+# prints that diff and then stops for a yes before it pushes main. Run without a terminal (a
+# session, a routine), it refuses to push unless --yes was passed, so the review cannot scroll
+# past unread.
 set -euo pipefail
 cd "$(dirname "$0")/.."   # repo root
+
+ASSUME_YES=""
+for arg in "$@"; do
+  case "$arg" in
+    -y|--yes) ASSUME_YES="yes" ;;
+    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
+    *) echo "ERROR: unknown argument '$arg'. Usage: bash scripts/deploy-site.sh [--yes]"; exit 2 ;;
+  esac
+done
 
 # Every git call in this script runs with auto-maintenance off. On 2026-08-04 a detached
 # `git maintenance run` held the maintenance lock, `git stash create` failed under it, and the
@@ -104,6 +116,23 @@ echo "This deploy will change:"
 git diff --stat origin/main..main || true
 if git diff --quiet origin/main..main; then
   echo "  (nothing — main already matches origin/main. See the header note about the reverted merge.)"
+fi
+
+# The gate. Nothing above has touched origin/main yet; declining leaves the local merge on main,
+# which the next run discards with its reset to origin/main.
+if [ -z "$ASSUME_YES" ]; then
+  if [ -t 0 ]; then
+    read -r -p "Push this to main and publish it? [y/N] " answer
+    case "$answer" in
+      y|Y|yes|YES) ;;
+      *) echo "Not pushed. main is unchanged on origin."; git checkout preview; exit 1 ;;
+    esac
+  else
+    echo "NOT PUSHED: stdin is not a terminal, so there is no one to confirm the diff above."
+    echo "  Review it, then re-run with --yes:  bash scripts/deploy-site.sh --yes"
+    git checkout preview
+    exit 1
+  fi
 fi
 
 git push origin main

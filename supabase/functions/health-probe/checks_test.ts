@@ -2,6 +2,11 @@
 // (checks.ts) and the per-sport push check (push_check.ts). Run: `deno test` from this dir.
 import {
   footballLeadStale,
+  JB_NEWS_STALE_MS,
+  jbNewsStale,
+  MIRROR_MIN_FILES,
+  mirrorProblem,
+  mirrorSample,
   quotaLow,
   salonStoreProblem,
   scoresPollStale,
@@ -129,4 +134,39 @@ Deno.test("tickets: any stuck ticket alerts by count only, none or an unknown co
   assertEquals(ticketsStuck(null), null);
   assertEquals(ticketsStuck(1), "1 ticket waiting at new, pending_triage or l1_working, untouched for over 2h");
   assertEquals(ticketsStuck(4), "4 tickets waiting at new, pending_triage or l1_working, untouched for over 2h");
+});
+
+const feedWith = (...dates: string[]) =>
+  `<rss><channel><lastBuildDate>Fri, 13 Nov 2026 14:09:45 GMT</lastBuildDate>` +
+  dates.map((d, i) => `<item><title>t${i}</title><pubDate>${d}</pubDate></item>`).join("") +
+  `</channel></rss>`;
+
+Deno.test("jb-news: the newest item counts, a Friday-to-Tuesday gap is fine, a missed edition alerts", () => {
+  const xml = feedWith("Fri, 06 Nov 2026 14:30:00 GMT", "Fri, 13 Nov 2026 14:09:45 GMT", "Tue, 03 Nov 2026 14:30:00 GMT");
+  assertEquals(jbNewsStale(xml, new Date("2026-11-17T13:00:00Z")), null, "Tuesday morning, before the edition");
+  const late = new Date(Date.parse("2026-11-13T14:09:45Z") + JB_NEWS_STALE_MS + 60_000);
+  assert(jbNewsStale(xml, late)?.startsWith("newest news item published 2026-11-13T14:09:45.000Z"), "stale after 120h");
+});
+
+Deno.test("jb-news: a feed with no dated item alerts, and lastBuildDate alone does not count", () => {
+  assertEquals(jbNewsStale(feedWith(), new Date("2026-11-14T00:00:00Z")), "news-feed.xml has no dated item");
+  assertEquals(jbNewsStale("not xml", new Date()), "news-feed.xml has no dated item");
+});
+
+Deno.test("salon-mirror: a full bucket serving its sample is healthy", () => {
+  assertEquals(mirrorProblem(MIRROR_MIN_FILES, []), null);
+});
+
+Deno.test("salon-mirror: an emptied bucket or a file not served alerts", () => {
+  assertEquals(mirrorProblem(0, []), `0 files in salon-art, expected at least ${MIRROR_MIN_FILES}`);
+  assertEquals(mirrorProblem(MIRROR_MIN_FILES, ["met-1-1792.jpg 404"]), "not served: met-1-1792.jpg 404");
+});
+
+Deno.test("salon-mirror: the sample is distinct names, never more than there are", () => {
+  const names = ["a.jpg", "b.jpg", "c.jpg", "d.jpg"];
+  const picked = mirrorSample(names, 3, () => 0.5);
+  assertEquals(new Set(picked).size, 3);
+  assert(picked.every((n) => names.includes(n)), "picked from the list");
+  assertEquals(mirrorSample(["a.jpg"], 3).length, 1);
+  assertEquals(mirrorSample([], 3), []);
 });

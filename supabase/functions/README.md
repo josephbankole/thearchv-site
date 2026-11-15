@@ -308,6 +308,9 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `salon-store` | the Salon shop switch (`GET /functions/v1/salon-store`) is not a 200 `gallery-store/1` document |
 | `android-waitlist` | the waitlist's preflight answers 404 or 5xx, or nothing |
 | `tickets` | any support ticket has sat at `new`, `pending_triage` or `l1_working` with nothing touching it for over 2h. The email gives the count only |
+| `jb-site` | https://josephbankole.ca/ does not answer 200 |
+| `jb-news` | josephbankole.ca's `news-feed.xml` does not answer 200, or its newest item is over 120h old (the desk publishes Tuesday and Friday, so this is one missed edition) |
+| `salon-mirror` | the `salon-art` bucket lists fewer than 452 JPEGs (the 15 Nov 2026 catalog's count; raise `MIRROR_MIN_FILES` in `checks.ts` when the catalog adds works), or one of 3 files picked at random does not answer 200 at its public URL |
 | `push-run`, `push-sport`, `scores-*` | also when the state row cannot be read |
 
 Deploy health-probe after the push migration (`20261115130100`): without its columns `push-run`

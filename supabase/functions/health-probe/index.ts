@@ -17,7 +17,11 @@
 //   (g) scores-poll has refreshed its schedule within 2h; season mode has listed within 7h; the
 //       API-Football count left today is not below 1,500; salon-store answers its gallery-store/1
 //       switch; android-waitlist answers its preflight (checks.ts)
-//   (h) no support ticket has sat at 'new' or 'pending_triage' untouched for over 2h (a count only)
+//   (h) no support ticket has sat at 'new', 'pending_triage' or 'l1_working' untouched for over 2h
+//       (a count only)
+//   (i) https://josephbankole.ca/ returns 200 and its news-feed.xml has an item from the last 120h
+//   (j) the Salon image mirror (bucket salon-art) still holds the catalog's files and serves a
+//       random sample of them
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
 // Debounced per check: health_alert_state records the last alert time, and a check will not
@@ -36,6 +40,13 @@ import { sendFounderMail } from "../_shared/zoho.ts";
 import { type AlertDeps, dispatchAlerts, type Failure, pingUrl } from "./alert.ts";
 import {
   footballLeadStale,
+  JB_NEWS_FEED_URL,
+  JB_SITE_URL,
+  jbNewsStale,
+  MIRROR_BUCKET,
+  MIRROR_SAMPLE,
+  mirrorProblem,
+  mirrorSample,
   quotaLow,
   salonStoreProblem,
   scoresPollStale,
@@ -310,6 +321,51 @@ Deno.serve(async (req) => {
       .lt("updated_at", cutoff);
     const detail = error ? `read error: ${error.message.slice(0, 120)}` : ticketsStuck(count ?? null);
     if (detail) failures.push({ check: "tickets", detail });
+  }
+
+  // (i) josephbankole.ca: the site answers, and its Tuesday and Friday news desk is still
+  //     publishing (jbNewsStale in checks.ts).
+  try {
+    const res = await fetch(JB_SITE_URL, { cache: "no-store", signal: AbortSignal.timeout(15_000) });
+    await res.body?.cancel();
+    if (res.status !== 200) failures.push({ check: "jb-site", detail: `status ${res.status}` });
+  } catch (e) {
+    failures.push({ check: "jb-site", detail: `unreachable: ${String(e).slice(0, 120)}` });
+  }
+  try {
+    const res = await fetch(JB_NEWS_FEED_URL, { cache: "no-store", signal: AbortSignal.timeout(15_000) });
+    if (res.status !== 200) {
+      await res.body?.cancel();
+      failures.push({ check: "jb-news", detail: `status ${res.status}` });
+    } else {
+      const detail = jbNewsStale(await res.text(), now);
+      if (detail) failures.push({ check: "jb-news", detail });
+    }
+  } catch (e) {
+    failures.push({ check: "jb-news", detail: `unreachable: ${String(e).slice(0, 120)}` });
+  }
+
+  // (j) salon-mirror: the bucket still holds the catalog's files, and a random few of them are
+  //     served at the public URL the app uses (mirrorProblem in checks.ts).
+  {
+    const { data: listed, error } = await supabase.storage.from(MIRROR_BUCKET).list("", { limit: 1000 });
+    if (error) {
+      failures.push({ check: "salon-mirror", detail: `list error: ${error.message.slice(0, 120)}` });
+    } else {
+      const names = (listed ?? []).map((o) => o.name).filter((n) => n.endsWith(".jpg"));
+      const failed: string[] = [];
+      for (const name of mirrorSample(names, MIRROR_SAMPLE)) {
+        const url = `${Deno.env.get("SUPABASE_URL") ?? ""}/storage/v1/object/public/${MIRROR_BUCKET}/${name}`;
+        try {
+          const res = await fetch(url, { method: "HEAD", cache: "no-store", signal: AbortSignal.timeout(15_000) });
+          if (res.status !== 200) failed.push(`${name} ${res.status}`);
+        } catch (e) {
+          failed.push(`${name} unreachable: ${String(e).slice(0, 60)}`);
+        }
+      }
+      const detail = mirrorProblem(names.length, failed);
+      if (detail) failures.push({ check: "salon-mirror", detail });
+    }
   }
 
   // (d) alert, debounced per check: 6h between alerts for the same failing check. A failed email

@@ -113,3 +113,48 @@ export function ticketsStuck(count: number | null): string | null {
   if (count === null || count <= 0) return null;
   return `${count} ticket${count === 1 ? "" : "s"} waiting at new, pending_triage or l1_working, untouched for over ${TICKET_STUCK_MS / 3_600_000}h`;
 }
+
+// josephbankole.ca. Its news desk publishes on Tuesday and Friday (josephbankole-site-desk), and
+// news-feed.xml is rebuilt from the edition pages each time, so the newest item's pubDate is the
+// desk's own freshness. Friday to Tuesday is the longest legitimate gap, about 98 hours; 120 hours
+// alerts the day after one missed edition.
+export const JB_SITE_URL = "https://josephbankole.ca/";
+export const JB_NEWS_FEED_URL = "https://josephbankole.ca/news-feed.xml";
+export const JB_NEWS_STALE_MS = 120 * 60 * 60 * 1000;
+
+export function jbNewsStale(xml: string, now: Date): string | null {
+  const dates = [...xml.matchAll(/<item>[\s\S]*?<pubDate>([^<]+)<\/pubDate>/g)]
+    .map((m) => Date.parse(m[1].trim()))
+    .filter((t) => !Number.isNaN(t));
+  if (dates.length === 0) return "news-feed.xml has no dated item";
+  const newest = Math.max(...dates);
+  if (now.getTime() - newest <= JB_NEWS_STALE_MS) return null;
+  return `newest news item published ${new Date(newest).toISOString()}, over ${JB_NEWS_STALE_MS / 3_600_000}h ago`;
+}
+
+// The Salon image mirror (bucket salon-art, filled by the gallery-app repo's
+// scripts/catalog/build_mirror.py). The app loads the Cleveland and Met wall images from it with
+// no fallback, so an emptied bucket or a missing file shows only as failed frames. The catalog of
+// 15 Nov 2026 references 452 mirror files: raise MIRROR_MIN_FILES when the catalog adds works.
+export const MIRROR_BUCKET = "salon-art";
+export const MIRROR_MIN_FILES = 452;
+export const MIRROR_SAMPLE = 3;
+
+// Up to n distinct names, chosen at random, so each run checks different files.
+export function mirrorSample(names: string[], n: number, random: () => number = Math.random): string[] {
+  const pool = [...names];
+  const out: string[] = [];
+  while (out.length < n && pool.length > 0) {
+    out.push(pool.splice(Math.floor(random() * pool.length), 1)[0]);
+  }
+  return out;
+}
+
+// fileCount: JPEGs listed in the bucket. failed: sampled files whose public URL did not answer 200,
+// each as "<name> <status>".
+export function mirrorProblem(fileCount: number, failed: string[]): string | null {
+  const problems: string[] = [];
+  if (fileCount < MIRROR_MIN_FILES) problems.push(`${fileCount} files in ${MIRROR_BUCKET}, expected at least ${MIRROR_MIN_FILES}`);
+  if (failed.length > 0) problems.push(`not served: ${failed.join(", ")}`);
+  return problems.length ? problems.join("; ") : null;
+}

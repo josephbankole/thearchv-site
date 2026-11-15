@@ -60,7 +60,7 @@ const LOG_VISIBLE = 10;
 
 // The privacy policy's "Last updated" day. Change the policy, change this (the policy promises
 // the date moves with it). It renders the visible line and feeds the AboutPage dateModified.
-const PRIVACY_UPDATED = "2026-10-19";
+const PRIVACY_UPDATED = "2026-11-15";
 
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
@@ -446,12 +446,39 @@ const html = `${documentShell({
           record a story's headline when you open or save it.</li>
         </ul>
         <p>Support messages and push tokens are kept in a database that Supabase runs for
-        us. Nothing is sold, shared for advertising, or used to build a profile of you.</p>
+        us, on its servers in the United States (Oregon). Supabase logs every request to that
+        server, from the app or from this site, with its IP address, the approximate location
+        and network provider worked out from that address, and the device details the request
+        carries. It keeps those logs for seven days and then deletes them. We use them only to
+        keep the server running and to fix faults. PostHog stores the analytics on its servers
+        in the United States. Nothing is sold, shared for advertising, or used to build a
+        profile of you.</p>
 
         <h3>The website</h3>
-        <p>This site uses the same PostHog analytics, and it honours your
-        browser's Do Not Track setting. This site serves its own fonts, so your browser
-        does not request them from anyone else. Partnership enquiries come by email to
+        <p>This site uses the same PostHog analytics as the app. It records:</p>
+        <ul class="about__list">
+          <li><strong>Page views.</strong> An event when a page opens and another when you
+          leave it, with the page address and the page that sent you.</li>
+          <li><strong>On the front page.</strong> How far down you scroll (25, 50, 75 and 100
+          per cent), which sections come into view, and clicks on links to the App Store, our
+          Etsy shop, Instagram and our long reads. A long read click records the link's
+          address and its text.</li>
+          <li><strong>On the games.</strong> On the quiz, the daily archive game and the player
+          comparisons, an event when you play, finish or share one.</li>
+          <li><strong>Browser details.</strong> Every event carries details that PostHog's own
+          script adds, such as your browser, operating system, screen size, language and time
+          zone. PostHog uses the IP address each event comes from to estimate a rough
+          location, such as the city or country.</li>
+          <li><strong>A random identifier.</strong> PostHog keeps a random id in your
+          browser's local storage, not in a cookie, so a return visit is not counted as a new
+          visitor. It is not linked to your name or email. Clearing this site's data in your
+          browser erases it.</li>
+        </ul>
+        <p>Autocapture and session recording are switched off, so PostHog does not record
+        every click, keystroke or form field. If your browser sends Do Not Track, no events
+        are sent for your visit. The scores on the front page and the scores page load live
+        from the same Supabase server, so those requests appear in its logs. This site serves
+        its own fonts, so your browser does not request them from anyone else. Partnership enquiries come by email to
         <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>, and the
         site has no contact form.</p>
         <p>Android visitors to the <a href="/app/">app page</a> see a waitlist. Joining it

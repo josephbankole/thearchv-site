@@ -396,3 +396,28 @@ export function rowFromState(s: PollState, now: Date): Record<string, unknown> {
     updated_at: now.toISOString(),
   };
 }
+
+// How the state row is saved. pg_cron starts a run every minute whether or not the last one has
+// finished, so two runs can overlap, and the slower one must not put back the older state over the
+// newer one. The save is conditional on the row still carrying the updated_at this run read: if
+// another run has saved since, this run's save is skipped ("stale") and the newer state stands.
+// The cost of a skipped save is at most a rewrite or a schedule refresh next minute. With no row
+// read (the very first run) there is nothing to compare, so the row is created as before.
+export type StateStore = {
+  create: (row: Record<string, unknown>) => Promise<{ error: string | null }>;
+  updateIf: (row: Record<string, unknown>, readUpdatedAt: string) => Promise<{ error: string | null; matched: number }>;
+};
+
+export async function saveStateRow(
+  store: StateStore,
+  row: Record<string, unknown>,
+  readUpdatedAt: string | null,
+): Promise<"saved" | "stale" | { error: string }> {
+  if (readUpdatedAt === null) {
+    const { error } = await store.create(row);
+    return error ? { error } : "saved";
+  }
+  const { error, matched } = await store.updateIf(row, readUpdatedAt);
+  if (error) return { error };
+  return matched > 0 ? "saved" : "stale";
+}

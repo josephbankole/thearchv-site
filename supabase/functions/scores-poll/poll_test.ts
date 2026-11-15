@@ -9,6 +9,7 @@ import {
   type PollState,
   rowFromState,
   runPoll,
+  saveStateRow,
   SCORES_PATH,
   stateFromRow,
   type Summary,
@@ -509,4 +510,47 @@ Deno.test("a match about to kick off points at its file, so its confirmed lineup
   // Further out, a not-started match still has no pointer.
   const later = scoresOf(store).matches.find((x: Match) => x.id === 1635690);
   assertEquals([later.status.code, later.detail], ["NS", null]);
+});
+
+// A one-row table with the conditional update scores_poll_state gets from index.ts.
+function stateTable(initial: Record<string, unknown> | null) {
+  let row = initial;
+  return {
+    get: () => row,
+    store: {
+      create: (r: Record<string, unknown>) => {
+        row = r;
+        return Promise.resolve({ error: null });
+      },
+      updateIf: (r: Record<string, unknown>, readUpdatedAt: string) => {
+        if (!row || row.updated_at !== readUpdatedAt) return Promise.resolve({ error: null, matched: 0 });
+        row = r;
+        return Promise.resolve({ error: null, matched: 1 });
+      },
+    },
+  };
+}
+
+Deno.test("overlapping runs: the slower run's save does not roll back the state the later run saved", async () => {
+  const read = rowFromState(EMPTY_STATE, at(T0));
+  const table = stateTable(read);
+  const fast = rowFromState({ ...EMPTY_STATE, windowDay: "2026-10-13" }, at(T0, 1));
+  const slow = rowFromState({ ...EMPTY_STATE, windowDay: "2026-10-12" }, at(T0, 1));
+  // Both runs read the same row; the later one finishes first.
+  assertEquals(await saveStateRow(table.store, fast, read.updated_at as string), "saved");
+  assertEquals(await saveStateRow(table.store, slow, read.updated_at as string), "stale");
+  assertEquals(table.get()!.window_day, "2026-10-13");
+});
+
+Deno.test("the first run ever creates the row; a failed save is reported", async () => {
+  const table = stateTable(null);
+  const row = rowFromState(EMPTY_STATE, at(T0));
+  assertEquals(await saveStateRow(table.store, row, null), "saved");
+  assertEquals(table.get(), row);
+  const broken = {
+    create: () => Promise.resolve({ error: "down" }),
+    updateIf: () => Promise.resolve({ error: "down", matched: 0 }),
+  };
+  assertEquals(await saveStateRow(broken, row, null), { error: "down" });
+  assertEquals(await saveStateRow(broken, row, "2026-10-13T20:10:00.000Z"), { error: "down" });
 });

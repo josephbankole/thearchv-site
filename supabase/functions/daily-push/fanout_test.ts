@@ -2,8 +2,10 @@
 // Dependency-free on purpose — a tiny local assert instead of std/assert so the suite runs
 // under a bare `deno test` with no network fetch. These cover the pieces that carry the send
 // loop's invariants: the bounded worker pool (including how it drains when a worker throws),
-// the reason-gated result classification, and the classification of a send that throws.
+// the reason-gated result classification, the classification of a send that throws, and the
+// length-bounded batching of the dead-token delete.
 import {
+  batchByEncodedLength,
   classifyApnsResult,
   classifySendError,
   describeError,
@@ -94,6 +96,50 @@ Deno.test("systemic failures are counted but never delete the token", () => {
 Deno.test("a reason-less failure buckets under http_<status>", () => {
   assertEquals(classifyApnsResult(500, ""), { ok: false, dead: false, reasonKey: "http_500" });
   assertEquals(classifyApnsResult(503, ""), { ok: false, dead: false, reasonKey: "http_503" });
+});
+
+// ---- batchByEncodedLength: delete batches bounded by request length ----
+
+const hexToken = (seed: string) => seed.repeat(64).slice(0, 64);
+const encodedCost = (batch: readonly string[]) =>
+  batch.reduce((n, t) => n + encodeURIComponent(t).length + 3, 0);
+
+Deno.test("no batch exceeds the encoded budget, and every token is kept once, in order", () => {
+  const tokens = Array.from({ length: 25 }, (_, i) => hexToken(i.toString(16)));
+  const batches = batchByEncodedLength(tokens, 1800);
+  for (const b of batches) {
+    assert(encodedCost(b) <= 1800, `batch of ${b.length} cost ${encodedCost(b)}`);
+  }
+  assertEquals(batches.flat(), tokens, "order preserved, nothing dropped or duplicated");
+});
+
+Deno.test("a long token costs more batches than a short one, for the same token count", () => {
+  const short = Array.from({ length: 40 }, (_, i) => hexToken(i.toString(16)));
+  // 200 hex characters is the upper bound the token format rule permits.
+  const long = short.map((t) => t.repeat(4).slice(0, 200));
+  assert(
+    batchByEncodedLength(long, 1800).length > batchByEncodedLength(short, 1800).length,
+    "batching must follow encoded length, not item count",
+  );
+});
+
+Deno.test("a single token over the whole budget still gets a batch of its own", () => {
+  // Legacy rows predate the token CHECK constraint, so cleanup has to be able to delete one.
+  const monster = "x".repeat(5000);
+  const batches = batchByEncodedLength([monster, hexToken("a")], 1800);
+  assertEquals(batches.length, 2);
+  assertEquals(batches[0], [monster], "the oversized token is deleted, never skipped");
+});
+
+Deno.test("percent-encoding is charged, not raw length", () => {
+  // A junk token full of characters that expand under encoding must not sneak past the budget.
+  const expands = ",".repeat(100); // 100 chars raw, 300 encoded
+  const batches = batchByEncodedLength([expands, expands], 400);
+  assertEquals(batches.length, 2, "two 303-char tokens cannot share a 400-char budget");
+});
+
+Deno.test("an empty dead list produces no batches", () => {
+  assertEquals(batchByEncodedLength([], 1800), []);
 });
 
 // ---- integration: the pool + classifier reproduce the handler's aggregation ----

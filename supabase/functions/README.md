@@ -153,6 +153,19 @@ Deploy register-push alongside it whenever the sport list changes:
 supabase functions deploy register-push --no-verify-jwt
 ```
 
+### Dead-token cleanup is bounded per run
+
+After the fan-out, `daily-push` deletes the tokens APNs reported as `BadDeviceToken` or
+`Unregistered`, at most **25 per run** (`MAX_TOKEN_DELETIONS_PER_RUN` in `daily-push/index.ts`).
+It always deletes when there is anything dead: there is no dead-token count that switches cleanup
+off, which is what stops a table full of junk tokens staying poisoned for good. When there are more
+than 25 dead in one run the response carries `tokenDeletionAnomaly` with `deadTokens`,
+`deletedThisRun` and `totalTokens`, and the overflow waits for the next run. That is the trade: a
+systemic APNs failure (a production token list sent at the sandbox host answers `BadDeviceToken`
+for every token) costs at most 25 rows a run rather than the table, and a large backlog drains 25 a
+run. Raise the constant if a one-off drain needs to go faster, and watch the anomaly field while it
+does.
+
 Schedule it with pg_cron (run in the SQL editor). This checks hourly and only sends when a sport has
 a new lead, so it keeps the one-a-day promise. Replace the secret if you set PUSH_SECRET:
 ```sql
@@ -668,3 +681,45 @@ report:
 - `PUBLISH_PLAYERS=1` set by the founder in the dashboard.
 - Backfill from 2026-07-07 done in one call: 17 requests, 273 match files rewritten with `players`.
   The next-day rerun is not needed, because no match was played on 27 or 28 October.
+
+## Push-token format check (deploy order matters)
+
+`register-push` now refuses a token that is not 64 to 200 lowercase hex characters, and
+`supabase/migrations/20261115120000_push_token_format_check.sql` mirrors that rule as a CHECK
+constraint on `push_tokens.token`. The iOS client has always sent exactly 64 lowercase hex, so no
+shipped build is affected; the upper bound leaves room for Apple lengthening device tokens. Keep
+the regex in `register-push/index.ts` and the one in the migration identical.
+
+Deploy in this order:
+
+```
+# 1. The function first, so the boundary check is already turning away anything the constraint
+#    would reject. The other way round, an old deployment would hand a malformed token to the
+#    database and the caller would see a 500 instead of a clean 400.
+supabase functions deploy register-push --no-verify-jwt
+
+# 2. Then the constraint. It is added NOT VALID: existing rows are neither scanned nor rejected,
+#    while every later insert and update is checked. Apply the one file and record it (see the
+#    note on `supabase migration list --linked` under daily-push's Migration).
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120000_push_token_format_check.sql
+supabase migration repair --status applied 20261115120000
+
+# 3. Then the cap exemption: a token that already has a row is no longer counted by the hourly
+#    insert cap, so an opt-out or a sport change always lands whatever the hour's count.
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120100_push_token_cap_exemptions.sql
+supabase migration repair --status applied 20261115120100
+
+# 4. Then the bounded cleanup.
+supabase functions deploy daily-push --no-verify-jwt
+```
+
+Legacy rows that predate the constraint are left for `daily-push` to remove as APNs reports them
+dead (a CHECK constraint never blocks a DELETE). Once none are left, promote the constraint with
+one line in the SQL editor:
+
+```sql
+-- What is still out of shape?
+select count(*) from public.push_tokens where token !~ '^[0-9a-f]{64,200}$';
+-- When that is 0:
+alter table public.push_tokens validate constraint push_tokens_token_format;
+```

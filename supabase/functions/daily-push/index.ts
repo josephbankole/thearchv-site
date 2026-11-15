@@ -15,7 +15,7 @@
 //   PUSH_SECRET     optional guard, matched against the x-push-secret header from the cron call
 import { adminClient, json } from "../_shared/cors.ts";
 import { DEFAULT_SPORT, SPORT_KEYS, type SportKey } from "../_shared/sports.ts";
-import { describeError, NETWORK_REASON, runPool, sendAndClassify } from "./fanout.ts";
+import { batchByEncodedLength, describeError, NETWORK_REASON, runPool, sendAndClassify } from "./fanout.ts";
 import {
   apnsHeaders,
   decideSend,
@@ -147,24 +147,53 @@ Deno.serve(async (req) => {
     }
   }
 
-  // Deletion cap: a single run may not delete more than 25 tokens or more than 20% of the table.
-  // Past the cap it deletes NONE and surfaces the anomaly — a systemic APNs error must not wipe
-  // the token table. The cap counts the whole run, every sport together, against every
-  // opted-in token.
+  // Deletion cap: a single run deletes AT MOST 25 dead tokens, and never fewer than all of them
+  // when there are fewer than 25. The old rule deleted NOTHING once dead.length passed 25 or a
+  // fifth of the fan-out set, which made the only delete against push_tokens in this repository an
+  // off-switch: fill the table with junk tokens, every one of which comes back BadDeviceToken, and
+  // cleanup is disabled for good while the table stays poisoned. A flat per-run ceiling removes
+  // that property — there is no dead-token count that stops cleanup deleting, so a poisoned table
+  // drains a run at a time — without letting one run take a large slice of the table. The blast
+  // radius does not grow either: 25 is the most the old rule could ever delete in one run too. A
+  // systemic APNs error (the classic being a production token list sent at the sandbox host, which
+  // answers BadDeviceToken for every token) therefore still cannot wipe the table; it costs at most
+  // 25 rows a run, and a run only fans out for a sport that has not pushed today, and it is surfaced
+  // loudly in the response and the log the first time it happens. The cap counts the whole run,
+  // every sport together, against every opted-in token.
+  const MAX_TOKEN_DELETIONS_PER_RUN = 25;
+  // Budget for one delete request's `in.(...)` filter, in encoded characters — deliberately well
+  // under the ~8 KB request line proxies allow, leaving room for the base URL and the rest of the
+  // query string. See batchByEncodedLength in fanout.ts for why this is measured in characters
+  // rather than tokens.
+  const MAX_DELETE_FILTER_CHARS = 1800;
+
   const { dead } = run;
+  const toDelete = dead.slice(0, MAX_TOKEN_DELETIONS_PER_RUN);
   let removed = 0;
   let deletionAnomaly: Record<string, unknown> | undefined;
-  if (dead.length > 25 || dead.length > allRows.length * 0.2) {
-    deletionAnomaly = { tokenDeletionAnomaly: true, wouldHaveDeleted: dead.length, totalTokens: allRows.length };
-  } else if (dead.length) {
-    // `removed` reports what was actually deleted: a failed delete keeps it at 0 and says so,
-    // and the dead tokens simply come back as dead on the next day's run.
-    const { error: deleteError } = await supabase.from("push_tokens").delete().in("token", dead);
-    if (deleteError) {
-      console.error(`daily-push: dead-token delete failed, ${dead.length} kept: ${deleteError.message}`);
-    } else {
-      removed = dead.length;
+  // The anomaly is a SIGNAL now, never a gate: the delete below does not consult it. Both of the
+  // old rule's thresholds are kept so nothing gets quieter than it was — the proportional one still
+  // surfaces a small table losing an unusual share of itself, which a flat count alone would miss.
+  if (dead.length > MAX_TOKEN_DELETIONS_PER_RUN || dead.length > allRows.length * 0.2) {
+    deletionAnomaly = {
+      tokenDeletionAnomaly: true,
+      deadTokens: dead.length,
+      deletedThisRun: toDelete.length,
+      totalTokens: allRows.length,
+    };
+    console.error(
+      `daily-push: dead-token anomaly — ${dead.length} dead of ${allRows.length} tokens, deleting ${toDelete.length} this run`,
+    );
+  }
+  for (const batch of batchByEncodedLength(toDelete, MAX_DELETE_FILTER_CHARS)) {
+    const { error } = await supabase.from("push_tokens").delete().in("token", batch);
+    if (error) {
+      // Stop at the first failure rather than retrying the same oversized request in a loop; the
+      // next run picks the remaining dead tokens up again.
+      console.error(`daily-push: dead-token delete failed, ${toDelete.length - removed} kept: ${error.message}`);
+      break;
     }
+    removed += batch.length;
   }
 
   const ok = Object.values(sports).every((r) => r.ok !== false);

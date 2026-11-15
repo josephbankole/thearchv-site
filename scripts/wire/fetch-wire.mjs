@@ -21,13 +21,15 @@ import { dateInZone } from "./lib/time.mjs";
 import { SOURCES, sanitiseWire } from "./lib/schema.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+// An RSS or Atom feed is a few hundred KB; anything past this is not a feed we should parse.
+const FEED_MAX_BYTES = 5 * 1024 * 1024;
 
 export async function fetchWire({ date, nowMs, history, offline, sources = SOURCES }) {
   const seen = seenFromEditions(history.editions, date);
   const candidates = [], missing = [], rejected = [];
   const fetchedAt = new Date(nowMs).toISOString();
   for (const source of sources.sources.filter((s) => s.enabled)) {
-    const res = await fetchText(source.feedUrl, { userAgent: sources.userAgent, offline, offlineName: `${source.id}.xml` });
+    const res = await fetchText(source.feedUrl, { userAgent: sources.userAgent, offline, offlineName: `${source.id}.xml`, maxBytes: FEED_MAX_BYTES });
     if (!res.ok) { missing.push({ sourceId: source.id, reason: `fetch-failed:${res.status}` }); continue; }
     let parsed;
     try { parsed = parseFeed(res.body); } catch (err) { missing.push({ sourceId: source.id, reason: "parse-error", detail: err.message }); continue; }

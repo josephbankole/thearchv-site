@@ -1,12 +1,37 @@
 /* http.mjs: the Wire's one fetch path. Descriptive UA (ESPN answers a browser UA with 202 and
    an empty body; Wikipedia expects contact details), a 15 s timeout, two retries on 202, empty or
    5xx, and one Retry-After wait on 429. With `offline` set it reads fixture files instead, which
-   is how the tests and a blocked network run. Never prints a header or a key. */
+   is how the tests and a blocked network run. Bodies are capped (MAX_BODY_BYTES, and
+   MAX_GUNZIP_BYTES after inflating). Never prints a header or a key. */
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { gunzipSync } from "node:zlib";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Body caps. A feed is a few hundred KB and the NFL CSV about 2 MB, so these only stop a runaway
+// or hostile body (or a gzip bomb) before the morning run buffers it all. Callers can lower them.
+export const MAX_BODY_BYTES = 20 * 1024 * 1024;
+export const MAX_GUNZIP_BYTES = 50 * 1024 * 1024;
+
+class TooLarge extends Error {}
+
+// The response body as bytes, refused once it passes maxBytes (Content-Length first, then while
+// streaming, since a server can omit or understate it).
+export async function readCapped(res, maxBytes) {
+  const len = Number(res.headers.get("content-length"));
+  if (Number.isFinite(len) && len > maxBytes) { await res.body?.cancel().catch(() => {}); throw new TooLarge(); }
+  const chunks = [];
+  let n = 0;
+  if (res.body) {
+    for await (const c of res.body) {
+      n += c.length;
+      if (n > maxBytes) { await res.body.cancel().catch(() => {}); throw new TooLarge(); }
+      chunks.push(c);
+    }
+  }
+  return Buffer.concat(chunks, n);
+}
 
 // Seconds to wait after a 429: Retry-After, else football-data.org's X-RequestCounter-Reset (the
 // seconds left in its 10-a-minute window) plus one, else 30. Capped at 60.
@@ -17,7 +42,7 @@ export function wait429(headers) {
   return Math.min(60, ra ?? (reset != null ? reset + 1 : 30));
 }
 
-export async function fetchText(url, { userAgent, headers = {}, offline = null, offlineName = null, gunzip = false, backoff = [5000, 15000], timeoutMs = 15000 } = {}) {
+export async function fetchText(url, { userAgent, headers = {}, offline = null, offlineName = null, gunzip = false, backoff = [5000, 15000], timeoutMs = 15000, maxBytes = MAX_BODY_BYTES, maxGunzipBytes = MAX_GUNZIP_BYTES } = {}) {
   if (offline) {
     const file = join(offline, offlineName || encodeURIComponent(url));
     if (!existsSync(file)) return { ok: false, status: "offline-missing", body: null };
@@ -31,9 +56,15 @@ export async function fetchText(url, { userAgent, headers = {}, offline = null, 
     try {
       const ctl = AbortSignal.timeout(timeoutMs);
       res = await fetch(url, { headers: { "User-Agent": userAgent, Accept: "*/*", ...headers }, signal: ctl, redirect: "follow" });
+      const raw = await readCapped(res, maxBytes);
       // gunzip: the asset itself is a .gz file (no Content-Encoding), so fetch cannot inflate it.
-      body = gunzip && res.ok ? gunzipSync(Buffer.from(await res.arrayBuffer())).toString("utf8") : await res.text();
+      if (gunzip && res.ok) {
+        try { body = gunzipSync(raw, { maxOutputLength: maxGunzipBytes }).toString("utf8"); }
+        catch (err) { if (err?.code === "ERR_BUFFER_TOO_LARGE") throw new TooLarge(); throw err; }
+      } else body = new TextDecoder().decode(raw);
     } catch (err) {
+      // An oversized body is not retried: the same request would send the same bytes.
+      if (err instanceof TooLarge) return { ok: false, status: "too-large", body: null };
       if (attempt < backoff.length) { await sleep(backoff[attempt]); continue; }
       return { ok: false, status: "network", body: null, detail: String(err?.cause?.code || err?.name || "error") };
     }

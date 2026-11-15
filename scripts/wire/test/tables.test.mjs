@@ -220,3 +220,30 @@ test("fetchText gunzips a .gz release asset (nflverse schedules ship only games.
     assert.equal(r.body, csv);
   } finally { srv.close(); }
 });
+
+test("ci-10: fetchText refuses an oversized body and a gzip bomb as too-large, without retrying", async () => {
+  const { createServer } = await import("node:http");
+  const { gzipSync } = await import("node:zlib");
+  const { fetchText } = await import("../lib/http.mjs");
+  let hits = 0;
+  const big = Buffer.alloc(64 * 1024, 97);
+  const bomb = gzipSync(Buffer.alloc(4 * 1024 * 1024, 0));
+  const srv = createServer((req, res) => {
+    hits++;
+    if (req.url === "/bomb.gz") { res.writeHead(200, { "Content-Type": "application/gzip" }); return res.end(bomb); }
+    if (req.url === "/chunked") { res.writeHead(200, { "Content-Type": "text/xml" }); res.write(big); res.write(big); return res.end(); }
+    res.writeHead(200, { "Content-Type": "text/xml", "Content-Length": big.length }); res.end(big);
+  });
+  await new Promise((r) => srv.listen(0, "127.0.0.1", r));
+  try {
+    const base = `http://127.0.0.1:${srv.address().port}`;
+    const opts = { userAgent: "test", backoff: [1, 1] };
+    assert.equal((await fetchText(`${base}/sized`, { ...opts, maxBytes: 1024 })).status, "too-large");
+    assert.equal((await fetchText(`${base}/chunked`, { ...opts, maxBytes: 100 * 1024 })).status, "too-large");
+    assert.equal((await fetchText(`${base}/bomb.gz`, { ...opts, gunzip: true, maxGunzipBytes: 1024 * 1024 })).status, "too-large");
+    assert.equal(hits, 3, "an oversized body is not fetched again");
+    const ok = await fetchText(`${base}/sized`, opts);
+    assert.equal(ok.ok, true);
+    assert.equal(ok.body.length, big.length);
+  } finally { srv.close(); }
+});

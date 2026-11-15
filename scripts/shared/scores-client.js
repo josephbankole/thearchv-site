@@ -930,6 +930,14 @@
     fetch(BASE + 'days/' + date + '.json', { cache: 'no-cache' })
       .then(function (res) {
         if (res.status === 404) return { matches: [] }; // no file: nothing was played that day
+        // Supabase Storage answers a missing object with HTTP 400 and a JSON body whose statusCode
+        // is "404", not a plain 404. Same test as LiveClient.isMissingObject in the app.
+        if (res.status === 400) {
+          return res.json().then(function (b) {
+            if (b && (String(b.statusCode) === '404' || b.error === 'not_found')) return { matches: [] };
+            throw new Error('day');
+          });
+        }
         if (!res.ok) throw new Error('day');
         return res.json();
       })

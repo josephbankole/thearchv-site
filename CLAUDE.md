@@ -23,6 +23,8 @@
    (`pages build and deployment` via the API with the PAT; the PAT cannot re-run
    workflows), then retrigger with an empty commit on main. Always verify live with
    a cache-busted curl grepping for something only the new build contains.
+   `https://thearchv.ca/build.txt` holds the commit SHA of the live build; the workflow's
+   "Verify live" step waits for it to match the run's commit.
 3. **A green build is not "it works". Look at the running site on a real device before you deploy.**
    On 2026-08-04 a branch shipped that the founder could not scroll, with the logo clipped. It had
    passed a clean-clone `npm ci && npm run build`, `check-csp-hash`, `verify-csp-pages` across 123

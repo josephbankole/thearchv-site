@@ -253,6 +253,29 @@ Functions cannot import from outside `supabase/functions`. To add a sport, add i
 
 The pg_cron jobs for daily-push, health-probe and triage-drain call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12, and in the migration above). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
 
+### Alerts that do not depend on email
+
+health-probe emails the founder through Zoho, from inside the project it watches. When that email
+fails (a revoked Zoho token, say), the check's 6-hour debounce slot is given back, so the next run
+tries again, and the failure is logged as `health-probe: alert email failed for ...`. Two optional
+secrets add channels outside Zoho and outside the project:
+
+```
+supabase secrets set HEALTHCHECK_PING_URL=<a Healthchecks.io-style ping URL>
+supabase secrets set ALERT_NTFY_URL=<an ntfy topic URL>
+```
+
+- `HEALTHCHECK_PING_URL`: every run sends a GET to it, so the service alerts when the probe goes
+  quiet (the cron job dropped, the guard secret changed, the project down). Set the check's period
+  to 30 minutes with some grace. When an alert email fails and no second channel took it, the run
+  calls `<url>/fail` instead, which such services treat as a failure.
+- `ALERT_NTFY_URL`: when an alert email fails, one POST goes here naming the failing checks, never
+  their detail, because anyone who knows a topic's name can read it. Use a long random topic name.
+  When it lands, those checks keep their 6-hour slot.
+
+Both are new, and each needs an account the founder makes. Without them the probe behaves as
+before, apart from the retry.
+
 ### Migration
 
 `supabase/migrations/20261012160124_push_per_sport.sql` adds `push_tokens.sport`,

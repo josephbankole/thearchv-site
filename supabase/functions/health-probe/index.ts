@@ -11,12 +11,16 @@
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
 // Debounced per check: health_alert_state records the last alert time, and a check will not
-// re-alert within 6 hours of its own last alert.
+// re-alert within 6 hours of its own last alert. An email that fails gives its slot back so the
+// next run retries, and goes to ALERT_NTFY_URL by check name when that is set. Every run GETs
+// HEALTHCHECK_PING_URL when set (a dead-man check outside this project), or <url>/fail when an
+// alert could not be delivered by either channel. Both are optional; see alert.ts and the README.
 //
 // Guarded with x-push-secret, matched against the PUSH_SECRET vault secret — the same pattern
 // daily-push's pg_cron caller uses.
 import { adminClient, json } from "../_shared/cors.ts";
 import { sendFounderMail } from "../_shared/zoho.ts";
+import { type AlertDeps, dispatchAlerts, type Failure, pingUrl } from "./alert.ts";
 import { pushOverdue } from "./push_check.ts";
 
 const SITE_URL = "https://thearchv.ca/";
@@ -31,8 +35,6 @@ const FEED_URL = "https://thearchv.ca/feed/today.json";
 const FEED_STALE_MS = 72 * 60 * 60 * 1000;
 const PUSH_STALE_MS = 76 * 60 * 60 * 1000;
 const DEBOUNCE_MS = 6 * 60 * 60 * 1000;
-
-type Failure = { check: string; detail: string };
 
 Deno.serve(async (req) => {
   // Fail CLOSED (security sweep 2026-07-22): an unset PUSH_SECRET must refuse, not run open.
@@ -158,41 +160,70 @@ Deno.serve(async (req) => {
     console.error(`health-probe: pages-deploy check skipped — fetch error: ${String(e).slice(0, 120)}`);
   }
 
-  // (d) alert, debounced per check — 6h between alerts for the same failing check.
-  const alerted: string[] = [];
-  for (const f of failures) {
-    const shouldAlert = await claimAlertSlot(supabase, f.check, now);
-    if (!shouldAlert) continue;
-    const sent = await sendFounderMail(
-      `ARCHV health: ${f.check} failing`,
-      `Launch health probe found a failing check.\n\n` +
-        `Check: ${f.check}\nDetail: ${f.detail}\nChecked at (UTC): ${now.toISOString()}\n\n` +
-        `This alert is debounced 6h per check; you will not be re-alerted for the same check ` +
-        `sooner than that even if it keeps failing.`,
-    );
-    if (sent) alerted.push(f.check);
+  // (d) alert, debounced per check: 6h between alerts for the same failing check. A failed email
+  //     gives its slot back and, when configured, goes to the second channel (alert.ts).
+  const outcome = await dispatchAlerts(failures, now, alertDeps(supabase), DEBOUNCE_MS);
+  const alerted = outcome.alerted;
+  if (outcome.mailFailed.length > 0) {
+    console.error(`health-probe: alert email failed for ${outcome.mailFailed.join(", ")}; second channel: ${outcome.fallback}`);
   }
 
-  return json({ ok: failures.length === 0, failures, alerted, checkedAt: now.toISOString() }, 200);
+  // (f) dead-man ping, every run, so an outside service notices when the probe stops running or
+  //     cannot be heard (pingUrl in alert.ts). Optional: HEALTHCHECK_PING_URL unset skips it.
+  const ping = pingUrl(Deno.env.get("HEALTHCHECK_PING_URL"), outcome);
+  if (ping) {
+    try {
+      await fetch(ping, { method: "GET", signal: AbortSignal.timeout(10_000) });
+    } catch (e) {
+      console.error(`health-probe: dead-man ping failed: ${String(e).slice(0, 120)}`);
+    }
+  }
+
+  return json({
+    ok: failures.length === 0,
+    failures,
+    alerted,
+    mailFailed: outcome.mailFailed,
+    fallback: outcome.fallback,
+    checkedAt: now.toISOString(),
+  }, 200);
 });
 
-// Debounce: only claims the slot (and returns true, meaning "go ahead and alert") if the last
-// alert for this check was more than DEBOUNCE_MS ago, or there was none. Claims BEFORE the email
-// send so a slow/failed send can't cause a flood of retries within the window.
-async function claimAlertSlot(
-  supabase: ReturnType<typeof adminClient>,
-  checkName: string,
-  now: Date,
-): Promise<boolean> {
-  const { data } = await supabase
-    .from("health_alert_state")
-    .select("last_alert_at")
-    .eq("check_name", checkName)
-    .maybeSingle();
-  if (data?.last_alert_at) {
-    const last = new Date(data.last_alert_at).getTime();
-    if (now.getTime() - last < DEBOUNCE_MS) return false;
-  }
-  await supabase.from("health_alert_state").upsert({ check_name: checkName, last_alert_at: now.toISOString() });
-  return true;
+// health_alert_state behind alert.ts's debounce. A read error reads as no previous alert, so a
+// missing or broken table means more email rather than none, and is logged.
+function alertDeps(supabase: ReturnType<typeof adminClient>): AlertDeps {
+  const ntfy = (Deno.env.get("ALERT_NTFY_URL") ?? "").trim();
+  return {
+    async readLast(check) {
+      const { data, error } = await supabase
+        .from("health_alert_state")
+        .select("last_alert_at")
+        .eq("check_name", check)
+        .maybeSingle();
+      if (error) console.error(`health-probe: health_alert_state read failed: ${error.message.slice(0, 120)}`);
+      return typeof data?.last_alert_at === "string" ? data.last_alert_at : null;
+    },
+    async writeLast(check, at) {
+      const { error } = at === null
+        ? await supabase.from("health_alert_state").delete().eq("check_name", check)
+        : await supabase.from("health_alert_state").upsert({ check_name: check, last_alert_at: at });
+      if (error) console.error(`health-probe: health_alert_state write failed: ${error.message.slice(0, 120)}`);
+    },
+    sendMail: sendFounderMail,
+    sendFallback: ntfy
+      ? async (text) => {
+        try {
+          const res = await fetch(ntfy, {
+            method: "POST",
+            headers: { Title: "ARCHV health", Priority: "high" },
+            body: text,
+            signal: AbortSignal.timeout(10_000),
+          });
+          return res.ok;
+        } catch {
+          return false;
+        }
+      }
+      : null,
+  };
 }

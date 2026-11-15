@@ -104,6 +104,23 @@ Deno.test("h2h: an empty reply is \"never met\"; a reply where nothing can be pl
   assertEquals(buildH2h(friendly, upcoming(), FETCHED)!.summary.played, 0);
 });
 
+Deno.test("h2h: a finished meeting with no score (awarded, walkover) is neither listed nor counted", () => {
+  const base = h2hReply().response.find((r: Fx) => r.fixture.id === 1208001);
+  const awarded = structuredClone(base);
+  awarded.fixture.id = 1309001;
+  awarded.fixture.date = "2026-01-01T15:00:00+00:00";
+  awarded.fixture.status.short = "AWD";
+  awarded.goals = { home: null, away: null };
+  const walkover = structuredClone(awarded);
+  walkover.fixture.id = 1309002;
+  walkover.fixture.status.short = "WO";
+  walkover.goals = { home: 3, away: null };
+  const h = buildH2h([...h2hReply().response, awarded, walkover], upcoming(), FETCHED)!;
+  assertEquals(h.matches.map((r) => r.id), [1208001, 1208002, 1208004, 1208003, 1208005, 1208008]);
+  assertEquals(h.summary, { played: 6, homeWins: 2, draws: 3, awayWins: 1 });
+  assertEquals(h.summary.played, h.matches.length);
+});
+
 Deno.test("h2h: at most ten meetings", () => {
   const base = h2hReply().response.find((r: Fx) => r.fixture.id === 1208001);
   const many = Array.from({ length: 14 }, (_, i) => {

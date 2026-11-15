@@ -144,8 +144,10 @@ export function mapH2hRow(fx: unknown, previewKey: CompetitionKey): H2hRow | nul
 // failure: a non-empty reply in which not one row could be placed is a shape we do not know, and
 // caching it as "never met" would hide every meeting for a week. An empty reply is the honest
 // "never met". Kept: finished, competitive meetings of exactly these two teams, the fixture itself
-// left out, newest first, at most ten. The summary counts by team id from this fixture's point of
-// view, wherever each meeting was played; a shootout is a draw on the score.
+// left out, newest first, at most ten. A finished row with no score (an awarded match or a
+// walkover) is left out too: the app does not list it, so counting it would put a Played figure
+// over fewer rows and call an awarded result a draw. The summary counts by team id from this
+// fixture's point of view, wherever each meeting was played; a shootout is a draw on the score.
 export function buildH2h(response: readonly unknown[], match: Match, fetchedAt: string): H2h | null {
   const key = match.competition.key;
   const placed = response.map((fx) => placeRow(fx, key));
@@ -155,7 +157,8 @@ export function buildH2h(response: readonly unknown[], match: Match, fetchedAt: 
   const rows = placed
     .flatMap((p) => p && !p.friendly ? [p.row] : [])
     .filter((r) =>
-      r.status.finished && r.id !== match.id && r.home.id !== r.away.id && pair.has(r.home.id) && pair.has(r.away.id)
+      r.status.finished && r.id !== match.id && r.home.id !== r.away.id && pair.has(r.home.id) && pair.has(r.away.id) &&
+      r.home.goals !== null && r.away.goals !== null
     )
     .filter((r) => !seen.has(r.id) && !!seen.add(r.id))
     .sort((a, b) => Date.parse(b.kickoff) - Date.parse(a.kickoff) || b.id - a.id)

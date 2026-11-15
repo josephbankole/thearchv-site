@@ -11,7 +11,8 @@
 //   APNS_KEY_ID     the key id from the Apple Developer site
 //   APNS_TEAM_ID    your Apple team id
 //   APNS_BUNDLE_ID  defaults to ca.thearchv.reader
-//   APNS_ENV        "sandbox" (default) for dev/TestFlight tokens, "production" for App Store
+//   APNS_ENV        "production" (default) for App Store and TestFlight builds; "sandbox" only for
+//                   tokens from a debug build run from Xcode
 //   PUSH_SECRET     optional guard, matched against the x-push-secret header from the cron call
 //
 // The run itself (every sport's guard, record, claim and fan-out, and the deletion cap) is in
@@ -39,9 +40,12 @@ Deno.serve(async (req) => {
   const keyId = Deno.env.get("APNS_KEY_ID");
   const teamId = Deno.env.get("APNS_TEAM_ID");
   const bundleId = Deno.env.get("APNS_BUNDLE_ID") ?? "ca.thearchv.reader";
-  const host = Deno.env.get("APNS_ENV") === "production"
-    ? "api.push.apple.com"
-    : "api.sandbox.push.apple.com";
+  // App Store and TestFlight builds both get production tokens, so production is the default and
+  // sandbox has to be asked for. Sending production tokens to the sandbox host answers
+  // BadDeviceToken for every one.
+  const host = Deno.env.get("APNS_ENV") === "sandbox"
+    ? "api.sandbox.push.apple.com"
+    : "api.push.apple.com";
   if (!p8 || !keyId || !teamId) {
     return json({ ok: false, reason: "APNs not configured yet" }, 200);
   }

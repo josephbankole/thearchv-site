@@ -236,7 +236,8 @@ supabase secrets set APNS_KEY="$(cat AuthKey_XXXXXX.p8)"   # the whole .p8 file,
 supabase secrets set APNS_KEY_ID=XXXXXXXXXX
 supabase secrets set APNS_TEAM_ID=YYYYYYYYYY
 supabase secrets set APNS_BUNDLE_ID=ca.thearchv.reader
-supabase secrets set APNS_ENV=sandbox      # sandbox for dev/TestFlight, production for App Store
+supabase secrets set APNS_ENV=production   # the default: App Store and TestFlight builds both use production
+                                          # set sandbox only to test with a debug build run from Xcode
 supabase secrets set PUSH_SECRET=<a-long-random-string>   # optional guard, matched by the cron header
 ```
 

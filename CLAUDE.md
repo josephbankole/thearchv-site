@@ -723,20 +723,24 @@ sources or left off. Do not hand-add a badge file to this repo to fill a gap on 
 
 `scripts/quote-posters/render.py` draws the typographic Manchester United quote posters from
 `scripts/quote-posters/lineup.json` (Archivo Black, Marcellus 700, THE ARCHV. wordmark from two
-committed alpha masks, Pillow only). It is NOT in `npm run build`. **One poster is listed: Good
-enough, old enough, on the converted tote listing 4517424545.** The other five are held
-because each would print a registered trade mark on the art (MANCHESTER UNITED inside two quotes,
-SEAGULLS, GLORY GLORY MAN UNITED and THEATRE OF DREAMS), and each held entry in `lineup.json` carries a
-`hold` string naming the registration. A full run skips every held poster; `--only <slug>` still
-draws one by name, for the record, never for a listing or for this repo.
+committed alpha masks, Pillow only). It is NOT in `npm run build`. **Two posters are listed: Good
+enough, old enough, on the converted tote listing 4517424545, and the red Busby poster
+`never-second` ("Only the best would be good enough."), listing 4594017483, cleared on 12 Oct 2026
+(D-2026-10-12b) once it was redrawn with MANCHESTER as the top line and the quote's Manchester United
+sentence left off the art.** Its `lineup.json` entry carries a `cleared` note instead of a `hold`.
+The other four are held because each would print a registered trade mark on the art (MANCHESTER
+UNITED inside a quote, SEAGULLS, GLORY GLORY MAN UNITED and THEATRE OF DREAMS), and each held entry
+in `lineup.json` carries a `hold` string naming the registration. A full run skips every held poster;
+`--only <slug>` still draws one by name, for the record, never for a listing or for this repo.
 
 Print files are never committed: this repo is public and a print file is the product, so the
-founder's Mac renders them into `ARCHIVE-PACKS`. The only quote-poster art here is the listed
-poster's 600x900 storefront thumbnail, `public/shop/quote-good-enough-old-enough.webp`. No art of a
+founder's Mac renders them into `ARCHIVE-PACKS`. The only quote-poster art here is the two listed
+posters' 600x900 storefront thumbnails, `public/shop/quote-good-enough-old-enough.webp` and
+`public/shop/quote-only-the-best.webp` (the Busby thumbnail, committed 12 Oct 2026). No art of a
 held poster is committed, thumbnails and contact sheets included.
 
-`scripts/storefront-items.json` feeds the app's `dist/feed/storefront.json` and lists the one
-poster. The old tee, tote, mug and sticker sheet are out of it: the tote's listing became the poster,
+`scripts/storefront-items.json` feeds the app's `dist/feed/storefront.json` and lists the two
+posters. The old tee, tote, mug and sticker sheet are out of it: the tote's listing became the poster,
 and the rest of the merch and the finals tees were deactivated on Etsy, never deleted. A quote
 poster goes into the feed only once its listing is live and its art clears the rule below.
 Storefront and fallback Etsy links use the Share & Save form, `https://thearchvca.etsy.com/listing/<id>`

@@ -41,17 +41,16 @@
     },
     {
       "slug": "never-second",
-      "hold": "founder, 4 Oct 2026: nothing registered as a trade mark goes on the art. MANCHESTER UNITED is registered to Manchester United Football Club Limited in class 16 (UK00900761312) and it is inside this quote.",
+      "cleared": "Cleared and listed (founder, 12 Oct 2026, canon D-2026-10-12b; Etsy listing 4594017483, app storefront). Redrawn so no registered trade mark is on the art: the top line reads MANCHESTER only, and the quote's first sentence, which names Manchester United, is left off. The parts below match the committed storefront thumbnail, public/shop/quote-only-the-best.webp.",
       "audience": "man-cave",
       "theme": "red",
-      "top": "OLD TRAFFORD",
-      "context": "MANCHESTER",
+      "top": "MANCHESTER",
+      "context": "",
       "date": "",
       "parts": [
-        {"text": "I never wanted Manchester United to be second to anybody.", "scale": 0.5},
         {"text": "Only the best would be good enough.", "scale": 1.0}
       ],
-      "speaker": "Sir Matt Busby",
+      "speaker": "Sir Matt Busby. The full quote opens 'I never wanted Manchester United to be second to anybody.'; that sentence is for the record only and is never printed on the art.",
       "sources": [
         "https://www.manutd.com/en/amp/news/detail/manchester-is-my-heaven-classic-quotes-from-key-united-figures",
         "https://150.scottishfa.co.uk/legends/managers/sir-matt-busby/"

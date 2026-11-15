@@ -40,6 +40,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 MANIFEST = os.path.join(ROOT, "scripts", "data", "heads-hd.json")
 OUT_DIR = os.path.join(ROOT, "public", "heads", "hd")
 CACHE = os.path.join(ROOT, ".heads-cache")
+CDN_BASE_FILE = os.path.join(ROOT, "scripts", "heads", "cdn-base.local")
 
 SIZE = 600          # output side, px
 FACE_FRAC = 0.46    # detector face-box width as a share of the crop side
@@ -52,7 +53,28 @@ CASC = [cv2.CascadeClassifier(cv2.data.haarcascades + n)
 EYES = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
 
 
+def cdn_base():
+    """Base URL for `cdn:` sources. It lives only on the Mac, never in this public repo: the env
+    var ARCHV_HEADS_CDN_BASE, else the first line of scripts/heads/cdn-base.local (gitignored)."""
+    base = os.environ.get("ARCHV_HEADS_CDN_BASE", "").strip()
+    if not base and os.path.exists(CDN_BASE_FILE):
+        with open(CDN_BASE_FILE) as f:
+            base = f.readline().strip()
+    if not base:
+        raise FileNotFoundError(
+            f"cdn: source needs a base URL: set ARCHV_HEADS_CDN_BASE or write it to {CDN_BASE_FILE}")
+    return base.rstrip("/")
+
+
+def resolve_source(src):
+    """A `cdn:<path>` source is the local base plus <path>; anything else is used as given."""
+    if src.startswith("cdn:"):
+        return cdn_base() + "/" + src.split(":", 1)[1].lstrip("/")
+    return src
+
+
 def fetch(src, masters):
+    src = resolve_source(src)
     if src.startswith("bank-local:"):
         path = os.path.join(masters, src.split(":", 1)[1])
         if not os.path.exists(path):

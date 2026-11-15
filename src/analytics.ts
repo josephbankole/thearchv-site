@@ -108,14 +108,16 @@ function setupAppTracking(): void {
   });
 }
 
-// Track clicks on finals and United long-form article deep-links.
+// Track clicks on the front page's Dispatch long reads (the homereads block rendered by
+// renderReads() in src/render/home.ts). The old `.archive__reads` selector outlived its block
+// and matched nothing. The section carries no id, so name it here.
 function setupArticleLinkTracking(): void {
-  document.querySelectorAll<HTMLAnchorElement>('.archive__reads a[href]').forEach((el) => {
+  document.querySelectorAll<HTMLAnchorElement>('.homereads__list a[href]').forEach((el) => {
     el.addEventListener('click', () => {
       track('article_link_click', {
         href: el.getAttribute('href'),
         text: el.textContent?.trim(),
-        section: el.closest('section')?.id || '',
+        section: 'homereads',
       });
     });
   });

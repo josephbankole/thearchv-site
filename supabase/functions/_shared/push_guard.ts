@@ -14,10 +14,25 @@ export const EDITORIAL_TZ = "America/Edmonton";
 // The "already sent today" check uses the ARCHV editorial day, not the UTC day: the desk
 // operates out of America/Edmonton, and a UTC-based check would flip to a new "day" hours
 // before (winter, UTC-7) or after (summer, UTC-6) the desk's own midnight, letting a second
-// push slip through, or blocking a legitimate one, right at the boundary. en-CA formats as
-// YYYY-MM-DD.
-export const edmontonDay = (d: Date): string =>
-  new Intl.DateTimeFormat("en-CA", { timeZone: EDITORIAL_TZ }).format(d);
+// push slip through, or blocking a legitimate one, right at the boundary. The day is built from
+// formatToParts (year, month, day) rather than from a locale's short-date pattern, so it does not
+// depend on how the runtime's ICU prints en-CA. A result that is not YYYY-MM-DD throws, so callers
+// (the push claim, the day file paths, the scores window) fail closed.
+const DAY_FORMAT = new Intl.DateTimeFormat("en-CA", {
+  timeZone: EDITORIAL_TZ,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+export function isoDayFromParts(parts: Intl.DateTimeFormatPart[]): string {
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  const day = `${get("year")}-${get("month")}-${get("day")}`;
+  if (!ISO_DAY.test(day)) throw new Error(`edmontonDay: could not build a YYYY-MM-DD day (got "${day}")`);
+  return day;
+}
+
+export const edmontonDay = (d: Date): string => isoDayFromParts(DAY_FORMAT.formatToParts(d));
 
 // ---------- the send window ----------
 

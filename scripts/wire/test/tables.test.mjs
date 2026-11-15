@@ -247,3 +247,17 @@ test("ci-10: fetchText refuses an oversized body and a gzip bomb as too-large, w
     assert.equal(ok.body.length, big.length);
   } finally { srv.close(); }
 });
+
+test("ci-9: a BALLDONTLIE season still paging at the page cap is held as pagination-cap, not published from part of the season", async () => {
+  const teams = { data: [{ id: 1, full_name: "Fixture Bulls", abbreviation: "FXB", conference: "East" }, { id: 2, full_name: "Placeholder Kings", abbreviation: "PLK", conference: "West" }] };
+  const game = { id: 1, date: "2026-12-10", status: "Final", status_state: "final", postseason: false, home_team: { id: 1 }, visitor_team: { id: 2 }, home_team_score: 100, visitor_team_score: 90 };
+  let pages = 0;
+  const get = async (url) => {
+    if (url.endsWith("/teams")) return { ok: true, status: 200, json: teams };
+    pages++;
+    return { ok: true, status: 200, json: { data: [{ ...game, id: pages }], meta: { next_cursor: pages + 1 } } };
+  };
+  const r = await basketball.run({ get, today: "2026-12-20", env: { BALLDONTLIE_API_KEY: "test-key" }, pause: 0 });
+  assert.equal(r.blocks.length, 0);
+  assert.deepEqual(r.failed, { "nba-table": "pagination-cap", "nba-games": "pagination-cap", "wnba-table": "pagination-cap", "wnba-games": "pagination-cap" });
+});

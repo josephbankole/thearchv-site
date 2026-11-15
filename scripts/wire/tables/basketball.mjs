@@ -93,6 +93,9 @@ export async function run({ get, today, env, pause = 13000 }) {
       pages++;
     } while (cursor && pages < MAX_PAGES);
     if (!ok) continue;
+    // Still a cursor after the page cap: the season is only part read, and records from part of
+    // it would pass the W+L check. Hold the previous blocks instead.
+    if (cursor) { failed[`${lg.key}-table`] = "pagination-cap"; failed[`${lg.key}-games`] = "pagination-cap"; continue; }
     const played = games.filter(regular);
     if (!played.length) {
       blocks.push({ id: `${lg.key}-table`, kind: "standings", league: lg.key, title: `${lg.label} records`, asOf: today, columns: COLUMNS, rows: [], source: SOURCE, emptyText: lg.offseasonText });

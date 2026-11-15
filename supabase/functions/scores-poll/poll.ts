@@ -30,6 +30,7 @@ import {
   contentHash,
   detailTargets,
   inWindow,
+  MAX_DETAIL_IDS,
   type OutFile,
   planWrites,
   SCHEDULE_EVERY_MS,
@@ -40,6 +41,9 @@ import {
 } from "./plan.ts";
 
 export const SCORES_PATH = "scores.json";
+
+// A recheck of held matches drops these: the match is not being played in the window.
+const GONE_CODES: ReadonlySet<string> = new Set(["PST", "CANC", "ABD"]);
 
 // What one run leaves for the next. Persisted in public.scores_poll_state.
 export type PollState = {
@@ -141,23 +145,47 @@ export async function runPoll(
     // A competition that failed keeps the matches we already had for it. So does one that answered
     // with nothing while we hold matches for it: a real competition does not empty out of a
     // three-day window, and believing it would drop the night's matches from scores.json (and stop
-    // their details calls) until the next refresh.
-    const outcomes = COMPETITIONS.map((c, i) => {
-      const r = results[i];
-      const held = matches.filter((m) => m.competition.key === c.key);
-      if (!r.ok) {
-        errors.push(`${c.key}: ${r.reason}`);
-        return { fresh: null, held };
+    // their details calls) until the next refresh. The exception is a competition whose held
+    // matches have none of them started: those can really have left, moved to another week or
+    // postponed. For those, one /fixtures?ids= call asks after the held matches themselves, and
+    // when it answers for every one, the ones still in the window and still to be played are kept
+    // and the competition counts as answered. Anything short of that is the old empty-reply error.
+    const outcomes: { key: string; fresh: Match[] | null; held: Match[]; empty?: boolean }[] = COMPETITIONS.map(
+      (c, i) => {
+        const r = results[i];
+        const held = matches.filter((m) => m.competition.key === c.key);
+        if (!r.ok) {
+          errors.push(`${c.key}: ${r.reason}`);
+          return { key: c.key, fresh: null, held };
+        }
+        const fresh = r.fixtures.map(mapMatch).filter((m): m is Match =>
+          m !== null && m.competition.key === c.key && inWindow(m.kickoff, win)
+        );
+        if (fresh.length === 0 && held.length > 0) return { key: c.key, fresh: null, held, empty: true };
+        return { key: c.key, fresh, held };
+      },
+    );
+    const recheck = outcomes.filter((o) => o.empty && o.held.every((m) => isNotStarted(m.status.code)));
+    const recheckIds = recheck.flatMap((o) => o.held.map((m) => m.id));
+    if (recheckIds.length > 0 && recheckIds.length <= MAX_DETAIL_IDS) {
+      const r = await deps.api(`/fixtures?ids=${recheckIds.join("-")}`);
+      saw(r);
+      if (r.ok) {
+        const answered = new Map<number, Match>();
+        for (const fx of r.fixtures) {
+          const m = mapMatch(fx);
+          if (m) answered.set(m.id, m);
+        }
+        for (const o of recheck) {
+          if (!o.held.every((m) => answered.has(m.id))) continue;
+          o.fresh = o.held.map((m) => answered.get(m.id)!).filter((m) =>
+            m.competition.key === o.key && inWindow(m.kickoff, win) && !GONE_CODES.has(m.status.code)
+          );
+          o.empty = false;
+        }
       }
-      const fresh = r.fixtures.map(mapMatch).filter((m): m is Match =>
-        m !== null && m.competition.key === c.key && inWindow(m.kickoff, win)
-      );
-      if (fresh.length === 0 && held.length > 0) {
-        errors.push(`${c.key}: empty schedule reply`);
-        return { fresh: null, held };
-      }
-      return { fresh, held };
-    });
+    }
+    for (const o of outcomes) if (o.empty) errors.push(`${o.key}: empty schedule reply`);
     good = outcomes.filter((o) => o.fresh !== null).length;
     if (good === 0) {
       // Nothing came back we can use: keep the last good state and files, and leave the API alone

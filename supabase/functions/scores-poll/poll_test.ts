@@ -250,6 +250,58 @@ Deno.test("an empty reply for a competition we hold matches for is a partial fai
   assertEquals(scheduleDue(c.state, at(T0, 64)), false);
 });
 
+// A WSL match held as not started for tomorrow, built from a real schedule row, and an API that
+// answers the WSL listing with nothing and asks after that match with `recheck` (null: no row).
+const HELD_WSL = 999001;
+function heldWslRow(edit: (fx: Fx) => void = () => {}): Fx {
+  const fx = structuredClone(SCHEDULES["44"].response[0]);
+  fx.fixture.id = HELD_WSL;
+  fx.fixture.date = "2026-10-14T13:00:00+00:00";
+  fx.fixture.status = { long: "Not Started", short: "NS", elapsed: null };
+  fx.goals = { home: null, away: null };
+  fx.score = { halftime: { home: null, away: null }, fulltime: { home: null, away: null } };
+  edit(fx);
+  return fx;
+}
+async function withHeldWsl(recheck: Fx | null) {
+  const store = fakeStore();
+  const a = await minute(EMPTY_STATE, at(T0), store);
+  const held = { ...a.state, matches: [...a.state.matches, mapMatch(heldWslRow())!] };
+  const inner = fakeApi({ empty: (p) => p.includes("league=44&") });
+  const api: ApiGet = (path) =>
+    path === `/fixtures?ids=${HELD_WSL}`
+      ? (inner.calls.push(path), Promise.resolve({ ok: true, fixtures: recheck ? [recheck] : [], remaining: 7000 }))
+      : inner.api(path);
+  const out = await runPoll(held, { now: at(T0, 31), season: 2026, api, write: store.write });
+  return { ...out, calls: inner.calls, store };
+}
+const wslIds = (s: PollState) => s.matches.filter((m) => m.competition.key === "wsl").map((m) => m.id);
+
+Deno.test("an empty reply after our only held match was postponed: one recheck drops it and the refresh counts", async () => {
+  const b = await withHeldWsl(heldWslRow((fx) => fx.fixture.status = { long: "Match Postponed", short: "PST", elapsed: null }));
+  assertEquals(b.calls.filter((c) => c === `/fixtures?ids=${HELD_WSL}`).length, 1);
+  assertEquals([b.summary.ok, b.summary.scheduleRefreshed], [true, true]);
+  assertEquals(wslIds(b.state), []);
+  assert(!scoresOf(b.store).matches.some((m: Match) => m.id === HELD_WSL), "scores.json no longer lists it");
+  assertEquals(scheduleDue(b.state, at(T0, 31 + 29)), false, "a full refresh: not due again for thirty minutes");
+});
+
+Deno.test("an empty reply after our only held match moved out of the window: the recheck drops it", async () => {
+  const b = await withHeldWsl(heldWslRow((fx) => fx.fixture.date = "2026-10-21T13:00:00+00:00"));
+  assertEquals([b.summary.ok, wslIds(b.state)], [true, []]);
+});
+
+Deno.test("an empty reply the recheck contradicts keeps the match; a recheck with no row is the old error", async () => {
+  const kept = await withHeldWsl(heldWslRow());
+  assertEquals([kept.summary.ok, wslIds(kept.state)], [true, [HELD_WSL]]);
+
+  const silent = await withHeldWsl(null);
+  assertEquals(silent.summary.ok, false);
+  assertEquals(silent.summary.error, "wsl: empty schedule reply");
+  assertEquals(wslIds(silent.state), [HELD_WSL], "held, as before");
+  assertEquals(scheduleDue(silent.state, at(T0, 36)), true, "retried in five minutes");
+});
+
 Deno.test("an empty reply from a competition we hold nothing for is just a quiet competition", async () => {
   const store = fakeStore();
   const a = await minute(EMPTY_STATE, at("2026-10-04T20:00:00Z"), store); // seven WSL matches, nothing else

@@ -24,7 +24,9 @@ What it guarantees for every file it writes:
 Identity. The script never decides who a face is. It builds exactly the entries listed in
 scripts/data/heads-hd.json, and each entry records how its master was matched to the portrait
 already published under that name (image correlation against the live file, or the named
-bank row). A wrong face is worse than no face.
+bank row). A wrong face is worse than no face. Master URLs and the identity detail behind them
+can sit in a private manifest kept only on the Mac (scripts/heads/heads-hd.private.local, or
+ARCHV_HEADS_PRIVATE_MANIFEST): its rows are matched on `out` and their fields win.
 
 Usage (needs OpenCV with Haar cascades, Pillow and numpy; the mflux tool env has all three):
     python3 scripts/heads/normalize-heads.py [--only slug,slug] [--masters DIR] [--sheet out.png]
@@ -41,6 +43,9 @@ MANIFEST = os.path.join(ROOT, "scripts", "data", "heads-hd.json")
 OUT_DIR = os.path.join(ROOT, "public", "heads", "hd")
 CACHE = os.path.join(ROOT, ".heads-cache")
 CDN_BASE_FILE = os.path.join(ROOT, "scripts", "heads", "cdn-base.local")
+# Master URLs, reference links, job ids and model notes live here, on the Mac only, never in the
+# public repo. ARCHV_HEADS_PRIVATE_MANIFEST points somewhere else if set. Gitignored.
+PRIVATE_MANIFEST = os.path.join(ROOT, "scripts", "heads", "heads-hd.private.local")
 
 SIZE = 600          # output side, px
 FACE_FRAC = 0.46    # detector face-box width as a share of the crop side
@@ -64,6 +69,26 @@ def cdn_base():
         raise FileNotFoundError(
             f"cdn: source needs a base URL: set ARCHV_HEADS_CDN_BASE or write it to {CDN_BASE_FILE}")
     return base.rstrip("/")
+
+
+def private_manifest_path():
+    return os.environ.get("ARCHV_HEADS_PRIVATE_MANIFEST", "").strip() or PRIVATE_MANIFEST
+
+
+def load_entries():
+    """The public manifest's entries, each merged with its row in the private manifest (matched on
+    `out`). A private row's fields win, so `source` and the identity detail can leave the public
+    file. With no private file the public entries are used as they are."""
+    entries = json.load(open(MANIFEST))["entries"]
+    path = private_manifest_path()
+    if not os.path.exists(path):
+        return entries
+    with open(path) as f:
+        private = json.load(f)
+    rows = private.get("entries", private) if isinstance(private, dict) else private
+    if isinstance(rows, list):
+        rows = {r["out"]: r for r in rows}
+    return [{**e, **{k: v for k, v in rows.get(e["out"], {}).items() if k != "out"}} for e in entries]
 
 
 def resolve_source(src):
@@ -239,6 +264,8 @@ def head_centre_x(im, box):
 
 
 def fit(entry, masters):
+    if not entry.get("source"):
+        raise KeyError(f"no source for {entry['out']}: add it to {private_manifest_path()}")
     path = fetch(entry["source"], masters)
     if entry.get("frame") == "none":
         # A master with no baked frame (the GPT Image 2 founder-prompt portraits, 2026-09-11 on):
@@ -305,10 +332,9 @@ def main():
     ap.add_argument("--masters", default=os.path.join(ROOT, "..", "assets", "headshots"))
     ap.add_argument("--sheet", default="")
     args = ap.parse_args()
-    manifest = json.load(open(MANIFEST))
     only = {s for s in args.only.split(",") if s}
     results, failed = [], 0
-    for e in manifest["entries"]:
+    for e in load_entries():
         if only and e["out"] not in only:
             continue
         try:

@@ -34,7 +34,7 @@ import { fileURLToPath } from "node:url";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, LANE_META, byDateDesc,
   masthead, footer, documentShell, ROBOTS_INDEXABLE,
-  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, SPORTS,
+  cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, SPORTS, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
 import { loadContentPages } from "./shared/content-pages.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
@@ -121,11 +121,13 @@ const DESTINATIONS = [
   ["Transfer Desk", "Manchester United transfer news.", "/desk/transfer/", "Desks"],
   ["International Football", "World Cup 2026 and international football, men's and women's, every day there is football on.", "/desk/world-cup/", "Desks"],
   ["Football Leagues", "Title races, promotions, relegation fights and the sackings behind them.", "/desk/leagues/", "Desks"],
-  ["NFL", "The NFL desk, one answered question a day.", "/nfl/", "Desks"],
-  ["Formula 1", "The Formula 1 desk, one answered question a day.", "/f1/", "Desks"],
-  ["Tennis", "The tennis desk, one answered question a day.", "/tennis/", "Desks"],
-  ["Golf", "The golf desk, one answered question a day.", "/golf/", "Desks"],
-  ["Basketball", "The basketball desk, the NBA and the WNBA covered equally, one answered question every Monday.", "/basketball/", "Desks"],
+  // The sport rows use the desks' cadence-free `about` line (gap4-9): the index is rebuilt with
+  // the site but nothing here checks whether a desk is keeping its rhythm.
+  ["NFL", SPORT_DESK_COPY.nfl.about, "/nfl/", "Desks"],
+  ["Formula 1", SPORT_DESK_COPY.f1.about, "/f1/", "Desks"],
+  ["Tennis", SPORT_DESK_COPY.tennis.about, "/tennis/", "Desks"],
+  ["Golf", SPORT_DESK_COPY.golf.about, "/golf/", "Desks"],
+  ["Basketball", SPORT_DESK_COPY.basketball.about, "/basketball/", "Desks"],
   ["The finals", "World Cup finals from Mexico 1970 onwards, plus the men's and women's finals of 2026, one page each.", "/finals/", "Sections"],
   ["Manchester United, in depth", "Manchester United in long form, with the numbers attached.", "/united/", "Sections"],
   ["Football, explained", "The rules, the terms and the records, without the jargon.", "/explainers/", "Sections"],

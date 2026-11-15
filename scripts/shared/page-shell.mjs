@@ -361,6 +361,9 @@ export const LANE_META = {
     anchor: "#transfer-desk",
     seoSuffix: "Manchester United transfer news",
     indexTitle: "Manchester United Transfer News, Verified Daily · The ARCHV",
+    // laneIndexTitle() swaps to this once the lane has gone quiet (gap4-9): "Verified Daily" on a
+    // lane with nothing new for weeks is a promise the page is not keeping.
+    quietIndexTitle: "Manchester United Transfer News · The ARCHV",
   },
   "world-cup": {
     label: "International Football",
@@ -419,30 +422,70 @@ export const QUESTION_LANE_META = {
 // standard it meets (and doubles as the meta description); `holding` is the honest empty-state
 // paragraph shown until the first entry lands. British English, house voice, no hype, no em
 // dashes. Football is not here: it keeps its own long-standing homepage and lane copy.
+// `about` is the same desk with no cadence in it. The pages never print `lede` directly: they go
+// through sportDeskLede() below, which prints `about` plus the date of the newest answer once the
+// desk has missed two of its own periods (gap4-9, 2026-11-15), so a page never promises "a day"
+// or "every Monday" on a desk that has stopped. The search index uses `about` as it stands.
 export const SPORT_DESK_COPY = {
   nfl: {
     lede: "The NFL desk, one answered question a day: the biggest thing fans are asking that week.",
+    about: "The NFL desk answers the biggest question fans are asking.",
     holding: "The NFL desk opens soon.",
   },
   f1: {
     lede: "The Formula 1 desk, one answered question a day: the one the paddock and the fans keep coming back to.",
+    about: "The Formula 1 desk answers the question the paddock and the fans keep coming back to.",
     holding: "The Formula 1 desk opens soon.",
   },
   tennis: {
     lede: "The tennis desk, one answered question a day: the one fans are asking about the tour.",
+    about: "The tennis desk answers the question fans are asking about the tour.",
     holding: "The tennis desk opens soon.",
   },
   golf: {
     lede: "The golf desk, one answered question a day: the one fans keep asking through the season.",
+    about: "The golf desk answers the question fans keep asking through the season.",
     holding: "The golf desk opens soon.",
   },
   // Basketball runs weekly, not daily (founder order 2026-09-11): one lane, the NBA and the WNBA
   // covered equally, one question every Monday with the league alternating week to week.
   basketball: {
     lede: "The basketball desk, the NBA and the WNBA covered equally, with one answered question every Monday.",
+    about: "The basketball desk answers questions on the NBA and the WNBA, covered equally.",
     holding: "The basketball desk opens soon.",
   },
 };
+
+// The rhythm each desk's own copy promises, in days: the four daily question desks, basketball
+// weekly, and the Transfer Desk, whose index title says "Verified Daily".
+export const DESK_CADENCE_DAYS = { transfer: 1, nfl: 1, f1: 1, tennis: 1, golf: 1, basketball: 7 };
+
+/* Whether a desk has gone quiet: its newest entry is more than two of its periods before `today`
+   (YYYY-MM-DD, Toronto). An empty desk is not quiet (it shows its holding line instead), and nor is
+   a desk with no stated rhythm. */
+export function deskQuiet(newestDate, cadenceDays, today) {
+  if (!newestDate || !cadenceDays || !today) return false;
+  const gap = (Date.parse(`${String(today).slice(0, 10)}T00:00:00Z`) - Date.parse(`${String(newestDate).slice(0, 10)}T00:00:00Z`)) / 86400000;
+  return gap > 2 * cadenceDays;
+}
+
+/* The lede a sport page prints. `days` is the desk's entries, newest first (as loadDayData hands
+   them back). While the desk keeps its rhythm, the cadence lede; once it is quiet, the cadence-free
+   line and the date of its newest answer, which is a fact the page can stand behind. */
+export function sportDeskLede(sportKey, days, today) {
+  const copy = SPORT_DESK_COPY[sportKey];
+  const newest = days && days.length ? days[0].date : null;
+  if (!deskQuiet(newest, DESK_CADENCE_DAYS[sportKey], today)) return copy.lede;
+  return `${copy.about} The latest answer is from ${longDate(newest)}.`;
+}
+
+/* A football lane's <title>, the same rule: quietIndexTitle once the lane has gone quiet. */
+export function laneIndexTitle(laneKey, days, today) {
+  const meta = LANE_META[laneKey];
+  const newest = days && days.length ? days[0].date : null;
+  if (meta.quietIndexTitle && deskQuiet(newest, DESK_CADENCE_DAYS[laneKey], today)) return meta.quietIndexTitle;
+  return meta.indexTitle;
+}
 
 // Sport-aware lane list: {key,label,href} per lane, in the order the sport declares them.
 // Football resolves through LANE_META and keeps /desk/<lane>/; new sports get /<urlBase>/<lane>/.

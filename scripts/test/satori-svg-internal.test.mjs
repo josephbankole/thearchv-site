@@ -40,7 +40,11 @@ test("satori is imported only by the two card modules", () => {
 
 test("every satori call feeds resvg and its SVG is never written to disk", () => {
   for (const rel of SATORI_MODULES) {
-    const src = files.find((f) => f.rel === rel).src;
+    // Comments are prose about the SVG, not uses of it.
+    const src = files
+      .find((f) => f.rel === rel)
+      .src.replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/^\s*\/\/.*$/gm, "");
     const calls = [...src.matchAll(/const\s+(\w+)\s*=\s*await\s+satori\(/g)];
     assert.ok(calls.length > 0, `${rel}: expected a satori call`);
     assert.equal(calls.length, (src.match(/\bsatori\(/g) || []).length, `${rel}: satori output must be held in a const`);

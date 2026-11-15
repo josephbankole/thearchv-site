@@ -22,7 +22,7 @@
        silently drop it at runtime. The Substack click-tracking script and the subscribe iframe
        went with the signup on 2026-10-12, so their hash is gone, frame-src is 'none' and there
        is no form, hence form-action 'self'. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Ht2VzO1WcKsHWg3c5d/K+eKiKNIVFlXm1+iwxhG8/kQ=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-TeP7egr/EZ1qK8I+nFu03dsUnk31YZn2nrDBBbBi0uE=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV Dispatch is paused" />
   <meta property="og:description" content="No new issues are going out for now. Our long reads are on thearchv.ca." />
@@ -42,7 +42,7 @@
       if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
       return v.replace(/^([^?#]*[^\/?#])(?=[?#]|$)/, function (m) { return /\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
     }
-    posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,disable_session_recording:true,disable_surveys:true,person_profiles:'identified_only',before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
+    posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,disable_session_recording:true,disable_surveys:true,disable_product_tours:true,disable_conversations:true,capture_heatmaps:false,capture_dead_clicks:false,capture_exceptions:false,capture_performance:false,person_profiles:'identified_only',before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
   </script>
 
   <!-- Brand fonts, self-hosted (2026-10-12). Same faces as fontLinks() in scripts/shared/page-shell.mjs. -->

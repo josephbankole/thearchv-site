@@ -67,9 +67,17 @@ export async function initAnalytics(): Promise<void> {
     capture_pageview: true,
     capture_pageleave: true,
     disable_session_recording: true,
-    // Same three privacy switches as the static pages' snippet (public/app, /start, /quiz,
-    // /dispatch): replay and surveys stay off in code whatever the PostHog project toggles say.
+    // Same privacy switches as the static pages' snippet (public/app, /start, /quiz, /dispatch)
+    // and josephbankole.ca, which shares this PostHog project: replay, surveys, tours, chat,
+    // heatmaps, dead clicks, exception capture and web vitals stay off in code, so a dashboard
+    // toggle can never make this site load an extension script nobody reviewed.
     disable_surveys: true,
+    disable_product_tours: true,
+    disable_conversations: true,
+    capture_heatmaps: false,
+    capture_dead_clicks: false,
+    capture_exceptions: false,
+    capture_performance: false,
     respect_dnt: true,
     persistence: 'localStorage',
     person_profiles: 'identified_only',

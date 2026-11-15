@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["CQ5PY4PJJ5.ca.thearchv.reader"],
+        "components": [
+          { "/": "/desk/transfer/????-??-??/", "comment": "Football dated desk pages, the same section and date a push carries" },
+          { "/": "/desk/world-cup/????-??-??/" },
+          { "/": "/desk/leagues/????-??-??/" },
+          { "/": "/nfl/questions/????-??-??/", "comment": "Other sports' dated Question Desk pages" },
+          { "/": "/f1/questions/????-??-??/" },
+          { "/": "/tennis/questions/????-??-??/" },
+          { "/": "/golf/questions/????-??-??/" },
+          { "/": "/basketball/questions/????-??-??/" }
+        ]
+      }
+    ]
+  }
+}

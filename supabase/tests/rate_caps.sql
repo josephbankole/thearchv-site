@@ -100,4 +100,59 @@ begin
   raise notice 'push_tokens_token_format: ok';
 end $$;
 
+-- tickets_hourly_cap reserve (20261115160000) and the reply cap's per-device layer
+-- (20261115160100). Starts from the reply block's rows, which are removed first: the reply block
+-- has already proved tickets started empty.
+do $$
+declare
+  i int;
+  t uuid;
+  refused boolean := false;
+  tickets uuid[] := '{}';
+begin
+  delete from public.ticket_messages;
+  delete from public.tickets;
+
+  insert into public.tickets (device_id, body, created_at)
+    values ('old-device', 'filed earlier', now() - interval '2 hours');
+  for i in 1..30 loop
+    insert into public.tickets (device_id, body) values ('new-dev' || (i % 10), 'flood ' || i);
+  end loop;
+
+  begin
+    insert into public.tickets (device_id, body) values ('never-seen', 'one too many');
+  exception when others then
+    if sqlerrm = 'ticket_rate_limited' then refused := true; else raise; end if;
+  end;
+  if not refused then
+    raise exception 'FAIL ticket reserve: the 31st ticket this hour from a new device was not refused';
+  end if;
+
+  insert into public.tickets (device_id, body) values ('old-device', 'returning device still lands');
+  raise notice 'tickets_hourly_cap reserve: ok';
+
+  delete from public.ticket_messages;
+  delete from public.tickets;
+  for i in 1..4 loop
+    insert into public.tickets (device_id, body) values ('busy-device', 'ticket ' || i) returning id into t;
+    tickets := tickets || t;
+  end loop;
+  for i in 1..60 loop
+    insert into public.ticket_messages (ticket_id, author, body)
+      values (tickets[1 + ((i - 1) / 20)], 'user', 'reply ' || i);
+  end loop;
+
+  refused := false;
+  begin
+    insert into public.ticket_messages (ticket_id, author, body) values (tickets[4], 'user', 'one too many');
+  exception when others then
+    if sqlerrm = 'ticket_reply_rate_limited' then refused := true; else raise; end if;
+  end;
+  if not refused then
+    raise exception 'FAIL reply cap: the 61st reply this hour from one device was not refused';
+  end if;
+
+  raise notice 'ticket_messages_hourly_cap per device: ok';
+end $$;
+
 rollback;

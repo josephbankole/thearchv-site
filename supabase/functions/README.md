@@ -43,6 +43,24 @@ Supabase gateway still requires the project's publishable key to invoke a functi
 not open to the wider internet. `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected by the
 platform, so there are no secrets to set for these four.
 
+## The rate caps live in the database, not in these functions
+
+The ticket and push-token ceilings are BEFORE INSERT triggers defined in `supabase/migrations/`,
+so they hold whatever code path or key does the insert. The functions only translate the
+trigger's abort marker into a clean 429.
+
+`ticket-intake` is capped by `tickets_hourly_cap`, whose current definition is
+`20261115160000_ticket_returning_device_reserve.sql`: 30 tickets an hour globally, 5 an hour per
+`device_id`, plus 15 further slots open only to a device that already filed a ticket before the
+current hour. `ticket-reply` is capped by `ticket_messages_hourly_cap`, whose current definition is
+`20261115160100_ticket_messages_device_cap.sql`. `device_id` is chosen by the app, so these raise
+the cost of filling a cap rather than remove it; each migration header says what it does and does
+not cover.
+
+Apply migrations with `supabase db push` (they are also applied live via the migration API).
+There is no ordering requirement between that and `supabase functions deploy`: the abort marker
+(`ticket_rate_limited`) is unchanged, so either half works against either version of the other.
+
 ## Test one quickly
 
 Replace `PUBLISHABLE_KEY` with the `sb_publishable_...` key.

@@ -70,6 +70,9 @@ export function pickTop(items, source, { defaults, seen, nowMs, maxAgeHours }) {
     const badTitle = filters.titles.find((f) => f.re.test(it.title));
     if (badTitle) { reject(`excluded:${badTitle.p}`); counts.filtered++; continue; }
     const when = parseFeedDate(it.published, source.timeZoneHint || "UTC");
+    // An undated item cannot pass the freshness or seen windows, so it is dropped unless the
+    // source opts in. Counted as filtered, so a feed date-format change reads as all-filtered.
+    if (!when && !source.allowUndated) { reject("no-date"); counts.filtered++; continue; }
     if (when && nowMs - when.ms > maxAge) { counts.stale++; continue; }
     if (when && when.ms - nowMs > HOUR) { reject("future"); counts.stale++; continue; }
     const cand = {

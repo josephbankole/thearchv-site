@@ -274,3 +274,17 @@ test("ci-12: a headline that still carries markup is dropped as markup-in-title,
   assert.equal(only.pick, null);
   assert.equal(only.reason, "all-filtered");
 });
+
+test("ci-8: an undated item is dropped as no-date unless the source allows undated items", () => {
+  const list = [
+    { title: "Undated story", link: "https://www.espn.com/golf/u", published: "", guid: "u1", position: 0 },
+    { title: "Odd date story", link: "https://www.espn.com/golf/v", published: "26th of September", guid: "u2", position: 1 },
+  ];
+  const r = pickTop(list, src("espn-golf"), { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.equal(r.pick, null);
+  assert.equal(r.reason, "all-filtered", "a feed date-format change shows as all-filtered in the run report");
+  assert.deepEqual(r.rejected.map((x) => x.reason), ["no-date", "no-date"]);
+  const ok = pickTop(list, { ...src("espn-golf"), allowUndated: true }, { defaults: SOURCES.defaults, seen: empty(), nowMs: NOW });
+  assert.equal(ok.pick.headline, "Undated story");
+  assert.equal(ok.pick.publishedAt, null);
+});

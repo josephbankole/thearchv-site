@@ -96,6 +96,15 @@
       "was": "Eleven issues copied from the Dispatch kept lines written for email: reply-by-email prompts, forward-and-subscribe lines, the weekly-letter footer and promises of a round-up next Sunday.",
       "now": "Those lines are off the site copies, because the Dispatch is paused and a web page cannot take a reply. The reporting is unchanged. The issues: Manchester City guilty on every financial charge across nine seasons; Manchester City guilty on 114 of 115 charges, reports say; Pro Ref stood down two officials over one Manchester derby goal; Manchester United Women's biggest night was a 3-0 in Leigh; The £222m transfer that was really a resignation; Hull City beat Manchester United at the eleventh try; Napoli bought a striker without a phone call; Mbappé took the record on the wrong night; Milla's record, and the man closing in on it; Canada's World Cup story; Hosts again: the USA's whole World Cup story.",
       "source": "The ARCHV Dispatch on Substack, paused 6 October 2026."
+    },
+    {
+      "at": "2026-11-15T12:00:00-05:00",
+      "kind": "correction",
+      "path": "/explainers/oldest-world-cup-goalscorers/",
+      "title": "The oldest goalscorers in World Cup history",
+      "was": "\"with Russia's Oleg Salenko scoring all six of the other goals in what is still the only five-goal haul by one player in a single World Cup match\"",
+      "now": "Salenko scored five of Russia's six goals in the 6-1 win over Cameroon on 28 June 1994. Dmitri Radchenko scored the sixth.",
+      "source": "FIFA match report, Russia v Cameroon, 1994 FIFA World Cup; Wikipedia, 1994 FIFA World Cup Group B."
     }
   ]
 }

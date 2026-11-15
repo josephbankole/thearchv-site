@@ -218,9 +218,11 @@ async function failed(
 // (ticket-intake writes it), so it is not repeated.
 // Everything the user wrote sits inside one <ticket> fence, and a ticket tag in their own text is
 // escaped so it cannot close the fence early. The system prompt says the fenced text is data.
+// The two lines above the fence are ours: category is whitelisted at intake, and the app version,
+// which the client sends as free text, is only shown when it looks like a version number.
 export function buildUserMessage(ticket: Record<string, unknown>, thread: ThreadMessage[]): string {
   const meta = `Ticket category: ${ticket.category ?? "other"}\n` +
-    `App version: ${ticket.app_version ?? "unknown"}\n\n`;
+    `App version: ${appVersion(ticket.app_version)}\n\n`;
   const later = thread.length > 0 && thread[0].author === "user" && thread[0].body === ticket.body
     ? thread.slice(1)
     : thread;
@@ -230,18 +232,28 @@ export function buildUserMessage(ticket: Record<string, unknown>, thread: Thread
     (later.length === 0 ? "" : "\n\nAnswer the user's latest message.");
 }
 
+// The client-sent app version, kept only when it reads like "1.6.0" or "1.6.0 (42)". Anything
+// else is free text from the device and is shown as "unknown" outside the untrusted section.
+const VERSION = /^\d{1,4}(?:\.\d{1,4}){0,3}(?: ?\(\d{1,8}\))?$/;
+export function appVersion(value: unknown): string {
+  const v = typeof value === "string" ? value.trim() : "";
+  return VERSION.test(v) ? v : "unknown";
+}
+
 // Escapes any <ticket> or </ticket> the user typed, so the fence above holds.
 function fence(text: string): string {
   return String(text).replace(/<(\/?)ticket/gi, "&lt;$1ticket");
 }
 
-// Turns links into text a mail client will not open with one click: http:// becomes hxxp[://] and
-// www. becomes www[.]. Applied to the whole founder email, since the model's note and reply are
-// written from the user's text and can carry the same links.
+// Turns links into text a mail client will not open with one click: http:// becomes hxxp[://]
+// wherever it appears, even glued to a word, and the dot before any domain-like label becomes [.],
+// so bare domains such as example.com are not linked either. Version numbers like 1.6.0 are left
+// alone. Applied to the whole founder email, since the model's note and reply are written from the
+// user's text and can carry the same links.
 export function defang(text: string): string {
   return String(text)
-    .replace(/\bhttp(s?):\/\//gi, "hxxp$1[://]")
-    .replace(/\bwww\./gi, "www[.]");
+    .replace(/http(s?):\/\//gi, "hxxp$1[://]")
+    .replace(/([a-z0-9-])\.(?=[a-z]{2,}\b)/gi, "$1[.]");
 }
 
 // The email the founder gets for anything L1 cannot close. Shared with ticket-reply's follow-up
@@ -261,7 +273,7 @@ export function founderMail(
   return defang(
     `A support ticket needs you (${label}).\n\n` +
       `Category: ${ticket.category ?? "other"}\n` +
-      `App version: ${ticket.app_version ?? "unknown"}\n` +
+      `App version: ${appVersion(ticket.app_version)}\n` +
       `Ticket id: ${ticket.id}` +
       (internalNote ? `\n\nL1 note, written by the triage model from the user's text and not checked:\n${internalNote}` : "") +
       (userReply ? `\n\nHolding reply the triage model sent to the user:\n${userReply}` : "") +

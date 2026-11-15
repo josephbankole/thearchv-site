@@ -21,7 +21,7 @@
        alone, the same rule the article pages follow. Neither script changed for that.
        2026-10-12, later: the page script (the second hash) changed. It now dates the TODAY
        kicker when the feed's lead is not today's story, so its hash was recomputed. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-VItv3TW4M20JVNnK3vFj5BjbtKmbaDzsRXMNlTnzFHk=' 'sha256-7/qBfdScegwJzohArUOL2cIXTUmDx0TQrMg3VFHh5rs=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-VItv3TW4M20JVNnK3vFj5BjbtKmbaDzsRXMNlTnzFHk=' 'sha256-CI6DbWnrD2E+4Td/RT7b0gJJHKZBhLGNwvBl5o77X6Y=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
   <meta property="og:description" content="Sport drawn down to the moment that decided it." />
@@ -372,7 +372,7 @@
       var follow = { platform: 'instagram', url: 'https://www.instagram.com/thearchvfc', label: 'Follow @thearchvfc' };
       if (/tiktok\./i.test(ref)) follow = { platform: 'tiktok', url: 'https://www.tiktok.com/@thearchvfc', label: 'Follow on TikTok' };
       else if (/instagram\./i.test(ref)) follow = { platform: 'instagram', url: 'https://www.instagram.com/thearchvfc', label: 'Follow on Instagram' };
-      else if (/facebook\.|fb\.watch/i.test(ref)) follow = { platform: 'facebook', url: 'https://www.facebook.com/thearchvfc', label: 'Follow on Facebook' };
+      else if (/facebook\.|fb\.watch/i.test(ref)) follow = { platform: 'facebook', url: 'https://www.facebook.com/profile.php?id=61590734246013', label: 'Follow on Facebook' };
       var followBtn = document.getElementById('follow-cta');
       if (followBtn) {
         followBtn.href = follow.url;

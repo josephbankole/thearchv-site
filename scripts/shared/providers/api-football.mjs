@@ -368,9 +368,14 @@ async function fetchSeason({ root, league, season, cachePath, cacheName, existin
       continue;
     }
     // Every row for THIS competition, not the first one. See the aggregation note above.
-    const inLeague = (record.statistics || []).filter((s) => s.league?.id === league);
-    const lines = inLeague.length ? inLeague : (record.statistics?.[0] ? [record.statistics[0]] : []);
-    if (!lines.length) continue;
+    // Never borrow another competition's row: the metrics are labelled Premier League, so a
+    // player with no row for this league is left out rather than shown with, say, his
+    // Champions League totals.
+    const lines = (record.statistics || []).filter((s) => s.league?.id === league);
+    if (!lines.length) {
+      console.warn(`[api-football] no league ${league} row for ${id} (api id ${meta.apiId}) in ${seasonLabel}; skipped`);
+      continue;
+    }
     const agg = aggregateLines(lines);
     if (lines.length > 1) {
       console.warn(

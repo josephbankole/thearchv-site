@@ -19,6 +19,13 @@
      node scripts/ping-indexnow.mjs 20 --dry-run print what would be sent, send nothing
      node scripts/ping-indexnow.mjs --help       usage
 
+   Pages the site itself marks noindex are left out, so a bounded run never spends its slots on a
+   page the site asks engines not to index. A URL counts as noindex when it is listed in
+   dist/noindex-urls.json (written by the page generators) or when its built page in dist/ carries
+   a robots meta with noindex. The one exception is the staged retroactive noindex list
+   (scripts/data/retro-noindex.json): those pages are submitted on purpose, because a recrawl is
+   how an engine sees the new tag and drops them. The run reports how many it skipped.
+
    Day to day, prefer the bounded form. IndexNow is for telling an engine what changed, and a daily
    deploy changes a handful of pages, not the whole archive. Roughly: `node scripts/ping-indexnow.mjs 25`
    after a normal deploy, and the unbounded form only after a large structural change.
@@ -45,9 +52,12 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { retroNoindex } from "./shared/retro-noindex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC_DIR = join(ROOT, "public");
+const DIST_DIR = join(ROOT, "dist");
+const NOINDEX_LIST = join(DIST_DIR, "noindex-urls.json");
 const SITEMAP = process.env.SITEMAP_PATH || join(ROOT, "dist", "sitemap.xml");
 const SITE = (process.env.SITE_ORIGIN || "https://thearchv.ca").replace(/\/+$/, "");
 const HOST = new URL(SITE).host;
@@ -162,13 +172,35 @@ if (onHost.length === 0) {
   process.exit(1);
 }
 
+/* Drop pages the site marks noindex, except the retro-noindex list, where the recrawl is the point. */
+const listedNoindex = loadNoindexList();
+const indexable = [];
+let skippedNoindex = 0;
+let keptRetro = 0;
+for (const e of onHost) {
+  const path = new URL(e.loc).pathname;
+  if (!listedNoindex.has(path) && !builtPageIsNoindex(path)) {
+    indexable.push(e);
+  } else if (retroNoindex(path)) {
+    keptRetro += 1;
+    indexable.push(e);
+  } else {
+    skippedNoindex += 1;
+  }
+}
+console.log(`${TAG} skipped ${skippedNoindex} noindex URL(s); kept ${keptRetro} on the retro-noindex list for a recrawl.`);
+if (indexable.length === 0) {
+  console.error(`${TAG} FAIL: every URL on ${HOST} in the sitemap is noindex, so there is nothing to submit.`);
+  process.exit(1);
+}
+
 /* Newest first by <lastmod>. Ties are broken by sitemap position, latest first: the generators
    append as they run and the day's article pages go in last (build-article-pages.mjs is last in
    the build chain), while the static routes and the glossary are stamped with the build date and
    sit earlier in the file. Without that tie-break a small N would spend itself on pages that only
    look new because the build restamped them. Both are approximations: with 20-odd pages sharing a
    build-stamped date, run --dry-run first if the exact selection matters. */
-const sorted = [...onHost].sort((a, b) => {
+const sorted = [...indexable].sort((a, b) => {
   const aUndated = Number.isNaN(a.lastmod);
   const bUndated = Number.isNaN(b.lastmod);
   if (aUndated && bUndated) return b.pos - a.pos;
@@ -229,6 +261,57 @@ if (dryRun) {
 }
 
 /* ---------- helpers ---------- */
+/* dist/noindex-urls.json: an array of site paths or full URLs, or { "urls": [...] } / { "paths": [...] }.
+   Missing is normal (the built pages are still checked); unreadable warns and lists nothing. */
+function loadNoindexList() {
+  const set = new Set();
+  if (!existsSync(NOINDEX_LIST)) return set;
+  let raw;
+  try {
+    raw = JSON.parse(readFileSync(NOINDEX_LIST, "utf8"));
+  } catch (err) {
+    console.warn(`${TAG} WARN could not read ${NOINDEX_LIST}: ${err.message}; relying on the built pages alone.`);
+    return set;
+  }
+  const items = Array.isArray(raw) ? raw : Array.isArray(raw?.urls) ? raw.urls : Array.isArray(raw?.paths) ? raw.paths : [];
+  for (const item of items) {
+    if (typeof item !== "string") continue;
+    try {
+      set.add(new URL(item, SITE).pathname);
+    } catch {
+      /* not a URL or path, ignore */
+    }
+  }
+  return set;
+}
+
+/* True when the built page for this path has <meta name="robots"> with noindex. No built page,
+   no verdict: the URL stays in. */
+function builtPageIsNoindex(path) {
+  let rel;
+  try {
+    rel = decodeURIComponent(path);
+  } catch {
+    return false;
+  }
+  if (rel.includes("..")) return false;
+  const file = rel.endsWith("/") ? join(DIST_DIR, rel, "index.html") : join(DIST_DIR, rel);
+  if (!file.endsWith(".html") || !existsSync(file)) return false;
+  let html;
+  try {
+    html = readFileSync(file, "utf8");
+  } catch {
+    return false;
+  }
+  for (const tag of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const t = tag[0];
+    if (!/\bname\s*=\s*["']?robots(?=["'\s\/>])/i.test(t)) continue;
+    const content = t.match(/\bcontent\s*=\s*["']([^"']*)["']/i);
+    if (content && /\bnoindex\b/i.test(content[1])) return true;
+  }
+  return false;
+}
+
 function decodeXml(s) {
   return s
     .replace(/&lt;/g, "<")

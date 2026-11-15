@@ -13,9 +13,10 @@
    URL() can parse. Keep the KEY lists in step with Models.swift when the app adds a required field. */
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { SPORTS } from "../shared/page-shell.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..", "..");
@@ -82,6 +83,51 @@ test("every lane and sport feed decodes as DaysFeed", () => {
   const names = laneFeeds();
   for (const lane of ["transfer", "worldcup", "leagues"]) assert.ok(names.includes(lane), `${lane} missing from index.json`);
   assertClean(names.flatMap((n) => arrayOf("DayEntry", readFeed(n).days, `${n}.days`)));
+});
+
+// site-build-12: the envelope and the routing fields. The app finds every file through index.json,
+// polls lastUpdated, routes a push by `section` to <section>.json and opens `url`. A football lane's
+// section is its feed name (worldcup, not world-cup); a sport's is the sport key, never its lane key
+// (build-feed.mjs CONTRACT). The URL shapes are written out here rather than taken from
+// page-shell.mjs, so a change there that moves the article URLs fails this test instead of passing it.
+const SITE = "https://thearchv.ca";
+const FOOTBALL_URL_LANE = { transfer: "transfer", worldcup: "world-cup", leagues: "leagues" };
+const SPORT_BY_KEY = new Map(SPORTS.filter((s) => s.key !== "football").map((s) => [s.key, s]));
+const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
+
+function expectedUrl(feed, date) {
+  if (FOOTBALL_URL_LANE[feed]) return `${SITE}/desk/${FOOTBALL_URL_LANE[feed]}/${date}/`;
+  const sport = SPORT_BY_KEY.get(feed);
+  return sport ? `${SITE}/${sport.urlBase}/${sport.lanes[0]}/${date}/` : null;
+}
+
+test("every file index.json lists exists at its path and carries the manifest's schema", () => {
+  const manifest = readFeed("index");
+  const list = [];
+  for (const f of manifest.feeds) {
+    if (f.path !== `/feed/${f.name}.json`) { list.push(`index.feeds ${f.name}: path ${f.path}`); continue; }
+    const file = join(DIST, "feed", `${f.name}.json`);
+    if (!existsSync(file)) { list.push(`index.feeds ${f.name}: ${f.path} was not built`); continue; }
+    const feed = readFeed(f.name);
+    if (feed.schema !== manifest.schema) list.push(`${f.name}.schema: ${JSON.stringify(feed.schema)}, index says ${manifest.schema}`);
+  }
+  assertClean(list);
+});
+
+test("every lane and sport feed has a lastUpdated and routes each entry to its own file and page", () => {
+  const list = [];
+  for (const name of laneFeeds()) {
+    const feed = readFeed(name);
+    const newest = Array.isArray(feed.days) && feed.days.length ? feed.days[0].date : null;
+    if (newest === null ? feed.lastUpdated !== null : !(typeof feed.lastUpdated === "string" && ISO_DAY.test(feed.lastUpdated)))
+      list.push(`${name}.lastUpdated: ${JSON.stringify(feed.lastUpdated)}`);
+    if (expectedUrl(name, "x") === null) { list.push(`${name}: not a football lane or a SPORTS key`); continue; }
+    (feed.days || []).forEach((d, i) => {
+      if (d.section !== name) list.push(`${name}.days[${i}].section: ${JSON.stringify(d.section)}, want "${name}"`);
+      if (d.url !== expectedUrl(name, d.date)) list.push(`${name}.days[${i}].url: ${JSON.stringify(d.url)}, want ${expectedUrl(name, d.date)}`);
+    });
+  }
+  assertClean(list);
 });
 
 test("posters.json decodes as PostersFeed", () => {

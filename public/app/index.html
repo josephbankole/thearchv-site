@@ -247,6 +247,12 @@
        white ground, which is a message nobody can read; #A32219 is 7.50:1. */
     .formnote.bad { color: #A32219; }
 
+    /* Who is asking, why, and how to withdraw, under the waitlist form (CASL express consent). */
+    .consent { margin-top: 6px; font-size: 0.8rem; line-height: 1.55; color: var(--cream-dim); }
+    .consent a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
+    .consent a:hover { color: var(--cream); }
+    .consent a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
     .fallback {
       margin-top: 26px;
       font-size: 0.85rem;
@@ -326,6 +332,10 @@
         <button class="cta-gold" type="submit" id="wait-submit">Tell me when Android is ready</button>
       </form>
       <p class="formnote" id="wait-note" role="status" aria-live="polite"></p>
+      <p class="consent">The ARCHV, run by Joseph Bankole, uses this address to tell you when the
+        Android app is ready. You can withdraw your consent at any time by emailing
+        <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>, and we will
+        delete it. Read the <a href="/about/#privacy">privacy policy</a>.</p>
 
       <p class="fallback">
         The app is on iPhone today. Everything reads on the web at

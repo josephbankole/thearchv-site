@@ -24,11 +24,21 @@
 // minutes, or within fifteen minutes after it while the feed still says not started) and the tab is
 // visible. Otherwise one quiet wake-up shortly before the next kickoff, and nothing if there is
 // none. A hidden tab stops polling and catches up once when it becomes visible again.
+//
+// WHEN THE FEED STOPS. scores-poll writes scores.json (and moves generatedAt) only when its content
+// changes, which during play is every minute or two. A feed that still says a match is live but has
+// not changed for STALE_MS has stopped (quota, function error, cron off): its live matches lose the
+// live dot, read "Feed paused" and are no longer pinned first, and the strip drops to the calm
+// 60-second retry until the feed moves again. A suspended or interrupted match can sit unchanged
+// for a long time legitimately, so it never counts towards that. Kept in step with
+// scripts/shared/scores-client.js (feedPaused), like the status wording.
 const FEED = 'https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/scores.json';
 const POLL_MS = 30_000;
 const RETRY_MS = 60_000;
 const MAX_WAKE_MS = 6 * 3_600_000;
 const MAX_ITEMS = 40;
+// Longer than a half-time break, so a quiet interval never reads as a stopped feed.
+const STALE_MS = 25 * 60_000;
 
 interface Side {
   name?: string;
@@ -40,6 +50,8 @@ interface Status {
   extra?: number | null;
   live?: boolean;
   finished?: boolean;
+  // Set here, never by the feed: the match was live when the feed stopped moving.
+  paused?: boolean;
 }
 interface Match {
   id: number;
@@ -82,11 +94,25 @@ function pick(all: Match[], now: Date): Match[] {
   return usable.filter((m) => localDay(kickoffMs(m)) === next).sort(byKickoff).slice(0, MAX_ITEMS);
 }
 
+// True when the feed says a match is live but has not moved for STALE_MS. A feed with no usable
+// generatedAt is taken at its word.
+function feedPaused(d: { generatedAt?: unknown }, all: Match[], now: number): boolean {
+  const at = Date.parse(typeof d.generatedAt === 'string' ? d.generatedAt : '');
+  if (Number.isNaN(at) || now - at <= STALE_MS) return false;
+  return all.some((m) => m?.status?.live && m.status.code !== 'SUSP' && m.status.code !== 'INT');
+}
+
+// The same matches with the live flag taken off, so a stopped feed never shows a match as live.
+function markPaused(all: Match[]): Match[] {
+  return all.map((m) => (m?.status?.live ? { ...m, status: { ...m.status, live: false, paused: true } } : m));
+}
+
 const clock = (minute: number, extra?: number | null): string => `${minute}${extra ? `+${extra}` : ''}'`;
 
 function statusText(m: Match): string {
   const s = m.status ?? {};
   const c = s.code;
+  if (s.paused) return 'Feed paused';
   if (s.live) {
     if (c === 'HT') return 'HT';
     if (c === 'P') return 'Pens';
@@ -152,6 +178,7 @@ export function initScoresStrip(): void {
   let haveData = false;
   let timer = 0;
   let pending = false;
+  let paused = false;
 
   function render(): void {
     const chosen = pick(matches, new Date());
@@ -168,7 +195,7 @@ export function initScoresStrip(): void {
 
   // How long until the next look at the feed, or null for none. See the header for the rule.
   function nextDelay(): number | null {
-    if (!haveData) return RETRY_MS;
+    if (!haveData || paused) return RETRY_MS;
     const now = Date.now();
     let soon: number | null = null;
     for (const m of matches) {
@@ -204,11 +231,13 @@ export function initScoresStrip(): void {
     fetch(FEED, { cache: 'no-cache' })
       .then((res) => {
         if (!res.ok) throw new Error('feed');
-        return res.json() as Promise<{ matches?: unknown }>;
+        return res.json() as Promise<{ matches?: unknown; generatedAt?: unknown }>;
       })
       .then((d) => {
         if (!d || !Array.isArray(d.matches)) throw new Error('shape');
-        matches = d.matches as Match[];
+        const all = d.matches as Match[];
+        paused = feedPaused(d, all, Date.now());
+        matches = paused ? markPaused(all) : all;
         haveData = true;
         render();
       })

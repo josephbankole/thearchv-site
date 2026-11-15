@@ -19,6 +19,11 @@
   //   scores-script.mjs refuses both.
   var BASE = 'https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/';
   var POLL = 30000;
+  // scores-poll moves generatedAt only when scores.json changes, every minute or two during play. A
+  // feed that says a match is live and has not moved for this long has stopped: longer than a
+  // half-time break, so a quiet interval never reads as one. Same rule as feedPaused() in
+  // src/components/scoresStrip.ts, kept in step by hand.
+  var STALE_MS = 25 * 60000;
   var ORDER = ['premier-league', 'champions-league', 'wsl'];
   var NAMES = { 'premier-league': 'Premier League', 'champions-league': 'Champions League', 'wsl': "Women's Super League" };
   // Goals and cards only. Substitutions, VAR notes and missed penalties stay out.
@@ -65,7 +70,7 @@
   var announcer = document.getElementById('scores-status');
   if (!root) return;
 
-  var matches = [], byId = {}, sig = '', haveData = false;
+  var matches = [], byId = {}, sig = '', haveData = false, paused = false;
   var open = {}, details = {};
   // Per open match: the panel on show, the track's height when it last settled, and the live track.
   var panelOf = {}, heightOf = {}, tracks = {};
@@ -147,6 +152,7 @@
   function statusText(m) {
     var s = m.status || {};
     var c = s.code;
+    if (s.paused) return 'Feed paused';
     if (s.live) {
       if (c === 'HT') return 'HT';
       if (c === 'P') return 'Pens';
@@ -169,7 +175,7 @@
 
   function row(m) {
     var live = !!(m.status && m.status.live);
-    var canOpen = live || !!(m.status && m.status.finished);
+    var canOpen = live || !!(m.status && (m.status.finished || m.status.paused));
     var el = h(canOpen ? 'button' : 'div', 'scores__row' + (live ? ' is-live' : ''));
     el.setAttribute('data-id', m.id);
     if (canOpen) {
@@ -758,6 +764,7 @@
   // not started). Otherwise one wake-up shortly before the next kickoff, and nothing if there is none.
   function nextDelay() {
     if (!haveData) return 60000; // the feed has not loaded yet: one calm retry a minute
+    if (paused) return 60000; // the feed has stopped moving: one calm look a minute until it moves
     var now = Date.now(), soon = null;
     for (var i = 0; i < matches.length; i++) {
       var s = matches[i].status || {};
@@ -789,11 +796,48 @@
   function setStamp(generatedAt) {
     if (!stamp) return;
     var t = generatedAt ? new Date(generatedAt) : null;
-    stamp.textContent = t && !isNaN(t.getTime()) ? 'Updated ' + hm(t) : '';
+    if (!t || isNaN(t.getTime())) { stamp.textContent = ''; return; }
+    // The day goes in whenever it is not today, so a stamp from yesterday never reads as current.
+    var day = dayLabel(t);
+    if (day === 'Yesterday') day = 'yesterday';
+    stamp.textContent = 'Updated ' + (day === 'Today' ? '' : day + ', ') + hm(t);
+  }
+
+  // True when the feed says a match is live but has not moved for STALE_MS. A suspended or
+  // interrupted match can sit unchanged for a long time, so it never counts. No usable generatedAt:
+  // the feed is taken at its word.
+  function feedPaused(d) {
+    var at = Date.parse(d.generatedAt);
+    if (isNaN(at) || Date.now() - at <= STALE_MS) return false;
+    for (var i = 0; i < d.matches.length; i++) {
+      var s = (d.matches[i] && d.matches[i].status) || {};
+      if (s.live && s.code !== 'SUSP' && s.code !== 'INT') return true;
+    }
+    return false;
+  }
+  // The same feed with the live flag taken off its live matches, so a stopped feed never shows a
+  // match as live. paused is set here, never by the feed.
+  function markPaused(d) {
+    return {
+      generatedAt: d.generatedAt,
+      matches: d.matches.map(function (m) {
+        if (!m || !m.status || !m.status.live) return m;
+        var st = {};
+        for (var k in m.status) if (Object.prototype.hasOwnProperty.call(m.status, k)) st[k] = m.status[k];
+        st.live = false;
+        st.paused = true;
+        var out = {};
+        for (var j in m) if (Object.prototype.hasOwnProperty.call(m, j)) out[j] = m[j];
+        out.status = st;
+        return out;
+      })
+    };
   }
 
   function apply(d) {
     haveData = true;
+    paused = feedPaused(d);
+    if (paused) d = markPaused(d);
     live = d;
     if (view) return; // a past day is on show; the live window waits in `live`
     var s = JSON.stringify(d.matches);

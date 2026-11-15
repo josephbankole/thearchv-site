@@ -31,7 +31,10 @@
    where <literal> is, recursively: an array of literals; an object literal whose every member is a
    plain `key: <literal>` with an identifier, string or number key; a string; a backtick string
    with NO ${} in it; a finite number, optionally with a leading minus; true, false, null or
-   undefined; or any of those wrapped in `as <type>` or `satisfies <type>`, which are erased too.
+   undefined; or any of those wrapped in `satisfies <type>` or `as const`, which are erased too.
+   Any other `as <type>` is refused (audit gap1-6, 2026-11-15): an assertion only needs the two
+   types to be comparable, so `{ date, headline } as DayEntry` with no `dek` passes tsc and then
+   breaks the app's decode of the feed. `satisfies` and a `: Type` annotation both check it.
    That leaves nowhere to spell a call, a tagged template, a `new`, an assignment, an arrow, a
    class, a getter, a spread, a computed key, a reference to another binding, a runtime import or
    a template substitution: the dangerous constructs are excluded by what the grammar cannot
@@ -345,6 +348,9 @@ function checkLiteral(node, ctx) {
     case K.AsExpression:
     case K.SatisfiesExpression:
       if (ctx.output) { ctx.report(node, "an `as` or `satisfies` left in esbuild's output"); return; }
+      if (node.kind === K.AsExpression && !isAsConst(node.type)) {
+        ctx.report(node, "an `as <type>` assertion, which lets tsc pass a value missing required fields; use `satisfies <type>` or a `: <type>` annotation (only `as const` is allowed)");
+      }
       checkLiteral(node.expression, ctx);
       checkType(node.type, ctx);
       return;
@@ -352,6 +358,12 @@ function checkLiteral(node, ctx) {
     default:
       ctx.report(node, describe(node));
   }
+}
+
+/* `as const`: TypeScript parses the `const` as a TypeReference to the name `const`, no arguments. */
+function isAsConst(type) {
+  return type.kind === K.TypeReference && type.typeName.kind === K.Identifier &&
+    type.typeName.text === "const" && !type.typeArguments?.length;
 }
 
 /* ── the type grammar ───────────────────────────────────────────────────────────────────────── */
@@ -926,6 +938,9 @@ export function assertPureDataFile(absPath, label) {
       "export interface A { a: string = foo() }\nexport const a = [];\n",
     "a type inside `as` that names a value": "export const a = [] as typeof b;\n",
     "a type inside `satisfies` that imports": "export const a = [] satisfies import('./x').B;\n",
+    "an `as` type assertion, which tsc accepts on a value missing required fields":
+      "export const a = [{ date: 'x', headline: 'y' } as DayEntry];\n",
+    "an `as` assertion on the whole export": "export const a = [] as DayEntry[];\n",
   };
   for (const [name, src] of Object.entries(refusedByTypeGrammar)) {
     if (!readingOne(src).length) throw new Error(`data-shape self-test: reading one must refuse ${name}, and accepted it`);

@@ -16,7 +16,7 @@
        one (including the QUESTIONS/VERDICTS data or the quiz logic further down), recompute
        its hash (sha256, base64-encoded, of its exact inline body) and update it here, or the
        browser will silently drop that script at runtime. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Ht2VzO1WcKsHWg3c5d/K+eKiKNIVFlXm1+iwxhG8/kQ=' 'sha256-C2dLM9J5LAUr51kRw8IbbantQNk3tpDzTn3f4RFXn3I=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Ht2VzO1WcKsHWg3c5d/K+eKiKNIVFlXm1+iwxhG8/kQ=' 'sha256-/cpDJbXDUMsvFl5KA8lgMNERdJEK9MrzdncFiPPXZmA=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="What's your football IQ?" />
   <meta property="og:description" content="Eight questions from the archive. Sixty seconds." />
@@ -170,14 +170,14 @@
     <!-- Quiz -->
     <section id="quiz" class="hidden">
       <p class="progress" id="progress" aria-live="polite"></p>
-      <p class="question" id="question"></p>
+      <p class="question" id="question" tabindex="-1"></p>
       <div class="options" id="options"></div>
       <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
     </section>
 
     <!-- Result -->
     <section id="result" class="hidden">
-      <p class="verdict" id="verdict" aria-live="polite"></p>
+      <p class="verdict" id="verdict" tabindex="-1" aria-live="polite"></p>
       <p class="score" id="score"></p>
       <p class="verdict-line" id="verdict-line"></p>
       <div class="cta-block">
@@ -235,6 +235,10 @@
       feedback.textContent = '';
       feedback.className = 'feedback';
       locked = false;
+      // The answer that held focus has just been removed, and Start or Go again sits in a
+      // section that is now hidden. Move focus to the new question so keyboard and switch
+      // users stay in place and screen readers read it out.
+      $('question').focus();
     }
 
     function pick(btn, idx, right) {
@@ -268,6 +272,7 @@
       $('verdict').textContent = v.name;
       $('score').textContent = score + ' out of ' + QUESTIONS.length;
       $('verdict-line').textContent = v.line;
+      $('verdict').focus();
       if (window.posthog) posthog.capture('quiz_complete', { score: score });
     }
 

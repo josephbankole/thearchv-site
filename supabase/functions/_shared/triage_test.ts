@@ -4,7 +4,9 @@ import {
   appVersion,
   buildUserMessage,
   defang,
+  FOUNDER_MAIL_FAILED,
   founderMail,
+  HOLDING_REPLY,
   MAX_ATTEMPTS,
   triageTicket,
   type TriageDb,
@@ -28,6 +30,7 @@ function world(opts: {
   reply?: () => Promise<Response>;
   thread?: { author: string; body: string }[];
   status?: string;
+  mailOk?: boolean;
 } = {}) {
   const state = {
     calls: 0,
@@ -80,7 +83,7 @@ function world(opts: {
     mail: (subject, content) => {
       state.mails.push(subject);
       state.mailBodies.push(content);
-      return Promise.resolve(true);
+      return Promise.resolve(opts.mailOk ?? true);
     },
   };
   return { deps, state };
@@ -280,4 +283,46 @@ Deno.test("defang and founderMail leave text without links alone", () => {
   assertEquals(defang("Pull down to refresh."), "Pull down to refresh.");
   const mail = founderMail(TICKET, "L2 escalation", [], "", "");
   assert(mail.endsWith(`User said:\n${TICKET.body}`), "user text last");
+});
+
+Deno.test("a resolve with an empty reply goes to the founder as L2 and the user gets the holding line", async () => {
+  for (const reply_to_user of ["", "   ", undefined]) {
+    const w = world({ reply: modelSays({ action: "resolve", reply_to_user, internal_note: "faq 5" }) });
+    const out = await triageTicket(w.deps, TICKET);
+    assertEquals(w.state.ticket, { status: "l2_working", tier: "l2" }, String(reply_to_user));
+    assertEquals(out.body.action, "escalate_l2");
+    assertEquals(w.state.mails, ["L2 escalation (resolve with no reply): bug"]);
+    const replies = w.state.messages.filter((m) => m.author === "l1" && !m.internal);
+    assertEquals(replies.map((m) => m.body), [HOLDING_REPLY]);
+  }
+});
+
+Deno.test("an escalation with an empty reply still leaves the user the holding line", async () => {
+  const w = world({ reply: modelSays({ action: "escalate_l3", reply_to_user: "", internal_note: "deletion" }) });
+  await triageTicket(w.deps, TICKET);
+  assertEquals(w.state.ticket, { status: "escalated_l3", tier: "l3" });
+  const replies = w.state.messages.filter((m) => m.author === "l1" && !m.internal);
+  assertEquals(replies.map((m) => m.body), [HOLDING_REPLY]);
+});
+
+Deno.test("a founder email that does not go leaves a note health-probe can count", async () => {
+  const w = world({ mailOk: false, reply: modelSays({ action: "escalate_l3", reply_to_user: "Passed on.", internal_note: "legal" }) });
+  await triageTicket(w.deps, TICKET);
+  const notes = w.state.messages.filter((m) => m.author === "system").map((m) => m.body as string);
+  assertEquals(notes, [`${FOUNDER_MAIL_FAILED}: L3 escalation`]);
+  assert(w.state.messages.filter((m) => m.author === "system").every((m) => m.internal === true), "note is internal");
+});
+
+Deno.test("a founder email that goes is noted as sent, and no failure note is written", async () => {
+  const w = world({ reply: modelSays({ action: "escalate_l3", reply_to_user: "Passed on.", internal_note: "legal" }) });
+  await triageTicket(w.deps, TICKET);
+  const notes = w.state.messages.filter((m) => m.author === "system").map((m) => m.body as string);
+  assertEquals(notes, ["founder email sent: L3 escalation"]);
+});
+
+Deno.test("the triage-failed email also notes when it does not go", async () => {
+  const w = world({ mailOk: false, attempts: MAX_ATTEMPTS - 1, reply: modelText("not json at all") });
+  await triageTicket(w.deps, TICKET);
+  const notes = w.state.messages.filter((m) => m.author === "system").map((m) => m.body as string);
+  assert(notes.includes(`${FOUNDER_MAIL_FAILED}: triage failed ${MAX_ATTEMPTS} times`), JSON.stringify(notes));
 });

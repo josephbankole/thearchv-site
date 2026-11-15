@@ -16,7 +16,7 @@
 // index.ts wires this to the database and the mailer; handler_test.ts tests it.
 import { corsHeaders, type Env, json } from "../_shared/http.ts";
 import { checkAppSecret } from "../_shared/appGuard.ts";
-import { founderMail, type ThreadMessage } from "../_shared/triage.ts";
+import { FOUNDER_MAIL_FAILED, founderMail, type ThreadMessage } from "../_shared/triage.ts";
 
 // Reopening an L2 or L3 ticket: the status that tier's open tickets carry.
 const REOPEN_STATUS: Record<string, string> = {
@@ -126,8 +126,11 @@ export async function handleTicketReply(
       const { error } = await deps.store.addNote(ticket_id, FOUNDER_NOTICE);
       if (error) console.error("ticket-reply: notice note failed", error);
     } else {
-      // No note, so the next follow-up tries the email again.
+      // No FOUNDER_NOTICE note, so the next follow-up tries the email again. The failure note is
+      // what health-probe counts (check k), so a send that keeps failing is seen.
       console.error(JSON.stringify({ fn: "ticket-reply", ticket: ticket_id, mail: "not sent" }));
+      const { error } = await deps.store.addNote(ticket_id, `${FOUNDER_MAIL_FAILED}: ${label}`);
+      if (error) console.error("ticket-reply: mail failure note failed", error);
     }
   }
   return json({ ok: true }, 200);

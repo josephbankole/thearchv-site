@@ -22,6 +22,8 @@
 //   (i) https://josephbankole.ca/ returns 200 and its news-feed.xml has an item from the last 120h
 //   (j) the Salon image mirror (bucket salon-art) still holds the catalog's files and serves a
 //       random sample of them
+//   (k) no founder email about a support ticket (an L2 or L3 escalation, a triage that kept
+//       failing, a follow-up) has failed to send in the last 24h (a count only)
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
 // Debounced per check: health_alert_state records the last alert time, and a check will not
@@ -36,10 +38,12 @@ import { adminClient, json } from "../_shared/cors.ts";
 import { pushRunFailing } from "../_shared/push_run.ts";
 import { feedName, leadFromFeed, statesFrom } from "../_shared/push_guard.ts";
 import { DEFAULT_SPORT, SPORT_KEYS } from "../_shared/sports.ts";
-import { sendFounderMail } from "../_shared/zoho.ts";
+import { FOUNDER_MAIL_FAILED, sendFounderMail } from "../_shared/zoho.ts";
 import { type AlertDeps, dispatchAlerts, type Failure, pingUrl } from "./alert.ts";
 import {
   footballLeadStale,
+  FOUNDER_MAIL_WINDOW_MS,
+  founderMailFailing,
   JB_NEWS_FEED_URL,
   JB_SITE_URL,
   jbNewsStale,
@@ -321,6 +325,21 @@ Deno.serve(async (req) => {
       .lt("updated_at", cutoff);
     const detail = error ? `read error: ${error.message.slice(0, 120)}` : ticketsStuck(count ?? null);
     if (detail) failures.push({ check: "tickets", detail });
+  }
+
+  // (k) ticket-mail: founder emails about tickets that did not go, from the internal notes triage
+  //     and ticket-reply leave (founderMailFailing in checks.ts). A count, never ticket content.
+  {
+    const since = new Date(now.getTime() - FOUNDER_MAIL_WINDOW_MS).toISOString();
+    const { count, error } = await supabase
+      .from("ticket_messages")
+      .select("id", { count: "exact", head: true })
+      .eq("author", "system")
+      .eq("internal", true)
+      .like("body", `${FOUNDER_MAIL_FAILED}%`)
+      .gt("created_at", since);
+    const detail = error ? `read error: ${error.message.slice(0, 120)}` : founderMailFailing(count ?? null);
+    if (detail) failures.push({ check: "ticket-mail", detail });
   }
 
   // (i) josephbankole.ca: the site answers, and its Tuesday and Friday news desk is still

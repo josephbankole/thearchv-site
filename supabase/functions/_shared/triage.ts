@@ -14,6 +14,8 @@
 // failures cannot spend the daily ceiling.
 import { FAQ } from "./faq.ts";
 import type { Env } from "./http.ts";
+import { FOUNDER_MAIL_FAILED } from "./zoho.ts";
+export { FOUNDER_MAIL_FAILED };
 
 const MODEL = "claude-sonnet-4-6";
 
@@ -163,27 +165,43 @@ export async function triageTicket(deps: TriageDeps, ticket: Record<string, unkn
   }
 
   const known = Object.hasOwn(STATUS_BY_ACTION, decision.action ?? "");
-  const next = known ? STATUS_BY_ACTION[decision.action as string] : STATUS_BY_ACTION.escalate_l2;
-  const reply = (decision.reply_to_user ?? "").toString().trim();
+  const modelReply = (decision.reply_to_user ?? "").toString().trim();
   const internal = (decision.internal_note ?? "").toString().trim();
+  // A resolve with nothing to say would close the ticket with no answer, so it goes to the founder
+  // as L2 instead. Any decision without a reply still leaves the user the fixed holding line.
+  const emptyResolve = known && decision.action === "resolve" && !modelReply;
+  const next = known && !emptyResolve ? STATUS_BY_ACTION[decision.action as string] : STATUS_BY_ACTION.escalate_l2;
+  const reply = modelReply || HOLDING_REPLY;
 
-  if (reply) await db.addMessage({ ticket_id: ticketId, author: "l1", body: reply });
+  await db.addMessage({ ticket_id: ticketId, author: "l1", body: reply });
   if (internal) await db.addMessage({ ticket_id: ticketId, author: "l1", body: internal, internal: true });
   await db.updateTicket(ticketId, next);
 
   // L2 and L3 both reach the founder: there is no L2 agent to pick l2_working up. A decision with
   // an action the prompt does not allow is treated as L2, and the subject says so. Best effort:
-  // the ticket is already recorded in the database.
+  // the ticket is already recorded in the database, and the send's outcome is noted on it so
+  // health-probe can see a founder email that did not go.
   if (next.tier !== "l1") {
     const label = next.tier === "l3"
       ? "L3 escalation"
+      : emptyResolve
+      ? "L2 escalation (resolve with no reply)"
       : known
       ? "L2 escalation"
       : "L2 escalation (unreadable triage action)";
-    await deps.mail(`${label}: ${ticket.category ?? "ticket"}`, founderMail(ticket, label, thread, internal, reply));
+    const sent = await deps.mail(`${label}: ${ticket.category ?? "ticket"}`, founderMail(ticket, label, thread, internal, reply));
+    await mailNote(db, ticketId, sent, label);
   }
 
-  return { httpStatus: 200, body: { ok: true, action: known ? decision.action : "escalate_l2", ...next } };
+  const action = known && !emptyResolve ? decision.action : "escalate_l2";
+  return { httpStatus: 200, body: { ok: true, action, ...next } };
+}
+
+// What the user reads when the model gave no reply of its own.
+export const HOLDING_REPLY = "Thanks for your message. We have passed it on and someone will look at it.";
+
+async function mailNote(db: TriageDb, ticketId: string, sent: boolean, label: string) {
+  await note(db, ticketId, sent ? `founder email sent: ${label}` : `${FOUNDER_MAIL_FAILED}: ${label}`);
 }
 
 // A failed attempt. An API error made no paid call, so the permit goes back. Either way the ticket
@@ -202,10 +220,12 @@ async function failed(
   if (attempts >= MAX_ATTEMPTS) {
     await db.updateTicket(ticketId, { status: "l2_working", tier: "l2" });
     await note(db, ticketId, `auto-triage failed ${attempts} times, handed to the founder: ${detail.slice(0, 160)}`);
-    await deps.mail(
+    const label = `triage failed ${attempts} times`;
+    const sent = await deps.mail(
       `Triage failed: ${ticket.category ?? "ticket"}`,
-      founderMail(ticket, `triage failed ${attempts} times`, await db.thread(ticketId), detail.slice(0, 300), ""),
+      founderMail(ticket, label, await db.thread(ticketId), detail.slice(0, 300), ""),
     );
+    await mailNote(db, ticketId, sent, label);
     return { httpStatus: 200, body: { ok: false, error: "triage failed", attempts, status: "l2_working" } };
   }
   await db.updateTicket(ticketId, { status: "pending_triage" });

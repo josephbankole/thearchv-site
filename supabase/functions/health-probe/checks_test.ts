@@ -2,6 +2,7 @@
 // (checks.ts) and the per-sport push check (push_check.ts). Run: `deno test` from this dir.
 import {
   footballLeadStale,
+  founderMailFailing,
   JB_NEWS_STALE_MS,
   jbNewsStale,
   MIRROR_MIN_FILES,
@@ -169,4 +170,11 @@ Deno.test("salon-mirror: the sample is distinct names, never more than there are
   assert(picked.every((n) => names.includes(n)), "picked from the list");
   assertEquals(mirrorSample(["a.jpg"], 3).length, 1);
   assertEquals(mirrorSample([], 3), []);
+});
+
+Deno.test("founderMailFailing: quiet at zero or unknown, a count otherwise", () => {
+  assertEquals(founderMailFailing(0), null);
+  assertEquals(founderMailFailing(null), null);
+  assertEquals(founderMailFailing(1), "1 founder email about support tickets failed to send in the last 24h");
+  assertEquals(founderMailFailing(3), "3 founder emails about support tickets failed to send in the last 24h");
 });

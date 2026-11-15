@@ -5,6 +5,11 @@
 // escalation/alert as already recorded elsewhere and the email as a bonus, not a dependency.
 // Every false is logged with which step failed (never a token or an address), so a revoked
 // refresh token shows in the function logs instead of only as missing email.
+// The start of the internal ticket note left when a founder email about a ticket does not go.
+// health-probe counts these notes (check k), so a revoked refresh token or a refused send shows
+// up as an alert instead of only as missing email.
+export const FOUNDER_MAIL_FAILED = "founder email failed";
+
 export async function sendFounderMail(subject: string, content: string): Promise<boolean> {
   const clientId = Deno.env.get("ZOHO_CLIENT_ID");
   const clientSecret = Deno.env.get("ZOHO_CLIENT_SECRET");

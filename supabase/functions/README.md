@@ -117,7 +117,9 @@ supabase secrets set TRIAGE_SECRET=<a-long-random-string>
 # The founder email (Zoho Mail, Canadian data centre, see _shared/zoho.ts). Skipped cleanly until
 # all five are set, and every ticket is still recorded in the database either way.
 supabase secrets set ZOHO_CLIENT_ID=... ZOHO_CLIENT_SECRET=... ZOHO_REFRESH_TOKEN=... ZOHO_ACCOUNT_ID=...
-supabase secrets set FOUNDER_EMAIL=<the founder's address>
+# FOUNDER_EMAIL is both the sender and the recipient of these emails (zoho.ts), so it must be a
+# mailbox of the Zoho account the refresh token belongs to: Zoho refuses a send from any other address.
+supabase secrets set FOUNDER_EMAIL=<the founder's Zoho mailbox>
 # Optional: override the triage model without a code change.
 supabase secrets set TRIAGE_MODEL=<model id>
 ```
@@ -150,6 +152,8 @@ alike, and the functions email him for both:
 | What happens | Ticket ends up | Who is told |
 | --- | --- | --- |
 | L1 resolves it | `resolved_l1` | nobody |
+| L1 picks resolve but writes no reply | `l2_working`, tier `l2`; the user gets a fixed holding line | founder email, "L2 escalation (resolve with no reply)" |
+| Any founder email about a ticket fails to send | unchanged; an internal note starting `founder email failed` | founder alert from health-probe, "ARCHV health: ticket-mail failing", with the count only |
 | L1 escalates to L2 | `l2_working`, tier `l2` | founder email, "L2 escalation" |
 | L1 escalates to L3 | `escalated_l3`, tier `l3` | founder email, "L3 escalation" |
 | The model answers with an action it was not offered | `l2_working`, tier `l2` | founder email, "L2 escalation (unreadable triage action)" |
@@ -308,6 +312,7 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `salon-store` | the Salon shop switch (`GET /functions/v1/salon-store`) is not a 200 `gallery-store/1` document |
 | `android-waitlist` | the waitlist's preflight answers 404 or 5xx, or nothing |
 | `tickets` | any support ticket has sat at `new`, `pending_triage` or `l1_working` with nothing touching it for over 2h. The email gives the count only |
+| `ticket-mail` | a founder email about a support ticket (an escalation, a triage that kept failing, a follow-up) failed to send in the last 24h, counted from the internal `founder email failed` notes. The alert gives the count only, and when Zoho is the thing failing it reaches you through `ALERT_NTFY_URL` or the dead-man ping's `/fail` |
 | `jb-site` | https://josephbankole.ca/ does not answer 200 |
 | `jb-news` | josephbankole.ca's `news-feed.xml` does not answer 200, or its newest item is over 120h old (the desk publishes Tuesday and Friday, so this is one missed edition) |
 | `salon-mirror` | the `salon-art` bucket lists fewer than 452 JPEGs (the 15 Nov 2026 catalog's count; raise `MIRROR_MIN_FILES` in `checks.ts` when the catalog adds works), or one of 3 files picked at random does not answer 200 at its public URL |

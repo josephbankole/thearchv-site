@@ -1,6 +1,7 @@
 // Unit tests for ticket-reply (handler.ts). Run: `deno test` from this dir. No network, no
 // permissions: the environment, the database and the mailer are fakes.
-import { FOLLOW_UP_QUIET_MS, handleTicketReply, type ReplyStore, type ReplyTicket } from "./handler.ts";
+import { FOLLOW_UP_QUIET_MS, FOUNDER_NOTICE, handleTicketReply, type ReplyStore, type ReplyTicket } from "./handler.ts";
+import { FOUNDER_MAIL_FAILED } from "../_shared/zoho.ts";
 
 function assertEquals(actual: unknown, expected: unknown, msg = ""): void {
   const a = JSON.stringify(actual);
@@ -36,7 +37,8 @@ function world(
     lastFounderNotice: () => Promise.resolve(state.notice),
     addNote: (_id, body) => {
       state.notes.push(body);
-      state.notice = state.clock;
+      // The real lastFounderNotice reads only FOUNDER_NOTICE notes.
+      if (body === FOUNDER_NOTICE) state.notice = state.clock;
       return Promise.resolve({});
     },
   };
@@ -138,9 +140,12 @@ Deno.test("a follow-up a day after the last email emails again, though the user 
 
 Deno.test("a failed email leaves no notice, so the next follow-up tries again", async () => {
   const w = world({ tier: "l2", status: "l2_working" });
-  const deps = { ...w.deps, mail: () => Promise.resolve(false) };
+  let sends = 0;
+  const deps = { ...w.deps, mail: () => (sends++, Promise.resolve(false)) };
   await quietly(() => handleTicketReply(reply(), deps));
-  assertEquals(w.state.notes, []);
+  assertEquals(w.state.notes, [`${FOUNDER_MAIL_FAILED}: follow-up on an L2 ticket`]);
+  await quietly(() => handleTicketReply(reply(), deps));
+  assertEquals(sends, 2, "second follow-up tries the email again");
 });
 
 Deno.test("someone else's ticket is 404, and the cap marker is 429", async () => {

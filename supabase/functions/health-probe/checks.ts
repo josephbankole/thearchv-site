@@ -114,6 +114,19 @@ export function ticketsStuck(count: number | null): string | null {
   return `${count} ticket${count === 1 ? "" : "s"} waiting at new, pending_triage or l1_working, untouched for over ${TICKET_STUCK_MS / 3_600_000}h`;
 }
 
+// Founder emails about tickets that did not go. triage.ts and ticket-reply leave an internal note
+// starting FOUNDER_MAIL_FAILED (../_shared/zoho.ts) when sendFounderMail returns false, so an L3
+// escalation whose email failed is counted here instead of sitting unseen. A day's window, with the
+// 6h debounce, keeps alerting through a day of failures without counting old ones forever. The
+// alert itself may go through the same broken Zoho path, which is what ALERT_NTFY_URL and the
+// dead-man ping's /fail are for (alert.ts). Only the count goes in the alert.
+export const FOUNDER_MAIL_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+export function founderMailFailing(count: number | null): string | null {
+  if (count === null || count <= 0) return null;
+  return `${count} founder email${count === 1 ? "" : "s"} about support tickets failed to send in the last ${FOUNDER_MAIL_WINDOW_MS / 3_600_000}h`;
+}
+
 // josephbankole.ca. Its news desk publishes on Tuesday and Friday (josephbankole-site-desk), and
 // news-feed.xml is rebuilt from the edition pages each time, so the newest item's pubDate is the
 // desk's own freshness. Friday to Tuesday is the longest legitimate gap, about 98 hours; 120 hours

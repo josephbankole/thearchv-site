@@ -14,6 +14,7 @@ import { writeSitemap } from "./shared/sitemap.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { modifiedAt, newest, torontoIso } from "./shared/entry-dates.mjs";
 import { retroInSitemap } from "./shared/retro-noindex.mjs";
+import { inlineMd } from "./shared/content-inline.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
@@ -142,13 +143,8 @@ const MASTHEAD_SCRIPT_TAG = `<script>\n    ${MASTHEAD_SCRIPT}\n  </script>`;
 const PAGE_CSP = cspMeta({ scripts: [scriptHash(extractScriptBody(MASTHEAD_SCRIPT_TAG))] });
 
 /* ---------- markdown subset -> html ---------- */
-function inline(t) {
-  t = esc(t);
-  t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, a, b) => `<a href="${escAttr(b)}">${a}</a>`);
-  t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  t = t.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-  return t;
-}
+// Links (safe targets only) and emphasis: scripts/shared/content-inline.mjs.
+const inline = inlineMd;
 function md(body) {
   const blocks = body.split(/\n{2,}/);
   const out = [];

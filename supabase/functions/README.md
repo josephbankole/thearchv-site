@@ -224,18 +224,15 @@ for every token) costs at most 25 rows a run rather than the table, and a large 
 run. Raise the constant if a one-off drain needs to go faster, and watch the anomaly field while it
 does.
 
-Schedule it with pg_cron (run in the SQL editor). This checks hourly and only sends when a sport has
-a new lead, so it keeps the one-a-day promise. Replace the secret if you set PUSH_SECRET:
-```sql
-select cron.schedule(
-  'archv-daily-push',
-  '0 * * * *',
-  $$ select net.http_post(
-       url := 'https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/daily-push',
-       headers := jsonb_build_object('Content-Type','application/json','x-push-secret','<same-secret>')
-     ); $$
-);
-```
+The schedule is a migration, `supabase/migrations/20261115130000_health_and_cron_from_repo.sql`. It
+runs `archv-daily-push` hourly (it only sends when a sport has a new lead, so the one-a-day promise
+holds), `health-probe` every 30 minutes and `triage-drain` hourly at :20. Each call reads its guard
+secret from Vault (`push_secret`, `triage_secret`) when it runs, so no secret sits in `cron.job`.
+Do not paste a `cron.schedule` with a literal secret into the SQL editor: set the Vault secret and
+apply the migration instead. It leaves a job alone when its Vault secret is missing, so a working job
+is never replaced by one that would be refused. Before applying it on the live project, compare
+`select jobname, schedule, command from cron.job order by jobname;` with the file.
+`supabase/RESTORE.md` lists everything a rebuilt project needs.
 
 ### The sport field
 
@@ -254,7 +251,7 @@ Functions cannot import from outside `supabase/functions`. To add a sport, add i
 
 ### Cron timeouts
 
-The pg_cron jobs for daily-push and health-probe call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
+The pg_cron jobs for daily-push, health-probe and triage-drain call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12, and in the migration above). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
 
 ### Migration
 

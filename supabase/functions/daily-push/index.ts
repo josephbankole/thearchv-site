@@ -24,6 +24,7 @@ import {
   feedHashesFrom,
   feedName,
   groupTokensBySport,
+  inSendWindow,
   type Lead,
   leadFromFeed,
   routeFor,
@@ -45,6 +46,7 @@ type Supabase = ReturnType<typeof adminClient>;
 type Run = {
   supabase: Supabase;
   today: string;
+  now: Date;
   manifest: Record<string, string>;
   groups: Map<SportKey, string[]>;
   states: Map<SportKey, SportState>;
@@ -118,10 +120,12 @@ Deno.serve(async (req) => {
   }
 
   // The provider token is made once, and only if some sport actually sends.
+  const startedAt = new Date();
   let jwt: Promise<string> | null = null;
   const run: Run = {
     supabase,
-    today: edmontonDay(new Date()),
+    today: edmontonDay(startedAt),
+    now: startedAt,
     manifest,
     groups: groupTokensBySport(allRows),
     states: statesFrom(legacy, sportRows ?? []),
@@ -244,6 +248,10 @@ async function pushSport(run: Run, sport: SportKey): Promise<Record<string, unkn
   // b. The guard: the lead's identity, never the file's (C115). See decideSend in leads.ts.
   const decision = decideSend(run.states.get(sport) ?? null, lead, run.today);
   if (!decision.send) return { ok: true, skipped: decision.skipped };
+  // The send window (07:00 to 21:00 Edmonton, see inSendWindow in push_guard.ts). Outside it the
+  // sport skips WITHOUT recording, so a lead that lands late in the evening goes at 07:00 rather
+  // than at the first tick after midnight.
+  if (!inSendWindow(run.now)) return { ok: true, skipped: "outside the send window" };
   const story = lead as Lead; // decideSend only says send for a lead with a key
 
   // c. Asset readiness guard: verify the lead's image and article url actually resolve

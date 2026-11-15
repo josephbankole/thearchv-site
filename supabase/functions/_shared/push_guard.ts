@@ -18,6 +18,29 @@ export const EDITORIAL_TZ = "America/Edmonton";
 export const edmontonDay = (d: Date): string =>
   new Intl.DateTimeFormat("en-CA", { timeZone: EDITORIAL_TZ }).format(d);
 
+// ---------- the send window ----------
+
+// Pushes go out only between 07:00 and 21:00 Edmonton time (the editorial clock). The once-a-day
+// guard alone let a lead that arrived after the day's push wait for the first hourly tick after
+// Edmonton midnight, which pushed it to every reader of that sport at 00:00 Edmonton, 02:00
+// Toronto. Outside the window a sport skips WITHOUT recording anything, so the lead goes at the
+// first tick inside it (07:00), when it is still new. The hours are a default the founder can change.
+export const SEND_WINDOW = { startHour: 7, endHour: 21 } as const;
+
+// The hour (0-23) on the Edmonton clock.
+export function edmontonHour(d: Date): number {
+  const h = new Intl.DateTimeFormat("en-CA", { timeZone: EDITORIAL_TZ, hour: "numeric", hourCycle: "h23" })
+    .formatToParts(d)
+    .find((p) => p.type === "hour")?.value;
+  return Number(h);
+}
+
+// True from startHour:00 up to, not including, endHour:00 Edmonton time.
+export function inSendWindow(d: Date): boolean {
+  const h = edmontonHour(d);
+  return h >= SEND_WINDOW.startHour && h < SEND_WINDOW.endHour;
+}
+
 // ---------- the lead's identity, and the guard ----------
 
 // What makes a lead the same lead (C115). The guard used to compare the whole today.json

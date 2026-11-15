@@ -145,7 +145,9 @@ that skips or fails never holds up the next. For each one it:
 3. Compares the lead's identity (its date, section and url) with the last lead pushed for that
    sport. It sends only a lead it has not pushed before and that is no older than the last one, and
    it sends at most once per editorial day (America/Edmonton). A new date in some other lane does not
-   make an old lead new.
+   make an old lead new. It sends only between 07:00 and 21:00 Edmonton time (`SEND_WINDOW` in
+   `_shared/push_guard.ts`); outside those hours the sport skips without recording anything, so a
+   lead that lands in the evening goes at 07:00 rather than at the first tick after midnight.
 4. Sends a HEAD to the lead's image and article url. If either answers anything but 200, the sport
    waits for the next tick and nothing is recorded.
 5. Records the lead as sent, then claims that sport's tokens for the day with `claim_push_tokens`,

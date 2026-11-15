@@ -32,6 +32,11 @@
 // 60-second retry until the feed moves again. A suspended or interrupted match can sit unchanged
 // for a long time legitimately, so it never counts towards that. Kept in step with
 // scripts/shared/scores-client.js (feedPaused), like the status wording.
+//
+// A FROZEN MATCH. A match the feed still calls live more than LIVE_MAX_MS after its kickoff is a
+// stuck figure even while the rest of the feed keeps moving: it loses the live dot, reads "Feed
+// paused" and stops holding the strip on the 30-second poll. Same limit and rule as staleLive() in
+// scripts/shared/scores-client.js and ScoresFreshness.liveMaxSinceKickoff in the app.
 const FEED = 'https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/scores.json';
 const POLL_MS = 30_000;
 const RETRY_MS = 60_000;
@@ -39,6 +44,8 @@ const MAX_WAKE_MS = 6 * 3_600_000;
 const MAX_ITEMS = 40;
 // Longer than a half-time break, so a quiet interval never reads as a stopped feed.
 const STALE_MS = 25 * 60_000;
+// Two halves, the break, stoppage, extra time, a shootout and room for a short delay.
+const LIVE_MAX_MS = 3.5 * 3_600_000;
 
 interface Side {
   name?: string;
@@ -102,9 +109,20 @@ function feedPaused(d: { generatedAt?: unknown }, all: Match[], now: number): bo
   return all.some((m) => m?.status?.live && m.status.code !== 'SUSP' && m.status.code !== 'INT');
 }
 
-// The same matches with the live flag taken off, so a stopped feed never shows a match as live.
-function markPaused(all: Match[]): Match[] {
-  return all.map((m) => (m?.status?.live ? { ...m, status: { ...m.status, live: false, paused: true } } : m));
+// True when the feed calls a match live more than LIVE_MAX_MS after its kickoff. A match with no
+// usable kickoff cannot be judged and is taken at its word.
+function staleLive(m: Match, now: number): boolean {
+  if (!m?.status?.live) return false;
+  const t = kickoffMs(m);
+  return !Number.isNaN(t) && now - t > LIVE_MAX_MS;
+}
+
+// The same matches with the live flag taken off (or only from those `only` picks), so a stopped
+// feed or a frozen match never shows as live.
+function markPaused(all: Match[], only?: (m: Match) => boolean): Match[] {
+  return all.map((m) =>
+    m?.status?.live && (!only || only(m)) ? { ...m, status: { ...m.status, live: false, paused: true } } : m,
+  );
 }
 
 const clock = (minute: number, extra?: number | null): string => `${minute}${extra ? `+${extra}` : ''}'`;
@@ -237,8 +255,9 @@ export function initScoresStrip(): void {
       .then((d) => {
         if (!d || !Array.isArray(d.matches)) throw new Error('shape');
         const all = d.matches as Match[];
-        paused = feedPaused(d, all, Date.now());
-        matches = paused ? markPaused(all) : all;
+        const now = Date.now();
+        paused = feedPaused(d, all, now);
+        matches = paused ? markPaused(all) : markPaused(all, (m) => staleLive(m, now));
         haveData = true;
         render();
       })

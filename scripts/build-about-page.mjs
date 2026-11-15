@@ -28,7 +28,7 @@
    Runs after vite build (it writes into dist/, which vite empties) and before build-search.mjs
    and verify-csp-pages.mjs (see package.json "build"). The /about/ sitemap row is in
    build-content.mjs's EXTRA_URLS; the stubs are noindex and in no sitemap. */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -132,6 +132,35 @@ ${olderRows.map((r) => correctionItem(r, "            ")).join("\n")}
         </details>`
     : "",
 ].filter(Boolean).join("\n        ");
+
+/* ---------- portrait credits (audit gap4-2, 2026-11-15) ----------
+   Every portrait made from a Wikimedia Commons photo credits its photographer and licence, read
+   from identity.licence in scripts/data/heads-hd.json (check-portrait-provenance.mjs makes sure
+   each one is recorded). The name is the registry's, from illustrated.json. */
+const readData = (f) => JSON.parse(readFileSync(join(ROOT, "scripts", "data", f), "utf8"));
+const nameByStem = new Map(
+  readData("illustrated.json").players.map((p) => [String(p.hd).split("/").pop().replace(/\.webp$/i, ""), p.name])
+);
+const credits = readData("heads-hd.json").entries
+  .filter((e) => e.identity?.method === "reference-render" && e.identity.licence?.source)
+  .map((e) => ({ player: nameByStem.get(e.out), ...e.identity.licence }))
+  .filter((c) => c.player)
+  .sort((a, b) => a.player.localeCompare(b.player, "en-GB"));
+const creditItem = (c) => {
+  const label = esc(c.name === "Public domain" ? "public domain" : c.name);
+  const licence = c.url ? `<a href="${escAttr(c.url)}" rel="license noopener">${label}</a>` : label;
+  return `<li>${esc(c.player)}: photo by ${esc(c.author)}, ${licence}, <a href="${escAttr(c.source)}">source on Wikimedia Commons</a></li>`;
+};
+const creditsHtml = credits.length
+  ? `<h3 id="portrait-credits">Portrait credits</h3>
+        <p>Some of our portraits are made from a reference photograph published on Wikimedia Commons under an open licence. The photographer and the licence of each one are listed here.</p>
+        <details class="log-older credits">
+          <summary>Photographers and licences (${credits.length})</summary>
+          <ul>
+${credits.map((c) => `            ${creditItem(c)}`).join("\n")}
+          </ul>
+        </details>`
+  : "";
 
 /* ---------- Joseph Bankole: the derived lists ---------- */
 const recentBlock = recent.length
@@ -296,6 +325,8 @@ const html = `${documentShell({
 
         <h3>The artwork is our own</h3>
         <p>Every image on The ARCHV is original illustration, drawn in our own house style. We use no club crests, no kit designs, no federation or competition marks, and no photographs. The faces are stylised drawings published as editorial commentary, not likenesses passed off as photos.</p>
+
+        ${creditsHtml}
 
         <h3>We answer to nobody in the game</h3>
         <p>The ARCHV is independent. We are not affiliated with FIFA, or with any club, federation, league or competition. No governing body approves our copy and none pays for it. That independence is the point of the whole thing: it is what lets us call a rumour a rumour, and correct ourselves in public when we get it wrong.</p>

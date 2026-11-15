@@ -1,4 +1,4 @@
-/* portrait-provenance.test.mjs: the rules in check-portrait-provenance.mjs (audits gap4-1, gap4-3). */
+/* portrait-provenance.test.mjs: the rules in check-portrait-provenance.mjs (audits gap4-1, gap4-2, gap4-3). */
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -9,9 +9,10 @@ import { appGrade, WITHDRAWN } from "../shared/app-art.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const read = (f) => JSON.parse(readFileSync(join(ROOT, "scripts", "data", f), "utf8"));
-const commonsRow = (out, file) => ({
+const LIC = { name: "CC BY 4.0", author: "A. Photographer", source: "https://commons.wikimedia.org/wiki/File:X.jpg" };
+const commonsRow = (out, file, licence = LIC) => ({
   out,
-  identity: { method: "reference-render", reference: `https://upload.wikimedia.org/wikipedia/commons/a/ab/${encodeURIComponent(file)}` },
+  identity: { method: "reference-render", reference: `https://upload.wikimedia.org/wikipedia/commons/a/ab/${encodeURIComponent(file)}`, licence },
 });
 const player = (slug, stem, cite) => ({
   slug,
@@ -52,4 +53,12 @@ test("photoKey folds Commons spellings and citedReference keeps parentheses", ()
 test("the app never serves a withdrawn portrait, file on disk or not", () => {
   assert.ok(WITHDRAWN.size > 0);
   for (const stem of WITHDRAWN) assert.equal(appGrade(`/heads/hd/${stem}.webp`), false, stem);
+});
+
+test("a Commons reference needs its licence, author and source page, and no NC or ND terms", () => {
+  assert.deepEqual(provenanceProblems({ entries: [commonsRow("a", "A.jpg")] }, { players: [] }), []);
+  assert.equal(provenanceProblems({ entries: [commonsRow("a", "A.jpg", null)] }, { players: [] }).length, 3);
+  assert.equal(provenanceProblems({ entries: [commonsRow("a", "A.jpg", { ...LIC, author: "" })] }, { players: [] }).length, 1);
+  assert.equal(provenanceProblems({ entries: [commonsRow("a", "A.jpg", { ...LIC, name: "CC BY-NC-SA 4.0" })] }, { players: [] }).length, 1);
+  assert.equal(provenanceProblems({ entries: [commonsRow("a", "A.jpg", { ...LIC, name: "CC BY-ND 2.0" })] }, { players: [] }).length, 1);
 });

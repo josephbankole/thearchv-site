@@ -8,7 +8,8 @@
    source. This refuses the build when:
 
      1. a reference-render row's reference is not on an allowed host (Wikimedia Commons) and the
-        row records no licence for it;
+        row records no licence for it, or a Commons reference records no licence name, author and
+        source page, or carries a non-commercial or no-derivatives licence;
      2. a withdrawn row (heads-hd.json `withdrawn`) is still registered in illustrated.json;
      3. an illustrated.json player cites a reference photo for its heads-hd.json row that is not the
         photo heads-hd.json records (heads-hd.json is the one record of the source).
@@ -58,9 +59,17 @@ export function provenanceProblems(heads, illustrated) {
   for (const e of heads.entries) {
     const id = e.identity ?? {};
     if (id.method !== "reference-render") continue;
-    if (!ALLOWED_HOSTS.has(hostOf(id.reference)) && !id.licence?.name) {
-      out.push(`${e.out}: reference ${id.reference} is not on Wikimedia Commons and records no licence`);
+    const lic = id.licence ?? {};
+    if (!ALLOWED_HOSTS.has(hostOf(id.reference))) {
+      if (!lic.name) out.push(`${e.out}: reference ${id.reference} is not on Wikimedia Commons and records no licence`);
+      continue;
     }
+    // gap4-2: a Commons photo is reusable only on its licence's terms, and the credit needs the
+    // author and the file page, so all three are recorded. NC and ND terms rule out this use.
+    for (const k of ["name", "author", "source"]) {
+      if (typeof lic[k] !== "string" || lic[k].trim() === "") out.push(`${e.out}: Commons reference records no licence ${k}`);
+    }
+    if (/\b(NC|ND)\b/.test(lic.name ?? "")) out.push(`${e.out}: licence ${lic.name} does not allow an adapted portrait`);
   }
 
   for (const p of illustrated.players) {

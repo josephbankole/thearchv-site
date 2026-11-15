@@ -1,7 +1,7 @@
 {
   "schema": "archv.heads-hd/1",
   "size": 600,
-  "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered 2026-09-11 on the founder's prompt, verbatim, from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters). 'withdrawn' holds rows taken off the site and the app on purpose, with the date and the reason; their files must not be served (scripts/shared/app-art.mjs refuses them, scripts/check-portrait-provenance.mjs fails the build if one is still registered).",
+  "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered 2026-09-11 on the founder's prompt, verbatim, from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters). 'withdrawn' holds rows taken off the site and the app on purpose, with the date and the reason; their files must not be served (scripts/shared/app-art.mjs refuses them, scripts/check-portrait-provenance.mjs fails the build if one is still registered). Every reference-render row on Wikimedia Commons carries identity.licence (name, url, author, source page) as Commons recorded it on the day it was checked; the About page credits them under #portrait-credits.",
   "entries": [
     {
       "out": "anderson",
@@ -563,7 +563,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Alex_Scott_Interview_2023.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Alex_Scott_Interview_2023.jpg",
         "job": "170a0b62-98bc-464f-bdb5-85c000f515aa",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0",
+          "author": "AFC Bournemouth",
+          "source": "https://commons.wikimedia.org/wiki/File:Alex_Scott_Interview_2023.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -575,7 +582,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/1/11/Rooney_CL.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Rooney_CL.jpg",
         "job": "cbad8ae4-9344-4bbe-8414-c2f760681616",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 2.0",
+          "url": "https://creativecommons.org/licenses/by/2.0",
+          "author": "Gordon Flood",
+          "source": "https://commons.wikimedia.org/wiki/File:Rooney_CL.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -587,7 +601,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Eddie_Howe_24052026_%282%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Eddie_Howe_24052026_(2).jpg",
         "job": "ffa9875e-2d1f-4c7b-9f03-9e158598192b",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC0",
+          "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "author": "Timmy96",
+          "source": "https://commons.wikimedia.org/wiki/File:Eddie_Howe_24052026_(2).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -599,7 +620,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/b/b0/FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_%282023-05-28%29_05.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_(2023-05-28)_05.jpg",
         "job": "220e9a27-a343-441e-9ff4-91a3bad43ed8",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Werner100359",
+          "source": "https://commons.wikimedia.org/wiki/File:FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_(2023-05-28)_05.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -619,7 +647,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/9/94/2023-10-04_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League%2C_RB_Leipzig_-_Manchester_City_FC_1DX_2658_%28cropped2%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2658_(cropped2).jpg",
         "job": "01662a22-f37d-4130-a1c9-b9ca34a7c4c5",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Steffen Prößdorf, crop by Guyrichtheman",
+          "source": "https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2658_(cropped2).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -652,7 +687,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/d/de/Dutch_goalkeepers_%2815300666997%29_%28Krul_crop%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Dutch_goalkeepers_(15300666997)_(Krul_crop).jpg",
         "job": "196ccb81-4750-444a-b7db-859fee3b9354",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, with the signage lettering behind him recoloured out of the reference. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, with the signage lettering behind him recoloured out of the reference. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 2.5",
+          "url": "https://creativecommons.org/licenses/by/2.5",
+          "author": "Kathi Rudminat",
+          "source": "https://commons.wikimedia.org/wiki/File:Dutch_goalkeepers_(15300666997)_(Krul_crop).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -664,7 +706,13 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/d/db/Gordon_Banks_en_1970.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Gordon_Banks_en_1970.jpg",
         "job": "9fcaa094-afe6-4de0-b482-721b8f8f563b",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "Public domain",
+          "author": "Panini",
+          "source": "https://commons.wikimedia.org/wiki/File:Gordon_Banks_en_1970.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -676,7 +724,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Alex_Ferguson_02_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Alex_Ferguson_02_(cropped).jpg",
         "job": "04444659-2649-481d-988f-14646b0e90d6",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 2.0",
+          "url": "https://creativecommons.org/licenses/by/2.0",
+          "author": "Austin Osuide",
+          "source": "https://commons.wikimedia.org/wiki/File:Alex_Ferguson_02_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -688,7 +743,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Arsene_Wenger.JPG",
         "page": "https://commons.wikimedia.org/wiki/File:Arsene_Wenger.JPG",
         "job": "7a3a7968-6424-43fa-bf82-3fbd4701813a",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 2.5",
+          "url": "https://creativecommons.org/licenses/by-sa/2.5",
+          "author": "Mr. Alexander Ottesen",
+          "source": "https://commons.wikimedia.org/wiki/File:Arsene_Wenger.JPG",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -708,7 +770,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Mariano_Navone_-_Roland-Garros_-_28.05.2024_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Mariano_Navone_-_Roland-Garros_-_28.05.2024_(cropped).jpg",
         "job": "0bc81a9b-5b43-4706-9a27-1e2e874e371a",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0",
+          "author": "Kuberzog",
+          "source": "https://commons.wikimedia.org/wiki/File:Mariano_Navone_-_Roland-Garros_-_28.05.2024_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -734,7 +803,14 @@
         "method": "reference-render",
         "reference": "https://upload.wikimedia.org/wikipedia/commons/0/02/Bianca_Andreescu_%282026_US_Open%29_05.jpg",
         "job": "b7e1287d-2f1e-4072-95a1-4376e7c6df6a",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Hameltion",
+          "source": "https://commons.wikimedia.org/wiki/File:Bianca_Andreescu_(2026_US_Open)_05.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -746,7 +822,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Terence_Atmane_%282024_DC_Open%29_01_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Terence_Atmane_(2024_DC_Open)_01_(cropped).jpg",
         "job": "9f43b011-3f64-423b-8388-ae47559f523b",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Hameltion",
+          "source": "https://commons.wikimedia.org/wiki/File:Terence_Atmane_(2024_DC_Open)_01_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -758,7 +841,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Sofia_Kenin_%282025_DC_Open%29_05_%28edited_and_cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Sofia_Kenin_(2025_DC_Open)_05_(edited_and_cropped).jpg",
         "job": "b154dcc9-2111-48f8-8b43-d4719aac1bc6",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Hameltion",
+          "source": "https://commons.wikimedia.org/wiki/File:Sofia_Kenin_(2025_DC_Open)_05_(edited_and_cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -770,7 +860,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/0/07/Draper_MCM23_%2855%29_%2852883527225%29_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Draper_MCM23_(55)_(52883527225)_(cropped).jpg",
         "job": "d27a91b4-0745-41ab-9f1a-d5b5e6cc87dc",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 2.0",
+          "url": "https://creativecommons.org/licenses/by-sa/2.0",
+          "author": "si.robi",
+          "source": "https://commons.wikimedia.org/wiki/File:Draper_MCM23_(55)_(52883527225)_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -815,7 +912,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/9/98/Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg",
         "job": "35f31c25-84a7-46c7-94c3-dacfa5eb048b",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Hameltion",
+          "source": "https://commons.wikimedia.org/wiki/File:Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -847,7 +951,14 @@
         "method": "reference-render",
         "reference": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Elena_Rybakina_2023_US_Open_69_cropped.jpg",
         "job": "0cea3da3-1de6-4567-aae7-17e1c1073690",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Hameltion",
+          "source": "https://commons.wikimedia.org/wiki/File:Elena_Rybakina_2023_US_Open_69_cropped.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -867,7 +978,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Coco_Gauff_Miami_Open.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Coco_Gauff_Miami_Open.jpg",
         "job": "bc48928b-4add-4dc4-bfd2-a4275dee2caa",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Rick Munroe",
+          "source": "https://commons.wikimedia.org/wiki/File:Coco_Gauff_Miami_Open.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -887,7 +1005,13 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/6/64/Jannik_Sinner_2025_US_Open.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Jannik_Sinner_2025_US_Open.jpg",
         "job": "a5e3d2c4-570f-4bee-8c33-186481be5435",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "Public domain",
+          "author": "The White House",
+          "source": "https://commons.wikimedia.org/wiki/File:Jannik_Sinner_2025_US_Open.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -899,7 +1023,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/1/19/Venus_Williams_%282025_DC_Open%29_crop.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Venus_Williams_(2025_DC_Open)_crop.jpg",
         "job": "c1cf2b50-9677-4b8f-a9ea-6c355f9877ac",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Hameltion",
+          "source": "https://commons.wikimedia.org/wiki/File:Venus_Williams_(2025_DC_Open)_crop.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -911,7 +1042,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d4/25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_(cropped).jpg",
         "job": "f06a4eb3-d9eb-43dc-8531-dd1dad9a61ea",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Barcex",
+          "source": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -923,7 +1061,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/2/2c/F%C3%A9lix_Auger-Aliassime_%282023_DC_Open%29_01_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Auger-Aliassime_(2023_DC_Open)_01_(cropped).jpg",
         "job": "9092c3f4-2b1a-4b33-b57a-e057804e0d6e",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Hameltion",
+          "source": "https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Auger-Aliassime_(2023_DC_Open)_01_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -935,7 +1080,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Novak_Djokovic_Paris_2024_Olympic_Games_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Novak_Djokovic_Paris_2024_Olympic_Games_(cropped).jpg",
         "job": "8706124a-dc9c-46bd-ada3-bf414d00094a",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Andymiah",
+          "source": "https://commons.wikimedia.org/wiki/File:Novak_Djokovic_Paris_2024_Olympic_Games_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -977,7 +1129,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Alexander_Zverev.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Alexander_Zverev.jpg",
         "job": "4bb2a6c5-a7a6-4a5f-9e8f-b75faf250b5d",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Rick Munroe",
+          "source": "https://commons.wikimedia.org/wiki/File:Alexander_Zverev.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1010,7 +1169,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Sebov_RGQ23.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Sebov_RGQ23.jpg",
         "job": "db94342f-3885-4394-af8c-300f05828a21",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 2.0",
+          "url": "https://creativecommons.org/licenses/by-sa/2.0",
+          "author": "si.robi",
+          "source": "https://commons.wikimedia.org/wiki/File:Sebov_RGQ23.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1132,7 +1298,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/7/78/Wyndham_Clark_2023_01a_%28cropped%29.png",
         "page": "https://commons.wikimedia.org/wiki/File:Wyndham_Clark_2023_01a_(cropped).png",
         "job": "a8ebee84-8da7-4bf4-a1b6-a8c6b69cb5b8",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0",
+          "author": "Titleist",
+          "source": "https://commons.wikimedia.org/wiki/File:Wyndham_Clark_2023_01a_(cropped).png",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1158,7 +1331,13 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Tiger_Woods_3.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Tiger_Woods_3.jpg",
         "job": "0b3095e3-a7aa-43e5-a70d-b478f2bb2d52",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "Public domain",
+          "author": "PaddyBriggs",
+          "source": "https://commons.wikimedia.org/wiki/File:Tiger_Woods_3.jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1178,7 +1357,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/9/97/Rory_McIlroy_Travelers-077_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Rory_McIlroy_Travelers-077_(cropped).jpg",
         "job": "83a354f3-dc78-4f8c-ad49-fda21cd69e2a",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Bryan Berlin",
+          "source": "https://commons.wikimedia.org/wiki/File:Rory_McIlroy_Travelers-077_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1241,7 +1427,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Viktor_Hovland_Ryder_Cup_2025-205_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg",
         "job": "9ddb8175-ba2b-46a4-8dd9-a2975bff9656",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Bryan Berlin",
+          "source": "https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1274,7 +1467,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Im_Sung-jae_2023.png",
         "page": "https://commons.wikimedia.org/wiki/File:Im_Sung-jae_2023.png",
         "job": "3181a786-43d8-4d93-961a-16a070e98191",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 3.0",
+          "url": "https://creativecommons.org/licenses/by-sa/3.0",
+          "author": "Titleist",
+          "source": "https://commons.wikimedia.org/wiki/File:Im_Sung-jae_2023.png",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1300,7 +1500,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/1/18/Sam_Burns_Ryder_Cup_2025-227_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg",
         "job": "87dfa6c4-9270-4800-87c1-444a24cadff5",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Bryan Berlin",
+          "source": "https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1350,7 +1557,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/1/15/Patrick_Cantlay_Ryder_Cup_2025-146_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg",
         "job": "803c875a-9853-4820-a563-a116da812737",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Bryan Berlin",
+          "source": "https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1556,7 +1770,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/b/be/Gary_Woodland_2019_US_Open.png",
         "page": "https://commons.wikimedia.org/wiki/File:Gary_Woodland_2019_US_Open.png",
         "job": "a36d65f9-5b5d-4151-a4cd-3a14df8a47cf",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0",
+          "author": "FOX Sports",
+          "source": "https://commons.wikimedia.org/wiki/File:Gary_Woodland_2019_US_Open.png",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1634,7 +1855,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg",
         "job": "b306699e-2787-49ea-9d1f-44a2aff9ea3e",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Bryan Berlin",
+          "source": "https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1722,7 +1950,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin%2C_TX_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin,_TX_(cropped).jpg",
         "job": "3fbb9c26-0647-4bc2-9b4d-6f8619fb2a94",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Kuyper",
+          "source": "https://commons.wikimedia.org/wiki/File:Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin,_TX_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1833,7 +2068,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/7/70/2024-08-25_Motorsport%2C_Formel_1%2C_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_(cropped).jpg",
         "job": "df5ae70a-cb55-4eae-a261-a218d4dccf8f",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Steffen Prößdorf, crop by Cerebral726",
+          "source": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1845,7 +2087,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_%2854566928382%29_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_(54566928382)_(cropped).jpg",
         "job": "42c69ab2-006a-4383-8087-3aba9b688cb6",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "OGL 3",
+          "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3",
+          "author": "Lauren Hurley / No 10 Downing Street",
+          "source": "https://commons.wikimedia.org/wiki/File:Prime_Minister_Keir_Starmer_meets_Sir_Lewis_Hamilton_(54566928382)_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -1969,7 +2218,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/5/52/2024-08-25_Motorsport%2C_Formel_1%2C_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_%28medium_crop%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_(medium_crop).jpg",
         "job": "f55d93f3-ac0e-4228-912d-636bf876e5dc",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Steffen Prößdorf",
+          "source": "https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_(medium_crop).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -2048,7 +2304,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/e/e5/2026_Chinese_GP_-_Oscar_Piastri_%28cropped%29_%28cropped%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped)_(cropped).jpg",
         "job": "a7ecada2-addf-4d43-be4f-e2c416c2e1ee",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0",
+          "author": "Liauzh",
+          "source": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped)_(cropped).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -2075,7 +2338,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Nick_Chubb_%2853142361391%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Nick_Chubb_(53142361391).jpg",
         "job": "48c6e43e-6ea5-4d29-a189-a8920cc634b5",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo, padded for framing. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 2.0",
+          "url": "https://creativecommons.org/licenses/by/2.0",
+          "author": "Erik Drost",
+          "source": "https://commons.wikimedia.org/wiki/File:Nick_Chubb_(53142361391).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -2087,7 +2357,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/3/38/Atlanta_Falcons_Bijan_Robinson_MAY2023_%28cropped%29.png",
         "page": "https://commons.wikimedia.org/wiki/File:Atlanta_Falcons_Bijan_Robinson_MAY2023_(cropped).png",
         "job": "e12c9a64-44fe-4573-9930-85ebd2bab8a3",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY 3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0",
+          "author": "Atlanta Falcons",
+          "source": "https://commons.wikimedia.org/wiki/File:Atlanta_Falcons_Bijan_Robinson_MAY2023_(cropped).png",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {
@@ -2113,7 +2390,14 @@
         "reference": "https://upload.wikimedia.org/wikipedia/commons/9/92/Patrick_Mahomes_%2851615475056%29.jpg",
         "page": "https://commons.wikimedia.org/wiki/File:Patrick_Mahomes_(51615475056).jpg",
         "job": "7bf1ad73-aee7-440e-887d-8bb113da735a",
-        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference."
+        "note": "GPT Image 2 render, 2026-09-11, founder prompt verbatim, from this reference photo. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 2.0",
+          "url": "https://creativecommons.org/licenses/by-sa/2.0",
+          "author": "All-Pro Reels from District of Columbia, USA",
+          "source": "https://commons.wikimedia.org/wiki/File:Patrick_Mahomes_(51615475056).jpg",
+          "checked": "2026-11-15, Wikimedia Commons file page"
+        }
       }
     },
     {

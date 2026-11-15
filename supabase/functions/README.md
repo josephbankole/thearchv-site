@@ -276,6 +276,7 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `push-run:<sport>` | the sport's last fan-out in 48h sent nothing, failed over half, or found over 25 dead tokens |
 | `pages-deploy` | the latest completed Pages deploy failed |
 | `scores-poll` | `scores_poll_state.schedule_fetched_at` is over 2h old (the key, the quota, the cron job or the state write) |
+| `scores-write` | `scores_poll_state.write_failed_since` is over 15 minutes old: Storage has refused every scores-poll upload since then, so `scores.json` is frozen while the schedule check stays green |
 | `scores-season` | season mode's newest listing in `scores_season_state.listed_at` is over 7h old |
 | `api-quota` | API-Football's count left today, as season mode last read it, is below 1,500 |
 | `salon-store` | the Salon shop switch (`GET /functions/v1/salon-store`) is not a 200 `gallery-store/1` document |
@@ -284,7 +285,8 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `push-run`, `push-sport`, `scores-*` | also when the state row cannot be read |
 
 Deploy health-probe after the push migration (`20261115130100`): without its columns `push-run`
-reports a read error.
+reports a read error. `scores-write` needs migration `20261115130200`; before it, scores-poll does
+not track failed uploads and the check stays quiet, so either order is safe.
 
 ### Alerts that do not depend on email
 

@@ -5,6 +5,7 @@
 import type { ApiGet } from "./api.ts";
 import {
   EMPTY_STATE,
+  nextWriteFailedSince,
   type PollState,
   rowFromState,
   runPoll,
@@ -64,7 +65,7 @@ function fakeStore(failOn: (path: string) => boolean = () => false) {
   return { files, write };
 }
 
-type Run = { summary: Summary; state: PollState; writeFailed: boolean; calls: string[] };
+type Run = { summary: Summary; state: PollState; writeFailed: boolean; writesAttempted: boolean; calls: string[] };
 async function minute(
   state: PollState,
   now: Date,
@@ -327,6 +328,34 @@ Deno.test("a failed upload is not recorded, so the next minute writes it again",
   assertEquals(b.writeFailed, false);
   assertEquals(b.summary.filesWritten, 1);
   assertEquals(healthy.files.has(SCORES_PATH), true);
+});
+
+Deno.test("write_failed_since starts at the first failed upload, holds, and clears once uploads land", async () => {
+  const down = fakeStore((p) => p === SCORES_PATH);
+  const a = await minute(EMPTY_STATE, at(T0), down);
+  assertEquals([a.writeFailed, a.writesAttempted], [true, true]);
+  const first = nextWriteFailedSince(null, a, at(T0));
+  assertEquals(first, at(T0).toISOString());
+
+  // Still down a minute later: the file is tried again and the clock keeps its start.
+  const b = await minute(a.state, at(T0, 1), down);
+  assertEquals(b.writeFailed, true);
+  assertEquals(nextWriteFailedSince(first, b, at(T0, 1)), first);
+
+  // Storage is back: the retry lands and the clock stops.
+  const healthy = fakeStore();
+  for (const [p, t] of down.files) healthy.files.set(p, t);
+  const c = await minute(b.state, at(T0, 2), healthy);
+  assertEquals([c.writeFailed, c.writesAttempted], [false, true]);
+  assertEquals(nextWriteFailedSince(first, c, at(T0, 2)), null);
+});
+
+Deno.test("a backed-off run reaches no files and leaves write_failed_since as it was", async () => {
+  const state = { ...EMPTY_STATE, backoffUntil: at(T0, 2).toISOString() };
+  const r = await minute(state, at(T0), fakeStore());
+  assertEquals([r.writeFailed, r.writesAttempted], [false, false]);
+  assertEquals(nextWriteFailedSince("2026-10-13T20:00:00.000Z", r, at(T0)), "2026-10-13T20:00:00.000Z");
+  assertEquals(nextWriteFailedSince(null, r, at(T0)), null);
 });
 
 Deno.test("scores.json never points at a match file whose upload failed", async () => {

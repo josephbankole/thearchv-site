@@ -88,7 +88,7 @@ export type Summary = {
 export async function runPoll(
   state: PollState,
   deps: Deps,
-): Promise<{ summary: Summary; state: PollState; writeFailed: boolean }> {
+): Promise<{ summary: Summary; state: PollState; writeFailed: boolean; writesAttempted: boolean }> {
   const { now } = deps;
   const win = windowFor(now);
   const errors: string[] = [];
@@ -98,6 +98,7 @@ export async function runPoll(
   let filesWritten = 0;
   let dayFilesWritten = 0;
   let writeFailed = false; // a storage upload failed: the caller answers 500
+  let writesAttempted = false; // the run reached the file stage (a backed-off run does not)
   const saw = (r: ApiResult) => {
     if (r.remaining !== null) remaining = r.remaining;
   };
@@ -114,6 +115,7 @@ export async function runPoll(
     },
     state: next,
     writeFailed,
+    writesAttempted,
   });
 
   if (state.backoffUntil && Date.parse(state.backoffUntil) > now.getTime()) {
@@ -206,6 +208,7 @@ export async function runPoll(
   // 3. The files. A match's own file goes up first, and scores.json points only at files that are
   //    there (a file whose upload failed is not); a file whose content is unchanged is not
   //    written again.
+  writesAttempted = true;
   const stamp = now.toISOString();
   const willHave = new Set(fetched.map((f) => detailPath(f.match.id)));
   // A match points at its file once it has kicked off, or when it kicks off within the details
@@ -309,6 +312,21 @@ export async function runPoll(
     fileHashes: hashes,
     backoffUntil: detailFailed ? backoff : null,
   }, scheduleRefreshed);
+}
+
+// When the current run of failed uploads began, for scores_poll_state.write_failed_since. A failed
+// upload keeps its old hash, so the file is tried again every minute until it lands; the first
+// failure starts the clock and a run that reaches the files with no failure stops it. A run that
+// never reached the files (backing off) leaves it as it was. health-probe alerts when the clock has
+// run past WRITE_FAILED_ALERT_MS in its checks.ts: schedule_fetched_at keeps moving through a
+// storage outage, so it cannot show a frozen scores.json.
+export function nextWriteFailedSince(
+  prev: string | null,
+  run: { writeFailed: boolean; writesAttempted: boolean },
+  now: Date,
+): string | null {
+  if (run.writeFailed) return prev ?? now.toISOString();
+  return run.writesAttempted ? null : prev;
 }
 
 // ---------- the state row ----------

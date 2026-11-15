@@ -8,6 +8,9 @@
 // old schedule), when the cron job stops, or when the state write fails. Two hours is four missed
 // refreshes in a row.
 export const POLL_STALE_MS = 2 * 60 * 60 * 1000;
+// scores-poll retries a failed upload every minute (poll.ts nextWriteFailedSince), so a quarter of
+// an hour of unbroken failures is storage refusing writes, not a blip.
+export const WRITE_FAILED_ALERT_MS = 15 * 60 * 1000;
 // Season mode lists one competition at :07, :22 and :37 of 00, 06, 12 and 18 UTC
 // (scores-poll/season.ts). Seven hours is a whole round of listings missed.
 export const SEASON_STALE_MS = 7 * 60 * 60 * 1000;
@@ -29,6 +32,15 @@ export function scoresPollStale(row: Record<string, unknown> | null | undefined,
   if (a <= POLL_STALE_MS) return null;
   const backoff = typeof row.backoff_until === "string" ? `, backoff_until ${row.backoff_until}` : "";
   return `schedule last fetched ${row.schedule_fetched_at}, over ${POLL_STALE_MS / 3_600_000}h ago${backoff}`;
+}
+
+// scores_poll_state.write_failed_since: have uploads been failing long enough that scores.json is
+// frozen? schedule_fetched_at keeps moving through a storage outage, so scoresPollStale cannot
+// see one. A row from before migration 20261115130200 has no such column and reads as healthy.
+export function scoresWriteFailing(row: Record<string, unknown> | null | undefined, now: Date): string | null {
+  const a = age(row?.write_failed_since, now);
+  if (a === null || a <= WRITE_FAILED_ALERT_MS) return null;
+  return `scores-poll uploads failing since ${row!.write_failed_since}, over ${WRITE_FAILED_ALERT_MS / 60_000} minutes`;
 }
 
 // scores_season_state: has a season listing landed recently? listed_at maps each competition to

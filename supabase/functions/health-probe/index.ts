@@ -39,6 +39,7 @@ import {
   quotaLow,
   salonStoreProblem,
   scoresPollStale,
+  scoresWriteFailing,
   seasonStale,
   TICKET_STUCK_MS,
   TICKET_WAITING_STATUSES,
@@ -254,9 +255,11 @@ Deno.serve(async (req) => {
   // service role, the only role allowed to.
   {
     const { data: poll, error } = await supabase
-      .from("scores_poll_state").select("schedule_fetched_at, backoff_until, updated_at").eq("id", 1).maybeSingle();
+      .from("scores_poll_state").select("*").eq("id", 1).maybeSingle();
     const detail = error ? `read error: ${error.message.slice(0, 120)}` : scoresPollStale(poll, now);
     if (detail) failures.push({ check: "scores-poll", detail });
+    const writes = error ? null : scoresWriteFailing(poll, now);
+    if (writes) failures.push({ check: "scores-write", detail: writes });
   }
   {
     const { data: season, error } = await supabase

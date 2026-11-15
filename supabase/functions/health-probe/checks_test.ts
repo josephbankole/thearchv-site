@@ -5,6 +5,7 @@ import {
   quotaLow,
   salonStoreProblem,
   scoresPollStale,
+  scoresWriteFailing,
   seasonStale,
   ticketsStuck,
   waitlistDown,
@@ -38,6 +39,19 @@ Deno.test("scores poll: a schedule stuck for over two hours alerts, with any bac
 Deno.test("scores poll: a missing row or no fetch at all alerts", () => {
   assertEquals(scoresPollStale(null, NOW), "scores_poll_state row missing");
   assert(scoresPollStale({ schedule_fetched_at: null }, NOW)?.startsWith("no schedule fetch"), "never fetched");
+});
+
+Deno.test("scores write: uploads failing for over 15 minutes alert, even with a fresh schedule", () => {
+  const d = scoresWriteFailing({ schedule_fetched_at: ago(0.1), write_failed_since: ago(0.5) }, NOW);
+  assert(d?.includes("over 15 minutes"), `got ${d}`);
+  assertEquals(scoresPollStale({ schedule_fetched_at: ago(0.1), write_failed_since: ago(0.5) }, NOW), null, "the schedule check alone stays green");
+});
+
+Deno.test("scores write: no failure, a short one, or a row without the column is quiet", () => {
+  assertEquals(scoresWriteFailing({ write_failed_since: null }, NOW), null);
+  assertEquals(scoresWriteFailing({ write_failed_since: ago(0.2) }, NOW), null, "12 minutes");
+  assertEquals(scoresWriteFailing({ schedule_fetched_at: ago(0.1) }, NOW), null, "before the migration");
+  assertEquals(scoresWriteFailing(null, NOW), null);
 });
 
 Deno.test("season: the newest listing decides, and seven hours is the limit", () => {

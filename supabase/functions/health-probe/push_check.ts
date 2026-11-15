@@ -1,6 +1,6 @@
 // health-probe check (c), pure, so push_check_test.ts can run it under a bare `deno test` with no
 // network and no database.
-import { decideSend, edmontonDay, type Lead } from "../_shared/push_guard.ts";
+import { decideSend, edmontonDay, edmontonHour, inSendWindow, type Lead, SEND_WINDOW, type SportState } from "../_shared/push_guard.ts";
 
 // Is the football daily push stuck? Only when today.json carries a lead that daily-push would
 // still send (the same guard, decideSend) AND the last push is older than staleMs. A stretch
@@ -38,4 +38,33 @@ export function pushOverdue(
   const decision = decideSend({ lastLeadKey, lastSentAt }, lead, edmontonDay(now));
   if (!decision.send) return null;
   return `stale: last_sent_at ${at.toISOString()}, and today.json's lead has not been pushed (${decision.key.slice(0, 160)})`;
+}
+
+// The same question for any other sport, from its push_sport_state row and the lead out of its own
+// feed. One difference from football: a sport with no row, or no last_sent_at, has simply never had
+// a lead to push (daily-push records a lead even with no readers), so it alerts only when a lead is
+// waiting, never just for the missing row.
+export function sportPushOverdue(
+  state: SportState | null,
+  lead: Lead | null,
+  now: Date,
+  staleMs: number,
+): string | null {
+  const lastSentAt = state?.lastSentAt ?? "";
+  if (lastSentAt) {
+    const at = new Date(lastSentAt);
+    if (Number.isNaN(at.getTime())) return `last_sent_at unreadable: ${JSON.stringify(lastSentAt).slice(0, 60)}`;
+    if (now.getTime() - at.getTime() <= staleMs) return null;
+  }
+  const decision = decideSend({ lastLeadKey: state?.lastLeadKey ?? null, lastSentAt: lastSentAt || null }, lead, edmontonDay(now));
+  if (!decision.send) return null;
+  const since = lastSentAt ? `last_sent_at ${new Date(lastSentAt).toISOString()}` : "never pushed";
+  return `stale: ${since}, and the feed's lead has not been pushed (${decision.key.slice(0, 160)})`;
+}
+
+// Whether the push checks run now: inside daily-push's send window, from an hour after it opens,
+// so the window's first hourly tick has had its chance. Outside the window a waiting lead is
+// expected (daily-push holds a late lead until 07:00 Edmonton) and must not alert.
+export function pushCheckDue(now: Date): boolean {
+  return inSendWindow(now) && edmontonHour(now) >= SEND_WINDOW.startHour + 1;
 }

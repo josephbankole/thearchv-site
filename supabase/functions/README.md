@@ -261,6 +261,29 @@ Functions cannot import from outside `supabase/functions`. To add a sport, add i
 
 The pg_cron jobs for daily-push, health-probe and triage-drain call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12, and in the migration above). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
 
+### What health-probe checks
+
+Every 30 minutes, each failing check emails the founder at most once every 6 hours:
+
+| Check | Fails when |
+| --- | --- |
+| `site` | https://thearchv.ca/ does not answer 200 |
+| `feed` | `/feed/today.json` does not answer 200, or its `lastUpdated` day ended over 72h ago |
+| `lead-image` | today.json's lead image does not answer 200 |
+| `football-lead` | today.json's lead (the newest football entry) is dated over 72h past its day. `lastUpdated` moves with every sport, so only this sees the football desks stop |
+| `push_state`, `push-sport:<sport>` | a sport's last push is over 76h old while its feed carries a lead daily-push has not sent. Checked 08:00 to 20:59 Edmonton only, because daily-push holds a late lead until 07:00 |
+| `push-run:<sport>` | the sport's last fan-out in 48h sent nothing, failed over half, or found over 25 dead tokens |
+| `pages-deploy` | the latest completed Pages deploy failed |
+| `scores-poll` | `scores_poll_state.schedule_fetched_at` is over 2h old (the key, the quota, the cron job or the state write) |
+| `scores-season` | season mode's newest listing in `scores_season_state.listed_at` is over 7h old |
+| `api-quota` | API-Football's count left today, as season mode last read it, is below 1,500 |
+| `salon-store` | the Salon shop switch (`GET /functions/v1/salon-store`) is not a 200 `gallery-store/1` document |
+| `android-waitlist` | the waitlist's preflight answers 404 or 5xx, or nothing |
+| `push-run`, `push-sport`, `scores-*` | also when the state row cannot be read |
+
+Deploy health-probe after the push migration (`20261115130100`): without its columns `push-run`
+reports a read error.
+
 ### Alerts that do not depend on email
 
 health-probe emails the founder through Zoho, from inside the project it watches. When that email

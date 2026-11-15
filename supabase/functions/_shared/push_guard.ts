@@ -1,6 +1,7 @@
 // The daily push's once-a-day guard, shared by daily-push (which decides whether to send a
 // sport's lead) and health-probe (which asks the same question to tell a stuck push from a quiet
 // week). Pure, no I/O, so both functions' tests run it under a bare `deno test`.
+import { DEFAULT_SPORT, SPORT_KEYS, type SportKey } from "./sports.ts";
 
 export type Lead = { headline?: string; section?: string; date?: string; image?: string; url?: string };
 
@@ -103,4 +104,48 @@ export function decideSend(state: SportState | null, lead: Lead | null, today: s
     return { send: false, skipped: "lead predates the last push" };
   }
   return { send: true, key };
+}
+
+// ---------- which feed carries a sport's lead ----------
+
+// The feed file that carries a sport's lead, by the name index.json lists it under. Football's
+// lead is today.json's `lead`, the transfer and World Cup pool that every token got before
+// per-sport pushes. Every other sport publishes one file named after its key, and its newest
+// entry is its lead. Same rule as the widget (ARCHVWidget fetchLead) and index.json's
+// sports[].feed, so a reader's push and their widget agree on the day's story.
+export function feedName(sport: SportKey): string {
+  return sport === DEFAULT_SPORT ? "today" : sport;
+}
+
+// The lead out of one parsed feed document: today.json's `lead` for football, `days[0]` for a
+// sport feed (build-feed.mjs writes days newest first). Anything else, an empty sport or a
+// document of the wrong shape, is no lead at all.
+export function leadFromFeed(sport: SportKey, doc: unknown): Lead | null {
+  if (!doc || typeof doc !== "object") return null;
+  const d = doc as { lead?: unknown; days?: unknown };
+  const raw = sport === DEFAULT_SPORT ? d.lead : Array.isArray(d.days) ? d.days[0] : undefined;
+  return raw && typeof raw === "object" ? raw as Lead : null;
+}
+
+// Every sport's state from the two tables daily-push reads. Football keeps the original
+// push_state singleton (last_build_hash now holds the football lead key; health-probe reads
+// both columns), and the other sports have a row each in push_sport_state. A
+// push_sport_state row for football or an unknown sport is ignored rather than trusted, so
+// there is one football state and only one.
+export function statesFrom(
+  legacy: { last_build_hash?: unknown; last_sent_at?: unknown } | null | undefined,
+  sportRows: readonly { sport?: unknown; last_lead_key?: unknown; last_sent_at?: unknown }[],
+): Map<SportKey, SportState> {
+  const str = (v: unknown) => typeof v === "string" && v ? v : null;
+  const states = new Map<SportKey, SportState>();
+  if (legacy) {
+    states.set(DEFAULT_SPORT, { lastLeadKey: str(legacy.last_build_hash), lastSentAt: str(legacy.last_sent_at) });
+  }
+  for (const r of sportRows) {
+    const sport = r.sport;
+    if (typeof sport !== "string" || sport === DEFAULT_SPORT) continue;
+    if (!(SPORT_KEYS as readonly string[]).includes(sport)) continue;
+    states.set(sport as SportKey, { lastLeadKey: str(r.last_lead_key), lastSentAt: str(r.last_sent_at) });
+  }
+  return states;
 }

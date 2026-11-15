@@ -1,0 +1,110 @@
+// Unit tests for health-probe's scores, season, quota, football lead and sign-up checks
+// (checks.ts) and the per-sport push check (push_check.ts). Run: `deno test` from this dir.
+import {
+  footballLeadStale,
+  quotaLow,
+  salonStoreProblem,
+  scoresPollStale,
+  seasonStale,
+  waitlistDown,
+} from "./checks.ts";
+import { pushCheckDue, sportPushOverdue } from "./push_check.ts";
+
+function assert(cond: unknown, msg: string): void {
+  if (!cond) throw new Error(`assertion failed: ${msg}`);
+}
+function assertEquals(actual: unknown, expected: unknown, msg = ""): void {
+  const a = JSON.stringify(actual);
+  const e = JSON.stringify(expected);
+  if (a !== e) throw new Error(`expected ${e} got ${a}${msg ? ` — ${msg}` : ""}`);
+}
+
+const NOW = new Date("2026-11-15T18:00:00Z");
+const H = 3_600_000;
+const ago = (h: number) => new Date(NOW.getTime() - h * H).toISOString();
+
+Deno.test("scores poll: a schedule fetched within two hours is healthy", () => {
+  assertEquals(scoresPollStale({ schedule_fetched_at: ago(0.5) }, NOW), null);
+  assertEquals(scoresPollStale({ schedule_fetched_at: ago(2) }, NOW), null, "exactly two hours");
+});
+
+Deno.test("scores poll: a schedule stuck for over two hours alerts, with any backoff", () => {
+  const d = scoresPollStale({ schedule_fetched_at: ago(3), backoff_until: ago(-0.05) }, NOW);
+  assert(d?.includes("over 2h ago"), `got ${d}`);
+  assert(d?.includes("backoff_until"), "names the backoff");
+});
+
+Deno.test("scores poll: a missing row or no fetch at all alerts", () => {
+  assertEquals(scoresPollStale(null, NOW), "scores_poll_state row missing");
+  assert(scoresPollStale({ schedule_fetched_at: null }, NOW)?.startsWith("no schedule fetch"), "never fetched");
+});
+
+Deno.test("season: the newest listing decides, and seven hours is the limit", () => {
+  assertEquals(seasonStale({ listed_at: { epl: ago(20), ucl: ago(5), wsl: ago(11) } }, NOW), null);
+  assert(seasonStale({ listed_at: { epl: ago(8), ucl: ago(9) } }, NOW)?.includes("8h old"), "stale");
+  assertEquals(seasonStale({ listed_at: {} }, NOW), "no season listing recorded");
+  assertEquals(seasonStale(null, NOW), "scores_season_state row missing");
+});
+
+Deno.test("quota: only today's reading below the reserve alerts", () => {
+  assert(quotaLow({ remaining: 900, remaining_at: ago(1) }, NOW)?.includes("900"), "low today");
+  assertEquals(quotaLow({ remaining: 1500, remaining_at: ago(1) }, NOW), null, "at the reserve");
+  assertEquals(quotaLow({ remaining: 10, remaining_at: "2026-11-14T23:50:00Z" }, NOW), null, "yesterday's reading");
+  assertEquals(quotaLow({ remaining: null, remaining_at: null }, NOW), null, "never read");
+});
+
+Deno.test("football lead: fresh inside the window, stale past it, missing alerts", () => {
+  const STALE = 72 * H;
+  const doc = (date: unknown) => ({ lastUpdated: "2026-11-15", lead: { date, section: "leagues" } });
+  assertEquals(footballLeadStale(doc("2026-11-12"), NOW, STALE), null, "day ended 2026-11-13, 66h ago");
+  assert(footballLeadStale(doc("2026-11-11"), NOW, STALE)?.includes("2026-11-11"), "a fresh envelope does not hide it");
+  assertEquals(footballLeadStale({ lead: null }, NOW, STALE), "today.json carries no football lead");
+  assert(footballLeadStale(doc("soon"), NOW, STALE)?.startsWith("football lead date unreadable"), "bad date");
+});
+
+Deno.test("salon-store: only a 200 gallery-store/1 document with storeOpen passes", () => {
+  assertEquals(salonStoreProblem(200, { schema: "gallery-store/1", storeOpen: false, message: null }), null);
+  assertEquals(salonStoreProblem(500, null), "status 500");
+  assert(salonStoreProblem(200, { schema: "other" })?.startsWith("unexpected schema"), "schema");
+  assertEquals(salonStoreProblem(200, { schema: "gallery-store/1" }), "storeOpen missing");
+});
+
+Deno.test("android-waitlist: a missing function or a server error is down, a key refusal is not", () => {
+  assertEquals(waitlistDown(200), null);
+  assertEquals(waitlistDown(401), null);
+  assertEquals(waitlistDown(404), "preflight answered 404");
+  assertEquals(waitlistDown(503), "preflight answered 503");
+});
+
+const nflLead = (date: string) => ({ date, section: "nfl", headline: "x", url: `https://thearchv.ca/nfl/questions/${date}/` });
+const nflKey = (date: string) => `${date}|nfl|https://thearchv.ca/nfl/questions/${date}/`;
+
+Deno.test("other sports: a sport with no row and no lead raises nothing", () => {
+  assertEquals(sportPushOverdue(null, null, NOW, 76 * H), null);
+});
+
+Deno.test("other sports: a waiting lead that was never pushed alerts", () => {
+  const d = sportPushOverdue(null, nflLead("2026-11-15"), NOW, 76 * H);
+  assert(d?.startsWith("stale: never pushed"), `got ${d}`);
+});
+
+Deno.test("other sports: a recent push, or an old push with nothing new, stays quiet", () => {
+  const recent = { lastLeadKey: nflKey("2026-11-10"), lastSentAt: ago(10) };
+  assertEquals(sportPushOverdue(recent, nflLead("2026-11-15"), NOW, 76 * H), null);
+  const old = { lastLeadKey: nflKey("2026-11-01"), lastSentAt: ago(300) };
+  assertEquals(sportPushOverdue(old, nflLead("2026-11-01"), NOW, 76 * H), null);
+});
+
+Deno.test("other sports: an old push with a new lead waiting alerts", () => {
+  const old = { lastLeadKey: nflKey("2026-11-01"), lastSentAt: ago(300) };
+  assert(sportPushOverdue(old, nflLead("2026-11-15"), NOW, 76 * H)?.includes(nflKey("2026-11-15")), "names the lead");
+});
+
+Deno.test("push checks run from 08:00 to 20:59 Edmonton, not while daily-push holds a late lead", () => {
+  // 2026-11-15 is MST, UTC-7.
+  assertEquals(pushCheckDue(new Date("2026-11-15T14:59:00Z")), false, "07:59");
+  assertEquals(pushCheckDue(new Date("2026-11-15T15:00:00Z")), true, "08:00");
+  assertEquals(pushCheckDue(new Date("2026-11-16T03:59:00Z")), true, "20:59");
+  assertEquals(pushCheckDue(new Date("2026-11-16T04:00:00Z")), false, "21:00");
+  assertEquals(pushCheckDue(new Date("2026-11-15T12:00:00Z")), false, "05:00, a lead from last night is still waiting for 07:00");
+});

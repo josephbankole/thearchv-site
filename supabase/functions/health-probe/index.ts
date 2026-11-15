@@ -5,11 +5,18 @@
 // Checks:
 //   (a) https://thearchv.ca/ returns 200
 //   (b) https://thearchv.ca/feed/today.json returns 200 AND its lastUpdated is within 72h
+//   (b3) today.json's football lead is dated within the same 72h window (the envelope's
+//       lastUpdated moves with every sport, so it cannot see the football desks stop)
 //   (c) push_state row is readable and, while today.json's lead is one daily-push has not sent,
-//       last_sent_at is not older than 76h, but ONLY checked 11:00-23:59 UTC (before 11:00 UTC
-//       the day's push legitimately has not fired yet)
+//       last_sent_at is not older than 76h, but ONLY checked 08:00-20:59 Edmonton (daily-push
+//       sends 07:00-20:59 and holds a late lead until 07:00, so a waiting lead outside those
+//       hours is expected)
+//   (c3) the same for every other sport, from its push_sport_state row and its own feed
 //   (c2) the last daily-push fan-out of every sport delivered: not zero sent, not more than half
 //       failed, not more dead tokens than one run deletes (../_shared/push_run.ts)
+//   (g) scores-poll has refreshed its schedule within 2h; season mode has listed within 7h; the
+//       API-Football count left today is not below 1,500; salon-store answers its gallery-store/1
+//       switch; android-waitlist answers its preflight (checks.ts)
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
 // support-triage's L3 escalation uses (../_shared/zoho.ts), subject "ARCHV health: <check> failing".
 // Debounced per check: health_alert_state records the last alert time, and a check will not
@@ -22,13 +29,23 @@
 // daily-push's pg_cron caller uses.
 import { adminClient, json } from "../_shared/cors.ts";
 import { pushRunFailing } from "../_shared/push_run.ts";
-import { DEFAULT_SPORT } from "../_shared/sports.ts";
+import { feedName, leadFromFeed, statesFrom } from "../_shared/push_guard.ts";
+import { DEFAULT_SPORT, SPORT_KEYS } from "../_shared/sports.ts";
 import { sendFounderMail } from "../_shared/zoho.ts";
 import { type AlertDeps, dispatchAlerts, type Failure, pingUrl } from "./alert.ts";
-import { pushOverdue } from "./push_check.ts";
+import {
+  footballLeadStale,
+  quotaLow,
+  salonStoreProblem,
+  scoresPollStale,
+  seasonStale,
+  waitlistDown,
+} from "./checks.ts";
+import { pushCheckDue, pushOverdue, sportPushOverdue } from "./push_check.ts";
 
 const SITE_URL = "https://thearchv.ca/";
 const FEED_URL = "https://thearchv.ca/feed/today.json";
+const SPORT_FEED_URL = (sport: string) => `https://thearchv.ca/feed/${sport}.json`;
 // The lead story changes only when archv-football-desk runs, Mon/Wed/Fri since D-2026-10-06a, and
 // daily-push sends only on a new lead. The old 26h windows assumed a daily desk and emailed on
 // every off day. Fri to Mon is the longest legitimate gap: the Friday lead's day ends Sat 00:00
@@ -112,13 +129,22 @@ Deno.serve(async (req) => {
     failures.push({ check: "lead-image", detail: `unreachable: ${String(e).slice(0, 120)}` });
   }
 
-  // (c) push_state, gated to 11:00-23:59 UTC — before that, the day's push legitimately has not
-  // fired yet and this must not alert. An old last_sent_at is a failure only while today.json
+  // (b3) football-lead: today.json's lead is the newest football entry, so its date is the
+  // football desks' own freshness (footballLeadStale in checks.ts). Skipped when check (b) could
+  // not read the feed, which it has already reported.
+  if (todayDoc !== null) {
+    const detail = footballLeadStale(todayDoc, now, FEED_STALE_MS);
+    if (detail) failures.push({ check: "football-lead", detail });
+  }
+
+  // (c) push_state, gated to 08:00-20:59 Edmonton (pushCheckDue in push_check.ts): outside that,
+  // daily-push is holding any late lead for its 07:00 send and this must not alert. An old last_sent_at is a failure only while today.json
   // carries a lead daily-push would still send: since C115, football pushes only when a new
   // lead lands, and a quiet week is not a broken push (see push_check.ts). Without today.json
   // there is no telling, and check (b) has already reported the feed, so this stays quiet
   // rather than alerting twice.
-  if (now.getUTCHours() >= 11) {
+  const pushDue = pushCheckDue(now);
+  if (pushDue) {
     const { data: state, error } = await supabase
       .from("push_state")
       .select("last_build_hash, last_sent_at")
@@ -131,6 +157,36 @@ Deno.serve(async (req) => {
     } else {
       const detail = pushOverdue(state, todayDoc, now, PUSH_STALE_MS);
       if (detail) failures.push({ check: "push_state", detail });
+    }
+  }
+
+  // (c3) push-sport: every other sport, from its push_sport_state row and the lead of its own feed,
+  // in the same hours. A feed that cannot be read is logged and skipped: daily-push skips that
+  // sport too, and its own reply says why.
+  if (pushDue) {
+    const { data: sportRows, error } = await supabase
+      .from("push_sport_state").select("sport, last_lead_key, last_sent_at");
+    if (error) {
+      failures.push({ check: "push-sport", detail: `read error: ${error.message.slice(0, 120)}` });
+    } else {
+      const states = statesFrom(null, sportRows ?? []);
+      for (const sport of SPORT_KEYS) {
+        if (sport === DEFAULT_SPORT) continue;
+        let doc: unknown;
+        try {
+          const res = await fetch(SPORT_FEED_URL(feedName(sport)), { cache: "no-store" });
+          if (res.status !== 200) {
+            console.error(`health-probe: push-sport ${sport} skipped, feed status ${res.status}`);
+            continue;
+          }
+          doc = await res.json();
+        } catch (e) {
+          console.error(`health-probe: push-sport ${sport} skipped, feed unreadable: ${String(e).slice(0, 120)}`);
+          continue;
+        }
+        const detail = sportPushOverdue(states.get(sport) ?? null, leadFromFeed(sport, doc), now, PUSH_STALE_MS);
+        if (detail) failures.push({ check: `push-sport:${sport}`, detail });
+      }
     }
   }
 
@@ -188,6 +244,52 @@ Deno.serve(async (req) => {
     }
   } catch (e) {
     console.error(`health-probe: pages-deploy check skipped — fetch error: ${String(e).slice(0, 120)}`);
+  }
+
+  // (g) live scores, season mode and the API quota (checks.ts). Their state rows are read with the
+  // service role, the only role allowed to.
+  {
+    const { data: poll, error } = await supabase
+      .from("scores_poll_state").select("schedule_fetched_at, backoff_until, updated_at").eq("id", 1).maybeSingle();
+    const detail = error ? `read error: ${error.message.slice(0, 120)}` : scoresPollStale(poll, now);
+    if (detail) failures.push({ check: "scores-poll", detail });
+  }
+  {
+    const { data: season, error } = await supabase
+      .from("scores_season_state").select("listed_at, remaining, remaining_at, updated_at").eq("id", 1).maybeSingle();
+    if (error) {
+      failures.push({ check: "scores-season", detail: `read error: ${error.message.slice(0, 120)}` });
+    } else {
+      const stale = seasonStale(season, now);
+      if (stale) failures.push({ check: "scores-season", detail: stale });
+      const quota = quotaLow(season, now);
+      if (quota) failures.push({ check: "api-quota", detail: quota });
+    }
+  }
+
+  // (g2) the two public sign-up surfaces on this project. salon-store's GET is public (verify_jwt
+  // off); android-waitlist keeps JWT verification on, so only its preflight is asked for.
+  const functionsBase = `${Deno.env.get("SUPABASE_URL") ?? ""}/functions/v1`;
+  try {
+    const res = await fetch(`${functionsBase}/salon-store`, { cache: "no-store", signal: AbortSignal.timeout(15_000) });
+    let body: unknown = null;
+    try { body = await res.json(); } catch { /* not JSON: salonStoreProblem reports it */ }
+    const detail = salonStoreProblem(res.status, body);
+    if (detail) failures.push({ check: "salon-store", detail });
+  } catch (e) {
+    failures.push({ check: "salon-store", detail: `unreachable: ${String(e).slice(0, 120)}` });
+  }
+  try {
+    const res = await fetch(`${functionsBase}/android-waitlist`, {
+      method: "OPTIONS",
+      headers: { Origin: "https://thearchv.ca", "Access-Control-Request-Method": "POST" },
+      signal: AbortSignal.timeout(15_000),
+    });
+    await res.body?.cancel();
+    const detail = waitlistDown(res.status);
+    if (detail) failures.push({ check: "android-waitlist", detail });
+  } catch (e) {
+    failures.push({ check: "android-waitlist", detail: `unreachable: ${String(e).slice(0, 120)}` });
   }
 
   // (d) alert, debounced per check: 6h between alerts for the same failing check. A failed email

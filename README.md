@@ -119,6 +119,6 @@ Do not point DNS / go public until every box is true:
 - [ ] Web3Forms key set, or the form intentionally left dormant
 - [ ] Rebuilt and re-scrubbed after any content change
 
-See `SECURITY.md` for the security assessment.
+See `SECURITY.md` to report a security problem.
 
 © 2026 The ARCHV. Independent publication, not affiliated with any governing body, league, or club.

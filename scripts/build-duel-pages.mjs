@@ -421,7 +421,8 @@ function renderPair({ a, b, slug }, hasCard) {
   description,
   socialTitle: title,
   // Search plan item (a): a pair on the staged retroactive list (plan 1.2) is noindex,follow. The
-  // page stays live, linked from /duel/ and in sitemap.xml.
+  // page stays live and linked from /duel/; its sitemap.xml row lasts until the batch's
+  // sitemapUntil (build-content.mjs).
   robots: retroNoindex(`/duel/${slug}/`) ? ROBOTS_NOINDEX_FOLLOW : ROBOTS_INDEXABLE,
   canonical: url,
   ogUrl: url,

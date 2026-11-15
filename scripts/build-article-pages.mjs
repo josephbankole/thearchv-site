@@ -26,7 +26,7 @@ import { entryArt } from "./shared/illustrated.mjs";
 import { pageCard } from "./shared/page-card.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
-import { retroNoindex, retroNoindexReport } from "./shared/retro-noindex.mjs";
+import { retroNoindex, retroNoindexReport, retroInSitemap } from "./shared/retro-noindex.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 import { sentences, abbreviationStop } from "./shared/sentences.mjs";
 import { makeLiving } from "./shared/living-answers.mjs";
@@ -588,6 +588,7 @@ if (census.noindex.length) for (const line of census.noindex.slice(0, 20)) conso
 let count = 0;
 let cards = 0;
 let wideCards = 0;
+let retroDropped = 0;
 const urls = [];
 for (const section of sections) {
   // dist path segments from the section base: "/desk/transfer/" -> ["desk","transfer"];
@@ -633,8 +634,11 @@ for (const section of sections) {
     writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom, decisions.get(entry)));
     // lastmod is the entry's own last change (G10): updatedAt after an amend, else publishedAt.
     // A noindex page stays here with its real lastmod (G1, plan 1.2): pulling it would remove a
-    // discovery path and slow the exclusion.
-    urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: modifiedAt(entry), changefreq: "monthly", priority: "0.6" });
+    // discovery path and slow the exclusion. A retro noindex page stays only until its batch's
+    // sitemapUntil date (plan 1.2 rows have had their recrawl by then), then drops out.
+    if (retroInSitemap(`${section.base}${entry.date}/`, TODAY)) {
+      urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: modifiedAt(entry), changefreq: "monthly", priority: "0.6" });
+    } else retroDropped++;
     count++;
   }
 }
@@ -659,3 +663,4 @@ if (titleFlags.missing.length) console.warn(`[build-article-pages] answer-title:
 if (titleFlags.long.length) console.warn(`[build-article-pages] answer-title: seoTitle over 60 chars: ${titleFlags.long.join(", ")}`);
 
 console.log(`[build-article-pages] wrote ${count} article page(s), ${cards} og card(s) and ${wideCards} og-wide card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);
+if (retroDropped) console.log(`[build-article-pages] ${retroDropped} retro noindex page(s) past their batch's sitemapUntil, left out of sitemap.xml`);

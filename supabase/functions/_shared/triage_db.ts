@@ -3,11 +3,20 @@
 // under a bare `deno test`.
 import { adminClient } from "./cors.ts";
 import { realEnv } from "./http.ts";
-import type { ThreadMessage, TriageDb, TriageDeps } from "./triage.ts";
+import { STALE_CLAIM_MS, type ThreadMessage, type TriageDb, type TriageDeps } from "./triage.ts";
 import { sendFounderMail } from "./zoho.ts";
 
 export function triageDb(supabase: ReturnType<typeof adminClient>): TriageDb {
   return {
+    async claim(ticketId) {
+      const { data, error } = await supabase
+        .from("tickets")
+        .update({ status: "l1_working" })
+        .eq("id", ticketId)
+        .or(waitingForTriageFilter())
+        .select("id");
+      return error ? { claimed: false, error: error.message } : { claimed: (data ?? []).length > 0 };
+    },
     async permit(limit) {
       const { data, error } = await supabase.rpc("triage_permit", { p_limit: limit });
       return error ? { permitted: false, error: error.message } : { permitted: data === true };
@@ -54,4 +63,18 @@ export function triageDb(supabase: ReturnType<typeof adminClient>): TriageDb {
 
 export function triageDeps(supabase: ReturnType<typeof adminClient>): TriageDeps {
   return { db: triageDb(supabase), env: realEnv, fetch: (input, init) => fetch(input, init), mail: sendFounderMail };
+}
+
+// PostgREST filters. A claim abandoned for STALE_CLAIM_MS counts as waiting again.
+export function staleClaimClause(now = Date.now()): string {
+  return `and(status.eq.l1_working,updated_at.lt.${new Date(now - STALE_CLAIM_MS).toISOString()})`;
+}
+// What claim() accepts: any ticket waiting for triage.
+export function waitingForTriageFilter(now = Date.now()): string {
+  return `status.in.(new,pending_triage),${staleClaimClause(now)}`;
+}
+// What triage-drain sweeps: the retry queue and abandoned claims. A ticket at 'new' belongs to the
+// insert webhook; health-probe reports one left there.
+export function drainQueueFilter(now = Date.now()): string {
+  return `status.eq.pending_triage,${staleClaimClause(now)}`;
 }

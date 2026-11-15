@@ -20,6 +20,11 @@ const MODEL = "claude-sonnet-4-6";
 // After this many failed attempts a ticket stops being retried and goes to the founder.
 export const MAX_ATTEMPTS = 3;
 
+// While a triage run is in progress the ticket sits at 'l1_working' (see claim below). A run that
+// died part way leaves it there, so a claim older than this is treated as abandoned: triage-drain
+// picks it up again and health-probe counts it as waiting. Edge Functions stop long before this.
+export const STALE_CLAIM_MS = 30 * 60 * 1000;
+
 const STATUS_BY_ACTION: Record<string, { status: string; tier: string }> = {
   resolve: { status: "resolved_l1", tier: "l1" },
   escalate_l2: { status: "l2_working", tier: "l2" },
@@ -29,6 +34,11 @@ const STATUS_BY_ACTION: Record<string, { status: string; tier: string }> = {
 export type ThreadMessage = { author: string; body: string };
 
 export type TriageDb = {
+  // Moves the ticket to 'l1_working' only if it is waiting for triage ('new', 'pending_triage', or
+  // an 'l1_working' claim older than STALE_CLAIM_MS), in one conditional update. claimed is false
+  // when another run already has it or it has been handled, so a second webhook or a drain racing
+  // the webhook cannot triage the same ticket twice.
+  claim(ticketId: string): Promise<{ claimed: boolean; error?: string }>;
   // triage_permit(): counts one paid call against today's ceiling and says whether it is allowed.
   permit(limit: number): Promise<{ permitted: boolean; error?: string }>;
   // triage_permit_release(): gives back the call permit() just counted, when no paid call happened.
@@ -57,6 +67,17 @@ export async function triageTicket(deps: TriageDeps, ticket: Record<string, unkn
   if (!apiKey) {
     await note(db, ticketId, "auto-triage skipped: ANTHROPIC_API_KEY not set");
     return { httpStatus: 200, body: { ok: false, reason: "no api key" } };
+  }
+
+  // Only one run triages a ticket. A duplicate webhook on the same insert, or a ticket already
+  // answered, is skipped before any permit is counted or any call is paid for.
+  const claim = await db.claim(ticketId);
+  if (claim.error) {
+    console.error("triage: claim failed", claim.error);
+    return { httpStatus: 500, body: { ok: false, error: "claim failed" } };
+  }
+  if (!claim.claimed) {
+    return { httpStatus: 200, body: { ok: true, triaged: false, reason: "not_waiting_for_triage" } };
   }
 
   // Daily spend ceiling on paid triage calls (default 100/day, TRIAGE_DAILY_LIMIT to override).

@@ -127,6 +127,6 @@ Deno.test("push checks run from 08:00 to 20:59 Edmonton, not while daily-push ho
 Deno.test("tickets: any stuck ticket alerts by count only, none or an unknown count does not", () => {
   assertEquals(ticketsStuck(0), null);
   assertEquals(ticketsStuck(null), null);
-  assertEquals(ticketsStuck(1), "1 ticket waiting at new or pending_triage, untouched for over 2h");
-  assertEquals(ticketsStuck(4), "4 tickets waiting at new or pending_triage, untouched for over 2h");
+  assertEquals(ticketsStuck(1), "1 ticket waiting at new, pending_triage or l1_working, untouched for over 2h");
+  assertEquals(ticketsStuck(4), "4 tickets waiting at new, pending_triage or l1_working, untouched for over 2h");
 });

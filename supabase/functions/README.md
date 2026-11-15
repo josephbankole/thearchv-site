@@ -107,7 +107,7 @@ Secrets:
 ```
 # Anthropic key (already set if you ran the secrets command earlier)
 supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
-# A random guard so only the webhook can call this paid endpoint. Make one up, any long string.
+# A random guard so only the tickets_triage trigger can call this paid endpoint. Make one up, any long string.
 supabase secrets set TRIAGE_SECRET=<a-long-random-string>
 
 # The founder email (Zoho Mail, Canadian data centre, see _shared/zoho.ts). Skipped cleanly until
@@ -123,12 +123,16 @@ Deploy:
 supabase functions deploy support-triage --no-verify-jwt
 ```
 
-Wire the database webhook (Dashboard):
-1. Database, Webhooks, Create a new hook.
-2. Table `public.tickets`, event `INSERT`.
-3. Type "Supabase Edge Functions", choose `support-triage`.
-4. Add an HTTP header: name `x-triage-secret`, value the same string you set as `TRIAGE_SECRET`.
-5. Save. Now every new ticket is triaged within a second or two.
+The hook is already in the database: no Dashboard webhook is needed, and adding one would
+triage every ticket twice. Migration `20260713221000_tickets_triage_vault_header.sql` creates
+the `tickets_triage` trigger on `public.tickets` (`AFTER INSERT`), which calls `support-triage`
+through `pg_net` with the `x-triage-secret` header read from Vault. For it to work, Vault must
+hold `triage_secret` (the same string as `TRIAGE_SECRET`) and `publishable_key`. Under Database,
+Webhooks, there should be nothing for `tickets`; delete any hook there that calls
+`support-triage`. As a backstop, the triage core claims a ticket before it does anything (one
+conditional update from `new` or `pending_triage` to `l1_working`), so a second call for the same
+ticket is skipped before any paid call. A claim left at `l1_working` for 30 minutes counts as
+abandoned: triage-drain picks it up again and health-probe counts it as waiting.
 
 To test end to end: run the `ticket-intake` curl above, then check the ticket row. Within a moment
 its status should move to `resolved_l1`, `l2_working`, or `escalated_l3`, and `ticket_messages`
@@ -146,7 +150,7 @@ alike, and the functions email him for both:
 | L1 escalates to L3 | `escalated_l3`, tier `l3` | founder email, "L3 escalation" |
 | The model answers with an action it was not offered | `l2_working`, tier `l2` | founder email, "L2 escalation (unreadable triage action)" |
 | A triage attempt fails (API error or unreadable answer) | `pending_triage`, `triage_attempts` up by one | nobody yet; triage-drain retries within the hour |
-| A ticket waits at `new` or `pending_triage` with nothing touching it for over 2 hours (the webhook never ran, or the drain is not running or not keeping up) | unchanged | founder email from health-probe, "ARCHV health: tickets failing", with the count only |
+| A ticket waits at `new`, `pending_triage` or `l1_working` with nothing touching it for over 2 hours (the trigger never ran, a triage run died, or the drain is not running or not keeping up) | unchanged | founder email from health-probe, "ARCHV health: tickets failing", with the count only |
 | The third attempt fails | `l2_working`, tier `l2` | founder email, "Triage failed" |
 | The user replies on an L1 ticket that was resolved (or left at `l1_working`) | `pending_triage` | nobody; triage-drain triages it with the whole conversation |
 | The user replies on an L2 or L3 ticket | reopened if it was resolved | founder email, "Ticket follow-up", at most one per ticket every 6 hours (each email leaves an internal system note that sets the clock) |
@@ -299,7 +303,7 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `api-quota` | API-Football's count left today, as season mode last read it, is below 1,500 |
 | `salon-store` | the Salon shop switch (`GET /functions/v1/salon-store`) is not a 200 `gallery-store/1` document |
 | `android-waitlist` | the waitlist's preflight answers 404 or 5xx, or nothing |
-| `tickets` | any support ticket has sat at `new` or `pending_triage` with nothing touching it for over 2h. The email gives the count only |
+| `tickets` | any support ticket has sat at `new`, `pending_triage` or `l1_working` with nothing touching it for over 2h. The email gives the count only |
 | `push-run`, `push-sport`, `scores-*` | also when the state row cannot be read |
 
 Deploy health-probe after the push migration (`20261115130100`): without its columns `push-run`

@@ -18,17 +18,25 @@ function world(opts: {
   attempts?: number;
   reply?: () => Promise<Response>;
   thread?: { author: string; body: string }[];
+  status?: string;
 } = {}) {
   const state = {
     calls: 0,
     released: 0,
     attempts: opts.attempts ?? 0,
     ticket: {} as Record<string, unknown>,
+    status: opts.status ?? "new",
     messages: [] as Record<string, unknown>[],
     mails: [] as string[],
     prompts: [] as string[],
   };
   const db: TriageDb = {
+    // The real claim is one conditional UPDATE; this fake keeps the same rule on a single row.
+    claim: () => {
+      if (state.status !== "new" && state.status !== "pending_triage") return Promise.resolve({ claimed: false });
+      state.status = "l1_working";
+      return Promise.resolve({ claimed: true });
+    },
     permit: () => {
       state.calls++;
       return Promise.resolve({ permitted: opts.permitted ?? true });
@@ -44,6 +52,7 @@ function world(opts: {
     },
     updateTicket: (_id, patch) => {
       Object.assign(state.ticket, patch);
+      if (typeof patch.status === "string") state.status = patch.status;
       return Promise.resolve();
     },
     recordFailure: () => Promise.resolve(++state.attempts),
@@ -155,4 +164,37 @@ Deno.test("a follow-up is triaged with the conversation, not as a fresh question
 Deno.test("a fresh ticket's prompt is just the ticket", () => {
   const msg = buildUserMessage(TICKET, [{ author: "user", body: TICKET.body }]);
   assert(!msg.includes("Conversation"), "no conversation block");
+});
+
+Deno.test("a second webhook for the same insert is skipped: one paid call, one reply", async () => {
+  const w = world({ reply: modelSays({ action: "resolve", reply_to_user: "Pull to refresh.", internal_note: "" }) });
+  await triageTicket(w.deps, TICKET);
+  const second = await triageTicket(w.deps, TICKET);
+  assertEquals(second.body, { ok: true, triaged: false, reason: "not_waiting_for_triage" });
+  assertEquals(w.state.calls, 1, "permits counted");
+  assertEquals(w.state.prompts.length, 1, "model calls");
+  assertEquals(w.state.messages.filter((m) => m.author === "l1").length, 1, "l1 replies");
+});
+
+Deno.test("a ticket already escalated is not triaged again and the founder is not mailed twice", async () => {
+  const w = world({ status: "escalated_l3", reply: modelSays({ action: "escalate_l3", reply_to_user: "x", internal_note: "y" }) });
+  const out = await triageTicket(w.deps, TICKET);
+  assertEquals(out.body.reason, "not_waiting_for_triage");
+  assertEquals(w.state.mails, []);
+  assertEquals(w.state.calls, 0);
+});
+
+Deno.test("a failed claim stops before any permit or paid call", async () => {
+  const w = world({ reply: modelSays({ action: "resolve", reply_to_user: "x", internal_note: "" }) });
+  w.deps.db.claim = () => Promise.resolve({ claimed: false, error: "db down" });
+  const out = await triageTicket(w.deps, TICKET);
+  assertEquals(out.httpStatus, 500);
+  assertEquals(w.state.calls, 0);
+});
+
+Deno.test("a ticket queued for retry is claimed by the drain", async () => {
+  const w = world({ status: "pending_triage", reply: modelSays({ action: "resolve", reply_to_user: "x", internal_note: "" }) });
+  const out = await triageTicket(w.deps, TICKET);
+  assertEquals(out.body.ok, true);
+  assertEquals(w.state.status, "resolved_l1");
 });

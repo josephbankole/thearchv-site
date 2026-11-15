@@ -103,12 +103,13 @@ export function waitlistDown(status: number): string | null {
 
 // Support tickets waiting for triage that nothing has touched for TICKET_STUCK_MS: a webhook
 // triage that never ran leaves a ticket at 'new', and a drain that is not running, or cannot keep
-// up, leaves them at 'pending_triage'. Every triage attempt updates the row, so a ticket the drain
+// up, leaves them at 'pending_triage', and a triage run that died after claiming one leaves it at
+// 'l1_working'. Every triage attempt updates the row, so a ticket the drain
 // is still retrying stays under the line. Only the count goes in the alert, never ticket content.
 export const TICKET_STUCK_MS = 2 * 60 * 60 * 1000;
-export const TICKET_WAITING_STATUSES = ["new", "pending_triage"] as const;
+export const TICKET_WAITING_STATUSES = ["new", "pending_triage", "l1_working"] as const;
 
 export function ticketsStuck(count: number | null): string | null {
   if (count === null || count <= 0) return null;
-  return `${count} ticket${count === 1 ? "" : "s"} waiting at new or pending_triage, untouched for over ${TICKET_STUCK_MS / 3_600_000}h`;
+  return `${count} ticket${count === 1 ? "" : "s"} waiting at new, pending_triage or l1_working, untouched for over ${TICKET_STUCK_MS / 3_600_000}h`;
 }

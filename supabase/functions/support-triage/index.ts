@@ -1,5 +1,6 @@
 // support-triage: runs L1 automatically the moment a ticket is inserted.
-// Wired to a Supabase Database Webhook on INSERT into public.tickets. Reads the new ticket and
+// Called by the tickets_triage trigger (AFTER INSERT on public.tickets, migration 20260713221000)
+// through pg_net; no Dashboard webhook is needed, and one would only be skipped by the claim. Reads the new ticket and
 // hands it to the shared triage core (../_shared/triage.ts), which asks Claude (with the FAQ as
 // the knowledge base) to resolve or escalate, then writes the reply and updates the ticket. This
 // is the automatic version of the archv-support-l1 agent.

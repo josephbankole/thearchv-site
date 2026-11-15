@@ -38,9 +38,13 @@ supabase functions deploy ticket-reply  --no-verify-jwt
 supabase functions deploy register-push --no-verify-jwt
 ```
 
-`--no-verify-jwt` is correct here: the app has no login, so there is no user token to verify. The
-Supabase gateway still requires the project's publishable key to invoke a function, so these are
-not open to the wider internet. `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected by the
+`--no-verify-jwt` is correct here: the app has no login, so there is no user token to verify. It
+also means the gateway does not check the publishable key, so these functions are reachable by
+anyone, and the key is public anyway because it ships in the app. The `x-archv-app` header is a
+tripwire for the same reason. What holds is in the data path: the database caps below, and
+`register-push` updating a token it already holds instead of inserting, so an opt-out or a token
+refresh never meets the hourly insert cap. `register-push` still accepts a missing header from
+builds before 1.5.6; a wrong one is refused. `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected by the
 platform, so there are no secrets to set for these four.
 
 ## The rate caps live in the database, not in these functions

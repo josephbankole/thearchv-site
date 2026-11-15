@@ -1,7 +1,9 @@
 // Shared CORS headers and JSON helper for the app-facing Edge Functions.
 // These endpoints are called by the iOS app with the publishable (anon) key in the apikey header.
-// The Supabase gateway rejects calls without a valid project key, so the surface is not open to the
-// whole internet even though we deploy with --no-verify-jwt (there is no user JWT in a no-login app).
+// They are deployed with --no-verify-jwt (a no-login app has no user JWT), so the gateway does not
+// check that key and anyone can reach the function code. The publishable key and the x-archv-app
+// header both ship inside the app, so neither is a lock: the limits that hold are the database
+// caps and the function's own checks.
 
 // corsHeaders and json live in http.ts, which imports nothing, so pure handler code can use them
 // in tests. Re-exported here so every existing import keeps working.

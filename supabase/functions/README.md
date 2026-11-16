@@ -932,8 +932,10 @@ the publishable key it needs ships in the `/app/` page. Its layers, cheapest to 
    does not arrive (`android-waitlist/client_ip.ts`). This stops a browser or a simple script
    from spending the hour's ceiling. It does not stop a script with many addresses, or one that
    writes its own `x-forwarded-for` on a route without `cf-connecting-ip`: that is what the
-   challenge below is for. Only a SHA-256 of the IP is stored, in `waitlist_rate_hits`. A limiter
-   error lets the signup through, because the global ceiling still holds.
+   challenge below is for. Only a SHA-256 of the IP is stored, in `waitlist_rate_hits`, and a
+   row is deleted a day after its hour, both on each claim and by the hourly pg_cron job
+   `waitlist-rate-hits-prune` (`20261115210000`). A limiter error lets the signup through,
+   because the global ceiling still holds.
    After the first deploy, check one request in the function's logs or with a temporary log line
    that `cf-connecting-ip` arrives; if it does not, the cap is running on the fallback.
 3. **Global 300 an hour** (`20260722120000`), unchanged, as the last resort.

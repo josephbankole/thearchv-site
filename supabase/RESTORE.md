@@ -45,7 +45,7 @@ select jobname, schedule from cron.job order by jobname;
 Expected: `archv-daily-push` (`0 * * * *`), `archv-retention-purge` (`40 3 * * *`),
 `health-probe` (`*/30 * * * *`), `scores-poll`
 (`* * * * *`), `scores-season` (`7,22,37,52 * * * *`), `ticket-thread-requests-prune`
-(`*/15 * * * *`) and `triage-drain` (`20 * * * *`).
+(`*/15 * * * *`), `triage-drain` (`20 * * * *`) and `waitlist-rate-hits-prune` (`50 * * * *`).
 
 ## 3. Function secrets
 

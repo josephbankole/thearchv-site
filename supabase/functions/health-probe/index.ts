@@ -22,6 +22,8 @@
 //   (i) https://josephbankole.ca/ returns 200 and its news-feed.xml has an item from the last 120h
 //   (j) the Salon image mirror (bucket salon-art) still holds the catalog's files and serves a
 //       random sample of them
+//   (e) the latest completed "Deploy to GitHub Pages" run did not fail; six GitHub API replies in a
+//       row it could not use alert as pages-deploy-blind (checks.ts nextSkipRun)
 //   (k) no founder email about a support ticket (an L2 or L3 escalation, a triage that kept
 //       failing, a follow-up) has failed to send in the last 24h (a count only)
 // On any failure, sends ONE alert email to the founder via the same Zoho Mail send path
@@ -51,6 +53,9 @@ import {
   MIRROR_SAMPLE,
   mirrorProblem,
   mirrorSample,
+  nextSkipRun,
+  PAGES_SKIP_ROW,
+  pagesDeployBlind,
   quotaLow,
   salonStoreProblem,
   scoresPollStale,
@@ -237,33 +242,61 @@ Deno.serve(async (req) => {
   }
 
   // (e) pages-deploy: confirm the most recent COMPLETED "Deploy to GitHub Pages" run
-  // succeeded. Public repo, unauthenticated GET, one call per 30-min probe tick — well
-  // within GitHub's rate limits. This is what would have caught the silent-build-failure
-  // incident (a TypeScript error in a content commit failed the Pages build with no
-  // alert; the site stayed stale and nothing here or elsewhere caught it). A GitHub API
-  // hiccup (network error, non-200, unexpected response shape) logs and is SKIPPED, not
-  // alerted — this check must never cry wolf over GitHub API flakiness.
+  // succeeded. Public repo, unauthenticated GET, one call per 30-min probe tick. This is what
+  // would have caught the silent-build-failure incident (a TypeScript error in a content commit
+  // failed the Pages build with no alert; the site stayed stale and nothing here or elsewhere
+  // caught it). A GitHub API hiccup (network error, non-200, unexpected response shape) logs and
+  // is SKIPPED, not alerted, so one bad reply never cries wolf. A run of skips is counted, though
+  // (nextSkipRun in checks.ts), and PAGES_SKIP_ALERT_AFTER in a row alerts as pages-deploy-blind,
+  // so a lasting refusal (the unauthenticated limit is 60 an hour per IP) cannot leave this blind.
+  let pagesSkip: string | null = null;
   try {
     const res = await fetch(
       "https://api.github.com/repos/josephbankole/thearchv-site/actions/runs?per_page=5",
       { headers: { "User-Agent": "archv-health-probe", Accept: "application/vnd.github+json" }, cache: "no-store" },
     );
     if (res.status !== 200) {
-      console.error(`health-probe: pages-deploy check skipped — GitHub API status ${res.status}`);
+      await res.body?.cancel();
+      pagesSkip = `GitHub API status ${res.status}`;
     } else {
       const data = await res.json();
-      const runs = Array.isArray(data?.workflow_runs) ? data.workflow_runs : [];
-      const deployRun = runs.find(
-        (r: { name?: string; status?: string }) => r?.name === "Deploy to GitHub Pages" && r?.status === "completed",
-      );
-      if (!deployRun) {
-        console.error("health-probe: pages-deploy check skipped — no completed 'Deploy to GitHub Pages' run in the last 5");
-      } else if (deployRun.conclusion === "failure") {
-        failures.push({ check: "pages-deploy", detail: `latest completed run ${deployRun.id} concluded "failure"` });
+      if (!Array.isArray(data?.workflow_runs)) {
+        pagesSkip = "GitHub API reply had no workflow_runs";
+      } else {
+        const deployRun = data.workflow_runs.find(
+          (r: { name?: string; status?: string }) => r?.name === "Deploy to GitHub Pages" && r?.status === "completed",
+        );
+        if (!deployRun) {
+          console.error("health-probe: pages-deploy check skipped — no completed 'Deploy to GitHub Pages' run in the last 5");
+        } else if (deployRun.conclusion === "failure") {
+          failures.push({ check: "pages-deploy", detail: `latest completed run ${deployRun.id} concluded "failure"` });
+        }
       }
     }
   } catch (e) {
-    console.error(`health-probe: pages-deploy check skipped — fetch error: ${String(e).slice(0, 120)}`);
+    pagesSkip = `fetch error: ${String(e).slice(0, 120)}`;
+  }
+  if (pagesSkip) console.error(`health-probe: pages-deploy check skipped — ${pagesSkip}`);
+  {
+    const { data: prevRow, error: readError } = await supabase
+      .from("health_alert_state").select("*").eq("check_name", PAGES_SKIP_ROW).maybeSingle();
+    if (readError) {
+      console.error(`health-probe: pages-deploy skip count read failed: ${readError.message.slice(0, 120)}`);
+    } else {
+      const prev = prevRow && typeof prevRow.skips === "number" && typeof prevRow.last_alert_at === "string"
+        ? { skips: prevRow.skips, since: prevRow.last_alert_at }
+        : null;
+      const run = nextSkipRun(prev, pagesSkip !== null, now);
+      const { error } = run
+        ? await supabase.from("health_alert_state")
+          .upsert({ check_name: PAGES_SKIP_ROW, last_alert_at: run.since, skips: run.skips })
+        : prevRow
+        ? await supabase.from("health_alert_state").delete().eq("check_name", PAGES_SKIP_ROW)
+        : { error: null };
+      if (error) console.error(`health-probe: pages-deploy skip count write failed: ${error.message.slice(0, 120)}`);
+      const blind = pagesDeployBlind(run, pagesSkip ?? "");
+      if (blind) failures.push({ check: "pages-deploy-blind", detail: blind });
+    }
   }
 
   // (g) live scores, season mode and the API quota (checks.ts). Their state rows are read with the

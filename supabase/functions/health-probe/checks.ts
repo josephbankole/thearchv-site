@@ -171,3 +171,24 @@ export function mirrorProblem(fileCount: number, failed: string[]): string | nul
   if (failed.length > 0) problems.push(`not served: ${failed.join(", ")}`);
   return problems.length ? problems.join("; ") : null;
 }
+
+// The pages-deploy check asks GitHub's public API, which allows 60 unauthenticated calls an hour
+// per IP, and the probe's egress IP may be shared. A reply it cannot use is skipped, never alerted
+// on its own, so a lasting refusal would leave the check blind. The run of skips in a row is kept
+// in health_alert_state under PAGES_SKIP_ROW (skips counts them, last_alert_at holds when the run
+// began), and PAGES_SKIP_ALERT_AFTER of them, three hours at one probe every 30 minutes, alerts.
+export const PAGES_SKIP_ROW = "pages-deploy:skipped";
+export const PAGES_SKIP_ALERT_AFTER = 6;
+
+export type SkipRun = { skips: number; since: string };
+
+// The run of skips after this probe: one more on a skip (starting at now), none on an answer.
+export function nextSkipRun(prev: SkipRun | null, skipped: boolean, now: Date): SkipRun | null {
+  if (!skipped) return null;
+  return prev ? { skips: prev.skips + 1, since: prev.since } : { skips: 1, since: now.toISOString() };
+}
+
+export function pagesDeployBlind(run: SkipRun | null, reason: string): string | null {
+  if (!run || run.skips < PAGES_SKIP_ALERT_AFTER) return null;
+  return `deploy status unknown: GitHub API unusable for ${run.skips} probes in a row since ${run.since} (last: ${reason})`;
+}

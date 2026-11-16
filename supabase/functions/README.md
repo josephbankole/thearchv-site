@@ -306,6 +306,7 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 | `push_state`, `push-sport:<sport>` | a sport's last push is over 76h old while its feed carries a lead daily-push has not sent. Checked 08:00 to 20:59 Edmonton only, because daily-push holds a late lead until 07:00 |
 | `push-run:<sport>` | the sport's last fan-out in 48h sent nothing, failed over half, or found over 25 dead tokens |
 | `pages-deploy` | the latest completed Pages deploy failed |
+| `pages-deploy-blind` | the GitHub API has answered the `pages-deploy` check with something unusable (a refusal, an error, no run list) 6 probes in a row, about 3h. One bad reply is only logged. The run is counted in `health_alert_state` row `pages-deploy:skipped` |
 | `scores-poll` | `scores_poll_state.schedule_fetched_at` is over 2h old (the key, the quota, the cron job or the state write) |
 | `scores-write` | `scores_poll_state.write_failed_since` is over 15 minutes old: Storage has refused every scores-poll upload since then, so `scores.json` is frozen while the schedule check stays green |
 | `scores-season` | season mode's newest listing in `scores_season_state.listed_at` is over 7h old |
@@ -321,7 +322,8 @@ Every 30 minutes, each failing check emails the founder at most once every 6 hou
 
 Deploy health-probe after the push migration (`20261115170100`): without its columns `push-run`
 reports a read error. `scores-write` needs migration `20261115170200`; before it, scores-poll does
-not track failed uploads and the check stays quiet, so either order is safe.
+not track failed uploads and the check stays quiet, so either order is safe. `pages-deploy-blind`
+needs migration `20261115191700`; before it, the count is not kept and the check stays quiet.
 
 ### Alerts that do not depend on email
 

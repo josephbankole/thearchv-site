@@ -8,6 +8,9 @@ import {
   MIRROR_MIN_FILES,
   mirrorProblem,
   mirrorSample,
+  nextSkipRun,
+  PAGES_SKIP_ALERT_AFTER,
+  pagesDeployBlind,
   quotaLow,
   salonStoreProblem,
   scoresPollStale,
@@ -177,4 +180,18 @@ Deno.test("founderMailFailing: quiet at zero or unknown, a count otherwise", () 
   assertEquals(founderMailFailing(null), null);
   assertEquals(founderMailFailing(1), "1 founder email about support tickets failed to send in the last 24h");
   assertEquals(founderMailFailing(3), "3 founder emails about support tickets failed to send in the last 24h");
+});
+
+Deno.test("pages-deploy: skips in a row are counted, an answer clears them, and the sixth alerts", () => {
+  let run = nextSkipRun(null, true, NOW);
+  assertEquals(run, { skips: 1, since: NOW.toISOString() });
+  for (let i = 0; i < PAGES_SKIP_ALERT_AFTER - 2; i++) run = nextSkipRun(run, true, new Date(NOW.getTime() + (i + 1) * H / 2));
+  assertEquals(run!.skips, PAGES_SKIP_ALERT_AFTER - 1);
+  assertEquals(run!.since, NOW.toISOString(), "the run keeps its start");
+  assertEquals(pagesDeployBlind(run, "GitHub API status 403"), null);
+  run = nextSkipRun(run, true, new Date(NOW.getTime() + 3 * H));
+  const detail = pagesDeployBlind(run, "GitHub API status 403");
+  assert(detail !== null && detail.includes("6 probes in a row") && detail.includes("status 403"), `alerts: ${detail}`);
+  assertEquals(nextSkipRun(run, false, new Date(NOW.getTime() + 4 * H)), null, "one usable reply ends the run");
+  assertEquals(pagesDeployBlind(null, ""), null);
 });

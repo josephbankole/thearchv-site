@@ -188,4 +188,54 @@ begin
   raise notice 'ticket_messages_hourly_cap first message: ok';
 end $$;
 
+-- ticket_thread_requests (20261115191900): 30 lookups per device an hour, 3,000 across all
+-- devices, and no device_id over 128 characters.
+do $$
+declare
+  i int;
+  refused boolean := false;
+begin
+  if exists (select 1 from public.ticket_thread_requests) then
+    raise exception 'rate_caps.sql: ticket_thread_requests is not empty, run this against a fresh local database';
+  end if;
+
+  begin
+    insert into public.ticket_thread_requests (device_id) values (repeat('x', 129));
+  exception when check_violation then refused := true;
+  end;
+  if not refused then
+    raise exception 'FAIL thread cap: a 129-character device_id was stored';
+  end if;
+
+  for i in 0..29 loop
+    insert into public.ticket_thread_requests (device_id) values ('thread-dev0');
+  end loop;
+
+  refused := false;
+  begin
+    insert into public.ticket_thread_requests (device_id) values ('thread-dev0');
+  exception when others then
+    if sqlerrm = 'ticket_thread_rate_limited' then refused := true; else raise; end if;
+  end;
+  if not refused then
+    raise exception 'FAIL thread cap: a 31st lookup from one device was not refused';
+  end if;
+
+  for i in 30..2999 loop
+    insert into public.ticket_thread_requests (device_id) values ('thread-dev' || (i / 30));
+  end loop;
+
+  refused := false;
+  begin
+    insert into public.ticket_thread_requests (device_id) values ('never-seen-device');
+  exception when others then
+    if sqlerrm = 'ticket_thread_rate_limited' then refused := true; else raise; end if;
+  end;
+  if not refused then
+    raise exception 'FAIL thread cap: a lookup past 3,000 this hour was not refused';
+  end if;
+
+  raise notice 'ticket_thread_requests_cap: ok';
+end $$;
+
 rollback;

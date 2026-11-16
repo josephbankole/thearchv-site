@@ -485,7 +485,9 @@ const html = `${documentShell({
           browser erases it.</li>
         </ul>
         <p>Autocapture and session recording are switched off, so PostHog does not record
-        every click, keystroke or form field. If your browser sends Do Not Track, no events
+        every click, keystroke or form field. PostHog's surveys, heatmaps and error reports are
+        switched off too. If your browser sends Global Privacy Control or Do Not Track, the
+        PostHog script does not load at all: nothing is stored in your browser and no events
         are sent for your visit. The scores on the front page and the scores page load live
         from the same Supabase server, so those requests appear in its logs. This site serves
         its own fonts, so your browser does not request them from anyone else. Partnership enquiries come by email to

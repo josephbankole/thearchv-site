@@ -12,6 +12,4 @@
 # Delete a line once its step is done and checked on the live project, and commit that.
 # One step per line. Say what to run and how to check it.
 
-Apply supabase/migrations/20261115200200_retention_purge.sql to the live project, then check that cron.job has a row with jobname 'archv-retention-purge' (the policy's 12-month ticket and 30-day push token periods depend on it).
 Deploy supabase/functions/delete-device-data to the live project and check that an OPTIONS request to it answers, before any app build with the Delete my data button is released (the policy's "Deleting your data" section describes what that function removes). When that build is live in the App Store, name its version in that section and delete this line.
-Apply supabase/migrations/20261115210000_waitlist_rate_hits_prune.sql to the live project, then check that cron.job has a row with jobname 'waitlist-rate-hits-prune' (the policy's "deleted a day after the hour" waitlist count line depends on it).

@@ -12,6 +12,8 @@
 --     5 second default. An earlier draft of this file scheduled the push as archv-daily-push at
 --     :00 every hour, after the README; live never had that job, so applying the draft would have
 --     left two push jobs. A job of that name is removed here if one exists.
+--     The push schedule set here was moved to hourly the same day, by 20261116120000. Applying
+--     this file again by itself puts daily-push back at :30, so apply 20261116120000 after it.
 --
 -- A job is (re)scheduled only when the Vault secret it needs is set. Where it is missing, the
 -- migration raises a warning and leaves any existing job of that name exactly as it is, so a job

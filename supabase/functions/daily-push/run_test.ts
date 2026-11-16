@@ -232,3 +232,55 @@ Deno.test("a page that does not move forward is an error, not a loop", async () 
   const out = await readOptedInTokens(() => Promise.resolve({ rows: [{ token: "t1" }], error: null }));
   assertEquals(out.error, "token paging did not advance");
 });
+
+// The cron job ticks every hour (migration 20261116120000), so ten ticks a day land outside the
+// send window. Each of those must leave no trace: no record, no claim, no asset check, no send.
+// The lead is today's and sendable, so the window is the only thing holding it.
+for (const [label, iso] of [
+  ["06:59, a minute before it opens", "2026-11-16T13:59:00Z"],
+  ["21:00, the hour it closes", "2026-11-17T04:00:00Z"],
+  ["23:00", "2026-11-17T06:00:00Z"],
+] as const) {
+  Deno.test(`a tick outside the send window (${label} Edmonton) records, claims, checks and sends nothing`, async () => {
+    const w = await world({ tokens: tokensOf(3) });
+    const at = new Date(iso);
+    assertEquals(edmontonDay(at), TODAY, "the tick is still on the lead's Edmonton day");
+    w.run.now = at;
+    w.run.clock = () => at;
+    let heads = 0;
+    const inner = w.run.fetch;
+    w.run.fetch = ((input: Parameters<typeof fetch>[0], init?: Parameters<typeof fetch>[1]) => {
+      if (init?.method === "HEAD") heads++;
+      return inner(input, init);
+    }) as typeof fetch;
+    const out = await quietly(() => runSports(w.run, w.total));
+    assertEquals(out.status, 200);
+    assertEquals((out.body.sports as Record<string, Record<string, unknown>>).football, {
+      ok: true,
+      skipped: "outside the send window",
+    });
+    assertEquals(w.log, [], "nothing recorded, claimed or sent");
+    assertEquals(w.state.recorded, []);
+    assertEquals(w.state.claims, []);
+    assertEquals(w.state.sentTo, []);
+    assertEquals(w.state.deleted, []);
+    assertEquals(heads, 0, "no asset check either");
+  });
+}
+
+// The same lead on the first and last ticks inside the window does go.
+for (const [label, iso] of [
+  ["07:00, the first tick", "2026-11-16T14:00:00Z"],
+  ["20:00, the last tick", "2026-11-17T03:00:00Z"],
+] as const) {
+  Deno.test(`a tick inside the send window (${label} Edmonton) sends`, async () => {
+    const w = await world({ tokens: tokensOf(3) });
+    const at = new Date(iso);
+    assertEquals(edmontonDay(at), TODAY, "the tick is still on the lead's Edmonton day");
+    w.run.now = at;
+    w.run.clock = () => at;
+    const out = await quietly(() => runSports(w.run, w.total));
+    assertEquals(out.status, 200);
+    assertEquals((out.body.sports as Record<string, Record<string, unknown>>).football, { ok: true, sent: 3, failed: 0 });
+  });
+}

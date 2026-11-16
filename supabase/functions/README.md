@@ -295,10 +295,13 @@ for every token) costs at most 25 rows a run rather than the table, and a large 
 run. Raise the constant if a one-off drain needs to go faster, and watch the anomaly field while it
 does.
 
-The schedule is a migration, `supabase/migrations/20261115170000_health_and_cron_from_repo.sql`. It
-runs `daily-push` at :30 from 14:30 to 23:30 UTC, the live project's schedule (it only sends when a
-sport has a new lead, so the one-a-day promise holds), `health-probe` every 30 minutes and
-`triage-drain` hourly at :20. Each call reads its guard
+The schedule is two migrations. `supabase/migrations/20261115170000_health_and_cron_from_repo.sql`
+runs `health-probe` every 30 minutes and `triage-drain` hourly at :20, and
+`20261116120000_daily_push_hourly.sql` runs `daily-push` every hour on the hour. The hours a push
+can go out are set in the function, not in cron: `SEND_WINDOW` in `_shared/push_guard.ts`, 07:00 to
+21:00 Edmonton time, so the last tick that can send is 20:00 Edmonton (22:00 Toronto). A tick
+outside the window skips without recording anything, and a tick inside it only sends when a sport
+has a new lead, so the one-a-day promise holds. Each call reads its guard
 secret from Vault (`push_secret`, `triage_secret`) when it runs, so no secret sits in `cron.job`.
 Do not paste a `cron.schedule` with a literal secret into the SQL editor: set the Vault secret and
 apply the migration instead. It leaves a job alone when its Vault secret is missing, so a working job

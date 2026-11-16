@@ -42,7 +42,7 @@ Then check the jobs:
 select jobname, schedule from cron.job order by jobname;
 ```
 
-Expected: `archv-retention-purge` (`40 3 * * *`), `daily-push` (`30 14-23 * * *`),
+Expected: `archv-retention-purge` (`40 3 * * *`), `daily-push` (`0 * * * *`),
 `health-probe` (`*/30 * * * *`), `scores-poll`
 (`* * * * *`), `scores-season` (`7,22,37,52 * * * *`), `ticket-thread-requests-prune`
 (`*/15 * * * *`), `triage-drain` (`20 * * * *`) and `waitlist-rate-hits-prune` (`50 * * * *`).

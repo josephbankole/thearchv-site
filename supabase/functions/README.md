@@ -783,7 +783,10 @@ above). `deno task app-fixtures [dir]` writes the server-side sample files the i
 decode (`match-with-players.json`, `teams-index.json`, `team-33.json`, `preview.json`, `ahead.json`) by
 running the real builders over the recorded replies; by default into
 `../thearchv-app/TheARCHVTests/Fixtures/` beside this repo. Run it after a change to any of those
-shapes and commit the app's copies with the change.
+shapes and commit the app's copies with the change. `deno task app-fixtures-check` (from
+`scores-poll/`) fails if the app's committed copies differ from a fresh build by a single byte; set
+`ARCHV_APP_FIXTURES=<dir>` to check a checkout somewhere else. Plain `deno test` and CI skip that
+case, since they have no app repo to read.
 
 ### Season mode deploy (package S3, 2026-10-29)
 

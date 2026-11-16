@@ -1,5 +1,6 @@
 {
   "tasks": {
-    "app-fixtures": "deno run --allow-read --allow-write app_fixtures.ts"
+    "app-fixtures": "deno run --allow-read --allow-write app_fixtures.ts",
+    "app-fixtures-check": "deno test --no-remote --allow-read --allow-env=ARCHV_APP_FIXTURES app_fixtures_test.ts"
   }
 }

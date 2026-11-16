@@ -48,11 +48,19 @@ export function buildAppFixtures(): Record<string, unknown> {
   };
 }
 
+// The exact bytes written for one file. app_fixtures_test.ts compares the app's copies with this.
+export function fixtureFileText(doc: unknown): string {
+  return JSON.stringify(doc, null, 2) + "\n";
+}
+
+// The app repo's fixtures folder beside this repo in the main checkout.
+export const DEFAULT_APP_FIXTURES_DIR = new URL("../../../../thearchv-app/TheARCHVTests/Fixtures/", import.meta.url).pathname;
+
 if (import.meta.main) {
-  const out = Deno.args[0] ?? new URL("../../../../thearchv-app/TheARCHVTests/Fixtures/", import.meta.url).pathname;
+  const out = Deno.args[0] ?? DEFAULT_APP_FIXTURES_DIR;
   for (const [name, doc] of Object.entries(buildAppFixtures())) {
     const path = `${out.replace(/\/$/, "")}/${name}`;
-    await Deno.writeTextFile(path, JSON.stringify(doc, null, 2) + "\n");
+    await Deno.writeTextFile(path, fixtureFileText(doc));
     console.log(`wrote ${path}`);
   }
 }

@@ -36,4 +36,4 @@ Two appearances and thirty-six years of silence is not much of a World Cup histo
 
 ---
 
-*Sources for this piece: FIFA, ESPN, CNN, NBC and Wikipedia. The ARCHV verifies every factual claim against at least two reputable sources before publishing. Illustrations are original and likeness-based, never photographic.*
+*Sources for this piece: FIFA, ESPN, CNN, NBC and Wikipedia. The ARCHV checks every factual claim against at least one trusted, named source before publishing. Illustrations are original and likeness-based, never photographic.*

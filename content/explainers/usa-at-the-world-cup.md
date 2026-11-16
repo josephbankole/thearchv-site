@@ -78,4 +78,4 @@ In 2026 the United States co-host the World Cup alongside Canada and Mexico, the
 
 ---
 
-*Sources for this piece: FIFA, ESPN, BBC, US Soccer, Goal and FOX Sports. The ARCHV verifies every factual claim against at least two reputable sources before publishing. Illustrations are original and likeness-based, never photographic.*
+*Sources for this piece: FIFA, ESPN, BBC, US Soccer, Goal and FOX Sports. The ARCHV checks every factual claim against at least one trusted, named source before publishing. Illustrations are original and likeness-based, never photographic.*

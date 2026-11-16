@@ -69,7 +69,7 @@ Events captured: `site_loaded`, `$pageview`, `section_view` (per section), `scro
 
 Two sections are "live trackers" seeded with honest, clearly-labelled placeholder cards
 (`status: 'pending'`, shown as **Updated daily**). The daily engine replaces them with
-verified entries under the two-source gate. No scores or deals are invented in the repo.
+verified entries under the one trusted, named source rule (canon D-2026-10-23a). No scores or deals are invented in the repo.
 - `src/data/transferDays.ts` — Transfer Desk daily wrap-ups
 - `src/data/worldCupDays.ts` — World Cup daily wrap-ups (`DayEntry` shape; set `status: 'verified'` once filled)
 

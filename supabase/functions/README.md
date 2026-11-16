@@ -19,7 +19,8 @@ key and never sees the service role key.
 bash supabase/functions/test.sh
 ```
 
-It runs `deno test --no-remote` in each folder here that holds a `*_test.ts` file, and the
+It runs `deno test --no-remote` in each folder here that holds a `*_test.ts` file, then the
+scores-poll app fixtures drift check when the app repo is on disk (see below), and the
 `Edge Function tests` workflow (`.github/workflows/supabase-functions-test.yml`) runs the same
 script on every push and pull request that touches `supabase/functions/`. Deploys go out by hand
 (CLI or the Supabase MCP), so that workflow only helps if its run for the commit being deployed is
@@ -793,8 +794,10 @@ running the real builders over the recorded replies; by default into
 `../thearchv-app/TheARCHVTests/Fixtures/` beside this repo. Run it after a change to any of those
 shapes and commit the app's copies with the change. `deno task app-fixtures-check` (from
 `scores-poll/`) fails if the app's committed copies differ from a fresh build by a single byte; set
-`ARCHV_APP_FIXTURES=<dir>` to check a checkout somewhere else. Plain `deno test` and CI skip that
-case, since they have no app repo to read.
+`ARCHV_APP_FIXTURES=<dir>` to check a checkout somewhere else. `test.sh` runs that check after the
+suites whenever the app's fixtures folder is there (beside this repo, or `ARCHV_APP_FIXTURES`), and
+counts a failure like any other suite. Plain `deno test` and CI skip it, since they have no app
+repo to read; `test.sh` prints a skip line when the folder is missing.
 
 ### Season mode deploy (package S3, 2026-10-29)
 
@@ -804,7 +807,8 @@ friendlies. Deploy through the Supabase MCP, in this order, with the proof of ea
 report:
 
 1. **Tests.** `bash supabase/functions/test.sh`: all green (scores-poll alone had 170 at the time
-   of writing). Nothing deploys on a red suite.
+   of writing). Nothing deploys on a red suite. Run it where the app repo sits beside this one, so
+   it also runs the app fixtures drift check; a "skipped" line for that check means it did not run.
 2. **Commit first** on `preview`, so the deployed code is the repo's code.
 3. **The table migration.** `list_migrations` and confirm `20261013170000_scores_live_feed` is
    recorded. Then `apply_migration` with `supabase/migrations/20261028185520_scores_season_mode.sql`.

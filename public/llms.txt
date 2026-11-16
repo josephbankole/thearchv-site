@@ -5,7 +5,7 @@
 ## Key pages
 
 - [Homepage](https://thearchv.ca/): the archive, the desks, the Wire and the Manchester United posters sold on Etsy.
-- [Manchester United transfer news](https://thearchv.ca/desk/transfer/): United moves, each checked against at least one trusted, named source.
+- [Manchester United transfer news](https://thearchv.ca/desk/transfer/): Manchester United moves, each checked against at least one trusted, named source.
 - [International football and the World Cup](https://thearchv.ca/desk/world-cup/): men's and women's international football.
 - [Football leagues](https://thearchv.ca/desk/leagues/): title races, promotions, sackings and the tables behind them.
 - [NFL](https://thearchv.ca/nfl/), [Formula 1](https://thearchv.ca/f1/), [Tennis](https://thearchv.ca/tennis/), [Golf](https://thearchv.ca/golf/) and [Basketball](https://thearchv.ca/basketball/): one question desk per sport.

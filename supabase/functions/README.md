@@ -57,7 +57,8 @@ trigger's abort marker into a clean 429.
 `20261115160000_ticket_returning_device_reserve.sql`: 30 tickets an hour globally, 5 an hour per
 `device_id`, plus 15 further slots open only to a device that already filed a ticket before the
 current hour. `ticket-reply` is capped by `ticket_messages_hourly_cap`, whose current definition is
-`20261115160100_ticket_messages_device_cap.sql`. `device_id` is chosen by the app, so these raise
+`20261115191800_ticket_first_message_cap_exempt.sql` (the layers of `20261115160100`, plus a
+ticket's opening message from `ticket-intake`, which is never refused). `device_id` is chosen by the app, so these raise
 the cost of filling a cap rather than remove it; each migration header says what it does and does
 not cover.
 

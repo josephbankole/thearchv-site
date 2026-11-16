@@ -155,4 +155,37 @@ begin
   raise notice 'ticket_messages_hourly_cap per device: ok';
 end $$;
 
+-- The reply cap lets a ticket's opening message through (20261115191800): with the shared
+-- 200-an-hour budget full, ticket-intake's mirror of a new ticket's body still lands, and the next
+-- user message on that ticket is refused as before.
+do $$
+declare
+  i int;
+  t uuid;
+  refused boolean := false;
+begin
+  delete from public.ticket_messages;
+  delete from public.tickets;
+  for i in 0..9 loop
+    insert into public.tickets (device_id, body) values ('fill-dev' || (i % 5), 'fill ' || i) returning id into t;
+    for k in 1..20 loop
+      insert into public.ticket_messages (ticket_id, author, body) values (t, 'user', 'reply ' || k);
+    end loop;
+  end loop;
+
+  insert into public.tickets (device_id, body) values ('fresh-device', 'my question') returning id into t;
+  insert into public.ticket_messages (ticket_id, author, body) values (t, 'user', 'my question');
+
+  begin
+    insert into public.ticket_messages (ticket_id, author, body) values (t, 'user', 'my question');
+  exception when others then
+    if sqlerrm = 'ticket_reply_rate_limited' then refused := true; else raise; end if;
+  end;
+  if not refused then
+    raise exception 'FAIL reply cap: a second user message with the global budget full was not refused';
+  end if;
+
+  raise notice 'ticket_messages_hourly_cap first message: ok';
+end $$;
+
 rollback;

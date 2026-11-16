@@ -54,7 +54,10 @@ export async function handleTicketIntake(req: Request, deps: { env: Env; store: 
   }
 
   // First thread message mirrors the body, so the in-app inbox reads as a conversation from line one.
-  await deps.store.insertMessage({ ticket_id: ticket.id, author: "user", body });
+  // The reply cap lets this one through (20261115191800). If it still fails, the ticket stands and is
+  // triaged from tickets.body, so the app still gets its 201; the failure is logged, never dropped.
+  const { error: messageError } = await deps.store.insertMessage({ ticket_id: ticket.id, author: "user", body });
+  if (messageError) console.error(`ticket-intake: first message for ticket ${ticket.id} not stored`, messageError);
 
   return json({ ok: true, ticket_id: ticket.id, status: ticket.status }, 201);
 }

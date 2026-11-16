@@ -11,7 +11,7 @@ function assertEquals(actual: unknown, expected: unknown, msg = ""): void {
 const SECRET = "s3cret";
 const env = (k: string) => (k === "ARCHV_APP_SECRET" ? SECRET : undefined);
 
-function fakeStore(insertError?: string) {
+function fakeStore(insertError?: string, messageError?: string) {
   const tickets: Record<string, unknown>[] = [];
   const messages: Record<string, unknown>[] = [];
   const store: TicketStore = {
@@ -21,6 +21,7 @@ function fakeStore(insertError?: string) {
       return Promise.resolve({ ticket: { id: `t${tickets.length}`, status: "new" } });
     },
     insertMessage(row) {
+      if (messageError) return Promise.resolve({ error: messageError });
       messages.push(row);
       return Promise.resolve({});
     },
@@ -86,4 +87,22 @@ Deno.test("an unknown category is stored as other, and short or long bodies are 
     const res = await quietly(() => handleTicketIntake(post({ device_id: "d1", body }), { env, store: fakeStore().store }));
     assertEquals(res.status, 400);
   }
+});
+
+Deno.test("a first message the database refuses is logged, and the ticket still answers 201", async () => {
+  const f = fakeStore(undefined, "ticket_reply_rate_limited");
+  const errors: unknown[][] = [];
+  const err = console.error;
+  console.error = (...a: unknown[]) => errors.push(a);
+  let res: Response;
+  try {
+    res = await handleTicketIntake(post({ device_id: "d1", body: "The feed is empty" }), { env, store: f.store });
+  } finally {
+    console.error = err;
+  }
+  assertEquals(res.status, 201);
+  assertEquals(f.tickets.length, 1);
+  assertEquals(errors.length, 1, "the failure is logged");
+  assertEquals(String(errors[0][0]).includes("first message for ticket t1 not stored"), true);
+  assertEquals(errors[0][1], "ticket_reply_rate_limited");
 });

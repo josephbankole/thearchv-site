@@ -7,6 +7,7 @@
 #
 # Usage:  bash scripts/deploy-site.sh          (asks before it pushes main)
 #         bash scripts/deploy-site.sh --yes    (no prompt; required when stdin is not a terminal)
+#         add --preconditions-done once every step in scripts/deploy-preconditions.txt is done
 #
 # ###########################################################################################
 # ## READ THIS BEFORE RUNNING IT, 2026-08-04. THIS SCRIPT MERGES preview INTO main.         ##
@@ -36,11 +37,13 @@ set -euo pipefail
 cd "$(dirname "$0")/.."   # repo root
 
 ASSUME_YES=""
+PRECONDITIONS_DONE=""
 for arg in "$@"; do
   case "$arg" in
     -y|--yes) ASSUME_YES="yes" ;;
-    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
-    *) echo "ERROR: unknown argument '$arg'. Usage: bash scripts/deploy-site.sh [--yes]"; exit 2 ;;
+    --preconditions-done) PRECONDITIONS_DONE="yes" ;;
+    -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
+    *) echo "ERROR: unknown argument '$arg'. Usage: bash scripts/deploy-site.sh [--yes] [--preconditions-done]"; exit 2 ;;
   esac
 done
 
@@ -116,6 +119,29 @@ echo "This deploy will change:"
 git diff --stat origin/main..main || true
 if git diff --quiet origin/main..main; then
   echo "  (nothing — main already matches origin/main. See the header note about the reverted merge.)"
+fi
+
+# Hand-run steps the published copy depends on (scripts/deploy-preconditions.txt). Read from the
+# merged main, so a step added on preview counts. --yes does not skip this: confirming the diff is
+# one decision and confirming the live database matches the policy is another.
+PRECONDITIONS="$(grep -vE '^[[:space:]]*(#|$)' scripts/deploy-preconditions.txt 2>/dev/null || true)"
+if [ -n "$PRECONDITIONS" ]; then
+  echo "This deploy publishes copy that depends on steps done by hand outside this repo:"
+  printf '%s\n' "$PRECONDITIONS" | sed 's/^/  - /'
+  if [ -z "$PRECONDITIONS_DONE" ]; then
+    if [ -t 0 ]; then
+      read -r -p "Is every step above done and checked on the live project? [y/N] " pre_answer
+      case "$pre_answer" in
+        y|Y|yes|YES) ;;
+        *) echo "Not pushed. Do those steps first, or remove a line from scripts/deploy-preconditions.txt once it is done."; git checkout preview; exit 1 ;;
+      esac
+    else
+      echo "NOT PUSHED: no terminal to confirm the steps above. Once they are done, re-run with"
+      echo "  bash scripts/deploy-site.sh --yes --preconditions-done"
+      git checkout preview
+      exit 1
+    fi
+  fi
 fi
 
 # The gate. Nothing above has touched origin/main yet; declining leaves the local merge on main,

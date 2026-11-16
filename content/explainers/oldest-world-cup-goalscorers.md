@@ -17,7 +17,7 @@ Roger Milla was 38 when he scored twice against Colombia at Italia '90 and turne
 
 Milla scored for Cameroon against Russia on 28 June 1994, at 42 years and 39 days old. It remains the oldest a man has ever been to score at a men's World Cup, and it is a record built on a record: his brace against Colombia four years earlier had already made him the oldest scorer in the tournament's history at the time, at 38 years and 34 days. He simply went and beat himself.
 
-Cameroon lost that 1994 match 6-1, with Russia's Oleg Salenko scoring five of their six goals, still the only five-goal haul by one player in a single World Cup match. Dmitri Radchenko scored the other. Milla's goal was a footnote to Salenko's afternoon, but it is the number next to Milla's name that has lasted.
+Cameroon lost that 1994 match 6-1. Russia's Oleg Salenko scored five of the six, still the only five-goal haul by one player in a single World Cup match, and Dmitri Radchenko scored the other. Milla's goal was a footnote to Salenko's afternoon, but it is the number next to Milla's name that has lasted.
 
 ## Ronaldo closes the gap
 

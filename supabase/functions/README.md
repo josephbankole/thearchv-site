@@ -58,7 +58,11 @@ trigger's abort marker into a clean 429.
 `device_id`, plus 15 further slots open only to a device that already filed a ticket before the
 current hour. `ticket-reply` is capped by `ticket_messages_hourly_cap`, whose current definition is
 `20261115191800_ticket_first_message_cap_exempt.sql` (the layers of `20261115160100`, plus a
-ticket's opening message from `ticket-intake`, which is never refused). `device_id` is chosen by the app, so these raise
+ticket's opening message from `ticket-intake`, which is never refused). `ticket-thread` is capped
+by `tg_ticket_thread_requests_cap`, whose current definition is
+`20261115191900_ticket_thread_requests_bounds.sql`: 30 lookups an hour per `device_id`, 3,000 an
+hour across all devices, and a `device_id` of at most 128 characters; the pg_cron job
+`ticket-thread-requests-prune` deletes its rows older than 2 hours every 15 minutes. `device_id` is chosen by the app, so these raise
 the cost of filling a cap rather than remove it; each migration header says what it does and does
 not cover.
 

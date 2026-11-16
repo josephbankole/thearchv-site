@@ -66,6 +66,19 @@ hour across all devices, and a `device_id` of at most 128 characters; the pg_cro
 the cost of filling a cap rather than remove it; each migration header says what it does and does
 not cover.
 
+## Retention
+
+`20261115200200_retention_purge.sql` adds `retention_purge()` and the daily pg_cron job
+`archv-retention-purge` (03:40 UTC). It deletes a finished ticket (`resolved_l1`, `resolved_l2`,
+`resolved`, `closed`) with no change and no message for 12 months, with its messages, and a push
+token switched off (`opt_in` false) and unchanged for 30 days. Open and escalated tickets are never
+deleted by it. The periods are constants at the top of the function, defaults for the founder to
+change, and the privacy policy should state the same ones. `android_waitlist` has no period yet: it
+is kept until the Android launch email, which has no date. `supabase/tests/retention.sql` checks it
+against a local database, the same way as `rate_caps.sql`. Calling `select public.retention_purge();`
+deletes for real; to see what the first live run will remove, run its two `where` clauses as a
+`select count(*)` before applying the migration.
+
 Apply migrations with `supabase db push` (they are also applied live via the migration API).
 There is no ordering requirement between that and `supabase functions deploy`: the abort marker
 (`ticket_rate_limited`) is unchanged, so either half works against either version of the other.

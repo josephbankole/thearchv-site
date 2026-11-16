@@ -99,7 +99,9 @@ dependencies are built in `_shared/triage_db.ts`. `corsHeaders` and `json` live 
 
 The database caps have a check script of their own, `supabase/tests/rate_caps.sql`. Run it only
 against a local database (`supabase start`); it works inside a transaction it rolls back, and it
-refuses to start if the tables already hold rows:
+refuses to start if the tables already hold rows. Every capped table also takes a table lock in
+its first BEFORE INSERT trigger (`_rate_cap_lock`, 20261115200000) so a burst counts one insert at
+a time; a new cap trigger needs no lock of its own, but its table must be in that migration's list:
 
 ```
 psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -f supabase/tests/rate_caps.sql

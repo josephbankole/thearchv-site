@@ -238,4 +238,31 @@ begin
   raise notice 'ticket_thread_requests_cap: ok';
 end $$;
 
+-- _rate_cap_lock (20261115200000): every capped table takes the table lock in a BEFORE INSERT row
+-- trigger that fires before its cap, so concurrent inserts count one at a time. A single session
+-- cannot race itself, so this checks the wiring: the lock trigger exists and sorts first.
+do $$
+declare
+  t text;
+  first_trigger text;
+begin
+  foreach t in array array['tickets', 'ticket_messages', 'push_tokens', 'ticket_thread_requests',
+                           'android_waitlist'] loop
+    select tgname into first_trigger
+    from pg_trigger
+    where tgrelid = ('public.' || t)::regclass
+      and not tgisinternal
+      and (tgtype & 1) = 1   -- row level
+      and (tgtype & 2) = 2   -- before
+      and (tgtype & 4) = 4   -- insert
+    order by tgname collate "C"
+    limit 1;
+    if first_trigger is distinct from '_rate_cap_lock' then
+      raise exception 'FAIL rate cap lock: the first BEFORE INSERT trigger on % is %, not _rate_cap_lock',
+        t, coalesce(first_trigger, 'none');
+    end if;
+  end loop;
+  raise notice '_rate_cap_lock: ok';
+end $$;
+
 rollback;

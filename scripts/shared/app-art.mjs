@@ -51,15 +51,22 @@ export function webpSize(buf) {
   return null;
 }
 
+// Portraits taken off the app on purpose (heads-hd.json `withdrawn`, audit gap4-1): refused even
+// while the file is still on disk, so a desk entry that filed one by its stem gets the crest.
+export const WITHDRAWN = new Set(
+  (JSON.parse(readFileSync(join(ROOT, "scripts", "data", "heads-hd.json"), "utf8")).withdrawn ?? []).map((e) => e.out)
+);
+
 const verdicts = new Map();
 const warned = new Set();
-/** True when a site-relative /heads/hd/ path is a real, square, >= 600px WebP. Cached. */
+/** True when a site-relative /heads/hd/ path is a real, square, >= 600px WebP and not withdrawn. Cached. */
 export function appGrade(rel) {
   if (!rel || !rel.startsWith("/heads/hd/")) return false;
   if (verdicts.has(rel)) return verdicts.get(rel);
   const file = join(PUBLIC, rel);
   let ok = false, why = "missing";
-  if (existsSync(file)) {
+  if (WITHDRAWN.has(basename(rel).replace(/\.webp$/i, ""))) why = "withdrawn in heads-hd.json";
+  else if (existsSync(file)) {
     const size = webpSize(readFileSync(file));
     if (!size) why = "not a WebP";
     else if (size.w !== size.h) why = `not square (${size.w}x${size.h})`;

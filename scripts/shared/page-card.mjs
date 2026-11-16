@@ -111,6 +111,8 @@ async function cardTree({ kicker, headline, artPath = null }, height) {
     2026-10-12 on a text-only card and a portrait card). */
 export async function writePageCard(dir, spec, where) {
   try {
+    // The SVG stays in memory and only the PNG is written: satori 0.26 is in an SVG escaping
+    // advisory range. scripts/test/satori-svg-internal.test.mjs fails if that changes.
     const svg = await satori(await cardTree(spec, 630), { width: CARD_W, height: 630, fonts: CARD_FONTS });
     const png = (await renderAsync(svg, { fitTo: { mode: "width", value: CARD_W } })).asPng();
     writeFileSync(join(dir, "og.png"), png);

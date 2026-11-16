@@ -8,7 +8,9 @@
    (scripts/glossary-data.mjs) and every markdown page under content/ (explainers, finals, notes,
    United). The rule is src/lib/entryGates.ts freshnessReasons(), the one copy.
 
-   WARN-ONLY. This prints the list and writes dist/freshness-report.json. It NEVER fails the build
+   WARN-ONLY. This prints the list and writes freshness-report.json to node_modules/.cache/archv/
+   (override with REPORT_OUT), never to dist: it is internal QA data, and everything in dist is
+   published (site-build-8, 2026-11-15). It NEVER fails the build
    (plan §6: public/media rides the same deploy). The noindex half of G9 is applied to dated pages
    by build-article-pages.mjs through indexDecision(), and only once GATES_ENFORCE is on; glossary
    and content pages are listed and never noindexed by this gate, because the top of the glossary
@@ -22,7 +24,7 @@ import { torontoIso } from "./shared/entry-dates.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
+const OUT = process.env.REPORT_OUT || join(ROOT, "node_modules", ".cache", "archv");
 const TAG = "[check-freshness]";
 const TODAY = torontoIso().slice(0, 10);
 
@@ -75,7 +77,7 @@ try {
   if (!overdue.length) {
     console.log(`${TAG} 0 overdue pages (warn-only: ${!GATES_ENFORCE})`);
   } else {
-    console.warn(`${TAG} WARN ${overdue.length} overdue page(s) (warn-only: ${!GATES_ENFORCE}); listed in dist/freshness-report.json`);
+    console.warn(`${TAG} WARN ${overdue.length} overdue page(s) (warn-only: ${!GATES_ENFORCE}); listed in ${relative(ROOT, join(OUT, "freshness-report.json"))}`);
     for (const o of overdue.slice(0, 30)) console.warn(`  ${o.url}${o.noindex ? " [noindex]" : ""}: ${o.reasons.join("; ")}`);
     if (overdue.length > 30) console.warn(`  ... and ${overdue.length - 30} more`);
   }

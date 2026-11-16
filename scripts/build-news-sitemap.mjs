@@ -1,5 +1,5 @@
 /* build-news-sitemap.mjs — emits dist/news-sitemap.xml, a Google News sitemap carrying every
-   canonical daily article published within the LAST 2 DAYS (Google News ignores older rows, and
+   canonical daily article and long read published within the LAST 2 DAYS (Google News ignores older rows, and
    its guidelines ask publishers not to list them). Same data source and lane registry as
    build-rss.mjs (src/data/*.ts bundled via esbuild, /desk/<lane>/ for football,
    /<urlBase>/<laneKey>/ for the new sports), so the news sitemap, the RSS feed and the pages
@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 import { byDateDesc, SPORTS } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { publishedAt, torontoIso } from "./shared/entry-dates.mjs";
+import { isIndexable } from "./shared/retro-noindex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -27,12 +28,13 @@ const WINDOW_MS = 2 * 24 * 60 * 60 * 1000;
 
 /* ---------- the typed day data, through scripts/shared/day-data.mjs (the one loader for
    src/data/*.ts, which also hands every lane back sorted newest-first) ---------- */
-const { transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA, indexDecision } = await loadDayData({ extras: ["entryGates"] });
+const { transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DATA, indexDecision, longReads, readPath } =
+  await loadDayData({ extras: ["entryGates", "longReads", "readSlug"] });
 const TODAY = torontoIso().slice(0, 10);
 
 // Lane registry, identical to build-rss.mjs: football keeps /desk/<lane>/ (World Cup's URL lane
 // is hyphenated even though its section key is "worldcup"); new sports syndicate from
-// /<urlBase>/<laneKey>/.
+// /<urlBase>/<laneKey>/. A dated entry's path is its lane base plus its date.
 const lanes = [
   { base: "/desk/transfer/", days: transferDays },
   { base: "/desk/world-cup/", days: worldCupDays },
@@ -45,6 +47,17 @@ for (const sport of SPORTS) {
   }
 }
 
+// The long reads (src/data/longReads.ts, the Dispatch essays) live at /reads/<slug>/, a slug from
+// the title (src/data/readSlug.ts), so they carry their own path instead of a lane base. A read has
+// no publishedAt, so publishedAt() gives 05:00 Toronto on its date, and its page is always
+// index,follow (build-reads-pages.mjs), so the G1 filter below does not apply to it.
+const reads = longReads.map((r) => ({
+  date: r.date,
+  headline: String(r.title).replace(/\.$/, ""),
+  path: readPath(r.title),
+  read: true,
+}));
+
 // news:publication_date is the entry's own publishedAt (search plan G10, 2026-10-04), the commit
 // time the commit script stamps, through scripts/shared/entry-dates.mjs. It used to be 12:00 -06:00
 // on the calendar date, hours after the real publication, so a fresh entry was future-dated when
@@ -52,10 +65,12 @@ for (const sport of SPORTS) {
 // which rows are listed, it never stamps one.
 const cutoff = Date.now() - WINDOW_MS;
 const items = lanes
-  .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
+  .flatMap(({ base, days }) => days.map((d) => ({ ...d, path: `${base}${d.date}/` })))
+  // G1 (search plan week 4, 2026-10-11): a noindex page leaves the news sitemap at once (plan 1.2),
+  // whether its own fields say so or it is on the staged retro noindex list.
+  .filter((it) => isIndexable(it, it.path, TODAY, indexDecision))
+  .concat(reads)
   .filter((it) => Date.parse(publishedAt(it)) >= cutoff)
-  // G1 (search plan week 4, 2026-10-11): a noindex page leaves the news sitemap at once (plan 1.2).
-  .filter((it) => indexDecision(it, TODAY).index)
   .sort(byDateDesc);
 
 const xmlEsc = (s = "") =>
@@ -68,7 +83,7 @@ const xmlEsc = (s = "") =>
 
 const urlXml = items
   .map((it) => `  <url>
-    <loc>${xmlEsc(`${SITE}${it.base}${it.date}/`)}</loc>
+    <loc>${xmlEsc(`${SITE}${it.path}`)}</loc>
     <news:news>
       <news:publication>
         <news:name>${xmlEsc(PUBLICATION_NAME)}</news:name>
@@ -86,4 +101,4 @@ ${urlXml}${urlXml ? "\n" : ""}</urlset>
 `;
 
 writeFileSync(join(OUT, "news-sitemap.xml"), xml);
-console.log(`[build-news-sitemap] wrote ${items.length} article(s) from the last 2 days to ${OUT}/news-sitemap.xml`);
+console.log(`[build-news-sitemap] wrote ${items.length} article(s) (${items.filter((it) => it.read).length} long read(s)) from the last 2 days to ${OUT}/news-sitemap.xml`);

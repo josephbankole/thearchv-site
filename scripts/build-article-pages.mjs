@@ -26,7 +26,7 @@ import { entryArt } from "./shared/illustrated.mjs";
 import { pageCard } from "./shared/page-card.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
-import { retroNoindex, retroNoindexReport } from "./shared/retro-noindex.mjs";
+import { retroNoindex, retroNoindexReport, retroInSitemap } from "./shared/retro-noindex.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 import { sentences, abbreviationStop } from "./shared/sentences.mjs";
 import { makeLiving } from "./shared/living-answers.mjs";
@@ -89,9 +89,9 @@ const TODAY = torontoIso().slice(0, 10);
 // root as the anchor. Every downstream string in render() is built from these fields, so nothing
 // football-shaped changed value.
 const sections = [
-  { sportKey: "football", laneKey: "transfer", label: LANE_META.transfer.label, seoSuffix: LANE_META.transfer.seoSuffix, anchor: LANE_META.transfer.anchor, base: "/desk/transfer/", days: transferDays },
-  { sportKey: "football", laneKey: "world-cup", label: LANE_META["world-cup"].label, seoSuffix: LANE_META["world-cup"].seoSuffix, anchor: LANE_META["world-cup"].anchor, base: "/desk/world-cup/", days: worldCupDays },
-  { sportKey: "football", laneKey: "leagues", label: LANE_META.leagues.label, seoSuffix: LANE_META.leagues.seoSuffix, anchor: LANE_META.leagues.anchor, base: "/desk/leagues/", days: leaguesDays },
+  { sportKey: "football", laneKey: "transfer", label: LANE_META.transfer.label, seoSuffix: LANE_META.transfer.seoSuffix, anchor: LANE_META.transfer.anchor, base: "/desk/transfer/", parent: "/desk/transfer/", days: transferDays },
+  { sportKey: "football", laneKey: "world-cup", label: LANE_META["world-cup"].label, seoSuffix: LANE_META["world-cup"].seoSuffix, anchor: LANE_META["world-cup"].anchor, base: "/desk/world-cup/", parent: "/desk/world-cup/", days: worldCupDays },
+  { sportKey: "football", laneKey: "leagues", label: LANE_META.leagues.label, seoSuffix: LANE_META.leagues.seoSuffix, anchor: LANE_META.leagues.anchor, base: "/desk/leagues/", parent: "/desk/leagues/", days: leaguesDays },
 ];
 for (const sport of SPORTS) {
   if (sport.key === "football") continue;
@@ -104,6 +104,9 @@ for (const sport of SPORTS) {
       seoSuffix: `${sport.label} ${laneMeta.seoSuffix}`.trim(),
       anchor: `${sport.urlBase}/`,
       base: `/${sport.urlBase}/${laneKey}/`,
+      // The breadcrumb parent: the sport root, which is where the lane front canonicalises
+      // (build-lane-pages.mjs). Football's parent is its own lane front.
+      parent: `/${sport.urlBase}/`,
       days: SPORT_DAYS[sport.key] || [],
     });
   }
@@ -278,7 +281,7 @@ function questionAnswer(dek, body) {
   check("St. at the cap", capDek, capPara, capDek);
 })();
 
-function schema(entry, url, label, faq, images, sources = []) {
+function schema(entry, url, label, parentUrl, faq, images, sources = []) {
   const graph = [
     {
         // Daily desk entries are timely news, so NewsArticle (long reads in build-content.mjs
@@ -353,7 +356,7 @@ function schema(entry, url, label, faq, images, sources = []) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-      { "@type": "ListItem", position: 2, name: label, item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: label, item: parentUrl },
       { "@type": "ListItem", position: 3, name: entry.headline, item: url },
     ],
   });
@@ -507,7 +510,7 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
   // Per-page CSP: the share-row script embeds this page's url, so its hash is not constant
   // across the family, and form-action is narrowed to 'self' (no form on the page).
   csp: pageCsp,
-  jsonLd: schema(entry, url, lane.label, faq, schemaImages, entrySources(entry)),
+  jsonLd: schema(entry, url, lane.label, `${SITE}${lane.parent}`, faq, schemaImages, entrySources(entry)),
   extraHead: [APP_CTA_STYLES],
 })}
 <body>
@@ -588,6 +591,7 @@ if (census.noindex.length) for (const line of census.noindex.slice(0, 20)) conso
 let count = 0;
 let cards = 0;
 let wideCards = 0;
+let retroDropped = 0;
 const urls = [];
 for (const section of sections) {
   // dist path segments from the section base: "/desk/transfer/" -> ["desk","transfer"];
@@ -633,8 +637,11 @@ for (const section of sections) {
     writeFileSync(join(dir, "index.html"), render(entry, section, hasCard, hasWide, moreFrom, decisions.get(entry)));
     // lastmod is the entry's own last change (G10): updatedAt after an amend, else publishedAt.
     // A noindex page stays here with its real lastmod (G1, plan 1.2): pulling it would remove a
-    // discovery path and slow the exclusion.
-    urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: modifiedAt(entry), changefreq: "monthly", priority: "0.6" });
+    // discovery path and slow the exclusion. A retro noindex page stays only until its batch's
+    // sitemapUntil date (plan 1.2 rows have had their recrawl by then), then drops out.
+    if (retroInSitemap(`${section.base}${entry.date}/`, TODAY)) {
+      urls.push({ loc: `${SITE}${section.base}${entry.date}/`, lastmod: modifiedAt(entry), changefreq: "monthly", priority: "0.6" });
+    } else retroDropped++;
     count++;
   }
 }
@@ -659,3 +666,4 @@ if (titleFlags.missing.length) console.warn(`[build-article-pages] answer-title:
 if (titleFlags.long.length) console.warn(`[build-article-pages] answer-title: seoTitle over 60 chars: ${titleFlags.long.join(", ")}`);
 
 console.log(`[build-article-pages] wrote ${count} article page(s), ${cards} og card(s) and ${wideCards} og-wide card(s) to ${OUT}/desk/<lane>/<date>/, appended to sitemap`);
+if (retroDropped) console.log(`[build-article-pages] ${retroDropped} retro noindex page(s) past their batch's sitemapUntil, left out of sitemap.xml`);

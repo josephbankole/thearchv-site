@@ -7,6 +7,7 @@ datePublished: "2026-07-08"
 description: "Roger Milla still holds the record at 42 years and 39 days, but Cristiano Ronaldo closed the gap at the 2026 World Cup, becoming the oldest man to score in a knockout match. The full list of the oldest scorers in the tournament's history."
 quickAnswer: "Roger Milla is the oldest World Cup goalscorer, at 42 years and 39 days when he scored for Cameroon against Russia in 1994. Cristiano Ronaldo is second, at 41 years and 147 days, his age when he later scored a penalty against Croatia at the 2026 World Cup, a goal that also made him the oldest man to score in a knockout match. Pepe (2022), Lionel Messi (2026) and Sweden's Gunnar Gren (1958) round out the top five."
 ogImage: "/og.jpg"
+updated: "2026-11-15"
 related: []
 ---
 
@@ -16,7 +17,7 @@ Roger Milla was 38 when he scored twice against Colombia at Italia '90 and turne
 
 Milla scored for Cameroon against Russia on 28 June 1994, at 42 years and 39 days old. It remains the oldest a man has ever been to score at a men's World Cup, and it is a record built on a record: his brace against Colombia four years earlier had already made him the oldest scorer in the tournament's history at the time, at 38 years and 34 days. He simply went and beat himself.
 
-Cameroon lost that 1994 match 6-1, with Russia's Oleg Salenko scoring all six of the other goals in what is still the only five-goal haul by one player in a single World Cup match. Milla's goal was a footnote to Salenko's afternoon, but it is the number next to Milla's name that has lasted.
+Cameroon lost that 1994 match 6-1, with Russia's Oleg Salenko scoring five of their six goals, still the only five-goal haul by one player in a single World Cup match. Dmitri Radchenko scored the other. Milla's goal was a footnote to Salenko's afternoon, but it is the number next to Milla's name that has lasted.
 
 ## Ronaldo closes the gap
 
@@ -37,6 +38,8 @@ The record at the opposite extreme has stood since before most of the men above 
 ## Why the record keeps moving
 
 Two things are pulling this list towards the present. Sports science and squad management now let elite players extend at the top level well past 35 in a way that was rare before the 1990s, and the international calendar keeps producing World Cups a great player's generation was not supposed to reach. Ronaldo, Messi and Pepe were all playing at a World Cup as veterans of a squad they might once have been expected to have retired from years earlier. Milla's record has survived one World Cup cycle after another since 1994, but for the first time in three decades, the players chasing it are getting genuinely close.
+
+Correction, 15 November 2026: this page said Oleg Salenko scored all six of Russia's goals against Cameroon in 1994. He scored five of them, and Dmitri Radchenko scored the sixth, in Russia's 6-1 win on 28 June 1994 (FIFA match report; Wikipedia, 1994 FIFA World Cup Group B).
 
 ---
 

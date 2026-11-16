@@ -22,9 +22,12 @@ const listed = new Set(manifest.entries.map((e) => `${e.out}.webp`));
 const onDisk = readdirSync(join(ROOT, "public", "heads", "hd")).filter((f) => f.endsWith(".webp"));
 const failures = [];
 
+const withdrawn = new Set((manifest.withdrawn ?? []).map((e) => `${e.out}.webp`));
+
 for (const f of onDisk) {
-  if (!listed.has(f)) failures.push(`public/heads/hd/${f} is not in scripts/data/heads-hd.json`);
-  if (!appGrade(`/heads/hd/${f}`)) failures.push(`public/heads/hd/${f} fails the 600px square gate`);
+  if (withdrawn.has(f)) failures.push(`public/heads/hd/${f} is withdrawn in scripts/data/heads-hd.json; delete the file`);
+  else if (!listed.has(f)) failures.push(`public/heads/hd/${f} is not in scripts/data/heads-hd.json`);
+  else if (!appGrade(`/heads/hd/${f}`)) failures.push(`public/heads/hd/${f} fails the 600px square gate`);
 }
 for (const p of PLAYERS) {
   if (!p.hd) failures.push(`registry player ${p.slug} has no hd path`);

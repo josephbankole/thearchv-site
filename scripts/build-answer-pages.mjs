@@ -9,8 +9,9 @@
 
    Every page shows a visible "Changes to this page" log, and its dateModified is the entry's own
    `updated`, never the build clock (G10). robots follows G1: index only when the entry asks for it
-   AND names its demand evidence; otherwise noindex,follow. The URL is in sitemap.xml either way,
-   with lastmod = updated. Nothing here fails the build on a data condition (plan section 6): a
+   AND names its demand evidence; otherwise noindex,follow. Only an indexable page goes into
+   sitemap.xml, with lastmod = updated: a noindex URL there is a Search Console "Submitted URL
+   marked noindex" row, and the pages stay reachable from the dated desk pages that link them. Nothing here fails the build on a data condition (plan section 6): a
    date that is not in its lane is warned about and left out. */
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -171,8 +172,8 @@ for (const a of answers) {
   const dir = join(OUT, ...ANSWERS_BASE.split("/").filter(Boolean), a.slug);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), render(a, items, index));
-  urls.push({ loc: `${SITE}${ANSWERS_BASE}${a.slug}/`, lastmod: a.updated, changefreq: "weekly", priority: "0.6" });
+  if (index) urls.push({ loc: `${SITE}${ANSWERS_BASE}${a.slug}/`, lastmod: a.updated, changefreq: "weekly", priority: "0.6" });
 }
 appendUrls(urls);
 for (const w of warnings) console.warn(`[build-answer-pages] WARN ${w}`);
-console.log(`[build-answer-pages] wrote ${answers.length} living page(s) to ${OUT}${ANSWERS_BASE}, ${indexed} index, ${answers.length - indexed} noindex,follow; appended to sitemap`);
+console.log(`[build-answer-pages] wrote ${answers.length} living page(s) to ${OUT}${ANSWERS_BASE}, ${indexed} index, ${answers.length - indexed} noindex,follow; ${indexed} appended to sitemap`);

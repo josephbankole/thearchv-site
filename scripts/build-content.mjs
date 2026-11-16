@@ -12,7 +12,9 @@ import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, R
 import { loadContentPages } from "./shared/content-pages.mjs";
 import { writeSitemap } from "./shared/sitemap.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
-import { modifiedAt, newest } from "./shared/entry-dates.mjs";
+import { modifiedAt, newest, torontoIso } from "./shared/entry-dates.mjs";
+import { retroInSitemap } from "./shared/retro-noindex.mjs";
+import { inlineMd } from "./shared/content-inline.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
 // Duel pair URLs are DERIVED from the data adapter, never hand-listed, for the same reason the
 // glossary rows are: a hand list silently caps the sitemap the moment the roster grows.
@@ -141,13 +143,8 @@ const MASTHEAD_SCRIPT_TAG = `<script>\n    ${MASTHEAD_SCRIPT}\n  </script>`;
 const PAGE_CSP = cspMeta({ scripts: [scriptHash(extractScriptBody(MASTHEAD_SCRIPT_TAG))] });
 
 /* ---------- markdown subset -> html ---------- */
-function inline(t) {
-  t = esc(t);
-  t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, a, b) => `<a href="${escAttr(b)}">${a}</a>`);
-  t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  t = t.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-  return t;
-}
+// Links (safe targets only) and emphasis: scripts/shared/content-inline.mjs.
+const inline = inlineMd;
 function md(body) {
   const blocks = body.split(/\n{2,}/);
   const out = [];
@@ -387,6 +384,8 @@ if (cards) console.log(`[build-content] ${cards} explainer og card(s)`);
 // no lastmod rather than an invented one).
 const newestOf = (list) => newest(list.filter(Boolean));
 const DUEL_PAIRS = await listPairsForSitemap();
+// Toronto calendar day, used only to drop retro noindex rows past their sitemapUntil (never a lastmod).
+const SITEMAP_TODAY = torontoIso().slice(0, 10);
 // The home page changes when a desk entry lands or is amended: its lastmod is the newest such time.
 const { transferDays: HT, worldCupDays: HW, leaguesDays: HL, sportDays: HS } = await loadDayData();
 const HOME_LASTMOD = newestOf([...HT, ...HW, ...HL, ...Object.values(HS).flat()].map((e) => modifiedAt(e)));
@@ -430,7 +429,8 @@ const EXTRA_URLS = [
   // Duel lastmods: a pair page changes when either player's record does, so its lastmod is the
   // later of the two players' `updated` dates in the roster snapshot (G10, 2026-10-04).
   { loc: "/duel/", lastmod: newestOf(DUEL_PAIRS.flatMap((p) => [p.a.updated, p.b.updated])), changefreq: "weekly", priority: "0.7" },
-  ...DUEL_PAIRS.map((p) => ({ loc: p.href, lastmod: newestOf([p.a.updated, p.b.updated]), changefreq: "monthly", priority: "0.6" })),
+  // A pair on the retro noindex list (plan 1.2) keeps its row only until its batch's sitemapUntil.
+  ...DUEL_PAIRS.filter((p) => retroInSitemap(p.href, SITEMAP_TODAY)).map((p) => ({ loc: p.href, lastmod: newestOf([p.a.updated, p.b.updated]), changefreq: "monthly", priority: "0.6" })),
   { loc: "/guess/", changefreq: "daily", priority: "0.6" },
 ];
 /* ---------- lastmod (search plan 1.7 and G10, 2026-10-04) ----------

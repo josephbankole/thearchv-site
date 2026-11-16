@@ -162,6 +162,26 @@ async function bundleAndImport(entrySrc) {
   }
 }
 
+/* Every day entry's `date` is its page's folder name (/desk/<lane>/<date>/) and its URL, so it
+   has to be a real YYYY-MM-DD day and unique within its lane. A second entry on the same date
+   would silently overwrite the first page while the feed kept both, and a date carrying a slash
+   or ".." would write outside the lane folder. The desk engine checks both before it commits,
+   but a hand edit or any other writer does not pass through it, so the build stops here and
+   names the lane and the date. */
+const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
+export function assertLaneDates(laneName, entries) {
+  const seen = new Set();
+  for (const entry of entries) {
+    const date = entry && entry.date;
+    const t = typeof date === "string" && ISO_DAY.test(date) ? Date.parse(`${date}T00:00:00Z`) : NaN;
+    if (Number.isNaN(t) || new Date(t).toISOString().slice(0, 10) !== date) {
+      throw new Error(`[day-data] ${laneName}: entry date ${JSON.stringify(date)} is not a YYYY-MM-DD calendar day`);
+    }
+    if (seen.has(date)) throw new Error(`[day-data] ${laneName}: two entries share the date ${date}; the second would overwrite the first page`);
+    seen.add(date);
+  }
+}
+
 /**
  * Load the typed site data.
  * @param {object} [options]
@@ -202,6 +222,7 @@ export async function loadDayData({ days = true, extras = [] } = {}) {
       // Copy before sorting: `mod` is the imported module namespace and its arrays are the
       // literals from src/data. Sorted here, once, so no caller has to remember to.
       const arr = [...mod[lane.name]].sort(byDateDesc);
+      assertLaneDates(lane.name, arr);
       out[lane.name] = arr;
       if (lane.sport) sportDays[lane.sport] = arr;
     }

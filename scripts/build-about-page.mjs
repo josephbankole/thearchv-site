@@ -28,7 +28,7 @@
    Runs after vite build (it writes into dist/, which vite empties) and before build-search.mjs
    and verify-csp-pages.mjs (see package.json "build"). The /about/ sitemap row is in
    build-content.mjs's EXTRA_URLS; the stubs are noindex and in no sitemap. */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -60,7 +60,7 @@ const LOG_VISIBLE = 10;
 
 // The privacy policy's "Last updated" day. Change the policy, change this (the policy promises
 // the date moves with it). It renders the visible line and feeds the AboutPage dateModified.
-const PRIVACY_UPDATED = "2026-10-19";
+const PRIVACY_UPDATED = "2026-11-15";
 
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
@@ -132,6 +132,35 @@ ${olderRows.map((r) => correctionItem(r, "            ")).join("\n")}
         </details>`
     : "",
 ].filter(Boolean).join("\n        ");
+
+/* ---------- portrait credits (audit gap4-2, 2026-11-15) ----------
+   Every portrait made from a Wikimedia Commons photo credits its photographer and licence, read
+   from identity.licence in scripts/data/heads-hd.json (check-portrait-provenance.mjs makes sure
+   each one is recorded). The name is the registry's, from illustrated.json. */
+const readData = (f) => JSON.parse(readFileSync(join(ROOT, "scripts", "data", f), "utf8"));
+const nameByStem = new Map(
+  readData("illustrated.json").players.map((p) => [String(p.hd).split("/").pop().replace(/\.webp$/i, ""), p.name])
+);
+const credits = readData("heads-hd.json").entries
+  .filter((e) => e.identity?.method === "reference-render" && e.identity.licence?.source)
+  .map((e) => ({ player: nameByStem.get(e.out), ...e.identity.licence }))
+  .filter((c) => c.player)
+  .sort((a, b) => a.player.localeCompare(b.player, "en-GB"));
+const creditItem = (c) => {
+  const label = esc(c.name === "Public domain" ? "public domain" : c.name);
+  const licence = c.url ? `<a href="${escAttr(c.url)}" rel="license noopener">${label}</a>` : label;
+  return `<li>${esc(c.player)}: photo by ${esc(c.author)}, ${licence}, <a href="${escAttr(c.source)}">source on Wikimedia Commons</a></li>`;
+};
+const creditsHtml = credits.length
+  ? `<h3 id="portrait-credits">Portrait credits</h3>
+        <p>Some of our portraits are made from a reference photograph published on Wikimedia Commons under an open licence. The photographer and the licence of each one are listed here.</p>
+        <details class="log-older credits">
+          <summary>Photographers and licences (${credits.length})</summary>
+          <ul>
+${credits.map((c) => `            ${creditItem(c)}`).join("\n")}
+          </ul>
+        </details>`
+  : "";
 
 /* ---------- Joseph Bankole: the derived lists ---------- */
 const recentBlock = recent.length
@@ -208,6 +237,10 @@ const schema = {
      competition, or player) stays as the section's last line: footer() says something narrower
      and never mentions players, and the #standards copy names no player either. #contact keeps
      the old About's wording; the Instagram handle is in the policy's own Contact line above it.
+   - Privacy, waitlist paragraph (audit be-support-6, 2026-11-15): the IP hash sentence matches
+     waitlist_rate_hits in supabase/migrations/20261115180000, pruned on each claim. The 90 day
+     line is a promise with no purge job yet: one must exist before the launch email is sent.
+     Other retention periods stay off this page until their purges exist.
    - Sections the old pages repeated were kept once: the old About's "How the work is checked",
      "When we get it wrong" and "Who we answer to" summaries, the standards page's "Corrections
      are added, not hidden" and the corrections page's "How we check things first time" each
@@ -277,8 +310,8 @@ const html = `${documentShell({
         <h2 id="how-we-verify">How we verify</h2>
         <p>The ARCHV is a football-history publication. We treat the game's present the way we treat its past, by checking it before we publish. This page sets out how we decide what to run, and how confident we are when we run it.</p>
 
-        <h3>Two sources before we publish</h3>
-        <p>Nothing goes up as fact on a single source, with one standing exception: on the NFL and Formula 1 desks, the league's own official record is enough on its own, and it is named on the page. Everywhere else, a claim, a fee, a date or a scoreline is checked against at least two independent outlets before we treat it as settled. Two write-ups of the same original scoop are not two sources; we want outlets that did the reporting separately.</p>
+        <h3>A trusted, named source before we publish</h3>
+        <p>Nothing goes up as fact without a trusted source, and the source is named on the page. Trusted means an established outlet or reporter, or the body itself on the record: a club, a league, UEFA or FIFA. On the NFL and Formula 1 desks, the league's own official record is that source. One trusted source is enough to publish a claim, a fee, a date or a scoreline. It is not always enough to call it confirmed, and the labels below say how firm each entry is. When two trusted sources disagree, we drop the number or name both.</p>
 
         <h3>Breaking news: the REPORTED tier</h3>
         <p>Transfer news moves faster than confirmation, and the best of it often breaks through one reporter. When a named journalist with a strong record breaks a story alone, we may run it marked REPORTED, with the reporter and outlet named every time.</p>
@@ -296,6 +329,8 @@ const html = `${documentShell({
 
         <h3>The artwork is our own</h3>
         <p>Every image on The ARCHV is original illustration, drawn in our own house style. We use no club crests, no kit designs, no federation or competition marks, and no photographs. The faces are stylised drawings published as editorial commentary, not likenesses passed off as photos.</p>
+
+        ${creditsHtml}
 
         <h3>We answer to nobody in the game</h3>
         <p>The ARCHV is independent. We are not affiliated with FIFA, or with any club, federation, league or competition. No governing body approves our copy and none pays for it. That independence is the point of the whole thing: it is what lets us call a rumour a rumour, and correct ourselves in public when we get it wrong.</p>
@@ -415,19 +450,55 @@ const html = `${documentShell({
           record a story's headline when you open or save it.</li>
         </ul>
         <p>Support messages and push tokens are kept in a database that Supabase runs for
-        us. Nothing is sold, shared for advertising, or used to build a profile of you.</p>
+        us, on its servers in the United States (Oregon). Supabase logs every request to that
+        server, from the app or from this site, with its IP address, the approximate location
+        and network provider worked out from that address, and the device details the request
+        carries. It keeps those logs for seven days and then deletes them. We use them only to
+        keep the server running and to fix faults. PostHog stores the analytics on its servers
+        in the United States. Nothing is sold, shared for advertising, or used to build a
+        profile of you.</p>
 
         <h3>The website</h3>
-        <p>This site uses the same PostHog analytics, and it honours your
-        browser's Do Not Track setting. This site serves its own fonts, so your browser
-        does not request them from anyone else. Partnership enquiries come by email to
+        <p>This site uses the same PostHog analytics as the app. It records:</p>
+        <ul class="about__list">
+          <li><strong>Page views.</strong> An event when a page opens and another when you
+          leave it, with the page address and the page that sent you.</li>
+          <li><strong>On the front page.</strong> How far down you scroll (25, 50, 75 and 100
+          per cent), which sections come into view, and clicks on links to the App Store, our
+          Etsy shop, Instagram and our long reads. A long read click records the link's
+          address and its text.</li>
+          <li><strong>On story pages.</strong> A tap on the share, post to X or copy link
+          buttons, with the story's address.</li>
+          <li><strong>On the start and app pages.</strong> Taps on their buttons and links,
+          such as the App Store badge, the story link and the follow button, with where the
+          link goes. The start page also records when you scroll most of the way down it, and
+          whether its card for today's story loaded.</li>
+          <li><strong>On the games.</strong> On the quiz, the daily archive game and the player
+          comparisons, an event when you play, finish or share one.</li>
+          <li><strong>Browser details.</strong> Every event carries details that PostHog's own
+          script adds, such as your browser, operating system, screen size, language and time
+          zone. PostHog uses the IP address each event comes from to estimate a rough
+          location, such as the city or country.</li>
+          <li><strong>A random identifier.</strong> PostHog keeps a random id in your
+          browser's local storage, not in a cookie, so a return visit is not counted as a new
+          visitor. It is not linked to your name or email. Clearing this site's data in your
+          browser erases it.</li>
+        </ul>
+        <p>Autocapture and session recording are switched off, so PostHog does not record
+        every click, keystroke or form field. If your browser sends Do Not Track, no events
+        are sent for your visit. The scores on the front page and the scores page load live
+        from the same Supabase server, so those requests appear in its logs. This site serves
+        its own fonts, so your browser does not request them from anyone else. Partnership enquiries come by email to
         <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>, and the
         site has no contact form.</p>
         <p>Android visitors to the <a href="/app/">app page</a> see a waitlist. Joining it
         stores your email address, your browser's user agent (the line of text that names
         your browser and operating system), and the page you signed up on, in the same
         Supabase database. We use the address to tell you when the Android app is
-        ready.</p>
+        ready, and delete it 90 days after that email goes out. To stop one source flooding
+        the list, our server also keeps a one-way hash of the IP address you joined from,
+        with a count of sign-ups from it in that hour. Old counts are removed as new sign-ups
+        come in.</p>
 
         <h3>Deleting your data</h3>
         <p>Deleting the app removes everything stored on the device, but not what has
@@ -443,6 +514,8 @@ const html = `${documentShell({
         settings default.</p>
 
         <h3>Contact</h3>
+        <p>Joseph Bankole is responsible for protecting your personal information on this site
+        and in the app.</p>
         <p>Email <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a> or
         message <a href="https://instagram.com/thearchvfc">@thearchvfc</a> on Instagram.
         For app help, see <a href="/support/">support</a>.</p>

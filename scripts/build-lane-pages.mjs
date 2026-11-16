@@ -17,12 +17,13 @@ import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
-  SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META,
+  SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, laneIndexTitle, sportDeskLede,
   cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
 import { glossaryEntries } from "./glossary-data.mjs";
+import { torontoIso } from "./shared/entry-dates.mjs";
 
 // slug -> glossary entry, so the "From the glossary" strip (below) can resolve a lane's chosen
 // terms to their titles and pages. A typo is a build-time error, not a silent broken link —
@@ -46,6 +47,7 @@ const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const {
   transferDays, worldCupDays, leaguesDays, sportDays: SPORT_DAYS, readLabel,
 } = await loadDayData({ extras: ["readTime"] });
+const TODAY = torontoIso().slice(0, 10);
 
 // Intro copy (SEO/AEO pass, UNIT 2, 2026-07-14): each lane's cards carried little or no
 // crawlable prose above them, so every intro now states what the lane covers (keyword-bearing,
@@ -118,7 +120,8 @@ function glossaryStrip(lane) {
 function render(laneKey, lane) {
   const url = `${SITE}/desk/${laneKey}/`;
   // <title> carries the entity-rich, search-only title; og/twitter keep the brand-clean form.
-  const pageTitle = lane.indexTitle;
+  // laneIndexTitle drops "Verified Daily" once the lane has gone quiet (gap4-9).
+  const pageTitle = laneIndexTitle(laneKey, lane.days, TODAY);
   const socialTitle = `${lane.label} · The ARCHV`;
 
   return `${documentShell({
@@ -179,8 +182,9 @@ function render(laneKey, lane) {
    the same lane-card markup, and a sport-scoped deskNav. */
 function renderSportLane(sport, laneKey) {
   const laneLabel = QUESTION_LANE_META[laneKey]?.label ?? laneKey;
-  const copy = SPORT_DESK_COPY[sport.key];
   const days = SPORT_DAYS[sport.key] || [];
+  // The cadence lede while the desk keeps its rhythm, a dated line once it has gone quiet (gap4-9).
+  const copy = { ...SPORT_DESK_COPY[sport.key], lede: sportDeskLede(sport.key, days, TODAY) };
   const url = `${SITE}/${sport.urlBase}/${laneKey}/`;
   /* SEO/AEO audit fix 5 (2026-07-28): /<sport>/questions/ and /<sport>/ were 98% textually
      identical, both self-canonical, both in the sitemap and both carrying CollectionPage, which

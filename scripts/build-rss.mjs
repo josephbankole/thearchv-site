@@ -18,6 +18,7 @@ import { byDateDesc, esc, escAttr, SPORTS, laneByFeedKey } from "./shared/page-s
 import { loadDayData } from "./shared/day-data.mjs";
 import { sourcesAwareParagraph } from "./shared/source-links.mjs";
 import { publishedAt, rfc822, newest, torontoIso } from "./shared/entry-dates.mjs";
+import { isIndexable } from "./shared/retro-noindex.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -90,8 +91,9 @@ const readItems = longReads.map((r) => ({
 
 const items = lanes
   .flatMap(({ base, days }) => days.map((d) => ({ ...d, base })))
-  // G1 (search plan week 4, 2026-10-11): a dated entry filed noindex is not syndicated.
-  .filter((it) => indexDecision(it, TODAY).index)
+  // G1 (search plan week 4, 2026-10-11): a dated entry filed noindex is not syndicated, and nor is
+  // a page on the staged retro noindex list (plan 1.2), which its article page renders noindex.
+  .filter((it) => isIndexable(it, `${it.base}${it.date}/`, TODAY, indexDecision))
   .concat(readItems)
   .sort(byDateDesc)
   .slice(0, MAX_ITEMS);
@@ -177,10 +179,16 @@ function ogAsset(it) {
 // The article as a self-contained HTML fragment: standfirst, illustration, body, rights notice.
 // Absolute image URL because the fragment is read far away from thearchv.ca. No width/height:
 // the real pixel size is not read here, and a wrong dimension is worse than none.
+/* content:encoded is republished away from thearchv.ca (Flipboard, Microsoft Start and other
+   readers) with no xml:base, so a site-root link such as href="/reads/x/" from the long-read
+   markdown would resolve against the reader's host. Make every site-root href absolute; a
+   protocol-relative "//" href is left alone (longreadMd never emits one). */
+const absoluteLinks = (html) => String(html).replace(/(<a\b[^>]*?\shref=")\/(?!\/)/g, `$1${SITE}/`);
+
 function contentHtml(entry, img) {
   const parts = [`<p><strong>${esc(entry.dek)}</strong></p>`];
   if (img) parts.push(`<figure><img src="${escAttr(img.url)}" alt="${escAttr(img.alt)}" /></figure>`);
-  parts.push(entry.html ?? bodyHtml(entry.body));
+  parts.push(absoluteLinks(entry.html ?? bodyHtml(entry.body)));
   parts.push(`<p>${esc(RIGHTS)}</p>`);
   return parts.filter(Boolean).join("\n");
 }
@@ -220,7 +228,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <title>The ARCHV</title>
     <link>${SITE}/</link>
     <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Daily, two-source-verified football reporting from The ARCHV: Manchester United transfers, international football and the leagues.</description>
+    <description>Football reporting from The ARCHV, with a trusted source named for every claim: Manchester United transfers, international football and the leagues.</description>
     <language>en-GB</language>
     <lastBuildDate>${lastBuild}</lastBuildDate>
 ${itemXml}

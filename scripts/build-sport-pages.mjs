@@ -9,9 +9,10 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
+import { torontoIso } from "./shared/entry-dates.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
-  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
+  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, sportDeskLede, cardArt,
   masthead, deskNav, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
@@ -38,6 +39,7 @@ const { sportDays: DAYS } = await loadDayData();
 // used by the lane fronts): `lede` is what the desk covers and its standard; `holding` is the
 // honest empty-state paragraph shown until the first entry lands.
 const COPY = SPORT_DESK_COPY;
+const TODAY = torontoIso().slice(0, 10);
 
 // A lane's entries as whole-card links, reusing the lane-card styling from pageStyles(). Matches
 // build-lane-pages.mjs's laneCard so a sport section and a lane front render identically.
@@ -48,8 +50,9 @@ function laneCard(entry, sportKey, laneKey) {
 
 function renderSection(sport) {
   const url = `${SITE}/${sport.urlBase}/`;
-  const copy = COPY[sport.key];
   const days = DAYS[sport.key] || [];
+  // The cadence lede while the desk keeps its rhythm, a dated line once it has gone quiet (gap4-9).
+  const copy = { ...COPY[sport.key], lede: sportDeskLede(sport.key, days, TODAY) };
   const lanes = lanesForSport(sport.key); // single Question Desk lane for the new sports
   const laneKey = sport.lanes[0];
 

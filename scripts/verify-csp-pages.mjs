@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 // shipped pages this file never opened while still printing "All N checked page(s) OK"
 // (2026-08-12 review). A new LANE_META key or SPORTS row is now covered automatically.
 import { LANE_META, SPORTS } from "./shared/page-shell.mjs";
+import { loadDayData } from "./shared/day-data.mjs";
 
 const FOOTBALL_LANES = Object.keys(LANE_META); // transfer, world-cup, leagues
 const NEW_SPORTS = SPORTS.filter((s) => s.key !== "football");
@@ -101,9 +102,8 @@ const targets = [
   ...FOOTBALL_LANES.map((lane) => [`lane: /desk/${lane}/`, join(DIST, "desk", lane, "index.html")]),
   // Evergreen surfaces (build-glossary-pages.mjs): the shared masthead + PostHog inline scripts,
   // so their static hashes must be in each page's CSP.
-  // Living story and answer pages (build-answer-pages.mjs, search plan G7, 2026-11-09): masthead and
-  // PostHog only, no per-page script.
-  ["answers: /answers/lewis-hall-manchester-united/", join(DIST, "answers", "lewis-hall-manchester-united", "index.html")],
+  // Living story and answer pages (build-answer-pages.mjs, search plan G7, 2026-11-09) are checked
+  // in the loop further down, one per entry in src/data/answers.ts.
   ["glossary hub: /glossary/", join(DIST, "glossary", "index.html")],
   ["glossary: /glossary/xg/", join(DIST, "glossary", "xg", "index.html")],
   // Glossary expansion (SEO/AEO pass, 2026-07-14): one of the six new entries, same page family
@@ -179,6 +179,24 @@ if (existsSync(readsDir)) {
   for (const entry of readdirSync(readsDir)) {
     const file = join(readsDir, entry, "index.html");
     if (existsSync(file)) targets.push([`read: /reads/${entry}/`, file]);
+  }
+}
+
+// Every living answer and story page: masthead and PostHog only, no per-page script. The slugs come
+// from src/data/answers.ts, which the commit script's answer mode writes, so they are read from the
+// data rather than hand-listed: a hard-coded slug failed this whole step, with a message that read
+// like a CSP regression, the day the desk renamed or retired that story. build-answer-pages.mjs
+// writes one page per entry, so an entry with no page is still a failure (check() reports it).
+const { answers } = await loadDayData({ days: false, extras: ["answers"] });
+for (const a of answers) {
+  targets.push([`answers: /answers/${a.slug}/`, join(DIST, "answers", a.slug, "index.html")]);
+}
+const answersDir = join(DIST, "answers");
+if (existsSync(answersDir)) {
+  const listed = new Set(answers.map((a) => a.slug));
+  for (const entry of readdirSync(answersDir)) {
+    const file = join(answersDir, entry, "index.html");
+    if (!listed.has(entry) && existsSync(file)) targets.push([`answers: /answers/${entry}/`, file]);
   }
 }
 

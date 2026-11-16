@@ -6,7 +6,28 @@
 import { corsHeaders, type Env, json } from "../_shared/http.ts";
 import { checkAppSecret } from "../_shared/appGuard.ts";
 
-const CATEGORIES = ["bug", "billing", "content", "account", "other"];
+// The categories the contact form offers (app-ui-14, 2026-11-15). The app has no accounts and no
+// purchases, so "billing" and "account" were dropped from the form. Builds already in readers'
+// hands still send them; those tickets are accepted and filed as "other", never refused. The
+// table's own check still allows both, for the rows already stored under them.
+const CATEGORIES = ["bug", "content", "other"];
+
+// The same light shape check the app runs before sending (ContactEmail.isAcceptable): one @ with
+// something before it, a dot in the domain that is not its first character, no trailing dot, no
+// empty label, no whitespace, at most 320 characters. The email is optional, so an address that
+// fails it is stored as null and the ticket still goes in; the reader can always read replies in
+// the app.
+export function normaliseEmail(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const email = raw.trim();
+  if (!email || email.length > 320 || /\s/.test(email)) return null;
+  const parts = email.split("@");
+  if (parts.length !== 2 || !parts[0]) return null;
+  const domain = parts[1];
+  const dot = domain.indexOf(".");
+  if (dot <= 0 || domain.endsWith(".") || domain.includes("..")) return null;
+  return email;
+}
 
 export type TicketStore = {
   insertTicket(row: Record<string, unknown>): Promise<{ ticket?: { id: string; status: string }; error?: string }>;
@@ -37,7 +58,7 @@ export async function handleTicketIntake(req: Request, deps: { env: Env; store: 
 
   const category = CATEGORIES.includes(payload.category as string) ? payload.category : "other";
   const subject = typeof payload.subject === "string" ? payload.subject.slice(0, 200) : null;
-  const email = typeof payload.email === "string" ? payload.email.slice(0, 320) : null;
+  const email = normaliseEmail(payload.email);
   const app_version = typeof payload.app_version === "string" ? payload.app_version.slice(0, 40) : null;
 
   const { ticket, error } = await deps.store.insertTicket({ device_id, body, category, subject, email, app_version });

@@ -238,9 +238,11 @@ const schema = {
      and never mentions players, and the #standards copy names no player either. #contact keeps
      the old About's wording; the Instagram handle is in the policy's own Contact line above it.
    - Privacy, waitlist paragraph (audit be-support-6, 2026-11-15): the IP hash sentence matches
-     waitlist_rate_hits in supabase/migrations/20261115180000, pruned on each claim. The 90 day
-     line is a promise with no purge job yet: one must exist before the launch email is sent.
-     Other retention periods stay off this page until their purges exist.
+     waitlist_rate_hits in supabase/migrations/20261115180000, pruned on each claim and by the
+     hourly job in 20261115210000. The waitlist itself has no purge job, so the page gives no
+     deletion date for it. "How long we keep it" lists only periods a scheduled job enforces
+     (retention_purge in 20261115200200 and the two prune jobs); apply those migrations before
+     this page reaches main (scripts/deploy-preconditions.txt).
    - Sections the old pages repeated were kept once: the old About's "How the work is checked",
      "When we get it wrong" and "Who we answer to" summaries, the standards page's "Corrections
      are added, not hidden" and the corrections page's "How we check things first time" each

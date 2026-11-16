@@ -11,8 +11,12 @@
 // paraphrases the poster's own top two lines (place and year, then what the match meant) and is
 // not always the printed wording: p3-09 says Goal of the Season, not the award its art prints, on
 // purpose, as its Etsy copy does. `stamp` is the match date, and `moment` is one sentence drawn
-// from the listing description. No player is named anywhere below. etsyUrl is the listing's
-// Share & Save link (https://thearchvca.etsy.com/listing/<id>, D-2026-10-04b).
+// from the listing description. No player is named in the data below, but that is a rule for this
+// file only, not a description of the posters: the printed art names players, prints rival club
+// names (BAYERN MUNICH, MANCHESTER CITY among them) and quotes broadcast commentary (audit
+// 2026-11-15, gap4-5). Whether the match posters fall under the quote posters' art rule is an open
+// founder question (CLAUDE.md, the quote posters section). etsyUrl is the listing's Share & Save
+// link (https://thearchvca.etsy.com/listing/<id>, D-2026-10-04b).
 export interface PosterPack {
   slug: string;
   name: string;

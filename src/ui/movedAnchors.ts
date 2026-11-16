@@ -24,7 +24,15 @@ const MOVED: Record<string, string> = {
 
 export function initMovedAnchors(): void {
   const go = (): void => {
-    const id = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+    // A hash with a stray % (thearchv.ca/#50%off) is not valid percent-encoding and
+    // decodeURIComponent throws on it. Fall back to the raw text so the page keeps booting.
+    const raw = window.location.hash.replace(/^#/, '');
+    let id = raw;
+    try {
+      id = decodeURIComponent(raw);
+    } catch {
+      id = raw;
+    }
     const target = Object.prototype.hasOwnProperty.call(MOVED, id) ? MOVED[id] : undefined;
     if (target) window.location.replace(target);
   };

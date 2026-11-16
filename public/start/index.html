@@ -21,7 +21,7 @@
        alone, the same rule the article pages follow. Neither script changed for that.
        2026-10-12, later: the page script (the second hash) changed. It now dates the TODAY
        kicker when the feed's lead is not today's story, so its hash was recomputed. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JiqJSH39ZjzKAiXgBEPvQMMkI+40o3c8mqYE3H7QLyI=' 'sha256-7/qBfdScegwJzohArUOL2cIXTUmDx0TQrMg3VFHh5rs=' https://us-assets.i.posthog.com https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com https://eu.i.posthog.com https://eu-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-nNAgYaFdw+9sikjcGTxxtKDI7N4EAbhzraJF6hrwZsg=' 'sha256-CI6DbWnrD2E+4Td/RT7b0gJJHKZBhLGNwvBl5o77X6Y=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
   <meta property="og:description" content="Sport drawn down to the moment that decided it." />
@@ -30,18 +30,24 @@
 
   <!-- PostHog: pageview + which button readers tap. Same project as the website. -->
   <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    // Trailing-slash normalisation, 2026-08-04. GitHub Pages 301s /start to /start/, yet PostHog
-    // logged the two as separate pages: 2,506 visits against 477 in the week to 1 August. A
-    // canonical tag does not merge pageviews, so the path is rewritten at capture time instead,
-    // towards the slash: the form the canonical tags, the sitemap and Pages itself already use.
-    // The site root and any path ending in a file extension are left alone. The same rule lives
-    // in src/analytics.ts and scripts/shared/page-shell.mjs. Change one, change all three.
-    function archvPath(v) {
-      if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
-      return v.replace(/^([^?#]*[^\/?#])(?=[?#]|$)/, function (m) { return /\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
-    }
-    posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,persistence:'localStorage',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
+    // Global Privacy Control or Do Not Track: PostHog never loads, so no script, no identifier
+    // in storage and no events. Same rule as src/analytics.ts and josephbankole.ca (2026-11-15).
+    (function () {
+      var nav = window.navigator || {};
+      if (nav.globalPrivacyControl === true || nav.doNotTrack === '1' || nav.doNotTrack === 'yes' || window.doNotTrack === '1' || nav.msDoNotTrack === '1') return;
+      !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+      // Trailing-slash normalisation, 2026-08-04. GitHub Pages 301s /start to /start/, yet PostHog
+      // logged the two as separate pages: 2,506 visits against 477 in the week to 1 August. A
+      // canonical tag does not merge pageviews, so the path is rewritten at capture time instead,
+      // towards the slash: the form the canonical tags, the sitemap and Pages itself already use.
+      // The site root and any path ending in a file extension are left alone. The same rule lives
+      // in src/analytics.ts and scripts/shared/page-shell.mjs. Change one, change all three.
+      function archvPath(v) {
+        if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
+        return v.replace(/^([^?#]*[^\/?#])(?=[?#]|$)/, function (m) { return /\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
+      }
+      posthog.init('phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,capture_pageleave:true,persistence:'localStorage',respect_dnt:true,disable_session_recording:true,disable_surveys:true,disable_product_tours:true,disable_conversations:true,capture_heatmaps:false,capture_dead_clicks:false,capture_exceptions:false,capture_performance:false,person_profiles:'identified_only',before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
+    })();
   </script>
 
   <!-- Brand fonts, self-hosted (2026-10-12). Same faces as fontLinks() in scripts/shared/page-shell.mjs. -->
@@ -366,7 +372,7 @@
       var follow = { platform: 'instagram', url: 'https://www.instagram.com/thearchvfc', label: 'Follow @thearchvfc' };
       if (/tiktok\./i.test(ref)) follow = { platform: 'tiktok', url: 'https://www.tiktok.com/@thearchvfc', label: 'Follow on TikTok' };
       else if (/instagram\./i.test(ref)) follow = { platform: 'instagram', url: 'https://www.instagram.com/thearchvfc', label: 'Follow on Instagram' };
-      else if (/facebook\.|fb\.watch/i.test(ref)) follow = { platform: 'facebook', url: 'https://www.facebook.com/thearchvfc', label: 'Follow on Facebook' };
+      else if (/facebook\.|fb\.watch/i.test(ref)) follow = { platform: 'facebook', url: 'https://www.facebook.com/profile.php?id=61590734246013', label: 'Follow on Facebook' };
       var followBtn = document.getElementById('follow-cta');
       if (followBtn) {
         followBtn.href = follow.url;

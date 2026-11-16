@@ -1,7 +1,7 @@
 // Privacy-friendly PostHog wiring.
 // - No key configured => everything is a safe no-op (zero network, zero cookies).
-// - Lean + privacy-first: autocapture OFF, session recording OFF, respects Do Not Track,
-//   localStorage persistence (no third-party cookies), only explicit events are sent.
+// - Lean + privacy-first: autocapture OFF, session recording OFF, nothing loads under Global
+//   Privacy Control or Do Not Track, localStorage persistence (no third-party cookies), only explicit events are sent.
 //
 // Configure by EITHER:
 //   build env:  VITE_POSTHOG_KEY=phc_xxx  VITE_POSTHOG_HOST=https://us.i.posthog.com
@@ -20,8 +20,23 @@ function readConfig() {
   return { key, host };
 }
 
+// Global Privacy Control or Do Not Track: PostHog is never imported, so no script, no identifier
+// in storage and no events, and track() drops everything. respect_dnt below stays as a second line
+// for DNT. The static pages' snippet and josephbankole.ca apply the same rule (2026-11-15).
+function privacySignal(): boolean {
+  const nav = navigator as Navigator & { globalPrivacyControl?: boolean; msDoNotTrack?: string };
+  const win = window as Window & { doNotTrack?: string };
+  return (
+    nav.globalPrivacyControl === true ||
+    nav.doNotTrack === '1' ||
+    nav.doNotTrack === 'yes' ||
+    win.doNotTrack === '1' ||
+    nav.msDoNotTrack === '1'
+  );
+}
+
 export function isConfigured(): boolean {
-  return !!readConfig().key;
+  return !!readConfig().key && !privacySignal();
 }
 
 /* ---------- trailing-slash path normalisation (2026-08-04) ----------
@@ -59,6 +74,7 @@ export function track(event: string, props?: Record<string, unknown>): void {
 export async function initAnalytics(): Promise<void> {
   const { key, host } = readConfig();
   if (!key) return; // dormant until a key is provided
+  if (privacySignal()) return; // the reader asked not to be tracked
 
   const { default: posthog } = await import('posthog-js');
   posthog.init(key, {
@@ -67,6 +83,17 @@ export async function initAnalytics(): Promise<void> {
     capture_pageview: true,
     capture_pageleave: true,
     disable_session_recording: true,
+    // Same privacy switches as the static pages' snippet (public/app, /start, /quiz, /dispatch)
+    // and josephbankole.ca, which shares this PostHog project: replay, surveys, tours, chat,
+    // heatmaps, dead clicks, exception capture and web vitals stay off in code, so a dashboard
+    // toggle can never make this site load an extension script nobody reviewed.
+    disable_surveys: true,
+    disable_product_tours: true,
+    disable_conversations: true,
+    capture_heatmaps: false,
+    capture_dead_clicks: false,
+    capture_exceptions: false,
+    capture_performance: false,
     respect_dnt: true,
     persistence: 'localStorage',
     person_profiles: 'identified_only',
@@ -105,14 +132,16 @@ function setupAppTracking(): void {
   });
 }
 
-// Track clicks on finals and United long-form article deep-links.
+// Track clicks on the front page's Dispatch long reads (the homereads block rendered by
+// renderReads() in src/render/home.ts). The old `.archive__reads` selector outlived its block
+// and matched nothing. The section carries no id, so name it here.
 function setupArticleLinkTracking(): void {
-  document.querySelectorAll<HTMLAnchorElement>('.archive__reads a[href]').forEach((el) => {
+  document.querySelectorAll<HTMLAnchorElement>('.homereads__list a[href]').forEach((el) => {
     el.addEventListener('click', () => {
       track('article_link_click', {
         href: el.getAttribute('href'),
         text: el.textContent?.trim(),
-        section: el.closest('section')?.id || '',
+        section: 'homereads',
       });
     });
   });

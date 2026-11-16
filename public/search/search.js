@@ -116,6 +116,12 @@
       .then(function (raw) {
         docs = prepare(raw);
         return docs;
+      })
+      // A failed fetch must not stay cached: clear it so the next search tries the network again
+      // instead of replaying the same rejection until the reader reloads the page.
+      .catch(function (e) {
+        loading = null;
+        throw e;
       });
     return loading;
   }

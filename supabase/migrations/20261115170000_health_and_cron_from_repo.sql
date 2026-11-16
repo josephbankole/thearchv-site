@@ -4,9 +4,14 @@
 --
 --   * health_alert_state: one row per health-probe check, the time of its last alert email. Only
 --     the service role (health-probe) reads and writes it.
---   * archv-daily-push (hourly, :00), health-probe (every 30 minutes) and triage-drain (hourly,
---     :20), each calling its function with the guard secret read from Vault at call time, the way
---     scores-poll's job does (20261013170000), and a 60 second pg_net timeout.
+--   * daily-push (at :30 from 14:30 to 23:30 UTC), health-probe (every 30 minutes) and
+--     triage-drain (hourly, :20), each calling its function with the guard secret read from Vault
+--     at call time, the way scores-poll's job does (20261013170000), and a 60 second pg_net
+--     timeout. The names, schedules and bodies are the live project's own, read from cron.job on
+--     2026-11-16. The one change to a live job is triage-drain's timeout, which was pg_net's
+--     5 second default. An earlier draft of this file scheduled the push as archv-daily-push at
+--     :00 every hour, after the README; live never had that job, so applying the draft would have
+--     left two push jobs. A job of that name is removed here if one exists.
 --
 -- A job is (re)scheduled only when the Vault secret it needs is set. Where it is missing, the
 -- migration raises a warning and leaves any existing job of that name exactly as it is, so a job
@@ -36,17 +41,19 @@ declare
   have_triage boolean := exists (select 1 from vault.decrypted_secrets where name = 'triage_secret');
 begin
   if have_push then
-    perform cron.unschedule(jobname) from cron.job where jobname in ('archv-daily-push', 'health-probe');
+    perform cron.unschedule(jobname) from cron.job
+      where jobname in ('daily-push', 'archv-daily-push', 'health-probe');
 
     perform cron.schedule(
-      'archv-daily-push',
-      '0 * * * *',
+      'daily-push',
+      '30 14-23 * * *',
       $job$ select net.http_post(
            url := 'https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/daily-push',
            headers := jsonb_build_object(
              'Content-Type', 'application/json',
              'x-push-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'push_secret')
            ),
+           body := '{}'::jsonb,
            timeout_milliseconds := 60000
          ); $job$
     );
@@ -60,11 +67,12 @@ begin
              'Content-Type', 'application/json',
              'x-push-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'push_secret')
            ),
+           body := '{}'::jsonb,
            timeout_milliseconds := 60000
          ); $job$
     );
   else
-    raise warning 'vault secret push_secret is not set: archv-daily-push and health-probe were left as they are';
+    raise warning 'vault secret push_secret is not set: daily-push and health-probe were left as they are';
   end if;
 
   if have_triage then
@@ -79,6 +87,7 @@ begin
              'Content-Type', 'application/json',
              'x-triage-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'triage_secret')
            ),
+           body := '{}'::jsonb,
            timeout_milliseconds := 60000
          ); $job$
     );

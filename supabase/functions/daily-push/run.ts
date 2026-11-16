@@ -223,7 +223,7 @@ export async function pushSport(run: Run, sport: SportKey): Promise<Record<strin
   //    BEFORE we're allowed to send. This is what would have caught the santos.webp incident
   //    — the desk committed an entry pointing at an asset before uploading it, and the daily
   //    push announced a 404 in the ~10 minute gap. On any non-200 we bail WITHOUT recording
-  //    the lead as sent, so the next cron tick (hourly, see migration 20261115170000) retries once assets are live.
+  //    the lead as sent, so the next cron tick (see migration 20261115170000) retries once assets are live.
   //    Only this sport waits; the others carry on.
   if (story.image) {
     const imageUrl = `${SITE}${story.image}`;

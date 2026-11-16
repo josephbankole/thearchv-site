@@ -296,8 +296,9 @@ run. Raise the constant if a one-off drain needs to go faster, and watch the ano
 does.
 
 The schedule is a migration, `supabase/migrations/20261115170000_health_and_cron_from_repo.sql`. It
-runs `archv-daily-push` hourly (it only sends when a sport has a new lead, so the one-a-day promise
-holds), `health-probe` every 30 minutes and `triage-drain` hourly at :20. Each call reads its guard
+runs `daily-push` at :30 from 14:30 to 23:30 UTC, the live project's schedule (it only sends when a
+sport has a new lead, so the one-a-day promise holds), `health-probe` every 30 minutes and
+`triage-drain` hourly at :20. Each call reads its guard
 secret from Vault (`push_secret`, `triage_secret`) when it runs, so no secret sits in `cron.job`.
 Do not paste a `cron.schedule` with a literal secret into the SQL editor: set the Vault secret and
 apply the migration instead. It leaves a job alone when its Vault secret is missing, so a working job

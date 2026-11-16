@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-16",
+    day: "Monday",
+    headline: "Mauricio Pochettino starts at Manchester United on 18 November, four days before Anfield",
+    dek: "Manchester United confirmed on Friday 13 November that Mauricio Pochettino becomes head coach from 18 November, with the club 18th in the Premier League on eight points from ten games and a trip to Liverpool on 22 November.",
+    body: "Manchester United confirmed on Friday 13 November that Mauricio Pochettino will become men's head coach from 18 November. He replaces Michael Carrick, who was sacked on Thursday 12 November after ten Premier League games. United are 18th with eight points and one league win, against Ipswich Town (The Independent).\n\nPochettino stays in charge of the United States for both Concacaf Nations League games against Haiti, the second in Cincinnati on 18 November, before reporting to Carrington. United paid US Soccer compensation worth an initial $7m (£5.3m) to release him from a contract that ran to the 2030 World Cup, The Independent reported, with more due for his staff, including long-time assistant Jesus Perez. ESPN reports a contract of two and a half years.\n\nHis first match is Liverpool against Manchester United at Anfield on Sunday 22 November. Pochettino last managed in the Premier League in 2023-24, when Chelsea finished sixth. Before that he spent five years at Tottenham, reaching the 2019 Champions League final, and 18 months at Paris Saint-Germain, where he won Ligue 1 in 2021-22 (The Independent).\n\nThe captain is one early question. BBC Sport's Simon Stone reported on Friday that Bruno Fernandes, 32, has turned down a second contract offer, and that United are almost certain to trigger a 12-month option to 2028 before 1 January. Fernandes came close to joining Pochettino's Tottenham in 2019 (BBC Sport).\n\nSources: The Independent; ESPN; BBC Sport.",
+    status: "verified",
+    publishedAt: "2026-11-16T06:30:03-05:00",
+    index: "noindex",
+    seoTitle: "Pochettino starts at Manchester United on 18 November",
+    sources: [{"outlet":"The Independent","url":"https://sports.yahoo.com/articles/man-utd-confirm-mauricio-pochettino-122422809.html","published":"2026-11-13"},{"outlet":"ESPN","url":"https://www.espn.com/soccer/story/_/id/50469660/man-united-mauricio-pochettino-manager-michael-carrick","published":"2026-11-13"},{"outlet":"BBC Sport","url":"https://www.bbc.co.uk/sport/football/articles/cm782d4pz9jyo","published":"2026-11-13"}],
+    tier: "confirmed",
+    expires: "2026-11-22",
+  },
+  {
     date: "2026-11-13",
     day: "Friday",
     headline: "Manchester United sack Michael Carrick and agree a deal with Mauricio Pochettino",

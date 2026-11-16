@@ -57,13 +57,13 @@ Config is lean by design: autocapture OFF, session recording OFF, respects Do No
 Activate:
 1. Create a free project at [posthog.com](https://posthog.com) and copy the **Project API key** (`phc_…`).
 2. Set it one of two ways:
-   - build env: `VITE_POSTHOG_KEY=phc_xxx` (and `VITE_POSTHOG_HOST=https://us.i.posthog.com` or the EU host), or
+   - build env: `VITE_POSTHOG_KEY=phc_xxx` (and `VITE_POSTHOG_HOST=https://us.i.posthog.com`; the CSP allows the US hosts only), or
    - in `index.html` head: `<meta name="posthog-key" content="phc_xxx">` (+ optional `<meta name="posthog-host" …>`).
 3. Rebuild. Verify in PostHog → Activity (events arrive within seconds).
 
 Events captured: `site_loaded`, `$pageview`, `section_view` (per section), `scroll_depth`
 (25/50/75/100), `follow_click` (every Instagram CTA), `digest_day_view` (each day card),
-`partnership_submit`. The CSP already allows the PostHog US/EU ingest + asset hosts.
+`partnership_submit`. The CSP allows the PostHog US ingest and asset hosts only (the EU hosts were dropped on 2026-11-15).
 
 ## Content — the daily engine fills these
 

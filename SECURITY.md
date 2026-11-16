@@ -17,7 +17,10 @@ Say what you found, how to reproduce it and what it affects.
 - The scripts that fetch the Wire headlines and the tables each day.
 
 The site's content security policy allows the Supabase project the app uses and PostHog
-analytics.
+analytics, on PostHog's US hosts only. PostHog's session replay, surveys, product tours,
+conversations, heatmaps, dead-click capture, exception capture and web vitals are switched off
+in the code on every page, so a change in the PostHog dashboard cannot turn them on. Under
+Global Privacy Control or Do Not Track, PostHog does not load at all.
 
 The pages carry two keys on purpose: the PostHog project key and the Supabase publishable
 key. Both are public client keys, built to sit in a web page, and are not a leak. No secret

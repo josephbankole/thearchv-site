@@ -726,14 +726,23 @@ export const APP_CTA_STYLES = `<style>
 // bundled JS, so the three copies cannot import each other. Change one, change all three.
 // This snippet's CSP hash is derived from its own text below (POSTHOG_SCRIPT_HASH), so editing
 // it here re-hashes every generated page automatically.
+// Global Privacy Control or Do Not Track: the IIFE returns before the stub runs, so PostHog never
+// loads (no script, no identifier in storage, no events). The init options are the same list as
+// src/analytics.ts and the four public/*/index.html copies: replay, surveys, tours, chat,
+// heatmaps, dead clicks, exceptions and web vitals pinned off in code (2026-11-15,
+// deps-supply-chain-3, gap8-2, site-frontend-4, privacy-compliance-3).
 export function posthogSnippet() {
   return `<script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    function archvPath(v) {
-      if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
-      return v.replace(/^([^?#]*[^\\/?#])(?=[?#]|$)/, function (m) { return /\\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
-    }
-    posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,capture_pageleave:true,disable_session_recording:true,disable_surveys:true,persistence:'localStorage',person_profiles:'identified_only',respect_dnt:true,before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
+    (function () {
+      var nav = window.navigator || {};
+      if (nav.globalPrivacyControl === true || nav.doNotTrack === '1' || nav.doNotTrack === 'yes' || window.doNotTrack === '1' || nav.msDoNotTrack === '1') return;
+      !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_in_capturing opt_out_capturing".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+      function archvPath(v) {
+        if (typeof v !== 'string' || v.indexOf('/') < 0) return v;
+        return v.replace(/^([^?#]*[^\\/?#])(?=[?#]|$)/, function (m) { return /\\.[a-z0-9]{1,8}$/i.test(m) ? m : m + '/'; });
+      }
+      posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',autocapture:false,capture_pageview:true,capture_pageleave:true,persistence:'localStorage',respect_dnt:true,disable_session_recording:true,disable_surveys:true,disable_product_tours:true,disable_conversations:true,capture_heatmaps:false,capture_dead_clicks:false,capture_exceptions:false,capture_performance:false,person_profiles:'identified_only',before_send:function(cr){if(cr&&cr.properties){cr.properties.$current_url=archvPath(cr.properties.$current_url);cr.properties.$pathname=archvPath(cr.properties.$pathname);}return cr;}});
+    })();
   </script>`;
 }
 
@@ -783,11 +792,13 @@ export const POSTHOG_SCRIPT_HASH = scriptHash(extractScriptBody(posthogSnippet()
 // so every other page's policy is byte-identical; /scores/ passes the Supabase storage host.
 export function cspMeta({ scripts = [], posthog = false, frame = null, forms = null, connect = [] } = {}) {
   const scriptSrc = ["'self'", ...scripts.map((h) => `'${h}'`)];
-  if (posthog) scriptSrc.push("https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com");
+  // US PostHog only: the snippet's api_host is us.i.posthog.com, and nothing on the site uses the
+  // EU origins (dropped 2026-11-15, deps-supply-chain-3).
+  if (posthog) scriptSrc.push("https://us-assets.i.posthog.com");
   const styleSrc = ["'self'", "'unsafe-inline'"]; // inline style="" attrs (e.g. the hidden App Store link)
   const fontSrc = ["'self'"];
   const connectSrc = ["'self'"];
-  if (posthog) connectSrc.push("https://us.i.posthog.com", "https://us-assets.i.posthog.com", "https://eu.i.posthog.com", "https://eu-assets.i.posthog.com");
+  if (posthog) connectSrc.push("https://us.i.posthog.com", "https://us-assets.i.posthog.com");
   connectSrc.push(...connect);
   const frameSrc = frame ? ["'self'", frame] : ["'none'"];
   const content = [

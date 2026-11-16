@@ -28,7 +28,7 @@ create extension if not exists pg_cron;
 -- 1. health-probe's debounce state.
 create table if not exists public.health_alert_state (
   check_name    text primary key,
-  last_alert_at timestamptz not null
+  last_alert_at timestamptz not null default now()
 );
 alter table public.health_alert_state enable row level security;
 -- No client policies, and no table privileges for the client roles either.

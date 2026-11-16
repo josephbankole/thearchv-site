@@ -14,6 +14,7 @@ import {
 } from "./days.ts";
 import { mapMatch, type Match, sortMatches } from "./map.ts";
 import { assert, assertEquals, fixtureById, IDS, SCHEDULES } from "./testkit.ts";
+import { atEdmonton } from "../_shared/edmonton_testkit.ts";
 
 const scheduled = (): Match[] =>
   Object.values(SCHEDULES).flatMap((e) => e.response).map((fx) => mapMatch(fx)!);
@@ -33,9 +34,11 @@ Deno.test("a match belongs to the Edmonton day it kicks off on, summer and winte
   assertEquals(dayOf("2026-10-14T03:30:00+00:00"), "2026-10-13"); // 21:30 in Edmonton
   assertEquals(dayOf("2026-10-14T05:59:59+00:00"), "2026-10-13");
   assertEquals(dayOf("2026-10-14T06:00:00+00:00"), "2026-10-14");
-  // Winter (MST, UTC-7): midnight is 07:00Z. The clocks went back on 1 November.
-  assertEquals(dayOf("2026-11-02T06:59:59+00:00"), "2026-11-01");
-  assertEquals(dayOf("2026-11-02T07:00:00+00:00"), "2026-11-02");
+  // Winter, after 1 November 2026. Alberta has kept UTC-6 all year since then and older timezone
+  // data still says UTC-7, so Edmonton midnight comes from the runtime's own rules (atEdmonton).
+  const nov2 = atEdmonton("2026-11-02", 0);
+  assertEquals(dayOf(new Date(nov2.getTime() - 1000).toISOString()), "2026-11-01");
+  assertEquals(dayOf(nov2.toISOString()), "2026-11-02");
   // An offset in the string is honoured, not read as UTC.
   assertEquals(dayOf("2026-10-14T00:30:00+01:00"), "2026-10-13"); // 23:30Z on the 13th
 });

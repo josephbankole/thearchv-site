@@ -18,6 +18,7 @@ import {
   windowFor,
 } from "./plan.ts";
 import { assert, assertEquals, IDS, SCHEDULES } from "./testkit.ts";
+import { atEdmonton } from "../_shared/edmonton_testkit.ts";
 
 const at = (iso: string) => new Date(iso);
 const MIN = 60_000;
@@ -39,21 +40,26 @@ Deno.test("windowFor: the Edmonton day, not the UTC day, sets today", () => {
 });
 
 Deno.test("windowFor: the clocks going back (1 Nov 2026) and forward (14 Mar 2027)", () => {
-  // 2 Nov 03:00 MST. Yesterday, 1 Nov, is the 25-hour day and began at 00:00 MDT; the day after
-  // tomorrow, 4 Nov, begins at 00:00 MST.
-  const fall = windowFor(at("2026-11-02T10:00:00Z"));
+  // 1 Nov 2026 and 14 Mar 2027 are the old fall-back and spring-forward days. Alberta has kept
+  // UTC-6 all year since 1 Nov 2026 and older timezone data still changes the clock on both, so
+  // every Edmonton time here comes from the runtime's own rules (atEdmonton). Under either rule the
+  // window runs from yesterday's Edmonton midnight to the midnight after tomorrow.
+  const iso = (d: Date) => d.toISOString();
+  // 2 Nov 03:00 Edmonton: yesterday is 1 Nov, and the window ends as 4 Nov begins.
+  const fall = windowFor(atEdmonton("2026-11-02", 3));
   assertEquals(fall.today, "2026-11-02");
-  assertEquals(new Date(fall.startMs).toISOString(), "2026-11-01T06:00:00.000Z");
-  assertEquals(new Date(fall.endMs).toISOString(), "2026-11-04T07:00:00.000Z");
+  assertEquals(new Date(fall.startMs).toISOString(), iso(atEdmonton("2026-11-01", 0)));
+  assertEquals(new Date(fall.endMs).toISOString(), iso(atEdmonton("2026-11-04", 0)));
   assertEquals([fall.from, fall.to], ["2026-11-01", "2026-11-04"]);
-  // 15 Mar 2027 06:00 MDT. Yesterday, 14 Mar, began at 00:00 MST; 17 Mar begins at 00:00 MDT.
-  const spring = windowFor(at("2027-03-15T12:00:00Z"));
+  // 15 Mar 2027 06:00 Edmonton: yesterday is 14 Mar, and the window ends as 17 Mar begins.
+  const spring = windowFor(atEdmonton("2027-03-15", 6));
   assertEquals(spring.today, "2027-03-15");
-  assertEquals(new Date(spring.startMs).toISOString(), "2027-03-14T07:00:00.000Z");
-  assertEquals(new Date(spring.endMs).toISOString(), "2027-03-17T06:00:00.000Z");
+  assertEquals(new Date(spring.startMs).toISOString(), iso(atEdmonton("2027-03-14", 0)));
+  assertEquals(new Date(spring.endMs).toISOString(), iso(atEdmonton("2027-03-17", 0)));
 });
 
 Deno.test("startOfEdmontonDay and addDays", () => {
+  // January 2026 is before Alberta Time began, so Edmonton is UTC-7 under either rule.
   assertEquals(startOfEdmontonDay("2026-01-15").toISOString(), "2026-01-15T07:00:00.000Z");
   assertEquals(startOfEdmontonDay("2026-07-15").toISOString(), "2026-07-15T06:00:00.000Z");
   assertEquals(addDays("2026-12-31", 1), "2027-01-01");

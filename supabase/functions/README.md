@@ -303,14 +303,34 @@ can go out are set in the function, not in cron: `SEND_WINDOW` in `_shared/push_
 outside the window skips without recording anything, and a tick inside it only sends when a sport
 has a new lead, so the one-a-day promise holds.
 
-Alberta has kept UTC-6 all year since 1 November 2026, so Edmonton is one hour behind Toronto in
-winter and two in summer. In Toronto time the window is 08:00 to 21:00 in winter and 09:00 to 22:00
-in summer. The Supabase edge runtime has that rule. A local deno or node with older timezone data
-still puts an Edmonton winter at UTC-7, so never test an Edmonton time with a hard-coded UTC
-instant: use `atEdmonton()` in `_shared/edmonton_testkit.ts`. Some older tests and comments
-(`scores-poll/days_test.ts`, `scores-poll/plan_test.ts`, the end-of-day cases in
-`daily-push/leads_test.ts`, and comments in `_shared/push_guard.ts`) still describe the old winter
-offset. The code they cover reads the offset from the runtime and is right in production. Each call reads its guard
+Alberta has kept UTC-6 all year since 1 November 2026 ("Alberta Time"; tzdata 2026f models
+America/Edmonton that way). The founder ruled on 16 November 2026 that the push window stays on
+Edmonton's clock, 07:00 to 21:00, and asked only that it is written down and has no problem when
+clocks change. Because Edmonton no longer changes its clocks, the hourly ticks that can send are the
+same 14 every day of the year, 13:00 to 02:00 UTC. Toronto still changes its clocks, so in Eastern
+time the window is 08:00 to 21:00 in winter and 09:00 to 22:00 in summer. The Eastern hours move by
+one hour on 14 March 2027, when Toronto springs forward, and back on 7 November 2027, when it falls
+back. Nothing in the functions changes on those dates.
+
+The Supabase edge runtime has the new rule. A local deno or node with older timezone data (deno
+2.9.8, which CI also pins, carries tz 2026b) still puts an Edmonton winter at UTC-7. Production code
+reads the offset from the runtime, so it is right on the edge runtime. No test assumes a fixed
+offset for Edmonton any more: every Edmonton time in a test after 1 November 2026 comes from
+`atEdmonton()` or `atWallClock()` in `_shared/edmonton_testkit.ts`, so the suites pass under the old
+rule and the new one and will keep passing when deno's timezone data is updated. Never test an
+Edmonton time with a hard-coded UTC instant.
+
+These deployed files still have comments that describe the old winter offset or Edmonton's clock
+changes. The code under them is right. Correct the comments at the next deploy of each function, so
+the deployed bytes and the repo stay equal until then:
+
+- `daily-push/leads.ts` line 73: "-6h in summer, -7h in winter".
+- `daily-push/leads.ts` line 91: "Edmonton changes its clocks at 02:00".
+- `scores-poll/plan.ts` line 29: "-6h in summer, -7h in winter".
+- `scores-poll/plan.ts` line 53: "Edmonton changes its clocks at 02:00".
+- `_shared/push_guard.ts` line 16: "winter, UTC-7" and "summer, UTC-6".
+
+Each cron call reads its guard
 secret from Vault (`push_secret`, `triage_secret`) when it runs, so no secret sits in `cron.job`.
 Do not paste a `cron.schedule` with a literal secret into the SQL editor: set the Vault secret and
 apply the migration instead. It leaves a job alone when its Vault secret is missing, so a working job

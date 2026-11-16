@@ -270,24 +270,29 @@ Deno.test("every token shipped before the sport field still gets the football pu
 
 // ---- C126: APNs expiry and collapse ----
 
+// Edmonton times come from the runtime's own rules (atEdmonton), never a hard-coded winter offset:
+// Alberta has kept UTC-6 all year since 1 November 2026, and older timezone data still says UTC-7.
+const secs = (d: Date) => Math.floor(d.getTime() / 1000);
+
 Deno.test("endOfEdmontonDay is the next Edmonton midnight, summer and winter", () => {
-  // 09:00 MDT (UTC-6) on 12 Oct -> 00:00 MDT on 13 Oct.
-  assertEquals(endOfEdmontonDay(new Date("2026-10-12T15:00:00Z")), iso("2026-10-13T06:00:00Z"));
-  // 23:30 MDT on 12 Oct, already the 13th in UTC -> 30 minutes away.
-  assertEquals(endOfEdmontonDay(new Date("2026-10-13T05:30:00Z")), iso("2026-10-13T06:00:00Z"));
-  // 13:00 MST (UTC-7) on 1 Dec -> 00:00 MST on 2 Dec.
-  assertEquals(endOfEdmontonDay(new Date("2026-12-01T20:00:00Z")), iso("2026-12-02T07:00:00Z"));
+  // 09:00 on 12 Oct -> 00:00 on 13 Oct.
+  assertEquals(endOfEdmontonDay(atEdmonton("2026-10-12", 9)), secs(atEdmonton("2026-10-13", 0)));
+  // 23:30 on 12 Oct, already the 13th in UTC -> 30 minutes away.
+  assertEquals(endOfEdmontonDay(atEdmonton("2026-10-12", 23, 30)), secs(atEdmonton("2026-10-13", 0)));
+  // 13:00 on 1 Dec, a winter day -> 00:00 on 2 Dec.
+  assertEquals(endOfEdmontonDay(atEdmonton("2026-12-01", 13)), secs(atEdmonton("2026-12-02", 0)));
   // Exactly midnight belongs to the new day, which ends 24 hours later.
-  assertEquals(endOfEdmontonDay(new Date("2026-10-13T06:00:00Z")), iso("2026-10-14T06:00:00Z"));
+  assertEquals(endOfEdmontonDay(atEdmonton("2026-10-13", 0)), secs(atEdmonton("2026-10-14", 0)));
 });
 
 Deno.test("endOfEdmontonDay across both clock changes", () => {
-  // Clocks go back 02:00 MDT, 1 Nov 2026. The 31st ends on MDT, the 1st (25 hours) on MST.
-  assertEquals(endOfEdmontonDay(new Date("2026-10-31T18:00:00Z")), iso("2026-11-01T06:00:00Z"));
-  assertEquals(endOfEdmontonDay(new Date("2026-11-01T12:00:00Z")), iso("2026-11-02T07:00:00Z"));
-  // Clocks go forward 02:00 MST, 14 Mar 2027. The 13th ends on MST, the 14th (23 hours) on MDT.
-  assertEquals(endOfEdmontonDay(new Date("2027-03-13T18:00:00Z")), iso("2027-03-14T07:00:00Z"));
-  assertEquals(endOfEdmontonDay(new Date("2027-03-14T18:00:00Z")), iso("2027-03-15T06:00:00Z"));
+  // 1 Nov 2026 and 14 Mar 2027 are the old fall-back and spring-forward days. Under Alberta Time
+  // neither changes the clock; under the old rule the 1st has 25 hours and the 14th has 23. Either
+  // way each day ends at the next Edmonton midnight, which is what is asserted here.
+  assertEquals(endOfEdmontonDay(atEdmonton("2026-10-31", 12)), secs(atEdmonton("2026-11-01", 0)));
+  assertEquals(endOfEdmontonDay(atEdmonton("2026-11-01", 5)), secs(atEdmonton("2026-11-02", 0)));
+  assertEquals(endOfEdmontonDay(atEdmonton("2027-03-13", 11)), secs(atEdmonton("2027-03-14", 0)));
+  assertEquals(endOfEdmontonDay(atEdmonton("2027-03-14", 12)), secs(atEdmonton("2027-03-15", 0)));
 });
 
 Deno.test("endOfEdmontonDay is always in the future and at most 25 hours out", () => {

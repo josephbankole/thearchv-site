@@ -63,7 +63,7 @@ so they hold whatever code path or key does the insert. The functions only trans
 trigger's abort marker into a clean 429.
 
 `ticket-intake` is capped by `tickets_hourly_cap`, whose current definition is
-`20261115160000_ticket_returning_device_reserve.sql`: 30 tickets an hour globally, 5 an hour per
+`20261115155900_ticket_returning_device_reserve.sql`: 30 tickets an hour globally, 5 an hour per
 `device_id`, plus 15 further slots open only to a device that already filed a ticket before the
 current hour. `ticket-reply` is capped by `ticket_messages_hourly_cap`, whose current definition is
 `20261115191800_ticket_first_message_cap_exempt.sql` (the layers of `20261115160100`, plus a

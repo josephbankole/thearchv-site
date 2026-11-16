@@ -100,7 +100,7 @@ begin
   raise notice 'push_tokens_token_format: ok';
 end $$;
 
--- tickets_hourly_cap reserve (20261115160000) and the reply cap's per-device layer
+-- tickets_hourly_cap reserve (20261115155900) and the reply cap's per-device layer
 -- (20261115160100). Starts from the reply block's rows, which are removed first: the reply block
 -- has already proved tickets started empty.
 do $$

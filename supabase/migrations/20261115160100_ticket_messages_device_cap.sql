@@ -3,7 +3,7 @@
 -- Replaces the function behind ticket_messages_hourly_cap (20261006230000), which allowed 200 user
 -- replies an hour across everyone and 20 an hour per ticket. It keeps both and adds two layers,
 -- after the per-device cap on the 2026-08-08 hardening branch (ea069e4, never applied) and the
--- returning-device reserve that 20261115160000 gives tickets:
+-- returning-device reserve that 20261115155900 gives tickets:
 --
 --   * 60 user replies an hour per device, across all of that device's tickets, so opening more
 --     tickets does not multiply one device's budget. The device is read from the parent ticket.

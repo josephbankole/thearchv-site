@@ -420,7 +420,7 @@ const html = `${documentShell({
           push is on, when the app last registered, and the day we last sent that phone a
           notification. We use them to send one notification a day through Apple's push
           service. Our server does not store the time zone at present. Turning the toggle off
-          stops the push.</li>
+          stops the push, and the token is deleted 30 days later.</li>
           <li><strong>Support messages.</strong> If you write to us through Settings, we
           store your message, the category you picked, the app version, and the anonymous id,
           along with anything you add to the conversation later. An email address is
@@ -496,11 +496,34 @@ const html = `${documentShell({
         <p>Android visitors to the <a href="/app/">app page</a> see a waitlist. Joining it
         stores your email address, your browser's user agent (the line of text that names
         your browser and operating system), and the page you signed up on, in the same
-        Supabase database. We use the address to tell you when the Android app is
-        ready, and delete it 90 days after that email goes out. To stop one source flooding
-        the list, our server also keeps a one-way hash of the IP address you joined from,
-        with a count of sign-ups from it in that hour. Old counts are removed as new sign-ups
-        come in.</p>
+        Supabase database. We use the address only to tell you when the Android app is
+        ready. We keep it until then, and there is no fixed date yet for deleting the list
+        after that email goes out. To stop one source flooding the list, our server also keeps
+        a one-way hash of the IP address you joined from, with a count of sign-ups from it in
+        that hour. The raw IP address is not stored, and each count is deleted a day after the
+        hour it covers.</p>
+
+        <h3>How long we keep it</h3>
+        <ul class="about__list">
+          <li><strong>Support conversations.</strong> Once a conversation is marked resolved
+          or closed, it is deleted 12 months after the last change or message on it, with every
+          message in it and your email address if you gave one. A conversation that is still
+          open is kept until it is closed and those 12 months pass, or until you delete it from
+          the app.</li>
+          <li><strong>Push tokens.</strong> A token you switch off is deleted 30 days later. A
+          token Apple reports as no longer working, for example after the app is deleted, is
+          removed by the daily notification run once Apple reports it. A token that is switched
+          on and still working is kept while push stays on.</li>
+          <li><strong>Reply checks.</strong> When the app checks for support replies or asks
+          us to delete its data, our server notes the anonymous id and the time, to limit how
+          often that can happen. Each note is deleted after two hours.</li>
+          <li><strong>Waitlist emails.</strong> Kept until the Android app is ready, as above,
+          with no fixed deletion date yet.</li>
+          <li><strong>Copies outside the database.</strong> An email already sent to the
+          founder about a support message stays in his inbox until he deletes it. Supabase also
+          keeps backups of the database, and a deleted entry can stay in a backup until that
+          backup expires.</li>
+        </ul>
 
         <h3>Deleting your data</h3>
         <p>In the app, Settings has a Delete my data button. It deletes, straight away, every

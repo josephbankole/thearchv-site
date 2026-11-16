@@ -108,9 +108,11 @@ A `201` with a `ticket_id` means it works. Check the row in the Supabase Table E
 
 ## How the app-facing functions are laid out
 
-`register-push`, `ticket-intake` and `ticket-reply` keep their request handling in `handler.ts`, which takes the
-environment and a small database interface as arguments, and `index.ts` only wires that to the
-service-role client. `handler_test.ts` beside each one runs the handler against fakes: the guard
+`register-push`, `ticket-intake`, `ticket-reply`, `ticket-thread` and `delete-device-data` keep
+their request handling in `handler.ts`, which takes the environment and a small database interface
+as arguments, and `index.ts` only wires that to the service-role client. `android-waitlist` does
+the same with the environment and `fetch` as its arguments, since it talks to the database over
+REST. `handler_test.ts` beside each one runs the handler against fakes: the guard
 modes (missing, wrong and unset header), `opt_in: false` landing as an update with the hourly cap
 full, the cap markers mapping to 429, where a follow-up goes, and the input checks.
 `_shared/appGuard_test.ts` covers both guards on their own, and `_shared/triage_test.ts` runs the
@@ -941,7 +943,7 @@ limiter error and lets the signup through, and nothing else calls the RPC.
 
 ### Still open, and the founder's call
 
-- **A challenge (Cloudflare Turnstile).** `verifyChallenge()` in `android-waitlist/index.ts` is
+- **A challenge (Cloudflare Turnstile).** `verifyChallenge()` in `android-waitlist/handler.ts` is
   scaffolded and does nothing until `WAITLIST_CAPTCHA_SECRET` is set. Turning it on needs a site
   key and the widget on `public/app/index.html` sending `captcha_token`, then the deploy, then the
   secret, in that order, so no real signup is refused part way.

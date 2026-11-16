@@ -7,7 +7,7 @@
 // route where cf-connecting-ip does not arrive.
 //
 // Neither makes the cap a trust boundary. A caller with many real addresses still gets many
-// buckets; the challenge (verifyChallenge in index.ts) is what tells a person from a script.
+// buckets; the challenge (verifyChallenge in handler.ts) is what tells a person from a script.
 // Empty when nothing usable arrived; the caller then skips the per-IP cap rather than putting
 // every such request in one bucket.
 

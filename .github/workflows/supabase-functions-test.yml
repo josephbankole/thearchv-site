@@ -1,0 +1,34 @@
+name: Edge Function tests
+
+# Runs every Supabase Edge Function test suite (supabase/functions/test.sh) whenever the functions
+# change. Function deploys happen by hand, outside this repo's Pages deploy, so this is the gate a
+# change meets before it can be deployed; the deploy checklist in supabase/functions/README.md asks
+# for the same command green. src/data/sports.ts is in the paths because _shared/sports_test.ts
+# checks the function's sport list against it.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "supabase/functions/**"
+      - "src/data/sports.ts"
+      - ".github/workflows/supabase-functions-test.yml"
+  pull_request:
+    paths:
+      - "supabase/functions/**"
+      - "src/data/sports.ts"
+      - ".github/workflows/supabase-functions-test.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deno-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.8
+      - run: bash supabase/functions/test.sh

@@ -3,13 +3,23 @@
 // Secrets: ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, ZOHO_ACCOUNT_ID, FOUNDER_EMAIL.
 // Best effort: never throws. Returns false if not configured or the send fails; callers treat the
 // escalation/alert as already recorded elsewhere and the email as a bonus, not a dependency.
+// Every false is logged with which step failed (never a token or an address), so a revoked
+// refresh token shows in the function logs instead of only as missing email.
+// The start of the internal ticket note left when a founder email about a ticket does not go.
+// health-probe counts these notes (check k), so a revoked refresh token or a refused send shows
+// up as an alert instead of only as missing email.
+export const FOUNDER_MAIL_FAILED = "founder email failed";
+
 export async function sendFounderMail(subject: string, content: string): Promise<boolean> {
   const clientId = Deno.env.get("ZOHO_CLIENT_ID");
   const clientSecret = Deno.env.get("ZOHO_CLIENT_SECRET");
   const refreshToken = Deno.env.get("ZOHO_REFRESH_TOKEN");
   const accountId = Deno.env.get("ZOHO_ACCOUNT_ID");
   const to = Deno.env.get("FOUNDER_EMAIL");
-  if (!clientId || !clientSecret || !refreshToken || !accountId || !to) return false; // not configured yet
+  if (!clientId || !clientSecret || !refreshToken || !accountId || !to) {
+    console.error("zoho: founder mail not sent, Zoho secrets not configured");
+    return false;
+  }
   try {
     const tokenRes = await fetch("https://accounts.zohocloud.ca/oauth/v2/token", {
       method: "POST",
@@ -22,7 +32,10 @@ export async function sendFounderMail(subject: string, content: string): Promise
       }),
     });
     const { access_token } = await tokenRes.json();
-    if (!access_token) return false;
+    if (!access_token) {
+      console.error(`zoho: founder mail not sent, token refresh answered ${tokenRes.status} with no access token`);
+      return false;
+    }
     const res = await fetch(`https://zmail.zohocloud.ca/api/accounts/${accountId}/messages`, {
       method: "POST",
       headers: { authorization: `Zoho-oauthtoken ${access_token}`, "content-type": "application/json" },
@@ -34,8 +47,10 @@ export async function sendFounderMail(subject: string, content: string): Promise
         content,
       }),
     });
+    if (!res.ok) console.error(`zoho: founder mail not sent, send answered ${res.status}`);
     return res.ok;
-  } catch {
+  } catch (e) {
+    console.error(`zoho: founder mail not sent, request failed: ${String(e).slice(0, 120)}`);
     return false; // email is best effort; the caller's own record of the event already exists
   }
 }

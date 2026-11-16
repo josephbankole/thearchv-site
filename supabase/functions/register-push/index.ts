@@ -1,66 +1,24 @@
-// register-push: the app registers or updates its APNs token and opt-in state here.
-// POST { device_id, token, opt_in?, app_version?, sport? }
-// -> { ok }
-// Upserts on the token, so re-registering the same device is idempotent. A user turning the daily
-// push off sends opt_in:false, which the daily dispatch job respects.
-//
-// `sport` (optional) is the sport the reader picked on Home, so daily-push can send them that
-// sport's lead. Any value is accepted and resolved, never rejected: a known feed key is stored
-// as itself; "all", the wrong shape or a key this server does not know yet is stored as
-// football. A request without the field leaves the stored sport alone (null on a new row, which
-// daily-push also reads as football), so every shipped build keeps getting the football push.
-import { corsHeaders, json, adminClient } from "../_shared/cors.ts";
-import { checkAppSecretSoft } from "../_shared/appGuard.ts";
-import { resolveSport, unknownSportKey } from "../_shared/sports.ts";
+// register-push entry point. The request handling lives in handler.ts (tested in handler_test.ts);
+// this file only wires it to the service-role client.
+import { adminClient } from "../_shared/cors.ts";
+import { realEnv } from "../_shared/http.ts";
+import { handleRegisterPush, type PushTokenStore } from "./handler.ts";
 
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-  if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
-
-  // Soft app-secret guard (founder-approved 2026-09-26). Builds up to 1.5.5 never sent
-  // x-archv-app on this path, so the hard guard refused every registration from 2026-07-22.
-  // See checkAppSecretSoft in _shared/appGuard.ts; the DB caps below remain the real backstop.
-  const guardResp = checkAppSecretSoft(req, "register-push");
-  if (guardResp) return guardResp;
-
-  let payload: Record<string, unknown>;
-  try {
-    payload = await req.json();
-  } catch {
-    return json({ error: "invalid json" }, 400);
-  }
-
-  const device_id = typeof payload.device_id === "string" ? payload.device_id.trim() : "";
-  const token = typeof payload.token === "string" ? payload.token.trim() : "";
-  if (!device_id) return json({ error: "device_id required" }, 400);
-  if (!token) return json({ error: "token required" }, 400);
-
-  const opt_in = typeof payload.opt_in === "boolean" ? payload.opt_in : true;
-  const app_version = typeof payload.app_version === "string" ? payload.app_version.slice(0, 40) : null;
-
-  const row: Record<string, unknown> = { device_id, token, opt_in, app_version, last_seen: new Date().toISOString() };
-  if (payload.sport !== undefined) {
-    row.sport = resolveSport(payload.sport);
-    // A well-formed key this server does not publish yet (an app build ahead of the server) is
-    // stored as football and logged, so it shows up. Only a shape-checked value is echoed.
-    const unknown = unknownSportKey(payload.sport);
-    if (unknown) console.log(JSON.stringify({ fn: "register-push", unknownSport: unknown }));
-  }
-
+Deno.serve((req) => {
   const supabase = adminClient();
-
-  const { error } = await supabase
-    .from("push_tokens")
-    .upsert(row, { onConflict: "token" });
-  if (error) {
-    // The DB-side rate caps (push_tokens_rate_cap trigger) abort the insert with this marker.
-    // Surface it as a clean 429 rather than a 500 so the app can back off quietly.
-    if (/push_token_rate_limited/.test(error.message)) {
-      return json({ error: "rate limited, please try again later" }, 429);
-    }
-    console.error("register-push: db error", error.message);
-    return json({ error: "server_error" }, 500);
-  }
-
-  return json({ ok: true }, 200);
+  const store: PushTokenStore = {
+    async exists(token) {
+      const { data, error } = await supabase.from("push_tokens").select("id").eq("token", token).maybeSingle();
+      return error ? { exists: false, error: error.message } : { exists: Boolean(data) };
+    },
+    async update(token, row) {
+      const { error } = await supabase.from("push_tokens").update(row).eq("token", token);
+      return error ? { error: error.message } : {};
+    },
+    async upsert(row) {
+      const { error } = await supabase.from("push_tokens").upsert(row, { onConflict: "token" });
+      return error ? { error: error.message } : {};
+    },
+  };
+  return handleRegisterPush(req, { env: realEnv, store });
 });

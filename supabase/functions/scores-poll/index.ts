@@ -33,12 +33,12 @@ import { makeApiGet } from "./api.ts";
 import { runBackfill } from "./backfill.ts";
 import { isStep } from "./season.ts";
 import { runSeasonStep } from "./season_run.ts";
-import { rowFromState, runPoll, stateFromRow } from "./poll.ts";
+import { nextWriteFailedSince, rowFromState, runPoll, saveStateRow, stateFromRow } from "./poll.ts";
 import { canonicalJson, seasonFor } from "./plan.ts";
 
 const BUCKET = "live";
-const STATE_COLUMNS =
-  "schedule_fetched_at, window_day, matches, finished_at, file_hashes, backoff_until";
+// Every column, so a row from before migration 20261115170200 (no write_failed_since) still reads.
+const STATE_COLUMNS = "*";
 const SEASON_COLUMNS =
   "season, listed_at, matches, built_at, file_hashes, remaining, remaining_at, backoff_until, updated_at";
 // Names a storage listing returns per page, the API's maximum.
@@ -160,7 +160,7 @@ Deno.serve(async (req) => {
   }
   const before = stateFromRow(row);
 
-  const { summary, state, writeFailed } = await runPoll(before, {
+  const { summary, state, writeFailed, writesAttempted } = await runPoll(before, {
     now,
     season,
     api: makeApiGet(apiKey),
@@ -169,13 +169,39 @@ Deno.serve(async (req) => {
     publishPlayers,
   });
 
-  // Save the state only if the run changed it, so a quiet minute is a single read.
+  // When the current run of failed uploads began (health-probe reads it). Tracked only once the
+  // column exists, so this function can go out before its migration without breaking the state write.
+  const tracksWrites = !!row && "write_failed_since" in row;
+  const failedBefore = tracksWrites && typeof row.write_failed_since === "string" ? row.write_failed_since : null;
+  const failedSince = nextWriteFailedSince(failedBefore, { writeFailed, writesAttempted }, now);
+  const failedChanged = tracksWrites && failedSince !== failedBefore;
+
+  // Save the state only if the run changed it, so a quiet minute is a single read. The save is
+  // conditional on the updated_at read above (saveStateRow), so a slow run that overlaps the next
+  // minute's cannot roll its newer state back.
   let stateFailed = false;
-  if (canonicalJson(state) !== canonicalJson(before)) {
-    const { error } = await supabase.from("scores_poll_state").upsert(rowFromState(state, now));
-    if (error) {
+  if (canonicalJson(state) !== canonicalJson(before) || failedChanged) {
+    const next = rowFromState(state, now);
+    const saved = await saveStateRow(
+      {
+        create: async (r) => {
+          const { error } = await supabase.from("scores_poll_state").upsert(r);
+          return { error: error?.message ?? null };
+        },
+        updateIf: async (r, readUpdatedAt) => {
+          const { data, error } = await supabase.from("scores_poll_state")
+            .update(r).eq("id", 1).eq("updated_at", readUpdatedAt).select("id");
+          return { error: error?.message ?? null, matched: data?.length ?? 0 };
+        },
+      },
+      tracksWrites ? { ...next, write_failed_since: failedSince } : next,
+      row && typeof row.updated_at === "string" ? row.updated_at : null,
+    );
+    if (saved === "stale") {
+      console.log("scores-poll: state save skipped, a later run saved first");
+    } else if (saved !== "saved") {
       stateFailed = true;
-      console.error(`scores-poll: state write failed: ${error.message}`);
+      console.error(`scores-poll: state write failed: ${saved.error}`);
     }
   }
 

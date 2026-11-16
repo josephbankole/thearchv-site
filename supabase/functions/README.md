@@ -13,6 +13,20 @@ key and never sees the service role key.
 
 ## Deploy
 
+**Before any function deploy, run every suite and deploy nothing on red:**
+
+```
+bash supabase/functions/test.sh
+```
+
+It runs `deno test --no-remote` in each folder here that holds a `*_test.ts` file, then the
+scores-poll app fixtures drift check when the app repo is on disk (see below), and the
+`Edge Function tests` workflow (`.github/workflows/supabase-functions-test.yml`) runs the same
+script on every push and pull request that touches `supabase/functions/`. Deploys go out by hand
+(CLI or the Supabase MCP), so that workflow only helps if its run for the commit being deployed is
+green: check it, or run the script, first. In a sparse checkout without `src/`, the `_shared`
+suite cannot find `src/data/sports.ts` and fails for that reason alone.
+
 You need the Supabase CLI once. Install it (`brew install supabase/tap/supabase`), then from
 `thearchv-site/`:
 
@@ -23,12 +37,60 @@ supabase functions deploy ticket-intake --no-verify-jwt
 supabase functions deploy ticket-thread --no-verify-jwt
 supabase functions deploy ticket-reply  --no-verify-jwt
 supabase functions deploy register-push --no-verify-jwt
+supabase functions deploy delete-device-data --no-verify-jwt
 ```
 
-`--no-verify-jwt` is correct here: the app has no login, so there is no user token to verify. The
-Supabase gateway still requires the project's publishable key to invoke a function, so these are
-not open to the wider internet. `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected by the
-platform, so there are no secrets to set for these four.
+`--no-verify-jwt` is correct here: the app has no login, so there is no user token to verify. It
+also means the gateway does not check the publishable key, so these functions are reachable by
+anyone, and the key is public anyway because it ships in the app. The `x-archv-app` header is a
+tripwire for the same reason. What holds is in the data path: the database caps below, and
+`register-push` updating a token it already holds instead of inserting, so an opt-out or a token
+refresh never meets the hourly insert cap. `register-push` still accepts a missing header from
+builds before 1.5.6; a wrong one is refused. `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected by the
+platform, so there are no secrets to set for these five.
+
+`delete-device-data` is the app's "Delete my data" action: POST `{ device_id }` with the
+`x-archv-app` header deletes that device's tickets (their messages go with them) and push tokens,
+and answers `{ ok, tickets, push_tokens }` with counts only. It uses the hard header guard and
+logs a row in `ticket_thread_requests`, so ticket-thread's caps (30 an hour per device, 3,000 in
+all) bound it too. The device_id is the only key, as it is for reading the inbox. Nothing calls it
+until an app build ships the Settings action.
+
+## The rate caps live in the database, not in these functions
+
+The ticket and push-token ceilings are BEFORE INSERT triggers defined in `supabase/migrations/`,
+so they hold whatever code path or key does the insert. The functions only translate the
+trigger's abort marker into a clean 429.
+
+`ticket-intake` is capped by `tickets_hourly_cap`, whose current definition is
+`20261115160000_ticket_returning_device_reserve.sql`: 30 tickets an hour globally, 5 an hour per
+`device_id`, plus 15 further slots open only to a device that already filed a ticket before the
+current hour. `ticket-reply` is capped by `ticket_messages_hourly_cap`, whose current definition is
+`20261115191800_ticket_first_message_cap_exempt.sql` (the layers of `20261115160100`, plus a
+ticket's opening message from `ticket-intake`, which is never refused). `ticket-thread` is capped
+by `tg_ticket_thread_requests_cap`, whose current definition is
+`20261115191900_ticket_thread_requests_bounds.sql`: 30 lookups an hour per `device_id`, 3,000 an
+hour across all devices, and a `device_id` of at most 128 characters; the pg_cron job
+`ticket-thread-requests-prune` deletes its rows older than 2 hours every 15 minutes. `device_id` is chosen by the app, so these raise
+the cost of filling a cap rather than remove it; each migration header says what it does and does
+not cover.
+
+## Retention
+
+`20261115200200_retention_purge.sql` adds `retention_purge()` and the daily pg_cron job
+`archv-retention-purge` (03:40 UTC). It deletes a finished ticket (`resolved_l1`, `resolved_l2`,
+`resolved`, `closed`) with no change and no message for 12 months, with its messages, and a push
+token switched off (`opt_in` false) and unchanged for 30 days. Open and escalated tickets are never
+deleted by it. The periods are constants at the top of the function, defaults for the founder to
+change, and the privacy policy should state the same ones. `android_waitlist` has no period yet: it
+is kept until the Android launch email, which has no date. `supabase/tests/retention.sql` checks it
+against a local database, the same way as `rate_caps.sql`. Calling `select public.retention_purge();`
+deletes for real; to see what the first live run will remove, run its two `where` clauses as a
+`select count(*)` before applying the migration.
+
+Apply migrations with `supabase db push` (they are also applied live via the migration API).
+There is no ordering requirement between that and `supabase functions deploy`: the abort marker
+(`ticket_rate_limited`) is unchanged, so either half works against either version of the other.
 
 ## Test one quickly
 
@@ -44,6 +106,29 @@ curl -i -X POST \
 
 A `201` with a `ticket_id` means it works. Check the row in the Supabase Table Editor.
 
+## How the app-facing functions are laid out
+
+`register-push`, `ticket-intake` and `ticket-reply` keep their request handling in `handler.ts`, which takes the
+environment and a small database interface as arguments, and `index.ts` only wires that to the
+service-role client. `handler_test.ts` beside each one runs the handler against fakes: the guard
+modes (missing, wrong and unset header), `opt_in: false` landing as an update with the hourly cap
+full, the cap markers mapping to 429, where a follow-up goes, and the input checks.
+`_shared/appGuard_test.ts` covers both guards on their own, and `_shared/triage_test.ts` runs the
+triage core (`_shared/triage.ts`) against a fake database, model and mailer. The real triage
+dependencies are built in `_shared/triage_db.ts`. `corsHeaders` and `json` live in `_shared/http.ts`, which imports nothing, and
+`_shared/cors.ts` re-exports them, so a function that deploys `_shared/cors.ts` must deploy
+`_shared/http.ts` with it.
+
+The database caps have a check script of their own, `supabase/tests/rate_caps.sql`. Run it only
+against a local database (`supabase start`); it works inside a transaction it rolls back, and it
+refuses to start if the tables already hold rows. Every capped table also takes a table lock in
+its first BEFORE INSERT trigger (`_rate_cap_lock`, 20261115200000) so a burst counts one insert at
+a time; a new cap trigger needs no lock of its own, but its table must be in that migration's list:
+
+```
+psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -f supabase/tests/rate_caps.sql
+```
+
 ## Automatic triage: support-triage
 
 `support-triage` runs the L1 agent automatically the moment a ticket is inserted. It reads the new
@@ -55,36 +140,67 @@ Secrets:
 ```
 # Anthropic key (already set if you ran the secrets command earlier)
 supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
-# A random guard so only the webhook can call this paid endpoint. Make one up, any long string.
+# A random guard so only the tickets_triage trigger can call this paid endpoint. Make one up, any long string.
 supabase secrets set TRIAGE_SECRET=<a-long-random-string>
 
-# Optional: email the founder when a ticket escalates to L3. Skipped cleanly until these are set.
-supabase secrets set RESEND_API_KEY=re_...
-supabase secrets set FOUNDER_EMAIL=folaban@gmail.com
-supabase secrets set SUPPORT_FROM_EMAIL="The ARCHV <support@mail.thearchv.ca>"   # must be a Resend-verified domain
+# The founder email (Zoho Mail, Canadian data centre, see _shared/zoho.ts). Skipped cleanly until
+# all five are set, and every ticket is still recorded in the database either way.
+supabase secrets set ZOHO_CLIENT_ID=... ZOHO_CLIENT_SECRET=... ZOHO_REFRESH_TOKEN=... ZOHO_ACCOUNT_ID=...
+# FOUNDER_EMAIL is both the sender and the recipient of these emails (zoho.ts), so it must be a
+# mailbox of the Zoho account the refresh token belongs to: Zoho refuses a send from any other address.
+supabase secrets set FOUNDER_EMAIL=<the founder's Zoho mailbox>
+# Optional: override the triage model without a code change.
+supabase secrets set TRIAGE_MODEL=<model id>
 ```
-
-After adding the Resend secrets, redeploy so the function picks up the L3-email code:
-`supabase functions deploy support-triage --no-verify-jwt`
 
 Deploy:
 ```
 supabase functions deploy support-triage --no-verify-jwt
 ```
 
-Wire the database webhook (Dashboard):
-1. Database, Webhooks, Create a new hook.
-2. Table `public.tickets`, event `INSERT`.
-3. Type "Supabase Edge Functions", choose `support-triage`.
-4. Add an HTTP header: name `x-triage-secret`, value the same string you set as `TRIAGE_SECRET`.
-5. Save. Now every new ticket is triaged within a second or two.
+The hook is already in the database: no Dashboard webhook is needed, and adding one would
+triage every ticket twice. Migration `20260713221000_tickets_triage_vault_header.sql` creates
+the `tickets_triage` trigger on `public.tickets` (`AFTER INSERT`), which calls `support-triage`
+through `pg_net` with the `x-triage-secret` header read from Vault. For it to work, Vault must
+hold `triage_secret` (the same string as `TRIAGE_SECRET`) and `publishable_key`. Under Database,
+Webhooks, there should be nothing for `tickets`; delete any hook there that calls
+`support-triage`. As a backstop, the triage core claims a ticket before it does anything (one
+conditional update from `new` or `pending_triage` to `l1_working`), so a second call for the same
+ticket is skipped before any paid call. A claim left at `l1_working` for 30 minutes counts as
+abandoned: triage-drain picks it up again and health-probe counts it as waiting.
 
 To test end to end: run the `ticket-intake` curl above, then check the ticket row. Within a moment
 its status should move to `resolved_l1`, `l2_working`, or `escalated_l3`, and `ticket_messages`
 should hold the L1 reply.
 
-L2 still runs as the `archv-support-l2` Claude agent (it does deeper investigation that suits a
-human-in-the-loop or scheduled run rather than a per-ticket function). L3 is you.
+### Who picks up what
+
+There is no L2 agent. Nothing reads `l2_working` on its own, so the founder handles L2 and L3
+alike, and the functions email him for both:
+
+| What happens | Ticket ends up | Who is told |
+| --- | --- | --- |
+| L1 resolves it | `resolved_l1` | nobody |
+| L1 picks resolve but writes no reply | `l2_working`, tier `l2`; the user gets a fixed holding line | founder email, "L2 escalation (resolve with no reply)" |
+| Any founder email about a ticket fails to send | unchanged; an internal note starting `founder email failed` | founder alert from health-probe, "ARCHV health: ticket-mail failing", with the count only |
+| L1 escalates to L2 | `l2_working`, tier `l2` | founder email, "L2 escalation" |
+| L1 escalates to L3 | `escalated_l3`, tier `l3` | founder email, "L3 escalation" |
+| The model answers with an action it was not offered | `l2_working`, tier `l2` | founder email, "L2 escalation (unreadable triage action)" |
+| A triage attempt fails (API error or unreadable answer) | `pending_triage`, `triage_attempts` up by one | nobody yet; triage-drain retries within the hour |
+| A ticket waits at `new`, `pending_triage` or `l1_working` with nothing touching it for over 2 hours (the trigger never ran, a triage run died, or the drain is not running or not keeping up) | unchanged | founder email from health-probe, "ARCHV health: tickets failing", with the count only |
+| The third attempt fails | `l2_working`, tier `l2` | founder email, "Triage failed" |
+| The user replies on an L1 ticket that was resolved (or left at `l1_working`) | `pending_triage` | nobody; triage-drain triages it with the whole conversation |
+| The user replies on an L2 or L3 ticket | reopened if it was resolved | founder email, "Ticket follow-up", at most one per ticket every 6 hours (each email leaves an internal system note that sets the clock) |
+
+An attempt that ends in an Anthropic API error makes no paid call, so it gives its place under the
+daily ceiling back (`triage_permit_release`). triage-drain takes the tickets with the fewest failed
+attempts first, then the oldest, so a ticket that keeps failing cannot hold up the queue.
+
+Deploy order for this: apply `supabase/migrations/20261115120500_triage_attempts.sql` first (the
+drain orders by its new column), then deploy `support-triage`, `triage-drain` and `ticket-reply`.
+The migration also moves tickets already stuck at `new` or `l1_working` for over an hour to
+`pending_triage`, so the next drain picks them up. To see how many that is before applying:
+`select status, count(*) from public.tickets where status in ('new','l1_working') and updated_at < now() - interval '1 hour' group by status;`
 
 ## Daily push: daily-push
 
@@ -105,7 +221,9 @@ that skips or fails never holds up the next. For each one it:
 3. Compares the lead's identity (its date, section and url) with the last lead pushed for that
    sport. It sends only a lead it has not pushed before and that is no older than the last one, and
    it sends at most once per editorial day (America/Edmonton). A new date in some other lane does not
-   make an old lead new.
+   make an old lead new. It sends only between 07:00 and 21:00 Edmonton time (`SEND_WINDOW` in
+   `_shared/push_guard.ts`); outside those hours the sport skips without recording anything, so a
+   lead that lands in the evening goes at 07:00 rather than at the first tick after midnight.
 4. Sends a HEAD to the lead's image and article url. If either answers anything but 200, the sport
    waits for the next tick and nothing is recorded.
 5. Records the lead as sent, then claims that sport's tokens for the day with `claim_push_tokens`,
@@ -121,6 +239,14 @@ the exact story.
 Football's state is the `push_state` row, where `last_build_hash` holds the football lead key. Every
 other sport has a row in `push_sport_state`. A sport with no readers still records its lead, so its
 first reader starts with the next new story rather than an old one.
+
+After each fan-out, daily-push writes what it delivered onto the same row: `last_run_at`,
+`last_run_claimed`, `last_run_sent`, `last_run_failed`, `last_run_dead` and up to five
+`last_run_reasons` (`_shared/push_run.ts`, migration `20261115170100_push_run_outcome.sql`, which goes
+in before either function is deployed). The lead is recorded as sent before the sends, so these are
+the only place a run that APNs refused (a revoked key, a wrong `APNS_ENV`) shows up. health-probe
+alerts, as `push-run:<sport>`, when a sport's last run in the past 48 hours sent nothing, failed more
+than half its sends, or found more than 25 dead tokens.
 
 health-probe watches football's row. It alerts when `last_sent_at` is more than 76 hours old and
 today.json's lead is one daily-push would still send, which it works out with the same guard
@@ -139,7 +265,8 @@ supabase secrets set APNS_KEY="$(cat AuthKey_XXXXXX.p8)"   # the whole .p8 file,
 supabase secrets set APNS_KEY_ID=XXXXXXXXXX
 supabase secrets set APNS_TEAM_ID=YYYYYYYYYY
 supabase secrets set APNS_BUNDLE_ID=ca.thearchv.reader
-supabase secrets set APNS_ENV=sandbox      # sandbox for dev/TestFlight, production for App Store
+supabase secrets set APNS_ENV=production   # the default: App Store and TestFlight builds both use production
+                                          # set sandbox only to test with a debug build run from Xcode
 supabase secrets set PUSH_SECRET=<a-long-random-string>   # optional guard, matched by the cron header
 ```
 
@@ -153,18 +280,28 @@ Deploy register-push alongside it whenever the sport list changes:
 supabase functions deploy register-push --no-verify-jwt
 ```
 
-Schedule it with pg_cron (run in the SQL editor). This checks hourly and only sends when a sport has
-a new lead, so it keeps the one-a-day promise. Replace the secret if you set PUSH_SECRET:
-```sql
-select cron.schedule(
-  'archv-daily-push',
-  '0 * * * *',
-  $$ select net.http_post(
-       url := 'https://fpsfnhjxczzyqurzbqpt.supabase.co/functions/v1/daily-push',
-       headers := jsonb_build_object('Content-Type','application/json','x-push-secret','<same-secret>')
-     ); $$
-);
-```
+### Dead-token cleanup is bounded per run
+
+After the fan-out, `daily-push` deletes the tokens APNs reported as `BadDeviceToken` or
+`Unregistered`, at most **25 per run** (`MAX_TOKEN_DELETIONS_PER_RUN` in `daily-push/run.ts`).
+It always deletes when there is anything dead: there is no dead-token count that switches cleanup
+off, which is what stops a table full of junk tokens staying poisoned for good. When there are more
+than 25 dead in one run the response carries `tokenDeletionAnomaly` with `deadTokens`,
+`deletedThisRun` and `totalTokens`, and the overflow waits for the next run. That is the trade: a
+systemic APNs failure (a production token list sent at the sandbox host answers `BadDeviceToken`
+for every token) costs at most 25 rows a run rather than the table, and a large backlog drains 25 a
+run. Raise the constant if a one-off drain needs to go faster, and watch the anomaly field while it
+does.
+
+The schedule is a migration, `supabase/migrations/20261115170000_health_and_cron_from_repo.sql`. It
+runs `archv-daily-push` hourly (it only sends when a sport has a new lead, so the one-a-day promise
+holds), `health-probe` every 30 minutes and `triage-drain` hourly at :20. Each call reads its guard
+secret from Vault (`push_secret`, `triage_secret`) when it runs, so no secret sits in `cron.job`.
+Do not paste a `cron.schedule` with a literal secret into the SQL editor: set the Vault secret and
+apply the migration instead. It leaves a job alone when its Vault secret is missing, so a working job
+is never replaced by one that would be refused. Before applying it on the live project, compare
+`select jobname, schedule, command from cron.job order by jobname;` with the file.
+`supabase/RESTORE.md` lists everything a rebuilt project needs.
 
 ### The sport field
 
@@ -183,7 +320,62 @@ Functions cannot import from outside `supabase/functions`. To add a sport, add i
 
 ### Cron timeouts
 
-The pg_cron jobs for daily-push and health-probe call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
+The pg_cron jobs for daily-push, health-probe and triage-drain call net.http_post with timeout_milliseconds := 60000 (set 2026-10-12, and in the migration above). The pg_net default is 5 seconds, and the per-sport daily-push reads six feeds before it answers: on its first run (v13, 17:30 UTC) the call timed out at 5.0 s while the function finished at 5.4 s. The function completed, but on a send day the fan-out comes after that mark, so the caller now waits.
+
+### What health-probe checks
+
+Every 30 minutes, each failing check emails the founder at most once every 6 hours:
+
+| Check | Fails when |
+| --- | --- |
+| `site` | https://thearchv.ca/ does not answer 200 |
+| `feed` | `/feed/today.json` does not answer 200, or its `lastUpdated` day ended over 72h ago |
+| `lead-image` | today.json's lead image does not answer 200 |
+| `football-lead` | today.json's lead (the newest football entry) is dated over 72h past its day. `lastUpdated` moves with every sport, so only this sees the football desks stop |
+| `push_state`, `push-sport:<sport>` | a sport's last push is over 76h old while its feed carries a lead daily-push has not sent. Checked 08:00 to 20:59 Edmonton only, because daily-push holds a late lead until 07:00 |
+| `push-run:<sport>` | the sport's last fan-out in 48h sent nothing, failed over half, or found over 25 dead tokens |
+| `pages-deploy` | the latest completed Pages deploy failed |
+| `pages-deploy-blind` | the GitHub API has answered the `pages-deploy` check with something unusable (a refusal, an error, no run list) 6 probes in a row, about 3h. One bad reply is only logged. The run is counted in `health_alert_state` row `pages-deploy:skipped` |
+| `scores-poll` | `scores_poll_state.schedule_fetched_at` is over 2h old (the key, the quota, the cron job or the state write) |
+| `scores-write` | `scores_poll_state.write_failed_since` is over 15 minutes old: Storage has refused every scores-poll upload since then, so `scores.json` is frozen while the schedule check stays green |
+| `scores-season` | season mode's newest listing in `scores_season_state.listed_at` is over 7h old |
+| `api-quota` | API-Football's count left today, as season mode last read it, is below 1,500 |
+| `salon-store` | the Salon shop switch (`GET /functions/v1/salon-store`) is not a 200 `gallery-store/1` document |
+| `android-waitlist` | the waitlist's preflight answers 404 or 5xx, or nothing |
+| `tickets` | any support ticket has sat at `new`, `pending_triage` or `l1_working` with nothing touching it for over 2h. The email gives the count only |
+| `ticket-mail` | a founder email about a support ticket (an escalation, a triage that kept failing, a follow-up) failed to send in the last 24h, counted from the internal `founder email failed` notes. The alert gives the count only, and when Zoho is the thing failing it reaches you through `ALERT_NTFY_URL` or the dead-man ping's `/fail` |
+| `jb-site` | https://josephbankole.ca/ does not answer 200 |
+| `jb-news` | josephbankole.ca's `news-feed.xml` does not answer 200, or its newest item is over 120h old (the desk publishes Tuesday and Friday, so this is one missed edition) |
+| `salon-mirror` | the `salon-art` bucket lists fewer than 452 JPEGs (the 15 Nov 2026 catalog's count; raise `MIRROR_MIN_FILES` in `checks.ts` when the catalog adds works), or one of 3 files picked at random does not answer 200 at its public URL |
+| `push-run`, `push-sport`, `scores-*` | also when the state row cannot be read |
+
+Deploy health-probe after the push migration (`20261115170100`): without its columns `push-run`
+reports a read error. `scores-write` needs migration `20261115170200`; before it, scores-poll does
+not track failed uploads and the check stays quiet, so either order is safe. `pages-deploy-blind`
+needs migration `20261115191700`; before it, the count is not kept and the check stays quiet.
+
+### Alerts that do not depend on email
+
+health-probe emails the founder through Zoho, from inside the project it watches. When that email
+fails (a revoked Zoho token, say), the check's 6-hour debounce slot is given back, so the next run
+tries again, and the failure is logged as `health-probe: alert email failed for ...`. Two optional
+secrets add channels outside Zoho and outside the project:
+
+```
+supabase secrets set HEALTHCHECK_PING_URL=<a Healthchecks.io-style ping URL>
+supabase secrets set ALERT_NTFY_URL=<an ntfy topic URL>
+```
+
+- `HEALTHCHECK_PING_URL`: every run sends a GET to it, so the service alerts when the probe goes
+  quiet (the cron job dropped, the guard secret changed, the project down). Set the check's period
+  to 30 minutes with some grace. When an alert email fails and no second channel took it, the run
+  calls `<url>/fail` instead, which such services treat as a failure.
+- `ALERT_NTFY_URL`: when an alert email fails, one POST goes here naming the failing checks, never
+  their detail, because anyone who knows a topic's name can read it. Use a long random topic name.
+  When it lands, those checks keep their 6-hour slot.
+
+Both are new, and each needs an account the founder makes. Without them the probe behaves as
+before, apart from the retry.
 
 ### Migration
 
@@ -206,12 +398,17 @@ supabase migration repair --status applied 20261012160124
 ### Tests
 
 The pure parts (the guard, the sport list and grouping, the APNs headers, the fan-out pool and
-health-probe's push check) have unit tests that need no network and no permissions:
+health-probe's push check) have unit tests that need no network and no permissions, and so does
+daily-push's run itself (`daily-push/run_test.ts`: the lead recorded before any claim or send, a
+failed record or claim, the claim chunks, the deletion cap and the paged token read):
 
 ```
 cd supabase/functions/daily-push && deno test
 cd supabase/functions/_shared && deno test
 cd supabase/functions/health-probe && deno test
+cd supabase/functions/register-push && deno test
+cd supabase/functions/ticket-intake && deno test
+cd supabase/functions/ticket-reply && deno test
 ```
 
 ## Live scores: scores-poll
@@ -570,7 +767,7 @@ supabase functions deploy scores-poll --no-verify-jwt
 
 The function's own files are `index.ts`, `api.ts`, `backfill.ts`, `days.ts`, `map.ts`, `plan.ts`,
 `poll.ts`, `season.ts`, `preview.ts` and `season_run.ts`, plus `../_shared/cors.ts`,
-`../_shared/push_guard.ts` and `../_shared/clubs.json`. Nothing else in the folder (tests, `testkit.ts`,
+`../_shared/http.ts`, `../_shared/push_guard.ts` and `../_shared/clubs.json`. Nothing else in the folder (tests, `testkit.ts`,
 `season_testkit.ts`, `app_fixtures.ts`, `deno.json`, `fixtures/`) is deployed. Deploying changes nothing until something calls the new code: the
 cron call carries no body, so the minute's poll runs as before and now also keeps `days/`; the backfill
 runs only when called with its body.
@@ -595,7 +792,12 @@ above). `deno task app-fixtures [dir]` writes the server-side sample files the i
 decode (`match-with-players.json`, `teams-index.json`, `team-33.json`, `preview.json`, `ahead.json`) by
 running the real builders over the recorded replies; by default into
 `../thearchv-app/TheARCHVTests/Fixtures/` beside this repo. Run it after a change to any of those
-shapes and commit the app's copies with the change.
+shapes and commit the app's copies with the change. `deno task app-fixtures-check` (from
+`scores-poll/`) fails if the app's committed copies differ from a fresh build by a single byte; set
+`ARCHV_APP_FIXTURES=<dir>` to check a checkout somewhere else. `test.sh` runs that check after the
+suites whenever the app's fixtures folder is there (beside this repo, or `ARCHV_APP_FIXTURES`), and
+counts a failure like any other suite. Plain `deno test` and CI skip it, since they have no app
+repo to read; `test.sh` prints a skip line when the folder is missing.
 
 ### Season mode deploy (package S3, 2026-10-29)
 
@@ -604,8 +806,9 @@ scheduled, `PUBLISH_PLAYERS` is set to `1`, and head to head keeps every competi
 friendlies. Deploy through the Supabase MCP, in this order, with the proof of each step in the run
 report:
 
-1. **Tests.** `cd supabase/functions/scores-poll && deno test`: all green (170 at the time of
-   writing). Nothing deploys on a red suite.
+1. **Tests.** `bash supabase/functions/test.sh`: all green (scores-poll alone had 170 at the time
+   of writing). Nothing deploys on a red suite. Run it where the app repo sits beside this one, so
+   it also runs the app fixtures drift check; a "skipped" line for that check means it did not run.
 2. **Commit first** on `preview`, so the deployed code is the repo's code.
 3. **The table migration.** `list_migrations` and confirm `20261013170000_scores_live_feed` is
    recorded. Then `apply_migration` with `supabase/migrations/20261028185520_scores_season_mode.sql`.
@@ -614,7 +817,7 @@ report:
    and `select relrowsecurity from pg_class where relname = 'scores_season_state';` is true.
 4. **The function.** `deploy_edge_function`, name `scores-poll`, entrypoint `index.ts`,
    `verify_jwt: false`, files `scores-poll/{index,api,backfill,days,map,plan,poll,season,preview,season_run}.ts`,
-   `_shared/cors.ts`, `_shared/push_guard.ts`, `_shared/clubs.json`. This deploy changes the minute
+   `_shared/cors.ts`, `_shared/http.ts`, `_shared/push_guard.ts`, `_shared/clubs.json`. This deploy changes the minute
    poll too (the `players` key, tomorrow's file, the early lineup pointer). **Smoke check:** the next
    two `scores-poll` rows in `net._http_response` are 200, and `scores.json` still parses as
    `archv-scores/1` (`curl -s <public url>/scores.json | jq .schema`). **Rollback:** redeploy the same
@@ -668,3 +871,81 @@ report:
 - `PUBLISH_PLAYERS=1` set by the founder in the dashboard.
 - Backfill from 2026-07-07 done in one call: 17 requests, 273 match files rewritten with `players`.
   The next-day rerun is not needed, because no match was played on 27 or 28 October.
+
+## Push-token format check (deploy order matters)
+
+`register-push` now refuses a token that is not 64 to 200 lowercase hex characters, and
+`supabase/migrations/20261115120300_push_token_format_check.sql` mirrors that rule as a CHECK
+constraint on `push_tokens.token`. The iOS client has always sent exactly 64 lowercase hex, so no
+shipped build is affected; the upper bound leaves room for Apple lengthening device tokens. Keep
+the regex in `register-push/handler.ts` and the one in the migration identical.
+
+The migration cleans the table before it adds the constraint, and adds it validated. It lowercases
+hex tokens stored in upper or mixed case and deletes every row still out of shape. It cannot be
+added NOT VALID and left for later: Postgres checks a CHECK constraint on every UPDATE, and
+`claim_push_tokens` claims a whole chunk of tokens in one UPDATE, so one legacy row out of shape
+would fail that chunk's claim on every run.
+
+Deploy in this order:
+
+```
+# 1. See what the migration will change. Neither kind of row can take a push today.
+psql "$SUPABASE_DB_URL" -c "select count(*) filter (where token ~ '^[0-9a-fA-F]{64,200}$' and token <> lower(token)) as to_lowercase, count(*) filter (where token !~ '^[0-9a-fA-F]{64,200}$') as to_delete from public.push_tokens;"
+
+# 2. The function, so the boundary check is already turning away anything the constraint
+#    would reject. The other way round, an old deployment would hand a malformed token to the
+#    database and the caller would see a 500 instead of a clean 400.
+supabase functions deploy register-push --no-verify-jwt
+
+# 3. Then the cleanup and the constraint, in one transaction. Apply the one file and record it
+#    (see the note on `supabase migration list --linked` under daily-push's Migration).
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120300_push_token_format_check.sql
+supabase migration repair --status applied 20261115120300
+
+# 4. Then the cap exemption: a token that already has a row is no longer counted by the hourly
+#    insert cap, so an opt-out or a sport change always lands whatever the hour's count.
+psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f supabase/migrations/20261115120400_push_token_cap_exemptions.sql
+supabase migration repair --status applied 20261115120400
+
+# 5. Then the bounded cleanup.
+supabase functions deploy daily-push --no-verify-jwt
+```
+
+To confirm afterwards, `select convalidated from pg_constraint where conname = 'push_tokens_token_format';`
+returns `t`.
+
+## Abuse controls on android-waitlist
+
+`android-waitlist` is the one public endpoint that takes an unauthenticated write from anyone, and
+the publishable key it needs ships in the `/app/` page. Its layers, cheapest to defeat last:
+
+1. **Origin refusal.** A request whose `Origin` header is present and not `https://thearchv.ca` or
+   `https://www.thearchv.ca` is refused with a 403 before the body is read, so another site's page
+   cannot write here. A request with no `Origin` (curl, a script) is not affected, so this stops
+   browsers, not scripts.
+2. **Per-IP cap.** At most 5 signups an hour from one client IP, claimed through the
+   `waitlist_rate_claim` RPC (`supabase/migrations/20261115180000_android_waitlist_source_caps.sql`)
+   before the insert. The key is `cf-connecting-ip`, which Cloudflare sets itself and the caller
+   cannot override, with the first `x-forwarded-for` entry as a fallback only when that header
+   does not arrive (`android-waitlist/client_ip.ts`). This stops a browser or a simple script
+   from spending the hour's ceiling. It does not stop a script with many addresses, or one that
+   writes its own `x-forwarded-for` on a route without `cf-connecting-ip`: that is what the
+   challenge below is for. Only a SHA-256 of the IP is stored, in `waitlist_rate_hits`. A limiter
+   error lets the signup through, because the global ceiling still holds.
+   After the first deploy, check one request in the function's logs or with a temporary log line
+   that `cf-connecting-ip` arrives; if it does not, the cap is running on the fallback.
+3. **Global 300 an hour** (`20260722120000`), unchanged, as the last resort.
+
+Deploy the migration before the function, or either order: the function treats a missing RPC as a
+limiter error and lets the signup through, and nothing else calls the RPC.
+
+### Still open, and the founder's call
+
+- **A challenge (Cloudflare Turnstile).** `verifyChallenge()` in `android-waitlist/index.ts` is
+  scaffolded and does nothing until `WAITLIST_CAPTCHA_SECRET` is set. Turning it on needs a site
+  key and the widget on `public/app/index.html` sending `captcha_token`, then the deploy, then the
+  secret, in that order, so no real signup is refused part way.
+- **Double opt-in.** Anyone can still put someone else's address on the list. Fixing that needs a
+  `confirmed_at` column, a confirmation email from a mail sender, and a confirm endpoint. Until it
+  lands, quote the total as addresses submitted, not addresses confirmed, and do not mail the list
+  without a confirmation step.

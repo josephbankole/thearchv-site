@@ -5,9 +5,11 @@
 import type { ApiGet } from "./api.ts";
 import {
   EMPTY_STATE,
+  nextWriteFailedSince,
   type PollState,
   rowFromState,
   runPoll,
+  saveStateRow,
   SCORES_PATH,
   stateFromRow,
   type Summary,
@@ -64,7 +66,7 @@ function fakeStore(failOn: (path: string) => boolean = () => false) {
   return { files, write };
 }
 
-type Run = { summary: Summary; state: PollState; writeFailed: boolean; calls: string[] };
+type Run = { summary: Summary; state: PollState; writeFailed: boolean; writesAttempted: boolean; calls: string[] };
 async function minute(
   state: PollState,
   now: Date,
@@ -249,6 +251,58 @@ Deno.test("an empty reply for a competition we hold matches for is a partial fai
   assertEquals(scheduleDue(c.state, at(T0, 64)), false);
 });
 
+// A WSL match held as not started for tomorrow, built from a real schedule row, and an API that
+// answers the WSL listing with nothing and asks after that match with `recheck` (null: no row).
+const HELD_WSL = 999001;
+function heldWslRow(edit: (fx: Fx) => void = () => {}): Fx {
+  const fx = structuredClone(SCHEDULES["44"].response[0]);
+  fx.fixture.id = HELD_WSL;
+  fx.fixture.date = "2026-10-14T13:00:00+00:00";
+  fx.fixture.status = { long: "Not Started", short: "NS", elapsed: null };
+  fx.goals = { home: null, away: null };
+  fx.score = { halftime: { home: null, away: null }, fulltime: { home: null, away: null } };
+  edit(fx);
+  return fx;
+}
+async function withHeldWsl(recheck: Fx | null) {
+  const store = fakeStore();
+  const a = await minute(EMPTY_STATE, at(T0), store);
+  const held = { ...a.state, matches: [...a.state.matches, mapMatch(heldWslRow())!] };
+  const inner = fakeApi({ empty: (p) => p.includes("league=44&") });
+  const api: ApiGet = (path) =>
+    path === `/fixtures?ids=${HELD_WSL}`
+      ? (inner.calls.push(path), Promise.resolve({ ok: true, fixtures: recheck ? [recheck] : [], remaining: 7000 }))
+      : inner.api(path);
+  const out = await runPoll(held, { now: at(T0, 31), season: 2026, api, write: store.write });
+  return { ...out, calls: inner.calls, store };
+}
+const wslIds = (s: PollState) => s.matches.filter((m) => m.competition.key === "wsl").map((m) => m.id);
+
+Deno.test("an empty reply after our only held match was postponed: one recheck drops it and the refresh counts", async () => {
+  const b = await withHeldWsl(heldWslRow((fx) => fx.fixture.status = { long: "Match Postponed", short: "PST", elapsed: null }));
+  assertEquals(b.calls.filter((c) => c === `/fixtures?ids=${HELD_WSL}`).length, 1);
+  assertEquals([b.summary.ok, b.summary.scheduleRefreshed], [true, true]);
+  assertEquals(wslIds(b.state), []);
+  assert(!scoresOf(b.store).matches.some((m: Match) => m.id === HELD_WSL), "scores.json no longer lists it");
+  assertEquals(scheduleDue(b.state, at(T0, 31 + 29)), false, "a full refresh: not due again for thirty minutes");
+});
+
+Deno.test("an empty reply after our only held match moved out of the window: the recheck drops it", async () => {
+  const b = await withHeldWsl(heldWslRow((fx) => fx.fixture.date = "2026-10-21T13:00:00+00:00"));
+  assertEquals([b.summary.ok, wslIds(b.state)], [true, []]);
+});
+
+Deno.test("an empty reply the recheck contradicts keeps the match; a recheck with no row is the old error", async () => {
+  const kept = await withHeldWsl(heldWslRow());
+  assertEquals([kept.summary.ok, wslIds(kept.state)], [true, [HELD_WSL]]);
+
+  const silent = await withHeldWsl(null);
+  assertEquals(silent.summary.ok, false);
+  assertEquals(silent.summary.error, "wsl: empty schedule reply");
+  assertEquals(wslIds(silent.state), [HELD_WSL], "held, as before");
+  assertEquals(scheduleDue(silent.state, at(T0, 36)), true, "retried in five minutes");
+});
+
 Deno.test("an empty reply from a competition we hold nothing for is just a quiet competition", async () => {
   const store = fakeStore();
   const a = await minute(EMPTY_STATE, at("2026-10-04T20:00:00Z"), store); // seven WSL matches, nothing else
@@ -327,6 +381,34 @@ Deno.test("a failed upload is not recorded, so the next minute writes it again",
   assertEquals(b.writeFailed, false);
   assertEquals(b.summary.filesWritten, 1);
   assertEquals(healthy.files.has(SCORES_PATH), true);
+});
+
+Deno.test("write_failed_since starts at the first failed upload, holds, and clears once uploads land", async () => {
+  const down = fakeStore((p) => p === SCORES_PATH);
+  const a = await minute(EMPTY_STATE, at(T0), down);
+  assertEquals([a.writeFailed, a.writesAttempted], [true, true]);
+  const first = nextWriteFailedSince(null, a, at(T0));
+  assertEquals(first, at(T0).toISOString());
+
+  // Still down a minute later: the file is tried again and the clock keeps its start.
+  const b = await minute(a.state, at(T0, 1), down);
+  assertEquals(b.writeFailed, true);
+  assertEquals(nextWriteFailedSince(first, b, at(T0, 1)), first);
+
+  // Storage is back: the retry lands and the clock stops.
+  const healthy = fakeStore();
+  for (const [p, t] of down.files) healthy.files.set(p, t);
+  const c = await minute(b.state, at(T0, 2), healthy);
+  assertEquals([c.writeFailed, c.writesAttempted], [false, true]);
+  assertEquals(nextWriteFailedSince(first, c, at(T0, 2)), null);
+});
+
+Deno.test("a backed-off run reaches no files and leaves write_failed_since as it was", async () => {
+  const state = { ...EMPTY_STATE, backoffUntil: at(T0, 2).toISOString() };
+  const r = await minute(state, at(T0), fakeStore());
+  assertEquals([r.writeFailed, r.writesAttempted], [false, false]);
+  assertEquals(nextWriteFailedSince("2026-10-13T20:00:00.000Z", r, at(T0)), "2026-10-13T20:00:00.000Z");
+  assertEquals(nextWriteFailedSince(null, r, at(T0)), null);
 });
 
 Deno.test("scores.json never points at a match file whose upload failed", async () => {
@@ -428,4 +510,47 @@ Deno.test("a match about to kick off points at its file, so its confirmed lineup
   // Further out, a not-started match still has no pointer.
   const later = scoresOf(store).matches.find((x: Match) => x.id === 1635690);
   assertEquals([later.status.code, later.detail], ["NS", null]);
+});
+
+// A one-row table with the conditional update scores_poll_state gets from index.ts.
+function stateTable(initial: Record<string, unknown> | null) {
+  let row = initial;
+  return {
+    get: () => row,
+    store: {
+      create: (r: Record<string, unknown>) => {
+        row = r;
+        return Promise.resolve({ error: null });
+      },
+      updateIf: (r: Record<string, unknown>, readUpdatedAt: string) => {
+        if (!row || row.updated_at !== readUpdatedAt) return Promise.resolve({ error: null, matched: 0 });
+        row = r;
+        return Promise.resolve({ error: null, matched: 1 });
+      },
+    },
+  };
+}
+
+Deno.test("overlapping runs: the slower run's save does not roll back the state the later run saved", async () => {
+  const read = rowFromState(EMPTY_STATE, at(T0));
+  const table = stateTable(read);
+  const fast = rowFromState({ ...EMPTY_STATE, windowDay: "2026-10-13" }, at(T0, 1));
+  const slow = rowFromState({ ...EMPTY_STATE, windowDay: "2026-10-12" }, at(T0, 1));
+  // Both runs read the same row; the later one finishes first.
+  assertEquals(await saveStateRow(table.store, fast, read.updated_at as string), "saved");
+  assertEquals(await saveStateRow(table.store, slow, read.updated_at as string), "stale");
+  assertEquals(table.get()!.window_day, "2026-10-13");
+});
+
+Deno.test("the first run ever creates the row; a failed save is reported", async () => {
+  const table = stateTable(null);
+  const row = rowFromState(EMPTY_STATE, at(T0));
+  assertEquals(await saveStateRow(table.store, row, null), "saved");
+  assertEquals(table.get(), row);
+  const broken = {
+    create: () => Promise.resolve({ error: "down" }),
+    updateIf: () => Promise.resolve({ error: "down", matched: 0 }),
+  };
+  assertEquals(await saveStateRow(broken, row, null), { error: "down" });
+  assertEquals(await saveStateRow(broken, row, "2026-10-13T20:10:00.000Z"), { error: "down" });
 });

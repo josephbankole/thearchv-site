@@ -25,6 +25,9 @@ Deno.serve(async (req) => {
   const device_id = typeof payload.device_id === "string" ? payload.device_id.trim() : "";
   const ticket_id = typeof payload.ticket_id === "string" ? payload.ticket_id : null;
   if (!device_id) return json({ error: "device_id required" }, 400);
+  // The same limit as ticket-reply and the table's own check (20261115191900). Real devices send 36
+  // characters (17 on early builds), so the format itself is not checked.
+  if (device_id.length > 128) return json({ error: "device_id too long" }, 400);
 
   const supabase = adminClient();
 

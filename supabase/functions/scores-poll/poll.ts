@@ -30,6 +30,7 @@ import {
   contentHash,
   detailTargets,
   inWindow,
+  MAX_DETAIL_IDS,
   type OutFile,
   planWrites,
   SCHEDULE_EVERY_MS,
@@ -40,6 +41,9 @@ import {
 } from "./plan.ts";
 
 export const SCORES_PATH = "scores.json";
+
+// A recheck of held matches drops these: the match is not being played in the window.
+const GONE_CODES: ReadonlySet<string> = new Set(["PST", "CANC", "ABD"]);
 
 // What one run leaves for the next. Persisted in public.scores_poll_state.
 export type PollState = {
@@ -88,7 +92,7 @@ export type Summary = {
 export async function runPoll(
   state: PollState,
   deps: Deps,
-): Promise<{ summary: Summary; state: PollState; writeFailed: boolean }> {
+): Promise<{ summary: Summary; state: PollState; writeFailed: boolean; writesAttempted: boolean }> {
   const { now } = deps;
   const win = windowFor(now);
   const errors: string[] = [];
@@ -98,6 +102,7 @@ export async function runPoll(
   let filesWritten = 0;
   let dayFilesWritten = 0;
   let writeFailed = false; // a storage upload failed: the caller answers 500
+  let writesAttempted = false; // the run reached the file stage (a backed-off run does not)
   const saw = (r: ApiResult) => {
     if (r.remaining !== null) remaining = r.remaining;
   };
@@ -114,6 +119,7 @@ export async function runPoll(
     },
     state: next,
     writeFailed,
+    writesAttempted,
   });
 
   if (state.backoffUntil && Date.parse(state.backoffUntil) > now.getTime()) {
@@ -139,23 +145,47 @@ export async function runPoll(
     // A competition that failed keeps the matches we already had for it. So does one that answered
     // with nothing while we hold matches for it: a real competition does not empty out of a
     // three-day window, and believing it would drop the night's matches from scores.json (and stop
-    // their details calls) until the next refresh.
-    const outcomes = COMPETITIONS.map((c, i) => {
-      const r = results[i];
-      const held = matches.filter((m) => m.competition.key === c.key);
-      if (!r.ok) {
-        errors.push(`${c.key}: ${r.reason}`);
-        return { fresh: null, held };
+    // their details calls) until the next refresh. The exception is a competition whose held
+    // matches have none of them started: those can really have left, moved to another week or
+    // postponed. For those, one /fixtures?ids= call asks after the held matches themselves, and
+    // when it answers for every one, the ones still in the window and still to be played are kept
+    // and the competition counts as answered. Anything short of that is the old empty-reply error.
+    const outcomes: { key: string; fresh: Match[] | null; held: Match[]; empty?: boolean }[] = COMPETITIONS.map(
+      (c, i) => {
+        const r = results[i];
+        const held = matches.filter((m) => m.competition.key === c.key);
+        if (!r.ok) {
+          errors.push(`${c.key}: ${r.reason}`);
+          return { key: c.key, fresh: null, held };
+        }
+        const fresh = r.fixtures.map(mapMatch).filter((m): m is Match =>
+          m !== null && m.competition.key === c.key && inWindow(m.kickoff, win)
+        );
+        if (fresh.length === 0 && held.length > 0) return { key: c.key, fresh: null, held, empty: true };
+        return { key: c.key, fresh, held };
+      },
+    );
+    const recheck = outcomes.filter((o) => o.empty && o.held.every((m) => isNotStarted(m.status.code)));
+    const recheckIds = recheck.flatMap((o) => o.held.map((m) => m.id));
+    if (recheckIds.length > 0 && recheckIds.length <= MAX_DETAIL_IDS) {
+      const r = await deps.api(`/fixtures?ids=${recheckIds.join("-")}`);
+      saw(r);
+      if (r.ok) {
+        const answered = new Map<number, Match>();
+        for (const fx of r.fixtures) {
+          const m = mapMatch(fx);
+          if (m) answered.set(m.id, m);
+        }
+        for (const o of recheck) {
+          if (!o.held.every((m) => answered.has(m.id))) continue;
+          o.fresh = o.held.map((m) => answered.get(m.id)!).filter((m) =>
+            m.competition.key === o.key && inWindow(m.kickoff, win) && !GONE_CODES.has(m.status.code)
+          );
+          o.empty = false;
+        }
       }
-      const fresh = r.fixtures.map(mapMatch).filter((m): m is Match =>
-        m !== null && m.competition.key === c.key && inWindow(m.kickoff, win)
-      );
-      if (fresh.length === 0 && held.length > 0) {
-        errors.push(`${c.key}: empty schedule reply`);
-        return { fresh: null, held };
-      }
-      return { fresh, held };
-    });
+    }
+    for (const o of outcomes) if (o.empty) errors.push(`${o.key}: empty schedule reply`);
     good = outcomes.filter((o) => o.fresh !== null).length;
     if (good === 0) {
       // Nothing came back we can use: keep the last good state and files, and leave the API alone
@@ -206,6 +236,7 @@ export async function runPoll(
   // 3. The files. A match's own file goes up first, and scores.json points only at files that are
   //    there (a file whose upload failed is not); a file whose content is unchanged is not
   //    written again.
+  writesAttempted = true;
   const stamp = now.toISOString();
   const willHave = new Set(fetched.map((f) => detailPath(f.match.id)));
   // A match points at its file once it has kicked off, or when it kicks off within the details
@@ -311,6 +342,21 @@ export async function runPoll(
   }, scheduleRefreshed);
 }
 
+// When the current run of failed uploads began, for scores_poll_state.write_failed_since. A failed
+// upload keeps its old hash, so the file is tried again every minute until it lands; the first
+// failure starts the clock and a run that reaches the files with no failure stops it. A run that
+// never reached the files (backing off) leaves it as it was. health-probe alerts when the clock has
+// run past WRITE_FAILED_ALERT_MS in its checks.ts: schedule_fetched_at keeps moving through a
+// storage outage, so it cannot show a frozen scores.json.
+export function nextWriteFailedSince(
+  prev: string | null,
+  run: { writeFailed: boolean; writesAttempted: boolean },
+  now: Date,
+): string | null {
+  if (run.writeFailed) return prev ?? now.toISOString();
+  return run.writesAttempted ? null : prev;
+}
+
 // ---------- the state row ----------
 
 // public.scores_poll_state's single row <-> PollState. Read defensively: a column of the wrong
@@ -349,4 +395,29 @@ export function rowFromState(s: PollState, now: Date): Record<string, unknown> {
     backoff_until: s.backoffUntil,
     updated_at: now.toISOString(),
   };
+}
+
+// How the state row is saved. pg_cron starts a run every minute whether or not the last one has
+// finished, so two runs can overlap, and the slower one must not put back the older state over the
+// newer one. The save is conditional on the row still carrying the updated_at this run read: if
+// another run has saved since, this run's save is skipped ("stale") and the newer state stands.
+// The cost of a skipped save is at most a rewrite or a schedule refresh next minute. With no row
+// read (the very first run) there is nothing to compare, so the row is created as before.
+export type StateStore = {
+  create: (row: Record<string, unknown>) => Promise<{ error: string | null }>;
+  updateIf: (row: Record<string, unknown>, readUpdatedAt: string) => Promise<{ error: string | null; matched: number }>;
+};
+
+export async function saveStateRow(
+  store: StateStore,
+  row: Record<string, unknown>,
+  readUpdatedAt: string | null,
+): Promise<"saved" | "stale" | { error: string }> {
+  if (readUpdatedAt === null) {
+    const { error } = await store.create(row);
+    return error ? { error } : "saved";
+  }
+  const { error, matched } = await store.updateIf(row, readUpdatedAt);
+  if (error) return { error };
+  return matched > 0 ? "saved" : "stale";
 }

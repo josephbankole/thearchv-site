@@ -7,7 +7,9 @@ import {
   collapseId,
   decideSend,
   edmontonDay,
+  edmontonHour,
   endOfEdmontonDay,
+  inSendWindow,
   feedHash,
   feedHashesFrom,
   feedName,
@@ -325,4 +327,26 @@ Deno.test("the route is the entry's own section and date", () => {
   assertEquals(routeFor(nflLead), { section: "nfl", date: "2026-09-22" });
   assertEquals(routeFor({ ...nflLead, section: undefined }), {});
   assertEquals(routeFor({ headline: "x" }), {});
+});
+
+// ---- the send window: 07:00 to 21:00 Edmonton ----
+
+Deno.test("send window: the first tick after Edmonton midnight does not push", () => {
+  // The audited case: 07:00 UTC in November is 00:00 Edmonton (MST, UTC-7), 02:00 Toronto.
+  assertEquals(edmontonHour(new Date("2026-11-16T07:00:00Z")), 0);
+  assertEquals(inSendWindow(new Date("2026-11-16T07:00:00Z")), false);
+});
+
+Deno.test("send window: opens at 07:00 and closes at 21:00 Edmonton, in winter", () => {
+  assertEquals(inSendWindow(new Date("2026-11-16T13:59:59Z")), false, "06:59 MST");
+  assertEquals(inSendWindow(new Date("2026-11-16T14:00:00Z")), true, "07:00 MST");
+  assertEquals(inSendWindow(new Date("2026-11-17T03:59:59Z")), true, "20:59 MST");
+  assertEquals(inSendWindow(new Date("2026-11-17T04:00:00Z")), false, "21:00 MST");
+});
+
+Deno.test("send window: follows daylight saving, in summer", () => {
+  assertEquals(inSendWindow(new Date("2026-07-01T12:59:59Z")), false, "06:59 MDT");
+  assertEquals(inSendWindow(new Date("2026-07-01T13:00:00Z")), true, "07:00 MDT");
+  assertEquals(inSendWindow(new Date("2026-07-02T02:59:59Z")), true, "20:59 MDT");
+  assertEquals(inSendWindow(new Date("2026-07-02T03:00:00Z")), false, "21:00 MDT");
 });

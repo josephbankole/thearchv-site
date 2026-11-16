@@ -131,3 +131,37 @@ export function describeError(err: unknown): string {
     .replace(/[0-9a-fA-F]{32,}/g, "<redacted>")
     .slice(0, 160);
 }
+
+// Split a token list into delete batches bounded by ENCODED LENGTH, not by a fixed item count.
+// The cleanup delete leaves as a PostgREST filter in the query string
+// (`token=in.("a","b",...)`), so what a batch costs is its encoded characters, not how many
+// entries it has: 100 tokens of the 64-hex shape the iOS client produces is already about 7.3 KB
+// of request line against the ~8 KB most proxies allow, and a legacy row predating the token
+// CHECK constraint can hold a string of any length at all, so a count-based batch is one long row
+// away from a request nothing will accept. Each token is charged its percent-encoded length plus
+// three characters for the two quotes and the separator, which is why the estimate holds for junk
+// tokens full of characters that expand under encoding.
+//
+// A single token that exceeds the whole budget still gets a batch of its own rather than being
+// dropped: cleanup must always be able to make progress on the rows that are hurting it most.
+// Order is preserved and every token appears in exactly one batch.
+export function batchByEncodedLength(
+  tokens: readonly string[],
+  maxEncodedChars: number,
+): string[][] {
+  const batches: string[][] = [];
+  let current: string[] = [];
+  let used = 0;
+  for (const token of tokens) {
+    const cost = encodeURIComponent(token).length + 3;
+    if (current.length > 0 && used + cost > maxEncodedChars) {
+      batches.push(current);
+      current = [];
+      used = 0;
+    }
+    current.push(token);
+    used += cost;
+  }
+  if (current.length > 0) batches.push(current);
+  return batches;
+}

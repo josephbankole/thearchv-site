@@ -1,7 +1,11 @@
-// triage-drain: pg_cron sweep (hourly, minute 20) that re-runs L1 triage for tickets stuck at
-// status 'pending_triage' — queued because support-triage's webhook hit the daily triage_permit
-// ceiling when they first came in. Picks up to 10 tickets, oldest first, and re-runs the same
-// shared triage core (../_shared/triage.ts) used by support-triage, so behaviour is identical.
+// triage-drain: pg_cron sweep (hourly, minute 20) that re-runs L1 triage for tickets waiting at
+// status 'pending_triage': queued because support-triage's webhook hit the daily triage_permit
+// ceiling, because an earlier attempt failed, or because the user followed up on an L1 ticket
+// (ticket-reply), plus any ticket a triage run claimed ('l1_working') and then abandoned for
+// STALE_CLAIM_MS. Picks up to 10 tickets, fewest failed attempts first and then oldest, so a
+// ticket that keeps failing cannot hold the head of the queue, and re-runs the same shared triage
+// core (../_shared/triage.ts) used by support-triage. A ticket that fails MAX_ATTEMPTS times
+// leaves the queue for the founder.
 // If the ceiling is still hit on a retry, this stops early and leaves the rest queued for the
 // next tick rather than burning further permit calls against an already-closed ceiling.
 //
@@ -9,6 +13,7 @@
 // TRIAGE_SECRET vault secret (see cron.job for the daily-push / push_secret pattern this mirrors).
 import { json, adminClient } from "../_shared/cors.ts";
 import { triageTicket } from "../_shared/triage.ts";
+import { drainQueueFilter, triageDeps } from "../_shared/triage_db.ts";
 
 const BATCH_SIZE = 10;
 
@@ -25,7 +30,8 @@ Deno.serve(async (req) => {
   const { data: queued, error } = await supabase
     .from("tickets")
     .select("id, category, subject, body, app_version, status, tier")
-    .eq("status", "pending_triage")
+    .or(drainQueueFilter())
+    .order("triage_attempts", { ascending: true })
     .order("created_at", { ascending: true })
     .limit(BATCH_SIZE);
   if (error) { console.error("triage-drain: queue db error", error.message); return json({ error: "server_error" }, 500); }
@@ -33,8 +39,9 @@ Deno.serve(async (req) => {
   const results: Array<{ ticket_id: string; outcome: Record<string, unknown> }> = [];
   let stoppedOnCeiling = false;
 
+  const deps = triageDeps(supabase);
   for (const ticket of queued ?? []) {
-    const outcome = await triageTicket(supabase, ticket);
+    const outcome = await triageTicket(deps, ticket);
     results.push({ ticket_id: ticket.id as string, outcome: outcome.body });
     if (outcome.body?.reason === "daily_triage_ceiling_reached") {
       stoppedOnCeiling = true;
@@ -49,7 +56,7 @@ Deno.serve(async (req) => {
     const { count } = await supabase
       .from("tickets")
       .select("id", { count: "exact", head: true })
-      .eq("status", "pending_triage");
+      .or(drainQueueFilter());
     stillQueued = count ?? 0;
   }
 

@@ -139,15 +139,12 @@ export async function runBackfill(from: string, deps: BackfillDeps): Promise<Bac
 
   // The index first. One that is there and unreadable stops the run before it writes anything,
   // because replacing it would drop whatever days it held.
-  let entries: DayEntry[];
   try {
     const parsed = parseIndex(await deps.read(INDEX_PATH));
     if (!parsed) return stop(`${INDEX_PATH} is not readable, left alone; delete it to rebuild`);
-    entries = parsed;
   } catch {
     return stop(`read ${INDEX_PATH} failed`);
   }
-  let indexHash = await contentHash({ days: entries });
 
   // 1. The whole season, a request a competition. A day file with one league's matches missing
   //    would be wrong, so any failure here stops the run with nothing written.
@@ -180,6 +177,7 @@ export async function runBackfill(from: string, deps: BackfillDeps): Promise<Bac
   const settled = new Set<number>(); // finished matches whose details are decided: stored, or the API had none
   const written = new Set<string>(); // days whose file is in place
   const dayFailed = new Set<string>();
+  const indexed: string[] = []; // days whose file is in place, for the index
 
   // A day's file goes up once every finished match in it is settled. A match points at its file
   // only if the file is in place; a match that has not finished never does.
@@ -203,13 +201,27 @@ export async function runBackfill(from: string, deps: BackfillDeps): Promise<Bac
       }
     }), PARALLEL_FILES);
     if (!rebuilt.length) return;
-    // The index follows the files: only days whose file is in place are ever listed.
-    entries = mergeIndex(entries, rebuilt, new Map(rebuilt.map((d) => [d, byDay.get(d)!.length])));
-    const hash = await contentHash({ days: entries });
-    if (hash === indexHash) return;
+    indexed.push(...rebuilt);
+    // The index follows the files: only days whose file is in place are ever listed. The minute
+    // poll also merges into it, so it is read again right before each write and this run's days are
+    // merged into what is there now: a copy read earlier would put back an index without the
+    // poll's latest day. A read that fails or comes back unreadable writes nothing; the next
+    // group's write, or the next backfill run, carries these days in.
+    let current: DayEntry[] | null;
     try {
-      await deps.write(INDEX_PATH, JSON.stringify(buildIndex(entries, stamp)));
-      indexHash = hash;
+      current = parseIndex(await deps.read(INDEX_PATH));
+    } catch {
+      errors.push(`read ${INDEX_PATH} failed`);
+      return;
+    }
+    if (!current) {
+      errors.push(`${INDEX_PATH} is not readable, left alone`);
+      return;
+    }
+    const merged = mergeIndex(current, indexed, new Map(indexed.map((d) => [d, byDay.get(d)!.length])));
+    if (await contentHash({ days: merged }) === await contentHash({ days: current })) return;
+    try {
+      await deps.write(INDEX_PATH, JSON.stringify(buildIndex(merged, stamp)));
     } catch {
       errors.push(`write ${INDEX_PATH} failed`);
     }

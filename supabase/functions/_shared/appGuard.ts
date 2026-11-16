@@ -5,10 +5,10 @@
 // headerless curl script from burning the global rate caps that legitimate users share.
 // The DB-side rate caps remain the backstop; this header is a tripwire, not a vault.
 // (Soft mode existed only while pre-19 TestFlight builds were live in the wild.)
-import { json } from "./cors.ts";
+import { type Env, json, realEnv } from "./http.ts";
 
-export function checkAppSecret(req: Request, fnName: string): Response | null {
-  const expected = Deno.env.get("ARCHV_APP_SECRET");
+export function checkAppSecret(req: Request, fnName: string, env: Env = realEnv): Response | null {
+  const expected = env("ARCHV_APP_SECRET");
   if (!expected) {
     // Fail CLOSED (security sweep 2026-07-22). An unset secret is an operator error, not an
     // open door: previously this returned null (no-op), which silently disabled the guard.
@@ -31,8 +31,8 @@ export function checkAppSecret(req: Request, fnName: string): Response | null {
 // WRONG header is still refused; an unset secret still fails closed. The push_tokens rate-cap
 // trigger (hourly global and per-device) stays the real guard. 1.5.6 sends the header on every
 // path (thearchv-app 8c5ac8b), so this can go hard again once older builds have aged out.
-export function checkAppSecretSoft(req: Request, fnName: string): Response | null {
-  const expected = Deno.env.get("ARCHV_APP_SECRET");
+export function checkAppSecretSoft(req: Request, fnName: string, env: Env = realEnv): Response | null {
+  const expected = env("ARCHV_APP_SECRET");
   if (!expected) {
     console.error(JSON.stringify({ fn: fnName, error: "ARCHV_APP_SECRET unset — refusing" }));
     return json({ error: "unauthorized" }, 401);

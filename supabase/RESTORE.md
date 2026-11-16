@@ -71,3 +71,5 @@ functions as `gallery-app/server/supabase/README.md` says.
 - `select * from net._http_response order by created desc limit 10;` shows the cron calls answering
   200 rather than 401.
 - `select * from public.health_alert_state;` exists (empty is fine).
+- A request to `rest/v1/tickets` (or `push_tokens`) with the publishable key answers 401, not an
+  empty list: the client grants are revoked (20261115200100).

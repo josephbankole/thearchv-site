@@ -503,11 +503,16 @@ const html = `${documentShell({
         come in.</p>
 
         <h3>Deleting your data</h3>
+        <p>In the app, Settings has a Delete my data button. It deletes, straight away, every
+        support conversation sent from that install, with its messages and any email address
+        in it, and that install's push sign-up from our database. The app then starts a new
+        anonymous id and a new PostHog id, so later activity is not linked to the old ones. If
+        daily push is on, the app signs up again under the new id and the notifications keep
+        coming. Analytics events already sent to PostHog are not deleted by this button.</p>
         <p>Deleting the app removes everything stored on the device, but not what has
-        already reached our database, such as a support conversation or a push token. If you
-        have written to support and want that conversation and any details in it removed,
-        ask us and we will delete it. To ask about deleting a push token, a waitlist email,
-        or anything else on this page, email
+        already reached our database, so use the button first if you want both gone. To ask
+        about deleting a waitlist email, a conversation from an install you no longer have, or
+        anything else on this page, email
         <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>.</p>
 
         <h3>Changes</h3>

@@ -22,6 +22,7 @@ import {
   statesFrom,
 } from "./leads.ts";
 import { SPORT_KEYS } from "../_shared/sports.ts";
+import { atEdmonton } from "../_shared/edmonton_testkit.ts";
 
 function assert(cond: unknown, msg: string): void {
   if (!cond) throw new Error(`assertion failed: ${msg}`);
@@ -331,22 +332,26 @@ Deno.test("the route is the entry's own section and date", () => {
 
 // ---- the send window: 07:00 to 21:00 Edmonton ----
 
+// These ask the runtime for each Edmonton time (atEdmonton) and never hard-code a UTC instant for
+// winter: Alberta has kept UTC-6 all year since 1 November 2026, and a runtime with older timezone
+// data still says UTC-7. See _shared/edmonton_testkit.ts.
 Deno.test("send window: the first tick after Edmonton midnight does not push", () => {
-  // The audited case: 07:00 UTC in November is 00:00 Edmonton (MST, UTC-7), 02:00 Toronto.
-  assertEquals(edmontonHour(new Date("2026-11-16T07:00:00Z")), 0);
-  assertEquals(inSendWindow(new Date("2026-11-16T07:00:00Z")), false);
+  // The audited case: a lead that landed late went out at midnight Edmonton.
+  const midnight = atEdmonton("2026-11-16", 0);
+  assertEquals(edmontonHour(midnight), 0);
+  assertEquals(inSendWindow(midnight), false);
 });
 
 Deno.test("send window: opens at 07:00 and closes at 21:00 Edmonton, in winter", () => {
-  assertEquals(inSendWindow(new Date("2026-11-16T13:59:59Z")), false, "06:59 MST");
-  assertEquals(inSendWindow(new Date("2026-11-16T14:00:00Z")), true, "07:00 MST");
-  assertEquals(inSendWindow(new Date("2026-11-17T03:59:59Z")), true, "20:59 MST");
-  assertEquals(inSendWindow(new Date("2026-11-17T04:00:00Z")), false, "21:00 MST");
+  assertEquals(inSendWindow(atEdmonton("2026-11-16", 6, 59, 59)), false, "06:59");
+  assertEquals(inSendWindow(atEdmonton("2026-11-16", 7)), true, "07:00");
+  assertEquals(inSendWindow(atEdmonton("2026-11-16", 20, 59, 59)), true, "20:59");
+  assertEquals(inSendWindow(atEdmonton("2026-11-16", 21)), false, "21:00");
 });
 
-Deno.test("send window: follows daylight saving, in summer", () => {
-  assertEquals(inSendWindow(new Date("2026-07-01T12:59:59Z")), false, "06:59 MDT");
-  assertEquals(inSendWindow(new Date("2026-07-01T13:00:00Z")), true, "07:00 MDT");
-  assertEquals(inSendWindow(new Date("2026-07-02T02:59:59Z")), true, "20:59 MDT");
-  assertEquals(inSendWindow(new Date("2026-07-02T03:00:00Z")), false, "21:00 MDT");
+Deno.test("send window: the same Edmonton hours in summer", () => {
+  assertEquals(inSendWindow(atEdmonton("2026-07-01", 6, 59, 59)), false, "06:59");
+  assertEquals(inSendWindow(atEdmonton("2026-07-01", 7)), true, "07:00");
+  assertEquals(inSendWindow(atEdmonton("2026-07-01", 20, 59, 59)), true, "20:59");
+  assertEquals(inSendWindow(atEdmonton("2026-07-01", 21)), false, "21:00");
 });

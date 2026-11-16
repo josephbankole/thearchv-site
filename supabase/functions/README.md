@@ -299,9 +299,18 @@ The schedule is two migrations. `supabase/migrations/20261115170000_health_and_c
 runs `health-probe` every 30 minutes and `triage-drain` hourly at :20, and
 `20261116120000_daily_push_hourly.sql` runs `daily-push` every hour on the hour. The hours a push
 can go out are set in the function, not in cron: `SEND_WINDOW` in `_shared/push_guard.ts`, 07:00 to
-21:00 Edmonton time, so the last tick that can send is 20:00 Edmonton (22:00 Toronto). A tick
+21:00 Edmonton time, so the first tick that can send is 07:00 Edmonton and the last is 20:00. A tick
 outside the window skips without recording anything, and a tick inside it only sends when a sport
-has a new lead, so the one-a-day promise holds. Each call reads its guard
+has a new lead, so the one-a-day promise holds.
+
+Alberta has kept UTC-6 all year since 1 November 2026, so Edmonton is one hour behind Toronto in
+winter and two in summer. In Toronto time the window is 08:00 to 21:00 in winter and 09:00 to 22:00
+in summer. The Supabase edge runtime has that rule. A local deno or node with older timezone data
+still puts an Edmonton winter at UTC-7, so never test an Edmonton time with a hard-coded UTC
+instant: use `atEdmonton()` in `_shared/edmonton_testkit.ts`. Some older tests and comments
+(`scores-poll/days_test.ts`, `scores-poll/plan_test.ts`, the end-of-day cases in
+`daily-push/leads_test.ts`, and comments in `_shared/push_guard.ts`) still describe the old winter
+offset. The code they cover reads the offset from the runtime and is right in production. Each call reads its guard
 secret from Vault (`push_secret`, `triage_secret`) when it runs, so no secret sits in `cron.job`.
 Do not paste a `cron.schedule` with a literal secret into the SQL editor: set the Vault secret and
 apply the migration instead. It leaves a job alone when its Vault secret is missing, so a working job

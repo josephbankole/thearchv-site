@@ -3,13 +3,18 @@
 -- Until now the job ran at :30 from 14:30 to 23:30 UTC, hours set in cron (20261115170000 kept
 -- them as the live project had them). daily-push now carries its own send window, 07:00 to 21:00
 -- Edmonton time (inSendWindow in _shared/push_guard.ts), and skips outside it without recording
--- anything. So the job can tick every hour and leave the hours to the code, which follows
--- Edmonton's clock through daylight saving where a UTC range in cron does not.
+-- anything. So the job can tick every hour and leave the hours to the code, which reads
+-- Edmonton's clock.
 --
--- What changes for readers: a push can go out on the hour from 07:00 to 20:00 Edmonton (09:00 to
--- 22:00 Toronto). It used to go at :30 from 14:30 to 23:30 UTC, which in winter is 07:30 to 16:30
--- Edmonton (09:30 to 18:30 Toronto). Still at most one a day for each sport: the once-a-day guard
--- is unchanged.
+-- What changes for readers: a push can go out on the hour from 07:00 to 20:00 Edmonton. It used
+-- to go at :30 from 14:30 to 23:30 UTC. Still at most one a day for each sport: the once-a-day
+-- guard is unchanged.
+--
+-- In Toronto time (corrected 16 November, after the first hourly tick sent at 08:00 Toronto):
+-- Alberta has kept UTC-6 all year since 1 November 2026, so Edmonton is one hour behind Toronto in
+-- winter and two in summer. The window is 08:00 to 21:00 Toronto in winter and 09:00 to 22:00 in
+-- summer. The old schedule was 09:30 to 18:30 Toronto in winter. An earlier draft of this comment
+-- said 09:00 to 22:00 Toronto all year, which is only true in summer.
 --
 -- The job keeps its name and its command, word for word. Like 20261115170000, it is touched only
 -- when the Vault secret it needs is set. Safe to run twice.

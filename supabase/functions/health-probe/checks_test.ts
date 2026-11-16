@@ -20,6 +20,7 @@ import {
   waitlistDown,
 } from "./checks.ts";
 import { pushCheckDue, sportPushOverdue } from "./push_check.ts";
+import { atEdmonton } from "../_shared/edmonton_testkit.ts";
 
 function assert(cond: unknown, msg: string): void {
   if (!cond) throw new Error(`assertion failed: ${msg}`);
@@ -125,12 +126,13 @@ Deno.test("other sports: an old push with a new lead waiting alerts", () => {
 });
 
 Deno.test("push checks run from 08:00 to 20:59 Edmonton, not while daily-push holds a late lead", () => {
-  // 2026-11-15 is MST, UTC-7.
-  assertEquals(pushCheckDue(new Date("2026-11-15T14:59:00Z")), false, "07:59");
-  assertEquals(pushCheckDue(new Date("2026-11-15T15:00:00Z")), true, "08:00");
-  assertEquals(pushCheckDue(new Date("2026-11-16T03:59:00Z")), true, "20:59");
-  assertEquals(pushCheckDue(new Date("2026-11-16T04:00:00Z")), false, "21:00");
-  assertEquals(pushCheckDue(new Date("2026-11-15T12:00:00Z")), false, "05:00, a lead from last night is still waiting for 07:00");
+  // Edmonton times from the runtime's own rules, never a hard-coded winter offset
+  // (_shared/edmonton_testkit.ts).
+  assertEquals(pushCheckDue(atEdmonton("2026-11-15", 7, 59)), false, "07:59");
+  assertEquals(pushCheckDue(atEdmonton("2026-11-15", 8)), true, "08:00");
+  assertEquals(pushCheckDue(atEdmonton("2026-11-15", 20, 59)), true, "20:59");
+  assertEquals(pushCheckDue(atEdmonton("2026-11-15", 21)), false, "21:00");
+  assertEquals(pushCheckDue(atEdmonton("2026-11-15", 5)), false, "05:00, a lead from last night is still waiting for 07:00");
 });
 
 Deno.test("tickets: any stuck ticket alerts by count only, none or an unknown count does not", () => {

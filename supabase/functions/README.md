@@ -36,6 +36,7 @@ supabase functions deploy ticket-intake --no-verify-jwt
 supabase functions deploy ticket-thread --no-verify-jwt
 supabase functions deploy ticket-reply  --no-verify-jwt
 supabase functions deploy register-push --no-verify-jwt
+supabase functions deploy delete-device-data --no-verify-jwt
 ```
 
 `--no-verify-jwt` is correct here: the app has no login, so there is no user token to verify. It
@@ -45,7 +46,14 @@ tripwire for the same reason. What holds is in the data path: the database caps 
 `register-push` updating a token it already holds instead of inserting, so an opt-out or a token
 refresh never meets the hourly insert cap. `register-push` still accepts a missing header from
 builds before 1.5.6; a wrong one is refused. `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected by the
-platform, so there are no secrets to set for these four.
+platform, so there are no secrets to set for these five.
+
+`delete-device-data` is the app's "Delete my data" action: POST `{ device_id }` with the
+`x-archv-app` header deletes that device's tickets (their messages go with them) and push tokens,
+and answers `{ ok, tickets, push_tokens }` with counts only. It uses the hard header guard and
+logs a row in `ticket_thread_requests`, so ticket-thread's caps (30 an hour per device, 3,000 in
+all) bound it too. The device_id is the only key, as it is for reading the inbox. Nothing calls it
+until an app build ships the Settings action.
 
 ## The rate caps live in the database, not in these functions
 

@@ -2,6 +2,7 @@
 # check-data-shrink.sh: refuse a push that shrinks or rewinds a desk-written data file.
 #
 # Usage:  bash scripts/check-data-shrink.sh <base-sha> [<fallback-sha> ...]
+# Exit:   0 passed or skipped by a trailer, 1 a data file shrank, 2 the guard could not run.
 #
 # deploy.yml runs this as a job the build needs. The first argument is the commit the last
 # successful "Deploy to GitHub Pages" run built, so the check is always against what is live:
@@ -56,7 +57,11 @@ fi
 # An explicit template under ${TMPDIR:-/tmp}: macOS mktemp with no template ignores TMPDIR and
 # writes to the per-user /var/folders temp dir, which the wire desk's build sandbox does not let
 # it write. GNU mktemp on the Actions runner reads the template the same way.
-tmp="$(mktemp -d "${TMPDIR:-/tmp}/data-shrink.XXXXXX")"
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/data-shrink.XXXXXX")" || {
+  # Exit 2, not 1: a guard that could not run is not a detected shrink. It still blocks the deploy.
+  echo "::error::Data shrink guard could not create a temp dir under ${TMPDIR:-/tmp}; nothing was compared."
+  exit 2
+}
 trap 'rm -rf "$tmp"' EXIT
 fail=0
 

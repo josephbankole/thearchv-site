@@ -45,7 +45,9 @@ test('a shrink blocked on one push stays blocked when a later push only touches 
     const deployed = seed(r);
     r.write('src/data/leaguesDays.ts', days('2026-11-13'));
     const a = r.commit('stale merge drops leagues entries');
-    assert.equal(r.guard(deployed, deployed).status, 1, 'push A must fail');
+    const pushA = r.guard(deployed, deployed);
+    assert.equal(pushA.status, 1, 'push A must fail');
+    assert.match(pushA.stdout, /leaguesDays\.ts has fewer date entries/);
     r.write('scripts/data/daily/wire.json', wire('2026-11-15T08:00:00Z', '2026-11-15', '2026-11-14', '2026-11-13'));
     r.commit('Wire and tables: 2026-11-15');
     // Push B: the last successful deploy is still `deployed`; github.event.before is A.
@@ -63,8 +65,14 @@ test('falls back to the pre-push commit when the deployed commit is unknown', ()
     const before = r.commit('add a day');
     r.write('src/data/leaguesDays.ts', days('2026-11-14'));
     r.commit('drop days');
-    assert.equal(r.guard('', before).status, 1);
-    assert.equal(r.guard('0123456789012345678901234567890123456789', before).status, 1);
+    // Assert the base the guard chose, not just the status: HEAD~1 is also `before` here, so a
+    // guard that rejected every candidate and fell through to HEAD~1 would still exit 1.
+    for (const first of ['', '0123456789012345678901234567890123456789']) {
+      const res = r.guard(first, before);
+      assert.equal(res.status, 1, res.stdout + res.stderr);
+      assert.match(res.stdout, new RegExp(`Comparing data files at HEAD against ${before}\\.`));
+      assert.match(res.stdout, /leaguesDays\.ts has fewer date entries/);
+    }
   } finally { r.done(); }
 });
 
@@ -86,7 +94,9 @@ test('the override needs a Data-Shrink-OK trailer; the word in prose does not sk
     const deployed = seed(r);
     r.write('src/data/leaguesDays.ts', days('2026-11-13'));
     r.commit('drop days\n\nA deliberate removal can use [data-shrink-ok] or a Data-Shrink-OK trailer.');
-    assert.equal(r.guard(deployed).status, 1, 'prose mention must not bypass');
+    const prose = r.guard(deployed);
+    assert.equal(prose.status, 1, 'prose mention must not bypass');
+    assert.match(prose.stdout, /leaguesDays\.ts has fewer date entries/);
     r.write('README', 'x');
     r.commit('remove the bad November days\n\nData-Shrink-OK: two duplicate days removed by hand');
     const res = r.guard(deployed);
@@ -104,5 +114,21 @@ test('growing data passes', () => {
     r.commit('grow');
     const res = r.guard(deployed);
     assert.equal(res.status, 0, res.stdout + res.stderr);
+  } finally { r.done(); }
+});
+
+test('the temp dir follows TMPDIR (macOS mktemp ignores it without a template)', () => {
+  const r = repo();
+  try {
+    const deployed = seed(r);
+    r.write('src/data/answers.ts', answers('a', 'b', 'c', 'd'));
+    r.commit('grow');
+    // A TMPDIR that does not exist: the guard must try to use it and stop with its own message.
+    const missing = join(r.dir, 'no-such-tmp');
+    const res = spawnSync('bash', ['scripts/check-data-shrink.sh', deployed],
+      { cwd: r.dir, encoding: 'utf8', env: { ...process.env, TMPDIR: missing } });
+    assert.equal(res.status, 2, res.stdout + res.stderr);
+    assert.ok(res.stderr.includes(missing), res.stderr);
+    assert.match(res.stdout, /could not create a temp dir/);
   } finally { r.done(); }
 });

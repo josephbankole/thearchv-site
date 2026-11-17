@@ -1061,6 +1061,17 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of former Manchester United and England player Sir Bobby Charlton",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 139; master recorded for 'bobby-charlton' in scripts/data/heads-hd.json."
+    },
+    {
+      "slug": "mauricio-pochettino",
+      "name": "Mauricio Pochettino",
+      "club": "Manchester United",
+      "src": "/heads/hd/mauricio-pochettino.webp",
+      "hd": "/heads/hd/mauricio-pochettino.webp",
+      "width": 600,
+      "height": 600,
+      "alt": "Illustrated ARCHV portrait of football manager Mauricio Pochettino",
+      "verifiedBy": "Rendered 2026-11-17 with GPT Image 2 from the reference photo recorded for 'mauricio-pochettino' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Mauricio_Pochettino_USMNT_v_Belgium_Mar_28_2026-2.jpg); likeness checked by eye against it."
     }
   ],
   "clubs": [

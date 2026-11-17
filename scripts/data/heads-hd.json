@@ -1,7 +1,7 @@
 {
   "schema": "archv.heads-hd/1",
   "size": 600,
-  "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered 2026-09-11 on the founder's prompt, verbatim, from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters). 'withdrawn' holds rows taken off the site and the app on purpose, with the date and the reason; their files must not be served (scripts/shared/app-art.mjs refuses them, scripts/check-portrait-provenance.mjs fails the build if one is still registered). Every reference-render row on Wikimedia Commons carries identity.licence (name, url, author, source page) as Commons recorded it on the day it was checked; the About page credits them under #portrait-credits. A 'source' starting cdn: is a path under the CDN base, which is kept only on the Mac (scripts/heads/cdn-base.local, gitignored, or ARCHV_HEADS_CDN_BASE) and joined by normalize-heads.py.",
+  "_comment": "Every app-grade portrait in public/heads/hd/, one row per file, built by scripts/heads/normalize-heads.py. 'out' is the file stem; a legacy /heads/<stem>.webp maps to /heads/hd/<stem>.webp in the feed. 'identity' records how the master was tied to the face already published under that name: ncc = image correlation of the master against the live file (0.9 or above), bank-row or squad-table = the named record in fifa.archv/player-headshot-bank.md; reference-render = a GPT Image 2 portrait rendered on the founder's prompt, verbatim (the 2026-09-11 batch, and later rows on the date in their note), from the reference photo named in 'reference' (job id in 'job'), likeness checked by eye against that photo. A name with no verified master is left out on purpose, and its entries keep the crest in the app. 'frame': 'none' marks a master with no baked frame to trim. 'marks' lists boxes, in master pixels, of logos, crests, sponsor marks and text that normalize-heads.py paints out before fitting (canon D90); the CDN master is never edited. bank-local sources live in fifa.archv/assets/headshots (pass --masters). 'withdrawn' holds rows taken off the site and the app on purpose, with the date and the reason; their files must not be served (scripts/shared/app-art.mjs refuses them, scripts/check-portrait-provenance.mjs fails the build if one is still registered). Every reference-render row on Wikimedia Commons carries identity.licence (name, url, author, source page) as Commons recorded it on the day it was checked; the About page credits them under #portrait-credits. A 'source' starting cdn: is a path under the CDN base, which is kept only on the Mac (scripts/heads/cdn-base.local, gitignored, or ARCHV_HEADS_CDN_BASE) and joined by normalize-heads.py.",
   "entries": [
     {
       "out": "anderson",
@@ -2526,6 +2526,25 @@
       "identity": {
         "method": "bank-row",
         "note": "player-headshot-bank.md 2026-09-12 multisport Answer Desk row, job 5bb170bd. FOUNDER QC PENDING."
+      }
+    },
+    {
+      "out": "mauricio-pochettino",
+      "source": "cdn:hf_20261117_142424_0dba7b81-af73-4dee-82ac-184bcc31b0bc.png",
+      "frame": "none",
+      "identity": {
+        "method": "reference-render",
+        "reference": "https://upload.wikimedia.org/wikipedia/commons/0/04/Mauricio_Pochettino_USMNT_v_Belgium_Mar_28_2026-2.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:Mauricio_Pochettino_USMNT_v_Belgium_Mar_28_2026-2.jpg",
+        "job": "0dba7b81-af73-4dee-82ac-184bcc31b0bc",
+        "note": "GPT Image 2 render, 2026-11-17, founder prompt verbatim, 3:2, 4k, quality high (D-2026-09-13d), from this reference photo. The founder chose the photo, the cover of the 13 Nov 2026 @thearchvfc carousel. Before upload it was padded to 3:2 with its own blurred edge, and the background sponsor marks and the lapel badge were painted out. Likeness checked by eye against the reference.",
+        "licence": {
+          "name": "CC BY-SA 4.0",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0",
+          "author": "Bryan Berlin",
+          "source": "https://commons.wikimedia.org/wiki/File:Mauricio_Pochettino_USMNT_v_Belgium_Mar_28_2026-2.jpg",
+          "checked": "2026-11-17, Wikimedia Commons file page"
+        }
       }
     }
   ],

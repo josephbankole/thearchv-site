@@ -53,7 +53,10 @@ if [ -n "$ok_reason" ]; then
   exit 0
 fi
 
-tmp="$(mktemp -d)"
+# An explicit template under ${TMPDIR:-/tmp}: macOS mktemp with no template ignores TMPDIR and
+# writes to the per-user /var/folders temp dir, which the wire desk's build sandbox does not let
+# it write. GNU mktemp on the Actions runner reads the template the same way.
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/data-shrink.XXXXXX")"
 trap 'rm -rf "$tmp"' EXIT
 fail=0
 

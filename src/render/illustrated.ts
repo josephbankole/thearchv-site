@@ -23,6 +23,10 @@ export interface Art {
   club?: string;
   // 600px app-grade portrait in public/heads/hd/, served to the iOS feed (scripts/shared/app-art.mjs).
   hd?: string;
+  // Other names the desk uses for the same player (a surname on its own), and names of different
+  // people who share one, which switch the aliases off. See firstPlayerIn().
+  aliases?: string[];
+  aliasUnless?: string[];
 }
 
 export const PLAYERS: Art[] = registry.players;
@@ -53,12 +57,51 @@ function inText(list: Art[], text: string): Art | null {
   return best;
 }
 
+/* Players: the FIRST banked player named in the text, the same rule the iOS app uses, so a story
+   shows one face on the site and in the app. Whole words only; the longer name wins a tie in
+   position; `aliases` count unless `context` (the whole story) names one of the row's
+   `aliasUnless`. MIRRORED in scripts/shared/illustrated.mjs. */
+interface Match {
+  at: number;
+  len: number;
+}
+
+function matchIn(padded: string, p: Art, ctx: string = padded): Match | null {
+  let best: Match | null = null;
+  const consider = (name: string): void => {
+    const k = norm(name);
+    if (!k) return;
+    const at = padded.indexOf(` ${k} `);
+    if (at >= 0 && (!best || at < best.at || (at === best.at && k.length > best.len))) best = { at, len: k.length };
+  };
+  consider(p.name);
+  const blocked = (p.aliasUnless ?? []).some((u) => norm(u) !== '' && ctx.includes(` ${norm(u)} `));
+  if (!blocked) for (const a of p.aliases ?? []) consider(a);
+  return best;
+}
+
+export function firstPlayerIn(text: string, list: Art[] = PLAYERS, context: string = text): Art | null {
+  const padded = ` ${norm(text ?? '')} `;
+  if (!padded.trim()) return null;
+  const ctx = ` ${norm(context ?? '')} `;
+  let best: Art | null = null;
+  let bestM: Match | null = null;
+  for (const p of list) {
+    const m = matchIn(padded, p, ctx);
+    if (m && (!best || !bestM || m.at < bestM.at || (m.at === bestM.at && m.len > bestM.len))) {
+      best = p;
+      bestM = m;
+    }
+  }
+  return best;
+}
+
 /** The first banked club named anywhere in a block of text. null when nothing is banked. */
 export const clubInText = (text: string): Art | null => inText(CLUBS, text);
 
-/** The first banked player named anywhere in a block of text. null when nothing is banked.
+/** The banked player a block of text is about: the first one it names. null when nothing is banked.
     A miss must render no image: inventing a face for an unbanked name is a canon break. */
-export const playerInText = (text: string): Art | null => inText(PLAYERS, text);
+export const playerInText = (text: string): Art | null => firstPlayerIn(text);
 
 export interface EntryArt {
   kind: 'entry' | 'player' | 'club';
@@ -71,6 +114,7 @@ export interface EntryArt {
 interface ArtEntry {
   headline?: string;
   dek?: string;
+  body?: string;
   image?: string;
   imageAlt?: string;
 }
@@ -91,7 +135,7 @@ export function entryArt(entry: ArtEntry): EntryArt | null {
     };
   }
   const text = `${entry.headline ?? ''} ${entry.dek ?? ''}`;
-  const player = playerInText(text);
+  const player = firstPlayerIn(text, PLAYERS, `${text} ${entry.body ?? ''}`);
   if (player) return { kind: 'player', src: player.src, alt: player.alt, width: player.width, height: player.height };
   const club = clubInText(text);
   if (club) return { kind: 'club', src: club.src, alt: club.alt, width: club.width, height: club.height };

@@ -59,17 +59,56 @@ export function clubInText(text) {
   return best;
 }
 
-/** The first banked player named anywhere in a block of text. Same longest-match rule. */
-export function playerInText(text) {
-  const n = norm(text);
-  if (!n) return null;
+/* Players: the FIRST banked player named in the text, the same rule the iOS app uses
+   (scripts/shared/app-art.mjs), so a story shows one face on the site and in the app. The
+   subject is the one the headline leads with: "Manchester United sack Michael Carrick and agree
+   a deal with Mauricio Pochettino" is Carrick's story. A name counts as whole words only, and on
+   a tie in position the longer name wins, so "Bruno Fernandes" beats a shorter name starting at
+   the same word. A row may list `aliases`, other names the desk uses for the same man (his
+   surname on its own); an alias does not count when the story also names one of the row's
+   `aliasUnless`, a different person who shares it. `context` is the text that block is checked
+   against: the whole story (headline, standfirst and body), so a son named only in the body
+   still switches his father's alias off. MIRRORED in src/render/illustrated.ts. */
+function matchIn(padded, p, ctx = padded) {
   let best = null;
-  for (const p of PLAYERS) {
-    const pn = norm(p.name);
-    if (n.includes(pn) && (!best || pn.length > norm(best.name).length)) best = p;
+  const consider = (name) => {
+    const k = norm(name);
+    if (!k) return;
+    const at = padded.indexOf(` ${k} `);
+    if (at >= 0 && (!best || at < best.at || (at === best.at && k.length > best.len))) best = { at, len: k.length };
+  };
+  consider(p.name);
+  const blocked = (p.aliasUnless ?? []).some((u) => norm(u) && ctx.includes(` ${norm(u)} `));
+  if (!blocked) for (const a of p.aliases ?? []) consider(a);
+  return best;
+}
+
+/** True when the text names this player by his full name or one of his aliases. */
+export function playerNamed(text, p, context = text) {
+  return matchIn(` ${norm(text)} `, p, ` ${norm(context)} `) !== null;
+}
+
+/** True when the story names one of the people this player's aliases must not be read as. */
+export function aliasBlocked(p, context) {
+  const ctx = ` ${norm(context)} `;
+  return (p.aliasUnless ?? []).some((u) => norm(u) && ctx.includes(` ${norm(u)} `));
+}
+
+/** The first player in `list` named in the text (earliest position, longer name on a tie). */
+export function firstPlayerIn(text, list = PLAYERS, context = text) {
+  const padded = ` ${norm(text)} `;
+  if (!padded.trim()) return null;
+  const ctx = ` ${norm(context)} `;
+  let best = null, bestM = null;
+  for (const p of list) {
+    const m = matchIn(padded, p, ctx);
+    if (m && (!best || m.at < bestM.at || (m.at === bestM.at && m.len > bestM.len))) { best = p; bestM = m; }
   }
   return best;
 }
+
+/** The banked player a block of text is about: the first one it names. */
+export const playerInText = (text) => firstPlayerIn(text);
 
 /* ---------- the art a desk entry gets ----------
    One chain, three steps, used by every card and every article page so a reader never sees the
@@ -77,7 +116,7 @@ export function playerInText(text) {
 
      1. the entry's OWN image, if the desk filed one. It always wins: the desk picked that face
         for that day and knows things a name match cannot.
-     2. a banked portrait of a player named in the headline or the standfirst.
+     2. a banked portrait of the first player named in the headline, then the standfirst.
      3. the ARCHV badge of a club named in the same text.
 
    A miss returns null and the caller renders no <img>. That is the whole discipline: the archive
@@ -95,7 +134,7 @@ export function entryArt(entry) {
     };
   }
   const text = `${entry.headline ?? ""} ${entry.dek ?? ""}`;
-  const player = playerInText(text);
+  const player = firstPlayerIn(text, PLAYERS, `${text} ${entry.body ?? ""}`);
   if (player) return { kind: "player", src: player.src, alt: player.alt, width: player.width, height: player.height };
   const club = clubInText(text);
   if (club) return { kind: "club", src: club.src, alt: club.alt, width: club.width, height: club.height };

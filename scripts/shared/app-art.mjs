@@ -15,7 +15,9 @@
      2. an entry with no image gets the banked portrait of the first registered player named in
         its headline, else in its dek provided the body names him too (an actual link). First-named, not longest-named: in the app the portrait
         stands for the story's subject, and the subject is the one the headline leads with.
-        (The website's entryArt() keeps its own longest-name rule; this does not touch it.)
+        The website's entryArt() uses the same first-named matcher (scripts/shared/illustrated.mjs),
+        reading headline and standfirst as one text; the two differ only in the standfirst-and-
+        body rule above and in this module's app-grade gate.
      3. otherwise no image, and the app shows the crest.
 
    Club badges are never served here. The app's rule is portraits or the crest.
@@ -28,7 +30,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PLAYERS } from "./illustrated.mjs";
+import { PLAYERS, firstPlayerIn as firstNamed, playerNamed, aliasBlocked } from "./illustrated.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const PUBLIC = join(ROOT, "public");
@@ -81,25 +83,20 @@ export function appGrade(rel) {
   return ok;
 }
 
-/** The first registered player named in the text (earliest position; longer name on a tie). */
-export function firstPlayerIn(text) {
-  const n = ` ${norm(text)} `;
-  let best = null, bestAt = Infinity;
-  for (const p of PLAYERS) {
-    if (!p.hd) continue;
-    const at = n.indexOf(` ${norm(p.name)} `);
-    if (at < 0) continue;
-    if (at < bestAt || (at === bestAt && p.name.length > best.name.length)) { best = p; bestAt = at; }
-  }
-  return best;
+/** The first registered player with an app-grade portrait named in the text (earliest position;
+    longer name on a tie; aliases count). One matcher with the website: scripts/shared/illustrated.mjs. */
+export function firstPlayerIn(text, context = text) {
+  return firstNamed(text, PLAYERS.filter((p) => p.hd), context);
 }
 
-/** True when the text names the player: full name, or surname where the surname is distinctive. */
-function namedIn(text, player) {
+/** True when the text names the player: full name or alias, or surname where the surname is
+    distinctive. The surname alone does not count in a story that names someone who shares it
+    (the row's aliasUnless), the same block the aliases obey. */
+function namedIn(text, player, context = text) {
+  if (playerNamed(text, player, context)) return true;
+  if (aliasBlocked(player, context)) return false;
   const n = ` ${norm(text)} `;
-  const full = norm(player.name);
-  if (n.includes(` ${full} `)) return true;
-  const sur = full.split(" ").pop();
+  const sur = norm(player.name).split(" ").pop();
   return sur.length >= 4 && n.includes(` ${sur} `);
 }
 
@@ -110,13 +107,14 @@ export function appArt(entry) {
     const hd = `/heads/hd/${basename(entry.image).replace(/\.[a-z0-9]+$/i, "")}.webp`;
     return appGrade(hd) ? { image: hd, imageAlt: entry.imageAlt ?? `Illustration: ${entry.headline ?? ""}` } : null;
   }
-  const lead = firstPlayerIn(entry.headline ?? "");
+  const story = `${entry.headline ?? ""} ${entry.dek ?? ""} ${entry.body ?? ""}`;
+  const lead = firstPlayerIn(entry.headline ?? "", story);
   if (lead && appGrade(lead.hd)) return { image: lead.hd, imageAlt: lead.alt };
   // A player named only in the dek stands in for the story only when there is an actual link:
   // the body names him too (founder, 2026-09-11: "a secondary name winning is fine if there is
   // an actual link"). A one-line passing mention in the standfirst does not earn the portrait.
-  const second = firstPlayerIn(entry.dek ?? "");
-  if (second && appGrade(second.hd) && namedIn(entry.body, second)) return { image: second.hd, imageAlt: second.alt };
+  const second = firstPlayerIn(entry.dek ?? "", story);
+  if (second && appGrade(second.hd) && namedIn(entry.body, second, story)) return { image: second.hd, imageAlt: second.alt };
   return null;
 }
 

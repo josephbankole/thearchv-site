@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-18",
+    day: "Wednesday",
+    headline: "Mauricio Pochettino starts at Manchester United the morning after a tearful USA farewell",
+    dek: "Mauricio Pochettino starts as Manchester United head coach on 18 November after a 2-0 win over Haiti in his last USA game, with three days to prepare for Liverpool at Anfield on 22 November.",
+    body: "Mauricio Pochettino begins work as Manchester United head coach on Wednesday 18 November, the morning after his last game in charge of the United States. The US beat Haiti 2-0 in Cincinnati on Tuesday night to go through 8-0 on aggregate in the Concacaf Nations League quarter-final, with Christian Pulisic scoring an overhead kick and 18-year-old Julian Hall the second goal (AP).\n\n\"It is impossible not to cry because we care about the people and they care about us,\" Pochettino said after the match, according to the Associated Press. The crowd of 24,001 at TQL Stadium gave him a standing ovation. He leaves the US job with a 23-12-2 record, including a World Cup run to the last 16 (AP).\n\nPart of his staff is already in Manchester. Assistant Jesús Pérez, goalkeeping coach Toni Jiménez and fitness coach Sebastiano Pochettino, his son, have been in England since Sunday, and Miguel D'Agostino, Sylvia Tuyà Viñas and analyst Alex Scott travel with him (AP). United arranged a private jet so he could go straight to Carrington on landing, the Daily Mail reported, and Goal says his first press conference as United coach is expected on Friday lunchtime.\n\nHe has three days with the squad, by Goal's count, before Liverpool against Manchester United at Anfield on Sunday 22 November. United are 18th in the Premier League with eight points from ten games (The Independent). Pochettino is the club's eighth permanent coach or manager since Sir Alex Ferguson retired in 2013, and after Anfield come Brentford, Newcastle United, Crystal Palace and Coventry City (AP).\n\nSources: AP; Goal; The Independent.",
+    status: "verified",
+    publishedAt: "2026-11-18T06:31:39-05:00",
+    index: "noindex",
+    seoTitle: "Pochettino starts at Manchester United after USA 2-0 Haiti",
+    sources: [{"outlet":"AP","url":"https://abcnews.com/Sports/wireStory/christian-pulisic-stuns-bicycle-kick-us-sends-off-138233726","published":"2026-11-18"},{"outlet":"Goal","url":"https://goal.com/en/news/manchester-united-lay-private-jet-mauricio-pochettino-fly-straight-cincinnati-carrington-ahead-liverpool-trip/bltbc971645455f4c80","published":"2026-11-16"},{"outlet":"The Independent","url":"https://sports.yahoo.com/articles/man-utd-confirm-mauricio-pochettino-122422809.html","published":"2026-11-13"}],
+    tier: "confirmed",
+    expires: "2026-11-22",
+  },
+  {
     date: "2026-11-16",
     day: "Monday",
     headline: "Mauricio Pochettino starts at Manchester United on 18 November, four days before Anfield",

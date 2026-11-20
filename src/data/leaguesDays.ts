@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-20",
+    day: "Friday",
+    headline: "Liverpool v Manchester United: Liverpool are fourth, and have not beaten United at Anfield since the 7-0",
+    dek: "Liverpool v Manchester United, Premier League, Anfield, Sunday 22 November: Liverpool have not beaten United at home since the 7-0 in March 2023 and have won one of five home league games this season before Mauricio Pochettino's first match.",
+    body: "Liverpool have not beaten Manchester United at Anfield since the 7-0 in March 2023, the biggest win in the fixture's history. In three attempts since, they drew 0-0 in December 2023, drew 2-2 the following season after a late Amad Diallo goal, and lost 2-1 last season, United's first win at Anfield in almost a decade, ESPN's Beth Lindop reported on 20 November.\n\nThe two sides meet again at Anfield on Sunday 22 November, kick-off 16:30 GMT (manutd.com). Liverpool are fourth and United 18th. It is the first Liverpool v Manchester United game for Andoni Iraola and for Mauricio Pochettino, who started as United head coach on Wednesday (ESPN).\n\nLiverpool have won one of five Premier League games at Anfield this season, with two draws and two defeats, the same home record as United, and only Crystal Palace and Nottingham Forest have taken fewer home points. Away from home they have won four and drawn one, the best record in the division. Against Arsenal they failed to register a shot on target at Anfield for the first time in 442 league matches, and across 2026 they have won five of 15 league games there (ESPN).\n\nUnited arrive with one league win all season and eight games without one, a point behind 17th-placed Coventry City, so a win could lift them out of the bottom three (ESPN, Rob Dawson, 19 November). Pochettino said his first task was to help the players \"recover those feelings about being winners\". He holds his first press conference at Carrington at 14:00 GMT on Friday, where an update is expected on Harry Maguire, who came off at half-time against Aston Villa with a back problem, and on Luke Shaw and Marcus Rashford, who are working on a return (manutd.com).\n\nSources: ESPN; manutd.com.",
+    status: "verified",
+    publishedAt: "2026-11-20T06:29:58-05:00",
+    index: "noindex",
+    seoTitle: "Liverpool v Manchester United: no home win since the 7-0",
+    sources: [{"outlet":"ESPN","url":"https://www.espn.com/soccer/story/_/id/50520411/liverpool-manchester-united-anfield-premier-league","published":"2026-11-20"},{"outlet":"Manchester United","url":"https://www.manutd.com/en/news/when-is-mauricio-pochettinos-first-united-press-conference","published":"2026-11-19"}],
+    tier: "reported",
+    expires: "2026-11-22",
+  },
+  {
     date: "2026-11-18",
     day: "Wednesday",
     headline: "Mauricio Pochettino starts at Manchester United the morning after a tearful USA farewell",

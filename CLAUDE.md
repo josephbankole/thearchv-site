@@ -462,6 +462,47 @@ site's own tokens so it reads as house illustration.
   line. One plain colour on the body: no number, stripe, logo or second body colour, and never a
   real team's scheme. That is still the line between a coloured toy and a livery.
 
+## The margin art, "Field lines" (2026-11-21)
+
+Founder's pick on 21 Nov 2026 from the side-margin demo (`../site-concepts-2026-11-21/`): a
+hairline drawing of the page's playing surface, split down the middle across the two side
+margins, that inks itself in as the page scrolls and is whole before the footer.
+
+- **Where the drawing comes from.** `scripts/shared/margin-art.mjs`, `marginArt(sportKey)`: one
+  module, no imports, two callers. `masthead()` writes it on every page-shell page with the sport
+  key the generator already passes (no sport and football both get the pitch), and the
+  `archv-home-ssr` plugin fills `<!--archv:margin-art-->` in `index.html`. Six drawings: pitch,
+  gridiron, circuit, tennis court, golf hole, basketball court. **The F1 circuit is invented and
+  must stay no real track's outline.** Paths only: no text, image, crest or mark.
+- **No JavaScript.** One registered property, `--margin-ink`, runs 0 to 1 on
+  `animation-timeline: scroll(root)` inside `@supports`; each path carries `--a` and `--w` (worked
+  out at build time from where it sits) and turns that into `stroke-dashoffset`. No CSP change,
+  and nothing here may ever emit a `<script>`. The property rests at 1, so a browser without
+  scroll timelines, `prefers-reduced-motion`, the front page's `.reduced-motion` class and a
+  page too short to scroll all show the finished drawing, still.
+- **Thresholds: shown only when the empty margin is about 140px.** Front page: both halves from
+  **1560px**, in the space outside the 1280px `.wrap`; from **1420px to 1559px** the left half
+  alone, in the left gutter. The right gutter is not empty: the scores strip and the Shorts row
+  bleed through it, which is why the right layer never uses it. Static family from **63.5em
+  (1016px)** beside the 46rem column and from **77.5em (1240px)** on a `.wrap--wide` page (60rem),
+  told apart with `:has(.wrap--wide)`; the wide value is the default, so no `:has()` means the
+  safe one. Below that the layers are `display: none`. Phones never show it and fetch nothing
+  (inline SVG, about 1 KB gzipped).
+- **Fail closed.** The markup carries `hidden` and only these rules show it. The content.css
+  family and `/scores/` call `masthead()` without `pageStyles()` and so show nothing. A new page
+  whose main content is wider than 60rem must not load these rules as they stand.
+- **Trap 3.** Fixed, `pointer-events: none`, `aria-hidden`, `contain` rather than `overflow` (so
+  never a scroll container), nothing transformed, class name `.margin-art` (never `.rail`).
+  `z-index: 0` puts it under `main`, the footer, the masthead and the sticky tab bar; it sits
+  outside `<header class="masthead">`, which is its own stacking context. The static footer is an
+  opaque band 72rem wide and slides over the foot of the drawing at the very end of a page.
+- **Colour.** `--ink-faint` lines, `--rule` soft lines, and the accent as a fill on one or two
+  small dots per drawing. Never a text colour, never behind text.
+- **Two copies of the CSS**: `src/style.css` and `pageStyles()`. The geometry differs; the ink
+  rules between `margin-art:ink` and `margin-art:end` are identical and
+  `scripts/test/margin-art.test.mjs` (in `test:home`) fails the build if they drift, if a sport
+  has no drawing, if a layer loses `aria-hidden` or `hidden`, or if a script appears.
+
 ## The feed contract (the iOS app depends on this)
 
 `scripts/build-feed.mjs` runs after `vite build` and emits `dist/feed/*.json`,

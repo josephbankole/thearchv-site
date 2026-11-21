@@ -10,6 +10,7 @@ import { sentences } from "./sentences.mjs";
 import { thumbImgAttrs } from "./thumbs.mjs";
 import { readFileSync } from "node:fs";
 import { SPORT_ICON_ALT, sportGlyph } from "../icons/markup.mjs";
+import { marginArt } from "./margin-art.mjs";
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -593,9 +594,13 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 // Pages that belong to no sport pass NO_SPORT (null), which marks no tab current; the default
 // only applies when the argument is left out entirely.
 export function masthead(currentSportKey = DEFAULT_SPORT) {
+  // The margin art (2026-11-21) rides here because every generator already passes its sport key
+  // to masthead(). It sits OUTSIDE <header>, which is its own stacking context at z-index 40.
+  // No sport (NO_SPORT) and football both draw the pitch. It is paths only, never a <script>.
   // The skip link is the first focusable thing on every page-shell page. It targets id="main",
   // which every builder puts on its <main>; a page without that id breaks the link silently.
   return `<a class="skip" href="#main">Skip to content</a>
+  ${marginArt(currentSportKey)}
   <header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge-68.webp" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <div class="masthead__actions">
@@ -1084,6 +1089,49 @@ export function pageStyles() {
        this page family and has scrolled away by the time the bar is pinned to anything. */
     .masthead { position: relative; z-index: 40; }
     @media print { body::before { display: none; } }
+    /* ---------- margin art: "Field lines" (founder's pick, 2026-11-21) ----------
+       Two fixed, inert, aria-hidden layers, one per side margin, holding a hairline drawing of the
+       page's playing surface (scripts/shared/margin-art.mjs). It inks in with scroll and is whole
+       before the footer. NO JAVASCRIPT: one registered property on a CSS scroll timeline. A browser
+       without scroll timelines, a reader who asked for reduced motion and a page too short to scroll
+       all get the finished drawing, still (--margin-ink rests at 1).
+       Shown only when the empty margin beside the column is about 140px or more: from 77.5em (1240px)
+       beside a 60rem .wrap--wide page, from 63.5em (1016px) beside the 46rem column. The wide value is
+       the default, so a browser without :has() never draws under a wide page.
+       Trap 3: the layers are fixed, take no pointer, are not scroll containers (contain, not
+       overflow) and nothing in them is transformed. z-index 0 keeps them under main, the footer, the
+       masthead and the sticky tab bar. The markup carries hidden, so only these rules show it.
+       TWO COPIES: this block, and src/style.css. Change one, change the other. */
+    @property --margin-ink { syntax: "<number>"; inherits: true; initial-value: 1; }
+    @keyframes margin-ink { from { --margin-ink: 0; } 92%, to { --margin-ink: 1; } }
+    .margin-art {
+      display: none; position: fixed; top: 11rem; bottom: 1.5rem; z-index: 0;
+      width: calc((100vw - var(--margin-col, 60rem)) / 2 - 1.75rem);
+      pointer-events: none; contain: layout paint;
+      --margin-ink: 1; --margin-accent: var(--accent-fill);
+    }
+    @media (min-width: 77.5em) { .margin-art { display: block; } }
+    @media (min-width: 63.5em) { body:not(:has(.wrap--wide)) .margin-art { display: block; --margin-col: 46rem; } }
+    /* margin-art:ink (this part is identical in src/style.css and pageStyles(); a test compares them) */
+    .margin-art--l { left: 0; }
+    .margin-art--r { right: 0; }
+    .margin-art svg { display: block; width: 100%; height: 100%; }
+    .margin-art .ln {
+      fill: none; stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 1 2;
+      stroke-dashoffset: clamp(0, calc(1 - (var(--margin-ink) - var(--a, 0)) / var(--w, 1)), 1);
+    }
+    .margin-art .ln-s { stroke: var(--rule); }
+    .margin-art .ln-b { stroke-width: 2.25; }
+    .margin-art .ln-t { stroke-width: 15; }
+    .margin-art .dot { fill: var(--ink-faint); opacity: clamp(0, calc((var(--margin-ink) - var(--a, 0)) / 0.04), 1); }
+    .margin-art .dot-a { fill: var(--margin-accent); }
+    @supports (animation-timeline: scroll()) {
+      .margin-art { animation: margin-ink linear both; animation-timeline: scroll(root block); }
+    }
+    @media (prefers-reduced-motion: reduce) { .margin-art { animation: none; } }
+    .reduced-motion .margin-art { animation: none; }
+    @media print { .margin-art { display: none !important; } }
+    /* margin-art:end */
     a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
     a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }

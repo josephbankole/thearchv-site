@@ -181,6 +181,52 @@ main, .footer { position: relative; z-index: 2; }
 /* Above .sportnav (55) so the open menu panel is never painted over; below the skip link (200). */
 .masthead { position: relative; z-index: 60; }
 
+/* ---------- margin art: "Field lines" (founder's pick, 2026-11-21) ----------
+   Two fixed, inert, aria-hidden layers, one per side margin, holding a hairline drawing of the
+   page's playing surface (scripts/shared/margin-art.mjs). It inks in with scroll and is whole
+   before the footer. NO JAVASCRIPT: one registered property on a CSS scroll timeline. A browser
+   without scroll timelines, a reader who asked for reduced motion and a page too short to scroll
+   all get the finished drawing, still (--margin-ink rests at 1).
+   Shown only when the empty margin beside the content is about 140px or more (rules below).
+   Trap 3: the layers are fixed, take no pointer, are not scroll containers (contain, not
+   overflow) and nothing in them is transformed. z-index 0 keeps them under main, the footer, the
+   masthead and the sticky tab bar. The markup carries `hidden`, so only these rules show it.
+   TWO COPIES: this block, and pageStyles() in scripts/shared/page-shell.mjs. Change one, change the other. */
+@property --margin-ink { syntax: "<number>"; inherits: true; initial-value: 1; }
+@keyframes margin-ink { from { --margin-ink: 0; } 92%, to { --margin-ink: 1; } }
+.margin-art {
+  display: none; position: fixed; top: 10rem; bottom: 1.5rem; z-index: 0;
+  width: calc((100vw - var(--maxw)) / 2 + var(--gutter) - 1.75rem);
+  pointer-events: none; contain: layout paint;
+  --margin-ink: 1; --margin-accent: var(--accent);
+}
+/* The scores strip and the Shorts row bleed through the RIGHT gutter to the edge of .wrap, so the
+   right layer may only use the space outside .wrap, which reaches 140px at 1560px. From 1420px to
+   1559px the left half shows alone, in the left gutter, where nothing bleeds. From 1560px both
+   halves take the same width so they draw at the same scale. */
+@media (min-width: 1420px) { .margin-art--l { display: block; } }
+@media (min-width: 1560px) { .margin-art { display: block; width: calc((100vw - var(--maxw)) / 2 - 1.75rem); } }
+/* margin-art:ink (this part is identical in src/style.css and pageStyles(); a test compares them) */
+.margin-art--l { left: 0; }
+.margin-art--r { right: 0; }
+.margin-art svg { display: block; width: 100%; height: 100%; }
+.margin-art .ln {
+  fill: none; stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 1 2;
+  stroke-dashoffset: clamp(0, calc(1 - (var(--margin-ink) - var(--a, 0)) / var(--w, 1)), 1);
+}
+.margin-art .ln-s { stroke: var(--rule); }
+.margin-art .ln-b { stroke-width: 2.25; }
+.margin-art .ln-t { stroke-width: 15; }
+.margin-art .dot { fill: var(--ink-faint); opacity: clamp(0, calc((var(--margin-ink) - var(--a, 0)) / 0.04), 1); }
+.margin-art .dot-a { fill: var(--margin-accent); }
+@supports (animation-timeline: scroll()) {
+  .margin-art { animation: margin-ink linear both; animation-timeline: scroll(root block); }
+}
+@media (prefers-reduced-motion: reduce) { .margin-art { animation: none; } }
+.reduced-motion .margin-art { animation: none; }
+@media print { .margin-art { display: none !important; } }
+/* margin-art:end */
+
 /* ---------- type primitives ---------- */
 .eyebrow, .section-index {
   font-family: var(--grotesque);

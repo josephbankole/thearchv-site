@@ -338,6 +338,11 @@ main, .footer { position: relative; z-index: 2; }
   padding: 0.85rem 1rem; border-bottom: 3px solid transparent;
   transition: color 0.3s, border-color 0.3s;
 }
+/* Tab glyph: a 16px static drawing in the link's own colour, mirrored in pageStyles(). The line
+   box is taller than 16px, so the bar keeps its height. Never a canvas in here: the bar scrolls
+   sideways (trap 3). */
+.sportnav__link { display: inline-flex; align-items: center; gap: 0.4rem; }
+.sportnav__glyph { flex: 0 0 auto; width: 16px; height: 16px; }
 .sportnav__link:hover { color: var(--ink); }
 .sportnav__link[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
 .sportnav__link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
@@ -696,6 +701,23 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
    short of the bezel; the row itself never widens the page. */
 .scores-strip { background: var(--bg-sunken); border-bottom: 1px solid var(--rule); }
 .scores-strip__inner { display: flex; align-items: stretch; min-height: 2.9rem; }
+/* Sport icon. MIRROR of .sport-icon* in pageStyles() (scripts/shared/page-shell.mjs), which
+   styles the 96px icon on the sport pages; here it is the football at the head of the scores
+   strip. A fixed square, so the poster holds the space and nothing shifts when the canvas arrives.
+   touch-action: pan-y hands every vertical pan to the browser, so a thumb that lands on the icon
+   and swipes up scrolls the page (trap 3 in CLAUDE.md). The change from poster to canvas is
+   opacity only; nothing is transformed at rest. The module is public/sport-icons/icon.js. */
+.sport-icon { position: relative; display: block; flex: 0 0 auto; width: 96px; height: 96px; -webkit-user-select: none; user-select: none; }
+.sport-icon__poster, .sport-icon__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.sport-icon__canvas { opacity: 0; transition: opacity 0.35s ease; touch-action: pan-y; cursor: grab; -webkit-tap-highlight-color: transparent; }
+.sport-icon__poster { transition: opacity 0s 0.4s; }
+.sport-icon.is-live .sport-icon__canvas { opacity: 1; }
+.sport-icon.is-live .sport-icon__poster { opacity: 0; }
+.sport-icon.is-dragging .sport-icon__canvas { cursor: grabbing; }
+/* 40px in a 2.9rem strip: the strip keeps its height. */
+.sport-icon--strip { width: 2.5rem; height: 2.5rem; align-self: center; margin-right: 0.7rem; }
+@media (prefers-reduced-motion: reduce) { .sport-icon__canvas, .sport-icon__poster { transition: none; } }
+.reduced-motion .sport-icon__canvas, .reduced-motion .sport-icon__poster { transition: none; }
 .scores-strip__all {
   flex: 0 0 auto; display: inline-flex; align-items: center; gap: 0.35rem;
   padding: 0 1rem 0 0; margin-right: 0.25rem; border-right: 1px solid var(--rule);

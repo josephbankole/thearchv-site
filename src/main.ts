@@ -59,6 +59,17 @@ function boot(): void {
   // runs in every mode; its motion is CSS-gated and reduced-motion safe.
   safe('initChrome', initChrome);
 
+  // The football at the head of the scores strip. Its SVG poster is already in the HTML; this
+  // only fetches the module that turns it live, and only if the mount is there. The module is a
+  // plain file in public/ shared with the static pages (see its header), so it is imported by
+  // URL at run time rather than bundled: the path goes through a variable so Vite leaves it be.
+  // It honours reduced motion itself (one still frame), so it runs in every mode.
+  safe('initSportIcon', () => {
+    if (!document.querySelector('[data-sport-icon]')) return;
+    const url = '/sport-icons/icon.js';
+    import(/* @vite-ignore */ url).catch((err) => console.error('[boot] sport icon failed', err));
+  });
+
   // Privacy-friendly analytics (no-op until a PostHog key is configured)
   safe('initAnalytics', initAnalytics);
 

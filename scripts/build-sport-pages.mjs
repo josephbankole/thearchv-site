@@ -12,7 +12,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
   SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
-  masthead, deskNav, footer, documentShell, ROBOTS_INDEXABLE,
+  masthead, sportIcon, deskNav, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
@@ -103,7 +103,7 @@ function renderSection(sport) {
   <main class="wrap wrap--wide" id="main">
     <section class="sport-head">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(sport.label)}</p>
-      <div class="sport-head__title"><h1>${esc(sport.label)}</h1></div>
+      <div class="sport-head__title">${sportIcon(sport.key)}<h1>${esc(sport.label)}</h1></div>
       ${renderWireStrip(DAILY.wire, sport.key, DAILY.today)}
       ${renderTablesStrip(DAILY.tables, sport.key, DAILY.today)}
       ${rail}

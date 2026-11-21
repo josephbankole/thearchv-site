@@ -1,0 +1,4 @@
+{
+  "note": "Videos the front page and the app feed never show, and whose thumbnails are never copied to this site. Empty since 2026-11-21, when the founder ruled that every public upload shows automatically. To keep one off, add { \"id\": \"<11-character video id>\", \"why\": \"<reason>\" } to the list; remove it to let the video back. scripts/fetch-videos.mjs and loadVideos() in scripts/videos/lib.mjs both read this file.",
+  "hidden": []
+}

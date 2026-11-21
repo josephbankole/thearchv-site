@@ -8,6 +8,9 @@ import { createHash } from "node:crypto";
 import { entryArt } from "./illustrated.mjs";
 import { sentences } from "./sentences.mjs";
 import { thumbImgAttrs } from "./thumbs.mjs";
+import { readFileSync } from "node:fs";
+import { SPORT_ICON_ALT, sportGlyph } from "../icons/markup.mjs";
+import { marginArt } from "./margin-art.mjs";
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -72,7 +75,7 @@ export const ORG_NODE = {
   url: `${SITE}/`,
   foundingDate: "2026",
   description:
-    "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and no photograph appears anywhere on the site.",
+    "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and every player and club image is drawn, not photographed.",
   logo: { "@type": "ImageObject", url: `${SITE}/brand/logo-badge@192.png`, width: 192, height: 192 },
   image: `${SITE}/og.jpg`,
   founder: PERSON_REF,
@@ -417,69 +420,49 @@ export const QUESTION_LANE_META = {
   questions: { label: "Question Desk", seoSuffix: "answered", indexTitleSuffix: "Question Desk" },
 };
 
-// Editorial copy per new sport, one source shared by the section pages (build-sport-pages.mjs)
-// and the lane fronts (build-lane-pages.mjs): `lede` states what the desk covers and the
-// standard it meets (and doubles as the meta description); `holding` is the honest empty-state
-// paragraph shown until the first entry lands. British English, house voice, no hype, no em
-// dashes. Football is not here: it keeps its own long-standing homepage and lane copy.
-// `about` is the same desk with no cadence in it. The pages never print `lede` directly: they go
-// through sportDeskLede() below, which prints `about` plus the date of the newest answer once the
-// desk has missed two of its own periods (gap4-9, 2026-11-15), so a page never promises "a day"
-// or "every Monday" on a desk that has stopped. The search index uses `about` as it stands.
+// Editorial copy per sport, one source for the sport hubs, the sport lane fronts and the search
+// index. `about` is what the desk covers, with no cadence and no date in it: it is each page's
+// meta, og, twitter and JSON-LD description and the search index's line. It is not printed in the
+// page header, which is breadcrumb, h1, then the strips (founder, 2026-11-21: the dated desk lede
+// read as stale). `holding` shows only while a desk has no entries.
+// British English, house voice, no hype, no em dashes. Football is not here: it keeps its own
+// homepage and lane copy.
 export const SPORT_DESK_COPY = {
   nfl: {
-    lede: "The NFL desk, one answered question a day: the biggest thing fans are asking that week.",
     about: "The NFL desk answers the biggest question fans are asking.",
     holding: "The NFL desk opens soon.",
   },
   f1: {
-    lede: "The Formula 1 desk, one answered question a day: the one the paddock and the fans keep coming back to.",
     about: "The Formula 1 desk answers the question the paddock and the fans keep coming back to.",
     holding: "The Formula 1 desk opens soon.",
   },
   tennis: {
-    lede: "The tennis desk, one answered question a day: the one fans are asking about the tour.",
     about: "The tennis desk answers the question fans are asking about the tour.",
     holding: "The tennis desk opens soon.",
   },
   golf: {
-    lede: "The golf desk, one answered question a day: the one fans keep asking through the season.",
     about: "The golf desk answers the question fans keep asking through the season.",
     holding: "The golf desk opens soon.",
   },
-  // Basketball runs weekly, not daily (founder order 2026-09-11): one lane, the NBA and the WNBA
-  // covered equally, one question every Monday with the league alternating week to week.
   basketball: {
-    lede: "The basketball desk, the NBA and the WNBA covered equally, with one answered question every Monday.",
     about: "The basketball desk answers questions on the NBA and the WNBA, covered equally.",
     holding: "The basketball desk opens soon.",
   },
 };
 
-// The rhythm each desk's own copy promises, in days: the four daily question desks, basketball
-// weekly, and the Transfer Desk, whose index title says "Verified Daily".
-export const DESK_CADENCE_DAYS = { transfer: 1, nfl: 1, f1: 1, tennis: 1, golf: 1, basketball: 7 };
+// The rhythm a desk's own copy promises, in days. Only the Transfer Desk states one now (its index
+// title says "Verified Daily"); the sport desks print no cadence anywhere.
+export const DESK_CADENCE_DAYS = { transfer: 1 };
 
 /* Whether a desk has gone quiet: its newest entry is more than two of its periods before `today`
-   (YYYY-MM-DD, Toronto). An empty desk is not quiet (it shows its holding line instead), and nor is
-   a desk with no stated rhythm. */
+   (YYYY-MM-DD, Toronto). An empty desk is not quiet, and nor is a desk with no stated rhythm. */
 export function deskQuiet(newestDate, cadenceDays, today) {
   if (!newestDate || !cadenceDays || !today) return false;
   const gap = (Date.parse(`${String(today).slice(0, 10)}T00:00:00Z`) - Date.parse(`${String(newestDate).slice(0, 10)}T00:00:00Z`)) / 86400000;
   return gap > 2 * cadenceDays;
 }
 
-/* The lede a sport page prints. `days` is the desk's entries, newest first (as loadDayData hands
-   them back). While the desk keeps its rhythm, the cadence lede; once it is quiet, the cadence-free
-   line and the date of its newest answer, which is a fact the page can stand behind. */
-export function sportDeskLede(sportKey, days, today) {
-  const copy = SPORT_DESK_COPY[sportKey];
-  const newest = days && days.length ? days[0].date : null;
-  if (!deskQuiet(newest, DESK_CADENCE_DAYS[sportKey], today)) return copy.lede;
-  return `${copy.about} The latest answer is from ${longDate(newest)}.`;
-}
-
-/* A football lane's <title>, the same rule: quietIndexTitle once the lane has gone quiet. */
+/* A football lane's <title>: quietIndexTitle once the lane has gone quiet (gap4-9). */
 export function laneIndexTitle(laneKey, days, today) {
   const meta = LANE_META[laneKey];
   const newest = days && days.length ? days[0].date : null;
@@ -510,7 +493,7 @@ export function lanesForSport(sportKey) {
 export function sportNav(currentSportKey = DEFAULT_SPORT, { home = false } = {}) {
   const links = SPORTS.map((s) => {
     const current = s.key === currentSportKey ? ' aria-current="page"' : "";
-    return `<a class="sportnav__link" href="${sportRoot(s)}"${current}>${esc(s.shortLabel)}</a>`;
+    return `<a class="sportnav__link" href="${sportRoot(s)}"${current}>${sportGlyph(s.key)}${esc(s.shortLabel)}</a>`;
   }).join("\n          ");
   const wrapClass = home ? "sportnav-wrap sportnav-wrap--home" : "sportnav-wrap sportnav-wrap--page";
   return `<div class="${wrapClass}">
@@ -520,6 +503,33 @@ export function sportNav(currentSportKey = DEFAULT_SPORT, { home = false } = {})
         </div>
       </nav>
     </div>`;
+}
+
+/* ---------- sport icons (2026-11-21) ----------
+   One interactive object per sport. sportIcon(key) is the whole mount: a fixed-size span holding
+   the server-rendered SVG poster (which is all a reader gets with no JS or no WebGL2), and the
+   one module that turns it live. Assets are committed under public/sport-icons/ and generated by
+   scripts/build-sport-icons.mjs; the ?v= is a hash of each file, so a change is never served stale.
+
+   THIS IS THE ONE SELF-HOSTED MODULE THE STATIC PAGE FAMILY SHIPS. It is an external file under
+   script-src 'self', so it needs no CSP hash and cspMeta() does not change. Never mount an icon
+   inside .sportnav or any horizontal scroller (the module refuses, and trap 3 in CLAUDE.md is
+   why); the tab bar gets the static glyphs from sportGlyph() instead. */
+const SPORT_ICON_DIR = new URL("../../public/sport-icons/", import.meta.url);
+const sportIconVersions = new Map();
+function sportIconVersion(file) {
+  if (!sportIconVersions.has(file)) {
+    sportIconVersions.set(file, createHash("sha256").update(readFileSync(new URL(file, SPORT_ICON_DIR))).digest("hex").slice(0, 10));
+  }
+  return sportIconVersions.get(file);
+}
+export function sportIcon(key, { size = 96, modifier = "", script = true, versioned = true } = {}) {
+  const alt = SPORT_ICON_ALT[key];
+  if (!alt) throw new Error(`sportIcon: no icon for sport "${key}"`);
+  const v = (file) => (versioned ? `?v=${sportIconVersion(file)}` : "");
+  const cls = modifier ? `sport-icon ${modifier}` : "sport-icon";
+  const span = `<span class="${cls}" data-sport-icon="${key}" data-src="/sport-icons/${key}.glb${v(`${key}.glb`)}"><img class="sport-icon__poster" src="/sport-icons/${key}.svg${v(`${key}.svg`)}" width="${size}" height="${size}" alt="${esc(alt)}" decoding="async"></span>`;
+  return script ? `${span}<script type="module" src="/sport-icons/icon.js${v("icon.js")}"></script>` : span;
 }
 
 /* ---------- card art (phase 2B) ----------
@@ -584,9 +594,13 @@ export function deskNav(currentLane, sportKey = DEFAULT_SPORT) {
 // Pages that belong to no sport pass NO_SPORT (null), which marks no tab current; the default
 // only applies when the argument is left out entirely.
 export function masthead(currentSportKey = DEFAULT_SPORT) {
+  // The margin art (2026-11-21) rides here because every generator already passes its sport key
+  // to masthead(). It sits OUTSIDE <header>, which is its own stacking context at z-index 40.
+  // No sport (NO_SPORT) and football both draw the pitch. It is paths only, never a <script>.
   // The skip link is the first focusable thing on every page-shell page. It targets id="main",
   // which every builder puts on its <main>; a page without that id breaks the link silently.
   return `<a class="skip" href="#main">Skip to content</a>
+  ${marginArt(currentSportKey)}
   <header class="masthead">
     <a class="wordmark" href="/"><img src="/brand/logo-badge-68.webp" width="34" height="34" alt="The ARCHV monogram" /><span class="wordmark__the">THE</span><span class="wordmark__archv">ARCHV</span></a>
     <div class="masthead__actions">
@@ -1075,6 +1089,49 @@ export function pageStyles() {
        this page family and has scrolled away by the time the bar is pinned to anything. */
     .masthead { position: relative; z-index: 40; }
     @media print { body::before { display: none; } }
+    /* ---------- margin art: "Field lines" (founder's pick, 2026-11-21) ----------
+       Two fixed, inert, aria-hidden layers, one per side margin, holding a hairline drawing of the
+       page's playing surface (scripts/shared/margin-art.mjs). It inks in with scroll and is whole
+       before the footer. NO JAVASCRIPT: one registered property on a CSS scroll timeline. A browser
+       without scroll timelines, a reader who asked for reduced motion and a page too short to scroll
+       all get the finished drawing, still (--margin-ink rests at 1).
+       Shown only when the empty margin beside the column is about 140px or more: from 77.5em (1240px)
+       beside a 60rem .wrap--wide page, from 63.5em (1016px) beside the 46rem column. The wide value is
+       the default, so a browser without :has() never draws under a wide page.
+       Trap 3: the layers are fixed, take no pointer, are not scroll containers (contain, not
+       overflow) and nothing in them is transformed. z-index 0 keeps them under main, the footer, the
+       masthead and the sticky tab bar. The markup carries hidden, so only these rules show it.
+       TWO COPIES: this block, and src/style.css. Change one, change the other. */
+    @property --margin-ink { syntax: "<number>"; inherits: true; initial-value: 1; }
+    @keyframes margin-ink { from { --margin-ink: 0; } 92%, to { --margin-ink: 1; } }
+    .margin-art {
+      display: none; position: fixed; top: 11rem; bottom: 1.5rem; z-index: 0;
+      width: calc((100vw - var(--margin-col, 60rem)) / 2 - 1.75rem);
+      pointer-events: none; contain: layout paint;
+      --margin-ink: 1; --margin-accent: var(--accent-fill);
+    }
+    @media (min-width: 77.5em) { .margin-art { display: block; } }
+    @media (min-width: 63.5em) { body:not(:has(.wrap--wide)) .margin-art { display: block; --margin-col: 46rem; } }
+    /* margin-art:ink (this part is identical in src/style.css and pageStyles(); a test compares them) */
+    .margin-art--l { left: 0; }
+    .margin-art--r { right: 0; }
+    .margin-art svg { display: block; width: 100%; height: 100%; }
+    .margin-art .ln {
+      fill: none; stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 1 2;
+      stroke-dashoffset: clamp(0, calc(1 - (var(--margin-ink) - var(--a, 0)) / var(--w, 1)), 1);
+    }
+    .margin-art .ln-s { stroke: var(--rule); }
+    .margin-art .ln-b { stroke-width: 2.25; }
+    .margin-art .ln-t { stroke-width: 15; }
+    .margin-art .dot { fill: var(--ink-faint); opacity: clamp(0, calc((var(--margin-ink) - var(--a, 0)) / 0.04), 1); }
+    .margin-art .dot-a { fill: var(--margin-accent); }
+    @supports (animation-timeline: scroll()) {
+      .margin-art { animation: margin-ink linear both; animation-timeline: scroll(root block); }
+    }
+    @media (prefers-reduced-motion: reduce) { .margin-art { animation: none; } }
+    .reduced-motion .margin-art { animation: none; }
+    @media print { .margin-art { display: none !important; } }
+    /* margin-art:end */
     a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
     a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
@@ -1169,10 +1226,19 @@ export function pageStyles() {
     .sportnav::-webkit-scrollbar { display: none; }
     .sportnav__row { display: flex; gap: 1.4rem; align-items: center; max-width: 72rem; margin: 0 auto; padding: .7rem 1.25rem; width: max-content; min-width: 100%; justify-content: center; }
     .sportnav__link { flex: 0 0 auto; scroll-snap-align: start; color: var(--cream-dim); font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; padding: .2rem 0; border-bottom: 2px solid transparent; }
+    /* Tab glyph: a 16px static drawing in the link's own colour. The link's line box is taller
+       than 16px, so the tab bar keeps its height. Never a canvas in here (see sportIcon above). */
+    .sportnav__link { display: inline-flex; align-items: center; gap: .4rem; }
+    .sportnav__glyph { flex: 0 0 auto; width: 16px; height: 16px; }
     .sportnav__link:hover { color: var(--gold); text-decoration: none; }
     .sportnav__link[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
+    /* On a phone only the current tab shows its glyph, and the gap gives back the 22px that glyph
+       costs. Six glyphs made the row 134px wider, which pushed the current tab off the screen on
+       /golf/ and /basketball/, and this family has no script to scroll it back into view. With
+       this the row is exactly as wide as it was before the glyphs (measured at 360, 390, 430). */
     @media (max-width: 640px) {
-      .sportnav__row { justify-content: flex-start; gap: 1.1rem; }
+      .sportnav__row { justify-content: flex-start; gap: .8rem; }
+      .sportnav__link:not([aria-current]) .sportnav__glyph { display: none; }
     }
     /* Edge-fade on the horizontal scroller (Tier 0). Replaces the old right-only gradient
        ::after, which only existed under 640px and only faded one side, so a left-scrolled tab bar
@@ -1189,9 +1255,26 @@ export function pageStyles() {
        Shared by the sport section pages (build-sport-pages.mjs) and the new-sport lane fronts
        (build-lane-pages.mjs). */
     .sport-head { padding: 2.2rem 0 1rem; }
-    .sport-head__eyebrow { color: var(--gold); font-size: .875rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
-    .sport-head h1 { margin: 0 0 .6rem; }
-    .sport-head__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 1.6rem; }
+    /* The h1 sits in a flex row so a sport icon (about 96px) can sit beside it later without
+       restructuring. Nothing else goes in the row; the header is breadcrumb, title row, strips. */
+    .sport-head__title { display: flex; align-items: center; gap: 1rem; margin: 0 0 1.4rem; }
+    .sport-head__title h1 { margin: 0; min-width: 0; }
+    /* Sport icon. MIRROR of .sport-icon* in src/style.css (the homepage's football). The span is
+       a fixed square, so the poster holds the space and nothing shifts when the canvas arrives.
+       touch-action: pan-y pinch-zoom hands every vertical pan and every pinch to the browser: a thumb that lands on the icon
+       and swipes up scrolls the page (trap 3). The change from poster to canvas is opacity only,
+       and nothing here is transformed at rest. */
+    .sport-icon { position: relative; display: block; flex: 0 0 auto; width: 96px; height: 96px; -webkit-user-select: none; user-select: none; }
+    .sport-icon__poster, .sport-icon__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+    .sport-icon__canvas { opacity: 0; transition: opacity .35s ease; touch-action: pan-y pinch-zoom; cursor: grab; -webkit-tap-highlight-color: transparent; }
+    /* The poster stays solid underneath until the canvas has finished fading in, then goes. */
+    .sport-icon__poster { transition: opacity 0s .4s; }
+    .sport-icon.is-live .sport-icon__canvas { opacity: 1; }
+    .sport-icon.is-live .sport-icon__poster { opacity: 0; }
+    .sport-icon.is-dragging .sport-icon__canvas { cursor: grabbing; }
+    @media (max-width: 640px) { .sport-icon { width: 72px; height: 72px; } }
+    @media (prefers-reduced-motion: reduce) { .sport-icon__canvas, .sport-icon__poster { transition: none; } }
+    .reduced-motion .sport-icon__canvas, .reduced-motion .sport-icon__poster { transition: none; }
     .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: var(--bg-sunken); }
     .sport-holding p { margin: 0; color: var(--cream-dim); font-size: 1rem; }
 
@@ -1368,7 +1451,7 @@ export function pageStyles() {
     /* .desknav is deliberately NOT in this list. It is navigation, not a label, and a monospace
        face widened it enough to wrap to three lines at 375px. CLAUDE.md records it as verified
        collision-proof at 320px in its current form; leave it in Inter Tight. */
-    .article__eyebrow, .lane__eyebrow, .sport-head__eyebrow,
+    .article__eyebrow, .lane__eyebrow,
     .lane-card__kicker, .breadcrumb,
     .author__role {
       font-family: var(--font-mono);

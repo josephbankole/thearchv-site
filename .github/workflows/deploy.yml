@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # No schedule (founder, 2026-11-21: no daily rebuild). The video list refreshes on every desk
+  # push to main, in the "Refresh the video list" step below, and on a manual run.
 
 # Read-only by default. Only the deploy job, which runs no npm code, can publish to Pages.
 permissions:
@@ -61,6 +63,13 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The front page's video block. Reads two public YouTube feeds (no key), copies each
+      # thumbnail into public/media/videos/ and rewrites scripts/data/videos.json for this build
+      # only; nothing is committed. On any failure it keeps the committed snapshot and exits 0, and
+      # continue-on-error covers a crash, so YouTube can never stop a deploy.
+      - name: Refresh the video list
+        continue-on-error: true
+        run: node scripts/fetch-videos.mjs
       - run: npm run build
       # The commit this artifact was built from, so "Verify live" can tell this deployment from
       # the one before it.

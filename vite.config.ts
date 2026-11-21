@@ -5,6 +5,10 @@ import { renderLead, renderBrief, renderReads, renderCovers } from './src/render
 // (WIRE_TODAY and WIRE_DATA_DIR pin both for a test build, as on /wire/).
 import { renderHomeWire } from './scripts/wire/lib/home.mjs';
 import { loadDaily } from './scripts/wire/lib/content.mjs';
+// The video block: the committed snapshot of the YouTube channel's newest videos, rendered at
+// build time (scripts/videos/lib.mjs). The build never touches the network.
+import { renderHomeVideos, loadVideos } from './scripts/videos/lib.mjs';
+import { marginArt } from './scripts/shared/margin-art.mjs';
 
 /* Server-render the front page at build time (phase 2A).
 
@@ -27,6 +31,11 @@ function archvHome(): Plugin {
       order: 'pre',
       handler(html) {
         const blocks: Record<string, () => string> = {
+          // Margin art (founder, 2026-11-21): two aria-hidden layers of inline SVG, no script.
+          '<!--archv:margin-art-->': () => marginArt('football'),
+          // The video block (founder, 2026-11-21), directly under the scores strip. The whole
+          // <section>, or '' when there is no snapshot or nothing in it.
+          '<!--archv:videos-->': () => renderHomeVideos(loadVideos()),
           '<!--archv:lead-->': renderLead,
           // The Wire block (founder, 2026-10-28), between the lead and the Dispatch. The renderer
           // returns the whole <section> or '' when there is no edition from the last 7 days.

@@ -9,11 +9,10 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
-import { torontoIso } from "./shared/entry-dates.mjs";
 import {
   SITE, esc, escAttr, longDate, clampTitle, clampDescription,
-  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, sportDeskLede, cardArt,
-  masthead, deskNav, footer, documentShell, ROBOTS_INDEXABLE,
+  SPORTS, sportByKey, lanesForSport, SPORT_DESK_COPY, cardArt,
+  masthead, sportIcon, deskNav, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH, RSS_LINK,
 } from "./shared/page-shell.mjs";
 
@@ -36,10 +35,11 @@ const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH],
 const { sportDays: DAYS } = await loadDayData();
 
 // Editorial copy per sport comes from SPORT_DESK_COPY in the shared page shell (one source, also
-// used by the lane fronts): `lede` is what the desk covers and its standard; `holding` is the
-// honest empty-state paragraph shown until the first entry lands.
+// used by the lane fronts and the search index): `about` is what the desk covers, with no cadence
+// and no date in it, and it is the page's meta, og, twitter and JSON-LD description. It is NOT
+// printed in the header (see renderSection). `holding` is the honest empty-state paragraph shown
+// until the first entry lands.
 const COPY = SPORT_DESK_COPY;
-const TODAY = torontoIso().slice(0, 10);
 
 // A lane's entries as whole-card links, reusing the lane-card styling from pageStyles(). Matches
 // build-lane-pages.mjs's laneCard so a sport section and a lane front render identically.
@@ -51,8 +51,7 @@ function laneCard(entry, sportKey, laneKey) {
 function renderSection(sport) {
   const url = `${SITE}/${sport.urlBase}/`;
   const days = DAYS[sport.key] || [];
-  // The cadence lede while the desk keeps its rhythm, a dated line once it has gone quiet (gap4-9).
-  const copy = { ...COPY[sport.key], lede: sportDeskLede(sport.key, days, TODAY) };
+  const copy = COPY[sport.key];
   const lanes = lanesForSport(sport.key); // single Question Desk lane for the new sports
   const laneKey = sport.lanes[0];
 
@@ -68,8 +67,8 @@ function renderSection(sport) {
 
   return `${documentShell({
   title: clampTitle(pageTitle.split(" \u00b7 ")),
-  metaDescription: clampDescription(copy.lede),
-  description: copy.lede,
+  metaDescription: clampDescription(copy.about),
+  description: copy.about,
   socialTitle,
   robots: ROBOTS_INDEXABLE,
   canonical: url,
@@ -83,7 +82,7 @@ function renderSection(sport) {
       {
         "@type": "CollectionPage",
         name: `${sport.label} \u00b7 The ARCHV`,
-        description: copy.lede,
+        description: copy.about,
         url,
         inLanguage: "en-GB",
         isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` },
@@ -104,9 +103,7 @@ function renderSection(sport) {
   <main class="wrap wrap--wide" id="main">
     <section class="sport-head">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / ${esc(sport.label)}</p>
-      <p class="sport-head__eyebrow">${esc(sport.label)}</p>
-      <h1>${esc(sport.label)}</h1>
-      <p class="sport-head__lede">${esc(copy.lede)}</p>
+      <div class="sport-head__title">${sportIcon(sport.key)}<h1>${esc(sport.label)}</h1></div>
       ${renderWireStrip(DAILY.wire, sport.key, DAILY.today)}
       ${renderTablesStrip(DAILY.tables, sport.key, DAILY.today)}
       ${rail}

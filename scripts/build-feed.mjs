@@ -5,7 +5,7 @@
    ETag handling cheap polling and index.json's buildHash giving an app-level "did anything change".
    The typed data comes in through scripts/shared/day-data.mjs, which is the one place in this
    repo that bundles src/data/*.ts into something a .mjs build script can import. */
-import { writeFileSync, mkdirSync, statSync, readFileSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, statSync, readFileSync, existsSync, readdirSync, unlinkSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
@@ -14,6 +14,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { infogramEligible, infogramAlt, infogramRelPath } from "./shared/infogram.mjs";
 import { withAppArt } from "./shared/app-art.mjs";
 import { resolveLongReadSport } from "./shared/longread-sport.mjs";
+import { loadVideos, VIDEOS_SCHEMA } from "./videos/lib.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.FEED_OUT || join(ROOT, "dist", "feed");
@@ -381,4 +382,34 @@ console.log(`[build-feed] home covers feed → ${OUT}/home-covers.json (${homeCo
   if (JSON.parse(raw).schema !== "archv-team-colours/1") throw new Error("[build-feed] team-colours.json is not archv-team-colours/1");
   writeFileSync(join(OUT, "team-colours.json"), raw);
   console.log(`[build-feed] team colours → ${OUT}/team-colours.json`);
+}
+
+/* ---------- videos (archv-videos/1, 2026-11-21, standalone file) ----------
+   The channel's long-form videos and Shorts, for the app, in the front page's own order (the
+   last seven days by views, then newest; see rankVideos() in scripts/videos/lib.mjs): the committed snapshot
+   scripts/data/videos.json (written by scripts/fetch-videos.mjs, the only step that reads
+   YouTube), through the same loadVideos() the front page renders from, so the site and the app
+   list the same videos. `thumb` is a site-relative path on thearchv.ca (our own copy of the
+   thumbnail, WebP, at thumbWidth x thumbHeight); `url` is the video on YouTube. No view counts
+   (loadVideos() strips the snapshot's sort key).
+   Outside the `feeds` loop, like storefront and home-covers, so index.json and its buildHash do
+   not move. With no snapshot the file is still written, with two empty lists.
+   Then dist/media/videos/ is swept against that list: vite copies all of public/ into dist, so
+   the thumbnail of a video that has since been hidden, or belongs to a
+   snapshot too old to show would otherwise still be served at its address. videos-hidden.json
+   promises a hidden video's thumbnail is not on this site; this is where the build keeps it. */
+{
+  const v = loadVideos();
+  const listed = new Set([...(v?.long ?? []), ...(v?.shorts ?? [])].map((x) => `${x.id}.webp`));
+  const thumbDir = join(DIST, "media", "videos");
+  if (existsSync(thumbDir)) {
+    for (const f of readdirSync(thumbDir)) {
+      if (listed.has(f)) continue;
+      unlinkSync(join(thumbDir, f));
+      console.log(`[build-feed] removed dist/media/videos/${f}: not in the video list`);
+    }
+  }
+  const videosFeed = { schema: VIDEOS_SCHEMA, fetchedAt: v?.fetchedAt ?? null, long: v?.long ?? [], shorts: v?.shorts ?? [] };
+  writeFileSync(join(OUT, "videos.json"), JSON.stringify(videosFeed, null, 2));
+  console.log(`[build-feed] videos feed → ${OUT}/videos.json (${videosFeed.long.length} long-form, ${videosFeed.shorts.length} Shorts)`);
 }

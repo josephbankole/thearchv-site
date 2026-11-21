@@ -102,7 +102,8 @@
    **What re-lands untouched:** the author page, the `max-image-preview:large` robots directive, and
    the whole static half of the Tier 0 pass in `scripts/shared/page-shell.mjs`, including the
    `.more-card__headline` and `.lane-card__headline` `display: block` fix. The static page family
-   ships no bundled JS, so it has no reveal and no transform. Measured on an article page from the
+   ships no bundled JS (true then; since 2026-11-21 the sport pages load one self-hosted module
+   for the sport icon, which moves nothing in the page), so it has no reveal and no transform. Measured on an article page from the
    same build: the page owns 296 of 296 sample points at every scroll position and `.sportnav` has
    no vertical overflow. Only the homepage half of Tier 0 needs the change above.
 
@@ -189,7 +190,7 @@ the three paler text tokens were darkened (the "white system" names in older not
 **The front page is rendered at build time, and the bundle enhances it.**
 `src/render/home.ts` builds the lead, the Dispatch block (three newest long reads) and the Desk Brief into the
 HTML. **The front page was cut back on 2026-10-13 (founder) to five things: the live scores
-strip, the lead (the day's story), the Dispatch block, the Desk Brief and four poster tiles.** The Dispatch block (the three newest long reads) replaced "Today at the desk" the same day (founder: it repeated the football leagues). Each scores-strip match links to `/scores/?match=<id>`, which opens that match's details.
+strip, the lead (the day's story), the Dispatch block, the Desk Brief and four poster tiles.** (The Wire block joined on 2026-10-28 and the Video block, directly under the scores strip, on 2026-11-21; see the trim section below.) The Dispatch block (the three newest long reads) replaced "Today at the desk" the same day (founder: it repeated the football leagues). Each scores-strip match links to `/scores/?match=<id>`, which opens that match's details.
 The three desk bands, the app block, the legends wall, the long-reads accordion, the FAQ and the
 partnership form are off it; see "The front page after the 2026-10-13 trim" below for where each
 went.
@@ -207,8 +208,10 @@ as well as in `npm run build`, so a developer sees what ships.
 - (The long reads accordion, a native `<details>` per essay, left the front page on 2026-10-13;
   the same rule holds if it ever returns: do not reintroduce a button plus a panel with a CSS
   resting height of zero.)
-- There is no WebGL hero and no `three` in the graph any more. `three` and `@types/three` are
-  still in `package.json` and are dead weight.
+- There is no WebGL hero and no `three` anywhere: `three` and `@types/three` left
+  `package.json` in phase 3 (2026-08-09). A stale `node_modules/three` on a laptop is a leftover,
+  not a dependency. The only WebGL on the site is the sport icons, which are hand-written and
+  import nothing (see "The sport icons" below).
 
 **Illustrated art goes through the registry, never a hand-written path.**
 `scripts/data/illustrated.json` is the one list of drawn portraits and ARCHV club badges.
@@ -295,6 +298,210 @@ posters at the bottom of the page, the rest can live in sub pages."
   and `build-search.mjs`; the hub's eyebrow is "The ARCHV explains" so it does not repeat the h1.
 - The Desk Brief is a full-width block (was a side rail beside the bands) and the scroll-spy nav
   (`.spynav`) is gone, since the page has one section left.
+- **The sport header is breadcrumb, h1, then the strips (2026-11-21).** The sport hubs
+  (`build-sport-pages.mjs`) and the `/<sport>/questions/` lane fronts (`renderSportLane` in
+  `build-lane-pages.mjs`) no longer print an eyebrow (it repeated the h1) or a desk lede (the
+  dated "latest answer is from 22 September" line told every visitor the desk was stale).
+  `sportDeskLede()` and the per-sport `lede` strings are deleted; do not bring them back.
+  `SPORT_DESK_COPY[key].about` is the evergreen meta, og, twitter and JSON-LD description for
+  both page kinds and the search index line, and `desk-cadence.test.mjs` fails it if a cadence
+  word or a date gets in. The h1 sits in `<div class="sport-head__title">`, a flex row that
+  exists so a sport icon (about 96px) can mount beside the h1 without restructuring. The Wire
+  subline, edition and attribution lines and the tables attribution are not subheaders and stay.
+
+- **The video block sits directly under the scores strip, above the lead (founder, 2026-11-21).**
+  So the front page is now seven blocks: scores strip, Video, lead, The Wire, the Dispatch block,
+  the Desk Brief, four posters. Marker `<!--archv:videos-->`, rendered by `renderHomeVideos()` in
+  `scripts/videos/lib.mjs` (the whole `<section>` or nothing): "Watch", three long-form videos,
+  and "Shorts", six. Each card is a plain link to YouTube with our own copy of the thumbnail, the
+  title and the date; no view counts shown, ever (they lag, and YouTube's policy wants a shown
+  count current).
+  - **Every public upload shows, with no review (founder, 2026-11-21: "show every upload
+    automatically, if we can show the most popular this week that would be ideal").** This
+    replaced the approve-first gate of commit `664bdb0` the same day: `videos-approved.json` and
+    its filter are gone, and a test fails if they come back.
+  - **The order is `rankVideos(items, now)` in `scripts/videos/lib.mjs`, a pure function run once,
+    at fetch time.** For each group: the entries published in the seven days before the fetch,
+    most viewed first (ties to the newer), then the older entries, newest first. So the cards
+    shown are the week's most viewed, and when the week holds fewer than the slots (3 and 6) the
+    next newest older videos fill them. The feeds give `media:statistics views` for the newest 15
+    of each kind; a missing count is 0. `views` is stored in `scripts/data/videos.json` **as a
+    sort key only**: `loadVideos()` strips it, so it reaches neither the page nor
+    `dist/feed/videos.json`. The rubrics stay "Watch" and "Shorts". **Never label the block or a
+    card "most popular", "trending" or the like:** a filled slot is not the week's most viewed, so
+    the claim would be false for some cards (a test holds this). A list kept from the live site
+    (the CI fallback) has no views and keeps the order it was published in.
+  - **Data.** `scripts/fetch-videos.mjs` (`npm run videos:fetch`) is the only step that reads
+    YouTube: two public Atom feeds, no API key (long-form playlist `UULF...`, Shorts `UUSH...`, each
+    entry cross-checked against its own `/watch` or `/shorts/` link). It writes the committed
+    snapshot `scripts/data/videos.json` (`archv-videos/1`) and one WebP per video in
+    `public/media/videos/`. The build reads only the snapshot (trap 0). On a network error or a
+    result that looks wrong (an empty list, under half the snapshot's count) it does not refresh
+    and exits 0 with a loud line and, in CI, a `::warning::` on the run summary; `--strict` exits 1.
+    **CI commits nothing, so the committed snapshot is frozen at its last hand commit.** In CI
+    the fallback is therefore the list the live site is serving (`thearchv.ca/feed/videos.json`
+    and its thumbnails) when that is valid and newer, and only then the committed snapshot.
+    `loadVideos()` returns null once the snapshot is over `MAX_AGE_DAYS` (30) old, so a month of
+    failed fetches drops the block and empties the feed; it never serves older data. The feed
+    parser reads link attributes in any order and either quote style. **Not in `DATA_FILES`**: no desk commits it to
+    main, and its lists legitimately shrink (a deleted video, a newly hidden one), which the shrink
+    guard would read as damage.
+  - **`scripts/data/videos-hidden.json` keeps a video off the site, and is empty.** Until
+    2026-11-21 it listed eight uploads whose thumbnails are match frames or replica shirts (the
+    rights line: no crests, kits, sponsor marks or match photographs anywhere). The founder's
+    ruling that day lets every upload show, so the list was emptied and those thumbnails are now
+    mirrored like any other; the YouTube thumbnail mirror is the one place the rights line gives
+    way, by his word. The file and the mechanism stay so he can hide one by id: add
+    `{ "id", "why" }` and it is never mirrored, rendered or published in the feed. Hiding is one commit to
+    that file and must deploy on a day YouTube does not answer: `loadVideos()` drops the card,
+    `build-feed.mjs` sweeps any thumbnail not in the list out of `dist/media/videos/`, and the
+    fetcher takes hidden entries out of a kept snapshot. No test may fail because a hidden id is
+    still in the committed snapshot or still has a file in `public/`.
+  - **Playback.** `src/components/videos.ts` (bundled, attached in `boot()` through `safe()`) turns
+    a plain click into YouTube's own iframe from `https://www.youtube-nocookie.com/embed/<id>`,
+    in a sibling element of the link, never inside it. One player at a time; a modified click still
+    opens YouTube; no YouTube JS API; the iframe keeps the page's referrer policy (YouTube needs
+    the Referer, never add `no-referrer`). The player is never under 200 by 200 and nothing is
+    drawn over it (`scroll-margin-top` on the player keeps it clear of the sticky tab bar).
+    A playing long-form card opens in place across the Watch column at desktop and on a phone;
+    on a tablet (720 to 1023px) it takes the full row and `videos.ts` moves the `<li>` to the
+    head of the list and back, never CSS `order`, so the tab order matches the screen. A
+    playing Short widens to 300px.
+  - **Layout.** At 1024px and up Watch (three rows, still left, words right) and Shorts sit side
+    by side in one band, so the lead headline shows in the first screen at 1440 by 900. Below
+    that the two groups stack and the lead starts below the fold. **Under 720px the block is
+    compact (founder, 2026-11-21):** one long-form video as a row (still left, words right; the
+    second and third are `display: none` at that width) and the Shorts strip with 132px cards
+    and titles clamped at four lines, so the lead headline starts about one screen down at 390
+    by 844 (lead h1 top measured in headless Chrome: 1452px before, with three long-form
+    cards, 901px after). Tablet and desktop are unchanged. The play mark sits where the
+    channel's thumbnails have no words: bottom-right on a long-form still, top-right on a Short.
+    Long-form titles print whole; a Short's title clamps at five lines.
+  - **CSP.** The homepage literal says `frame-src https://www.youtube-nocookie.com` (it was
+    `'none'`). `img-src` is unchanged because the thumbnails are ours. `verify-csp-pages.mjs` now
+    fails any page that carries `data-embed-origin` or a static `<iframe src>` its own `frame-src`
+    does not name. `EMBED_ORIGIN` lives in `scripts/videos/lib.mjs` and again in `videos.ts`; a
+    test holds them together.
+  - **Trap 3.** The Shorts row scrolls sideways at every width, so it
+    carries `overflow-y: hidden`. Nothing in the block is transformed or translated; keep it so.
+  - **Deploy cadence: no scheduled run (founder, 2026-11-21: no daily rebuild).** `deploy.yml`
+    runs the fetcher before `npm run build` (tolerant, `continue-on-error`) on every push to main
+    and on a manual run, so each desk push refreshes the list. The daily `schedule` trigger that
+    shipped with the block was removed the same day. On a day with no push the list stays as the
+    last deploy left it; `MAX_AGE_DAYS` (30) is the backstop, and YouTube's policy asks for stored
+    data to be refreshed within 30 days. CI commits nothing. The committed snapshot is the
+    fallback and what a local build shows.
+  - **Privacy.** `/about/#privacy` says thumbnails are served by us and nothing reaches YouTube
+    until play. Hot-linking a thumbnail, or loading the player before a click, makes that false.
+  - Tests: `scripts/test/videos.test.mjs` (recorded feeds in `scripts/test/fixtures/videos/`, no
+    network) and the video cases in `home-feeds.test.mjs`, all inside `npm run test:home`.
+
+## The sport icons (2026-11-21)
+
+One interactive 3D object per sport: a football, an American football, a single-seater racing
+car, a tennis ball, a golf ball, a basketball. Slow idle turn, drag to spin, toon-shaded in the
+site's own tokens so it reads as house illustration.
+
+- **Where.** Beside the h1 on the five sport hubs and their `/<sport>/questions/` fronts
+  (`sportIcon(key)` in `scripts/shared/page-shell.mjs`, 96px, 72px on a phone), and the football
+  at the head of the homepage scores strip (hand copy in `index.html`, 40px, loaded by a dynamic
+  import in `src/main.ts`). The sport tab bar carries a static 16px inline SVG glyph per sport
+  (`sportGlyph()` in `scripts/icons/markup.mjs`; hand copy in `index.html`). **Never a canvas in
+  the tab bar**, and the module refuses to start inside `.sportnav` or anything that scrolls
+  sideways. On phones (640px and under) both families show the glyph on the current tab only:
+  six made the row 134px wider and pushed the current tab off-screen on `/golf/` and
+  `/basketball/`, where the static family has no script to scroll it back, and the front page
+  mirrors the rule so the bar does not change on the first tap.
+- **The geometry is arithmetic, not a modelling file.** `scripts/icons/meshes.mjs` builds each
+  mesh in Node; `scripts/build-sport-icons.mjs` (`npm run sport-icons`) writes
+  `public/sport-icons/<key>.glb` and `<key>.svg`, and **both are committed**. The build runs
+  `--check` only, which regenerates in memory and fails if a committed file is missing, over the
+  cap (64 KB a mesh) or no longer what the generator makes. Change a mesh or a token colour, run
+  `npm run sport-icons`, commit `public/sport-icons/`.
+- **The GLB is plain on purpose.** One mesh, float32 POSITION and NORMAL, COLOR_0 holding real
+  token colours, a `_PALETTE` slot per vertex, uint16 indices, no textures, no extensions. The
+  CSP has no `'wasm-unsafe-eval'`, so Draco or meshopt would fail without a sound, and the iOS
+  app will convert these same files to USDZ. Pose, light, toon bands and the palette ride in the
+  mesh's `extras`, so the runtime and the poster read the same numbers.
+- **The poster is the mesh, not a second drawing.** `scripts/icons/poster.mjs` projects the same
+  triangles at the rest pose through the same camera and writes flat paths. It is what shows
+  with no JS, with no WebGL2, and after a lost context, and the canvas fades in over it at the
+  same pose. Poster and canvas cannot drift because there is one source.
+- **`public/sport-icons/icon.js` is the one self-hosted module the static family ships.** Plain
+  file, no import, no build, under `script-src 'self'`, so no CSP hash and no `cspMeta()` change
+  (the same arrangement as `/search/search.js`). No three.js: it would cost about 120 KB gzipped
+  for a toon ramp and an outline.
+- **Scroll safety is the rule that file is written round (trap 3).** `touch-action: pan-y pinch-zoom` on the
+  canvas (a pinch that starts on the icon still zooms the page), no `preventDefault`, no wheel or touch listener, pointer capture only after a touch has
+  moved further sideways than up or down, opacity-only change from poster to canvas, nothing
+  transformed at rest. `scripts/test/sport-icon.test.mjs` fails the build if any of that goes.
+  Measured in headless Chrome with real touch events at 390px, 2026-11-21: a vertical swipe that
+  starts on the icon scrolls the page, a horizontal one turns the object and the page does not
+  move, the page owns 296 of 296 sample points on `/nfl/` and `/` (same as the control build),
+  and the tab bar and scores strip keep their heights. **That is a simulator. Trap 3 still
+  applies: try it with a thumb on a real phone before a deploy.**
+- **Reduced motion** (the media query or the bootstrap's `.reduced-motion` class) is one still
+  frame at the rest pose: no idle turn, no hover lean, no coasting. Dragging still works.
+- **Colour.** Token names only (`RAMPS` in `scripts/icons/lib.mjs`); the runtime reads the live
+  custom properties and the baked hex is a fallback the test keeps equal to the tokens.
+  **One exception, founder-approved on 21 Nov 2026: the tennis ball is optic yellow felt with a
+  paper seam.** The yellow (`#D3E03C` lit, `#BCCB2A` mid, `#98A61E` shadow) is `ICON_ONLY` in
+  `scripts/icons/markup.mjs` and is used on this icon only: the mesh, its poster, and the fill
+  of the tennis tab glyph (outline and seams stay `currentColor`). It is NOT a site token. Do
+  not add it to any shared CSS token block (`check-tokens.mjs` guards those) or use it anywhere
+  else; the runtime finds no custom property for it and uses the hex baked into the GLB, and
+  `sport-icon.test.mjs` fails if the hex or a `--icon-tennis-felt` property turns up in
+  `style.css`, `page-shell.mjs` or `icon.js`, or if another icon takes the ramp. American
+  football leather stays `--accent-ink` rust (brown would be another hue; the founder kept it
+  the same day).
+- **Rights.** Generic objects only: no crest, maker's mark, number, sponsor or livery, and the
+  car is nobody's chassis. **Its body is orange (founder, 2026-11-21: "orange body that reads
+  better small").** The paper body it replaced was weak at 72px and below. The tub and sidepods
+  take the `orange` ramp (`--accent-fill` and `--accent-ink`, the site's own accent and no
+  team's colour); wing planes and the helmet are paper, endplates, pylon and halo ink, tyres
+  line. One plain colour on the body: no number, stripe, logo or second body colour, and never a
+  real team's scheme. That is still the line between a coloured toy and a livery.
+
+## The margin art, "Field lines" (2026-11-21)
+
+Founder's pick on 21 Nov 2026 from the side-margin demo (`../site-concepts-2026-11-21/`): a
+hairline drawing of the page's playing surface, split down the middle across the two side
+margins, that inks itself in as the page scrolls and is whole before the footer.
+
+- **Where the drawing comes from.** `scripts/shared/margin-art.mjs`, `marginArt(sportKey)`: one
+  module, no imports, two callers. `masthead()` writes it on every page-shell page with the sport
+  key the generator already passes (no sport and football both get the pitch), and the
+  `archv-home-ssr` plugin fills `<!--archv:margin-art-->` in `index.html`. Six drawings: pitch,
+  gridiron, circuit, tennis court, golf hole, basketball court. **The F1 circuit is invented and
+  must stay no real track's outline.** Paths only: no text, image, crest or mark.
+- **No JavaScript.** One registered property, `--margin-ink`, runs 0 to 1 on
+  `animation-timeline: scroll(root)` inside `@supports`; each path carries `--a` and `--w` (worked
+  out at build time from where it sits) and turns that into `stroke-dashoffset`. No CSP change,
+  and nothing here may ever emit a `<script>`. The property rests at 1, so a browser without
+  scroll timelines, `prefers-reduced-motion`, the front page's `.reduced-motion` class and a
+  page too short to scroll all show the finished drawing, still.
+- **Thresholds: shown only when the empty margin is about 140px.** Front page: both halves from
+  **1560px**, in the space outside the 1280px `.wrap`; below that the front page shows neither half (one
+  half alone looked lopsided, changed 21 Nov 2026). The right gutter is not empty: the scores strip and the Shorts row
+  bleed through it, which is why the right layer never uses it. Static family from **63.5em
+  (1016px)** beside the 46rem column and from **77.5em (1240px)** on a `.wrap--wide` page (60rem),
+  told apart with `:has(.wrap--wide)`; the wide value is the default, so no `:has()` means the
+  safe one. Below that the layers are `display: none`. Phones never show it and fetch nothing
+  (inline SVG, about 1 KB gzipped).
+- **Fail closed.** The markup carries `hidden` and only these rules show it. The content.css
+  family and `/scores/` call `masthead()` without `pageStyles()` and so show nothing. A new page
+  whose main content is wider than 60rem must not load these rules as they stand.
+- **Trap 3.** Fixed, `pointer-events: none`, `aria-hidden`, `contain` rather than `overflow` (so
+  never a scroll container), nothing transformed, class name `.margin-art` (never `.rail`).
+  `z-index: 0` puts it under `main`, the footer, the masthead and the sticky tab bar; it sits
+  outside `<header class="masthead">`, which is its own stacking context. The static footer is an
+  opaque band 72rem wide and slides over the foot of the drawing at the very end of a page.
+- **Colour.** `--ink-faint` lines, `--rule` soft lines, and the accent as a fill on one or two
+  small dots per drawing. Never a text colour, never behind text.
+- **Two copies of the CSS**: `src/style.css` and `pageStyles()`. The geometry differs; the ink
+  rules between `margin-art:ink` and `margin-art:end` are identical and
+  `scripts/test/margin-art.test.mjs` (in `test:home`) fails the build if they drift, if a sport
+  has no drawing, if a layer loses `aria-hidden` or `hidden`, or if a script appears.
 
 ## The feed contract (the iOS app depends on this)
 
@@ -326,6 +533,19 @@ reads only; `/reads/` lists them all. `archive.longReads[]` in the feed gained `
 (`https://thearchv.ca/reads/<slug>/`, from `readPath()`), and the body passes through unchanged
 because the app renders the same markdown (thearchv-app `21a24fd`). The converter and the weekly
 mirror live in `../dispatch/site-longreads/` (`substack_to_longread.py`).
+
+**`dist/feed/videos.json` (`archv-videos/1`, 2026-11-21, additive, a new standalone file).**
+Written by `build-feed.mjs` outside the manifest loop, so `index.json` and every existing feed stay
+byte-identical. Shape: `{ schema, fetchedAt, long[], shorts[] }`, each item
+`{ id, title, published, url, thumb, thumbWidth, thumbHeight }`, in the front page's order (the
+last seven days by views, then older ones newest first; `rankVideos()`; do not re-sort by date if
+the shelf should match the site), up to six long-form and eight Shorts. `url` is the video on YouTube (`/watch?v=` or `/shorts/`), `published` and
+`fetchedAt` are ISO UTC, and `thumb` is a site-relative path (`/media/videos/<id>.webp`, 800x450
+for long-form, 405x720 for Shorts): prefix `https://thearchv.ca`. No view counts. With no snapshot
+the file still ships with `fetchedAt: null` and two empty lists. It is the same list the front page
+renders from, any video in `videos-hidden.json` left out (the list is empty; every upload shows). The app does not read it yet; if it embeds the player it
+must follow YouTube's embed rules (see `src/components/videos.ts`) and the in-app-browser age
+rating note in `../thearchv-app/CLAUDE.md`.
 
 ## The Wire and the daily tables (2026-09-26, branch feature/wire-site)
 
@@ -694,7 +914,9 @@ Tier 0 only from the deep-dive report. Four things to know before touching it:
   `.rail` that also carried it was removed on 2026-10-12), is still in force and stays in force. A downward transform on anything inside a horizontal
   scroller is the mistake not to repeat, whatever mechanism happens to apply it. Any future
   reveal starts from that, not from a resurrected `reveal.ts`. The static page family gets the
-  CSS half of Tier 0 and never had a reveal, by design: it ships no bundled JS at all.
+  CSS half of Tier 0 and never had a reveal, by design: it ships no bundled JS. (Since
+  2026-11-21 it ships one self-hosted module, `/sport-icons/icon.js`, on the sport pages only. That
+  module transforms nothing in the page and is not a reveal; see "The sport icons".)
 - **Reduced motion is a designed state, not a disabled one.** `[data-inview]` resolves
   straight to its finished state under both `prefers-reduced-motion` and the
   `.reduced-motion` class the early bootstrap sets. The edge-fade masks drop on

@@ -4,6 +4,7 @@ import './style.css';
 
 import { initFrontCards } from './components/frontCards';
 import { initScoresStrip } from './components/scoresStrip';
+import { initVideos } from './components/videos';
 import { initChrome, initMastheadMenu } from './ui/chrome';
 import { initMovedAnchors } from './ui/movedAnchors';
 import { initSportTabs } from './ui/sportTabs';
@@ -41,6 +42,10 @@ function boot(): void {
   // fills the row of matches beside it from the public scores feed.
   safe('initScoresStrip', initScoresStrip);
 
+  // The video block under the strip. Its cards are server-rendered links to YouTube; this turns a
+  // plain click into the player, loaded from YouTube only at that moment.
+  safe('initVideos', initVideos);
+
   // The poster tiles are static links in index.html and need no script. The JS-built plate rail and
   // its lightbox (src/components/archiveRail.ts) were removed on 2026-10-12, when the site moved to
   // the redrawn Manchester United posters only.
@@ -58,6 +63,17 @@ function boot(): void {
   // Page chrome (progress bar + scroll-spy nav). Affordance, not decoration:
   // runs in every mode; its motion is CSS-gated and reduced-motion safe.
   safe('initChrome', initChrome);
+
+  // The football at the head of the scores strip. Its SVG poster is already in the HTML; this
+  // only fetches the module that turns it live, and only if the mount is there. The module is a
+  // plain file in public/ shared with the static pages (see its header), so it is imported by
+  // URL at run time rather than bundled: the path goes through a variable so Vite leaves it be.
+  // It honours reduced motion itself (one still frame), so it runs in every mode.
+  safe('initSportIcon', () => {
+    if (!document.querySelector('[data-sport-icon]')) return;
+    const url = '/sport-icons/icon.js';
+    import(/* @vite-ignore */ url).catch((err) => console.error('[boot] sport icon failed', err));
+  });
 
   // Privacy-friendly analytics (no-op until a PostHog key is configured)
   safe('initAnalytics', initAnalytics);

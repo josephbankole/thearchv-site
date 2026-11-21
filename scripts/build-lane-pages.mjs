@@ -17,8 +17,8 @@ import { fileURLToPath } from "node:url";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
-  SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, laneIndexTitle, sportDeskLede,
-  cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, laneIndexTitle,
+  cardArt, deskNav, masthead, sportIcon, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
@@ -183,8 +183,8 @@ function render(laneKey, lane) {
 function renderSportLane(sport, laneKey) {
   const laneLabel = QUESTION_LANE_META[laneKey]?.label ?? laneKey;
   const days = SPORT_DAYS[sport.key] || [];
-  // The cadence lede while the desk keeps its rhythm, a dated line once it has gone quiet (gap4-9).
-  const copy = { ...SPORT_DESK_COPY[sport.key], lede: sportDeskLede(sport.key, days, TODAY) };
+  // `about` is the evergreen description (meta, og, twitter, JSON-LD). The header prints no lede.
+  const copy = SPORT_DESK_COPY[sport.key];
   const url = `${SITE}/${sport.urlBase}/${laneKey}/`;
   /* SEO/AEO audit fix 5 (2026-07-28): /<sport>/questions/ and /<sport>/ were 98% textually
      identical, both self-canonical, both in the sitemap and both carrying CollectionPage, which
@@ -209,8 +209,8 @@ function renderSportLane(sport, laneKey) {
 
   return `${documentShell({
   title: clampTitle(pageTitle.split(" \u00b7 ")),
-  metaDescription: clampDescription(copy.lede),
-  description: copy.lede,
+  metaDescription: clampDescription(copy.about),
+  description: copy.about,
   socialTitle,
   robots: ROBOTS_INDEXABLE,
   // Canonical and og:url both point at the SPORT ROOT, not at this page. See the note above
@@ -226,7 +226,7 @@ function renderSportLane(sport, laneKey) {
   jsonLd: {
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "CollectionPage", name: `${sport.label} ${laneLabel}`, description: copy.lede, url, inLanguage: "en-GB", isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` } },
+      { "@type": "CollectionPage", name: `${sport.label} ${laneLabel}`, description: copy.about, url, inLanguage: "en-GB", isPartOf: { "@type": "WebSite", name: "The ARCHV", url: `${SITE}/` } },
       { "@type": "BreadcrumbList", itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
         { "@type": "ListItem", position: 2, name: sport.label, item: `${SITE}/${sport.urlBase}/` },
@@ -241,9 +241,7 @@ function renderSportLane(sport, laneKey) {
   <main class="wrap wrap--wide" id="main">
     <section class="sport-head">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${sport.urlBase}/">${esc(sport.label)}</a> / ${esc(laneLabel)}</p>
-      <p class="sport-head__eyebrow">${esc(sport.label)} · ${esc(laneLabel)}</p>
-      <h1>${esc(laneLabel)}</h1>
-      <p class="sport-head__lede">${esc(copy.lede)}</p>
+      <div class="sport-head__title">${sportIcon(sport.key)}<h1>${esc(laneLabel)}</h1></div>
       ${rail}
     </section>
   </main>

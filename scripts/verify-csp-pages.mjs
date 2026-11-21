@@ -1,5 +1,5 @@
 /* verify-csp-pages.mjs — proves every generated/static page family's CSP meta actually allows
-   its own inline scripts: for each sample page, extract every plain <script>...</script> body
+   its own inline scripts and (since 2026-11-21) every origin it frames: for each sample page, extract every plain <script>...</script> body
    (ignoring type="application/ld+json", which CSP script-src does not gate), hash it the same
    way scripts/shared/page-shell.mjs's cspMeta() does, and confirm that hash appears in the
    page's own <meta http-equiv="Content-Security-Policy"> tag. Run after `npm run build`
@@ -80,6 +80,24 @@ function check(label, filePath) {
         `[verify-csp-pages] FAIL: ${label} — inline script hash ${hash} not in CSP script-src.\n` +
         `  script starts: ${JSON.stringify(body.trim().slice(0, 60))}`
       );
+    }
+  }
+  // Frames (2026-11-21). A page that frames another origin must name it in its own frame-src,
+  // or the browser blocks the frame and nothing at build time says so. Two things are read: any
+  // <iframe src> in the markup, and data-embed-origin, which the front page's video block sets
+  // because its player iframe is created on a click (src/components/videos.ts) and so is never
+  // in the HTML.
+  const page = html.replace(/<!--[\s\S]*?-->/g, "");
+  const csp = (html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/) || ["", ""])[1];
+  const frameSrc = (csp.match(/(?:^|;)\s*frame-src\s+([^;]*)/) || [null, null])[1];
+  const frames = frameSrc === null ? null : frameSrc.trim().split(/\s+/);
+  const wanted = new Set();
+  for (const [, origin] of page.matchAll(/\bdata-embed-origin="([^"]+)"/g)) wanted.add(origin);
+  for (const [, src] of page.matchAll(/<iframe\b[^>]*\bsrc="(https?:\/\/[^"/]+)/gi)) wanted.add(src);
+  for (const origin of wanted) {
+    if (!frames || !frames.includes(origin)) {
+      ok = false;
+      console.error(`[verify-csp-pages] FAIL: ${label}: the page frames ${origin} but its CSP frame-src is ${frameSrc === null ? "missing" : JSON.stringify(frameSrc.trim())}.`);
     }
   }
   if (ok) console.log(`[verify-csp-pages] OK: ${label} (${bodies.length} inline script(s), all hashes match)`);

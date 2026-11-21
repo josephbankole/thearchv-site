@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+ <link rel="self" href="http://www.youtube.com/feeds/videos.xml?playlist_id=UULFl6d9aV0mLImkGwvYzunWBg"/>
+ <id>yt:playlist:UULFl6d9aV0mLImkGwvYzunWBg</id>
+ <yt:playlistId>UULFl6d9aV0mLImkGwvYzunWBg</yt:playlistId>
+ <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+ <title>Videos</title>
+ <author>
+  <name>TheARCHV</name>
+  <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+ </author>
+ <published>2021-10-13T07:10:08+00:00</published>
+ <entry>
+  <id>yt:video:2LaHp3i3cvI</id>
+  <yt:videoId>2LaHp3i3cvI</yt:videoId>
+  <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+  <title>Athletic Club v Real Sociedad: How La Liga's Connected Ball Fell Out of Sync With VAR | The ARCHV</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=2LaHp3i3cvI"/>
+  <author>
+   <name>TheARCHV</name>
+   <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+  </author>
+  <published>2026-11-21T15:00:13+00:00</published>
+  <updated>2026-11-21T15:00:14+00:00</updated>
+  <media:group>
+   <media:title>Athletic Club v Real Sociedad: How La Liga's Connected Ball Fell Out of Sync With VAR | The ARCHV</media:title>
+   <media:content url="https://www.youtube.com/v/2LaHp3i3cvI?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/2LaHp3i3cvI/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Joseph Bankole and Bryan on La Liga's connected ball and the penalty that won Athletic Club 2-1 Real Sociedad at San Mamés on 1 November 2026, which the RFEF referees' committee later said may not have been correct. They also get to Estêvão's offside at Chelsea 2-0 Manchester United in the Premier League on 31 October 2026, and whether an AI referee should make the call.
+
+Bryan, host of the Pros in the Arena podcast and a matchday operations insider, explains the ball's heartbeat signal, which spikes every time the ball is touched. The referee gave the penalty on the pitch, the VAR room checked it and let it stand, and Alex Berenguer scored it in first-half stoppage time to win the match. Kinexon, which makes the ball's sensor, reported to the committee that the most likely explanation was the ball data running one to two frames, 20 to 40 milliseconds, ahead of the VAR video. Resynced, the Real Sociedad player would have touched the ball last.
+
+Joseph wants to know why nobody caught it on the day. The committee says the VAR referee and the operator synced the ball's signal to the video before kick-off without spotting a problem, and Mediapro spot-checked the sync during the match. Bryan sets 500 readings a second, adidas's figure for the World Cup ball it built with FIFA and Kinexon, against VAR video that manages 50 frames a second. Then he brings in Chelsea 2-0 Manchester United, where a delayed VAR review ruled out Estêvão's finish from Cole Palmer's pass for a marginal offside. By Bryan's account, the broadcast still and the offside animation put Harry Maguire's knee in different places.
+
+Everybody experiences the game with their eyes, Joseph says, so he keeps asking what fans want from the technology. UEFA says the refereeing chiefs of all 55 member associations agreed in July that VAR steps in only for a &quot;clear and obvious&quot; error in 2026/27. Joseph asks whether referees are getting better with VAR or more tentative. Bryan, who by his count has worked with referees of 20 nationalities, puts them on a spectrum and questions how well they are trained on the system.
+
+Joseph works in AI and still does not want to watch an AI referee: &quot;I want a human experience.&quot; Bryan agrees, and sees room for it on black-and-white calls, such as whether the ball has gone out. Joseph tells referees to embrace the technology and learn where it is useful, because &quot;at the end of the day, the decision lies with you.&quot;
+
+This was recorded on Tuesday 17 November 2026, and the date is on screen. Notes on screen give the sources, and one corrects a line about where the penalty was given.
+
+Would you take an AI referee? Yes or no in the comments.
+
+0:00 Joseph on AI referees: &quot;I want a human experience&quot;
+0:23 Athletic Club v Real Sociedad and ball data a frame or two out of sync
+5:06 Why nobody caught it on the day
+8:45 500 Hz against 50 Hz, and Estêvão's offside at Chelsea v Manchester United
+12:26 What fans want from VAR
+15:31 UEFA goes back to &quot;clear and obvious&quot;
+16:37 Are referees getting better with VAR?
+19:50 Can an AI referee make the call?
+
+Sources for the numbers and notes on screen, all read on 17 November 2026: LALIGA (match centre, 1 November 2026; connected ball in every match from 2026/27, 12 August 2026), Real Sociedad (match report, 1 November 2026), RFEF referees' committee, the CTA (statement on the connected ball, 2 November 2026), adidas (World Cup connected ball, 1 July 2022), FIFA (VAR for the 2018 World Cup, 16 March 2018; semi-automated offside at the 2022 World Cup, 1 July 2022), Chelsea FC (Chelsea 2-0 Manchester United match report, 31 October 2026), Premier League (semi-automated offside explainer, 12 April 2025), UEFA.com (refereeing guidance for 2026/27, 28 July 2026).
+
+Music: Sunny Days by Anno Domini Beats.
+
+Pictures: LALIGA (frames from its official highlights of Athletic Club 2-1 Real Sociedad, shown as stills, plus match photos and its connected-ball image), LALIGA and PUMA via Kinexon (the connected-ball design concept), Real Sociedad, Chelsea FC, Getty Images via The National (Cole Palmer), Ash Donelon/Manchester United via Getty Images (Harry Maguire), FIFA (some via New Atlas), the Premier League and UEFA. Under CC BY-SA 4.0 (creativecommons.org/licenses/by-sa/4.0) via Wikimedia Commons, resized or cropped: HyperionLEO (adidas Al Rihla), BugWarp (adidas Al Hilm), SounderBruce (pitchside VAR monitor), ProtoplasmaKid (VAR check at the Estadio Azteca) and Bryan Berlin (VAR check at New York City FC v FC Cincinnati; the photographer, not our guest). The two clips labelled Illustration on screen, a ball's sensor and a ball crossing a line, are illustrations made for this video, not match footage. Graphics and cards by The ARCHV.</media:description>
+   <media:community>
+    <media:starRating count="0" average="0.00" min="1" max="5"/>
+    <media:statistics views="0"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:fG61um5dDCQ</id>
+  <yt:videoId>fG61um5dDCQ</yt:videoId>
+  <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+  <title>Mauricio Pochettino at Manchester United: Will He Get a Full Season? Plus Arsenal on Top | The ARCHV</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=fG61um5dDCQ"/>
+  <author>
+   <name>TheARCHV</name>
+   <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+  </author>
+  <published>2026-11-19T15:00:25+00:00</published>
+  <updated>2026-11-19T15:00:26+00:00</updated>
+  <media:group>
+   <media:title>Mauricio Pochettino at Manchester United: Will He Get a Full Season? Plus Arsenal on Top | The ARCHV</media:title>
+   <media:content url="https://www.youtube.com/v/fG61um5dDCQ?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/fG61um5dDCQ/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Mauricio Pochettino's first season at Manchester United, Arsenal top of the Premier League and Portugal's 1-4 defeat to Denmark in the UEFA Nations League: Joseph Bankole and Bryan, recorded on Tuesday 17 November 2026, the day before Pochettino took charge.
+
+Bryan, host of the Pros in the Arena podcast and a matchday operations insider, was in Braga on Saturday 14 November for Portugal's first game since Cristiano Ronaldo retired from international football. There was a banner thanking him, and the crowd applauded in the seventh minute. Next for Bryan are a Champions League match and then Morocco, for a 2027 Women's World Cup play-off tournament of six teams and nine matches.
+
+As an Arsenal fan he is &quot;super happy&quot;. On 17 November Arsenal were top after 10 games, five points clear of Brighton &amp; Hove Albion (ESPN), a season after their first league title in 22 years, and Bryan's line on it is &quot;It's no longer our ceiling, it's our floor.&quot; Joseph's reply, for the record, is &quot;I have nothing but hate in my heart for Arsenal at the moment.&quot;
+
+Joseph says Declan Rice &quot;just signed a new contract&quot;. At recording Rice had agreed a new long-term Arsenal deal, which ESPN reported as five years to 2031, but had not signed it (Sky Sports, 17 November). Joseph also thinks Manchester City are &quot;probably getting relegated&quot;, which is his opinion. They were found guilty of more than 100 Premier League financial breaches and have appealed (Al Jazeera, 14 October), and no sanction had been announced by 17 November.
+
+Then the talk turns to Manchester United, 18th after 10 games on 17 November (ESPN). Joseph thinks Pochettino &quot;probably is the best available option&quot; because of his experience, and he likes the staff Pochettino brings. Jesús Pérez has been with him since Espanyol, and Silvia Tuyà Viñas, his strength and conditioning coach with the United States, is reported to become the first woman coach on Manchester United's men's first team (A Bola, citing The Guardian, 14 November). His bar this season is staying up, with mid-table &quot;probably fine&quot; and a &quot;tactical baseline&quot; so the pressing stops being a weekly question. He thinks Pochettino is good enough to be the club's coach for 10 years or more. Joseph also puts Mikel Arteta in his sixth season at Arsenal. Bryan says seven and he is right, since Arteta took over in December 2019 and 2026/27 is his seventh full season.
+
+Bryan asks what could stop Pochettino getting a full season, and Joseph says only relegation. Bryan agrees that coaches need time in a &quot;trigger-happier environment&quot;, and says the club's situation has no quick fix. Joseph ends where the episode opens, telling Manchester United it is time for &quot;enough of the sentimental stuff&quot; and to move on from Diogo Dalot, Lisandro Martínez and Harry Maguire.
+
+Recorded on Tuesday 17 November 2026. The date is on screen, and notes mark where things have moved on since or where something said needs correcting.
+
+How long should Mauricio Pochettino get at Manchester United? Answer in seasons in the comments.
+
+0:00 Enough of the sentimental stuff at Manchester United
+0:12 Portugal 1-4 Denmark and Cristiano Ronaldo's send-off
+1:26 Champions League, then a Women's World Cup play-off in Morocco
+2:19 Bryan on Arsenal, top of the Premier League
+4:05 Declan Rice's new deal and Manchester City's appeal
+4:45 Joseph's case for Mauricio Pochettino at Manchester United
+8:00 Will Mauricio Pochettino get a full season?
+9:20 Diogo Dalot, Lisandro Martínez and Harry Maguire: time to move on
+
+Sources for numbers and notes on screen, all read 17 November 2026: Al Jazeera (Portugal 1-4 Denmark, 14 November 2026; Manchester City, 14 October 2026), FIFA (Women's World Cup play-offs, 20 October 2026), ESPN (Premier League table and fixtures; Declan Rice, 16 November 2026), Sky Sports (Declan Rice, 17 November 2026), Premier League (Arsenal's title, 19 May 2026; Mikel Arteta, 21 December 2019), AP (Mauricio Pochettino, Jason Wilcox and Omar Berrada, 12 and 13 November 2026), USA Today (Pochettino's clubs, 10 September 2024), DFB (Jürgen Klopp, 24 July 2026), U.S. Soccer (Silvia Tuyà Viñas and Jesús Pérez, 7 October 2024), A Bola citing The Guardian (14 November 2026), RFEF (Luis de la Fuente, 21 September 2026), The Irish News (Cristiano Ronaldo, 3 October 2026), Manchester United (signing dates).
+
+Music: Let It Ride by Anno Domini Beats.
+
+Photographs: Liselotte Sabroe (Ritzau Scanpix via AP), Abbie Parr (AP), Ben Stansall (AFP), AFP, EPA, Getty Images, Reuters, Nick Potts (PA), Thomas Böcker (DFB), Chelsea FC, U.S. Soccer. Via Wikimedia Commons: Arne Müseler (CC BY-SA 3.0 DE); Joseolgon, YantsImages, Bryan Berlin, Ardfern and Thomas Dahlstrøm Nielsen (CC BY-SA 4.0); Lewis Clarke (CC BY-SA 2.0); Agência Lusa (CC BY 3.0); Ronnie Macdonald and Web Summit (CC BY 2.0). Graphics: The ARCHV. The ceiling and floor clip, marked Illustration on screen, shows no real person or match.</media:description>
+   <media:community>
+    <media:starRating count="0" average="0.00" min="1" max="5"/>
+    <media:statistics views="23"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:6vGLPcd1wY4</id>
+  <yt:videoId>6vGLPcd1wY4</yt:videoId>
+  <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+  <title>Mauricio Pochettino to Manchester United? What He Brings After Michael Carrick's Sacking | The ARCHV</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=6vGLPcd1wY4"/>
+  <author>
+   <name>TheARCHV</name>
+   <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+  </author>
+  <published>2026-11-13T00:21:02+00:00</published>
+  <updated>2026-11-18T06:38:57+00:00</updated>
+  <media:group>
+   <media:title>Mauricio Pochettino to Manchester United? What He Brings After Michael Carrick's Sacking | The ARCHV</media:title>
+   <media:content url="https://www.youtube.com/v/6vGLPcd1wY4?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/6vGLPcd1wY4/hqdefault.jpg" width="480" height="360"/>
+   <media:description>What would Mauricio Pochettino bring to a Manchester United side sitting 18th in the 2026-27 Premier League? Joseph Bankole recorded this on Thursday 12 November 2026, the morning the club sacked Michael Carrick. He calls Pochettino &quot;the great lost United manager&quot;, and his read is that Pochettino is a builder with experience, at his best when he has some time and a young squad that will run through walls for him. The first job is a new standard, built on a press that works as a unit and fitness demands that go up massively. Anyone not ready for that can, as Joseph puts it, be shown the door in January.
+
+He sees two big questions in the squad, striker and full back. Benjamin Šeško is his answer up front if he can stay fit, Patrick Dorgu should play left back, and United need a new right back. Leny Yoro and Ayden Heaven should be the centre backs, and he would let Harry Maguire and Lisandro Martínez go. Joseph is more interested in who comes with Pochettino. Jesús Pérez, Miguel D'Agostino, Toni Jiménez and Sebastiano Pochettino are the four Pochettino reportedly wants to bring, and Joseph's case for them is the breadth of players they have worked with, after a spell in which United under Carrick &quot;really did seem underprepared&quot;. Short term, he expects no miracles and would take a couple of 0-0s, which from 18th in the table counts as ambition.
+
+Sky Sports reported that day that United had reached a full agreement with Pochettino, with paperwork and regulatory steps still to finish. The club had not announced him when Joseph recorded, and the strap on screen carries the date. Pochettino's U.S. Soccer contract, which runs to the 2030 World Cup, has a release clause that Sky Sports puts at £7m and ESPN at $10m (£7m). Joseph says the last two coaching staffs did not play Harry Amass, and a note on screen corrects that: Amass made his Premier League debut under Ruben Amorim in March 2025 and came off the bench twice under Carrick in this season's Champions League.
+
+Where should Manchester United sign in January? Name the position in the comments.
+
+0:00 Cold open
+1:04 How we got here
+2:22 Who Pochettino is now
+6:52 The style of play
+8:06 Who plays where
+13:27 The staff
+15:44 What to expect
+
+Sources for numbers and notes on screen: Reuters via The Jerusalem Post (Premier League position and points, and the club statement on Michael Carrick, 12 November 2026), ESPN (Aston Villa 4-4 report, 8 November 2026; Jesús Pérez, 11 November 2026; Pochettino reports and the $10m figure, 12 November 2026; Folarin Balogun's suspended ban, 5 July 2026; Manchester United fixtures, read 12 November 2026), Sky Sports (Carrick, Pochettino, the £7m figure, Jonny Evans and Jonathan Woodgate, 12 November 2026), UPI (Ruben Amorim and Carrick dates, 12 November 2026), TEAMtalk via Football365 (Pochettino's staff, 11 November 2026), theScore (U.S. Soccer contract, 3 August 2026), U.S. Soccer (Belgium 4-1 USA recap, 7 July 2026; staff list, October 2024), Premier League (Harry Amass, 13 April 2025), UEFA (Champions League match data and fixtures), Tottenham Hotspur (coaching staff, May 2014 and November 2019).
+
+Music: Let It Ride by Anno Domini Beats.
+
+A new episode goes up every Sunday. Subscribe to catch the next one.</media:description>
+   <media:community>
+    <media:starRating count="0" average="0.00" min="1" max="5"/>
+    <media:statistics views="39"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:XMopaNERGW0</id>
+  <yt:videoId>XMopaNERGW0</yt:videoId>
+  <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+  <title>Manchester United Squad Audit: Keep or Sell Bruno Fernandes, with Coach Mo | The ARCHV</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=XMopaNERGW0"/>
+  <author>
+   <name>TheARCHV</name>
+   <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+  </author>
+  <published>2026-11-08T14:06:04+00:00</published>
+  <updated>2026-11-18T06:38:57+00:00</updated>
+  <media:group>
+   <media:title>Manchester United Squad Audit: Keep or Sell Bruno Fernandes, with Coach Mo | The ARCHV</media:title>
+   <media:content url="https://www.youtube.com/v/XMopaNERGW0?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/XMopaNERGW0/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Manchester United squad audit, keep or sell: Joseph Bankole goes through the 2026-27 Premier League squad player by player, recorded on 2 and 4 November 2026. Goalkeeper is one of the few positions he is happy with, Senne Lammens included. At centre back and full back his word for it is &quot;dark&quot;, and he holds his Bruno Fernandes verdict back for the final chapter. Coach Mo (@coachmo_pdcst) joins for the second half to ask why Luke Shaw is still, in his words, the club's one true first-team left back, and whether this ownership will ever pay 100 million for a single player. Joseph pushes back twice, insisting United are never that far from glory, then asks for Leny Yoro and Ayden Heaven to be picked now so they get their mistakes out of the way.
+
+Joseph recorded his half on Monday 2 November, the day before Manchester United beat Roma 3-2 in the Champions League. The conversation with Coach Mo was recorded on Wednesday 4 November. The date is on screen, and notes mark where events have moved on since, including the Premier League table after Saturday 7 November. One correction runs on screen as well: Mason Mount has missed about twice as many games as he has started, not twice as many as he has played.
+
+Should Manchester United sell Bruno Fernandes next summer? Yes or no in the comments.
+
+0:00 Coming up
+0:25 The squad, position by position
+3:56 Why haven't we signed a left back?
+4:51 Stuck with the minutes
+5:35 Too late for United?
+9:02 Keep or sell: Coach Mo
+10:44 Just play Yoro and Heaven
+11:40 Keep or sell: Joseph
+
+Sources for numbers and notes on screen: Transfermarkt (starts, games missed injured and contracts, to 2 November 2026; Luke Shaw's games missed are the ARCHV count from Transfermarkt's injury dates), Sky Sports (Roma result, 4 November 2026; Paul Pogba fee, 9 August 2016; Ayyoub Bouaddi fee, 23 August 2026), ESPN (Benjamin Sesko injury, 9 October 2026; Alex Telles signing, 5 October 2020), manutd.com (Tyrell Malacia signing; team news for Aston Villa, 6 November 2026; Leny Yoro and Ayden Heaven ages), BBC Sport (Premier League table, 7 November 2026).
+
+Music: Let It Ride by Anno Domini Beats.
+
+Photos via Wikimedia Commons, all CC BY-SA 4.0: Joris van Rooden and WDM10 (Old Trafford); Bryan Berlin (Bruno Fernandes, Lisandro Martinez).
+
+A new episode goes up every Sunday. Subscribe to catch the next one.</media:description>
+   <media:community>
+    <media:starRating count="0" average="0.00" min="1" max="5"/>
+    <media:statistics views="142"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:8_eRD-024Ag</id>
+  <yt:videoId>8_eRD-024Ag</yt:videoId>
+  <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+  <title>Who Broke Manchester United? The Glazers, INEOS and the Eddie Howe Question | The ARCHV</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=8_eRD-024Ag"/>
+  <author>
+   <name>TheARCHV</name>
+   <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+  </author>
+  <published>2026-11-01T15:37:05+00:00</published>
+  <updated>2026-11-13T00:58:22+00:00</updated>
+  <media:group>
+   <media:title>Who Broke Manchester United? The Glazers, INEOS and the Eddie Howe Question | The ARCHV</media:title>
+   <media:content url="https://www.youtube.com/v/8_eRD-024Ag?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/8_eRD-024Ag/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Who broke Manchester United, after the 3-0 Premier League home defeat to AFC Bournemouth on 25 October 2026? Joseph Bankole picks through the wreckage: what the Glazers' takeover has cost the club, whether INEOS have made things worse, and why Michael Carrick is the one left answering for it. Bryan, host of the Pros in the Arena podcast and a matchday operations insider, joins for the second half, then turns to Arsenal, from the Fleetwood Town defeat to Harry Kane at the Allianz Arena and Viktor Gyokeres.
+
+These passages were recorded on 25, 27 and 29 October 2026. The date is on screen, and notes mark where events have moved on since. Chelsea beat Manchester United 2-0 on 31 October, two days after the conversation with Bryan.
+
+If Manchester United replace Michael Carrick, who should they hire? One name in the comments.
+
+0:00 Coming up
+0:26 Nobody is surprised
+1:29 Wilcox or Vivell, Howe or Conte
+3:39 What the Glazers cost
+4:51 Is INEOS the problem?
+7:08 Spineless
+9:07 Rock bottom
+10:52 Arsenal, Kane and Gyokeres
+13:23 Your call
+
+Sources for numbers and notes on screen: StatMuse FC (manager records, read 25 October 2026), Swiss Ramble (interest and dividends, estimates), Transfermarkt (win rate before and since INEOS, to 25 October 2026), BBC Sport (Chelsea result), Newcastle United and TNT Sports (Eddie Howe).
+
+Music: Let It Ride by Anno Domini Beats.
+
+Photos via Wikimedia Commons: Timmy96 (CC0); Sunfox (CC BY-SA 2.0); Joris van Rooden, Vincenzo.togni and Michael Barera (CC BY-SA 4.0); Brad Tutterow (CC BY 2.0); Prime Video AU &amp; NZ (CC BY 3.0).</media:description>
+   <media:community>
+    <media:starRating count="0" average="0.00" min="1" max="5"/>
+    <media:statistics views="80"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:qNrStY0XRqU</id>
+  <yt:videoId>qNrStY0XRqU</yt:videoId>
+  <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+  <title>What JJ Gabriel is risking at Man Utd at 15, and the Haaland goal the referees admitted was wrong</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=qNrStY0XRqU"/>
+  <author>
+   <name>TheARCHV</name>
+   <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+  </author>
+  <published>2026-09-23T10:26:12+00:00</published>
+  <updated>2026-11-12T21:57:48+00:00</updated>
+  <media:group>
+   <media:title>What JJ Gabriel is risking at Man Utd at 15, and the Haaland goal the referees admitted was wrong</media:title>
+   <media:content url="https://www.youtube.com/v/qNrStY0XRqU?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i2.ytimg.com/vi/qNrStY0XRqU/hqdefault.jpg" width="480" height="360"/>
+   <media:description>JJ Gabriel is 15, he is a forward in the Manchester United academy, and his representatives have asked the club to cancel his registration. Manchester United refused. The club has confirmed none of the rest of what has been reported. Joseph Bankole and Bryan work through what a 15-year-old is actually owed by a club, and then the other admission of the week: the referees accepting that Erling Haaland's goal in the Manchester derby on 13 September 2026 should not have stood.
+
+Bryan hosts the Pros in the Arena podcast and works in matchday technology operations, so the refereeing section comes from someone who sits near it. They also cover Brighton beating Arsenal and Manchester United inside four days, United's running numbers, Kobbie Mainoo's silence at the World Cup, and Kylian Mbappé taking equity instead of a fee.
+
+Recorded 20 September 2026.
+
+0:00 Coming up
+0:40 Brighton beat Arsenal 3-0
+1:57 Manchester United without Amad Diallo
+2:57 Brighton's squad, and how they keep replacing
+5:16 Is it too early to worry about Michael Carrick?
+6:04 United's running numbers
+8:14 Kobbie Mainoo, and what Tuchel said
+8:44 The JJ Gabriel story
+10:47 What is a 15-year-old entitled to?
+12:01 Cavan Sullivan asks for minutes, then scores
+13:37 Mbappé, equity deals and football first
+16:48 Tottenham finally score
+19:33 Bayern 7-0, Barcelona 7-2
+22:49 Would a pressing side level up to Barcelona?
+24:30 Arsenal without a world-class match-winner
+26:10 Max Dowman and a teenager's minutes
+28:23 Manchester City's goal, and the offside that wasn't
+31:38 When the assistant VAR goes quiet
+33:08 The World Cup's three-man video desk
+36:41 English refereeing and the accountability gap
+
+Music: Let It Ride, Sunny Days, Faint and Legend by Anno Domini Beats.
+
+Photos used under public domain, CC0 and CC BY licences:
+&quot;American Express Community Stadium, Falmer (August 2015) (5)&quot; by Hassocks5489, CC0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:American_Express_Community_Stadium,_Falmer_(August_2015)_(5).JPG
+&quot;Pascal Groß 24012026 (1)&quot; by Timmy96, CC0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Pascal_Gro%C3%9F_24012026_(1).jpg
+&quot;Old Trafford (interior), Manchester United&quot; by Stacey MacNaught, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Old_Trafford_(interior),_Manchester_United.jpg
+&quot;Michael Carrick 12042025 (2)&quot; by Timmy96, CC0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Michael_Carrick_12042025_(2).jpg
+&quot;Arkansas Invite 2020 MatthewBoling&quot; by jenaragon94, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Arkansas_Invite_2020_MatthewBoling.jpg
+&quot;Kylian Mbappé en visite à Caen&quot; by Benoit-caen, CC0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Kylian_Mbapp%C3%A9_en_visite_%C3%A0_Caen.jpg
+&quot;Subaru Park&quot; by Cornflower123, CC0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Subaru_Park.jpg
+&quot;Outside Tottenham Stadium (49070797756)&quot; by Daniel from Glasgow, United Kingdom, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Outside_Tottenham_Stadium_(49070797756).jpg
+&quot;20201225 Allianz Arena&quot; by Flocci Nivis, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:20201225_Allianz_Arena.jpg
+&quot;CampNouMotto&quot; by Zicarlo van Aalderen, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:CampNouMotto.jpg
+&quot;Lamine Yamal in 2025&quot; by Biso, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Lamine_Yamal_in_2025.jpg
+&quot;RC Lens - Arsenal FC (03-10-2023) 2&quot; by Supporterhéninois, CC0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:RC_Lens_-_Arsenal_FC_(03-10-2023)_2.jpg
+&quot;Emirates Stadium (12646307564)&quot; by Kieran Clarke, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Emirates_Stadium_(12646307564).jpg
+&quot;VAR camera at Emirates Stadium 2024-04-26&quot; by Matt Brown, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:VAR_camera_at_Emirates_Stadium_2024-04-26.jpg
+&quot;VAR by BISO0074&quot; by Biser Todorov, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:VAR_by_BISO0074.jpg
+&quot;Norway Italy - June 2025 C 39&quot; by MichaelEmilio, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Norway_Italy_-_June_2025_C_39.jpg
+&quot;Flickr - Ronnie Macdonald - Mikel Arteta&quot; by Ronnie Macdonald from Chelmsford, United Kingdom, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Flickr_-_Ronnie_Macdonald_-_Mikel_Arteta.jpg
+&quot;Mecz piłkarski Wisła Kraków - Zagłębie Sosnwoiec, 28 października 2022, Pożegnanie Stadionu Ludowego, KP&quot; by Krzysztof Popławski, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Mecz_pi%C5%82karski_Wis%C5%82a_Krak%C3%B3w_-_Zag%C5%82%C4%99bie_Sosnwoiec,_28_pa%C5%BAdziernika_2022,_Po%C5%BCegnanie_Stadionu_Ludowego,_KP.jpg</media:description>
+   <media:community>
+    <media:starRating count="0" average="0.00" min="1" max="5"/>
+    <media:statistics views="67"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:uN2hugBmywg</id>
+  <yt:videoId>uN2hugBmywg</yt:videoId>
+  <yt:channelId>UCl6d9aV0mLImkGwvYzunWBg</yt:channelId>
+  <title>What happens when VAR stops the game, from the man who explains it</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=uN2hugBmywg"/>
+  <author>
+   <name>TheARCHV</name>
+   <uri>https://www.youtube.com/channel/UCl6d9aV0mLImkGwvYzunWBg</uri>
+  </author>
+  <published>2026-09-18T10:49:14+00:00</published>
+  <updated>2026-11-12T21:57:21+00:00</updated>
+  <media:group>
+   <media:title>What happens when VAR stops the game, from the man who explains it</media:title>
+   <media:content url="https://www.youtube.com/v/uN2hugBmywg?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i2.ytimg.com/vi/uN2hugBmywg/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Joseph Bankole and Bryan, host of the Pros in the Arena podcast and a matchday operations insider, talk through the opening week of the 2026-27 Champions League. Bryan explains what a VAR information officer does when the referees stop play, why FC Cologne's fans pushed back on betting ads, and how FIFA 2004 made him an Arsenal fan. Then the arguments: is xG worth trusting, would you swap Bukayo Saka for Michael Olise, and how did Manchester United start in Europe before the Manchester derby?
+
+Recorded 13 September 2026.
+
+0:00 Coming up
+0:45 Opening week of the Champions League
+2:22 Can smaller clubs keep up in the Champions League?
+3:35 Prague: Slavia Praha v RC Lens
+5:04 The VAR information officer
+7:41 Why Bryan started Pros in the Arena
+11:12 Football coverage without gambling ads or paywalls
+14:33 FC Cologne fans and betting ads
+16:06 Going to more games
+17:52 How Bryan became an Arsenal fan
+19:48 Cristiano Ronaldo's free kick, remembered from Nigeria
+21:43 Arsenal in the Champions League this season
+23:07 xG: believer or denier?
+26:51 Would you swap Bukayo Saka for Michael Olise?
+28:10 Manchester United's Champions League start
+31:14 Manchester United v Manchester City prediction
+33:33 Wrap-up
+
+Music: Let It Ride, Sunny Days, Faint and Legend by Anno Domini Beats.
+
+Photos used under public domain, CC0 and CC BY licences:
+&quot;Bodø Hafen lub 2025-07-24 img01&quot; by Lukas Beck, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Bod%C3%B8_Hafen_lub_2025-07-24_img01.jpg
+&quot;Crowd in Old Town Square Below Old Town Hall Prague at Sunset (34801178800)&quot; by Nan Palmero from San Antonio, TX, USA, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Crowd_in_Old_Town_Square_Below_Old_Town_Hall_Prague_at_Sunset_(34801178800).jpg
+&quot;Stadion Eden tribuny&quot; by Vojtasekd, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Stadion_Eden_tribuny.jpg
+&quot;Big Textile Factory (14643481453)&quot; by darkday from Brisbane, Australia, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Big_Textile_Factory_(14643481453).jpg
+&quot;GER Köln, RheinEnergieStadion 011&quot; by -wuppertaler, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:GER_K%C3%B6ln,_RheinEnergieStadion_011.jpg
+&quot;Stade Saputo&quot; by Justin Quintal, CC BY 3.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Stade_Saputo.jpg
+&quot;Sony-PlayStation-2-30001-Console-FL&quot; by Evan-Amos, Public domain, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Sony-PlayStation-2-30001-Console-FL.jpg
+&quot;Arsène Wenger (15339559916)&quot; by Ronnie Macdonald from Chelmsford and Largs, United Kingdom, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Ars%C3%A8ne_Wenger_(15339559916).jpg
+&quot;Ronaldo free kick&quot; by Gordon Flood from Trim, Ireland, CC BY 2.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Ronaldo_free_kick.jpg
+&quot;RC Lens - Arsenal FC (03-10-2023) 16&quot; by Supporterhéninois, CC0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:RC_Lens_-_Arsenal_FC_(03-10-2023)_16.jpg
+&quot;Old Trafford August 2011 - panoramio&quot; by Heikki Immonen, CC BY 3.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Old_Trafford_August_2011_-_panoramio.jpg
+&quot;Erling Haaland June 2025&quot; by MichaelEmilio, CC BY 4.0, via Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Erling_Haaland_June_2025.jpg</media:description>
+   <media:community>
+    <media:starRating count="1" average="5.00" min="1" max="5"/>
+    <media:statistics views="172"/>
+   </media:community>
+  </media:group>
+ </entry>
+</feed>

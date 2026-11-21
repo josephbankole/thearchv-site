@@ -190,7 +190,7 @@ the three paler text tokens were darkened (the "white system" names in older not
 **The front page is rendered at build time, and the bundle enhances it.**
 `src/render/home.ts` builds the lead, the Dispatch block (three newest long reads) and the Desk Brief into the
 HTML. **The front page was cut back on 2026-10-13 (founder) to five things: the live scores
-strip, the lead (the day's story), the Dispatch block, the Desk Brief and four poster tiles.** The Dispatch block (the three newest long reads) replaced "Today at the desk" the same day (founder: it repeated the football leagues). Each scores-strip match links to `/scores/?match=<id>`, which opens that match's details.
+strip, the lead (the day's story), the Dispatch block, the Desk Brief and four poster tiles.** (The Wire block joined on 2026-10-28 and the Video block, directly under the scores strip, on 2026-11-21; see the trim section below.) The Dispatch block (the three newest long reads) replaced "Today at the desk" the same day (founder: it repeated the football leagues). Each scores-strip match links to `/scores/?match=<id>`, which opens that match's details.
 The three desk bands, the app block, the legends wall, the long-reads accordion, the FAQ and the
 partnership form are off it; see "The front page after the 2026-10-13 trim" below for where each
 went.
@@ -309,6 +309,52 @@ posters at the bottom of the page, the rest can live in sub pages."
   exists so a sport icon (about 96px) can mount beside the h1 without restructuring. The Wire
   subline, edition and attribution lines and the tables attribution are not subheaders and stay.
 
+- **The video block sits directly under the scores strip, above the lead (founder, 2026-11-21).**
+  So the front page is now seven blocks: scores strip, Video, lead, The Wire, the Dispatch block,
+  the Desk Brief, four posters. Marker `<!--archv:videos-->`, rendered by `renderHomeVideos()` in
+  `scripts/videos/lib.mjs` (the whole `<section>` or nothing): "Watch", the three newest long-form
+  videos, and "Shorts", the six newest. Each card is a plain link to YouTube with our own copy of
+  the thumbnail, the title and the date; no view counts, ever (they lag, and YouTube's policy wants
+  a shown count current).
+  - **Data.** `scripts/fetch-videos.mjs` (`npm run videos:fetch`) is the only step that reads
+    YouTube: two public Atom feeds, no API key (long-form playlist `UULF...`, Shorts `UUSH...`, each
+    entry cross-checked against its own `/watch` or `/shorts/` link). It writes the committed
+    snapshot `scripts/data/videos.json` (`archv-videos/1`) and one WebP per video in
+    `public/media/videos/`. The build reads only the snapshot (trap 0). On a network error or a
+    result that looks wrong (an empty list, under half the snapshot's count) it keeps the snapshot
+    and exits 0 with a loud line; `--strict` exits 1. **Not in `DATA_FILES`**: no desk commits it to
+    main, and its lists legitimately shrink (a deleted video, a newly hidden one), which the shrink
+    guard would read as damage.
+  - **`scripts/data/videos-hidden.json` keeps a video off the site.** The rights line (no crests,
+    kits, sponsor marks or match photographs anywhere) reaches YouTube thumbnails: a goal archive
+    Short's thumbnail is a frame of match footage. Such ids are listed there by hand, with a
+    reason, and are never mirrored, rendered or published in the feed. **Nothing detects them
+    automatically**, so a new footage thumbnail goes live with the next deploy unless its id is
+    added first.
+  - **Playback.** `src/components/videos.ts` (bundled, attached in `boot()` through `safe()`) turns
+    a plain click into YouTube's own iframe from `https://www.youtube-nocookie.com/embed/<id>`,
+    in a sibling element of the link, never inside it. One player at a time; a modified click still
+    opens YouTube; no YouTube JS API; the iframe keeps the page's referrer policy (YouTube needs
+    the Referer, never add `no-referrer`). The player is never under 200 by 200 and nothing is
+    drawn over it. A playing long-form card takes two of the three columns at desktop and the full
+    row below 1024px; a playing Short widens to 300px.
+  - **CSP.** The homepage literal says `frame-src https://www.youtube-nocookie.com` (it was
+    `'none'`). `img-src` is unchanged because the thumbnails are ours. `verify-csp-pages.mjs` now
+    fails any page that carries `data-embed-origin` or a static `<iframe src>` its own `frame-src`
+    does not name. `EMBED_ORIGIN` lives in `scripts/videos/lib.mjs` and again in `videos.ts`; a
+    test holds them together.
+  - **Trap 3.** The Shorts row is six across at desktop and scrolls sideways below that, so it
+    carries `overflow-y: hidden`. Nothing in the block is transformed or translated; keep it so.
+  - **Deploy cadence changed.** `deploy.yml` runs the fetcher before `npm run build` (tolerant,
+    `continue-on-error`) and has a daily `schedule` at 18:10 UTC, after the channel's usual 17:30
+    UTC Short, so the list is never more than a day old (YouTube's policy asks for stored data to
+    be refreshed within 30 days). The scheduled run rebuilds and redeploys main as it stands and
+    commits nothing. The committed snapshot is the fallback and what a local build shows.
+  - **Privacy.** `/about/#privacy` says thumbnails are served by us and nothing reaches YouTube
+    until play. Hot-linking a thumbnail, or loading the player before a click, makes that false.
+  - Tests: `scripts/test/videos.test.mjs` (recorded feeds in `scripts/test/fixtures/videos/`, no
+    network) and the video cases in `home-feeds.test.mjs`, all inside `npm run test:home`.
+
 ## The sport icons (2026-11-21)
 
 One interactive 3D object per sport: a football, an American football, a single-seater racing
@@ -392,6 +438,18 @@ reads only; `/reads/` lists them all. `archive.longReads[]` in the feed gained `
 (`https://thearchv.ca/reads/<slug>/`, from `readPath()`), and the body passes through unchanged
 because the app renders the same markdown (thearchv-app `21a24fd`). The converter and the weekly
 mirror live in `../dispatch/site-longreads/` (`substack_to_longread.py`).
+
+**`dist/feed/videos.json` (`archv-videos/1`, 2026-11-21, additive, a new standalone file).**
+Written by `build-feed.mjs` outside the manifest loop, so `index.json` and every existing feed stay
+byte-identical. Shape: `{ schema, fetchedAt, long[], shorts[] }`, each item
+`{ id, title, published, url, thumb, thumbWidth, thumbHeight }`, newest first, up to six long-form
+and eight Shorts. `url` is the video on YouTube (`/watch?v=` or `/shorts/`), `published` and
+`fetchedAt` are ISO UTC, and `thumb` is a site-relative path (`/media/videos/<id>.webp`, 800x450
+for long-form, 405x720 for Shorts): prefix `https://thearchv.ca`. No view counts. With no snapshot
+the file still ships with `fetchedAt: null` and two empty lists. It is the same list the front page
+renders from, hidden videos left out. The app does not read it yet; if it embeds the player it
+must follow YouTube's embed rules (see `src/components/videos.ts`) and the in-app-browser age
+rating note in `../thearchv-app/CLAUDE.md`.
 
 ## The Wire and the daily tables (2026-09-26, branch feature/wire-site)
 

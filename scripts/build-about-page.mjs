@@ -60,7 +60,7 @@ const LOG_VISIBLE = 10;
 
 // The privacy policy's "Last updated" day. Change the policy, change this (the policy promises
 // the date moves with it). It renders the visible line and feeds the AboutPage dateModified.
-const PRIVACY_UPDATED = "2026-11-15";
+const PRIVACY_UPDATED = "2026-11-21";
 
 const PAGE_CSP = cspMeta({ scripts: [MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH], posthog: true });
 
@@ -403,7 +403,7 @@ const html = `${documentShell({
         <p class="updated">Last updated ${esc(longDate(PRIVACY_UPDATED))}</p>
 
         <p>The ARCHV is an independent football publication. We publish an iOS app and this
-        website. There are no ads on either, there are no accounts, and we do not track you
+        website. We run no ads on either, there are no accounts, and we do not track you
         across other companies' apps or websites. This page says exactly what we do collect
         and which outside companies handle it for us, in plain words.</p>
 
@@ -495,6 +495,15 @@ const html = `${documentShell({
         its own fonts, so your browser does not request them from anyone else. Partnership enquiries come by email to
         <a href="mailto:partnerships@josephbankole.ca">partnerships@josephbankole.ca</a>, and the
         site has no contact form.</p>
+        <p><strong>YouTube videos.</strong> The front page shows videos from our YouTube
+        channel. The thumbnails are our own copies, served from this site, so nothing is sent to
+        YouTube until you press play. When you do, the video loads from YouTube in its
+        privacy-enhanced mode (youtube-nocookie.com). From then on Google receives your IP
+        address and details of your device and browser, and may store data in your browser,
+        under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's
+        privacy policy</a>. Google may process that data outside Canada. YouTube may show its own
+        adverts in the player; we do not sell or choose them. A link that opens a video on
+        youtube.com takes you to YouTube itself. This site uses YouTube API Services.</p>
         <p>Android visitors to the <a href="/app/">app page</a> see a waitlist. Joining it
         stores your email address, your browser's user agent (the line of text that names
         your browser and operating system), and the page you signed up on, in the same

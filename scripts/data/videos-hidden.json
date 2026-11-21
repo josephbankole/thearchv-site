@@ -1,0 +1,37 @@
+{
+  "note": "Videos the front page and the app feed never show, and whose thumbnails are never copied to this site. The site's rights line is no club crests, kits, sponsor marks or match photographs anywhere, and a YouTube thumbnail that is a frame of match footage, or shows a replica shirt, would put one on the home page. Add an id here to keep a video off; remove it to let it back. scripts/fetch-videos.mjs and loadVideos() in scripts/videos/lib.mjs both read this file.",
+  "hidden": [
+    {
+      "id": "AZmryt9OWWc",
+      "why": "Thumbnail is a frame of match footage: a goalkeeper in club kit."
+    },
+    {
+      "id": "M6-MJymKPEE",
+      "why": "Thumbnail is a frame of match footage: a player in club kit with a sponsor mark."
+    },
+    {
+      "id": "8_eRD-024Ag",
+      "why": "Thumbnail shows a replica club shirt with the crest and sponsor."
+    },
+    {
+      "id": "XhKUDNRPo9M",
+      "why": "Goal archive Short: the thumbnail is a frame of match footage with players in club kit."
+    },
+    {
+      "id": "HyG19RXuxII",
+      "why": "Goal archive Short: the thumbnail is a frame of match footage with players in club kit."
+    },
+    {
+      "id": "GK2VG5e6QG4",
+      "why": "Goal archive Short: the thumbnail is a frame of match footage with players in club kit."
+    },
+    {
+      "id": "AqryXhvv4aM",
+      "why": "Thumbnail includes a frame of club match footage."
+    },
+    {
+      "id": "uN2hugBmywg",
+      "why": "Thumbnail shows a replica shirt with manufacturer stripes."
+    }
+  ]
+}

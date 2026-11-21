@@ -330,7 +330,7 @@ const html = `${documentShell({
         <h2 id="standards">Editorial standards</h2>
 
         <h3>The artwork is our own</h3>
-        <p>Every image on The ARCHV is original illustration, drawn in our own house style. We use no club crests, no kit designs, no federation or competition marks, and no photographs. The faces are stylised drawings published as editorial commentary, not likenesses passed off as photos.</p>
+        <p>Every player, club and match image on The ARCHV is original illustration, drawn in our own house style. We use no club crests, no kit designs, no federation or competition marks, and no match or agency photographs. The faces are stylised drawings published as editorial commentary, not likenesses passed off as photos. The video row on the front page is the one exception: its stills come from our own YouTube channel and show the people who present it.</p>
 
         ${creditsHtml}
 
@@ -503,7 +503,9 @@ const html = `${documentShell({
         under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's
         privacy policy</a>. Google may process that data outside Canada. YouTube may show its own
         adverts in the player; we do not sell or choose them. A link that opens a video on
-        youtube.com takes you to YouTube itself. This site uses YouTube API Services.</p>
+        youtube.com takes you to YouTube itself. This site uses YouTube API Services, so by
+        playing a video here you agree to the
+        <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a>.</p>
         <p>Android visitors to the <a href="/app/">app page</a> see a waitlist. Joining it
         stores your email address, your browser's user agent (the line of text that names
         your browser and operating system), and the page you signed up on, in the same

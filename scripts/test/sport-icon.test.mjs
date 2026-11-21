@@ -154,7 +154,7 @@ test("both style copies give the canvas touch-action: pan-y and keep the tab-bar
   const home = readFileSync(join(ROOT, "src", "style.css"), "utf8");
   for (const css of [shell, home]) {
     const rule = css.match(/\n\s*\.sport-icon__canvas \{[^}]*\}/)[0];
-    assert.match(rule, /touch-action: pan-y/);
+    assert.match(rule, /touch-action: pan-y pinch-zoom;/);
     assert.ok(!/transform/.test(css.match(/\.sport-icon \{[^}]*\}/)[0]));
     assert.match(css, /\.sportnav \{[^}]*overflow-y: hidden/);
   }

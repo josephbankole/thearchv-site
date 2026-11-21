@@ -38,18 +38,22 @@ interface Playing {
   player: HTMLElement;
   close: HTMLButtonElement;
   link: HTMLAnchorElement;
+  // Where the card came from, when play() moved it to the head of its list (see play()).
+  home: { parent: Node; next: Node | null } | null;
 }
 
 let playing: Playing | null = null;
 
 function stop(restoreFocus: boolean): void {
   if (!playing) return;
-  const { card, player, close, link } = playing;
+  const { card, player, close, link, home } = playing;
   playing = null;
   // Removing the iframe is what ends playback.
   player.remove();
   close.remove();
   card.classList.remove('is-playing');
+  // Put a moved card back where it was (the iframe is gone, so nothing reloads).
+  if (home) home.parent.insertBefore(card, home.next && home.next.parentNode === home.parent ? home.next : null);
   if (restoreFocus) link.focus();
 }
 
@@ -76,10 +80,26 @@ function play(card: HTMLElement, link: HTMLAnchorElement): void {
   close.textContent = 'Close player';
   close.addEventListener('click', () => stop(true));
 
+  // On a tablet the Watch list is three across and a playing card takes a full row at its head.
+  // The card is moved there in the DOM, not with CSS `order`, so Tab reaches the player before
+  // the cards drawn after it (WCAG 2.4.3). Done before the iframe goes in: moving an iframe
+  // reloads it. A phone and a desktop list are one column and the card opens in place.
+  let home: Playing['home'] = null;
+  const list = card.parentNode;
+  if (
+    list &&
+    card.classList.contains('video-card--long') &&
+    card !== list.firstElementChild &&
+    window.matchMedia('(min-width: 720px) and (max-width: 1023.98px)').matches
+  ) {
+    home = { parent: list, next: card.nextSibling };
+    list.insertBefore(card, list.firstChild);
+  }
+
   card.classList.add('is-playing');
   card.insertBefore(player, card.firstChild);
   card.appendChild(close);
-  playing = { card, player, close, link };
+  playing = { card, player, close, link, home };
 
   // The playing card takes more room (style.css), so bring the player into view where it landed,
   // then hand it the keyboard.

@@ -321,29 +321,53 @@ posters at the bottom of the page, the rest can live in sub pages."
     entry cross-checked against its own `/watch` or `/shorts/` link). It writes the committed
     snapshot `scripts/data/videos.json` (`archv-videos/1`) and one WebP per video in
     `public/media/videos/`. The build reads only the snapshot (trap 0). On a network error or a
-    result that looks wrong (an empty list, under half the snapshot's count) it keeps the snapshot
-    and exits 0 with a loud line; `--strict` exits 1. **Not in `DATA_FILES`**: no desk commits it to
+    result that looks wrong (an empty list, under half the snapshot's count) it does not refresh
+    and exits 0 with a loud line and, in CI, a `::warning::` on the run summary; `--strict` exits 1.
+    **CI commits nothing, so the committed snapshot is frozen at its last hand commit.** In CI
+    the fallback is therefore the list the live site is serving (`thearchv.ca/feed/videos.json`
+    and its thumbnails) when that is valid and newer, and only then the committed snapshot.
+    `loadVideos()` returns null once the snapshot is over `MAX_AGE_DAYS` (30) old, so a month of
+    failed fetches drops the block and empties the feed; it never serves older data. The feed
+    parser reads link attributes in any order and either quote style. **Not in `DATA_FILES`**: no desk commits it to
     main, and its lists legitimately shrink (a deleted video, a newly hidden one), which the shrink
     guard would read as damage.
   - **`scripts/data/videos-hidden.json` keeps a video off the site.** The rights line (no crests,
     kits, sponsor marks or match photographs anywhere) reaches YouTube thumbnails: a goal archive
     Short's thumbnail is a frame of match footage. Such ids are listed there by hand, with a
-    reason, and are never mirrored, rendered or published in the feed. **Nothing detects them
-    automatically**, so a new footage thumbnail goes live with the next deploy unless its id is
-    added first.
+    reason, and are never mirrored, rendered or published in the feed. Hiding is one commit to
+    that file and must deploy on a day YouTube does not answer: `loadVideos()` drops the card,
+    `build-feed.mjs` sweeps any thumbnail not in the list out of `dist/media/videos/`, and the
+    fetcher takes hidden entries out of a kept snapshot. No test may fail because a hidden id is
+    still in the committed snapshot or still has a file in `public/`.
+  - **Approve first: `scripts/data/videos-approved.json` (2026-11-21, the founder's to
+    overrule).** Nothing can check a thumbnail for a kit or a match frame by machine, and 8 of
+    the 21 recent uploads broke the line, so a video is mirrored, rendered and published only
+    when its id is listed there. An unlisted upload is HELD: the fetch names it in the log and
+    in a CI notice, and downloads nothing of it. Whoever uploads a video adds its id after
+    looking at the thumbnail. If approvals fall behind, the approved videos age out of the
+    feed's 15 entries, the fetch reads as suspicious and keeps the old list, and after 30 days
+    the block goes. Hidden wins over approved.
   - **Playback.** `src/components/videos.ts` (bundled, attached in `boot()` through `safe()`) turns
     a plain click into YouTube's own iframe from `https://www.youtube-nocookie.com/embed/<id>`,
     in a sibling element of the link, never inside it. One player at a time; a modified click still
     opens YouTube; no YouTube JS API; the iframe keeps the page's referrer policy (YouTube needs
     the Referer, never add `no-referrer`). The player is never under 200 by 200 and nothing is
-    drawn over it. A playing long-form card takes two of the three columns at desktop and the full
-    row below 1024px; a playing Short widens to 300px.
+    drawn over it (`scroll-margin-top` on the player keeps it clear of the sticky tab bar).
+    A playing long-form card opens in place across the Watch column at desktop and on a phone;
+    on a tablet (720 to 1023px) it takes the full row and `videos.ts` moves the `<li>` to the
+    head of the list and back, never CSS `order`, so the tab order matches the screen. A
+    playing Short widens to 300px.
+  - **Layout.** At 1024px and up Watch (three rows, still left, words right) and Shorts sit side
+    by side in one band, so the lead headline shows in the first screen at 1440 by 900. Below
+    that the two groups stack and the lead starts below the fold. The play mark sits where the
+    channel's thumbnails have no words: bottom-right on a long-form still, top-right on a Short.
+    Long-form titles print whole; a Short's title clamps at five lines.
   - **CSP.** The homepage literal says `frame-src https://www.youtube-nocookie.com` (it was
     `'none'`). `img-src` is unchanged because the thumbnails are ours. `verify-csp-pages.mjs` now
     fails any page that carries `data-embed-origin` or a static `<iframe src>` its own `frame-src`
     does not name. `EMBED_ORIGIN` lives in `scripts/videos/lib.mjs` and again in `videos.ts`; a
     test holds them together.
-  - **Trap 3.** The Shorts row is six across at desktop and scrolls sideways below that, so it
+  - **Trap 3.** The Shorts row scrolls sideways at every width, so it
     carries `overflow-y: hidden`. Nothing in the block is transformed or translated; keep it so.
   - **Deploy cadence changed.** `deploy.yml` runs the fetcher before `npm run build` (tolerant,
     `continue-on-error`) and has a daily `schedule` at 18:10 UTC, after the channel's usual 17:30
@@ -367,9 +391,10 @@ site's own tokens so it reads as house illustration.
   import in `src/main.ts`). The sport tab bar carries a static 16px inline SVG glyph per sport
   (`sportGlyph()` in `scripts/icons/markup.mjs`; hand copy in `index.html`). **Never a canvas in
   the tab bar**, and the module refuses to start inside `.sportnav` or anything that scrolls
-  sideways. On phones the static family shows the glyph on the current tab only: six made the
-  row 134px wider and pushed the current tab off-screen on `/golf/` and `/basketball/`, and that
-  family has no script to scroll it back.
+  sideways. On phones (640px and under) both families show the glyph on the current tab only:
+  six made the row 134px wider and pushed the current tab off-screen on `/golf/` and
+  `/basketball/`, where the static family has no script to scroll it back, and the front page
+  mirrors the rule so the bar does not change on the first tap.
 - **The geometry is arithmetic, not a modelling file.** `scripts/icons/meshes.mjs` builds each
   mesh in Node; `scripts/build-sport-icons.mjs` (`npm run sport-icons`) writes
   `public/sport-icons/<key>.glb` and `<key>.svg`, and **both are committed**. The build runs
@@ -389,8 +414,8 @@ site's own tokens so it reads as house illustration.
   file, no import, no build, under `script-src 'self'`, so no CSP hash and no `cspMeta()` change
   (the same arrangement as `/search/search.js`). No three.js: it would cost about 120 KB gzipped
   for a toon ramp and an outline.
-- **Scroll safety is the rule that file is written round (trap 3).** `touch-action: pan-y` on the
-  canvas, no `preventDefault`, no wheel or touch listener, pointer capture only after a touch has
+- **Scroll safety is the rule that file is written round (trap 3).** `touch-action: pan-y pinch-zoom` on the
+  canvas (a pinch that starts on the icon still zooms the page), no `preventDefault`, no wheel or touch listener, pointer capture only after a touch has
   moved further sideways than up or down, opacity-only change from poster to canvas, nothing
   transformed at rest. `scripts/test/sport-icon.test.mjs` fails the build if any of that goes.
   Measured in headless Chrome with real touch events at 390px, 2026-11-21: a vertical swipe that
@@ -402,11 +427,13 @@ site's own tokens so it reads as house illustration.
   frame at the rest pose: no idle turn, no hover lean, no coasting. Dragging still works.
 - **Colour.** Token names only (`RAMPS` in `scripts/icons/lib.mjs`); the runtime reads the live
   custom properties and the baked hex is a fallback the test keeps equal to the tokens. Tennis
-  felt is the sunken paper step and American football leather is `--accent-ink`, because optic
+  felt is the muted ink step with a paper seam (the pale ball with a dark seam it replaced read
+  as a baseball) and American football leather is `--accent-ink`, because optic
   yellow and brown would each be a sixth hue. That substitution is the founder's to overrule.
 - **Rights.** Generic objects only: no crest, maker's mark, number, sponsor or livery, and the
   car is nobody's chassis. Its body is paper on purpose; a colour scheme on a racing car is a
-  livery, and orange or red would read as a real team.
+  livery, and orange or red would read as a real team. (A 2026-11-21 review found the paper body
+  weak at 72px and below and proposed an orange tub; that is the founder's call and was not made.)
 
 ## The feed contract (the iOS app depends on this)
 

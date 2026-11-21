@@ -74,7 +74,7 @@ export const ORG_NODE = {
   url: `${SITE}/`,
   foundingDate: "2026",
   description:
-    "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and no photograph appears anywhere on the site.",
+    "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and every player and club image is drawn, not photographed.",
   logo: { "@type": "ImageObject", url: `${SITE}/brand/logo-badge@192.png`, width: 192, height: 192 },
   image: `${SITE}/og.jpg`,
   founder: PERSON_REF,
@@ -1213,12 +1213,12 @@ export function pageStyles() {
     .sport-head__title h1 { margin: 0; min-width: 0; }
     /* Sport icon. MIRROR of .sport-icon* in src/style.css (the homepage's football). The span is
        a fixed square, so the poster holds the space and nothing shifts when the canvas arrives.
-       touch-action: pan-y hands every vertical pan to the browser: a thumb that lands on the icon
+       touch-action: pan-y pinch-zoom hands every vertical pan and every pinch to the browser: a thumb that lands on the icon
        and swipes up scrolls the page (trap 3). The change from poster to canvas is opacity only,
        and nothing here is transformed at rest. */
     .sport-icon { position: relative; display: block; flex: 0 0 auto; width: 96px; height: 96px; -webkit-user-select: none; user-select: none; }
     .sport-icon__poster, .sport-icon__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
-    .sport-icon__canvas { opacity: 0; transition: opacity .35s ease; touch-action: pan-y; cursor: grab; -webkit-tap-highlight-color: transparent; }
+    .sport-icon__canvas { opacity: 0; transition: opacity .35s ease; touch-action: pan-y pinch-zoom; cursor: grab; -webkit-tap-highlight-color: transparent; }
     /* The poster stays solid underneath until the canvas has finished fading in, then goes. */
     .sport-icon__poster { transition: opacity 0s .4s; }
     .sport-icon.is-live .sport-icon__canvas { opacity: 1; }

@@ -417,69 +417,49 @@ export const QUESTION_LANE_META = {
   questions: { label: "Question Desk", seoSuffix: "answered", indexTitleSuffix: "Question Desk" },
 };
 
-// Editorial copy per new sport, one source shared by the section pages (build-sport-pages.mjs)
-// and the lane fronts (build-lane-pages.mjs): `lede` states what the desk covers and the
-// standard it meets (and doubles as the meta description); `holding` is the honest empty-state
-// paragraph shown until the first entry lands. British English, house voice, no hype, no em
-// dashes. Football is not here: it keeps its own long-standing homepage and lane copy.
-// `about` is the same desk with no cadence in it. The pages never print `lede` directly: they go
-// through sportDeskLede() below, which prints `about` plus the date of the newest answer once the
-// desk has missed two of its own periods (gap4-9, 2026-11-15), so a page never promises "a day"
-// or "every Monday" on a desk that has stopped. The search index uses `about` as it stands.
+// Editorial copy per sport, one source for the sport hubs, the sport lane fronts and the search
+// index. `about` is what the desk covers, with no cadence and no date in it: it is each page's
+// meta, og, twitter and JSON-LD description and the search index's line. It is not printed in the
+// page header, which is breadcrumb, h1, then the strips (founder, 2026-11-21: the dated desk lede
+// read as stale). `holding` shows only while a desk has no entries.
+// British English, house voice, no hype, no em dashes. Football is not here: it keeps its own
+// homepage and lane copy.
 export const SPORT_DESK_COPY = {
   nfl: {
-    lede: "The NFL desk, one answered question a day: the biggest thing fans are asking that week.",
     about: "The NFL desk answers the biggest question fans are asking.",
     holding: "The NFL desk opens soon.",
   },
   f1: {
-    lede: "The Formula 1 desk, one answered question a day: the one the paddock and the fans keep coming back to.",
     about: "The Formula 1 desk answers the question the paddock and the fans keep coming back to.",
     holding: "The Formula 1 desk opens soon.",
   },
   tennis: {
-    lede: "The tennis desk, one answered question a day: the one fans are asking about the tour.",
     about: "The tennis desk answers the question fans are asking about the tour.",
     holding: "The tennis desk opens soon.",
   },
   golf: {
-    lede: "The golf desk, one answered question a day: the one fans keep asking through the season.",
     about: "The golf desk answers the question fans keep asking through the season.",
     holding: "The golf desk opens soon.",
   },
-  // Basketball runs weekly, not daily (founder order 2026-09-11): one lane, the NBA and the WNBA
-  // covered equally, one question every Monday with the league alternating week to week.
   basketball: {
-    lede: "The basketball desk, the NBA and the WNBA covered equally, with one answered question every Monday.",
     about: "The basketball desk answers questions on the NBA and the WNBA, covered equally.",
     holding: "The basketball desk opens soon.",
   },
 };
 
-// The rhythm each desk's own copy promises, in days: the four daily question desks, basketball
-// weekly, and the Transfer Desk, whose index title says "Verified Daily".
-export const DESK_CADENCE_DAYS = { transfer: 1, nfl: 1, f1: 1, tennis: 1, golf: 1, basketball: 7 };
+// The rhythm a desk's own copy promises, in days. Only the Transfer Desk states one now (its index
+// title says "Verified Daily"); the sport desks print no cadence anywhere.
+export const DESK_CADENCE_DAYS = { transfer: 1 };
 
 /* Whether a desk has gone quiet: its newest entry is more than two of its periods before `today`
-   (YYYY-MM-DD, Toronto). An empty desk is not quiet (it shows its holding line instead), and nor is
-   a desk with no stated rhythm. */
+   (YYYY-MM-DD, Toronto). An empty desk is not quiet, and nor is a desk with no stated rhythm. */
 export function deskQuiet(newestDate, cadenceDays, today) {
   if (!newestDate || !cadenceDays || !today) return false;
   const gap = (Date.parse(`${String(today).slice(0, 10)}T00:00:00Z`) - Date.parse(`${String(newestDate).slice(0, 10)}T00:00:00Z`)) / 86400000;
   return gap > 2 * cadenceDays;
 }
 
-/* The lede a sport page prints. `days` is the desk's entries, newest first (as loadDayData hands
-   them back). While the desk keeps its rhythm, the cadence lede; once it is quiet, the cadence-free
-   line and the date of its newest answer, which is a fact the page can stand behind. */
-export function sportDeskLede(sportKey, days, today) {
-  const copy = SPORT_DESK_COPY[sportKey];
-  const newest = days && days.length ? days[0].date : null;
-  if (!deskQuiet(newest, DESK_CADENCE_DAYS[sportKey], today)) return copy.lede;
-  return `${copy.about} The latest answer is from ${longDate(newest)}.`;
-}
-
-/* A football lane's <title>, the same rule: quietIndexTitle once the lane has gone quiet. */
+/* A football lane's <title>: quietIndexTitle once the lane has gone quiet (gap4-9). */
 export function laneIndexTitle(laneKey, days, today) {
   const meta = LANE_META[laneKey];
   const newest = days && days.length ? days[0].date : null;
@@ -1189,9 +1169,10 @@ export function pageStyles() {
        Shared by the sport section pages (build-sport-pages.mjs) and the new-sport lane fronts
        (build-lane-pages.mjs). */
     .sport-head { padding: 2.2rem 0 1rem; }
-    .sport-head__eyebrow { color: var(--gold); font-size: .875rem; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 .6rem; }
-    .sport-head h1 { margin: 0 0 .6rem; }
-    .sport-head__lede { color: var(--cream-dim); font-size: 1.05rem; max-width: 42rem; margin: 0 0 1.6rem; }
+    /* The h1 sits in a flex row so a sport icon (about 96px) can sit beside it later without
+       restructuring. Nothing else goes in the row; the header is breadcrumb, title row, strips. */
+    .sport-head__title { display: flex; align-items: center; gap: 1rem; margin: 0 0 1.4rem; }
+    .sport-head__title h1 { margin: 0; min-width: 0; }
     .sport-holding { margin: 1.4rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--cream-faint); border-radius: .75rem; background: var(--bg-sunken); }
     .sport-holding p { margin: 0; color: var(--cream-dim); font-size: 1rem; }
 
@@ -1368,7 +1349,7 @@ export function pageStyles() {
     /* .desknav is deliberately NOT in this list. It is navigation, not a label, and a monospace
        face widened it enough to wrap to three lines at 375px. CLAUDE.md records it as verified
        collision-proof at 320px in its current form; leave it in Inter Tight. */
-    .article__eyebrow, .lane__eyebrow, .sport-head__eyebrow,
+    .article__eyebrow, .lane__eyebrow,
     .lane-card__kicker, .breadcrumb,
     .author__role {
       font-family: var(--font-mono);

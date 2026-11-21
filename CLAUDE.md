@@ -295,6 +295,16 @@ posters at the bottom of the page, the rest can live in sub pages."
   and `build-search.mjs`; the hub's eyebrow is "The ARCHV explains" so it does not repeat the h1.
 - The Desk Brief is a full-width block (was a side rail beside the bands) and the scroll-spy nav
   (`.spynav`) is gone, since the page has one section left.
+- **The sport header is breadcrumb, h1, then the strips (2026-11-21).** The sport hubs
+  (`build-sport-pages.mjs`) and the `/<sport>/questions/` lane fronts (`renderSportLane` in
+  `build-lane-pages.mjs`) no longer print an eyebrow (it repeated the h1) or a desk lede (the
+  dated "latest answer is from 22 September" line told every visitor the desk was stale).
+  `sportDeskLede()` and the per-sport `lede` strings are deleted; do not bring them back.
+  `SPORT_DESK_COPY[key].about` is the evergreen meta, og, twitter and JSON-LD description for
+  both page kinds and the search index line, and `desk-cadence.test.mjs` fails it if a cadence
+  word or a date gets in. The h1 sits in `<div class="sport-head__title">`, a flex row that
+  exists so a sport icon (about 96px) can mount beside the h1 without restructuring. The Wire
+  subline, edition and attribution lines and the tables attribution are not subheaders and stay.
 
 ## The feed contract (the iOS app depends on this)
 

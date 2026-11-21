@@ -1,8 +1,9 @@
-// gap4-9: a desk's cadence promise ("a day", "every Monday", "Verified Daily") comes off once the
-// desk has missed two of its own periods, and comes back the day a new entry lands.
+// gap4-9: the Transfer Desk's cadence promise ("Verified Daily") comes off once the desk has missed
+// two of its own periods, and comes back the day a new entry lands. The sport desks no longer
+// print a cadence or a dated lede at all.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { deskQuiet, sportDeskLede, laneIndexTitle, SPORT_DESK_COPY, LANE_META } from "../shared/page-shell.mjs";
+import { deskQuiet, laneIndexTitle, SPORT_DESK_COPY, LANE_META } from "../shared/page-shell.mjs";
 
 test("deskQuiet: more than two periods since the newest entry", () => {
   assert.equal(deskQuiet("2026-11-13", 1, "2026-11-15"), false, "two days on a daily desk is still within");
@@ -13,18 +14,14 @@ test("deskQuiet: more than two periods since the newest entry", () => {
   assert.equal(deskQuiet("2026-01-01", undefined, "2026-11-15"), false, "no stated rhythm, nothing to break");
 });
 
-test("sportDeskLede keeps the cadence while the desk is live and dates it once quiet", () => {
-  assert.equal(sportDeskLede("nfl", [{ date: "2026-11-14" }], "2026-11-15"), SPORT_DESK_COPY.nfl.lede);
-  const quiet = sportDeskLede("nfl", [{ date: "2026-09-22" }, { date: "2026-09-21" }], "2026-11-15");
-  assert.equal(quiet, "The NFL desk answers the biggest question fans are asking. The latest answer is from 22 September 2026.");
-  assert.equal(sportDeskLede("basketball", [{ date: "2026-09-21" }], "2026-11-15"),
-    "The basketball desk answers questions on the NBA and the WNBA, covered equally. The latest answer is from 21 September 2026.");
-  assert.equal(sportDeskLede("golf", [], "2026-11-15"), SPORT_DESK_COPY.golf.lede);
-});
-
-test("no quiet line carries a cadence promise", () => {
+// The sport pages print no desk lede (founder, 2026-11-21). `about` is their meta description, so
+// it has to stay evergreen: no cadence promise and no date.
+test("a sport desk's description carries no cadence promise and no date", () => {
   for (const [key, copy] of Object.entries(SPORT_DESK_COPY)) {
+    assert.ok(copy.about && copy.about.length > 20, key);
     assert.doesNotMatch(copy.about, /a day|daily|every (Monday|week)|weekly/i, key);
+    assert.doesNotMatch(copy.about, /\d{4}|latest answer|January|February|March|April|May |June|July|August|September|October|November|December/, key);
+    assert.equal(copy.lede, undefined, `${key}: the cadence lede is gone, do not bring it back`);
   }
 });
 

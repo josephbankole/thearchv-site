@@ -14,8 +14,14 @@
    Nothing here may emit a <script> tag: index.html carries exactly one inline bootstrap and
    scripts/check-csp-hash.mjs asserts that. The player is the bundled src/components/videos.ts.
 
-   NO VIEW COUNTS. The feed carries them, they lag by hours, and YouTube's developer policy wants
-   any count shown to be current. They are dropped at parse time and never reach the snapshot. */
+   NO VIEW COUNTS ARE SHOWN. The feed carries them, they lag by hours, and YouTube's developer
+   policy wants any count shown to be current. From 2026-11-21 (founder: "if we can show the most
+   popular this week that would be ideal") the snapshot keeps `views` as a SORT KEY for
+   rankVideos() and nothing else: loadVideos() strips it, so no count reaches the page or the
+   app feed, and no copy may claim a ranking.
+
+   EVERY PUBLIC UPLOAD SHOWS (founder, 2026-11-21: "show every upload automatically"). There is
+   no approval step. scripts/data/videos-hidden.json is the one way to keep a video off. */
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -55,11 +61,10 @@ export const thumbPath = (id) => `${THUMB_DIR}/${id}.webp`;
 
 export const SNAPSHOT_PATH = join(ROOT, "scripts", "data", "videos.json");
 export const HIDDEN_PATH = join(ROOT, "scripts", "data", "videos-hidden.json");
-export const APPROVED_PATH = join(ROOT, "scripts", "data", "videos-approved.json");
 // A snapshot older than this is not shown or published at all. YouTube's developer policy asks
 // for stored data to be refreshed within 30 days, and a list that old may name videos that have
-// since been deleted or made private. The daily fetch in deploy.yml keeps the age to a day; this
-// is what happens when that fetch has failed for a month.
+// since been deleted or made private. The fetch runs on every deploy (each desk push to main), so the list
+// is as old as the last deploy; this is what happens when no deploy has refreshed it for a month.
 export const MAX_AGE_DAYS = 30;
 export const PUBLIC_DIR = join(ROOT, "public");
 
@@ -98,7 +103,8 @@ const tag = (xml, name) => {
 };
 
 /* parseFeed(xml, kind): the entries of one playlist feed as snapshot items WITHOUT a thumbnail
-   (the fetcher adds thumb, thumbWidth and thumbHeight once the image is on disk), newest first.
+   (the fetcher adds thumb, thumbWidth and thumbHeight once the image is on disk), newest first,
+   each with the feed's view count as `views` (0 when the feed gives none).
    `kind` is "long" or "shorts". An entry is dropped, and named in `dropped`, when its id is not a
    video id, it belongs to another channel, its date does not parse, its title is empty, or its
    link disagrees with the playlist it came from. Throws when the text is not an Atom feed at all,
@@ -119,6 +125,10 @@ export function parseFeed(xml, kind) {
     const channel = tag(entry, "yt:channelId");
     const title = cleanTitle(tag(entry, "title"));
     const published = tag(entry, "published");
+    // <media:statistics views="123"/>: kept as a sort key only. Missing or unreadable is 0.
+    const stats = (entry.match(/<media:statistics\b[^>]*>/) || [""])[0];
+    const viewsRaw = stats ? attr(stats, "views") : "";
+    const views = /^\d{1,15}$/.test(viewsRaw) ? Number(viewsRaw) : 0;
     const alt = (entry.match(/<link\b[^>]*>/g) || []).find((t) => attr(t, "rel") === "alternate");
     const link = decodeXml(alt ? attr(alt, "href") : "");
     const drop = (why) => dropped.push({ id, why });
@@ -132,10 +142,32 @@ export function parseFeed(xml, kind) {
     const isWatchLink = link === `https://www.youtube.com/watch?v=${id}`;
     if (kind === "shorts" ? !isShortLink : !isWatchLink) { drop(`link is not a ${kind} link: ${link || "missing"}`); continue; }
     seen.add(id);
-    items.push({ id, title, published: when.toISOString(), url: link });
+    items.push({ id, title, published: when.toISOString(), url: link, views });
   }
   items.sort((a, b) => (a.published < b.published ? 1 : a.published > b.published ? -1 : 0));
   return { items, dropped };
+}
+
+/* ---------- the order ---------- */
+
+export const WEEK_DAYS = 7;
+
+/* rankVideos(items, now): the order one group is stored and shown in (founder, 2026-11-21).
+   First every entry published in the WEEK_DAYS before `now` (the fetch time, ms), most viewed
+   first, ties to the newer; then the older entries, newest first. So the first N of the result
+   are "this week's most viewed, and when the week has fewer than N, the next newest older ones",
+   for any N: the page takes SHOW, the feed KEEP. Missing or bad `views` count as 0. Pure: no
+   clock, no I/O, the input is not changed. */
+export function rankVideos(items, now) {
+  const since = now - WEEK_DAYS * 86_400_000;
+  const at = (v) => Date.parse(v.published);
+  const views = (v) => (Number.isFinite(v.views) && v.views > 0 ? v.views : 0);
+  const newest = (a, b) => at(b) - at(a);
+  const week = [], older = [];
+  for (const v of items) (at(v) > since ? week : older).push(v);
+  week.sort((a, b) => views(b) - views(a) || newest(a, b));
+  older.sort(newest);
+  return [...week, ...older];
 }
 
 /* ---------- the snapshot ---------- */
@@ -155,6 +187,8 @@ export function itemProblems(v, kind, where) {
   if (v.thumbWidth !== THUMB[kind].width || v.thumbHeight !== THUMB[kind].height) {
     out.push(`${where}: thumbnail must be ${THUMB[kind].width}x${THUMB[kind].height}`);
   }
+  // Optional: the live feed carries none, and a snapshot kept from it has none either.
+  if (v.views !== undefined && !(Number.isSafeInteger(v.views) && v.views >= 0)) out.push(`${where}.views: not a count`);
   return out;
 }
 
@@ -187,10 +221,9 @@ export function suspicious(fresh, previous) {
   return reasons;
 }
 
-/* hiddenIds(): the ids in scripts/data/videos-hidden.json. The site's rights line is no crests,
-   kits, sponsor marks or match photographs anywhere, and a thumbnail that is a frame of match
-   footage would put one on the front page, so such a video is listed there and never shown. A
-   missing file hides nothing; a malformed one throws. */
+/* hiddenIds(): the ids in scripts/data/videos-hidden.json, the one way to keep a video off the
+   site. The list is empty since the founder's ruling of 2026-11-21 (every upload shows); add
+   { id, why } there to hide one. A missing file hides nothing; a malformed one throws. */
 export function hiddenIds(path = HIDDEN_PATH) {
   if (!existsSync(path)) return new Set();
   const { hidden } = JSON.parse(readFileSync(path, "utf8"));
@@ -198,24 +231,13 @@ export function hiddenIds(path = HIDDEN_PATH) {
   return new Set(hidden.map((h) => h.id));
 }
 
-/* approvedIds(): the ids in scripts/data/videos-approved.json. APPROVE FIRST: a video reaches the
-   front page, the mirror and the app feed only once someone has looked at its thumbnail (no kit,
-   crest, sponsor mark or match frame) and listed its id there. Nothing can check a thumbnail for
-   those by machine, and two in five of the channel's recent uploads broke the line, so an
-   unlisted video is held, not shown. A missing file approves nothing; a malformed one throws. */
-export function approvedIds(path = APPROVED_PATH) {
-  if (!existsSync(path)) return new Set();
-  const { approved } = JSON.parse(readFileSync(path, "utf8"));
-  if (!Array.isArray(approved) || approved.some((a) => !ID_RE.test(a?.id ?? ""))) throw new Error(`[videos] ${path}: "approved" must be a list of { id, why }`);
-  return new Set(approved.map((a) => a.id));
-}
-
-/* loadVideos(): the committed snapshot, checked, with any video that is hidden, not approved or
-   whose thumbnail is not on disk left out. Returns null when there is no snapshot, or when the
+/* loadVideos(): the committed snapshot, checked, in its stored order (rankVideos() at fetch
+   time), with any video that is hidden or whose thumbnail is not on disk left out, and with
+   `views` taken off every item so no count can reach the page or the feed. Returns null when there is no snapshot, or when the
    snapshot is older than MAX_AGE_DAYS (the block and the feed then ship empty, and one line says
    why). An unreadable or malformed snapshot throws: that is a broken commit, and a build that
    quietly dropped the block would hide it. `now` is a parameter so a test can hold the clock. */
-export function loadVideos({ path = SNAPSHOT_PATH, publicDir = PUBLIC_DIR, hidden = hiddenIds(), approved = approvedIds(), now = Date.now(), log = console.warn } = {}) {
+export function loadVideos({ path = SNAPSHOT_PATH, publicDir = PUBLIC_DIR, hidden = hiddenIds(), now = Date.now(), log = console.warn } = {}) {
   if (!existsSync(path)) return null;
   const data = JSON.parse(readFileSync(path, "utf8"));
   const problems = snapshotProblems(data);
@@ -227,12 +249,13 @@ export function loadVideos({ path = SNAPSHOT_PATH, publicDir = PUBLIC_DIR, hidde
     return null;
   }
   const onDisk = (v) => {
-    if (hidden.has(v.id) || !approved.has(v.id)) return false;
+    if (hidden.has(v.id)) return false;
     const ok = existsSync(join(publicDir, v.thumb));
     if (!ok) log(`[videos] ${v.id}: thumbnail missing at public${v.thumb}, video left out`);
     return ok;
   };
-  return { schema: data.schema, fetchedAt: data.fetchedAt, long: data.long.filter(onDisk), shorts: data.shorts.filter(onDisk) };
+  const bare = ({ views, ...v }) => v;
+  return { schema: data.schema, fetchedAt: data.fetchedAt, long: data.long.filter(onDisk).map(bare), shorts: data.shorts.filter(onDisk).map(bare) };
 }
 
 /* ---------- rendering ---------- */

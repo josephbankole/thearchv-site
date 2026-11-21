@@ -385,15 +385,17 @@ console.log(`[build-feed] home covers feed → ${OUT}/home-covers.json (${homeCo
 }
 
 /* ---------- videos (archv-videos/1, 2026-11-21, standalone file) ----------
-   The channel's newest long-form videos and Shorts, for the app: the committed snapshot
+   The channel's long-form videos and Shorts, for the app, in the front page's own order (the
+   last seven days by views, then newest; see rankVideos() in scripts/videos/lib.mjs): the committed snapshot
    scripts/data/videos.json (written by scripts/fetch-videos.mjs, the only step that reads
    YouTube), through the same loadVideos() the front page renders from, so the site and the app
    list the same videos. `thumb` is a site-relative path on thearchv.ca (our own copy of the
-   thumbnail, WebP, at thumbWidth x thumbHeight); `url` is the video on YouTube. No view counts.
+   thumbnail, WebP, at thumbWidth x thumbHeight); `url` is the video on YouTube. No view counts
+   (loadVideos() strips the snapshot's sort key).
    Outside the `feeds` loop, like storefront and home-covers, so index.json and its buildHash do
    not move. With no snapshot the file is still written, with two empty lists.
    Then dist/media/videos/ is swept against that list: vite copies all of public/ into dist, so
-   the thumbnail of a video that has since been hidden, was never approved, or belongs to a
+   the thumbnail of a video that has since been hidden, or belongs to a
    snapshot too old to show would otherwise still be served at its address. videos-hidden.json
    promises a hidden video's thumbnail is not on this site; this is where the build keeps it. */
 {

@@ -23,23 +23,26 @@
    deleted, so hiding a video works on a day YouTube does not answer. The build drops the block
    altogether once the list is older than MAX_AGE_DAYS (scripts/videos/lib.mjs).
 
-   APPROVE FIRST. A video is mirrored and listed only when its id is in
-   scripts/data/videos-approved.json (and not in videos-hidden.json). An unlisted video is held
-   and named in the log; nothing of it is downloaded.
+   EVERY PUBLIC UPLOAD IS LISTED (founder, 2026-11-21), unless its id is in videos-hidden.json.
+
+   THE ORDER (founder, same day). Each group is stored in rankVideos() order: the videos of the
+   last seven days, most viewed first, then older ones, newest first. The feed gives views for the
+   newest 15 of each kind.
 
    WHY THE THUMBNAILS ARE COPIED. The homepage CSP says img-src 'self', and the privacy policy
    says nothing is sent to YouTube until the visitor presses play. A hot-linked i.ytimg.com image
    would break both. Each run re-downloads every thumbnail, so a copy is never older than the
-   last run (YouTube's developer policy asks for stored data to be refreshed within 30 days; the
-   daily schedule in deploy.yml keeps it to one).
+   last run (YouTube's developer policy asks for stored data to be refreshed within 30 days; every
+   deploy runs this first, and the desks push to main most days. There is no scheduled run).
 
-   No view counts are kept: they lag, and the policy wants any count shown to be current. */
+   View counts are kept in the snapshot as a sort key only and are never shown or published:
+   they lag, and the policy wants any count shown to be current. */
 import { writeFileSync, mkdirSync, readFileSync, existsSync, readdirSync, unlinkSync, renameSync } from "node:fs";
 import { join } from "node:path";
 import sharp from "sharp";
 import {
   VIDEOS_SCHEMA, PLAYLISTS, KEEP, THUMB, THUMB_DIR, SNAPSHOT_PATH, PUBLIC_DIR,
-  feedUrl, parseFeed, thumbPath, snapshotProblems, suspicious, hiddenIds, approvedIds,
+  feedUrl, parseFeed, rankVideos, thumbPath, snapshotProblems, suspicious, hiddenIds,
 } from "./videos/lib.mjs";
 
 const TAG = "[fetch-videos]";
@@ -66,12 +69,12 @@ async function useLiveList() {
     const problems = snapshotProblems(live);
     if (problems.length) throw new Error(`not a valid ${VIDEOS_SCHEMA} list (${problems[0]})`);
     if (previous && !(Date.parse(live.fetchedAt) > Date.parse(previous.fetchedAt))) throw new Error("it is no newer than the committed snapshot");
-    const hidden = hiddenIds(), approved = approvedIds();
+    const hidden = hiddenIds();
     const list = { long: [], shorts: [] };
     mkdirSync(OUT_DIR, { recursive: true });
     for (const kind of ["long", "shorts"]) {
       for (const v of live[kind]) {
-        if (hidden.has(v.id) || !approved.has(v.id)) continue;
+        if (hidden.has(v.id)) continue;
         const buf = await get(`${LIVE_ORIGIN}${thumbPath(v.id)}`, "buffer");
         const meta = await sharp(buf).metadata();
         if (meta.format !== "webp" || meta.width !== THUMB[kind].width || meta.height !== THUMB[kind].height) throw new Error(`${thumbPath(v.id)} is not a ${THUMB[kind].width}x${THUMB[kind].height} WebP`);
@@ -195,19 +198,16 @@ for (const kind of ["long", "shorts"]) {
 const longIds = new Set(parsed.long.items.map((v) => v.id));
 if (parsed.shorts.items.some((v) => longIds.has(v.id))) await keep("a video appears in both the long-form and the Shorts feed");
 
-// Videos held off the site (scripts/data/videos-hidden.json), and videos nobody has approved yet
-// (scripts/data/videos-approved.json), are dropped before anything of theirs is downloaded.
+// Videos held off the site (scripts/data/videos-hidden.json) are dropped before anything of
+// theirs is downloaded. Then each group takes its order: this week's most viewed, then newest.
 const hidden = hiddenIds();
-const approved = approvedIds();
-const held = [];
+const fetchedAt = Date.now();
 for (const kind of ["long", "shorts"]) {
-  parsed[kind].items = parsed[kind].items.filter((v) => {
+  parsed[kind].items = rankVideos(parsed[kind].items.filter((v) => {
     if (hidden.has(v.id)) { console.log(`${TAG} ${kind} ${v.id}: hidden by videos-hidden.json`); return false; }
-    if (!approved.has(v.id)) { console.warn(`${TAG} ${kind} ${v.id}: HELD, not in videos-approved.json (${v.title})`); held.push(v.id); return false; }
     return true;
-  });
+  }), fetchedAt);
 }
-if (held.length) annotate("notice", "Videos waiting for approval", `${held.length} video(s) are not shown until their ids are added to scripts/data/videos-approved.json: ${held.join(", ")}`);
 
 const fresh = { long: [], shorts: [] };
 const staged = []; // [tmpPath, finalPath]
@@ -232,7 +232,7 @@ for (const kind of ["long", "shorts"]) {
 
 const discard = () => { for (const [tmp] of staged) { try { unlinkSync(tmp); } catch { /* already gone */ } } };
 const reasons = suspicious(fresh, previous);
-const snapshot = { schema: VIDEOS_SCHEMA, fetchedAt: new Date().toISOString(), long: fresh.long, shorts: fresh.shorts };
+const snapshot = { schema: VIDEOS_SCHEMA, fetchedAt: new Date(fetchedAt).toISOString(), long: fresh.long, shorts: fresh.shorts };
 const problems = snapshotProblems(snapshot);
 if (reasons.length || problems.length) {
   discard();

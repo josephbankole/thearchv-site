@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Once a day, 18:10 UTC, about forty minutes after the channel's usual 17:30 UTC Short, so the
+  # front page's video block (scripts/fetch-videos.mjs, below) is never more than a day behind
+  # YouTube even on a day when no desk pushes. It rebuilds and redeploys main as it stands: no
+  # commit is made, and the data guard still runs first. GitHub runs schedules late under load.
+  schedule:
+    - cron: '10 18 * * *'
 
 # Read-only by default. Only the deploy job, which runs no npm code, can publish to Pages.
 permissions:
@@ -61,6 +67,13 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The front page's video block. Reads two public YouTube feeds (no key), copies each
+      # thumbnail into public/media/videos/ and rewrites scripts/data/videos.json for this build
+      # only; nothing is committed. On any failure it keeps the committed snapshot and exits 0, and
+      # continue-on-error covers a crash, so YouTube can never stop a deploy.
+      - name: Refresh the video list
+        continue-on-error: true
+        run: node scripts/fetch-videos.mjs
       - run: npm run build
       # The commit this artifact was built from, so "Verify live" can tell this deployment from
       # the one before it.

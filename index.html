@@ -50,8 +50,12 @@
          (src/components/scoresStrip.ts reads live/scores.json from it) and nowhere else; the
          Web3Forms host left with the partnership form, so form-action is 'self' alone. The strip's
          client is bundled, not inline, so the one hashed bootstrap script below is still the only
-         inline script on the page. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com; form-action 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'" />
+         inline script on the page.
+         2026-11-21: frame-src names https://www.youtube-nocookie.com, the one origin the video
+         block's click-to-load player frames (src/components/videos.ts). Nothing loads from it
+         until a visitor presses play. img-src is unchanged: the thumbnails are our own copies.
+         scripts/verify-csp-pages.mjs fails the build if the block ships without this origin. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gp+sIviDDDveuyXkLvtRB/8hAT+jYRlYmNN/PsY3/CI=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://fpsfnhjxczzyqurzbqpt.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com; form-action 'self'; base-uri 'self'; object-src 'none'; frame-src https://www.youtube-nocookie.com" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <!-- JSON-LD: Organization + WebSite. No trademarked terms in structured data. (The FAQPage node went on
@@ -238,6 +242,15 @@
           <ul class="scores-strip__track" id="scores-strip-track" aria-label="Matches" tabindex="0" hidden></ul>
         </div>
       </section>
+
+      <!-- VIDEO (founder, 2026-11-21: the latest long-form videos and the latest Shorts from the
+           YouTube channel, directly below the live scores strip, playable on the site). Rendered
+           at build time by renderHomeVideos() in scripts/videos/lib.mjs from the committed
+           snapshot scripts/data/videos.json; the marker becomes the whole <section> or nothing.
+           Every card is a plain link to YouTube with our own copy of the thumbnail, so nothing
+           reaches Google until the visitor presses play. src/components/videos.ts (bundled)
+           turns a click into the player; frame-src in the CSP above names its one origin. -->
+      <!--archv:videos-->
 
       <!-- LEAD. The front-page lead story is the newest entry across the three football desks,
            rendered at build time, so it is in the HTML a crawler and a no-JS reader both get. -->

@@ -1,0 +1,125 @@
+{
+  "schema": "archv-videos/1",
+  "fetchedAt": "2026-11-21T20:58:05.890Z",
+  "long": [
+    {
+      "id": "2LaHp3i3cvI",
+      "title": "Athletic Club v Real Sociedad: How La Liga's Connected Ball Fell Out of Sync With VAR",
+      "published": "2026-11-21T15:00:13.000Z",
+      "url": "https://www.youtube.com/watch?v=2LaHp3i3cvI",
+      "thumb": "/media/videos/2LaHp3i3cvI.webp",
+      "thumbWidth": 800,
+      "thumbHeight": 450
+    },
+    {
+      "id": "fG61um5dDCQ",
+      "title": "Mauricio Pochettino at Manchester United: Will He Get a Full Season? Plus Arsenal on Top",
+      "published": "2026-11-19T15:00:25.000Z",
+      "url": "https://www.youtube.com/watch?v=fG61um5dDCQ",
+      "thumb": "/media/videos/fG61um5dDCQ.webp",
+      "thumbWidth": 800,
+      "thumbHeight": 450
+    },
+    {
+      "id": "6vGLPcd1wY4",
+      "title": "Mauricio Pochettino to Manchester United? What He Brings After Michael Carrick's Sacking",
+      "published": "2026-11-13T00:21:02.000Z",
+      "url": "https://www.youtube.com/watch?v=6vGLPcd1wY4",
+      "thumb": "/media/videos/6vGLPcd1wY4.webp",
+      "thumbWidth": 800,
+      "thumbHeight": 450
+    },
+    {
+      "id": "XMopaNERGW0",
+      "title": "Manchester United Squad Audit: Keep or Sell Bruno Fernandes, with Coach Mo",
+      "published": "2026-11-08T14:06:04.000Z",
+      "url": "https://www.youtube.com/watch?v=XMopaNERGW0",
+      "thumb": "/media/videos/XMopaNERGW0.webp",
+      "thumbWidth": 800,
+      "thumbHeight": 450
+    },
+    {
+      "id": "qNrStY0XRqU",
+      "title": "What JJ Gabriel is risking at Man Utd at 15, and the Haaland goal the referees admitted was wrong",
+      "published": "2026-09-23T10:26:12.000Z",
+      "url": "https://www.youtube.com/watch?v=qNrStY0XRqU",
+      "thumb": "/media/videos/qNrStY0XRqU.webp",
+      "thumbWidth": 800,
+      "thumbHeight": 450
+    }
+  ],
+  "shorts": [
+    {
+      "id": "YhHjI-Dbhws",
+      "title": "Mauricio Pochettino at Manchester United: \"I don't think he was anybody's first choice\"",
+      "published": "2026-11-21T17:30:08.000Z",
+      "url": "https://www.youtube.com/shorts/YhHjI-Dbhws",
+      "thumb": "/media/videos/YhHjI-Dbhws.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    },
+    {
+      "id": "XUBMRd4WgCo",
+      "title": "Can Mauricio Pochettino's Manchester United surprise Liverpool at Anfield?",
+      "published": "2026-11-20T17:30:02.000Z",
+      "url": "https://www.youtube.com/shorts/XUBMRd4WgCo",
+      "thumb": "/media/videos/XUBMRd4WgCo.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    },
+    {
+      "id": "21TxceQvwBU",
+      "title": "Omar Berrada and Jason Wilcox: is Manchester United's recruitment a mess?",
+      "published": "2026-11-19T17:30:24.000Z",
+      "url": "https://www.youtube.com/shorts/21TxceQvwBU",
+      "thumb": "/media/videos/21TxceQvwBU.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    },
+    {
+      "id": "lc_Ydh8i3aE",
+      "title": "Manchester United's mentality: the hardest thing Mauricio Pochettino has to fix",
+      "published": "2026-11-18T17:30:14.000Z",
+      "url": "https://www.youtube.com/shorts/lc_Ydh8i3aE",
+      "thumb": "/media/videos/lc_Ydh8i3aE.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    },
+    {
+      "id": "cRmxFgDLxRU",
+      "title": "Diogo Dalot \"often lets us down\": does Mauricio Pochettino need a new Manchester United right back?",
+      "published": "2026-11-17T17:30:26.000Z",
+      "url": "https://www.youtube.com/shorts/cRmxFgDLxRU",
+      "thumb": "/media/videos/cRmxFgDLxRU.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    },
+    {
+      "id": "IsNnPBS2bKo",
+      "title": "Mauricio Pochettino's £7.4m release clause: should Manchester United have hired him in the summer?",
+      "published": "2026-11-16T17:30:06.000Z",
+      "url": "https://www.youtube.com/shorts/IsNnPBS2bKo",
+      "thumb": "/media/videos/IsNnPBS2bKo.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    },
+    {
+      "id": "Knmvml2Gjbc",
+      "title": "Why haven't Manchester United signed a left back? Coach Mo on Luke Shaw",
+      "published": "2026-11-10T17:30:14.000Z",
+      "url": "https://www.youtube.com/shorts/Knmvml2Gjbc",
+      "thumb": "/media/videos/Knmvml2Gjbc.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    },
+    {
+      "id": "BCpyKcZUHyQ",
+      "title": "Is it too late for Manchester United to attract top players? Coach Mo vs Joseph",
+      "published": "2026-11-09T17:30:19.000Z",
+      "url": "https://www.youtube.com/shorts/BCpyKcZUHyQ",
+      "thumb": "/media/videos/BCpyKcZUHyQ.webp",
+      "thumbWidth": 405,
+      "thumbHeight": 720
+    }
+  ]
+}

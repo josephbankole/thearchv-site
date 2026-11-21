@@ -14,6 +14,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { infogramEligible, infogramAlt, infogramRelPath } from "./shared/infogram.mjs";
 import { withAppArt } from "./shared/app-art.mjs";
 import { resolveLongReadSport } from "./shared/longread-sport.mjs";
+import { loadVideos, VIDEOS_SCHEMA } from "./videos/lib.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.FEED_OUT || join(ROOT, "dist", "feed");
@@ -381,4 +382,19 @@ console.log(`[build-feed] home covers feed → ${OUT}/home-covers.json (${homeCo
   if (JSON.parse(raw).schema !== "archv-team-colours/1") throw new Error("[build-feed] team-colours.json is not archv-team-colours/1");
   writeFileSync(join(OUT, "team-colours.json"), raw);
   console.log(`[build-feed] team colours → ${OUT}/team-colours.json`);
+}
+
+/* ---------- videos (archv-videos/1, 2026-11-21, standalone file) ----------
+   The channel's newest long-form videos and Shorts, for the app: the committed snapshot
+   scripts/data/videos.json (written by scripts/fetch-videos.mjs, the only step that reads
+   YouTube), through the same loadVideos() the front page renders from, so the site and the app
+   list the same videos. `thumb` is a site-relative path on thearchv.ca (our own copy of the
+   thumbnail, WebP, at thumbWidth x thumbHeight); `url` is the video on YouTube. No view counts.
+   Outside the `feeds` loop, like storefront and home-covers, so index.json and its buildHash do
+   not move. With no snapshot the file is still written, with two empty lists. */
+{
+  const v = loadVideos();
+  const videosFeed = { schema: VIDEOS_SCHEMA, fetchedAt: v?.fetchedAt ?? null, long: v?.long ?? [], shorts: v?.shorts ?? [] };
+  writeFileSync(join(OUT, "videos.json"), JSON.stringify(videosFeed, null, 2));
+  console.log(`[build-feed] videos feed → ${OUT}/videos.json (${videosFeed.long.length} long-form, ${videosFeed.shorts.length} Shorts)`);
 }

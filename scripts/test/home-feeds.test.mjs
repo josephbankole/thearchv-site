@@ -13,6 +13,8 @@ const ROOT = join(HERE, "..", "..");
 const DIST = process.env.DIST || join(ROOT, "dist");
 const readJson = (rel) => JSON.parse(readFileSync(join(DIST, rel), "utf8"));
 const html = () => readFileSync(join(DIST, "index.html"), "utf8");
+// The video block's own reader: the block and its feed are checked against what it loads.
+const { loadVideos, snapshotProblems, SHOW, EMBED_ORIGIN } = await import("../videos/lib.mjs");
 
 // Everything expected below is worked out from poster-tiles.json, so rotating the front-page
 // posters (one edit to `home` there, then a deploy) never needs this file or a fixture touched.
@@ -99,5 +101,68 @@ test("the Wire block, when the build has an edition, sits before the Dispatch an
   for (const [a] of block.matchAll(/<a\b[^>]*href="https?:[^"]*"[^>]*>/g)) {
     assert.match(a, /target="_blank"/);
     assert.match(a, /rel="noopener noreferrer"/);
+  }
+});
+
+/* ---------- the video block and its feed (2026-11-21) ---------- */
+
+test("the video block sits directly after the scores strip and before the lead", () => {
+  const page = html();
+  assert.ok(!page.includes("<!--archv:videos-->"), "videos marker left unreplaced");
+  const data = loadVideos({ log: () => {} });
+  const block = page.indexOf('<section class="videos"');
+  if (!data || (!data.long.length && !data.shorts.length)) {
+    assert.equal(block, -1, "no data, so no block");
+    return;
+  }
+  assert.ok(block > 0, "video block missing");
+  const strip = page.indexOf('<section class="scores-strip"');
+  const stripEnd = page.indexOf("</section>", strip) + "</section>".length;
+  // Nothing but white space and comments between the end of the strip and the block.
+  assert.equal(page.slice(stripEnd, block).replace(/<!--[\s\S]*?-->/g, "").trim(), "");
+  assert.ok(page.indexOf('<section class="lead"') > block, "the lead must come after the video block");
+});
+
+test("every video card is a plain link to YouTube with our own thumbnail, and nothing loads from YouTube", () => {
+  const page = html();
+  const start = page.indexOf('<section class="videos"');
+  if (start < 0) return;
+  const block = page.slice(start, page.indexOf("</section>", start));
+  const data = loadVideos({ log: () => {} });
+  const expected = [...data.long.slice(0, SHOW.long), ...data.shorts.slice(0, SHOW.shorts)];
+  const cards = [...block.matchAll(/<li class="video-card video-card--(long|shorts)" data-video-id="([^"]+)"[^>]*>\s*<a class="video-card__link" href="([^"]+)"[^>]*data-video-play>\s*<span class="video-card__media"><img src="([^"]+)"/g)];
+  assert.deepEqual(cards.map((c) => c[2]), expected.map((v) => v.id));
+  for (const [, kind, id, href, src] of cards) {
+    assert.equal(href, kind === "shorts" ? `https://www.youtube.com/shorts/${id}` : `https://www.youtube.com/watch?v=${id}`);
+    assert.equal(src, `/media/videos/${id}.webp`);
+    assert.ok(existsSync(join(DIST, src)), `${src} is not in the build`);
+  }
+  assert.ok(!/<iframe|<script/i.test(block));
+  assert.ok(!/ytimg\.com|youtube-nocookie\.com\/embed/.test(block));
+});
+
+test("the homepage CSP lets the player frame its one origin and still serves images from this site alone", () => {
+  const csp = html().match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/)[1];
+  const directive = (name) => csp.split(";").map((d) => d.trim()).find((d) => d.startsWith(`${name} `));
+  assert.equal(directive("frame-src"), `frame-src ${EMBED_ORIGIN}`);
+  assert.equal(directive("img-src"), "img-src 'self' data:");
+});
+
+test("feed/videos.json is archv-videos/1 and lists what the front page draws from", () => {
+  const feed = readJson("feed/videos.json");
+  const data = loadVideos({ log: () => {} });
+  if (!data) {
+    assert.deepEqual(feed, { schema: "archv-videos/1", fetchedAt: null, long: [], shorts: [] });
+    return;
+  }
+  assert.deepEqual(snapshotProblems(feed), []);
+  assert.deepEqual(Object.keys(feed), ["schema", "fetchedAt", "long", "shorts"]);
+  assert.deepEqual(feed.long, data.long);
+  assert.deepEqual(feed.shorts, data.shorts);
+  for (const v of [...feed.long, ...feed.shorts]) {
+    assert.deepEqual(Object.keys(v), ["id", "title", "published", "url", "thumb", "thumbWidth", "thumbHeight"]);
+    assert.match(v.thumb, /^\/media\/videos\/[A-Za-z0-9_-]{11}\.webp$/);
+    assert.ok(existsSync(join(DIST, v.thumb)), `${v.thumb} is not in the build`);
+    assert.ok(!("views" in v));
   }
 });

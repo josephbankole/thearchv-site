@@ -48,6 +48,7 @@
     "wire:finalise": "node scripts/wire/finalise-wire.mjs",
     "wire:verify": "node scripts/wire/verify-wire.mjs",
     "tables:fetch": "node scripts/wire/fetch-tables.mjs",
+    "videos:fetch": "node scripts/fetch-videos.mjs",
     "daily-pages": "node scripts/build-daily-feed.mjs && node scripts/build-daily-pages.mjs && node scripts/check-wire-links.mjs",
     "check-img-alt": "node scripts/check-img-alt.mjs",
     "check-day-images": "node scripts/check-day-images.mjs",

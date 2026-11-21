@@ -4,6 +4,7 @@ import './style.css';
 
 import { initFrontCards } from './components/frontCards';
 import { initScoresStrip } from './components/scoresStrip';
+import { initVideos } from './components/videos';
 import { initChrome, initMastheadMenu } from './ui/chrome';
 import { initMovedAnchors } from './ui/movedAnchors';
 import { initSportTabs } from './ui/sportTabs';
@@ -40,6 +41,10 @@ function boot(): void {
   // The live scores strip. Its "All scores" link is server-rendered and always there; this only
   // fills the row of matches beside it from the public scores feed.
   safe('initScoresStrip', initScoresStrip);
+
+  // The video block under the strip. Its cards are server-rendered links to YouTube; this turns a
+  // plain click into the player, loaded from YouTube only at that moment.
+  safe('initVideos', initVideos);
 
   // The poster tiles are static links in index.html and need no script. The JS-built plate rail and
   // its lightbox (src/components/archiveRail.ts) were removed on 2026-10-12, when the site moved to

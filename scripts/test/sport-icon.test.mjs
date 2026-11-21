@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT, readGlb, tokens, RAMPS, TOKEN_NAMES } from "../icons/lib.mjs";
-import { SPORT_ICON_ALT, SPORT_GLYPHS, sportGlyph } from "../icons/markup.mjs";
+import { SPORT_ICON_ALT, SPORT_GLYPHS, sportGlyph, ICON_ONLY } from "../icons/markup.mjs";
 import { GLB_CAP, SVG_CAP, SPORT_ICON_KEYS, generate } from "../build-sport-icons.mjs";
 import { SPORTS, sportIcon, sportNav } from "../shared/page-shell.mjs";
 
@@ -16,6 +16,7 @@ const DIR = join(ROOT, "public", "sport-icons");
 const KEYS = SPORTS.map((s) => s.key);
 const read = (f) => readFileSync(join(DIR, f));
 const TOKEN_HEX = new Set(Object.values(tokens()));
+const ICON_ONLY_HEX = new Set(Object.values(ICON_ONLY));
 
 test("every sport in SPORTS has a generator, an alt line and a tab glyph, and nothing extra", () => {
   assert.deepEqual([...SPORT_ICON_KEYS].sort(), [...KEYS].sort());
@@ -62,8 +63,10 @@ for (const key of KEYS) {
     for (const p of X.palette) {
       assert.deepEqual(p.ramp, RAMPS[p.name]);
       p.ramp.forEach((name, i) => {
-        assert.ok(TOKEN_NAMES.includes(name), `${name} is not a core token`);
-        assert.equal(p.hex[i], T[name], `${key}: baked ${name} is stale. Run npm run sport-icons.`);
+        // Token names only, bar the founder-approved optic yellow felt, on the tennis ball alone.
+        const iconOnly = key === "tennis" && p.name === "felt" && Object.hasOwn(ICON_ONLY, name);
+        assert.ok(TOKEN_NAMES.includes(name) || iconOnly, `${key}: ${name} is not a core token`);
+        assert.equal(p.hex[i], iconOnly ? ICON_ONLY[name] : T[name], `${key}: baked ${name} is stale. Run npm run sport-icons.`);
       });
     }
     assert.ok(g.pal.every((s) => s < X.palette.length));
@@ -85,7 +88,7 @@ for (const key of KEYS) {
     assert.match(svg, /^<svg [^>]*viewBox="0 0 192 192"[^>]*width="96"[^>]*height="96"/);
     assert.ok(svg.includes(`<title>${SPORT_ICON_ALT[key]}</title>`));
     assert.ok(!/<script|<image|<text|href=|url\(/.test(svg), "a poster is paths only: no script, image, text or link");
-    for (const [hex] of svg.matchAll(/#[0-9A-Fa-f]{6}\b/g)) assert.ok(TOKEN_HEX.has(hex.toUpperCase()), `${hex} is not a token colour`);
+    for (const [hex] of svg.matchAll(/#[0-9A-Fa-f]{6}\b/g)) assert.ok(TOKEN_HEX.has(hex.toUpperCase()) || (key === "tennis" && ICON_ONLY_HEX.has(hex.toUpperCase())), `${hex} is not a token colour`);
   });
 }
 
@@ -112,7 +115,8 @@ test("alt lines and glyphs are plain: no brand, no em dash", () => {
     assert.ok(SPORT_ICON_ALT[key].length > 5);
     assert.ok(!/[—–#]/.test(SPORT_ICON_ALT[key]));
     assert.ok(!/<text|<image|href/.test(SPORT_GLYPHS[key]), "a glyph is strokes only");
-    assert.ok(!/#[0-9a-f]{3,6}/i.test(sportGlyph(key)), "a glyph takes the link's colour, never its own");
+    const own = [...sportGlyph(key).matchAll(/#[0-9a-f]{3,6}\b/gi)].map((m) => m[0]);
+    assert.deepEqual(own, key === "tennis" ? [ICON_ONLY["icon-tennis-felt"]] : [], "a glyph takes the link's colour; only the tennis felt has its own");
   }
 });
 
@@ -157,5 +161,18 @@ test("both style copies give the canvas touch-action: pan-y and keep the tab-bar
     assert.match(rule, /touch-action: pan-y pinch-zoom;/);
     assert.ok(!/transform/.test(css.match(/\.sport-icon \{[^}]*\}/)[0]));
     assert.match(css, /\.sportnav \{[^}]*overflow-y: hidden/);
+  }
+});
+
+test("the optic yellow felt is the tennis icon's alone: in no stylesheet, no token block and no other ramp", () => {
+  assert.deepEqual(Object.keys(ICON_ONLY), RAMPS.felt, "the only icon-only colours are the three felt steps");
+  for (const [name, ramp] of Object.entries(RAMPS)) if (name !== "felt") for (const step of ramp) assert.ok(TOKEN_NAMES.includes(step), `${name}: ${step} is not a core token`);
+  for (const key of KEYS) if (key !== "tennis") assert.ok(!generate(key).built.mesh.palette.some((p) => p.name === "felt"), `${key} uses the felt ramp`);
+  for (const file of ["src/style.css", "scripts/shared/page-shell.mjs", "public/sport-icons/icon.js"]) {
+    const text = readFileSync(join(ROOT, file), "utf8").toUpperCase();
+    for (const [name, hex] of Object.entries(ICON_ONLY)) {
+      assert.ok(!text.includes(hex), `${hex} must not be written into ${file}`);
+      assert.ok(!text.includes(`--${name}`.toUpperCase()), `--${name} must not become a custom property (${file})`);
+    }
   }
 });

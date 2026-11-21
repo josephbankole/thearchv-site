@@ -10,7 +10,7 @@
  * what is left is the outline of that colour's region. An outlined part first lays down its
  * silhouette in ink, a little fat, which is the poster's version of the canvas's inverted-hull line.
  */
-import { V, DEG, rotX, rotY, SCENE, tokens } from "./lib.mjs";
+import { V, DEG, rotX, rotY, SCENE, colours } from "./lib.mjs";
 
 const S = 192; // viewBox units; integer coordinates, so half a CSS pixel at 96px
 
@@ -102,7 +102,7 @@ function pathData(ls, tol) {
 }
 
 export function posterSvg({ mesh, pose, alt }, { stroke = 6, tol = 0.55 } = {}) {
-  const T = tokens();
+  const T = colours();
   const { view, scr, nl } = project(mesh, pose);
   const [b0, b1] = SCENE.bands;
   const INK = T.ink;

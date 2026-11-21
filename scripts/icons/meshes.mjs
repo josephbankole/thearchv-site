@@ -6,8 +6,10 @@
  *
  * RIGHTS. Every object here is generic. No crest, logo, maker's mark, sponsor, number or livery
  * is modelled, and the racing car is nobody's chassis: it is a box-built single-seater with the
- * parts any open-wheel car has. Do not add a stripe, a number or a second colour to the car body:
- * a colour scheme on a racing car is a livery. See "Editorial and rights lines" in CLAUDE.md.
+ * parts any open-wheel car has. Its body is one plain colour, the site's own accent (founder,
+ * 2026-11-21: "orange body that reads better small"). Do not add a stripe, a number, a logo or a
+ * second colour to the body, and do not copy a real team's scheme: that would be a livery. See
+ * "Editorial and rights lines" in CLAUDE.md.
  */
 import { Mesh, V, DEG, rotX, rotZ, icosphere } from "./lib.mjs";
 import { SPORT_ICON_ALT } from "./markup.mjs";
@@ -178,7 +180,9 @@ function nfl() {
 /* ---------- single-seater racing car, generic, boxes only ---------- */
 function f1() {
   const m = new Mesh("f1");
-  const body = m.slot("paper"), dark = m.slot("ink"), tyre = m.slot("line"), hub = m.slot("metal"), spot = m.slot("spot");
+  // Body (tub and sidepods): the accent ramp, one plain colour. Wing planes and the helmet are
+  // paper, endplates, pylon, halo and arms ink, tyres line.
+  const body = m.slot("orange"), wing = m.slot("paper"), dark = m.slot("ink"), tyre = m.slot("line"), hub = m.slot("metal");
   // X is forward (nose at +X), Y up, Z across. Units are arbitrary; fit() scales at the end.
   // Proportions are a toy's, not a blueprint's: short, wide and big-wheeled, so it still reads
   // as a racing car when the whole icon is 72px across.
@@ -207,7 +211,7 @@ function f1() {
   m.begin("cockpit", { layer: 2 });
   m.box(-0.1, 0.2, 0.37, 0.405, -0.09, 0.09, tyre);
   m.begin("helmet", { layer: 3 });
-  m.sphere(0.085, spot, 1, [0, 0.46, 0]);
+  m.sphere(0.085, wing, 1, [0, 0.46, 0]);
   // halo: a hoop from behind the driver's shoulders to one centre post
   const hoop = [];
   for (let i = 0; i <= 6; i++) { const a = (-90 + 30 * i) * DEG; hoop.push([-0.12 + 0.38 * Math.cos(a), 0.45 + 0.09 * Math.cos(a), 0.16 * Math.sin(a)]); }
@@ -215,13 +219,13 @@ function f1() {
   m.begin("halopost", { layer: 4 });
   m.strut([0.26, 0.54, 0], [0.31, 0.36, 0], 0.045, dark);
   // front wing: main plane, a flap, two endplates
-  m.begin("fwing", { layer: 1 }); m.box(0.8, 1.02, 0.05, 0.085, -HW, HW, body);
-  m.begin("fflap", { layer: 1 }); m.box(0.74, 0.88, 0.11, 0.14, -HW, HW, body);
+  m.begin("fwing", { layer: 1 }); m.box(0.8, 1.02, 0.05, 0.085, -HW, HW, wing);
+  m.begin("fflap", { layer: 1 }); m.box(0.74, 0.88, 0.11, 0.14, -HW, HW, wing);
   for (const s of [1, -1]) { m.begin(`fend${s}`, { layer: 1 }); m.box(0.72, 1.02, 0.04, 0.22, s * HW - 0.02, s * HW + 0.02, dark); }
   // rear wing: one pylon, a beam, the main plane, two endplates
   m.begin("rpylon", { layer: 1 }); m.box(-0.95, -0.85, 0.2, 0.58, -0.025, 0.025, dark);
-  m.begin("rbeam", { layer: 1 }); m.box(-0.98, -0.84, 0.28, 0.315, -0.34, 0.34, body);
-  m.begin("rwing", { layer: 1 }); m.box(-1.04, -0.8, 0.58, 0.64, -0.34, 0.34, body);
+  m.begin("rbeam", { layer: 1 }); m.box(-0.98, -0.84, 0.28, 0.315, -0.34, 0.34, wing);
+  m.begin("rwing", { layer: 1 }); m.box(-1.04, -0.8, 0.58, 0.64, -0.34, 0.34, wing);
   for (const s of [1, -1]) { m.begin(`rend${s}`, { layer: 1 }); m.box(-1.06, -0.76, 0.16, 0.68, s * 0.34 - 0.02, s * 0.34 + 0.02, dark); }
   // wheels and one arm each, so they are attached to something
   const wheel = (name, x, r, w, s) => {

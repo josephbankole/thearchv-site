@@ -15,11 +15,13 @@
  * COLOUR. A palette slot is a three-step toon ramp of token NAMES (lit, mid, shadow). The hex
  * values are read out of the :root block in scripts/shared/page-shell.mjs at generation time and
  * baked in as a fallback; the runtime reads the live CSS custom properties first. Nothing here
- * invents a colour. scripts/test/sport-icon.test.mjs holds that line.
+ * invents a colour, bar the tennis felt (ICON_ONLY in markup.mjs, founder-approved, baked only). scripts/test/sport-icon.test.mjs holds that line.
  */
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { ICON_ONLY } from "./markup.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(HERE, "..", "..");
@@ -39,16 +41,17 @@ export function tokens() {
   tokenCache = out;
   return out;
 }
+/* Every colour an icon may use: the core tokens, plus the icon-only colours in markup.mjs. */
+export function colours() { return { ...tokens(), ...ICON_ONLY }; }
 export const hexToRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
 
-/* The ramps. [lit, mid, shadow], token names only. Tennis felt and American football leather have
-   no token of their own (optic yellow and brown would each be a sixth hue), so they borrow:
-   felt is the muted ink step with a paper seam (a dark ball with a pale seam is a tennis ball; the
-   earlier pale ball with a dark seam read as a baseball), leather is --accent-ink. That
-   substitution is a founder call. */
+/* The ramps. [lit, mid, shadow]: token names, with ONE exception. Tennis felt is optic yellow
+   with a paper seam (founder, 21 Nov 2026), an icon-only colour from ICON_ONLY in markup.mjs
+   that is in no CSS token block. American football leather has no token of its own (brown would
+   be a sixth hue) and borrows --accent-ink; the founder kept that the same day. */
 export const RAMPS = {
   paper: ["bg", "bg-sunken", "rule"],
-  felt: ["ink-muted", "ink-soft", "ink"],
+  felt: ["icon-tennis-felt", "icon-tennis-felt-mid", "icon-tennis-felt-shadow"],
   ink: ["ink-soft", "ink", "ink"],
   line: ["ink", "ink", "ink"],
   orange: ["accent-fill", "accent-fill", "accent-ink"],
@@ -209,7 +212,7 @@ export function icosphere(subdiv) {
 const pad4 = (n) => (n + 3) & ~3;
 export function toGlb(mesh, meta) {
   mesh.end();
-  const T = tokens();
+  const T = colours();
   const n = mesh.pos.length;
   if (n > 65535) throw new Error(`${mesh.key}: ${n} vertices will not index as uint16`);
   const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), col = new Uint8Array(n * 4), pal = new Uint8Array(n * 4);

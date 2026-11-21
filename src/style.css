@@ -201,10 +201,9 @@ main, .footer { position: relative; z-index: 2; }
   --margin-ink: 1; --margin-accent: var(--accent);
 }
 /* The scores strip and the Shorts row bleed through the RIGHT gutter to the edge of .wrap, so the
-   right layer may only use the space outside .wrap, which reaches 140px at 1560px. From 1420px to
-   1559px the left half shows alone, in the left gutter, where nothing bleeds. From 1560px both
+   right layer may only use the space outside .wrap, which reaches 140px at 1560px. Below 1560px the front
+   page shows neither half: one half alone looked lopsided (21 Nov 2026). From 1560px both
    halves take the same width so they draw at the same scale. */
-@media (min-width: 1420px) { .margin-art--l { display: block; } }
 @media (min-width: 1560px) { .margin-art { display: block; width: calc((100vw - var(--maxw)) / 2 - 1.75rem); } }
 /* margin-art:ink (this part is identical in src/style.css and pageStyles(); a test compares them) */
 .margin-art--l { left: 0; }

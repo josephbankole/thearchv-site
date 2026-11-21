@@ -92,7 +92,7 @@ test("the two stylesheets agree on the ink rules, and neither needs JavaScript",
     assert.ok(!/url\(/.test(block), `${name}: no image is fetched`);
   }
   // thresholds: the empty margin has to be about 140px before a layer shows
-  assert.match(home, /@media \(min-width: 1420px\) \{ \.margin-art--l \{ display: block; \} \}/);
+  assert.doesNotMatch(home, /\.margin-art--l \{ display: block; \}/); // founder-side call 21 Nov 2026: never one half alone
   assert.match(home, /@media \(min-width: 1560px\) \{ \.margin-art \{ display: block; width: calc\(\(100vw - var\(--maxw\)\) \/ 2 - 1\.75rem\); \} \}/);
   assert.match(shell, /@media \(min-width: 77\.5em\) \{ \.margin-art \{ display: block; \} \}/);
   assert.match(shell, /@media \(min-width: 63\.5em\) \{ body:not\(:has\(\.wrap--wide\)\) \.margin-art \{ display: block; --margin-col: 46rem; \} \}/);

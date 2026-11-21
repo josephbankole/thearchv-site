@@ -481,8 +481,8 @@ margins, that inks itself in as the page scrolls and is whole before the footer.
   scroll timelines, `prefers-reduced-motion`, the front page's `.reduced-motion` class and a
   page too short to scroll all show the finished drawing, still.
 - **Thresholds: shown only when the empty margin is about 140px.** Front page: both halves from
-  **1560px**, in the space outside the 1280px `.wrap`; from **1420px to 1559px** the left half
-  alone, in the left gutter. The right gutter is not empty: the scores strip and the Shorts row
+  **1560px**, in the space outside the 1280px `.wrap`; below that the front page shows neither half (one
+  half alone looked lopsided, changed 21 Nov 2026). The right gutter is not empty: the scores strip and the Shorts row
   bleed through it, which is why the right layer never uses it. Static family from **63.5em
   (1016px)** beside the 46rem column and from **77.5em (1240px)** on a `.wrap--wide` page (60rem),
   told apart with `:has(.wrap--wide)`; the wide value is the default, so no `:has()` means the

@@ -18,7 +18,7 @@ import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
 import {
   SITE, esc, escAttr, clampTitle, clampDescription, longDate, LANE_META, laneIndexTitle,
-  cardArt, deskNav, masthead, footer, documentShell, ROBOTS_INDEXABLE,
+  cardArt, deskNav, masthead, sportIcon, footer, documentShell, ROBOTS_INDEXABLE,
   cspMeta, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   SPORTS, lanesForSport, QUESTION_LANE_META, SPORT_DESK_COPY,
 } from "./shared/page-shell.mjs";
@@ -241,7 +241,7 @@ function renderSportLane(sport, laneKey) {
   <main class="wrap wrap--wide" id="main">
     <section class="sport-head">
       <p class="breadcrumb"><a href="/">The ARCHV</a> / <a href="/${sport.urlBase}/">${esc(sport.label)}</a> / ${esc(laneLabel)}</p>
-      <div class="sport-head__title"><h1>${esc(laneLabel)}</h1></div>
+      <div class="sport-head__title">${sportIcon(sport.key)}<h1>${esc(laneLabel)}</h1></div>
       ${rail}
     </section>
   </main>

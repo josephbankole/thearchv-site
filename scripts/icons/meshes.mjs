@@ -85,7 +85,7 @@ function basketball() {
 /* ---------- tennis ball ---------- */
 function tennis() {
   const m = new Mesh("tennis");
-  const felt = m.slot("felt"), line = m.slot("line");
+  const felt = m.slot("felt"), seam = m.slot("paper");
   m.begin("ball", { layer: 0 });
   m.sphere(1, felt, 3);
   m.begin("seam", { outline: false, layer: 1 });
@@ -93,7 +93,7 @@ function tennis() {
   m.ribbon(Array.from({ length: n }, (_, i) => {
     const t = (i / n) * TAU;
     return [a * Math.cos(t) + b * Math.cos(3 * t), c * Math.sin(2 * t), a * Math.sin(t) - b * Math.sin(3 * t)];
-  }), 0.085, line);
+  }), 0.11, seam);
   m.end();
   return { mesh: m, pose: { yaw: 30, tilt: 40 } };
 }

@@ -43,10 +43,12 @@ export const hexToRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 
 
 /* The ramps. [lit, mid, shadow], token names only. Tennis felt and American football leather have
    no token of their own (optic yellow and brown would each be a sixth hue), so they borrow:
-   felt is the sunken paper step, leather is --accent-ink. That substitution is a founder call. */
+   felt is the muted ink step with a paper seam (a dark ball with a pale seam is a tennis ball; the
+   earlier pale ball with a dark seam read as a baseball), leather is --accent-ink. That
+   substitution is a founder call. */
 export const RAMPS = {
   paper: ["bg", "bg-sunken", "rule"],
-  felt: ["bg-sunken", "rule", "ink-muted"],
+  felt: ["ink-muted", "ink-soft", "ink"],
   ink: ["ink-soft", "ink", "ink"],
   line: ["ink", "ink", "ink"],
   orange: ["accent-fill", "accent-fill", "accent-ink"],

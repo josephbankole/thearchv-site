@@ -14,7 +14,8 @@
  *
  * SCROLL SAFETY IS THE RULE THIS FILE IS WRITTEN ROUND (trap 3 in CLAUDE.md). A reader who puts
  * a thumb on the icon and swipes up must scroll the page, every time.
- *   - The canvas is `touch-action: pan-y` (set in CSS), so the browser keeps every vertical pan.
+ *   - The canvas is `touch-action: pan-y pinch-zoom` (set in CSS), so the browser keeps every
+ *     vertical pan and every pinch.
  *   - Nothing here calls preventDefault on a pointer or touch event. There is no wheel listener.
  *   - A touch only becomes a drag after it has moved sideways further than up or down. Until
  *     then the pointer is not captured, and a vertical start gives the gesture up for good.
@@ -236,11 +237,17 @@ async function start(el) {
   /* ---------- pointer. Read the header before changing a line of this. ---------- */
   const K = () => 3.6 / Math.max(48, css); // one icon-width of drag is about 200 degrees
   canvas.addEventListener("pointerdown", (e) => {
-    if (e.button !== 0 || S.drag) return;
+    // A confirmed drag is never replaced. A press that never became one is stale (its release
+    // was missed), so a new press takes its place.
+    if (e.button !== 0 || (S.drag && S.drag.on)) return;
     S.drag = { id: e.pointerId, x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, on: false, touch: e.pointerType !== "mouse", t: performance.now() };
   });
   canvas.addEventListener("pointermove", (e) => {
-    const d = S.drag;
+    let d = S.drag;
+    // A mouse that moves with no button held has let go somewhere this canvas could not see
+    // (outside it, before the drag was confirmed and the pointer captured). Treat it as the
+    // release, or the next plain hover would turn the object.
+    if (d && d.id === e.pointerId && e.pointerType === "mouse" && !(e.buttons & 1)) { release(e); d = null; }
     if (!d || d.id !== e.pointerId) {
       if (e.pointerType === "mouse" && !still && !d) {
         const r = canvas.getBoundingClientRect();
@@ -279,7 +286,12 @@ async function start(el) {
   };
   canvas.addEventListener("pointerup", release);
   canvas.addEventListener("pointercancel", release);
-  canvas.addEventListener("pointerleave", () => { S.leanTo = [0, 0]; wake(); });
+  canvas.addEventListener("pointerleave", (e) => {
+    // A press that never became a drag is forgotten when its pointer leaves: with no capture the
+    // release may never reach this canvas. A confirmed drag holds capture and is left alone.
+    if (S.drag && !S.drag.on && S.drag.id === e.pointerId) S.drag = null;
+    S.leanTo = [0, 0]; wake();
+  });
 
   /* ---------- lifecycle ---------- */
   canvas.addEventListener("webglcontextlost", () => {

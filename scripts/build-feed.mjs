@@ -5,7 +5,7 @@
    ETag handling cheap polling and index.json's buildHash giving an app-level "did anything change".
    The typed data comes in through scripts/shared/day-data.mjs, which is the one place in this
    repo that bundles src/data/*.ts into something a .mjs build script can import. */
-import { writeFileSync, mkdirSync, statSync, readFileSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, statSync, readFileSync, existsSync, readdirSync, unlinkSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
@@ -391,9 +391,22 @@ console.log(`[build-feed] home covers feed → ${OUT}/home-covers.json (${homeCo
    list the same videos. `thumb` is a site-relative path on thearchv.ca (our own copy of the
    thumbnail, WebP, at thumbWidth x thumbHeight); `url` is the video on YouTube. No view counts.
    Outside the `feeds` loop, like storefront and home-covers, so index.json and its buildHash do
-   not move. With no snapshot the file is still written, with two empty lists. */
+   not move. With no snapshot the file is still written, with two empty lists.
+   Then dist/media/videos/ is swept against that list: vite copies all of public/ into dist, so
+   the thumbnail of a video that has since been hidden, was never approved, or belongs to a
+   snapshot too old to show would otherwise still be served at its address. videos-hidden.json
+   promises a hidden video's thumbnail is not on this site; this is where the build keeps it. */
 {
   const v = loadVideos();
+  const listed = new Set([...(v?.long ?? []), ...(v?.shorts ?? [])].map((x) => `${x.id}.webp`));
+  const thumbDir = join(DIST, "media", "videos");
+  if (existsSync(thumbDir)) {
+    for (const f of readdirSync(thumbDir)) {
+      if (listed.has(f)) continue;
+      unlinkSync(join(thumbDir, f));
+      console.log(`[build-feed] removed dist/media/videos/${f}: not in the video list`);
+    }
+  }
   const videosFeed = { schema: VIDEOS_SCHEMA, fetchedAt: v?.fetchedAt ?? null, long: v?.long ?? [], shorts: v?.shorts ?? [] };
   writeFileSync(join(OUT, "videos.json"), JSON.stringify(videosFeed, null, 2));
   console.log(`[build-feed] videos feed → ${OUT}/videos.json (${videosFeed.long.length} long-form, ${videosFeed.shorts.length} Shorts)`);

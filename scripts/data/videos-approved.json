@@ -1,0 +1,57 @@
+{
+  "note": "APPROVE FIRST. A video from the channel reaches the front page, our thumbnail mirror and the app feed only when its id is listed here. Before adding one, open its thumbnail and check it shows no club kit, crest, sponsor mark or frame of match footage (the site's rights line). An id that is not listed is held: the fetch names it in the deploy log and downloads nothing of it. videos-hidden.json still wins, and records why a video was refused. scripts/fetch-videos.mjs and loadVideos() in scripts/videos/lib.mjs both read this file.",
+  "approved": [
+    {
+      "id": "2LaHp3i3cvI",
+      "why": "long-form: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "fG61um5dDCQ",
+      "why": "long-form: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "6vGLPcd1wY4",
+      "why": "long-form: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "XMopaNERGW0",
+      "why": "long-form: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "qNrStY0XRqU",
+      "why": "long-form: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "YhHjI-Dbhws",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "XUBMRd4WgCo",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "21TxceQvwBU",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "lc_Ydh8i3aE",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "cRmxFgDLxRU",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "IsNnPBS2bKo",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "Knmvml2Gjbc",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    },
+    {
+      "id": "BCpyKcZUHyQ",
+      "why": "Short: presenter and title card, checked 2026-11-21."
+    }
+  ]
+}

@@ -3,13 +3,13 @@
    for the channel's long-form and Shorts playlists, saved on 2026-11-21. */
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  parseFeed, cleanTitle, decodeXml, snapshotProblems, suspicious, loadVideos, hiddenIds, renderHomeVideos,
-  displayDate, thumbPath, VIDEOS_SCHEMA, CHANNEL_ID, PLAYLISTS, EMBED_ORIGIN, THUMB, SHOW,
+  parseFeed, cleanTitle, decodeXml, snapshotProblems, suspicious, loadVideos, hiddenIds, approvedIds, renderHomeVideos,
+  displayDate, thumbPath, VIDEOS_SCHEMA, CHANNEL_ID, PLAYLISTS, EMBED_ORIGIN, THUMB, SHOW, MAX_AGE_DAYS,
 } from "../videos/lib.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -65,6 +65,14 @@ test("titles are decoded, lose the channel's own sign-off and never carry a hash
   assert.equal(shorts[0].title, `Mauricio Pochettino at Manchester United: "I don't think he was anybody's first choice"`);
   assert.equal(cleanTitle("A goal worth seeing #shorts #football | The ARCHV"), "A goal worth seeing");
   assert.equal(cleanTitle("Number 7 shirt, 3-2 at Anfield"), "Number 7 shirt, 3-2 at Anfield");
+  // A number written with a hash is a shirt number or a ranking, never a hashtag.
+  assert.equal(cleanTitle("Who is the #1 striker in England? | The ARCHV"), "Who is the #1 striker in England?");
+  assert.equal(cleanTitle("Why Bruno Fernandes is still Manchester United's #10 | The ARCHV"), "Why Bruno Fernandes is still Manchester United's #10");
+  assert.equal(cleanTitle("Top 5 #9s #shorts"), "Top 5 #9s");
+  assert.equal(cleanTitle("C# explained"), "C# explained");
+  // The sign-off goes even when a hashtag followed it, or led the title.
+  assert.equal(cleanTitle("Bruno's best goal | The ARCHV #shorts"), "Bruno's best goal");
+  assert.equal(cleanTitle("#shorts Goal | The ARCHV"), "Goal");
   assert.equal(decodeXml("Tom &amp; Jerry &#39;x&#x27; &lt;b&gt; &unknown;"), "Tom & Jerry 'x' <b> &unknown;");
 });
 
@@ -85,6 +93,21 @@ test("entries from another channel, with a bad id or a bad date are dropped by n
   assert.equal(parseFeed(badDate, "long").items.length, 6);
   const badId = LONG.replace("<yt:videoId>2LaHp3i3cvI</yt:videoId>", '<yt:videoId>"><script></yt:videoId>');
   assert.equal(parseFeed(badId, "long").items.length, 6);
+});
+
+test("a feed re-serialised with other attribute order, quotes or entry attributes still parses", () => {
+  const base = parseFeed(LONG, "long").items;
+  const hrefFirst = LONG.replace(/<link rel="alternate" href="([^"]*)"\s*\/>/g, '<link href="$1" rel="alternate"/>');
+  assert.notEqual(hrefFirst, LONG);
+  assert.deepEqual(parseFeed(hrefFirst, "long").items, base);
+  const single = LONG.replace(/<link rel="alternate" href="([^"]*)"\s*\/>/g, "<link rel='alternate' href='$1'/>");
+  assert.deepEqual(parseFeed(single, "long").items, base);
+  const entryAttr = LONG.replaceAll("<entry>", '<entry xml:lang="en">');
+  assert.deepEqual(parseFeed(entryAttr, "long").items, base);
+  // The exact-link check is still the guard.
+  const wrong = LONG.replace(/<link rel="alternate" href="https:\/\/www\.youtube\.com\/watch\?v=2LaHp3i3cvI"/, '<link rel="alternate" href="https://example.com/watch?v=2LaHp3i3cvI"');
+  assert.notEqual(wrong, LONG);
+  assert.equal(parseFeed(wrong, "long").items.length, 6);
 });
 
 test("something that is not an Atom feed throws, so an error page is never 'no videos'", () => {
@@ -116,34 +139,82 @@ test("a fetch with an empty list, or far fewer entries than the snapshot, is sus
   assert.deepEqual(suspicious({ long: prev.long.slice(0, 1), shorts: prev.shorts.slice(0, 1) }, null), []);
 });
 
-test("loadVideos leaves out a hidden video and one whose thumbnail is not on disk", () => {
+const NOW = Date.parse("2026-11-22T00:00:00.000Z"); // a clock held just after the fixture snapshot
+
+test("loadVideos leaves out a hidden video, an unapproved one and one whose thumbnail is not on disk", () => {
   const dir = mkdtempSync(join(tmpdir(), "archv-videos-"));
   const snap = snapshot();
+  const everyId = new Set([...snap.long, ...snap.shorts].map((v) => v.id));
   writeFileSync(join(dir, "videos.json"), JSON.stringify(snap));
   mkdirSync(join(dir, "public", "media", "videos"), { recursive: true });
   for (const v of [...snap.long, ...snap.shorts.slice(1)]) writeFileSync(join(dir, "public", v.thumb), "x");
   const logs = [];
-  const out = loadVideos({ path: join(dir, "videos.json"), publicDir: join(dir, "public"), hidden: new Set([snap.long[1].id]), log: (m) => logs.push(m) });
+  const opts = { path: join(dir, "videos.json"), publicDir: join(dir, "public"), now: NOW };
+  const out = loadVideos({ ...opts, hidden: new Set([snap.long[1].id]), approved: everyId, log: (m) => logs.push(m) });
   assert.equal(out.long.length, 6);
   assert.ok(!out.long.some((v) => v.id === snap.long[1].id));
   assert.equal(out.shorts.length, 14);
   assert.equal(logs.length, 1);
   assert.match(logs[0], /YhHjI-Dbhws: thumbnail missing/);
+  // Approve first: an id nobody has listed is never returned, whatever the snapshot says.
+  const two = loadVideos({ ...opts, hidden: new Set(), approved: new Set([snap.long[0].id, snap.shorts[2].id]), log: () => {} });
+  assert.deepEqual([two.long.map((v) => v.id), two.shorts.map((v) => v.id)], [[snap.long[0].id], [snap.shorts[2].id]]);
+  const none = loadVideos({ ...opts, hidden: new Set(), approved: new Set(), log: () => {} });
+  assert.deepEqual([none.long, none.shorts], [[], []]);
+  assert.equal(renderHomeVideos(none), "");
+  assert.equal(approvedIds(join(dir, "no-such-file.json")).size, 0, "a missing approved file approves nothing");
   assert.equal(loadVideos({ path: join(dir, "none.json") }), null);
   writeFileSync(join(dir, "broken.json"), JSON.stringify({ ...snap, schema: "nope" }));
   assert.throws(() => loadVideos({ path: join(dir, "broken.json"), publicDir: join(dir, "public") }), /not a valid archv-videos\/1/);
 });
 
-test("the committed snapshot is valid, every thumbnail is committed, and no hidden video is in it", () => {
+test("a snapshot older than the limit is not shown at all, and says so once", () => {
+  const dir = mkdtempSync(join(tmpdir(), "archv-videos-"));
+  const snap = snapshot();
+  writeFileSync(join(dir, "videos.json"), JSON.stringify(snap));
+  mkdirSync(join(dir, "public", "media", "videos"), { recursive: true });
+  for (const v of [...snap.long, ...snap.shorts]) writeFileSync(join(dir, "public", v.thumb), "x");
+  const approved = new Set([...snap.long, ...snap.shorts].map((v) => v.id));
+  const at = (days) => Date.parse(snap.fetchedAt) + days * 86_400_000;
+  const opts = { path: join(dir, "videos.json"), publicDir: join(dir, "public"), hidden: new Set(), approved };
+  assert.equal(MAX_AGE_DAYS, 30);
+  assert.equal(loadVideos({ ...opts, now: at(29), log: () => {} }).long.length, 7);
+  const logs = [];
+  assert.equal(loadVideos({ ...opts, now: at(31), log: (m) => logs.push(m) }), null);
+  assert.equal(logs.length, 1);
+  assert.match(logs[0], /fetched 31 days ago/);
+});
+
+/* What this test must NOT do is fail because an id in videos-hidden.json is still in the committed
+   snapshot or still has a thumbnail in public/. Hiding a video is one commit to that file, often
+   from a phone, and it has to deploy on a day YouTube does not answer: loadVideos() drops the
+   card, build-feed.mjs sweeps the thumbnail out of dist, and the fetcher tidies the rest. An id in both files is
+   hidden (hidden wins), and that is not a failure either. The
+   clock is held at the snapshot's own date, so the age limit cannot fail a build either. */
+test("the committed snapshot is valid, and what the build loads from it is approved, not hidden and on disk", () => {
   const data = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "videos.json"), "utf8"));
   assert.deepEqual(snapshotProblems(data), []);
-  const logs = [];
-  const loaded = loadVideos({ log: (m) => logs.push(m) });
-  assert.deepEqual(logs, []);
-  assert.ok(loaded.long.length >= 1 && loaded.shorts.length >= 1);
+  const loaded = loadVideos({ now: Date.parse(data.fetchedAt), log: () => {} });
   const hidden = hiddenIds();
+  const approved = approvedIds();
   assert.ok(hidden.size > 0);
-  for (const v of [...data.long, ...data.shorts]) assert.ok(!hidden.has(v.id), `${v.id} is hidden but in the snapshot`);
+  const onDisk = new Set(readdirSync(join(ROOT, "public", "media", "videos")));
+  for (const v of [...loaded.long, ...loaded.shorts]) {
+    assert.ok(!hidden.has(v.id), `${v.id} is hidden but loadVideos() returned it`);
+    assert.ok(approved.has(v.id), `${v.id} is not approved but loadVideos() returned it`);
+    assert.ok(onDisk.has(`${v.id}.webp`), `${v.id} has no thumbnail`);
+  }
+});
+
+test("the fetcher holds an unapproved video before anything of it is downloaded", () => {
+  const src = readFileSync(join(ROOT, "scripts", "fetch-videos.mjs"), "utf8");
+  const filter = src.indexOf("if (!approved.has(v.id))");
+  assert.ok(filter > 0, "the approval filter is gone");
+  assert.ok(filter < src.indexOf("await mirrorThumb(v.id, kind)"), "thumbnails must be mirrored after the approval filter");
+  // Every item in the recorded feeds that is not listed is held; today that is the eight hidden ones.
+  const approved = approvedIds();
+  const all = [...parseFeed(LONG, "long").items, ...parseFeed(SHORTS, "shorts").items];
+  assert.ok(all.some((v) => !approved.has(v.id)), "the fixtures should hold an unapproved id");
 });
 
 test("the block renders the house card, links out safely and shows no view count", () => {

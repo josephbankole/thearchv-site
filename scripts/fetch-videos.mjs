@@ -10,9 +10,22 @@
    NO API KEY, and none may be added here. These feeds are public and CI never reads a key.
 
    IT NEVER FAILS A BUILD. Any network error, a feed that will not parse, or a result that looks
-   wrong (an empty list, or far fewer entries than the snapshot holds) keeps the committed
-   snapshot and exits 0 with a loud line. deploy.yml runs it before `npm run build`, so a YouTube
-   outage costs a deploy nothing but freshness. `--strict` exits 1 instead, for running by hand.
+   wrong (an empty list, or far fewer entries than the snapshot holds) keeps a list it already
+   trusts and exits 0 with a loud line, and in CI a warning on the run's summary page. deploy.yml
+   runs it before `npm run build`, so a YouTube outage costs a deploy nothing but freshness.
+   `--strict` exits 1 instead, for running by hand.
+
+   WHICH LIST IS KEPT. CI commits nothing, so the committed snapshot only moves when someone
+   commits it by hand, and falling back to it would roll the front page back to that day. In CI
+   the fallback is therefore the list the live site is serving (thearchv.ca/feed/videos.json and
+   its thumbnails), when it is valid and newer than the committed one; only then the committed
+   snapshot. Either way hidden videos are taken out of the kept list and their thumbnails are
+   deleted, so hiding a video works on a day YouTube does not answer. The build drops the block
+   altogether once the list is older than MAX_AGE_DAYS (scripts/videos/lib.mjs).
+
+   APPROVE FIRST. A video is mirrored and listed only when its id is in
+   scripts/data/videos-approved.json (and not in videos-hidden.json). An unlisted video is held
+   and named in the log; nothing of it is downloaded.
 
    WHY THE THUMBNAILS ARE COPIED. The homepage CSP says img-src 'self', and the privacy policy
    says nothing is sent to YouTube until the visitor presses play. A hot-linked i.ytimg.com image
@@ -26,7 +39,7 @@ import { join } from "node:path";
 import sharp from "sharp";
 import {
   VIDEOS_SCHEMA, PLAYLISTS, KEEP, THUMB, THUMB_DIR, SNAPSHOT_PATH, PUBLIC_DIR,
-  feedUrl, parseFeed, thumbPath, snapshotProblems, suspicious, hiddenIds,
+  feedUrl, parseFeed, thumbPath, snapshotProblems, suspicious, hiddenIds, approvedIds,
 } from "./videos/lib.mjs";
 
 const TAG = "[fetch-videos]";
@@ -37,9 +50,79 @@ const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
 const HEADERS = { "user-agent": "Mozilla/5.0 (compatible; static-site-build)", accept: "*/*" };
 const OUT_DIR = join(PUBLIC_DIR, THUMB_DIR);
 
-function keep(why) {
-  console.warn(`${TAG} *** KEEPING THE COMMITTED SNAPSHOT: ${why} ***`);
-  console.warn(`${TAG} *** The video block ships as it was last committed. Nothing was written. ***`);
+const LIVE_ORIGIN = "https://thearchv.ca";
+const IN_CI = Boolean(process.env.GITHUB_ACTIONS);
+const oneLine = (s) => String(s).replace(/\s*\r?\n\s*/g, " ");
+// A GitHub annotation: it shows on the run's summary page, where a console line does not.
+const annotate = (level, title, msg) => { if (IN_CI) console.log(`::${level} title=${title}::${oneLine(msg)}`); };
+
+/* The list the live site is serving, written in place of the committed snapshot. True when it
+   was used. Any problem (the feed is not there yet, it is not valid, it is no newer than the
+   committed one, a thumbnail will not download) leaves everything as it was. */
+async function useLiveList() {
+  const staged = [];
+  try {
+    const live = JSON.parse(await get(`${LIVE_ORIGIN}/feed/videos.json`, "text"));
+    const problems = snapshotProblems(live);
+    if (problems.length) throw new Error(`not a valid ${VIDEOS_SCHEMA} list (${problems[0]})`);
+    if (previous && !(Date.parse(live.fetchedAt) > Date.parse(previous.fetchedAt))) throw new Error("it is no newer than the committed snapshot");
+    const hidden = hiddenIds(), approved = approvedIds();
+    const list = { long: [], shorts: [] };
+    mkdirSync(OUT_DIR, { recursive: true });
+    for (const kind of ["long", "shorts"]) {
+      for (const v of live[kind]) {
+        if (hidden.has(v.id) || !approved.has(v.id)) continue;
+        const buf = await get(`${LIVE_ORIGIN}${thumbPath(v.id)}`, "buffer");
+        const meta = await sharp(buf).metadata();
+        if (meta.format !== "webp" || meta.width !== THUMB[kind].width || meta.height !== THUMB[kind].height) throw new Error(`${thumbPath(v.id)} is not a ${THUMB[kind].width}x${THUMB[kind].height} WebP`);
+        const final = join(PUBLIC_DIR, thumbPath(v.id));
+        writeFileSync(`${final}.tmp`, buf);
+        staged.push([`${final}.tmp`, final]);
+        list[kind].push({ id: v.id, title: v.title, published: v.published, url: v.url, thumb: thumbPath(v.id), thumbWidth: THUMB[kind].width, thumbHeight: THUMB[kind].height });
+      }
+    }
+    if (!list.long.length && !list.shorts.length) throw new Error("nothing in it may be shown");
+    for (const [tmp, final] of staged) renameSync(tmp, final);
+    // Its own fetchedAt is kept, so the list's age stays honest.
+    writeFileSync(SNAPSHOT_PATH, JSON.stringify({ schema: VIDEOS_SCHEMA, fetchedAt: live.fetchedAt, long: list.long, shorts: list.shorts }, null, 2) + "\n");
+    const wanted = new Set([...list.long, ...list.shorts].map((v) => `${v.id}.webp`));
+    for (const f of readdirSync(OUT_DIR)) if (!wanted.has(f)) unlinkSync(join(OUT_DIR, f));
+    console.warn(`${TAG} *** Using the list the live site is serving (fetched ${live.fetchedAt}): ${list.long.length} long-form, ${list.shorts.length} Shorts. ***`);
+    return live.fetchedAt;
+  } catch (err) {
+    for (const [tmp] of staged) { try { unlinkSync(tmp); } catch { /* already gone */ } }
+    console.warn(`${TAG} the live site's list was not used: ${err.message}`);
+    return null;
+  }
+}
+
+/* A kept snapshot still obeys videos-hidden.json: hidden entries leave it and their thumbnails
+   leave public/, so they are not built into dist. Never throws. */
+function dropHiddenFromKept() {
+  try {
+    const hidden = hiddenIds();
+    for (const id of hidden) {
+      const file = join(PUBLIC_DIR, thumbPath(id));
+      if (existsSync(file)) { unlinkSync(file); console.warn(`${TAG} removed ${thumbPath(id)}: hidden by videos-hidden.json`); }
+    }
+    if (!previous || !Array.isArray(previous.long) || !Array.isArray(previous.shorts)) return;
+    const long = previous.long.filter((v) => !hidden.has(v?.id)), shorts = previous.shorts.filter((v) => !hidden.has(v?.id));
+    if (long.length === previous.long.length && shorts.length === previous.shorts.length) return;
+    writeFileSync(SNAPSHOT_PATH, JSON.stringify({ ...previous, long, shorts }, null, 2) + "\n");
+    console.warn(`${TAG} took ${previous.long.length - long.length + previous.shorts.length - shorts.length} hidden video(s) out of the kept snapshot`);
+  } catch (err) {
+    console.warn(`${TAG} could not apply videos-hidden.json to the kept snapshot: ${err.message}`);
+  }
+}
+
+async function keep(why) {
+  console.warn(`${TAG} *** NOT REFRESHED: ${why} ***`);
+  const live = IN_CI && !STRICT ? await useLiveList() : null;
+  if (!live) {
+    dropHiddenFromKept();
+    console.warn(`${TAG} *** KEEPING THE COMMITTED SNAPSHOT (fetched ${previous?.fetchedAt ?? "never"}). The video block ships as it was last committed. ***`);
+  }
+  annotate("warning", "Video list not refreshed", `${why}. The build ships the list fetched ${live ?? previous?.fetchedAt ?? "never"} (${live ? "the live site's own list" : "the committed snapshot"}).`);
   process.exit(STRICT ? 1 : 0);
 }
 
@@ -102,7 +185,7 @@ try {
   const [longXml, shortsXml] = await Promise.all([getFeed(feedUrl(PLAYLISTS.long)), getFeed(feedUrl(PLAYLISTS.shorts))]);
   parsed = { long: parseFeed(longXml, "long"), shorts: parseFeed(shortsXml, "shorts") };
 } catch (err) {
-  keep(`could not read the feeds (${err.message})`);
+  await keep(`could not read the feeds (${err.message})`);
 }
 
 for (const kind of ["long", "shorts"]) {
@@ -110,17 +193,21 @@ for (const kind of ["long", "shorts"]) {
 }
 // A video in both lists means the playlists no longer mean what this script assumes.
 const longIds = new Set(parsed.long.items.map((v) => v.id));
-if (parsed.shorts.items.some((v) => longIds.has(v.id))) keep("a video appears in both the long-form and the Shorts feed");
+if (parsed.shorts.items.some((v) => longIds.has(v.id))) await keep("a video appears in both the long-form and the Shorts feed");
 
-// Videos held off the site (scripts/data/videos-hidden.json) are dropped before anything of
-// theirs is downloaded.
+// Videos held off the site (scripts/data/videos-hidden.json), and videos nobody has approved yet
+// (scripts/data/videos-approved.json), are dropped before anything of theirs is downloaded.
 const hidden = hiddenIds();
+const approved = approvedIds();
+const held = [];
 for (const kind of ["long", "shorts"]) {
   parsed[kind].items = parsed[kind].items.filter((v) => {
-    if (hidden.has(v.id)) console.log(`${TAG} ${kind} ${v.id}: hidden by videos-hidden.json`);
-    return !hidden.has(v.id);
+    if (hidden.has(v.id)) { console.log(`${TAG} ${kind} ${v.id}: hidden by videos-hidden.json`); return false; }
+    if (!approved.has(v.id)) { console.warn(`${TAG} ${kind} ${v.id}: HELD, not in videos-approved.json (${v.title})`); held.push(v.id); return false; }
+    return true;
   });
 }
+if (held.length) annotate("notice", "Videos waiting for approval", `${held.length} video(s) are not shown until their ids are added to scripts/data/videos-approved.json: ${held.join(", ")}`);
 
 const fresh = { long: [], shorts: [] };
 const staged = []; // [tmpPath, finalPath]
@@ -149,7 +236,7 @@ const snapshot = { schema: VIDEOS_SCHEMA, fetchedAt: new Date().toISOString(), l
 const problems = snapshotProblems(snapshot);
 if (reasons.length || problems.length) {
   discard();
-  keep([...reasons, ...problems].join("; "));
+  await keep([...reasons, ...problems].join("; "));
 }
 
 for (const [tmp, final] of staged) renameSync(tmp, final);

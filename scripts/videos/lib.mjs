@@ -55,6 +55,12 @@ export const thumbPath = (id) => `${THUMB_DIR}/${id}.webp`;
 
 export const SNAPSHOT_PATH = join(ROOT, "scripts", "data", "videos.json");
 export const HIDDEN_PATH = join(ROOT, "scripts", "data", "videos-hidden.json");
+export const APPROVED_PATH = join(ROOT, "scripts", "data", "videos-approved.json");
+// A snapshot older than this is not shown or published at all. YouTube's developer policy asks
+// for stored data to be refreshed within 30 days, and a list that old may name videos that have
+// since been deleted or made private. The daily fetch in deploy.yml keeps the age to a day; this
+// is what happens when that fetch has failed for a month.
+export const MAX_AGE_DAYS = 30;
 export const PUBLIC_DIR = join(ROOT, "public");
 
 const ID_RE = /^[A-Za-z0-9_-]{11}$/;
@@ -74,12 +80,15 @@ export function decodeXml(s) {
 
 /* A title as the site prints it. The channel signs long-form titles " | The ARCHV", which says
    nothing on The ARCHV's own page; hashtags never ship from this house (workspace rule), so a
-   "#shorts" a title picked up on YouTube is dropped here as well. */
+   "#shorts" a title picked up on YouTube is dropped here as well. Only a tag that starts with a
+   letter is a hashtag: "#10", "#1" and "#9s" are shirt numbers and rankings and stay. The
+   sign-off goes last, so it is still found when a hashtag followed it. */
 export function cleanTitle(raw) {
   return decodeXml(raw)
-    .replace(/\s*\|\s*The ARCHV\s*$/i, "")
-    .replace(/(^|\s)#[\p{L}\p{N}_]+/gu, "$1")
+    .replace(/(^|\s)#(?=\p{L})[\p{L}\p{N}_]+(?=\s|$)/gu, "$1")
     .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\s*\|\s*The ARCHV$/i, "")
     .trim();
 }
 
@@ -101,12 +110,17 @@ export function parseFeed(xml, kind) {
   const items = [];
   const dropped = [];
   const seen = new Set();
-  for (const [, entry] of text.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
+  // Attributes are read by name, in any order and either quote style, and <entry> may carry
+  // attributes of its own: a harmless re-serialisation of the feed must not read as "no videos".
+  // The exact-URL check below is the guard, so nothing looser gets through.
+  const attr = (t, name) => (t.match(new RegExp(`\\s${name}\\s*=\\s*(["'])(.*?)\\1`)) || [])[2] ?? "";
+  for (const [, entry] of text.matchAll(/<entry(?:\s[^>]*)?>([\s\S]*?)<\/entry>/g)) {
     const id = tag(entry, "yt:videoId");
     const channel = tag(entry, "yt:channelId");
     const title = cleanTitle(tag(entry, "title"));
     const published = tag(entry, "published");
-    const link = decodeXml((entry.match(/<link\s[^>]*rel="alternate"[^>]*href="([^"]*)"/) || [])[1] || "");
+    const alt = (entry.match(/<link\b[^>]*>/g) || []).find((t) => attr(t, "rel") === "alternate");
+    const link = decodeXml(alt ? attr(alt, "href") : "");
     const drop = (why) => dropped.push({ id, why });
     if (!ID_RE.test(id)) { drop("bad video id"); continue; }
     if (seen.has(id)) { drop("duplicate"); continue; }
@@ -184,16 +198,36 @@ export function hiddenIds(path = HIDDEN_PATH) {
   return new Set(hidden.map((h) => h.id));
 }
 
-/* loadVideos(): the committed snapshot, checked, with any video whose thumbnail is not on disk
-   left out. Returns null when there is no snapshot. An unreadable or malformed snapshot throws:
-   that is a broken commit, and a build that quietly dropped the block would hide it. */
-export function loadVideos({ path = SNAPSHOT_PATH, publicDir = PUBLIC_DIR, hidden = hiddenIds(), log = console.warn } = {}) {
+/* approvedIds(): the ids in scripts/data/videos-approved.json. APPROVE FIRST: a video reaches the
+   front page, the mirror and the app feed only once someone has looked at its thumbnail (no kit,
+   crest, sponsor mark or match frame) and listed its id there. Nothing can check a thumbnail for
+   those by machine, and two in five of the channel's recent uploads broke the line, so an
+   unlisted video is held, not shown. A missing file approves nothing; a malformed one throws. */
+export function approvedIds(path = APPROVED_PATH) {
+  if (!existsSync(path)) return new Set();
+  const { approved } = JSON.parse(readFileSync(path, "utf8"));
+  if (!Array.isArray(approved) || approved.some((a) => !ID_RE.test(a?.id ?? ""))) throw new Error(`[videos] ${path}: "approved" must be a list of { id, why }`);
+  return new Set(approved.map((a) => a.id));
+}
+
+/* loadVideos(): the committed snapshot, checked, with any video that is hidden, not approved or
+   whose thumbnail is not on disk left out. Returns null when there is no snapshot, or when the
+   snapshot is older than MAX_AGE_DAYS (the block and the feed then ship empty, and one line says
+   why). An unreadable or malformed snapshot throws: that is a broken commit, and a build that
+   quietly dropped the block would hide it. `now` is a parameter so a test can hold the clock. */
+export function loadVideos({ path = SNAPSHOT_PATH, publicDir = PUBLIC_DIR, hidden = hiddenIds(), approved = approvedIds(), now = Date.now(), log = console.warn } = {}) {
   if (!existsSync(path)) return null;
   const data = JSON.parse(readFileSync(path, "utf8"));
   const problems = snapshotProblems(data);
   if (problems.length) throw new Error(`[videos] ${path} is not a valid ${VIDEOS_SCHEMA} snapshot:\n  ${problems.join("\n  ")}`);
+  const ageDays = (now - Date.parse(data.fetchedAt)) / 86_400_000;
+  if (ageDays > MAX_AGE_DAYS) {
+    const line = `[videos] the snapshot was fetched ${Math.floor(ageDays)} days ago (limit ${MAX_AGE_DAYS}): the video block and the videos feed ship empty. Run npm run videos:fetch.`;
+    log(process.env.GITHUB_ACTIONS ? `::warning title=Video block left out::${line}` : line);
+    return null;
+  }
   const onDisk = (v) => {
-    if (hidden.has(v.id)) return false;
+    if (hidden.has(v.id) || !approved.has(v.id)) return false;
     const ok = existsSync(join(publicDir, v.thumb));
     if (!ok) log(`[videos] ${v.id}: thumbnail missing at public${v.thumb}, video left out`);
     return ok;

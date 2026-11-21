@@ -4,12 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Once a day, 18:10 UTC, about forty minutes after the channel's usual 17:30 UTC Short, so the
-  # front page's video block (scripts/fetch-videos.mjs, below) is never more than a day behind
-  # YouTube even on a day when no desk pushes. It rebuilds and redeploys main as it stands: no
-  # commit is made, and the data guard still runs first. GitHub runs schedules late under load.
-  schedule:
-    - cron: '10 18 * * *'
+  # No schedule (founder, 2026-11-21: no daily rebuild). The video list refreshes on every desk
+  # push to main, in the "Refresh the video list" step below, and on a manual run.
 
 # Read-only by default. Only the deploy job, which runs no npm code, can publish to Pages.
 permissions:

@@ -312,10 +312,25 @@ posters at the bottom of the page, the rest can live in sub pages."
 - **The video block sits directly under the scores strip, above the lead (founder, 2026-11-21).**
   So the front page is now seven blocks: scores strip, Video, lead, The Wire, the Dispatch block,
   the Desk Brief, four posters. Marker `<!--archv:videos-->`, rendered by `renderHomeVideos()` in
-  `scripts/videos/lib.mjs` (the whole `<section>` or nothing): "Watch", the three newest long-form
-  videos, and "Shorts", the six newest. Each card is a plain link to YouTube with our own copy of
-  the thumbnail, the title and the date; no view counts, ever (they lag, and YouTube's policy wants
-  a shown count current).
+  `scripts/videos/lib.mjs` (the whole `<section>` or nothing): "Watch", three long-form videos,
+  and "Shorts", six. Each card is a plain link to YouTube with our own copy of the thumbnail, the
+  title and the date; no view counts shown, ever (they lag, and YouTube's policy wants a shown
+  count current).
+  - **Every public upload shows, with no review (founder, 2026-11-21: "show every upload
+    automatically, if we can show the most popular this week that would be ideal").** This
+    replaced the approve-first gate of commit `664bdb0` the same day: `videos-approved.json` and
+    its filter are gone, and a test fails if they come back.
+  - **The order is `rankVideos(items, now)` in `scripts/videos/lib.mjs`, a pure function run once,
+    at fetch time.** For each group: the entries published in the seven days before the fetch,
+    most viewed first (ties to the newer), then the older entries, newest first. So the cards
+    shown are the week's most viewed, and when the week holds fewer than the slots (3 and 6) the
+    next newest older videos fill them. The feeds give `media:statistics views` for the newest 15
+    of each kind; a missing count is 0. `views` is stored in `scripts/data/videos.json` **as a
+    sort key only**: `loadVideos()` strips it, so it reaches neither the page nor
+    `dist/feed/videos.json`. The rubrics stay "Watch" and "Shorts". **Never label the block or a
+    card "most popular", "trending" or the like:** a filled slot is not the week's most viewed, so
+    the claim would be false for some cards (a test holds this). A list kept from the live site
+    (the CI fallback) has no views and keeps the order it was published in.
   - **Data.** `scripts/fetch-videos.mjs` (`npm run videos:fetch`) is the only step that reads
     YouTube: two public Atom feeds, no API key (long-form playlist `UULF...`, Shorts `UUSH...`, each
     entry cross-checked against its own `/watch` or `/shorts/` link). It writes the committed
@@ -331,22 +346,17 @@ posters at the bottom of the page, the rest can live in sub pages."
     parser reads link attributes in any order and either quote style. **Not in `DATA_FILES`**: no desk commits it to
     main, and its lists legitimately shrink (a deleted video, a newly hidden one), which the shrink
     guard would read as damage.
-  - **`scripts/data/videos-hidden.json` keeps a video off the site.** The rights line (no crests,
-    kits, sponsor marks or match photographs anywhere) reaches YouTube thumbnails: a goal archive
-    Short's thumbnail is a frame of match footage. Such ids are listed there by hand, with a
-    reason, and are never mirrored, rendered or published in the feed. Hiding is one commit to
+  - **`scripts/data/videos-hidden.json` keeps a video off the site, and is empty.** Until
+    2026-11-21 it listed eight uploads whose thumbnails are match frames or replica shirts (the
+    rights line: no crests, kits, sponsor marks or match photographs anywhere). The founder's
+    ruling that day lets every upload show, so the list was emptied and those thumbnails are now
+    mirrored like any other; the YouTube thumbnail mirror is the one place the rights line gives
+    way, by his word. The file and the mechanism stay so he can hide one by id: add
+    `{ "id", "why" }` and it is never mirrored, rendered or published in the feed. Hiding is one commit to
     that file and must deploy on a day YouTube does not answer: `loadVideos()` drops the card,
     `build-feed.mjs` sweeps any thumbnail not in the list out of `dist/media/videos/`, and the
     fetcher takes hidden entries out of a kept snapshot. No test may fail because a hidden id is
     still in the committed snapshot or still has a file in `public/`.
-  - **Approve first: `scripts/data/videos-approved.json` (2026-11-21, the founder's to
-    overrule).** Nothing can check a thumbnail for a kit or a match frame by machine, and 8 of
-    the 21 recent uploads broke the line, so a video is mirrored, rendered and published only
-    when its id is listed there. An unlisted upload is HELD: the fetch names it in the log and
-    in a CI notice, and downloads nothing of it. Whoever uploads a video adds its id after
-    looking at the thumbnail. If approvals fall behind, the approved videos age out of the
-    feed's 15 entries, the fetch reads as suspicious and keeps the old list, and after 30 days
-    the block goes. Hidden wins over approved.
   - **Playback.** `src/components/videos.ts` (bundled, attached in `boot()` through `safe()`) turns
     a plain click into YouTube's own iframe from `https://www.youtube-nocookie.com/embed/<id>`,
     in a sibling element of the link, never inside it. One player at a time; a modified click still
@@ -359,7 +369,12 @@ posters at the bottom of the page, the rest can live in sub pages."
     playing Short widens to 300px.
   - **Layout.** At 1024px and up Watch (three rows, still left, words right) and Shorts sit side
     by side in one band, so the lead headline shows in the first screen at 1440 by 900. Below
-    that the two groups stack and the lead starts below the fold. The play mark sits where the
+    that the two groups stack and the lead starts below the fold. **Under 720px the block is
+    compact (founder, 2026-11-21):** one long-form video as a row (still left, words right; the
+    second and third are `display: none` at that width) and the Shorts strip with 132px cards
+    and titles clamped at four lines, so the lead headline starts about one screen down at 390
+    by 844 (lead h1 top measured in headless Chrome: 1452px before, with three long-form
+    cards, 901px after). Tablet and desktop are unchanged. The play mark sits where the
     channel's thumbnails have no words: bottom-right on a long-form still, top-right on a Short.
     Long-form titles print whole; a Short's title clamps at five lines.
   - **CSP.** The homepage literal says `frame-src https://www.youtube-nocookie.com` (it was
@@ -369,11 +384,13 @@ posters at the bottom of the page, the rest can live in sub pages."
     test holds them together.
   - **Trap 3.** The Shorts row scrolls sideways at every width, so it
     carries `overflow-y: hidden`. Nothing in the block is transformed or translated; keep it so.
-  - **Deploy cadence changed.** `deploy.yml` runs the fetcher before `npm run build` (tolerant,
-    `continue-on-error`) and has a daily `schedule` at 18:10 UTC, after the channel's usual 17:30
-    UTC Short, so the list is never more than a day old (YouTube's policy asks for stored data to
-    be refreshed within 30 days). The scheduled run rebuilds and redeploys main as it stands and
-    commits nothing. The committed snapshot is the fallback and what a local build shows.
+  - **Deploy cadence: no scheduled run (founder, 2026-11-21: no daily rebuild).** `deploy.yml`
+    runs the fetcher before `npm run build` (tolerant, `continue-on-error`) on every push to main
+    and on a manual run, so each desk push refreshes the list. The daily `schedule` trigger that
+    shipped with the block was removed the same day. On a day with no push the list stays as the
+    last deploy left it; `MAX_AGE_DAYS` (30) is the backstop, and YouTube's policy asks for stored
+    data to be refreshed within 30 days. CI commits nothing. The committed snapshot is the
+    fallback and what a local build shows.
   - **Privacy.** `/about/#privacy` says thumbnails are served by us and nothing reaches YouTube
     until play. Hot-linking a thumbnail, or loading the player before a click, makes that false.
   - Tests: `scripts/test/videos.test.mjs` (recorded feeds in `scripts/test/fixtures/videos/`, no
@@ -426,14 +443,24 @@ site's own tokens so it reads as house illustration.
 - **Reduced motion** (the media query or the bootstrap's `.reduced-motion` class) is one still
   frame at the rest pose: no idle turn, no hover lean, no coasting. Dragging still works.
 - **Colour.** Token names only (`RAMPS` in `scripts/icons/lib.mjs`); the runtime reads the live
-  custom properties and the baked hex is a fallback the test keeps equal to the tokens. Tennis
-  felt is the muted ink step with a paper seam (the pale ball with a dark seam it replaced read
-  as a baseball) and American football leather is `--accent-ink`, because optic
-  yellow and brown would each be a sixth hue. That substitution is the founder's to overrule.
+  custom properties and the baked hex is a fallback the test keeps equal to the tokens.
+  **One exception, founder-approved on 21 Nov 2026: the tennis ball is optic yellow felt with a
+  paper seam.** The yellow (`#D3E03C` lit, `#BCCB2A` mid, `#98A61E` shadow) is `ICON_ONLY` in
+  `scripts/icons/markup.mjs` and is used on this icon only: the mesh, its poster, and the fill
+  of the tennis tab glyph (outline and seams stay `currentColor`). It is NOT a site token. Do
+  not add it to any shared CSS token block (`check-tokens.mjs` guards those) or use it anywhere
+  else; the runtime finds no custom property for it and uses the hex baked into the GLB, and
+  `sport-icon.test.mjs` fails if the hex or a `--icon-tennis-felt` property turns up in
+  `style.css`, `page-shell.mjs` or `icon.js`, or if another icon takes the ramp. American
+  football leather stays `--accent-ink` rust (brown would be another hue; the founder kept it
+  the same day).
 - **Rights.** Generic objects only: no crest, maker's mark, number, sponsor or livery, and the
-  car is nobody's chassis. Its body is paper on purpose; a colour scheme on a racing car is a
-  livery, and orange or red would read as a real team. (A 2026-11-21 review found the paper body
-  weak at 72px and below and proposed an orange tub; that is the founder's call and was not made.)
+  car is nobody's chassis. **Its body is orange (founder, 2026-11-21: "orange body that reads
+  better small").** The paper body it replaced was weak at 72px and below. The tub and sidepods
+  take the `orange` ramp (`--accent-fill` and `--accent-ink`, the site's own accent and no
+  team's colour); wing planes and the helmet are paper, endplates, pylon and halo ink, tyres
+  line. One plain colour on the body: no number, stripe, logo or second body colour, and never a
+  real team's scheme. That is still the line between a coloured toy and a livery.
 
 ## The feed contract (the iOS app depends on this)
 
@@ -469,12 +496,13 @@ mirror live in `../dispatch/site-longreads/` (`substack_to_longread.py`).
 **`dist/feed/videos.json` (`archv-videos/1`, 2026-11-21, additive, a new standalone file).**
 Written by `build-feed.mjs` outside the manifest loop, so `index.json` and every existing feed stay
 byte-identical. Shape: `{ schema, fetchedAt, long[], shorts[] }`, each item
-`{ id, title, published, url, thumb, thumbWidth, thumbHeight }`, newest first, up to six long-form
-and eight Shorts. `url` is the video on YouTube (`/watch?v=` or `/shorts/`), `published` and
+`{ id, title, published, url, thumb, thumbWidth, thumbHeight }`, in the front page's order (the
+last seven days by views, then older ones newest first; `rankVideos()`; do not re-sort by date if
+the shelf should match the site), up to six long-form and eight Shorts. `url` is the video on YouTube (`/watch?v=` or `/shorts/`), `published` and
 `fetchedAt` are ISO UTC, and `thumb` is a site-relative path (`/media/videos/<id>.webp`, 800x450
 for long-form, 405x720 for Shorts): prefix `https://thearchv.ca`. No view counts. With no snapshot
 the file still ships with `fetchedAt: null` and two empty lists. It is the same list the front page
-renders from, hidden videos left out. The app does not read it yet; if it embeds the player it
+renders from, any video in `videos-hidden.json` left out (the list is empty; every upload shows). The app does not read it yet; if it embeds the player it
 must follow YouTube's embed rules (see `src/components/videos.ts`) and the in-app-browser age
 rating note in `../thearchv-app/CLAUDE.md`.
 

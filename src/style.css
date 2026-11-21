@@ -864,18 +864,29 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
   .video-card--shorts { flex-basis: calc((100% - 1.8rem) / 3); }
 }
 @media (max-width: 719px) {
-  /* A phone: the newest video keeps the full-width card, the rest become rows (still left, words
-     right) to keep the block short. The block sits above the lead by the founder's order, so the
-     day's story still starts about a screen and a half down at 390 by 844. A playing row opens
-     to the full width in place. */
-  .videos__inner { padding-block: 1.25rem 1.5rem; }
-  .videos__list--long { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
-  .video-card--long:not(:first-child):not(.is-playing) .video-card__link { display: grid; grid-template-columns: 8.75rem minmax(0, 1fr); gap: 0.8rem; align-items: start; }
-  .video-card--long:not(:first-child):not(.is-playing) .video-card__body { padding-top: 0; }
-  .video-card--long:not(:first-child):not(.is-playing) .video-card__title { font-size: 0.95rem; }
-  .video-card--long:not(:first-child):not(.is-playing) .video-card__play { right: 0.35rem; bottom: 0.35rem; width: 1.7rem; height: 1.7rem; border-width: 1px; }
-  .video-card--long:not(:first-child):not(.is-playing) .video-card__play::after { margin: -0.28rem 0 0 -0.15rem; border-width: 0.28rem 0 0.28rem 0.44rem; }
-  .videos__group + .videos__group { margin-top: 1.25rem; padding-top: 1.1rem; }
+  /* A phone: COMPACT (founder, 2026-11-21). One long-form video as a row (still left, words
+     right) and the Shorts strip with smaller cards, so the day's lead starts about one screen
+     down at 390 by 844 (it was a screen and three quarters with three long-form cards). The
+     second and third long-form videos are not shown at this width; "More on YouTube" has them.
+     A playing row opens to the full width in place, and a playing Short still widens to 300px.
+     Tablet and desktop are untouched. */
+  .videos__inner { padding-block: 1rem 1.2rem; }
+  .videos__head { margin-bottom: 0.8rem; }
+  .videos__rubric { margin-bottom: 0.6rem; }
+  .videos__list--long { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .video-card--long:not(:first-child) { display: none; }
+  .video-card--long:not(.is-playing) .video-card__link { display: grid; grid-template-columns: 8.75rem minmax(0, 1fr); gap: 0.8rem; align-items: start; }
+  .video-card--long:not(.is-playing) .video-card__body { padding-top: 0; }
+  .video-card--long:not(.is-playing) .video-card__title { font-size: 0.95rem; }
+  .video-card--long:not(.is-playing) .video-card__play { right: 0.35rem; bottom: 0.35rem; width: 1.7rem; height: 1.7rem; border-width: 1px; }
+  .video-card--long:not(.is-playing) .video-card__play::after { margin: -0.28rem 0 0 -0.15rem; border-width: 0.28rem 0 0.28rem 0.44rem; }
+  .videos__group + .videos__group { margin-top: 1rem; padding-top: 0.9rem; }
+  .videos__list--shorts { gap: 0.7rem; }
+  .video-card--shorts:not(.is-playing) { flex-basis: 8.25rem; min-width: 8.25rem; }
+  .video-card--shorts .video-card__body { padding-top: 0.5rem; }
+  .video-card--shorts .video-card__title { font-size: 0.85rem; -webkit-line-clamp: 4; }
+  .video-card--shorts:not(.is-playing) .video-card__play { right: 0.4rem; top: 0.4rem; width: 1.9rem; height: 1.9rem; }
+  .video-card--shorts:not(.is-playing) .video-card__play::after { margin: -0.32rem 0 0 -0.17rem; border-width: 0.32rem 0 0.32rem 0.5rem; }
 }
 
 /* ---------- desk brief ----------

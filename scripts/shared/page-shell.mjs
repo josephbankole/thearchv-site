@@ -1184,8 +1184,13 @@ export function pageStyles() {
     .sportnav__glyph { flex: 0 0 auto; width: 16px; height: 16px; }
     .sportnav__link:hover { color: var(--gold); text-decoration: none; }
     .sportnav__link[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
+    /* On a phone only the current tab shows its glyph, and the gap gives back the 22px that glyph
+       costs. Six glyphs made the row 134px wider, which pushed the current tab off the screen on
+       /golf/ and /basketball/, and this family has no script to scroll it back into view. With
+       this the row is exactly as wide as it was before the glyphs (measured at 360, 390, 430). */
     @media (max-width: 640px) {
-      .sportnav__row { justify-content: flex-start; gap: 1.1rem; }
+      .sportnav__row { justify-content: flex-start; gap: .8rem; }
+      .sportnav__link:not([aria-current]) .sportnav__glyph { display: none; }
     }
     /* Edge-fade on the horizontal scroller (Tier 0). Replaces the old right-only gradient
        ::after, which only existed under 640px and only faded one side, so a left-scrolled tab bar

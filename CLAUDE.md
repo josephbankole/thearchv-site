@@ -102,7 +102,8 @@
    **What re-lands untouched:** the author page, the `max-image-preview:large` robots directive, and
    the whole static half of the Tier 0 pass in `scripts/shared/page-shell.mjs`, including the
    `.more-card__headline` and `.lane-card__headline` `display: block` fix. The static page family
-   ships no bundled JS, so it has no reveal and no transform. Measured on an article page from the
+   ships no bundled JS (true then; since 2026-11-21 the sport pages load one self-hosted module
+   for the sport icon, which moves nothing in the page), so it has no reveal and no transform. Measured on an article page from the
    same build: the page owns 296 of 296 sample points at every scroll position and `.sportnav` has
    no vertical overflow. Only the homepage half of Tier 0 needs the change above.
 
@@ -207,8 +208,10 @@ as well as in `npm run build`, so a developer sees what ships.
 - (The long reads accordion, a native `<details>` per essay, left the front page on 2026-10-13;
   the same rule holds if it ever returns: do not reintroduce a button plus a panel with a CSS
   resting height of zero.)
-- There is no WebGL hero and no `three` in the graph any more. `three` and `@types/three` are
-  still in `package.json` and are dead weight.
+- There is no WebGL hero and no `three` anywhere: `three` and `@types/three` left
+  `package.json` in phase 3 (2026-08-09). A stale `node_modules/three` on a laptop is a leftover,
+  not a dependency. The only WebGL on the site is the sport icons, which are hand-written and
+  import nothing (see "The sport icons" below).
 
 **Illustrated art goes through the registry, never a hand-written path.**
 `scripts/data/illustrated.json` is the one list of drawn portraits and ARCHV club badges.
@@ -305,6 +308,59 @@ posters at the bottom of the page, the rest can live in sub pages."
   word or a date gets in. The h1 sits in `<div class="sport-head__title">`, a flex row that
   exists so a sport icon (about 96px) can mount beside the h1 without restructuring. The Wire
   subline, edition and attribution lines and the tables attribution are not subheaders and stay.
+
+## The sport icons (2026-11-21)
+
+One interactive 3D object per sport: a football, an American football, a single-seater racing
+car, a tennis ball, a golf ball, a basketball. Slow idle turn, drag to spin, toon-shaded in the
+site's own tokens so it reads as house illustration.
+
+- **Where.** Beside the h1 on the five sport hubs and their `/<sport>/questions/` fronts
+  (`sportIcon(key)` in `scripts/shared/page-shell.mjs`, 96px, 72px on a phone), and the football
+  at the head of the homepage scores strip (hand copy in `index.html`, 40px, loaded by a dynamic
+  import in `src/main.ts`). The sport tab bar carries a static 16px inline SVG glyph per sport
+  (`sportGlyph()` in `scripts/icons/markup.mjs`; hand copy in `index.html`). **Never a canvas in
+  the tab bar**, and the module refuses to start inside `.sportnav` or anything that scrolls
+  sideways. On phones the static family shows the glyph on the current tab only: six made the
+  row 134px wider and pushed the current tab off-screen on `/golf/` and `/basketball/`, and that
+  family has no script to scroll it back.
+- **The geometry is arithmetic, not a modelling file.** `scripts/icons/meshes.mjs` builds each
+  mesh in Node; `scripts/build-sport-icons.mjs` (`npm run sport-icons`) writes
+  `public/sport-icons/<key>.glb` and `<key>.svg`, and **both are committed**. The build runs
+  `--check` only, which regenerates in memory and fails if a committed file is missing, over the
+  cap (64 KB a mesh) or no longer what the generator makes. Change a mesh or a token colour, run
+  `npm run sport-icons`, commit `public/sport-icons/`.
+- **The GLB is plain on purpose.** One mesh, float32 POSITION and NORMAL, COLOR_0 holding real
+  token colours, a `_PALETTE` slot per vertex, uint16 indices, no textures, no extensions. The
+  CSP has no `'wasm-unsafe-eval'`, so Draco or meshopt would fail without a sound, and the iOS
+  app will convert these same files to USDZ. Pose, light, toon bands and the palette ride in the
+  mesh's `extras`, so the runtime and the poster read the same numbers.
+- **The poster is the mesh, not a second drawing.** `scripts/icons/poster.mjs` projects the same
+  triangles at the rest pose through the same camera and writes flat paths. It is what shows
+  with no JS, with no WebGL2, and after a lost context, and the canvas fades in over it at the
+  same pose. Poster and canvas cannot drift because there is one source.
+- **`public/sport-icons/icon.js` is the one self-hosted module the static family ships.** Plain
+  file, no import, no build, under `script-src 'self'`, so no CSP hash and no `cspMeta()` change
+  (the same arrangement as `/search/search.js`). No three.js: it would cost about 120 KB gzipped
+  for a toon ramp and an outline.
+- **Scroll safety is the rule that file is written round (trap 3).** `touch-action: pan-y` on the
+  canvas, no `preventDefault`, no wheel or touch listener, pointer capture only after a touch has
+  moved further sideways than up or down, opacity-only change from poster to canvas, nothing
+  transformed at rest. `scripts/test/sport-icon.test.mjs` fails the build if any of that goes.
+  Measured in headless Chrome with real touch events at 390px, 2026-11-21: a vertical swipe that
+  starts on the icon scrolls the page, a horizontal one turns the object and the page does not
+  move, the page owns 296 of 296 sample points on `/nfl/` and `/` (same as the control build),
+  and the tab bar and scores strip keep their heights. **That is a simulator. Trap 3 still
+  applies: try it with a thumb on a real phone before a deploy.**
+- **Reduced motion** (the media query or the bootstrap's `.reduced-motion` class) is one still
+  frame at the rest pose: no idle turn, no hover lean, no coasting. Dragging still works.
+- **Colour.** Token names only (`RAMPS` in `scripts/icons/lib.mjs`); the runtime reads the live
+  custom properties and the baked hex is a fallback the test keeps equal to the tokens. Tennis
+  felt is the sunken paper step and American football leather is `--accent-ink`, because optic
+  yellow and brown would each be a sixth hue. That substitution is the founder's to overrule.
+- **Rights.** Generic objects only: no crest, maker's mark, number, sponsor or livery, and the
+  car is nobody's chassis. Its body is paper on purpose; a colour scheme on a racing car is a
+  livery, and orange or red would read as a real team.
 
 ## The feed contract (the iOS app depends on this)
 
@@ -704,7 +760,9 @@ Tier 0 only from the deep-dive report. Four things to know before touching it:
   `.rail` that also carried it was removed on 2026-10-12), is still in force and stays in force. A downward transform on anything inside a horizontal
   scroller is the mistake not to repeat, whatever mechanism happens to apply it. Any future
   reveal starts from that, not from a resurrected `reveal.ts`. The static page family gets the
-  CSS half of Tier 0 and never had a reveal, by design: it ships no bundled JS at all.
+  CSS half of Tier 0 and never had a reveal, by design: it ships no bundled JS. (Since
+  2026-11-21 it ships one self-hosted module, `/sport-icons/icon.js`, on the sport pages only. That
+  module transforms nothing in the page and is not a reveal; see "The sport icons".)
 - **Reduced motion is a designed state, not a disabled one.** `[data-inview]` resolves
   straight to its finished state under both `prefers-reduced-motion` and the
   `.reduced-motion` class the early bootstrap sets. The edge-fade masks drop on

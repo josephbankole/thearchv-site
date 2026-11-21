@@ -7,8 +7,8 @@
  *
  * How: each part is drawn back to front. Inside a part, every front-facing triangle is cut into
  * its lit, mid and shadow pieces; pieces of one colour are unioned by cancelling shared edges, and
- * what is left is the outline of that colour's region. An outlined part then gets its silhouette
- * stroked in ink, which is the poster's version of the canvas's inverted-hull line.
+ * what is left is the outline of that colour's region. An outlined part first lays down its
+ * silhouette in ink, a little fat, which is the poster's version of the canvas's inverted-hull line.
  */
 import { V, DEG, rotX, rotY, SCENE, tokens } from "./lib.mjs";
 
@@ -115,7 +115,7 @@ export function posterSvg({ mesh, pose, alt }, { stroke = 6, tol = 0.55 } = {}) 
 
   const classes = new Map(); // style string -> class name
   const cls = (style) => { if (!classes.has(style)) classes.set(style, String.fromCharCode(97 + classes.size)); return classes.get(style); };
-  let body = "", rims = "";
+  let body = "";
   for (const { part, tris } of parts) {
     const byColour = new Map();
     for (const t of tris) {
@@ -126,12 +126,11 @@ export function posterSvg({ mesh, pose, alt }, { stroke = 6, tol = 0.55 } = {}) 
     }
     const fills = [...byColour.entries()].map(([hex, polys]) => [hex, pathData(loops(polys), tol)]).filter(([, d]) => d);
     const outline = part.outline ? pathData(loops(tris.map((t) => t.map((i) => scr[i]))), tol) : "";
-    if (outline && part.rim) rims += `<path class="${cls(`fill:none;stroke:${INK}`)}" d="${outline}"/>`;
     // The canvas's ink line sits OUTSIDE the silhouette (it is a pushed-out hull). So here the
     // outline goes down first at twice the width and the fills cover its inner half.
-    if (outline && !part.rim) body += `<path class="${cls(`fill:${INK};stroke:${INK}`)}" d="${outline}"/>`;
+    if (outline) body += `<path class="${cls(`fill:${INK};stroke:${INK}`)}" d="${outline}"/>`;
     for (const [hex, d] of fills) body += `<path class="${cls(`fill:${hex}`)}" d="${d}"/>`;
   }
   const css = [...classes.entries()].map(([style, name]) => `.${name}{${style}}`).join("");
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="96" height="96" role="img" aria-label="${alt}"><title>${alt}</title><style>path{stroke-width:${stroke};stroke-linejoin:round}${css}</style>${body}${rims}</svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="96" height="96" role="img" aria-label="${alt}"><title>${alt}</title><style>path{stroke-width:${stroke};stroke-linejoin:round}${css}</style>${body}</svg>\n`;
 }

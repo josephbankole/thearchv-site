@@ -101,11 +101,9 @@ export class Mesh {
   }
   /* A part is a convex-ish piece: the poster draws parts back to front and inks each one's
      silhouette when outline is true. The GLB does not carry parts; it is one primitive. */
-  begin(name, { outline = true, layer = 0, rim = false } = {}) {
+  begin(name, { outline = true, layer = 0 } = {}) {
     this.end();
-    // rim: the poster inks this part's silhouette last, over everything (a ball whose skin is
-    // made of separate panels has no other edge to ink).
-    this.part = { name, start: this.tris.length, count: 0, outline, layer, rim };
+    this.part = { name, start: this.tris.length, count: 0, outline, layer };
   }
   end() {
     if (this.part) { this.part.count = this.tris.length - this.part.start; if (this.part.count) this.parts.push(this.part); this.part = null; }

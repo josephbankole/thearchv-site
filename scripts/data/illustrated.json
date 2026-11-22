@@ -512,7 +512,42 @@
       "height": 240,
       "alt": "Illustrated ARCHV portrait of Folarin Balogun of the United States",
       "hd": "/heads/hd/balogun.webp",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Folarin_Balogun_USMNT_v_Belgium_Mar_28_2026-69_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/folarin-balogun.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/folarin-balogun.webp",
+        "squareSize": 640,
+        "alt": "Folarin Balogun, photographed 2026",
+        "taken": "2026-03-28",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Folarin_Balogun_USMNT_v_Belgium_Mar_28_2026-69_%28cropped%29.jpg",
+        "originalSize": [
+          3060,
+          4078
+        ],
+        "crop": [
+          0,
+          0,
+          3060,
+          3825
+        ],
+        "squareCrop": [
+          0,
+          211,
+          3060,
+          3060
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "raul-jimenez",
@@ -524,7 +559,42 @@
       "alt": "Illustrated ARCHV portrait of Raul Jimenez of Mexico",
       "verifiedBy": "Two agreeing in-repo records, checked 2026-08-09: the bank index row 'Raúl Jiménez | MEX' (regen3 2026-06-11, photo-ref Wikimedia '2017 Confederation Cup - MEXNZL - Raúl Jiménez (crop).jpg'), and the desk's own committed imageAlt 'Raúl Jiménez, illustrated by The ARCHV.' on /heads/jimenez.webp in src/data/worldCupDays.ts. Full name only: the bare surname would also match /heads/jimenez-fulham.webp and any other Jimenez.",
       "hd": "/heads/hd/jimenez-fulham.webp",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Timmy96 / Wikimedia Commons / CC0",
+      "licence": {
+        "name": "CC0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "author": "Timmy96",
+        "source": "https://commons.wikimedia.org/wiki/File:Ra%C3%BAl_Jim%C3%A9nez_04032026_(1).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/raul-jimenez.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/raul-jimenez.webp",
+        "squareSize": 640,
+        "alt": "Raul Jimenez, photographed 2026",
+        "taken": "2026-03-04",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/d/de/Ra%C3%BAl_Jim%C3%A9nez_04032026_%281%29.jpg",
+        "originalSize": [
+          2964,
+          3802
+        ],
+        "crop": [
+          0,
+          0,
+          2964,
+          3705
+        ],
+        "squareCrop": [
+          0,
+          0,
+          2964,
+          2964
+        ],
+        "shareAlike": false
+      }
     },
     {
       "slug": "bruno-fernandes",
@@ -535,7 +605,42 @@
       "width": 600,
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Manchester United player Bruno Fernandes",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Bruno_Fernandes_USMNT_v_Portugal_Mar_31_2026-27_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/bruno-fernandes.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/bruno-fernandes.webp",
+        "squareSize": 640,
+        "alt": "Bruno Fernandes, photographed 2026",
+        "taken": "2026-03-31",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Bruno_Fernandes_USMNT_v_Portugal_Mar_31_2026-27_%28cropped%29.jpg",
+        "originalSize": [
+          2816,
+          4222
+        ],
+        "crop": [
+          0,
+          0,
+          2816,
+          3520
+        ],
+        "squareCrop": [
+          0,
+          295,
+          2610,
+          2610
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "joshua-zirkzee",
@@ -557,7 +662,42 @@
       "width": 600,
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Manchester United player Diogo Dalot",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Diogo_Dalot_USMNT_v_Portugal_Mar_31_2026-12.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/diogo-dalot.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/diogo-dalot.webp",
+        "squareSize": 640,
+        "alt": "Diogo Dalot, photographed 2026",
+        "taken": "2026-03-31",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Diogo_Dalot_USMNT_v_Portugal_Mar_31_2026-12.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          22,
+          70,
+          3311,
+          4138
+        ],
+        "squareCrop": [
+          1083,
+          328,
+          2173,
+          2173
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "noussair-mazraoui",
@@ -568,7 +708,42 @@
       "width": 600,
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Manchester United player Noussair Mazraoui",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: YantsImages / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "YantsImages",
+        "source": "https://commons.wikimedia.org/wiki/File:Noussair_Mazraoui_at_2026_FIFA_World_Cup_by_YantsImages_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/noussair-mazraoui.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/noussair-mazraoui.webp",
+        "squareSize": 640,
+        "alt": "Noussair Mazraoui, photographed 2026",
+        "taken": "2026-06-14",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/4/49/Noussair_Mazraoui_at_2026_FIFA_World_Cup_by_YantsImages_%28cropped%29.jpg",
+        "originalSize": [
+          2098,
+          2852
+        ],
+        "crop": [
+          0,
+          102,
+          1724,
+          2155
+        ],
+        "squareCrop": [
+          288,
+          237,
+          1131,
+          1131
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "matthijs-de-ligt",
@@ -1132,7 +1307,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of former Arsenal manager Arsène Wenger",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'arsene-wenger' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Arsene_Wenger.JPG); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Barcex / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Barcex",
+        "source": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Ars%C3%A8ne_Wenger_-_240422_192850.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/arsene-wenger.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/arsene-wenger.webp",
+        "squareSize": 640,
+        "alt": "Arsène Wenger, photographed 2024",
+        "taken": "2024-04-22",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/4/41/25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Ars%C3%A8ne_Wenger_-_240422_192850.jpg",
+        "originalSize": [
+          3415,
+          5122
+        ],
+        "crop": [
+          899,
+          302,
+          1403,
+          1754
+        ],
+        "squareCrop": [
+          1140,
+          410,
+          921,
+          921
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "mariano-navone",
@@ -1156,7 +1366,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Bianca Andreescu",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'bianca-andreescu' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Bianca_Andreescu_(2026_US_Open)_05.jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Hameltion / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Hameltion",
+        "source": "https://commons.wikimedia.org/wiki/File:Bianca_Andreescu_(2026_US_Open)_06_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/bianca-andreescu.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/bianca-andreescu.webp",
+        "squareSize": 640,
+        "alt": "Bianca Andreescu, photographed 2026",
+        "taken": "2026-08-26",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Bianca_Andreescu_%282026_US_Open%29_06_%28cropped%29.jpg",
+        "originalSize": [
+          1955,
+          2875
+        ],
+        "crop": [
+          0,
+          199,
+          1955,
+          2444
+        ],
+        "squareCrop": [
+          184,
+          359,
+          1352,
+          1352
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "terence-atmane",
@@ -1168,7 +1413,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Terence Atmane",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'terence-atmane' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Terence_Atmane_(2024_DC_Open)_01_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Hameltion / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Hameltion",
+        "source": "https://commons.wikimedia.org/wiki/File:Terence_Atmane_(2024_DC_Open)_01_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/terence-atmane.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/terence-atmane.webp",
+        "squareSize": 640,
+        "alt": "Terence Atmane, photographed 2024",
+        "taken": "2024-07-27",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Terence_Atmane_%282024_DC_Open%29_01_%28cropped%29.jpg",
+        "originalSize": [
+          1240,
+          1933
+        ],
+        "crop": [
+          0,
+          0,
+          1240,
+          1550
+        ],
+        "squareCrop": [
+          0,
+          347,
+          1240,
+          1240
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "sofia-kenin",
@@ -1180,7 +1460,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Sofia Kenin",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'sofia-kenin' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Sofia_Kenin_(2025_DC_Open)_05_(edited_and_cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Hameltion / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Hameltion",
+        "source": "https://commons.wikimedia.org/wiki/File:Sofia_Kenin_(2025_DC_Open)_05_(edited_and_cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/sofia-kenin.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/sofia-kenin.webp",
+        "squareSize": 640,
+        "alt": "Sofia Kenin, photographed 2025",
+        "taken": "2025-07-22",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Sofia_Kenin_%282025_DC_Open%29_05_%28edited_and_cropped%29.jpg",
+        "originalSize": [
+          1491,
+          1904
+        ],
+        "crop": [
+          0,
+          0,
+          1491,
+          1864
+        ],
+        "squareCrop": [
+          0,
+          98,
+          1491,
+          1491
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "jack-draper",
@@ -1216,7 +1531,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Elena Rybakina",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'elena-rybakina' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Elena_Rybakina_2023_US_Open_69_cropped.jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Hameltion / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Hameltion",
+        "source": "https://commons.wikimedia.org/wiki/File:Elena_Rybakina_(2025_DC_Open)_04_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/elena-rybakina.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/elena-rybakina.webp",
+        "squareSize": 640,
+        "alt": "Elena Rybakina, photographed 2025",
+        "taken": "2025-07-19",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/3/39/Elena_Rybakina_%282025_DC_Open%29_04_%28cropped%29.jpg",
+        "originalSize": [
+          2840,
+          3338
+        ],
+        "crop": [
+          170,
+          0,
+          2670,
+          3338
+        ],
+        "squareCrop": [
+          688,
+          367,
+          2135,
+          2135
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "coco-gauff",
@@ -1228,7 +1578,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Coco Gauff",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'coco-gauff' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Coco_Gauff_Miami_Open.jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Rick Munroe / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Rick Munroe",
+        "source": "https://commons.wikimedia.org/wiki/File:Coco_Gauff_Miami_Open.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/coco-gauff.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/coco-gauff.webp",
+        "squareSize": 640,
+        "alt": "Coco Gauff, photographed 2026",
+        "taken": "2026-03-28",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Coco_Gauff_Miami_Open.jpg",
+        "originalSize": [
+          1430,
+          1905
+        ],
+        "crop": [
+          0,
+          0,
+          1430,
+          1788
+        ],
+        "squareCrop": [
+          220,
+          98,
+          983,
+          983
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "jannik-sinner",
@@ -1240,7 +1625,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Jannik Sinner",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'jannik-sinner' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Jannik_Sinner_2025_US_Open.jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Daniel Torok (The White House) / Wikimedia Commons / Public domain",
+      "licence": {
+        "name": "Public domain",
+        "url": "https://commons.wikimedia.org/wiki/Template:PD-USGov",
+        "author": "Daniel Torok (The White House)",
+        "source": "https://commons.wikimedia.org/wiki/File:Jannik_Sinner_US_Open_2025_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/jannik-sinner.webp",
+        "width": 796,
+        "height": 995,
+        "square": "/photos/sq/jannik-sinner.webp",
+        "squareSize": 522,
+        "alt": "Jannik Sinner, photographed 2025",
+        "taken": "2025-09-07",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/4/48/Jannik_Sinner_US_Open_2025_%28cropped%29.jpg",
+        "originalSize": [
+          1204,
+          2000
+        ],
+        "crop": [
+          169,
+          39,
+          796,
+          995
+        ],
+        "squareCrop": [
+          306,
+          101,
+          522,
+          522
+        ],
+        "shareAlike": false
+      }
     },
     {
       "slug": "venus-williams",
@@ -1252,7 +1672,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Venus Williams",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'venus-williams' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Venus_Williams_(2025_DC_Open)_crop.jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Hameltion / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Hameltion",
+        "source": "https://commons.wikimedia.org/wiki/File:Venus_Williams_(2025_DC_Open)_crop.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/venus-williams.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/venus-williams.webp",
+        "squareSize": 640,
+        "alt": "Venus Williams, photographed 2025",
+        "taken": "2025-07-20",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/1/19/Venus_Williams_%282025_DC_Open%29_crop.jpg",
+        "originalSize": [
+          1881,
+          2070
+        ],
+        "crop": [
+          0,
+          0,
+          1656,
+          2070
+        ],
+        "squareCrop": [
+          0,
+          152,
+          1796,
+          1796
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "carlos-alcaraz",
@@ -1264,7 +1719,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Carlos Alcaraz",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'carlos-alcaraz' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192324_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Barcex / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Barcex",
+        "source": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192353.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/carlos-alcaraz.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/carlos-alcaraz.webp",
+        "squareSize": 640,
+        "alt": "Carlos Alcaraz, photographed 2024",
+        "taken": "2024-04-22",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/8/8b/25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192353.jpg",
+        "originalSize": [
+          3123,
+          4685
+        ],
+        "crop": [
+          764,
+          61,
+          1313,
+          1641
+        ],
+        "squareCrop": [
+          990,
+          164,
+          862,
+          862
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "felix-auger-aliassime",
@@ -1276,7 +1766,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Félix Auger-Aliassime",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'felix-auger-aliassime' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Auger-Aliassime_(2023_DC_Open)_01_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Skyscraper2010 / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Skyscraper2010",
+        "source": "https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Auger-Aliassime,_Canada,_ATP_Basel_2025_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/felix-auger-aliassime.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/felix-auger-aliassime.webp",
+        "squareSize": 640,
+        "alt": "Félix Auger-Aliassime, photographed 2025",
+        "taken": "2025-10-22",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/f/ff/F%C3%A9lix_Auger-Aliassime%2C_Canada%2C_ATP_Basel_2025_%28cropped%29.jpg",
+        "originalSize": [
+          2513,
+          2577
+        ],
+        "crop": [
+          393,
+          0,
+          2062,
+          2577
+        ],
+        "squareCrop": [
+          618,
+          40,
+          1613,
+          1613
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "novak-djokovic",
@@ -1300,7 +1825,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Alexander Zverev",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'alexander-zverev' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Alexander_Zverev.jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Rick Munroe / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Rick Munroe",
+        "source": "https://commons.wikimedia.org/wiki/File:Alexander_Zverev.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/alexander-zverev.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/alexander-zverev.webp",
+        "squareSize": 640,
+        "alt": "Alexander Zverev, photographed 2026",
+        "taken": "2026-03-28",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Alexander_Zverev.jpg",
+        "originalSize": [
+          1235,
+          1418
+        ],
+        "crop": [
+          0,
+          0,
+          1134,
+          1418
+        ],
+        "squareCrop": [
+          0,
+          86,
+          862,
+          862
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "katherine-sebov",
@@ -1348,7 +1908,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of golfer Rory McIlroy",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'rory-mcilroy' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Rory_McIlroy_Travelers-077_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Rory_McIlroy_Ryder_Cup_2025-195_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/rory-mcilroy.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/rory-mcilroy.webp",
+        "squareSize": 640,
+        "alt": "Rory McIlroy, photographed 2025",
+        "taken": "2025-09-23",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/0/02/Rory_McIlroy_Ryder_Cup_2025-195_%28cropped%29.jpg",
+        "originalSize": [
+          2292,
+          3055
+        ],
+        "crop": [
+          0,
+          0,
+          2292,
+          2865
+        ],
+        "squareCrop": [
+          0,
+          168,
+          1993,
+          1993
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "viktor-hovland",
@@ -1360,7 +1955,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of golfer Viktor Hovland",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'viktor-hovland' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/viktor-hovland.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/viktor-hovland.webp",
+        "squareSize": 640,
+        "alt": "Viktor Hovland, photographed 2025",
+        "taken": "2025-09-23",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Viktor_Hovland_Ryder_Cup_2025-205_%28cropped%29.jpg",
+        "originalSize": [
+          2391,
+          3186
+        ],
+        "crop": [
+          0,
+          0,
+          2391,
+          2989
+        ],
+        "squareCrop": [
+          252,
+          195,
+          1865,
+          1865
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "sungjae-im",
@@ -1608,7 +2238,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Formula 1 driver Max Verstappen",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'max-verstappen' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_3973_by_Stepro_(medium_crop).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Yu Chu Chin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Yu Chu Chin",
+        "source": "https://commons.wikimedia.org/wiki/File:Max_Verstappen_at_the_Red_Bull_Fan_Zone_%E2%80%93_Crown_Riverwalk,_Melbourne_(028A7659)_-_cropped.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/max-verstappen.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/max-verstappen.webp",
+        "squareSize": 640,
+        "alt": "Max Verstappen, photographed 2026",
+        "taken": "2026-03-05",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/8/89/Max_Verstappen_at_the_Red_Bull_Fan_Zone_%E2%80%93_Crown_Riverwalk%2C_Melbourne_%28028A7659%29_-_cropped.jpg",
+        "originalSize": [
+          1867,
+          2800
+        ],
+        "crop": [
+          0,
+          98,
+          1867,
+          2334
+        ],
+        "squareCrop": [
+          0,
+          646,
+          1867,
+          1867
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "oscar-piastri",
@@ -1620,7 +2285,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Formula 1 driver Oscar Piastri",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'oscar-piastri' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped)_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Liauzh / Wikimedia Commons / CC BY 4.0",
+      "licence": {
+        "name": "CC BY 4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0",
+        "author": "Liauzh",
+        "source": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/oscar-piastri.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/oscar-piastri.webp",
+        "squareSize": 640,
+        "alt": "Oscar Piastri, photographed 2026",
+        "taken": "2026-03-15",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/c/c7/2026_Chinese_GP_-_Oscar_Piastri_%28cropped%29.jpg",
+        "originalSize": [
+          2164,
+          2823
+        ],
+        "crop": [
+          33,
+          304,
+          1412,
+          1765
+        ],
+        "squareCrop": [
+          276,
+          414,
+          927,
+          927
+        ],
+        "shareAlike": false
+      }
     },
     {
       "slug": "nick-chubb",

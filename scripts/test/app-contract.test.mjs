@@ -27,7 +27,9 @@ const readFeed = (name) => JSON.parse(readFileSync(join(DIST, "feed", `${name}.j
 const SHAPES = {
   DayEntry: {
     required: ["date", "day", "headline", "dek", "body", "status"],
-    optional: ["image", "imageAlt", "section", "url", "infogram", "infogramAlt"],
+    optional: ["image", "imageAlt", "section", "url", "infogram", "infogramAlt",
+      // Additive photo fields (21 Nov 2026); unknown to every app build so far, ignored by its decoder.
+      "photo", "photoSquare", "photoAlt", "photoCredit", "photoLicence", "photoLicenceUrl", "photoSource"],
   },
   Poster: { required: ["slug", "year", "title", "moment", "stamp"], optional: ["host", "city", "etsyUrl", "image"] },
   Legend: { required: ["no", "name", "nation", "headshot", "bio"], optional: ["years"] },
@@ -164,4 +166,44 @@ test("the checker itself catches the drift it exists for", () => {
   assert.deepEqual(problems("DayEntry", { ...good, image: null }, "x"), [], "null optional decodes");
   assert.equal(arrayOf("DayEntry", null, "wrap").length, 1, "a null wrap must fail");
   assert.equal(problems("StorefrontItem", { id: "1", name: "n", price: "p", image: "", url: "https://a.b" }, "s").length, 1);
+});
+
+const PHOTO_KEYS = ["photo", "photoSquare", "photoAlt", "photoCredit", "photoLicence", "photoLicenceUrl", "photoSource"];
+
+/** Problems with one entry's photo fields: all or none, the photo shelf only, never in `image`. */
+export function photoProblems(e, where) {
+  const out = [];
+  const present = PHOTO_KEYS.filter((k) => e[k] != null);
+  if (present.length && present.length !== PHOTO_KEYS.length) out.push(`${where}: photo fields come as a set, got ${present.join(", ")}`);
+  if (e.photo != null) {
+    if (!/^\/photos\/[a-z0-9-]+\.webp$/.test(e.photo)) out.push(`${where}.photo: not on the photo shelf: ${e.photo}`);
+    if (!/^\/photos\/sq\/[a-z0-9-]+\.webp$/.test(e.photoSquare ?? "")) out.push(`${where}.photoSquare: not on the photo shelf`);
+    if (!e.image) out.push(`${where}: photo without its illustration in image`);
+    if (!/^Photograph: .+ \/ Wikimedia Commons \/ .+$/.test(e.photoCredit ?? "")) out.push(`${where}.photoCredit: not a credit line`);
+    if (!/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/.test(e.photoSource ?? "")) out.push(`${where}.photoSource: not a Commons file page`);
+    if (/\b(NC|ND)\b/.test(e.photoLicence ?? "")) out.push(`${where}.photoLicence: ${e.photoLicence} is not allowed`);
+  }
+  if (typeof e.image === "string" && e.image.startsWith("/photos/")) out.push(`${where}.image: a photo in the illustration field`);
+  return out;
+}
+
+test("photo fields, where present, are a full set beside the illustration (21 Nov 2026)", () => {
+  const list = [];
+  let seen = 0;
+  for (const name of laneFeeds()) {
+    const feed = readFeed(name);
+    for (const [i, e] of (feed.days ?? []).entries()) {
+      if (e.photo) seen++;
+      list.push(...photoProblems(e, `${name}.days[${i}]`));
+    }
+  }
+  const today = readFeed("today");
+  for (const [i, e] of [today.lead, ...(today.wrap ?? [])].filter(Boolean).entries()) list.push(...photoProblems(e, `today[${i}]`));
+  assertClean(list);
+  const good = { image: "/heads/hd/x.webp", photo: "/photos/x.webp", photoSquare: "/photos/sq/x.webp", photoAlt: "X, photographed 2026",
+    photoCredit: "Photograph: A / Wikimedia Commons / CC BY 4.0", photoLicence: "CC BY 4.0", photoLicenceUrl: "https://creativecommons.org/licenses/by/4.0", photoSource: "https://commons.wikimedia.org/wiki/File:X.jpg" };
+  assert.deepEqual(photoProblems(good, "g"), []);
+  assert.ok(photoProblems({ ...good, photoCredit: undefined }, "g").length > 0, "a photo with no credit must fail");
+  assert.ok(photoProblems({ ...good, image: "/photos/x.webp" }, "g").length > 0, "a photo in image must fail");
+  console.log(`# ${seen} feed entries carry a photo`);
 });

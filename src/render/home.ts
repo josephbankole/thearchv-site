@@ -30,7 +30,7 @@ import { readPath } from '../data/readSlug';
 import { entrySources } from '../lib/entryGates';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
-import { entryArt } from './illustrated';
+import { entryArt, photoCreditHtml } from './illustrated';
 import posterTiles from '../../scripts/data/poster-tiles.json';
 
 /* ---------- escaping ---------- */
@@ -160,8 +160,15 @@ export function renderLead(): string {
   // The lead panel only takes a drawn FACE. A club badge is a mark and belongs on a card, not
   // under a caption reading "Original ARCHV illustration" beside the day's biggest story.
   const leadArt = entryArt(entry);
+  // A Commons photograph (founder ruling, 21 Nov 2026) draws from its square crop with its
+  // credit line as the caption: author linked to the file page, licence to its deed.
   const art =
-    leadArt && leadArt.kind !== 'club'
+    leadArt && leadArt.kind === 'photo'
+      ? `<figure class="lead__art lead__art--photo">
+          <img src="${esc(leadArt.square ?? leadArt.src)}" alt="${esc(leadArt.alt)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
+          <figcaption>${photoCreditHtml(leadArt, esc)}</figcaption>
+        </figure>`
+      : leadArt && leadArt.kind !== 'club'
       ? `<figure class="lead__art">
           <img src="${esc(leadArt.src)}" alt="${esc(leadArt.alt)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
           <figcaption>Original ARCHV illustration.</figcaption>

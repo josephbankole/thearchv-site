@@ -1,10 +1,14 @@
 /* render.mjs: pure HTML renderers for the Wire and the table blocks, used by
    build-daily-pages.mjs (/wire/, /tables/) and build-sport-pages.mjs (the per-sport strip).
    Calm by construction: no images, no logos, no crests, no relative times, no "live", nothing
-   that moves. Every outbound link opens in a new tab with rel="noopener noreferrer", and its href
+   that moves. One licensed exception (founder ruling, 21 Nov 2026): the Premier League table's
+   title carries the Premier League logo, 24px, beside the words, through plLogo() in
+   scripts/shared/logos.mjs and only while its THIRD_PARTY_LOGOS switch is on. Nothing in the Wire
+   ever carries a logo, and check-wire-links.mjs allows that one <img> in a table title only. Every outbound link opens in a new tab with rel="noopener noreferrer", and its href
    is the feed's own URL, escaped for the attribute and otherwise untouched. A renderer with
    nothing to show returns '' so no empty section ever ships. */
 import { esc, escAttr } from "../../shared/page-shell.mjs";
+import { plLogo } from "../../shared/logos.mjs";
 import { SOURCES, SPORT_KEYS, currentEdition, blockVisible, daysBetween, rankOne, upcomingRows } from "./schema.mjs";
 
 // '' for a date it cannot read: content never throws the build (the sanitiser drops bad dates first).
@@ -157,6 +161,10 @@ function renderEventRows(b) {
       </ul>`;
 }
 
+/* The competition logo beside a table's title: the Premier League standings only (the block's own
+   league key, never a guess from the title), '' for everything else or with the switch off. */
+const titleLogo = (b) => (b.kind === "standings" && b.league === "premier-league" ? plLogo({ lazy: true }) : "");
+
 export function renderTableBlock(b, { compact = false, today } = {}) {
   if (today && !blockVisible(b, today)) return "";
   // A fixture dated before today is never shown as still to come.
@@ -169,7 +177,7 @@ export function renderTableBlock(b, { compact = false, today } = {}) {
   else if (b.kind === "event") inner = renderEventRows(b);
   else inner = renderMatchRows(b);
   return `<section class="tblock" id="tblock-${escAttr(b.id)}" aria-labelledby="tblock-title-${escAttr(b.id)}">
-      <h3 class="tblock__title" id="tblock-title-${escAttr(b.id)}">${esc(b.title)}</h3>
+      <h3 class="tblock__title" id="tblock-title-${escAttr(b.id)}">${titleLogo(b)}${esc(b.title)}</h3>
       ${inner}
       ${blockFooter(b)}
     </section>`;

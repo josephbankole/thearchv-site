@@ -1,0 +1,33 @@
+{
+  "schema": "archv-logos/1",
+  "switch": "THIRD_PARTY_LOGOS in scripts/shared/logos.mjs turns every logo in this file off",
+  "logos": [
+    {
+      "key": "premier-league",
+      "name": "Premier League logo",
+      "owner": "The Football Association Premier League Limited",
+      "source": "https://logo.premierleague.com",
+      "download": "PL_Digital_Positive.zip, downloaded by the founder on 2026-11-21",
+      "downloadSha256": "8cda940f34d1ce6df4678b71d14142cd903a085a196a94f31a9db414ffd39814",
+      "file": "public/logos/premier-league/PL_LOGO_COMPACT_DARK_RGB.png",
+      "fileFromZip": "Compact/PNG/PL_LOGO_COMPACT_DARK_RGB.png",
+      "fileSha256": "9808213c2a897370ff003096fffcd9d22b7d4597ad8c8d08c91ff2210751c16c",
+      "filePixels": "941 x 1117, PNG with alpha, unaltered",
+      "variant": "purple (positive), for light backgrounds; the site is light only",
+      "termsAccepted": "2026-11-21, by the founder (\"downloaded, we are ok to use them\")",
+      "rules": [
+        "Purple version on light backgrounds, white version on dark backgrounds.",
+        "Resize only. Never recolour, redraw, crop, distort, animate or add effects.",
+        "Shown small (24px high) beside the words \"Premier League\" where a page already names the competition.",
+        "Never on posters, storefront tiles or feeds, og or share cards, navigation, mastheads, section identity, the Wire or the app feeds."
+      ],
+      "requiredNotice": "© Copyright The Football Association Premier League Limited, 2016.",
+      "noticeWhere": "LEGAL_LINE in scripts/shared/page-shell.mjs (every static footer) and the hand copy in index.html",
+      "removalDuty": "Remove from the site within 12 hours of a request from the Premier League: set THIRD_PARTY_LOGOS to false, rebuild and deploy.",
+      "shownAt": [
+        "/scores/ (Premier League group heading)",
+        "/tables/ (Premier League table title)"
+      ]
+    }
+  ]
+}

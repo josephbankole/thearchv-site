@@ -22,7 +22,7 @@ import {
 } from "./shared/page-shell.mjs";
 import { publishedAt, modifiedAt, wasUpdated, dateFieldReport, torontoIso } from "./shared/entry-dates.mjs";
 import { isSourcesPara, sourcesAwareParagraph } from "./shared/source-links.mjs";
-import { entryArt } from "./shared/illustrated.mjs";
+import { entryArt, shareArt, photoCreditHtml } from "./shared/illustrated.mjs";
 import { pageCard } from "./shared/page-card.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 import { appendUrls } from "./shared/sitemap.mjs";
@@ -385,7 +385,9 @@ function schema(entry, url, label, parentUrl, faq, images, sources = []) {
    headline, and the same art the page shows (entryArt: filed image, banked portrait, club
    badge, nothing). */
 async function ogCard(entry, laneLabel, height = 630, art = undefined) {
-  const resolved = art === undefined ? entryArt(entry) : art;
+  // shareArt(): a share card leaves the site, so a photographed player's card carries his
+  // illustration, never the Commons photo (founder ruling, 21 Nov 2026; check-photo-wall.mjs).
+  const resolved = shareArt(art === undefined ? entryArt(entry) : art);
   return pageCard({
     kicker: `${laneLabel} · ${longDate(entry.date)}`,
     headline: entry.headline,
@@ -468,9 +470,18 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
   // The page's own art. Resolved through entryArt() (phase 2B) rather than reading entry.image
   // directly, so an entry the desk filed without an image still gets the banked portrait of the
   // player it is about, or the club badge, or — on a genuine miss — nothing at all.
+  // A Commons photograph draws from its square crop in the same circle, with its credit line
+  // under it: author linked to the file page, licence linked to its deed (founder ruling,
+  // 21 Nov 2026). The illustration stays the share card's art.
   const art = entryArt(entry);
   const figure = art
-    ? `
+    ? art.kind === "photo"
+      ? `
+      <figure class="article__fig article__fig--photo">
+        <img src="${escAttr(art.square)}" alt="${escAttr(art.alt)}" width="96" height="96" loading="eager" decoding="async" />
+        <figcaption class="article__credit">${photoCreditHtml(art, escAttr)}</figcaption>
+      </figure>`
+      : `
       <figure class="article__fig">
         <img src="${escAttr(art.src)}" alt="${escAttr(art.alt)}" width="${art.width}" height="${art.height}" loading="eager" decoding="async" />
       </figure>` : "";

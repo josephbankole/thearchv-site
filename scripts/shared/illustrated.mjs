@@ -125,18 +125,71 @@ export const playerInText = (text) => firstPlayerIn(text);
 export function entryArt(entry) {
   if (!entry) return null;
   if (entry.image) {
-    return {
+    const filed = {
       kind: "entry",
       src: entry.image,
       alt: entry.imageAlt ?? `Illustration: ${entry.headline ?? ""}`,
       width: 240,
       height: 240,
     };
+    const who = playerForImage(entry.image);
+    return who && who.kind === "photo" ? photoArt(who, filed) : filed;
   }
   const text = `${entry.headline ?? ""} ${entry.dek ?? ""}`;
   const player = firstPlayerIn(text, PLAYERS, `${text} ${entry.body ?? ""}`);
-  if (player) return { kind: "player", src: player.src, alt: player.alt, width: player.width, height: player.height };
+  if (player) {
+    const drawn = { kind: "player", src: player.src, alt: player.alt, width: player.width, height: player.height };
+    return player.kind === "photo" ? photoArt(player, drawn) : drawn;
+  }
   const club = clubInText(text);
   if (club) return { kind: "club", src: club.src, alt: club.alt, width: club.width, height: club.height };
   return null;
+}
+
+/* ---------- photographs (founder ruling, 21 Nov 2026) ----------
+   A registry row with kind "photo" carries a free-licence Wikimedia Commons photograph (row.photo,
+   row.credit, row.licence) beside its illustration, which stays in src/alt/hd. On the site the
+   photo wins; everywhere a file leaves the site it must not, so the art object carries `share`:
+   the illustration (or the desk's filed image) for og and twitter cards, JSON-LD images, posters
+   and the app's `image` field. Read `share` there, never `src`. A photo is never redistributed
+   off-site, and scripts/check-photo-wall.mjs fails the build if one is.
+
+   A filed entry image counts as the same person when it is that row's own file or shares the stem
+   of its app-grade head (/heads/<stem>.webp and /heads/hd/<stem>.webp), which is the identity rule
+   scripts/shared/app-art.mjs already relies on. MIRRORED in src/render/illustrated.ts. */
+const stemOf = (src = "") => String(src).split("/").pop().replace(/\.[a-z0-9]+$/i, "");
+
+export function playerForImage(src) {
+  if (!src) return null;
+  const stem = stemOf(src);
+  return (
+    PLAYERS.find((p) => p.src === src || p.hd === src) ??
+    (src.startsWith("/heads/") ? PLAYERS.find((p) => p.hd && stemOf(p.hd) === stem) : null) ??
+    null
+  );
+}
+
+function photoArt(p, share) {
+  return {
+    kind: "photo",
+    src: p.photo.src,
+    square: p.photo.square,
+    alt: p.photo.alt,
+    width: p.photo.width,
+    height: p.photo.height,
+    credit: p.credit,
+    licence: { ...p.licence },
+    share,
+  };
+}
+
+/** The art a file that leaves the site may carry: the illustration behind a photo, else the art. */
+export const shareArt = (art) => (art && art.kind === "photo" ? art.share : art);
+
+/** The visible credit line for a photo, with the author linked to the Commons file page and the
+    licence name to its deed. `esc` is the caller's HTML escaper. Empty for anything but a photo. */
+export function photoCreditHtml(art, esc) {
+  if (!art || art.kind !== "photo") return "";
+  const l = art.licence;
+  return `Photograph: <a href="${esc(l.source)}" rel="noopener">${esc(l.author)}</a> / Wikimedia Commons / <a href="${esc(l.url)}" rel="license noopener">${esc(l.name)}</a>`;
 }

@@ -697,6 +697,7 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .lead__art { margin-top: 1.1rem; }
 .lead__art img { width: 100%; max-width: 160px; height: auto; display: block; border: 1px solid var(--rule); }
 .lead__art figcaption { margin-top: 0.4rem; font-size: 0.7rem; color: var(--ink-muted); }
+.lead__art figcaption a { color: var(--ink-muted); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ---------- the dispatch (long reads, 2026-10-13) ----------
    The band between the lead and the Desk Brief, listing the three newest Dispatch issues.

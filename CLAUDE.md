@@ -224,6 +224,13 @@ registry on one source: each head-bank entry is identified by both the bank inde
 `../player-headshot-bank.md` and the desk's own committed `imageAlt` for that same file, and
 the 2026-08-05 Alex Scott case is why. Bare mononyms are left out on purpose.
 
+**Photographs are a second kind of row in that registry (founder ruling, 21 Nov 2026).** His words:
+"lets use free-licence one from Wikimedia Commons with credit, if an up to date photo does not
+exist, then we will create an illustration", and never a photo on the shop side. A row with
+`kind: "photo"` keeps its illustration (`src`, `alt`, `hd`) and adds `credit`, `licence {name, url,
+author, source, checked}` and `photo {src, width, height, square, alt, taken, original, crop, ...}`.
+Every other row is `kind: "illustration"` and renders exactly as before. See "Photographs" below.
+
 **Small portraits come from `public/thumbs/` (2026-10-12).** The 64px card circles used to pull the
 600px `heads/hd` rebuilds and the 1024px Legends art. `scripts/build-thumbs.mjs` (in the build
 before `vite build`, or `npm run thumbs`) writes a 128px and a 320px WebP of every file on those
@@ -232,6 +239,46 @@ two shelves to `public/thumbs/<width>/<original path>`, keyed by content hash in
 `scripts/shared/thumbs.mjs`. A head with no thumbs falls back to its original src, so nothing
 breaks; run the script and commit `public/thumbs/` plus the manifest after adding or replacing a
 head. The originals stay for the app feed, share cards and article art.
+
+## Photographs: free-licence Wikimedia Commons, with credit (founder ruling, 21 Nov 2026)
+
+- **Source.** Wikimedia Commons files only, each checked for identity, licence (never NC or ND) and
+  date (2024 or later for anyone active; a legend may be older) in
+  `../photo-sourcing-2026-11-21/manifest-verified.json`. No agency, club or press photos.
+- **Pipeline (not in the build).** Originals are downloaded one at a time to
+  `../photo-sourcing-2026-11-21/originals/` and kept byte for byte, author and licence metadata
+  intact. Never run a metadata or watermark strip on these third-party files. A face box comes from
+  macOS Vision; `scripts/photos/make-photos.mjs` crops (the only alteration besides resizing) to
+  `public/photos/<slug>.webp` (4:5, 960x1200 at most) and `public/photos/sq/<slug>.webp` (square,
+  640 at most), records the crop boxes, and writes the row. `npm run thumbs` makes the 128/320px
+  thumbs (`photos/sq` is a thumb shelf). Commit `public/photos/`, `public/thumbs/`, `thumbs.json`
+  and `illustrated.json` together. Look at a contact sheet of the crops against the manifest's
+  reference thumbs before committing: the face box picks the largest face.
+- **Resolution.** `entryArt()` (both readers, MIRRORED, parity-checked): a player named in the copy,
+  or a filed entry image that is that row's own file or shares its hd stem (`playerForImage()`),
+  resolves to `kind: "photo"` with `src` (4:5), `square`, `alt` ("<Name>, photographed <year>"),
+  `credit`, `licence` and `share` (the illustration, or the desk's filed image). Card circles and
+  the 96px article circle draw `square`.
+- **Credit.** Wherever a photo draws at reading size (the article figure, the front-page lead) a
+  visible line under it: "Photograph: <author> / Wikimedia Commons / <licence>", author linked to
+  the Commons file page, licence to its deed (`photoCreditHtml()`). The 64px card circles carry no
+  credit of their own; `/about/#photo-credits` lists every photo (author, licence, file, and for
+  CC BY-SA that the crop is shared under the same licence), and `LEGAL_LINE` (every static footer)
+  and the `index.html` footer link to it.
+- **The wall.** A file that leaves the site never carries a photo: og and twitter cards, JSON-LD,
+  RSS, sitemaps, posters, the shop, storefront and posters feeds, the sport icons, and the app's
+  `image` field (it goes on the app's share poster). Share cards use `shareArt(art)`, and
+  `artPng()` in `card-brand.mjs` throws on a photo path. `scripts/check-photo-wall.mjs` (end of the
+  build) fails on any of those in `dist/`; `check-portrait-provenance.mjs` fails a photo row that
+  is not a Commons file with licence name, deed, author, source and date checked, carries NC or ND,
+  has a non-house credit, an "illustrated" alt, or a missing file.
+- **App feed (additive, optional strings).** An entry whose `image` is a photographed player's hd
+  head also carries `photo`, `photoSquare`, `photoAlt`, `photoCredit`, `photoLicence`,
+  `photoLicenceUrl`, `photoSource`. `image` is unchanged and stays the illustration. Any app that
+  shows `photo` must show `photoCredit` with it, and never put it on the share poster.
+  `app-contract.test.mjs` checks the fields come as a set and stay on the shelf.
+- **Where there is no photo, the illustration stays.** Do not commission a new illustration for a
+  person who has a photo row, and do not remove an illustration a photo row still points at.
 
 ## The front page after the 2026-10-13 trim
 
@@ -251,6 +298,8 @@ posters at the bottom of the page, the rest can live in sub pages."
   match is live (or due within two minutes before / fifteen after kickoff) and the tab is visible.
   Its status wording mirrors `scripts/shared/scores-client.js` (the inline client on /scores/):
   change one, change the other. Text only, no crests. The track carries `overflow-y: hidden` (trap 3).
+  The 21 Nov 2026 logo ruling (below) does not reach the strip: it prints no competition label, so
+  it carries no logo.
 - **Where each removed section went.** Football Leagues, Transfer Desk and International Football
   bands: `/desk/leagues/`, `/desk/transfer/`, `/desk/world-cup/` (lane indexes; all three are in
   the masthead menu). The Legends: `/legends/`. Long reads: `/reads/`. Quick answers (FAQ): the six
@@ -573,6 +622,38 @@ Design of record: `docs/wire-design-2026-09-26/design-final.md`. Code: `scripts/
   read by name, never printed, never `VITE_`, never CI. Jolpica stays off until admin@jolpi.ca
   grants commercial use in writing.
 - Tests: `npm run test:wire` (node:test, fixtures only, no network), which runs inside `build`.
+
+## Third-party logos: the Premier League logo (founder ruling, 21 Nov 2026)
+
+His words: "downloaded, we are ok to use them" (the official set from https://logo.premierleague.com,
+`PL_Digital_Positive.zip`). This supersedes "no competition logos" for the Premier League logo only.
+
+- **One switch.** `THIRD_PARTY_LOGOS` in `scripts/shared/logos.mjs` turns every third-party logo on
+  the site off; flip it, rebuild, deploy. The Premier League's terms ask for removal within 12 hours
+  of a request, so that is the drill. The homepage bundle shows no logo, so nothing is mirrored in
+  `src/`; if one is ever added there, mirror the constant and extend the check.
+- **One file, untouched.** `public/logos/premier-league/PL_LOGO_COMPACT_DARK_RGB.png`, the purple
+  (positive) compact mark, byte for byte as downloaded (sha256 in `scripts/data/logos.json`, the
+  registry with owner, source, terms and the removal duty). Terms: purple on light grounds, white on
+  dark (the site is light only, so only purple ships), resize only, never recolour, redraw, crop or
+  animate. CSS sets `height: 24px; width: auto` (`COMP_LOGO_CSS`); markup only through `plLogo()`.
+- **Where it shows, and only there.** Beside an existing "Premier League" label: the Premier League
+  group heading on `/scores/` (client-side, keyed on the feed's `competition.key`, path handed over in
+  `#scores[data-pl-logo]`) and the "Premier League table" title on `/tables/` (keyed on the block's
+  `league`). Never in navigation, mastheads, section identity, the Wire, posters, storefront tiles,
+  og or share cards, app feeds, or near the poster strip. `check-wire-links.mjs` allows that one
+  `<img>` as the first child of `h3.tblock__title` and nowhere else in Wire or tables content.
+- **The notice.** "© Copyright The Football Association Premier League Limited, 2016." and the
+  trade-mark sentence are in `LEGAL_LINE` (page-shell, used by `footer()`, `build-content.mjs`,
+  `build-day-pages.mjs`) and in the hand copy in `index.html`. The notice rides on the switch except
+  in `index.html`, which is static.
+- **The gate.** `scripts/check-logos.mjs` (end of `npm run build`) fails if anything under
+  `/logos/` is referenced from posters, the shop, `dist/feed/`, RSS, sitemaps, og or twitter meta, or
+  any page at all while the switch is off. `scripts/test/logos.test.mjs` (in `test:home`) covers the
+  helper and the table renderer both ways.
+- **Still off:** club crests and every other league until a later pass (Wikimedia Commons files only,
+  with file page, author and licence recorded); Formula 1, NBA and WNBA logos (their pages require a
+  written licence; names in text only). Nothing goes to the app until the founder is asked again.
 
 ## The live scores page, /scores/ (2026-10-13; match panels 2026-10-19)
 
@@ -936,7 +1017,8 @@ a replacement that has been audited against a confirmed photograph of that playe
 and approved by the founder on that audit, which always archives its predecessor to
 `_superseded/` first; carve-out founder-approved 2026-08-05, and the same day's
 Alex Scott case shows why the audit comes first: the candidate failed it); no club
-crests, kits, photos or FIFA marks anywhere.
+crests, kits or FIFA marks anywhere, and no photos other than the credited free-licence Commons
+photographs under "Photographs" above (founder ruling, 21 Nov 2026).
 
 The ARCHV club badges in `public/media/illustrated/` are not an exception to that last line.
 They are our own typographic disc, designed here, and the set is Leeds United, Manchester

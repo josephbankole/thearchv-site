@@ -14,6 +14,13 @@
 // items (no crests: the feed carries none and img-src stays 'self' data:), built with textContent
 // only, so nothing from the feed is ever parsed as markup.
 //
+// LOGOS (founder ruling, 21 Nov 2026). The Premier League logo is now licensed for the site, small
+// and beside the words "Premier League" where a page already names the competition, behind the
+// THIRD_PARTY_LOGOS switch in scripts/shared/logos.mjs (it shows on the /scores/ group heading and
+// the /tables/ Premier League table title). This strip prints no competition label, so it carries
+// no logo: one is not invented here. Text only stays the rule for this strip, and for every crest
+// and every logo that is not licensed.
+//
 // WHAT IT NEVER DOES. It never removes the "All scores" link: that link is server-rendered in
 // index.html, pinned outside the scrolling track, and stays when the feed is empty, slow or down.
 // The track is simply left hidden. Nothing in here may create a downward-translated element inside

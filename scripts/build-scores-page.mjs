@@ -12,8 +12,14 @@
    shared and the back button walks back through the days. No index, no controls: the page is then
    exactly the live page it was.
 
-   TEXT ONLY, BY RULE. No crests, logos or photos: the feed carries none (map.ts builds every object
-   field by field), the page loads none, and img-src stays 'self' data:.
+   TEXT ONLY, BY RULE, WITH ONE LICENSED EXCEPTION. No crests, logos or photos: the feed carries none
+   (map.ts builds every object field by field), the page loads none from it, and img-src stays
+   'self' data:. The exception (founder ruling, 21 Nov 2026, "downloaded, we are ok to use them"):
+   the Premier League group heading carries the Premier League logo, 24px, beside the words, under
+   the Premier League's terms. It is self-hosted under /logos/, keyed on the feed's competition key
+   (premier-league), never on a name, and the page passes its path to the client in the #scores
+   element's data-pl-logo attribute only while THIRD_PARTY_LOGOS in scripts/shared/logos.mjs is on,
+   so switching that off and rebuilding takes it off this page too. Everything else stays text.
 
    PANELS (2026-10-19, founder: "swipe right to see the starting lineups in a graphic with player
    ratings, each player represented with a shirt in their team colors with their number, then swipe
@@ -40,6 +46,7 @@ import {
   cspMeta, scriptHash, extractScriptBody, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
 } from "./shared/page-shell.mjs";
 import { scoresClientSource } from "./shared/scores-script.mjs";
+import { plLogo, PL_LOGO, COMP_LOGO_CSS } from "./shared/logos.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -82,6 +89,7 @@ function styles() {
     .scores__updated { margin: 0 0 1.4rem; min-height: 1.2em; color: var(--ink-muted); font-family: var(--font-mono); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
     .scores__group { margin: 0 0 2rem; }
     .scores__group h2 { margin: 0 0 .2rem; color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: 1.5rem; line-height: 1.2; }
+    ${COMP_LOGO_CSS}
     .scores__day { margin: 1rem 0 .3rem; color: var(--ink-muted); font-family: var(--font-mono); font-size: .75rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
     .scores__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
     .scores__item { border-bottom: 1px solid var(--rule); }
@@ -246,7 +254,7 @@ const html = `${documentShell({
       <noscript>
         <p class="scores__noscript">The scores need JavaScript, which is off in this browser.</p>
       </noscript>
-      <div class="scores" id="scores">
+      <div class="scores" id="scores"${plLogo() ? ` data-pl-logo="${PL_LOGO.src}" data-pl-logo-alt="${PL_LOGO.alt}" data-pl-logo-w="${PL_LOGO.width}" data-pl-logo-h="${PL_LOGO.height}"` : ""}>
         <p class="scores__note">Loading scores.</p>
       </div>
       <p class="scores__foot">Scores, ratings, lineups and team stats from API-Football.</p>

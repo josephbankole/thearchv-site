@@ -74,6 +74,7 @@
   var liveBtn = document.getElementById('scores-live');
   var tzNote = document.getElementById('scores-tz');
   var announcer = document.getElementById('scores-status');
+  var plLogoSrc = root ? root.getAttribute('data-pl-logo') : null;
   if (!root) return;
 
   var matches = [], byId = {}, sig = '', haveData = false, paused = false;
@@ -236,6 +237,18 @@
       sec.setAttribute('aria-labelledby', hid);
       var title = h('h2', null, NAMES[k] || g.name);
       title.id = hid;
+      // The Premier League logo beside its heading (founder ruling, 21 Nov 2026), keyed on the
+      // feed's competition key and only when the page says the licence switch is on: the path and
+      // size come from the build (data-pl-logo on #scores), never from the feed.
+      if (k === 'premier-league' && plLogoSrc) {
+        var logo = h('img', 'comp-logo');
+        logo.src = plLogoSrc;
+        logo.alt = root.getAttribute('data-pl-logo-alt') || 'Premier League logo';
+        logo.width = Number(root.getAttribute('data-pl-logo-w')) || 20;
+        logo.height = Number(root.getAttribute('data-pl-logo-h')) || 24;
+        logo.decoding = 'async';
+        title.insertBefore(logo, title.firstChild);
+      }
       sec.appendChild(title);
       var list = null, lastDay = '';
       g.items.forEach(function (m) {

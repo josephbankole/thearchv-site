@@ -11,6 +11,14 @@ import { thumbImgAttrs } from "./thumbs.mjs";
 import { readFileSync } from "node:fs";
 import { SPORT_ICON_ALT, sportGlyph } from "../icons/markup.mjs";
 import { marginArt } from "./margin-art.mjs";
+import { THIRD_PARTY_LOGOS, PL_NOTICE, COMP_LOGO_CSS } from "./logos.mjs";
+
+/* The footer legal line, one source for every static footer (footer() here, and the hand-built
+   footers in build-content.mjs and build-day-pages.mjs; index.html carries a hand copy). The
+   trade-mark sentence and the Premier League notice follow the founder's logo ruling of 21 Nov
+   2026: the notice goes with every use of the Premier League logo, so it rides on the
+   THIRD_PARTY_LOGOS switch in logos.mjs. */
+export const LEGAL_LINE = `The ARCHV is an independent football-history publication. Team and league names and logos are trade marks of their owners, shown for identification in news reporting; The ARCHV is independent and not affiliated with or endorsed by any club, league or governing body. Player illustrations are original stylised artwork, not photographs. ${THIRD_PARTY_LOGOS ? `${PL_NOTICE} ` : ""}© 2026 The ARCHV.`;
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -690,7 +698,7 @@ export function footer() {
         <a href="/about/">About</a>
       </nav>
       <p class="footer__tag">Sports history, illustrated. No gambling ads, ever.</p>
-      <p class="footer__legal">The ARCHV is an independent football-history publication, not affiliated with any governing body, league, club, or competition organiser. Club and competition names are referenced for editorial and historical commentary only and remain the property of their respective owners. Player illustrations are original stylised artwork, not photographs. © 2026 The ARCHV.</p>
+      <p class="footer__legal">${LEGAL_LINE}</p>
     </div>
   </footer>`;
 }
@@ -1419,6 +1427,7 @@ export function pageStyles() {
     .footer__links a { display: inline-flex; align-items: center; min-height: 44px; }
     .footer__tag { color: var(--cream); margin: .5rem 0; }
     .footer__legal { color: var(--cream-faint-text); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
+    ${COMP_LOGO_CSS}
 
     /* glossary (UNIT 1) + standards (UNIT 2, now the /about/ page): evergreen static surfaces */
     .glossary { padding: 1.5rem 0 1rem; }

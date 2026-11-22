@@ -6,7 +6,10 @@
      above all). The sanitiser (schema.mjs) already drops such items with a log line, so this is a
      backstop that should never fire: it tests the path with the same regexes pick.mjs uses, never
      the query or fragment;
-   - an <img> appears inside the Wire or tables content (no publisher thumbnails, logos or crests);
+   - an <img> appears inside the Wire or tables content (no publisher thumbnails, logos or crests).
+     One licensed exception (founder ruling, 21 Nov 2026): the Premier League logo from
+     scripts/shared/logos.mjs, as the first child of a table title (h3.tblock__title), is allowed;
+     the same image anywhere else in these regions, the Wire above all, still fails;
    - the wire CSS region in page-shell.mjs, or in src/style.css once the homepage carries the Wire
      block (2026-10-28), gains an animation, marquee or headline clamp.
    The homepage block is checked like a sport strip when it is there; with no current edition it
@@ -55,6 +58,9 @@ export function wireCssProblems(text, label, required = true) {
     .filter((bad) => css.includes(bad)).map((bad) => `${label} wire CSS region contains "${bad}"`);
 }
 
+// A table title opening with the licensed Premier League logo (plLogo() in scripts/shared/logos.mjs).
+const LICENSED_TITLE_LOGO = /(<h3 class="tblock__title"[^>]*>)<img class="comp-logo" src="\/logos\/premier-league\/[A-Za-z0-9_.-]+\.png"[^>]*\/?>/g;
+
 function checkPage(label, file, regions) {
   if (!existsSync(file)) { errors.push(`${label}: missing ${file}`); return 0; }
   const html = readFileSync(file, "utf8");
@@ -69,7 +75,8 @@ function checkPage(label, file, regions) {
     const j = end ? html.indexOf(end, i) : -1;
     const stop = j < 0 ? html.indexOf("</main>", i) : j;
     const region = html.slice(i, stop < 0 ? undefined : stop);
-    if (/<img\b/i.test(region)) errors.push(`${label}: <img> inside Wire or tables content`);
+    const rest = region.replace(LICENSED_TITLE_LOGO, "$1");
+    if (/<img\b/i.test(rest)) errors.push(`${label}: <img> inside Wire or tables content`);
     if (/<marquee\b/i.test(region)) errors.push(`${label}: <marquee> inside Wire or tables content`);
   }
   return links;

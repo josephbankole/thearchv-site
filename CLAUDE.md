@@ -251,6 +251,8 @@ posters at the bottom of the page, the rest can live in sub pages."
   match is live (or due within two minutes before / fifteen after kickoff) and the tab is visible.
   Its status wording mirrors `scripts/shared/scores-client.js` (the inline client on /scores/):
   change one, change the other. Text only, no crests. The track carries `overflow-y: hidden` (trap 3).
+  The 21 Nov 2026 logo ruling (below) does not reach the strip: it prints no competition label, so
+  it carries no logo.
 - **Where each removed section went.** Football Leagues, Transfer Desk and International Football
   bands: `/desk/leagues/`, `/desk/transfer/`, `/desk/world-cup/` (lane indexes; all three are in
   the masthead menu). The Legends: `/legends/`. Long reads: `/reads/`. Quick answers (FAQ): the six
@@ -573,6 +575,38 @@ Design of record: `docs/wire-design-2026-09-26/design-final.md`. Code: `scripts/
   read by name, never printed, never `VITE_`, never CI. Jolpica stays off until admin@jolpi.ca
   grants commercial use in writing.
 - Tests: `npm run test:wire` (node:test, fixtures only, no network), which runs inside `build`.
+
+## Third-party logos: the Premier League logo (founder ruling, 21 Nov 2026)
+
+His words: "downloaded, we are ok to use them" (the official set from https://logo.premierleague.com,
+`PL_Digital_Positive.zip`). This supersedes "no competition logos" for the Premier League logo only.
+
+- **One switch.** `THIRD_PARTY_LOGOS` in `scripts/shared/logos.mjs` turns every third-party logo on
+  the site off; flip it, rebuild, deploy. The Premier League's terms ask for removal within 12 hours
+  of a request, so that is the drill. The homepage bundle shows no logo, so nothing is mirrored in
+  `src/`; if one is ever added there, mirror the constant and extend the check.
+- **One file, untouched.** `public/logos/premier-league/PL_LOGO_COMPACT_DARK_RGB.png`, the purple
+  (positive) compact mark, byte for byte as downloaded (sha256 in `scripts/data/logos.json`, the
+  registry with owner, source, terms and the removal duty). Terms: purple on light grounds, white on
+  dark (the site is light only, so only purple ships), resize only, never recolour, redraw, crop or
+  animate. CSS sets `height: 24px; width: auto` (`COMP_LOGO_CSS`); markup only through `plLogo()`.
+- **Where it shows, and only there.** Beside an existing "Premier League" label: the Premier League
+  group heading on `/scores/` (client-side, keyed on the feed's `competition.key`, path handed over in
+  `#scores[data-pl-logo]`) and the "Premier League table" title on `/tables/` (keyed on the block's
+  `league`). Never in navigation, mastheads, section identity, the Wire, posters, storefront tiles,
+  og or share cards, app feeds, or near the poster strip. `check-wire-links.mjs` allows that one
+  `<img>` as the first child of `h3.tblock__title` and nowhere else in Wire or tables content.
+- **The notice.** "© Copyright The Football Association Premier League Limited, 2016." and the
+  trade-mark sentence are in `LEGAL_LINE` (page-shell, used by `footer()`, `build-content.mjs`,
+  `build-day-pages.mjs`) and in the hand copy in `index.html`. The notice rides on the switch except
+  in `index.html`, which is static.
+- **The gate.** `scripts/check-logos.mjs` (end of `npm run build`) fails if anything under
+  `/logos/` is referenced from posters, the shop, `dist/feed/`, RSS, sitemaps, og or twitter meta, or
+  any page at all while the switch is off. `scripts/test/logos.test.mjs` (in `test:home`) covers the
+  helper and the table renderer both ways.
+- **Still off:** club crests and every other league until a later pass (Wikimedia Commons files only,
+  with file page, author and licence recorded); Formula 1, NBA and WNBA logos (their pages require a
+  written licence; names in text only). Nothing goes to the app until the founder is asked again.
 
 ## The live scores page, /scores/ (2026-10-13; match panels 2026-10-19)
 

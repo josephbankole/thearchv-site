@@ -62,3 +62,22 @@ test("a Commons reference needs its licence, author and source page, and no NC o
   assert.equal(provenanceProblems({ entries: [commonsRow("a", "A.jpg", { ...LIC, name: "CC BY-NC-SA 4.0" })] }, { players: [] }).length, 1);
   assert.equal(provenanceProblems({ entries: [commonsRow("a", "A.jpg", { ...LIC, name: "CC BY-ND 2.0" })] }, { players: [] }).length, 1);
 });
+
+test("a photo row is a Commons file with its licence, credit and files, never NC or ND (21 Nov 2026)", async () => {
+  const { photoRowProblems } = await import("../check-portrait-provenance.mjs");
+  const row = {
+    slug: "x", name: "X", src: "/heads/hd/x.webp", alt: "Illustrated ARCHV portrait of X", kind: "photo",
+    credit: "Photograph: A / Wikimedia Commons / CC BY-SA 4.0",
+    licence: { name: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0", author: "A", source: "https://commons.wikimedia.org/wiki/File:X_(1).jpg", checked: "2026-11-21" },
+    photo: { src: "/photos/x.webp", square: "/photos/sq/x.webp", alt: "X, photographed 2026", original: "https://upload.wikimedia.org/wikipedia/commons/a/ab/X_%281%29.jpg" },
+  };
+  const run = (r, exists) => photoRowProblems({ players: [r] }, exists);
+  assert.deepEqual(run(row), []);
+  assert.equal(run({ ...row, licence: { ...row.licence, name: "CC BY-NC-SA 4.0" }, credit: "Photograph: A / Wikimedia Commons / CC BY-NC-SA 4.0" }).length, 1);
+  assert.equal(run({ ...row, licence: { ...row.licence, source: "https://www.manutd.com/x" } }).length, 2);
+  assert.equal(run({ ...row, photo: { ...row.photo, original: "https://example.com/X.jpg" } }).length, 1);
+  assert.equal(run({ ...row, credit: "Photo: A" }).length, 1);
+  assert.equal(run({ ...row, photo: { ...row.photo, alt: "Illustrated ARCHV portrait of X" } }).length, 1);
+  assert.equal(run(row, () => false).length, 2, "missing files fail");
+  assert.equal(run({ ...row, kind: "illustration" }).length, 1, "photo fields on an illustration row fail");
+});

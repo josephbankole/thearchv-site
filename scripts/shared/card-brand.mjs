@@ -108,8 +108,15 @@ export async function renderCard(tree, { width, height, fonts = CARD_FONTS }) {
     not. Returns null when there is nothing to draw: no path, or the file is not on disk. Note
     that the resize takes no `background`: under `fit: "cover"` there is never any padding to
     fill, so the option two of these callers passed was doing nothing (verified byte-identical). */
+/** True for a file on the photo shelf (public/photos/), in any spelling of the path. */
+export const isPhotoPath = (p) => /(^|[\\/])photos[\\/]/.test(String(p));
+
 export async function artPng(path, { size = 600, flatten = true } = {}) {
   if (!path || !existsSync(path)) return null;
+  // Every share card (article, read, explainer, glossary, duel) paints its art through here, and a
+  // share card is redistributed off the site with no credit on it. A Commons photograph never
+  // goes on one (founder ruling, 21 Nov 2026): throw, so the bug is loud rather than shipped.
+  if (isPhotoPath(path)) throw new Error(`[card-brand] refusing a photograph on a share card: ${path}`);
   const pipeline = sharp(path).resize(size, size, { fit: "cover" });
   return (flatten ? pipeline.flatten({ background: { r: 255, g: 255, b: 255 } }) : pipeline)
     .png()

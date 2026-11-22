@@ -151,7 +151,33 @@ const creditItem = (c) => {
   const licence = c.url ? `<a href="${escAttr(c.url)}" rel="license noopener">${label}</a>` : label;
   return `<li>${esc(c.player)}: photo by ${esc(c.author)}, ${licence}, <a href="${escAttr(c.source)}">source on Wikimedia Commons</a></li>`;
 };
-const creditsHtml = credits.length
+/* ---------- photo credits (founder ruling, 21 Nov 2026) ----------
+   Every Commons photograph the site shows, read from the kind "photo" rows of illustrated.json
+   (check-portrait-provenance.mjs makes sure each records its licence, author and file page). The
+   64px card circles are too small for a credit of their own, so this list is their credit, and
+   the footer's legal line links here. A CC BY-SA photo is cropped, and the crop is an adaptation
+   shared under the same licence, which the list says. */
+const photoRows = readData("illustrated.json").players
+  .filter((p) => p.kind === "photo" && p.photo && p.licence)
+  .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+const photoItem = (p) => {
+  const l = p.licence;
+  const licence = l.url ? `<a href="${escAttr(l.url)}" rel="license noopener">${esc(l.name)}</a>` : esc(l.name);
+  const sa = p.photo.shareAlike ? "; cropped, and the crop is shared under the same licence" : "; cropped";
+  return `<li>${esc(p.name)}: photograph by ${esc(l.author)}, ${licence}, <a href="${escAttr(l.source)}">file on Wikimedia Commons</a>${sa}</li>`;
+};
+const photoCreditsHtml = photoRows.length
+  ? `<h3 id="photo-credits">Photo credits</h3>
+        <p>Where a free-licence photograph of a player, coach or driver is published on Wikimedia Commons and is recent enough to show them as they are now, we use it, with credit. Where there is none, the page keeps our illustration. Each photograph is cropped to head and shoulders and otherwise unaltered. Photographs never appear on posters, in the shop or on the cards a page shares to other sites. The photographer, licence and file of each one are listed here.</p>
+        <details class="log-older credits" open>
+          <summary>Photographers and licences (${photoRows.length})</summary>
+          <ul>
+${photoRows.map((p) => `            ${photoItem(p)}`).join("\n")}
+          </ul>
+        </details>`
+  : "";
+
+const creditsHtml = (credits.length
   ? `<h3 id="portrait-credits">Portrait credits</h3>
         <p>Some of our portraits are made from a reference photograph published on Wikimedia Commons under an open licence. The photographer and the licence of each one are listed here.</p>
         <details class="log-older credits">
@@ -160,7 +186,7 @@ const creditsHtml = credits.length
 ${credits.map((c) => `            ${creditItem(c)}`).join("\n")}
           </ul>
         </details>`
-  : "";
+  : "") + (photoCreditsHtml ? `\n\n        ${photoCreditsHtml}` : "");
 
 /* ---------- Joseph Bankole: the derived lists ---------- */
 const recentBlock = recent.length
@@ -271,7 +297,7 @@ const html = `${documentShell({
       <h1>About The ARCHV</h1>
 
       <p class="lead">The ARCHV is a football publication that checks what it prints and draws
-      what it publishes. It files daily on the transfer market and international football, and regularly on the league season, in plain English, with original illustration in place of photography.
+      what it publishes. It files daily on the transfer market and international football, and regularly on the league season, in plain English. Faces are our own illustration, or a credited free-licence photograph where a current one exists.
       Entries stay up, dated, in the order they were filed, which is what makes the site an
       archive.</p>
 
@@ -329,8 +355,8 @@ const html = `${documentShell({
       <section class="about__section">
         <h2 id="standards">Editorial standards</h2>
 
-        <h3>The artwork is our own</h3>
-        <p>Every player, club and match image on The ARCHV is original illustration, drawn in our own house style. We use no club crests, no kit designs, no federation or competition marks, and no match or agency photographs. The faces are stylised drawings published as editorial commentary, not likenesses passed off as photos. The video row on the front page is the one exception: its stills come from our own YouTube channel and show the people who present it.</p>
+        <h3>The artwork, and the photographs we credit</h3>
+        <p>Club and match images on The ARCHV are original illustration, drawn in our own house style. A player, coach or driver is shown in a free-licence photograph from Wikimedia Commons where a recent one exists, credited to its photographer with its licence, and in our own stylised drawing where it does not. The drawings are editorial commentary, never passed off as photos. We use no club crests, no kit designs and no agency photographs, and no competition marks apart from the Premier League logo, shown under its owner's terms beside the league's name. The video row on the front page is a further exception: its stills come from our own YouTube channel and show the people who present it.</p>
 
         ${creditsHtml}
 

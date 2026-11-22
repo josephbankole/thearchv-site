@@ -44,7 +44,7 @@ const SRC = join(ROOT, "src");
    esbuild bundles one re-export entry to a temp file, it gets imported once, and the temp file
    is removed in a finally. The JSON registry rides along on esbuild's built-in json loader, so
    the typed side reads the same file it reads in a real build. */
-const entrySrc = `export { entryArt, playerInText, clubInText, PLAYERS, CLUBS } from "./render/illustrated.ts";`;
+const entrySrc = `export { entryArt, playerInText, clubInText, playerForImage, photoCreditHtml, PLAYERS, CLUBS } from "./render/illustrated.ts";`;
 // Process-unique, for the same reason scripts/shared/day-data.mjs is: two builds running at
 // once on one laptop would otherwise race a single fixed path, and the loser deletes the
 // winner's bundle between the esbuild write and the import. CI is immune (fresh checkout,
@@ -139,6 +139,20 @@ const ENTRY_FIXTURES = [
     entry: { headline: "Paris Saint Germain in the semi final", dek: "" },
   },
   {
+    // Founder ruling, 21 Nov 2026: a row with a Commons photograph resolves to the photo, with the
+    // illustration riding in `share` for every file that leaves the site.
+    name: "a player with a Commons photograph resolves to the photo, illustration in share",
+    entry: { headline: "Erling Haaland scores again", dek: "" },
+  },
+  {
+    name: "a filed head with the stem of a photographed player's hd head resolves to the photo",
+    entry: { headline: "A quiet week", image: "/heads/haaland.webp", imageAlt: "Illustrated ARCHV portrait of Erling Haaland" },
+  },
+  {
+    name: "a filed head of someone with no photo keeps the filed image",
+    entry: { headline: "A quiet week", image: "/heads/nilson-angulo.webp" },
+  },
+  {
     name: "an empty entry resolves to nothing",
     entry: { headline: "", dek: "" },
   },
@@ -162,10 +176,13 @@ const TEXT_FIXTURES = [
 /* ---------- comparison ---------- */
 // Key order is not part of the contract; a stable serialisation keeps a reordered object literal
 // from reading as a behaviour change.
-const stable = (v) =>
-  v === null || v === undefined
-    ? JSON.stringify(v ?? null)
-    : JSON.stringify(v, Object.keys(v).sort());
+// Recursive, so a nested object (a photo's licence and share) is compared whole: a replacer array
+// would silently drop every nested key that is not also a top-level key.
+const sortDeep = (v) =>
+  Array.isArray(v) ? v.map(sortDeep)
+    : v && typeof v === "object" ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, sortDeep(v[k])]))
+    : v;
+const stable = (v) => JSON.stringify(sortDeep(v ?? null));
 
 const failures = [];
 
@@ -190,8 +207,16 @@ for (const f of TEXT_FIXTURES) {
   compare("clubInText", f.name, f.text, mjs.clubInText(f.text), ts.clubInText(f.text));
   compare("playerInText", f.name, f.text, mjs.playerInText(f.text), ts.playerInText(f.text));
 }
+const escFixture = (v) => String(v).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+for (const f of ENTRY_FIXTURES) {
+  compare("photoCreditHtml", f.name, f.entry, mjs.photoCreditHtml(mjs.entryArt(f.entry), escFixture), ts.photoCreditHtml(ts.entryArt(f.entry), escFixture));
+}
+const IMAGE_FIXTURES = ["/heads/haaland.webp", "/heads/hd/haaland-manchester-city.webp", "/heads/haaland-manchester-city.webp", "/heads/nilson-angulo.webp", "/media/illustrated/head-mahrez.jpg", "/heads/nobody-at-all.webp", ""];
+for (const src of IMAGE_FIXTURES) {
+  compare("playerForImage", "image path", src, mjs.playerForImage(src), ts.playerForImage(src));
+}
 
-const checks = 2 + ENTRY_FIXTURES.length + TEXT_FIXTURES.length * 2;
+const checks = 2 + ENTRY_FIXTURES.length * 2 + TEXT_FIXTURES.length * 2 + IMAGE_FIXTURES.length;
 
 if (failures.length) {
   console.error(

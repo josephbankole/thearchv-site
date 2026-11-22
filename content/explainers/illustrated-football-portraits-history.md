@@ -57,6 +57,8 @@ The job has not changed much since Modena: start from a real photograph, then ma
 - Kit colours stay. Crests, sponsors and makers' marks come out.
 - The finished face is checked by eye against the reference before it goes anywhere.
 
+Since November 2026, where a recent photograph of the player is published on Wikimedia Commons under a free licence, the site shows that photograph instead, credited to its photographer with its licence on the page and on [our About page](/about/#photo-credits). Where there is none, the drawing stays.
+
 The gallery lives in [the Legends Series](/legends/), and the method behind the art is written up in [our field notes](/notes/the-archv-method/).
 
 ## Illustrated football portraits, a dated record

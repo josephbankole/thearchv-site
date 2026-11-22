@@ -124,5 +124,35 @@ export function appArt(entry) {
 export function withAppArt(entry) {
   const { image: _image, imageAlt: _alt, ...rest } = entry;
   const art = appArt(entry);
-  return art ? { ...rest, ...art } : rest;
+  return art ? { ...rest, ...art, ...appPhoto(art.image) } : rest;
+}
+
+/* ---------- the photo fields (founder ruling, 21 Nov 2026; additive, all optional) ----------
+   When the portrait in `image` belongs to a registry row that carries a free-licence Wikimedia
+   Commons photograph, the entry also gets:
+
+     photo            site-relative path of the 4:5 photo (/photos/<slug>.webp); prefix the site
+     photoSquare      site-relative path of the square crop (/photos/sq/<slug>.webp)
+     photoAlt         "<Name>, photographed <year>"
+     photoCredit      the credit line to print beside it, verbatim
+     photoLicence     the licence name (CC BY-SA 4.0, CC0, ...)
+     photoLicenceUrl  the licence deed
+     photoSource      the Commons file page
+
+   All strings, so a strict Codable decoder that does not know them ignores them and one that
+   does reads them as optional Strings. `image` is untouched and stays the illustration: the app
+   draws it in its share poster, which leaves the app, and a photo never goes there. An app that
+   shows `photo` must show `photoCredit` with it. */
+export function appPhoto(image) {
+  const p = PLAYERS.find((r) => r.kind === "photo" && r.photo && r.hd === image);
+  if (!p) return {};
+  return {
+    photo: p.photo.src,
+    photoSquare: p.photo.square,
+    photoAlt: p.photo.alt,
+    photoCredit: p.credit,
+    photoLicence: p.licence.name,
+    photoLicenceUrl: p.licence.url,
+    photoSource: p.licence.source,
+  };
 }

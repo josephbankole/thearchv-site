@@ -5,7 +5,8 @@
    masthead, same CSP-exempt inline-style pattern per thearchv-site/CLAUDE.md "Per-article
    pages"). Not used by the homepage bundle (src/), which stays CSP-clean and router-free. */
 import { createHash } from "node:crypto";
-import { entryArt } from "./illustrated.mjs";
+import { entryArt, photoCreditHtml } from "./illustrated.mjs";
+export { photoCreditHtml };
 import { sentences } from "./sentences.mjs";
 import { thumbImgAttrs } from "./thumbs.mjs";
 import { readFileSync } from "node:fs";
@@ -18,7 +19,7 @@ import { THIRD_PARTY_LOGOS, PL_NOTICE, COMP_LOGO_CSS } from "./logos.mjs";
    trade-mark sentence and the Premier League notice follow the founder's logo ruling of 21 Nov
    2026: the notice goes with every use of the Premier League logo, so it rides on the
    THIRD_PARTY_LOGOS switch in logos.mjs. */
-export const LEGAL_LINE = `The ARCHV is an independent football-history publication. Team and league names and logos are trade marks of their owners, shown for identification in news reporting; The ARCHV is independent and not affiliated with or endorsed by any club, league or governing body. Player illustrations are original stylised artwork, not photographs. ${THIRD_PARTY_LOGOS ? `${PL_NOTICE} ` : ""}© 2026 The ARCHV.`;
+export const LEGAL_LINE = `The ARCHV is an independent football-history publication. Team and league names and logos are trade marks of their owners, shown for identification in news reporting; The ARCHV is independent and not affiliated with or endorsed by any club, league or governing body. Player illustrations are original stylised artwork; player photographs are free-licence files from Wikimedia Commons, credited on the <a href="/about/#photo-credits">photo credits</a> list. ${THIRD_PARTY_LOGOS ? `${PL_NOTICE} ` : ""}© 2026 The ARCHV.`;
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
@@ -83,7 +84,7 @@ export const ORG_NODE = {
   url: `${SITE}/`,
   foundingDate: "2026",
   description:
-    "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and every player and club image is drawn, not photographed.",
+    "An independent illustrated sports publication: a daily football desk, question pages on the NFL, Formula 1, tennis, golf and basketball, and long reads on the systems behind the games. Every desk entry names its sources, and every player image is our own illustration or a credited free-licence photograph.",
   logo: { "@type": "ImageObject", url: `${SITE}/brand/logo-badge@192.png`, width: 192, height: 192 },
   image: `${SITE}/og.jpg`,
   founder: PERSON_REF,
@@ -560,7 +561,10 @@ export function sportIcon(key, { size = 96, modifier = "", script = true, versio
 export function cardArt(entry, { className = "lane-card__avatar", size = 64, loading = "lazy", art = undefined } = {}) {
   const a = art === undefined ? entryArt(entry) : art;
   if (!a) return "";
-  const t = thumbImgAttrs(a.src, size);
+  // A photo draws from its square crop (public/photos/sq/), which has thumbs like the heads do.
+  // Its credit is too small to print in a 64px circle; the About page lists every one, linked
+  // from the footer's legal line (founder ruling, 21 Nov 2026).
+  const t = thumbImgAttrs(a.kind === "photo" ? a.square : a.src, size);
   const set = t.srcset ? ` srcset="${escAttr(t.srcset)}" sizes="${t.sizes}"` : "";
   return `<img class="${className}" src="${escAttr(t.src)}"${set} alt="${escAttr(a.alt)}" loading="${loading}" decoding="async" width="${size}" height="${size}" />`;
 }
@@ -1317,6 +1321,10 @@ export function pageStyles() {
     .article__meta { color: var(--cream-faint-text); font-size: .9rem; margin: 0 0 1.5rem; }
     .article__fig { margin: 1.5rem 0 2rem; }
     .article__fig img { border-radius: 50%; width: 96px; height: 96px; object-fit: cover; border: 1px solid var(--rule); box-shadow: 0 0 0 4px var(--bg); }
+    /* The credit under a Commons photograph (founder ruling, 21 Nov 2026). Muted text token, links
+       underlined so they are not told apart by colour alone. */
+    .article__credit { margin-top: .5rem; font-size: .75rem; line-height: 1.4; color: var(--ink-muted); }
+    .article__credit a { color: var(--ink-muted); text-decoration: underline; text-underline-offset: 2px; }
     .article__body p { margin: 1rem 0; }
     /* In-body links carry an underline, so a link is not told apart by colour alone. */
     .article__body a { text-decoration: underline; text-underline-offset: 3px; }

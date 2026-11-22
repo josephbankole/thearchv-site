@@ -224,6 +224,13 @@ registry on one source: each head-bank entry is identified by both the bank inde
 `../player-headshot-bank.md` and the desk's own committed `imageAlt` for that same file, and
 the 2026-08-05 Alex Scott case is why. Bare mononyms are left out on purpose.
 
+**Photographs are a second kind of row in that registry (founder ruling, 21 Nov 2026).** His words:
+"lets use free-licence one from Wikimedia Commons with credit, if an up to date photo does not
+exist, then we will create an illustration", and never a photo on the shop side. A row with
+`kind: "photo"` keeps its illustration (`src`, `alt`, `hd`) and adds `credit`, `licence {name, url,
+author, source, checked}` and `photo {src, width, height, square, alt, taken, original, crop, ...}`.
+Every other row is `kind: "illustration"` and renders exactly as before. See "Photographs" below.
+
 **Small portraits come from `public/thumbs/` (2026-10-12).** The 64px card circles used to pull the
 600px `heads/hd` rebuilds and the 1024px Legends art. `scripts/build-thumbs.mjs` (in the build
 before `vite build`, or `npm run thumbs`) writes a 128px and a 320px WebP of every file on those
@@ -232,6 +239,46 @@ two shelves to `public/thumbs/<width>/<original path>`, keyed by content hash in
 `scripts/shared/thumbs.mjs`. A head with no thumbs falls back to its original src, so nothing
 breaks; run the script and commit `public/thumbs/` plus the manifest after adding or replacing a
 head. The originals stay for the app feed, share cards and article art.
+
+## Photographs: free-licence Wikimedia Commons, with credit (founder ruling, 21 Nov 2026)
+
+- **Source.** Wikimedia Commons files only, each checked for identity, licence (never NC or ND) and
+  date (2024 or later for anyone active; a legend may be older) in
+  `../photo-sourcing-2026-11-21/manifest-verified.json`. No agency, club or press photos.
+- **Pipeline (not in the build).** Originals are downloaded one at a time to
+  `../photo-sourcing-2026-11-21/originals/` and kept byte for byte, author and licence metadata
+  intact. Never run a metadata or watermark strip on these third-party files. A face box comes from
+  macOS Vision; `scripts/photos/make-photos.mjs` crops (the only alteration besides resizing) to
+  `public/photos/<slug>.webp` (4:5, 960x1200 at most) and `public/photos/sq/<slug>.webp` (square,
+  640 at most), records the crop boxes, and writes the row. `npm run thumbs` makes the 128/320px
+  thumbs (`photos/sq` is a thumb shelf). Commit `public/photos/`, `public/thumbs/`, `thumbs.json`
+  and `illustrated.json` together. Look at a contact sheet of the crops against the manifest's
+  reference thumbs before committing: the face box picks the largest face.
+- **Resolution.** `entryArt()` (both readers, MIRRORED, parity-checked): a player named in the copy,
+  or a filed entry image that is that row's own file or shares its hd stem (`playerForImage()`),
+  resolves to `kind: "photo"` with `src` (4:5), `square`, `alt` ("<Name>, photographed <year>"),
+  `credit`, `licence` and `share` (the illustration, or the desk's filed image). Card circles and
+  the 96px article circle draw `square`.
+- **Credit.** Wherever a photo draws at reading size (the article figure, the front-page lead) a
+  visible line under it: "Photograph: <author> / Wikimedia Commons / <licence>", author linked to
+  the Commons file page, licence to its deed (`photoCreditHtml()`). The 64px card circles carry no
+  credit of their own; `/about/#photo-credits` lists every photo (author, licence, file, and for
+  CC BY-SA that the crop is shared under the same licence), and `LEGAL_LINE` (every static footer)
+  and the `index.html` footer link to it.
+- **The wall.** A file that leaves the site never carries a photo: og and twitter cards, JSON-LD,
+  RSS, sitemaps, posters, the shop, storefront and posters feeds, the sport icons, and the app's
+  `image` field (it goes on the app's share poster). Share cards use `shareArt(art)`, and
+  `artPng()` in `card-brand.mjs` throws on a photo path. `scripts/check-photo-wall.mjs` (end of the
+  build) fails on any of those in `dist/`; `check-portrait-provenance.mjs` fails a photo row that
+  is not a Commons file with licence name, deed, author, source and date checked, carries NC or ND,
+  has a non-house credit, an "illustrated" alt, or a missing file.
+- **App feed (additive, optional strings).** An entry whose `image` is a photographed player's hd
+  head also carries `photo`, `photoSquare`, `photoAlt`, `photoCredit`, `photoLicence`,
+  `photoLicenceUrl`, `photoSource`. `image` is unchanged and stays the illustration. Any app that
+  shows `photo` must show `photoCredit` with it, and never put it on the share poster.
+  `app-contract.test.mjs` checks the fields come as a set and stay on the shelf.
+- **Where there is no photo, the illustration stays.** Do not commission a new illustration for a
+  person who has a photo row, and do not remove an illustration a photo row still points at.
 
 ## The front page after the 2026-10-13 trim
 
@@ -970,7 +1017,8 @@ a replacement that has been audited against a confirmed photograph of that playe
 and approved by the founder on that audit, which always archives its predecessor to
 `_superseded/` first; carve-out founder-approved 2026-08-05, and the same day's
 Alex Scott case shows why the audit comes first: the candidate failed it); no club
-crests, kits, photos or FIFA marks anywhere.
+crests, kits or FIFA marks anywhere, and no photos other than the credited free-licence Commons
+photographs under "Photographs" above (founder ruling, 21 Nov 2026).
 
 The ARCHV club badges in `public/media/illustrated/` are not an exception to that last line.
 They are our own typographic disc, designed here, and the set is Leeds United, Manchester

@@ -20,7 +20,8 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const PUBLIC = join(ROOT, "public");
 export const THUMB_WIDTHS = [128, 320];
-export const THUMB_SHELVES = ["heads/hd", "legends"];
+// photos/sq: the square crops of the Commons photographs (scripts/photos/make-photos.mjs).
+export const THUMB_SHELVES = ["heads/hd", "legends", "photos/sq"];
 
 /** Site-relative path of the `w`px thumb of a site-relative image path. */
 export const thumbPath = (src, w) => `/thumbs/${w}${src}`;

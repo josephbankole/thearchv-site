@@ -967,7 +967,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of football manager Matthias Jaissle",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'matthias-jaissle' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:FC_RB_Salzburg_gegen_SK_Austria_Klagenfurt_(2023-05-28)_05.jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Timmy96 / Wikimedia Commons / CC0",
+      "licence": {
+        "name": "CC0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "author": "Timmy96",
+        "source": "https://commons.wikimedia.org/wiki/File:Matthias_Jaissle_07112026_(2).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/matthias-jaissle.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/matthias-jaissle.webp",
+        "squareSize": 640,
+        "alt": "Matthias Jaissle, photographed 2026",
+        "taken": "2026-11-07",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Matthias_Jaissle_07112026_%282%29.jpg",
+        "originalSize": [
+          2685,
+          3233
+        ],
+        "crop": [
+          35,
+          0,
+          2393,
+          2991
+        ],
+        "squareCrop": [
+          446,
+          82,
+          1570,
+          1570
+        ],
+        "shareAlike": false
+      }
     },
     {
       "slug": "david-raum",
@@ -979,7 +1014,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of footballer David Raum",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'david-raum' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2658_(cropped2).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:David_Raum_Ecuador_v_Germany_25_June_2026-117.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/david-raum.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/david-raum.webp",
+        "squareSize": 640,
+        "alt": "David Raum, photographed 2026",
+        "taken": "2026-06-25",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/0/02/David_Raum_Ecuador_v_Germany_25_June_2026-117.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          0,
+          16,
+          3333,
+          4166
+        ],
+        "squareCrop": [
+          401,
+          336,
+          2691,
+          2691
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "tim-krul",
@@ -991,7 +1061,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of former Netherlands goalkeeper Tim Krul",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'tim-krul' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Dutch_goalkeepers_(15300666997)_(Krul_crop).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Web Summit / Wikimedia Commons / CC BY 4.0",
+      "licence": {
+        "name": "CC BY 4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0",
+        "author": "Web Summit",
+        "source": "https://commons.wikimedia.org/wiki/File:Tim_Krul.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/tim-krul.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/tim-krul.webp",
+        "squareSize": 640,
+        "alt": "Tim Krul, photographed 2025",
+        "taken": "2025-11-13",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Tim_Krul.jpg",
+        "originalSize": [
+          2028,
+          2179
+        ],
+        "crop": [
+          36,
+          0,
+          1743,
+          2179
+        ],
+        "squareCrop": [
+          202,
+          9,
+          1411,
+          1411
+        ],
+        "shareAlike": false
+      }
     },
     {
       "slug": "gordon-banks",
@@ -1279,7 +1384,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of golfer Sam Burns",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'sam-burns' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/sam-burns.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/sam-burns.webp",
+        "squareSize": 640,
+        "alt": "Sam Burns, photographed 2025",
+        "taken": "2025-09-23",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/1/18/Sam_Burns_Ryder_Cup_2025-227_%28cropped%29.jpg",
+        "originalSize": [
+          2235,
+          2979
+        ],
+        "crop": [
+          0,
+          102,
+          2235,
+          2794
+        ],
+        "squareCrop": [
+          337,
+          316,
+          1798,
+          1798
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "patrick-cantlay",
@@ -1291,7 +1431,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of golfer Patrick Cantlay",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'patrick-cantlay' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/patrick-cantlay.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/patrick-cantlay.webp",
+        "squareSize": 640,
+        "alt": "Patrick Cantlay, photographed 2025",
+        "taken": "2025-09-23",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/1/15/Patrick_Cantlay_Ryder_Cup_2025-146_%28cropped%29.jpg",
+        "originalSize": [
+          2154,
+          2870
+        ],
+        "crop": [
+          0,
+          127,
+          2154,
+          2693
+        ],
+        "squareCrop": [
+          161,
+          319,
+          1617,
+          1617
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "gary-woodland",
@@ -1315,7 +1490,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of golfer Scottie Scheffler",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'scottie-scheffler' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/scottie-scheffler.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/scottie-scheffler.webp",
+        "squareSize": 640,
+        "alt": "Scottie Scheffler, photographed 2025",
+        "taken": "2025-09-23",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg",
+        "originalSize": [
+          2055,
+          2739
+        ],
+        "crop": [
+          0,
+          0,
+          2055,
+          2569
+        ],
+        "squareCrop": [
+          12,
+          154,
+          1962,
+          1962
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "kimi-antonelli",
@@ -1327,7 +1537,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Formula 1 driver Kimi Antonelli",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'kimi-antonelli' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:Kimi_Antonelli_at_the_2025_US_Grand_Prix_in_Austin,_TX_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Yu Chu Chin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Yu Chu Chin",
+        "source": "https://commons.wikimedia.org/wiki/File:Kimi_Antonelli_at_the_Melbourne_Walk_during_the_2026_Australian_Grand_Prix_(028A7930)_cropped.jpg",
+        "checked": "2026-11-21"
+      },
+      "photo": {
+        "src": "/photos/kimi-antonelli.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/kimi-antonelli.webp",
+        "squareSize": 640,
+        "alt": "Kimi Antonelli, photographed 2026",
+        "taken": "2026-03-06",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/2/27/Kimi_Antonelli_at_the_Melbourne_Walk_during_the_2026_Australian_Grand_Prix_%28028A7930%29_cropped.jpg",
+        "originalSize": [
+          3705,
+          3800
+        ],
+        "crop": [
+          665,
+          0,
+          3040,
+          3800
+        ],
+        "squareCrop": [
+          0,
+          95,
+          3705,
+          3705
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "lando-norris",

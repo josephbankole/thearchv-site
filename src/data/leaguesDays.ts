@@ -7,6 +7,19 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-23",
+    day: "Monday",
+    headline: "Liverpool 4-0 Manchester United: Pochettino's first game turned on Leny Yoro's eighth-minute red card",
+    dek: "Liverpool 4-0 Manchester United, Premier League, Anfield, Sunday 22 November: Leny Yoro was sent off in the eighth minute of Mauricio Pochettino's first game, Pochettino called the red unfair, and United are 19th on eight points.",
+    body: "Liverpool beat Manchester United 4-0 at Anfield on Sunday 22 November in Mauricio Pochettino's first game as United head coach. Leny Yoro was sent off in the eighth minute for a last-man foul on Alexander Isak, and Dominik Szoboszlai scored the free-kick that followed (Sky Sports, Nick Wright). Liverpool FC's match report has Ronald Araujo's ball over the top catching United out of shape and Isak reaching it just ahead of Yoro on the edge of the area.\n\nFlorian Wirtz volleyed a second three minutes later. Liverpool were 2-0 up after 12 minutes and 40 seconds, the quickest they have gone two ahead of United in a Premier League match, and Rio Ngumoha and Victor Munoz scored in the second half (Sky Sports). Yoro's red was the earliest shown to a Manchester United player in a Premier League match.\n\nPochettino disputed the decision. \"I feel like that was an action that everyone who plays football can see was clearly not a red card,\" he said, and he told Sky Sports: \"So painful. So disappointed.\" (beIN SPORTS; Sky Sports).\n\nHe is the first manager in Premier League history to see his team concede twice and receive a red card in the first half of his first match in charge (Sky Sports). The 4-0 equals Lal Hilditch's defeat against Bolton Wanderers in October 1926 as the heaviest first-game loss for a United manager (beIN SPORTS).\n\nUnited are 19th on eight points from 11 games, one above bottom side Crystal Palace, their lowest total after 11 league games since 1972-73 counting three points a win (beIN SPORTS). It is the first time since November 1986 that they have been in the bottom two after at least 10 matches (Sky Sports). Liverpool are back in fourth, a point behind Manchester City and seven behind leaders Arsenal.\n\nSources: Sky Sports; beIN SPORTS; Liverpool FC.",
+    status: "verified",
+    publishedAt: "2026-11-23T06:26:06-05:00",
+    index: "noindex",
+    seoTitle: "Liverpool 4-0 Manchester United: Yoro red card, Pochettino",
+    sources: [{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13611979/liverpool-4-0-man-utd-mauricio-pochettino-endures-nightmare-start-as-leny-yoros-early-red-card-sparks-collapse","published":"2026-11-22"},{"outlet":"beIN SPORTS","url":"https://www.beinsports.com/en-us/soccer/premier-league/articles/yoro-sending-off-against-liverpool-completely-unfair-says-pochettino-2026-11-22","published":"2026-11-22"},{"outlet":"Liverpool FC","url":"https://www.liverpoolfc.com/news/match-report-liverpool-4-0-manchester-united-premier-league","published":"2026-11-22"}],
+    tier: "confirmed",
+  },
+  {
     date: "2026-11-20",
     day: "Friday",
     headline: "Liverpool v Manchester United: Liverpool are fourth, and have not beaten United at Anfield since the 7-0",

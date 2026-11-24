@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr, ORG_REF, ORG_NODE, LEGAL_LINE } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, SHOP_URL, scriptHash, extractScriptBody, cspMeta, documentShell, ROBOTS_INDEXABLE, clampTitle, answerTitle, clampDescription, longDate, esc, escAttr, ORG_REF, ORG_NODE, LEGAL_LINE } from "./shared/page-shell.mjs";
 // The frontmatter parser and the content/ walk moved to shared/content-pages.mjs on 2026-08-09,
 // so scripts/build-section-pages.mjs enumerates each section's children from the same parse that
 // builds the pages. Behaviour here is unchanged: same filter, same order, same objects.
@@ -304,7 +304,7 @@ function render(p, allPages) {
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="${APP_STORE_URL}">Download the app</a>
-        <a class="masthead__panel-link" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a class="masthead__panel-link" href="${SHOP_URL}" data-shop="masthead">Shop</a>
       </nav>
       </div>
     </div>
@@ -328,7 +328,7 @@ function render(p, allPages) {
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
         <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
-        <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a href="${SHOP_URL}" data-shop="footer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>

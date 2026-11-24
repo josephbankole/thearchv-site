@@ -10,7 +10,7 @@ import { join } from "node:path";
 import { ROOT, readGlb, tokens, RAMPS, TOKEN_NAMES } from "../icons/lib.mjs";
 import { SPORT_ICON_ALT, SPORT_GLYPHS, sportGlyph, ICON_ONLY } from "../icons/markup.mjs";
 import { GLB_CAP, SVG_CAP, SPORT_ICON_KEYS, generate } from "../build-sport-icons.mjs";
-import { SPORTS, sportIcon, sportNav } from "../shared/page-shell.mjs";
+import { SPORTS, sportIcon, sportNav, shopTab, SHOP_URL } from "../shared/page-shell.mjs";
 
 const DIR = join(ROOT, "public", "sport-icons");
 const KEYS = SPORTS.map((s) => s.key);
@@ -138,6 +138,23 @@ test("index.html is in step: the same six glyphs in the tab bar, the football mo
   assert.equal(html.match(/data-sport-icon=/g).length, 1, "one live icon on the homepage");
   const track = html.match(/<ul class="scores-strip__track"[\s\S]*?<\/ul>/)[0];
   assert.ok(!/data-sport-icon/.test(track), "never inside the scrolling track");
+});
+
+test("the Shop tab ends the row in both copies, is never current and carries no transform", () => {
+  const tab = shopTab();
+  assert.ok(tab.includes(`href="${SHOP_URL}"`) && !/aria-current|target=/.test(tab));
+  for (const key of [...SPORTS.map((s) => s.key), "nope"]) {
+    for (const home of [false, true]) {
+      const row = sportNav(key, { home }).match(/<div class="sportnav__row">([\s\S]*?)<\/div>/)[1].trim();
+      assert.ok(row.endsWith(tab), `${key}: the Shop tab is not last`);
+    }
+  }
+  const html = readFileSync(join(ROOT, "index.html"), "utf8").replace(/<!--[\s\S]*?-->/g, "");
+  const row = html.match(/<div class="sportnav__row">([\s\S]*?)<\/div>/)[1].trim();
+  assert.ok(row.endsWith(tab), "index.html's Shop tab is out of step with shopTab()");
+  const shell = readFileSync(join(ROOT, "scripts", "shared", "page-shell.mjs"), "utf8");
+  const home = readFileSync(join(ROOT, "src", "style.css"), "utf8");
+  for (const css of [shell, home]) for (const rule of css.match(/\.sportnav__link--shop[^{]*\{[^}]*\}/g)) assert.ok(!/transform|margin|padding|height/.test(rule), rule);
 });
 
 test("the runtime keeps its scroll promises", () => {

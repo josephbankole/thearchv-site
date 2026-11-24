@@ -209,7 +209,7 @@
           <span class="masthead__panel-sep" role="separator"></span>
           <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
           <a class="masthead__panel-link masthead__panel-link--gold" href="https://apps.apple.com/app/id6786508653">Download the app</a>
-          <a class="masthead__panel-link" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="masthead">Shop</a>
+          <a class="masthead__panel-link" href="https://shop.thearchv.ca" data-shop="masthead">Shop</a>
         </nav>
         </div>
       </div>
@@ -219,7 +219,9 @@
     <!-- Sport tab row (multi-sport, 2026-07-22). Markup, hrefs and aria-current are unchanged
          from the navy build: these routes are the section keys the feeds and the app resolve
          against, so nothing here may be renamed. Only the styling moved to the white ground.
-         The active-tab scroll-into-view is bundled (src/ui/sportTabs.ts), never inline. -->
+         The active-tab scroll-into-view is bundled (src/ui/sportTabs.ts), never inline.
+         The last tab is Shop (2026-11-24), a pasted copy of shopTab() in page-shell.mjs, held in
+         step by scripts/test/sport-icon.test.mjs. -->
     <div class="sportnav-wrap sportnav-wrap--home">
       <nav class="sportnav" aria-label="Sports">
         <div class="sportnav__row">
@@ -229,6 +231,7 @@
           <a class="sportnav__link" href="/tennis/"><svg class="sportnav__glyph" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.25" fill="#D3E03C"/><path d="M5.3 5.6Q10.9 12 5.3 18.4M18.7 5.6Q13.1 12 18.7 18.4"/></svg>Tennis</a>
           <a class="sportnav__link" href="/golf/"><svg class="sportnav__glyph" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="9.4" r="6.9"/><path d="M9.2 18.6h5.6M12 18.6v3.2"/><path stroke-width="1.9" d="M9.6 7.4h0M13 6.4h0M15.4 9h0M11.6 10h0M8.6 11h0M13.8 12.4h0M10.6 13.2h0"/></svg>Golf</a>
           <a class="sportnav__link" href="/basketball/"><svg class="sportnav__glyph" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.25"/><path d="M12 2.75v18.5M2.75 12h18.5M5.4 5.5Q9.3 12 5.4 18.5M18.6 5.5Q14.7 12 18.6 18.5"/></svg>Basketball</a>
+          <a class="sportnav__link sportnav__link--shop" href="https://shop.thearchv.ca" data-shop="tab"><svg class="sportnav__glyph" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.2 8h13.6l-1.1 12.1a1 1 0 0 1-1 .9H7.3a1 1 0 0 1-1-.9z"/><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"/></svg>Shop</a>
         </div>
       </nav>
     </div>
@@ -336,7 +339,7 @@
         <nav class="footer__cta" aria-label="Follow the archive" data-stagger>
           <a class="btn btn--gold" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer" data-follow>Follow on Instagram</a>
           <a class="btn btn--ghost" href="https://apps.apple.com/app/id6786508653">Download the app</a>
-          <a class="btn btn--ghost" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="footer">Shop on Etsy</a>
+          <a class="btn btn--ghost" href="https://shop.thearchv.ca" data-shop="footer">Shop</a>
           <a class="btn btn--ghost" href="/about/#contact">Partner with us</a>
         </nav>
         <!-- One links row since 2026-10-20 (founder, "fewer sections"): the trust row folded into

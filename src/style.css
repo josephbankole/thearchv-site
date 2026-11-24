@@ -393,6 +393,10 @@ main, .footer { position: relative; z-index: 2; }
 @media (max-width: 640px) { .sportnav__link:not([aria-current]) .sportnav__glyph { display: none; } }
 .sportnav__link:hover { color: var(--ink); }
 .sportnav__link[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+/* The Shop tab (2026-11-24), last in the row: gold text, never current, so it reads as the way out
+   to the store and not as a sport. Mirrors .sportnav__link--shop in pageStyles(). */
+.sportnav__link--shop { color: var(--gold); }
+.sportnav__link--shop:hover { color: var(--ink); }
 .sportnav__link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 @media (prefers-reduced-motion: reduce) { .sportnav__link { transition: none; } }
 

@@ -27,6 +27,12 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 // LIVE 2026-07-16. Country-neutral URL: Apple geo-redirects each visitor to their
 // own storefront (app is live in CA/US/GB and beyond). See FLIP-DAY.md for history.
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
+// The shop (2026-11-24): our own Shopify store, fulfilled by Printful. Every GENERAL Shop link
+// (masthead panel, the Shop tab at the end of the sport tab row, footers) points here, as a plain
+// same-window link because it is our own domain. Per-listing poster links stay on Etsy
+// (thearchvca.etsy.com/listing/<id>) until the posters are on Shopify; the app feed's shopUrl
+// (scripts/build-feed.mjs) also stays on Etsy for now, see the note there.
+export const SHOP_URL = "https://shop.thearchv.ca";
 
 // The ARCHV Dispatch is PAUSED (founder, D-2026-10-06a). On 12 Oct 2026 the founder approved
 // taking every Dispatch ask off the site: the masthead "Subscribe to the Dispatch" slot, the
@@ -499,11 +505,22 @@ export function lanesForSport(sportKey) {
 // variant styled in pageStyles() below. No inline script here — the active-tab scroll-into-view
 // lives in a bundled module (src/ui/sportTabs.ts) for the homepage; the static pages rely on
 // Football sitting leftmost, which is the regression-critical case.
+// The Shop tab (2026-11-24, founder: "add the shop link as a tab"). Always last in the row, never
+// aria-current (it leaves the site), gold text so it does not read as a sport. A 16px stroke
+// shopping bag in the same drawing style as sportGlyph(); like the sport glyphs it hides on a
+// phone (the :not([aria-current]) rule), so the row grows by the word only. index.html carries a
+// pasted copy, held in step by scripts/test/sport-icon.test.mjs. No transform, nothing taller
+// than the other tabs: the row scrolls sideways (trap 3).
+export const SHOP_GLYPH = '<svg class="sportnav__glyph" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.2 8h13.6l-1.1 12.1a1 1 0 0 1-1 .9H7.3a1 1 0 0 1-1-.9z"/><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"/></svg>';
+export function shopTab() {
+  return `<a class="sportnav__link sportnav__link--shop" href="${SHOP_URL}" data-shop="tab">${SHOP_GLYPH}Shop</a>`;
+}
+
 export function sportNav(currentSportKey = DEFAULT_SPORT, { home = false } = {}) {
-  const links = SPORTS.map((s) => {
+  const links = [...SPORTS.map((s) => {
     const current = s.key === currentSportKey ? ' aria-current="page"' : "";
     return `<a class="sportnav__link" href="${sportRoot(s)}"${current}>${sportGlyph(s.key)}${esc(s.shortLabel)}</a>`;
-  }).join("\n          ");
+  }), shopTab()].join("\n          ");
   const wrapClass = home ? "sportnav-wrap sportnav-wrap--home" : "sportnav-wrap sportnav-wrap--page";
   return `<div class="${wrapClass}">
       <nav class="sportnav" aria-label="Sports">
@@ -643,7 +660,7 @@ export function masthead(currentSportKey = DEFAULT_SPORT) {
         <span class="masthead__panel-sep" role="separator"></span>
         <a class="masthead__panel-link" href="https://instagram.com/thearchvfc" target="_blank" rel="noopener noreferrer">Follow</a>
         <a class="masthead__panel-link masthead__panel-link--gold" href="${APP_STORE_URL}">Download the app</a>
-        <a class="masthead__panel-link" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a class="masthead__panel-link" href="${SHOP_URL}" data-shop="masthead">Shop</a>
       </nav>
       </div>
     </div>
@@ -693,7 +710,7 @@ export function footer() {
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
         <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
-        <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a href="${SHOP_URL}" data-shop="footer">Shop</a>
         <a href="/">Home</a>
         <a href="/duel/">Duels</a>
         <a href="/guess/">Daily Archive</a>
@@ -1244,6 +1261,9 @@ export function pageStyles() {
     .sportnav__glyph { flex: 0 0 auto; width: 16px; height: 16px; }
     .sportnav__link:hover { color: var(--gold); text-decoration: none; }
     .sportnav__link[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
+    /* The Shop tab (shopTab() above): gold text at rest, never an underline, so it reads as the
+       way out to the store and not as a current sport. Mirrored in src/style.css. */
+    .sportnav__link--shop { color: var(--gold); }
     /* On a phone only the current tab shows its glyph, and the gap gives back the 22px that glyph
        costs. Six glyphs made the row 134px wider, which pushed the current tab off the screen on
        /golf/ and /basketball/, and this family has no script to scroll it back into view. With

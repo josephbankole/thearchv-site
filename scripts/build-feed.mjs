@@ -265,6 +265,10 @@ console.log(
    and committed by the daily desk job; this is hand-curated shop merch, a different lifecycle).
    Deliberately NOT folded into the `feeds` loop above so the existing feed files and
    index.json manifest/buildHash stay byte-identical to before this feed existed. */
+// Stays on Etsy for now (2026-11-24). The live iOS app trusts only etsy.com purchase links and hides
+// the shop link otherwise, so shopUrl moves to https://shop.thearchv.ca only after an app build that
+// trusts that host is live. The listing URLs below are built from this too and stay on Etsy until
+// the posters are on Shopify; split the two constants when shopUrl moves.
 const SHOP_URL = "https://thearchvca.etsy.com";
 const storefrontItemsRaw = JSON.parse(
   readFileSync(join(ROOT, "scripts", "storefront-items.json"), "utf8")

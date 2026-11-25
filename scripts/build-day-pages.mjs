@@ -10,7 +10,7 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APP_STORE_URL, cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, ORG_REF, ORG_NODE, LEGAL_LINE } from "./shared/page-shell.mjs";
+import { APP_STORE_URL, SHOP_URL, cspMeta, documentShell, ROBOTS_NOINDEX_FOLLOW, clampTitle, clampDescription, longDate, esc, escAttr, LANE_META, ORG_REF, ORG_NODE, LEGAL_LINE } from "./shared/page-shell.mjs";
 import { loadDayData } from "./shared/day-data.mjs";
 
 // These legacy pages have no inline <script> at all (their masthead is two plain links, no
@@ -144,7 +144,7 @@ function render(entry, sectionKey) {
         <a href="https://x.com/thearchvfc" target="_blank" rel="noopener noreferrer">X</a>
         <a href="https://www.youtube.com/@thearchvca" target="_blank" rel="noopener noreferrer">YouTube</a>
         <a href="${APP_STORE_URL}">App</a>
-        <a href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a href="${SHOP_URL}" data-shop="footer">Shop</a>
         <a href="/">Home</a>
         <a href="/about/">About</a>
       </nav>

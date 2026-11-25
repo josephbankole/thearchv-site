@@ -372,8 +372,9 @@ const html = `${documentShell({
         </ul>
 
         <h3 id="funding">Who pays for it</h3>
-        <p>The only money The ARCHV takes comes from the posters it sells through its Etsy shop and
-        from paid subscriptions to the Dispatch newsletter, which is paused. No club, league or
+        <p>The only money The ARCHV takes comes from what it sells through its shop at
+        shop.thearchv.ca and its Etsy shop, and from paid subscriptions to the Dispatch newsletter,
+        which is paused. No club, league or
         betting company pays for anything here.</p>
       </section>
 
@@ -493,7 +494,7 @@ const html = `${documentShell({
           leave it, with the page address and the page that sent you.</li>
           <li><strong>On the front page.</strong> How far down you scroll (25, 50, 75 and 100
           per cent), which sections come into view, and clicks on links to the App Store, our
-          Etsy shop, Instagram and our long reads. A long read click records the link's
+          shop, our Etsy shop, Instagram and our long reads. A long read click records the link's
           address and its text.</li>
           <li><strong>On story pages.</strong> A tap on the share, post to X or copy link
           buttons, with the story's address.</li>

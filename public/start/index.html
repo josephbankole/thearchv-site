@@ -21,7 +21,7 @@
        alone, the same rule the article pages follow. Neither script changed for that.
        2026-10-12, later: the page script (the second hash) changed. It now dates the TODAY
        kicker when the feed's lead is not today's story, so its hash was recomputed. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-nNAgYaFdw+9sikjcGTxxtKDI7N4EAbhzraJF6hrwZsg=' 'sha256-CI6DbWnrD2E+4Td/RT7b0gJJHKZBhLGNwvBl5o77X6Y=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-nNAgYaFdw+9sikjcGTxxtKDI7N4EAbhzraJF6hrwZsg=' 'sha256-16kKYi+xMkqwlEQg4NRVLvyWcT6ynhwtiEPFw2JLCuM=' https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://us.i.posthog.com https://us-assets.i.posthog.com; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'self'" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="The ARCHV. Start here." />
   <meta property="og:description" content="Sport drawn down to the moment that decided it." />
@@ -312,7 +312,7 @@
       </a>
 
       <nav class="linkrow" aria-label="More from The ARCHV">
-        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer">Etsy shop</a>
+        <a class="quiet" href="https://thearchv.ca/">Archive</a><span class="sep">·</span><a class="quiet" href="https://shop.thearchv.ca">Shop</a>
       </nav>
 
       <div class="strip" aria-label="Manchester United posters">
@@ -385,7 +385,7 @@
       bindCta(document.getElementById('today-card'), 'today_card');
       bindCta(document.getElementById('today-cta'), 'today_cta');
       document.querySelectorAll('.linkrow .quiet').forEach(function (a) {
-        bindCta(a, a.href.indexOf('substack') > -1 ? 'dispatch' : a.href.indexOf('etsy.com') > -1 ? 'store' : 'archive');
+        bindCta(a, a.href.indexOf('substack') > -1 ? 'dispatch' : (a.href.indexOf('etsy.com') > -1 || a.href.indexOf('shop.thearchv.ca') > -1) ? 'store' : 'archive');
       });
 
       // Today's lead, from the same feed the iOS app reads. Point the card and the gold

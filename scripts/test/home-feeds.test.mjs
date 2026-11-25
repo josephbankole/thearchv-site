@@ -1,5 +1,5 @@
-/* home-feeds.test.mjs: the front page's posters and the two feeds published beside them
-   (spec B2.6, 2026-10-28). Reads the BUILT dist, so it runs in `npm run build` straight after
+/* home-feeds.test.mjs: the front page's shop tiles (posters until 2026-11-25) and the feeds published
+   beside them (spec B2.6, 2026-10-28). Reads the BUILT dist, so it runs in `npm run build` straight after
    build-feed.mjs, and on its own (`npm run test:home`) against whatever dist is there. DIST points
    it at another build. */
 import { test } from "node:test";
@@ -16,35 +16,46 @@ const html = () => readFileSync(join(DIST, "index.html"), "utf8");
 // The video block's own reader: the block and its feed are checked against what it loads.
 const { loadVideos, snapshotProblems, SHOW, EMBED_ORIGIN } = await import("../videos/lib.mjs");
 
-// Everything expected below is worked out from poster-tiles.json, so rotating the front-page
-// posters (one edit to `home` there, then a deploy) never needs this file or a fixture touched.
-const { tiles } = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "poster-tiles.json"), "utf8"));
-const STORE = "https://thearchvca.etsy.com";
-const labelOf = (t) => (t.group === "women" ? `${t.label} (Women)` : t.label);
+// Everything expected below is worked out from seasonal-tiles.json, so rotating the front-page
+// tiles (one edit to `home` there, then a deploy) never needs this file touched. Since 2026-11-25
+// the block is the seasonal shop range on shop.thearchv.ca, not the Etsy poster tiles.
+const seasonal = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "seasonal-tiles.json"), "utf8"));
+const SHOP = "https://shop.thearchv.ca";
+const ETSY = "https://thearchvca.etsy.com";
+const productUrl = (t) => `${SHOP}/products/${t.handle}`;
 // The homepage's four, as src/render/home.ts picks them.
-const homeTiles = tiles.filter((t) => typeof t.home === "number").sort((a, b) => a.home - b.home).slice(0, 4);
+const homeTiles = seasonal.tiles.filter((t) => typeof t.home === "number").sort((a, b) => a.home - b.home).slice(0, 4);
 // The feed's, as build-feed.mjs picks them: a tile whose image is missing is skipped with a log line.
-const feedTiles = tiles
+const feedTiles = seasonal.tiles
   .filter((t) => Number.isInteger(t.home))
   .sort((a, b) => a.home - b.home)
   .slice(0, 4)
   .filter((t) => existsSync(join(ROOT, "public", t.image)));
 
-// One covers-grid item, in the markup of the hand-written block the renderer replaced.
+// One grid item, in the markup renderCovers() writes.
 const attr = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const coverLi = (t) =>
-  `<li><a href="${attr(`${STORE}/listing/${t.listing}`)}" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="${attr(t.image)}" alt="${attr(t.alt)}" loading="lazy" width="900" height="675" /><span>${attr(t.label)}</span></a></li>`;
+  `<li><a href="${attr(productUrl(t))}" data-shop="seasonal"><img src="${attr(t.image)}" alt="${attr(t.alt)}" loading="lazy" width="900" height="675" /><span>${attr(t.name)}</span></a></li>`;
 const coversBlock = (items) => items.map((t) => `              ${coverLi(t)}\n`).join("");
 
-test("home-covers.json: the home tiles in home order, Etsy links, thearchv.ca images, real alts", () => {
+// The fourteen Etsy listings deactivated on 2026-11-25. No built page and no feed may link one.
+const DEAD_LISTINGS = [
+  "4527680418", "4527296455", "4594017483", "4517396908", "4517398702", "4517399720", "4521778670",
+  "4521798833", "4521798166", "4521795943", "4521790986", "4521787127", "4527673755", "4517424545",
+];
+
+test("home-covers.json: the seasonal home tiles in home order, shop product links, thearchv.ca images, real alts", () => {
   const feed = readJson("feed/home-covers.json");
   assert.equal(feed.schema, "archv-home-covers/1");
-  assert.equal(feed.shopUrl, STORE);
-  assert.ok(feed.title && feed.lede);
-  assert.deepEqual(feed.items.map((i) => i.id), feedTiles.map((t) => t.listing));
-  assert.deepEqual(feed.items.map((i) => i.label), feedTiles.map(labelOf));
+  // Both app builds label this link "All prints in the Etsy shop", so it stays on Etsy (build-feed.mjs).
+  assert.equal(feed.shopUrl, ETSY);
+  assert.equal(feed.title, seasonal.title);
+  assert.equal(feed.lede, seasonal.lede);
+  assert.equal(feed.items.length, 4);
+  assert.deepEqual(feed.items.map((i) => i.id), feedTiles.map((t) => t.handle));
+  assert.deepEqual(feed.items.map((i) => i.label), feedTiles.map((t) => t.name));
   for (const it of feed.items) {
-    assert.equal(it.url, `${STORE}/listing/${it.id}`);
+    assert.equal(it.url, `${SHOP}/products/${it.id}`);
     assert.match(it.image, /^https:\/\/thearchv\.ca\/shop\/[a-z0-9-]+\.webp$/);
     assert.ok(it.alt.trim().length > 20, `${it.id} alt is too thin`);
     assert.ok(it.label.trim());
@@ -59,6 +70,18 @@ test("home-covers.json agrees with the tiles the homepage renders", () => {
   assert.deepEqual(feed.items.map((i) => i.alt), feedTiles.map((t) => t.alt));
 });
 
+test("storefront.json: our shop as shopUrl, every item a shop.thearchv.ca product with a thearchv.ca image", () => {
+  const feed = readJson("feed/storefront.json");
+  assert.equal(feed.shopUrl, SHOP);
+  assert.ok(feed.items.length > 0);
+  for (const it of feed.items) {
+    assert.equal(it.url, `${SHOP}/products/${it.id}`);
+    assert.match(it.image, /^https:\/\/thearchv\.ca\/shop\/[a-z0-9-]+\.webp$/);
+    assert.ok(existsSync(join(ROOT, "public", new URL(it.image).pathname)), `${it.id} image missing under public/`);
+    assert.match(it.price, /^(From )?CA\$\d+\.\d{2}$/);
+  }
+});
+
 test("team-colours.json is published unchanged as archv-team-colours/1", () => {
   const published = readFileSync(join(DIST, "feed", "team-colours.json"), "utf8");
   const source = readFileSync(join(ROOT, "scripts", "data", "team-colours.json"), "utf8");
@@ -66,26 +89,35 @@ test("team-colours.json is published unchanged as archv-team-colours/1", () => {
   assert.equal(JSON.parse(published).schema, "archv-team-colours/1");
 });
 
-test("the built covers block is the home tiles, in the hand-written block's markup", () => {
+test("the built shop block is the seasonal home tiles, linking to the shop", () => {
   const page = html();
-  const open = page.indexOf('<ul class="archive__covers-grid" aria-label="Manchester United posters" data-stagger>');
+  const open = page.indexOf('<ul class="archive__covers-grid" aria-label="');
   assert.ok(open > 0, "covers grid missing");
   const start = page.indexOf("\n", open) + 1;
   const end = page.indexOf("          </ul>", start);
-  assert.equal(page.slice(start, end), coversBlock(homeTiles.map((t) => ({ ...t, label: labelOf(t) }))));
+  assert.equal(page.slice(start, end), coversBlock(homeTiles));
   assert.ok(!page.includes("<!--archv:covers-->"), "covers marker left unreplaced");
+  const section = page.slice(page.indexOf('<section class="archive" id="archive">'), page.indexOf("</section>", open));
+  assert.ok(section.includes(`<h2 class="archive__title" data-reveal>${attr(seasonal.title)}</h2>`));
+  assert.ok(section.includes(`href="${attr(seasonal.collection.url)}"`), "the range link is missing");
+  assert.ok(!/etsy\.com/.test(section), "the shop block must not link to Etsy");
 });
 
-test("the markup above is byte for byte the hand-written block of 2026-10-28", () => {
-  // The frozen block holds its own data (listing, image, alt and label per item), so this checks
-  // the markup alone and stays true whatever poster-tiles.json says today.
-  const golden = readFileSync(join(HERE, "fixtures", "home-covers-block.html"), "utf8");
-  const unattr = (s) => s.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
-  const items = [...golden.matchAll(/listing\/(\d+)" [^>]*><img src="([^"]*)" alt="([^"]*)"[^>]*\/><span>([^<]*)<\/span>/g)].map(
-    ([, listing, image, alt, label]) => ({ listing, image: unattr(image), alt: unattr(alt), label: unattr(label) }),
-  );
-  assert.equal(items.length, 4);
-  assert.equal(coversBlock(items), golden);
+test("no built page or feed links a deactivated Etsy listing (2026-11-25)", async () => {
+  const { readdirSync, statSync } = await import("node:fs");
+  const hits = [];
+  const walk = (dir) => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) walk(full);
+      else if (/\.(html|json|xml|txt)$/.test(name)) {
+        const text = readFileSync(full, "utf8");
+        for (const id of DEAD_LISTINGS) if (text.includes(`listing/${id}`)) hits.push(`${full.slice(DIST.length)}: ${id}`);
+      }
+    }
+  };
+  walk(DIST);
+  assert.deepEqual(hits, []);
 });
 
 test("the Wire block, when the build has an edition, sits before the Dispatch and is calm", () => {

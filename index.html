@@ -298,29 +298,15 @@
         </div>
       </section>
 
-      <!-- THE ARCHIVE. Four of the twenty-one Manchester United poster tiles; /posters/ holds the
-           rest (scripts/build-posters-page.mjs, from scripts/data/poster-tiles.json). Each tile is
-           one Etsy listing (thearchvca.etsy.com/listing/<id>); the image is the listing photo at
-           900x675 under public/shop/ and the alt is that photo's Etsy alt text. Since 2026-10-28
-           the four come from the tiles carrying a `home` order in poster-tiles.json, through
-           renderCovers() in src/render/home.ts, and the app's Home reads the same four from
-           /feed/home-covers.json: rotate them there, not here. Inclusion rules: the header of
-           src/data/posters.ts (README.md, Commerce). -->
+      <!-- THE SHOP (founder, 25 Nov 2026: the stale archive section came off for the seasonal range,
+           linked to the shop). Four product tiles from https://shop.thearchv.ca, each linking to its
+           product page, with a link to the whole range and one to /posters/. renderCovers() in
+           src/render/home.ts fills the section from scripts/data/seasonal-tiles.json (the tiles
+           carrying a `home` order), and build-feed.mjs publishes the same four, title and lede as
+           /feed/home-covers.json for the app: rotate the season there, not here. The id stays
+           "archive" because older links (/start/, shares) land on /#archive. -->
       <section class="archive" id="archive">
-        <div class="wrap">
-          <p class="section-index">The archive</p>
-          <h2 class="archive__title" data-reveal>From the archive.</h2>
-          <p class="archive__lede" data-reveal>Football history, drawn down to the one moment that decided it.</p>
-        </div>
-        <div class="wrap archive__covers">
-          <ul class="archive__covers-grid" aria-label="Manchester United posters" data-stagger>
-              <!--archv:covers-->
-          </ul>
-          <p class="archive__covers-links">
-            <a class="archive__covers-all" href="/posters/">See all the posters</a>
-            <a class="archive__covers-all" href="https://thearchvca.etsy.com" target="_blank" rel="noopener noreferrer" data-shop="covers">All prints in the Etsy shop</a>
-          </p>
-        </div>
+        <!--archv:covers-->
       </section>
     </main>
 

@@ -1,16 +1,93 @@
 [
   {
-    "id": "quote-good-enough-old-enough",
-    "name": "Good Enough, Old Enough Kids' Room Poster",
-    "price": "From CA$24.00",
-    "image": "quote-good-enough-old-enough.webp",
-    "url": "https://thearchvca.etsy.com/listing/4517424545"
+    "id": "naughty-list-christmas-sweatshirt",
+    "name": "Naughty List Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "naughty-list-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/naughty-list-christmas-sweatshirt"
   },
   {
-    "id": "quote-only-the-best",
-    "name": "Only the Best Would Be Good Enough Poster",
-    "price": "From CA$24.00",
-    "image": "quote-only-the-best.webp",
-    "url": "https://thearchvca.etsy.com/listing/4594017483"
+    "id": "relegation-zone-christmas-sweatshirt",
+    "name": "Relegation Zone Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "relegation-zone-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/relegation-zone-christmas-sweatshirt"
+  },
+  {
+    "id": "40-points-christmas-sweatshirt",
+    "name": "40 Points Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "40-points-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/40-points-christmas-sweatshirt"
+  },
+  {
+    "id": "mid-table-christmas-sweatshirt",
+    "name": "Mid-Table Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "mid-table-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/mid-table-christmas-sweatshirt"
+  },
+  {
+    "id": "dashing-christmas-sweatshirt",
+    "name": "Dashing Through the Snow Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "dashing-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/dashing-christmas-sweatshirt"
+  },
+  {
+    "id": "lousy-jumper-christmas-sweatshirt",
+    "name": "Lousy Jumper Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "lousy-jumper-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/lousy-jumper-christmas-sweatshirt"
+  },
+  {
+    "id": "next-year-christmas-sweatshirt",
+    "name": "Next Year Is Our Year Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "next-year-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/next-year-christmas-sweatshirt"
+  },
+  {
+    "id": "charity-fc-christmas-sweatshirt",
+    "name": "Charity FC Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "charity-fc-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/charity-fc-christmas-sweatshirt"
+  },
+  {
+    "id": "nightmares-christmas-sweatshirt",
+    "name": "Theatre of Nightmares Christmas Sweatshirt for Manchester United Fans",
+    "price": "From CA$99.99",
+    "image": "nightmares-christmas-sweatshirt.webp",
+    "url": "https://shop.thearchv.ca/products/nightmares-christmas-sweatshirt"
+  },
+  {
+    "id": "london-1968-european-final-poster",
+    "name": "London 1968 European Final Poster, Manchester United",
+    "price": "CA$49.99",
+    "image": "london-1968-european-final-poster.webp",
+    "url": "https://shop.thearchv.ca/products/london-1968-european-final-poster"
+  },
+  {
+    "id": "london-1996-cup-final-poster",
+    "name": "London 1996 Cup Final Poster, Manchester United",
+    "price": "CA$49.99",
+    "image": "london-1996-cup-final-poster.webp",
+    "url": "https://shop.thearchv.ca/products/london-1996-cup-final-poster"
+  },
+  {
+    "id": "barcelona-1999-european-final-poster",
+    "name": "Barcelona 1999 European Final Poster, Manchester United",
+    "price": "CA$49.99",
+    "image": "barcelona-1999-european-final-poster.webp",
+    "url": "https://shop.thearchv.ca/products/barcelona-1999-european-final-poster"
+  },
+  {
+    "id": "moscow-2008-european-final-poster",
+    "name": "Moscow 2008 European Final Poster, Manchester United",
+    "price": "CA$49.99",
+    "image": "moscow-2008-european-final-poster.webp",
+    "url": "https://shop.thearchv.ca/products/moscow-2008-european-final-poster"
   }
 ]

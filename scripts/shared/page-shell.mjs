@@ -29,9 +29,9 @@ export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";
 export const APP_STORE_URL = "https://apps.apple.com/app/id6786508653";
 // The shop (2026-11-24): our own Shopify store, fulfilled by Printful. Every GENERAL Shop link
 // (masthead panel, the Shop tab at the end of the sport tab row, footers) points here, as a plain
-// same-window link because it is our own domain. Per-listing poster links stay on Etsy
-// (thearchvca.etsy.com/listing/<id>) until the posters are on Shopify; the app feed's shopUrl
-// (scripts/build-feed.mjs) also stays on Etsy for now, see the note there.
+// same-window link because it is our own domain. Since 2026-11-25 the front page's shop tiles, the
+// four final posters on /posters/ and the app storefront link product pages here too; only the
+// Manchester United Women posters still link Etsy listings (see scripts/build-feed.mjs for the app).
 export const SHOP_URL = "https://shop.thearchv.ca";
 
 // The ARCHV Dispatch is PAUSED (founder, D-2026-10-06a). On 12 Oct 2026 the founder approved

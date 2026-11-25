@@ -4,14 +4,17 @@
    archive" block: twenty-one framed-poster photos in two grids. The founder cut the front page down
    to the scores strip, the day's story, the Desk Brief and "a few posters at the bottom", so the
    front page keeps four tiles and this page holds all of them, with the same tiles, the same
-   captions and the same Etsy links the front page carried.
+   captions and the same links the front page carried.
 
    DATA. scripts/data/poster-tiles.json (in the repo, so the build reads nothing outside it). Each
-   tile is one Etsy listing: the image is the 900x675 listing photo under public/shop/, the alt is
-   that photo's Etsy alt text, and `listing` is the listing id for the Share & Save link
-   https://thearchvca.etsy.com/listing/<id> (D-2026-10-04b). Keep in step with src/data/posters.ts,
-   whose header holds the inclusion rules (README.md, Commerce), and with the four tiles in
-   index.html. No quote posters are tiled: the art rule in CLAUDE.md ("The quote posters") holds.
+   tile is one poster still on sale and links to its own `url`: since 25 Nov 2026 the four final
+   posters with the skyline art link to their product pages on https://shop.thearchv.ca, with the
+   shop's photo at 900x675 under public/shop/. The fourteen Etsy listings deactivated that day are
+   off the page, and so are the five Manchester United Women posters, whose Etsy listings were
+   already unavailable. A tile may still link one live Etsy listing's Share & Save link
+   (https://thearchvca.etsy.com/listing/<id>, D-2026-10-04b). Keep in step with
+   src/data/posters.ts, whose header holds the inclusion rules (README.md, Commerce). No quote
+   posters are tiled: the art rule in CLAUDE.md ("The quote posters") holds.
 
    NO INLINE SCRIPT BEYOND THE SHARED PAIR. The tiles are plain links; the front page's analytics
    hooks (etsy_click, shop_click) live in the bundled homepage script, which this page does not
@@ -28,27 +31,36 @@ import {
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
 const URL = `${SITE}/posters/`;
-const STORE = "https://thearchvca.etsy.com";
+const ETSY = "https://thearchvca.etsy.com";
+const SHOP_POSTERS = "https://shop.thearchv.ca/collections/final-posters";
 
 const TITLE = "Manchester United posters · The ARCHV";
 const DESCRIPTION =
-  "Every Manchester United and Manchester United Women poster in The ARCHV shop, one match to a poster, from the 1968 European Cup final to the 5-4 win over Lyon.";
+  "Manchester United final posters from The ARCHV, one match to a poster, from the 1968 European Cup final at Wembley to the 2008 Champions League final in Moscow.";
 const LEDE =
-  "Manchester United and Manchester United Women, one match to a poster, printed to order and shipped by our print partner.";
+  "Manchester United finals, one match to a poster, printed to order and shipped by our print partner.";
 
 const { tiles } = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "poster-tiles.json"), "utf8"));
 const men = tiles.filter((t) => t.group === "men");
-const women = tiles.filter((t) => t.group === "women");
-if (men.length !== 11 || women.length !== 10) {
-  throw new Error(`[build-posters-page] expected 11 men's and 10 women's tiles, found ${men.length} and ${women.length}`);
+if (!men.length || men.length !== tiles.length) {
+  throw new Error(`[build-posters-page] expected only men's tiles, found ${men.length} of ${tiles.length}`);
 }
+// A tile links to a product page on our shop or to one Etsy listing, nothing else.
+const LINK = /^https:\/\/(shop\.thearchv\.ca\/products\/[a-z0-9-]+|thearchvca\.etsy\.com\/listing\/\d{8,12})$/;
 for (const t of tiles) {
-  if (!/^\d{8,12}$/.test(t.listing)) throw new Error(`[build-posters-page] bad listing id on ${t.label}: ${t.listing}`);
+  if (!LINK.test(t.url ?? "")) throw new Error(`[build-posters-page] bad link on ${t.label}: ${t.url}`);
   if (!t.image.startsWith("/shop/") || !t.alt || !t.label) throw new Error(`[build-posters-page] incomplete tile: ${JSON.stringify(t)}`);
 }
+// The heading's year range is the tiles' own, so it cannot drift from the grid.
+const span = (list) => {
+  const ys = list.map((t) => Number(t.label.match(/(\d{4})$/)?.[1])).filter(Boolean);
+  return `${Math.min(...ys)} to ${Math.max(...ys)}`;
+};
+// Our own shop opens in the same window, as every Shop link does; Etsy stays a new tab.
+const target = (url) => (url.startsWith("https://shop.thearchv.ca/") ? "" : ' target="_blank" rel="noopener noreferrer"');
 
 const tile = (t) =>
-  `<li><a href="${escAttr(`${STORE}/listing/${t.listing}`)}" target="_blank" rel="noopener noreferrer"><img src="${escAttr(t.image)}" alt="${escAttr(t.alt)}" loading="lazy" width="900" height="675" /><span>${esc(t.label)}</span></a></li>`;
+  `<li><a href="${escAttr(t.url)}"${target(t.url)}><img src="${escAttr(t.image)}" alt="${escAttr(t.alt)}" loading="lazy" width="900" height="675" /><span>${esc(t.label)}</span></a></li>`;
 
 const grid = (id, heading, list) => `      <h2 id="${id}">${esc(heading)}</h2>
       <ul class="posters__grid" aria-labelledby="${id}">
@@ -65,7 +77,8 @@ const styles = `<style>
     .posters__grid a:hover { color: var(--accent-ink); text-decoration: none; }
     .posters__grid a:hover img { transform: translateY(-3px); border-color: var(--accent-ink); }
     .posters__grid a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
-    .posters__shop { display: inline-block; margin-top: 1.4rem; color: var(--ink); font-size: .98rem; border-bottom: 1px solid var(--rule); padding-bottom: .15rem; }
+    .posters__links { display: flex; flex-wrap: wrap; gap: .6rem 1.75rem; margin: 1.4rem 0 0; }
+    .posters__shop { display: inline-block; color: var(--ink); font-size: .98rem; border-bottom: 1px solid var(--rule); padding-bottom: .15rem; }
     .posters__shop:hover { color: var(--accent-ink); border-bottom-color: var(--accent-ink); text-decoration: none; }
     @media (max-width: 560px) { .posters__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (prefers-reduced-motion: reduce) { .posters__grid img { transition: none; } .posters__grid a:hover img { transform: none; } }
@@ -114,9 +127,9 @@ const html = `${documentShell({
       <p class="breadcrumb"><a href="/">The ARCHV</a> / Posters</p>
       <h1>Posters</h1>
       <p class="lede">${esc(LEDE)}</p>
-${grid("covers-men", "Manchester United, 1968 to 2025", men)}
-${grid("covers-women", "Manchester United Women, 2018 to 2025", women)}
-      <a class="posters__shop" href="${STORE}" target="_blank" rel="noopener noreferrer">All prints in the Etsy shop</a>
+${grid("covers-men", `Manchester United, ${span(men)}`, men)}
+      <p class="posters__links"><a class="posters__shop" href="${SHOP_POSTERS}">The final posters in our shop</a>
+      <a class="posters__shop" href="${ETSY}" target="_blank" rel="noopener noreferrer">All prints in the Etsy shop</a></p>
     </section>
   </main>
   ${footer()}
@@ -126,4 +139,4 @@ ${grid("covers-women", "Manchester United Women, 2018 to 2025", women)}
 
 mkdirSync(join(OUT, "posters"), { recursive: true });
 writeFileSync(join(OUT, "posters", "index.html"), html);
-console.log(`[build-posters-page] wrote /posters/ (${men.length} men's + ${women.length} women's tiles) to ${OUT}`);
+console.log(`[build-posters-page] wrote /posters/ (${men.length} tiles) to ${OUT}`);

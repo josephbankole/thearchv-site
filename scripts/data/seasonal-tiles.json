@@ -1,0 +1,70 @@
+{
+  "_note": "The seasonal shop tiles on the front page (founder, 25 Nov 2026: the stale archive section came off for the seasonal range, linked to the shop) and, through build-feed.mjs, the app's /feed/home-covers.json. One tile per product on https://shop.thearchv.ca: `handle` is the Shopify handle (the link is https://shop.thearchv.ca/products/<handle>), `name` is the product title copied verbatim from the shop, `image` is the shop's first product photo at 900x675 WebP under public/shop/ (the square photo centred on its own white ground, metadata stripped), `alt` describes that photo. `home` (1 to 4) picks the front page's four and their order; the app gets the same four. Rotating the season is an edit here plus a deploy: read https://shop.thearchv.ca/products.json for handles and titles, and never link a product the shop does not list.",
+  "kicker": "The shop",
+  "title": "Christmas 2026.",
+  "lede": "Christmas sweatshirts for Manchester United fans who have sat through a lot, printed to order by our print partner.",
+  "collection": {
+    "label": "See the Christmas range",
+    "url": "https://shop.thearchv.ca/collections/christmas-2026"
+  },
+  "tiles": [
+    {
+      "handle": "naughty-list-christmas-sweatshirt",
+      "name": "Naughty List Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/naughty-list-christmas-sweatshirt.webp",
+      "alt": "Green knit-look Christmas sweatshirt: ON THE NAUGHTY LIST, a tally of league titles, managers and leaking roofs, and SINCE 2013.",
+      "home": 1
+    },
+    {
+      "handle": "relegation-zone-christmas-sweatshirt",
+      "name": "Relegation Zone Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/relegation-zone-christmas-sweatshirt.webp",
+      "alt": "Navy knit-look Christmas sweatshirt: ROCKIN' AROUND THE RELEGATION ZONE over the bottom five of a league table.",
+      "home": 2
+    },
+    {
+      "handle": "40-points-christmas-sweatshirt",
+      "name": "40 Points Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/40-points-christmas-sweatshirt.webp",
+      "alt": "Red knit-look Christmas sweatshirt: ALL I WANT FOR CHRISTMAS IS 40 POINTS, above a band of Christmas trees.",
+      "home": 3
+    },
+    {
+      "handle": "mid-table-christmas-sweatshirt",
+      "name": "Mid-Table Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/mid-table-christmas-sweatshirt.webp",
+      "alt": "Oatmeal knit-look Christmas sweatshirt: HAVE YOURSELF A MID-TABLE LITTLE CHRISTMAS (PLEASE) around three rows of a league table.",
+      "home": 4
+    },
+    {
+      "handle": "dashing-christmas-sweatshirt",
+      "name": "Dashing Through the Snow Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/dashing-christmas-sweatshirt.webp",
+      "alt": "Navy knit-look Christmas sweatshirt: DASHING THROUGH THE SNOW, STRAIGHT PAST OUR MIDFIELD, with a reindeer weaving through candy canes."
+    },
+    {
+      "handle": "lousy-jumper-christmas-sweatshirt",
+      "name": "Lousy Jumper Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/lousy-jumper-christmas-sweatshirt.webp",
+      "alt": "Red knit-look Christmas sweatshirt whose December of watching football ends in LOUSY JUMPER."
+    },
+    {
+      "handle": "next-year-christmas-sweatshirt",
+      "name": "Next Year Is Our Year Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/next-year-christmas-sweatshirt.webp",
+      "alt": "Green knit-look Christmas sweatshirt: IT'S BEGINNING TO LOOK A LOT LIKE NEXT YEAR IS OUR YEAR."
+    },
+    {
+      "handle": "charity-fc-christmas-sweatshirt",
+      "name": "Charity FC Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/charity-fc-christmas-sweatshirt.webp",
+      "alt": "Navy knit-look Christmas sweatshirt: SEASON'S GREETINGS FROM CHARITY FC, GIFTING 3 POINTS EVERY WEEKEND THIS DECEMBER."
+    },
+    {
+      "handle": "nightmares-christmas-sweatshirt",
+      "name": "Theatre of Nightmares Christmas Sweatshirt for Manchester United Fans",
+      "image": "/shop/nightmares-christmas-sweatshirt.webp",
+      "alt": "Navy knit-look Christmas sweatshirt: WELCOME TO THE THEATRE OF NIGHTMARES BEFORE CHRISTMAS, under a small drawing of a stadium."
+    }
+  ]
+}

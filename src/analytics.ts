@@ -148,10 +148,10 @@ function setupArticleLinkTracking(): void {
 }
 
 // Track outbound clicks to the Etsy listings (the poster-funnel KPI), and to the shop behind
-// every Shop link (shop.thearchv.ca since 2026-11-24, store 'shopify'; links still on Etsy, such as
-// the listing tiles, stay 'etsy'). Shop links carry data-shop and count as shop_click. The listing
-// selector matches /listing/ URLs only, so a link to the shop root is never also counted as a
-// listing click. The homepage poster tiles link listings and carry data-shop, so they count as both.
+// every Shop link (shop.thearchv.ca since 2026-11-24, store 'shopify'; links still on Etsy stay
+// 'etsy'). Shop links carry data-shop and count as shop_click. The listing selector matches
+// /listing/ URLs only, so a link to the shop root is never also counted as a listing click. The
+// homepage's seasonal tiles (2026-11-25) link shop.thearchv.ca products and count as shop_click.
 function setupOutboundTracking(): void {
   document.querySelectorAll<HTMLAnchorElement>('a[href*="etsy.com/listing"]').forEach((el) => {
     el.addEventListener('click', () => {

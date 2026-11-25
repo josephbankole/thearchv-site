@@ -4,7 +4,7 @@
 
 ## Key pages
 
-- [Homepage](https://thearchv.ca/): the archive, the desks, the Wire and the Manchester United posters sold on Etsy.
+- [Homepage](https://thearchv.ca/): the archive, the desks and the Wire, and the Christmas range and posters from our shop.
 - [Shop](https://shop.thearchv.ca): The ARCHV's own shop.
 - [Manchester United transfer news](https://thearchv.ca/desk/transfer/): Manchester United moves, each checked against at least one trusted, named source.
 - [International football and the World Cup](https://thearchv.ca/desk/world-cup/): men's and women's international football.
@@ -13,7 +13,7 @@
 - [The Wire](https://thearchv.ca/wire/): one headline a day from each permitted newsroom, linked to the publisher. These stories are written by those newsrooms, not by The ARCHV, and are not covered by the checks below.
 - [Tables and fixtures](https://thearchv.ca/tables/): league tables and fixtures, updated once a day, with the source of each block credited.
 - [Live scores](https://thearchv.ca/scores/): the Premier League, the Champions League and the Women's Super League.
-- [Posters](https://thearchv.ca/posters/): every Manchester United and Manchester United Women poster in the shop, one match to a poster.
+- [Posters](https://thearchv.ca/posters/): the Manchester United final posters in our shop, one match to a poster.
 - [Start here](https://thearchv.ca/start/): a short introduction to what The ARCHV is and how to follow it.
 - [Football, explained](https://thearchv.ca/explainers/): the rules, the terms and the records, without the jargon. One question per page, answered in the first paragraph. The glossary sits inside it.
 - [Glossary](https://thearchv.ca/glossary/): part of Football, explained. Plain, verified definitions of common football terms (xG, the false 9, the offside rule, VAR).

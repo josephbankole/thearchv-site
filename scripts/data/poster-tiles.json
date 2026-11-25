@@ -1,13 +1,13 @@
 {
-  "_note": "The twenty-one Manchester United poster tiles shown on /posters/ (moved off the front page on 2026-10-13). One tile per Etsy listing; image is the listing photo at 900x675 under public/shop/ and alt is that photo's Etsy alt text. Keep in step with src/data/posters.ts (inclusion rules in its header). `home` (1 to 4) picks the four front-page tiles and their order: the homepage renders them from here (renderCovers in src/render/home.ts) and build-feed.mjs publishes the same four as /feed/home-covers.json for the app, so rotating the front-page posters is one edit here plus a deploy. A home tile must be a 900x675 webp; the build fails otherwise. `art` (gap4-5, 2026-11-15) records what the printed artwork itself carries, read off the file under public/posters/: every club name, every player name on a shirt or the goal timeline, and the quoted headline line (null when the poster has none). It is a record for the founder's ruling on the match posters, which is still open (CLAUDE.md, The quote posters and the app storefront), not a clearance: `ruling` stays \"pending\" until he decides. Nothing renders it.",
+  "_note": "The Manchester United poster tiles shown on /posters/ (scripts/build-posters-page.mjs). One tile per poster still on sale. `url` is where the tile links: the four final posters redrawn with the skyline art (25 Nov 2026) are sold on https://shop.thearchv.ca and link to their product pages there, with the shop's own product photo at 900x675 under public/shop/ Nothing else is on sale: the five Manchester United Women Etsy listings were already unavailable on Etsy on 25 Nov 2026 (checked in a browser), so their tiles went too. `listing` is the Etsy listing id the tile was first made from. Fourteen Etsy listings were deactivated on 25 Nov 2026 and their tiles removed with the women's five; never add a tile whose link is not live. Keep in step with src/data/posters.ts (the app's poster feed). The front page no longer reads this file: its tiles are the seasonal shop range in scripts/data/seasonal-tiles.json. `art` (gap4-5, 2026-11-15) records what the printed artwork itself carries, read off the file under public/posters/: every club name, every player name on a shirt or the goal timeline, and the quoted headline line (null when the poster has none). It is a record for the founder's ruling on the match posters, which is still open (CLAUDE.md, The quote posters and the app storefront), not a clearance: `ruling` stays \"pending\" until he decides. Nothing renders it.",
   "tiles": [
     {
       "group": "men",
       "listing": "4521788550",
-      "home": 1,
-      "image": "/shop/united-london-1968.webp",
+      "url": "https://shop.thearchv.ca/products/london-1968-european-final-poster",
+      "image": "/shop/london-1968-european-final-poster.webp",
       "label": "London 1968",
-      "alt": "Framed poster of Manchester United 4-1 Benfica, the 1968 European Cup final at Wembley, hanging on a wall.",
+      "alt": "LONDON 68 poster, 18x24 inches: Wembley drawn above the London skyline, a goal timeline and the 4-1 score against Benfica.",
       "art": {
         "file": "/posters/united-men/united-london-1968.webp",
         "clubNames": [
@@ -15,65 +15,22 @@
           "BENFICA"
         ],
         "playerNames": [
-          "BEST",
-          "KIDD",
           "CHARLTON",
-          "GRAÇA"
+          "GRAÇA",
+          "BEST",
+          "KIDD"
         ],
-        "quoteLine": "THE PROUDEST MAN IN ENGLAND.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "men",
-      "listing": "4521790986",
-      "image": "/shop/united-rotterdam-1991.webp",
-      "label": "Rotterdam 1991",
-      "alt": "Framed poster of Manchester United 2-1 Barcelona, the 1991 Cup Winners' Cup final in Rotterdam, hanging on a wall.",
-      "art": {
-        "file": "/posters/united-men/united-rotterdam-1991.webp",
-        "clubNames": [
-          "UNITED",
-          "BARCELONA"
-        ],
-        "playerNames": [
-          "BRUCE",
-          "HUGHES",
-          "ROBSON",
-          "KOEMAN"
-        ],
-        "quoteLine": "THE BEST BUZZ OF MY FOOTBALL CAREER.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "men",
-      "listing": "4521795943",
-      "image": "/shop/united-manchester-1993.webp",
-      "label": "Manchester 1993",
-      "alt": "Framed poster of Manchester United 2-1 Sheffield Wednesday at Old Trafford, April 1993, hanging on a wall.",
-      "art": {
-        "file": "/posters/united-men/united-manchester-1993.webp",
-        "clubNames": [
-          "UNITED",
-          "SHEFFIELD WEDNESDAY"
-        ],
-        "playerNames": [
-          "IRWIN",
-          "BRUCE",
-          "PALLISTER",
-          "SHERIDAN"
-        ],
-        "quoteLine": "THERE SHOULD, IN FACT, HAVE BEEN AN ADDITIONAL 12 MINUTES.",
+        "quoteLine": null,
         "ruling": "pending"
       }
     },
     {
       "group": "men",
       "listing": "4521795838",
-      "image": "/shop/united-london-1996.webp",
+      "url": "https://shop.thearchv.ca/products/london-1996-cup-final-poster",
+      "image": "/shop/london-1996-cup-final-poster.webp",
       "label": "London 1996",
-      "alt": "Framed poster of Manchester United 1-0 Liverpool, the 1996 FA Cup final at Wembley, hanging on a wall.",
+      "alt": "LONDON 96 poster, 18x24 inches: Wembley drawn above the London skyline, a goal timeline and the 1-0 score against Liverpool.",
       "art": {
         "file": "/posters/united-men/united-london-1996.webp",
         "clubNames": [
@@ -81,41 +38,19 @@
           "LIVERPOOL"
         ],
         "playerNames": [
-          "CANTONA",
-          "GIGGS"
+          "CANTONA"
         ],
-        "quoteLine": "YOU CAN'T WIN ANYTHING WITH KIDS.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "men",
-      "listing": "4521798833",
-      "image": "/shop/united-birmingham-1999.webp",
-      "label": "Birmingham 1999",
-      "alt": "Framed poster of Manchester United 2-1 Arsenal, the 1999 FA Cup semi-final replay at Villa Park, hanging on a wall.",
-      "art": {
-        "file": "/posters/united-men/united-birmingham-1999.webp",
-        "clubNames": [
-          "UNITED",
-          "ARSENAL"
-        ],
-        "playerNames": [
-          "GIGGS",
-          "SHERINGHAM",
-          "BERGKAMP"
-        ],
-        "quoteLine": "HE'S CUT ARSENAL TO RIBBONS",
+        "quoteLine": null,
         "ruling": "pending"
       }
     },
     {
       "group": "men",
       "listing": "4521782964",
-      "home": 2,
-      "image": "/shop/united-barcelona-1999.webp",
+      "url": "https://shop.thearchv.ca/products/barcelona-1999-european-final-poster",
+      "image": "/shop/barcelona-1999-european-final-poster.webp",
       "label": "Barcelona 1999",
-      "alt": "Framed poster of Manchester United 2-1 Bayern Munich, the 1999 Champions League final in Barcelona, hanging on a wall.",
+      "alt": "BARCELONA 99 poster, 18x24 inches: the stadium drawn above the Barcelona skyline, a goal timeline and the 2-1 score against Bayern Munich.",
       "art": {
         "file": "/posters/united-men/united-barcelona-1999.webp",
         "clubNames": [
@@ -123,21 +58,21 @@
           "BAYERN MUNICH"
         ],
         "playerNames": [
+          "BASLER",
           "SHERINGHAM",
-          "SOLSKJAER",
-          "BASLER"
+          "SOLSKJAER"
         ],
-        "quoteLine": "AND SOLSKJAER HAS WON IT!",
+        "quoteLine": null,
         "ruling": "pending"
       }
     },
     {
       "group": "men",
       "listing": "4521779161",
-      "home": 3,
-      "image": "/shop/united-moscow-2008.webp",
+      "url": "https://shop.thearchv.ca/products/moscow-2008-european-final-poster",
+      "image": "/shop/moscow-2008-european-final-poster.webp",
       "label": "Moscow 2008",
-      "alt": "Framed poster of Manchester United 1-1 Chelsea, the 2008 Champions League final in Moscow won on penalties, hanging on a wall.",
+      "alt": "MOSCOW 08 poster, 18x24 inches: the stadium drawn above the Moscow skyline, a goal timeline and the 1-1 score against Chelsea, won 6-5 on penalties.",
       "art": {
         "file": "/posters/united-men/united-moscow-2008.webp",
         "clubNames": [
@@ -146,317 +81,9 @@
         ],
         "playerNames": [
           "RONALDO",
-          "FERDINAND",
-          "GIGGS",
           "LAMPARD"
         ],
-        "quoteLine": "IT'S THE HAPPIEST DAY OF MY LIFE.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "men",
-      "listing": "4527296455",
-      "image": "/shop/united-manchester-2011.webp",
-      "label": "Manchester 2011",
-      "alt": "Framed poster of Manchester United 2-1 Manchester City, the February 2011 derby at Old Trafford, hanging on a wall.",
-      "art": {
-        "file": "/posters/united-men/united-manchester-2011.webp",
-        "clubNames": [
-          "UNITED",
-          "MANCHESTER CITY"
-        ],
-        "playerNames": [
-          "NANI",
-          "ROONEY",
-          "SILVA"
-        ],
-        "quoteLine": "IT DEFIES DESCRIPTION.",
-        "otherNames": [
-          "GOAL OF THE 20 SEASONS"
-        ],
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "men",
-      "listing": "4521787127",
-      "image": "/shop/united-stockholm-2017.webp",
-      "label": "Stockholm 2017",
-      "alt": "Framed poster of Manchester United 2-0 Ajax, the 2017 Europa League final in Stockholm, hanging on a wall.",
-      "art": {
-        "file": "/posters/united-men/united-stockholm-2017.webp",
-        "clubNames": [
-          "UNITED",
-          "AJAX"
-        ],
-        "playerNames": [
-          "POGBA",
-          "VALENCIA",
-          "MKHITARYAN"
-        ],
-        "quoteLine": "POETS DON'T WIN MANY TITLES.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "men",
-      "listing": "4521778670",
-      "image": "/shop/united-merseyside-2023.webp",
-      "label": "Merseyside 2023",
-      "alt": "Framed poster of Manchester United's 3-0 win at Everton, Goodison Park, November 2023, hanging on a wall.",
-      "art": {
-        "file": "/posters/united-men/united-merseyside-2023.webp",
-        "clubNames": [
-          "EVERTON",
-          "UNITED"
-        ],
-        "playerNames": [
-          "RASHFORD",
-          "GARNACHO",
-          "MARTIAL"
-        ],
-        "quoteLine": "SPECIAL BEYOND SPECIAL.",
-        "otherNames": [
-          "PUSKÁS AWARD WINNER"
-        ],
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "men",
-      "listing": "4521798166",
-      "image": "/shop/united-manchester-2025-lyon.webp",
-      "label": "Manchester 2025",
-      "alt": "Framed poster of Manchester United 5-4 Lyon, the 2025 Europa League quarter-final at Old Trafford, hanging on a wall.",
-      "art": {
-        "file": "/posters/united-men/united-manchester-2025-lyon.webp",
-        "clubNames": [
-          "UNITED",
-          "LYON"
-        ],
-        "playerNames": [
-          "FERNANDES",
-          "MAGUIRE",
-          "MAINOO",
-          "UGARTE",
-          "DALOT"
-        ],
-        "quoteLine": "I JUST WANT TO KEEP THAT SOUND. IT'S THE BEST SOUND IN THE WORLD.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539752764",
-      "image": "/shop/united-women-birkenhead-2018.webp",
-      "label": "Birkenhead 2018",
-      "alt": "Framed poster on a wall: Manchester United Women's 1-0 win over Liverpool in Birkenhead, 2018, three players seen from behind in navy and gold.",
-      "art": {
-        "file": "/posters/united-women/united-women-birkenhead-2018.webp",
-        "clubNames": [
-          "LIVERPOOL",
-          "UNITED WOMEN"
-        ],
-        "playerNames": [
-          "GREENWOOD",
-          "ARNOT",
-          "SIGSWORTH"
-        ],
-        "quoteLine": "ANOTHER UNITED HISTORY MAKER",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539751302",
-      "image": "/shop/united-women-sutton-coldfield-2018.webp",
-      "label": "Sutton Coldfield 2018",
-      "alt": "Framed poster on a wall: Manchester United Women's 12-0 win at Aston Villa, Sutton Coldfield 2018, three players seen from behind in pink shirts.",
-      "art": {
-        "file": "/posters/united-women/united-women-sutton-coldfield-2018.webp",
-        "clubNames": [
-          "ASTON VILLA",
-          "UNITED WOMEN"
-        ],
-        "playerNames": [
-          "SIGSWORTH",
-          "ZELEM",
-          "GREEN",
-          "TOONE"
-        ],
-        "quoteLine": "WE'VE GONE YOUNG, WE'VE GONE EXCITING, WE'VE GONE ENTERTAINING.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539732851",
-      "image": "/shop/united-women-leigh-2019.webp",
-      "label": "Leigh 2019",
-      "alt": "Framed poster on a wall: Manchester United Women's 5-0 promotion win over Aston Villa, Leigh 2019, three players seen from behind in red and black.",
-      "art": {
-        "file": "/posters/united-women/united-women-leigh-2019.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "ASTON VILLA"
-        ],
-        "playerNames": [
-          "M. TURNER",
-          "GREENWOOD",
-          "TOONE",
-          "SIGSWORTH",
-          "DEVLIN"
-        ],
         "quoteLine": null,
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539731211",
-      "image": "/shop/united-women-manchester-2019.webp",
-      "label": "Manchester 2019",
-      "alt": "Framed poster on a wall: Manchester United Women v Manchester City, the first WSL Manchester derby, 2019, three players seen from behind in red and black.",
-      "art": {
-        "file": "/posters/united-women/united-women-manchester-2019.webp",
-        "clubNames": [
-          "MANCHESTER CITY",
-          "UNITED WOMEN"
-        ],
-        "playerNames": [
-          "GROENEN",
-          "ZELEM",
-          "ROSS",
-          "WEIR"
-        ],
-        "quoteLine": null,
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539743978",
-      "image": "/shop/united-women-manchester-2022.webp",
-      "label": "Manchester 2022",
-      "alt": "Framed poster on a wall: Manchester United Women's 3-1 win over Everton at Old Trafford, 2022, two players seen from behind.",
-      "art": {
-        "file": "/posters/united-women/united-women-manchester-2022.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "EVERTON"
-        ],
-        "playerNames": [
-          "RUSSO",
-          "ZELEM",
-          "EMSLIE"
-        ],
-        "quoteLine": "I'M PROUD OF THEM FOR TURNING UP.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4517396908",
-      "image": "/shop/united-women-london-2023.webp",
-      "label": "London 2023",
-      "alt": "Framed poster on a wall: Manchester United Women v Chelsea, the 2023 Women's FA Cup final at Wembley, two players seen from behind.",
-      "art": {
-        "file": "/posters/united-women/united-women-london-2023.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "CHELSEA"
-        ],
-        "playerNames": [
-          "GALTON",
-          "TOONE",
-          "KERR"
-        ],
-        "quoteLine": "WE'RE A TEAM THAT WILL COME AGAIN.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4517398702",
-      "image": "/shop/united-women-leigh-2024.webp",
-      "label": "Leigh 2024",
-      "alt": "Framed poster on a wall: Manchester United Women's 2-1 win over Chelsea in the 2024 Women's FA Cup semi-final, three players seen from behind.",
-      "art": {
-        "file": "/posters/united-women/united-women-leigh-2024.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "CHELSEA"
-        ],
-        "playerNames": [
-          "GARCÍA",
-          "GALTON"
-        ],
-        "quoteLine": "WE NEEDED TO DO SOMETHING DIFFERENT.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4527673755",
-      "home": 4,
-      "image": "/shop/united-women-london-2024.webp",
-      "label": "London 2024",
-      "alt": "Framed poster on a wall: Manchester United Women's 4-0 win over Tottenham Hotspur in the 2024 Women's FA Cup final at Wembley, three players seen from behind.",
-      "art": {
-        "file": "/posters/united-women/united-women-london-2024.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "TOTTENHAM"
-        ],
-        "playerNames": [
-          "TOONE",
-          "GARCÍA"
-        ],
-        "quoteLine": "ICONIC MOMENT, ICONIC PLAYER, ICONIC CLUB.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4517399720",
-      "image": "/shop/united-women-leigh-2025.webp",
-      "label": "Leigh 2025",
-      "alt": "Framed poster on a wall: Manchester United Women's 3-0 win over SK Brann in the 2025 Women's Champions League qualifier at Leigh, three players seen from behind.",
-      "art": {
-        "file": "/posters/united-women/united-women-leigh-2025.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "SK BRANN"
-        ],
-        "playerNames": [
-          "ZIGIOTTI",
-          "TERLAND",
-          "MALARD"
-        ],
-        "quoteLine": "WE MADE HISTORY TODAY.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4527680418",
-      "image": "/shop/united-women-manchester-2025.webp",
-      "label": "Manchester 2025",
-      "alt": "Framed poster on a wall: Manchester United Women's 2-1 win over Paris Saint-Germain at Old Trafford, November 2025, three players seen from behind.",
-      "art": {
-        "file": "/posters/united-women/united-women-manchester-2025.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "PSG"
-        ],
-        "playerNames": [
-          "MALARD",
-          "SANDBERG",
-          "ROLFÖ",
-          "CARMONA"
-        ],
-        "quoteLine": "I'M SO HAPPY FOR THIS WIN.",
         "ruling": "pending"
       }
     }

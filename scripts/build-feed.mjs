@@ -265,11 +265,17 @@ console.log(
    and committed by the daily desk job; this is hand-curated shop merch, a different lifecycle).
    Deliberately NOT folded into the `feeds` loop above so the existing feed files and
    index.json manifest/buildHash stay byte-identical to before this feed existed. */
-// Stays on Etsy for now (2026-11-24). The live iOS app trusts only etsy.com purchase links and hides
-// the shop link otherwise, so shopUrl moves to https://shop.thearchv.ca only after an app build that
-// trusts that host is live. The listing URLs below are built from this too and stay on Etsy until
-// the posters are on Shopify; split the two constants when shopUrl moves.
-const SHOP_URL = "https://thearchvca.etsy.com";
+// The storefront's shopUrl (the app's Buy Here) is our own shop since 2026-11-25, and so is every
+// storefront item. Checked against both app builds that day (Models.swift / AppConfig.swift at
+// v1.6.2 and at v1.6.3): StorefrontFeed decodes shopUrl as a plain URL in both, so any https URL
+// decodes. 1.6.3 trusts etsy.com and shop.thearchv.ca. 1.6.2 trusts etsy.com only: its Buy Here
+// falls back to the built-in Etsy shop link (ArchiveView.shopURL) and its storefront drops every
+// item whose link is off Etsy, so the shelf is simply not drawn there. Nothing crashes either way.
+const STOREFRONT_SHOP_URL = "https://shop.thearchv.ca";
+// home-covers.json keeps the Etsy shop as its shopUrl on purpose: both app builds label that link
+// "All prints in the Etsy shop" (home.covers.shop), so pointing it at shop.thearchv.ca would put
+// the wrong name on it. Move it with the app build that renames the label.
+const ETSY_SHOP_URL = "https://thearchvca.etsy.com";
 const storefrontItemsRaw = JSON.parse(
   readFileSync(join(ROOT, "scripts", "storefront-items.json"), "utf8")
 );
@@ -304,22 +310,22 @@ const storefrontItems = storefrontItemsRaw
 const storefront = {
   schema: SCHEMA,
   lastUpdated,
-  shopUrl: SHOP_URL,
+  shopUrl: STOREFRONT_SHOP_URL,
   items: storefrontItems,
 };
 writeFileSync(join(OUT, "storefront.json"), JSON.stringify(storefront, null, 2));
 console.log(`[build-feed] storefront feed → ${OUT}/storefront.json (${storefrontItems.length} items)`);
 
 /* ---------- home covers feed (archv-home-covers/1, 2026-10-28, standalone file) ----------
-   The four poster tiles the front page shows, for the app's Home. Sourced from the tiles carrying a
-   `home` order in scripts/data/poster-tiles.json, the same field src/render/home.ts renders the
-   homepage's four from, so the site and the app rotate together from one edit and a deploy, with
-   no app build. Outside the `feeds` loop, like storefront, so index.json and its buildHash do not
-   move. Storefront items carry a price and a different lifecycle, so they are not mixed in here.
-   `url` is the plain listing form the homepage links to (the homepage block is held byte for byte
-   to its pre-2026-10-28 markup). width and height are read from each webp's own header: a home tile
-   that is not 900x675 fails the build, and one whose image is missing under public/ is skipped
-   with a log line. */
+   The four tiles the front page shows, for the app's Home. Since 2026-11-25 they are the seasonal
+   shop products in scripts/data/seasonal-tiles.json (the tiles carrying a `home` order), the same
+   field src/render/home.ts renders the homepage's four from, so the site and the app rotate
+   together from one edit and a deploy, with no app build; the feed's title and lede are that
+   file's too. Outside the `feeds` loop, like storefront, so index.json and its buildHash do not
+   move. `url` is the product page on https://shop.thearchv.ca. 1.6.3 opens it; 1.6.2 trusts Etsy
+   links only, so its trust filter drops all four and Home draws no covers section at all (no crash,
+   no empty shelf). width and height are read from each webp's own header: a home tile that is not
+   900x675 fails the build, and one whose image is missing under public/ is skipped with a log line. */
 const HOME_COVERS_SCHEMA = "archv-home-covers/1";
 const HOME_COVERS_MAX = 4;
 const HOME_COVER_SIZE = { width: 900, height: 675 };
@@ -341,36 +347,36 @@ function webpSize(buf) {
   return null;
 }
 
-const { tiles: posterTiles } = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "poster-tiles.json"), "utf8"));
+const seasonal = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "seasonal-tiles.json"), "utf8"));
 const homeCoverItems = [];
-for (const t of posterTiles.filter((t) => Number.isInteger(t.home)).sort((a, b) => a.home - b.home).slice(0, HOME_COVERS_MAX)) {
+for (const t of seasonal.tiles.filter((t) => Number.isInteger(t.home)).sort((a, b) => a.home - b.home).slice(0, HOME_COVERS_MAX)) {
   const src = join(ROOT, "public", t.image);
   if (!existsSync(src)) {
-    console.warn(`[build-feed] home cover ${t.listing} (${t.label}): image missing at public${t.image}, skipped`);
+    console.warn(`[build-feed] home cover ${t.handle} (${t.name}): image missing at public${t.image}, skipped`);
     continue;
   }
   const size = webpSize(readFileSync(src));
   if (!size || size.width !== HOME_COVER_SIZE.width || size.height !== HOME_COVER_SIZE.height) {
     throw new Error(
-      `[build-feed] home cover ${t.listing} (${t.label}): ${t.image} is ${size ? `${size.width}x${size.height}` : "not a readable webp"}, expected ${HOME_COVER_SIZE.width}x${HOME_COVER_SIZE.height}`
+      `[build-feed] home cover ${t.handle} (${t.name}): ${t.image} is ${size ? `${size.width}x${size.height}` : "not a readable webp"}, expected ${HOME_COVER_SIZE.width}x${HOME_COVER_SIZE.height}`
     );
   }
   homeCoverItems.push({
-    id: t.listing,
-    label: t.group === "women" ? `${t.label} (Women)` : t.label,
+    id: t.handle,
+    label: t.name,
     alt: t.alt,
     image: `${SITE}${t.image}`,
     width: size.width,
     height: size.height,
-    url: `${SHOP_URL}/listing/${t.listing}`,
+    url: `${STOREFRONT_SHOP_URL}/products/${t.handle}`,
   });
 }
 const homeCovers = {
   schema: HOME_COVERS_SCHEMA,
   lastUpdated,
-  shopUrl: SHOP_URL,
-  title: "From the archive.",
-  lede: "Football history, drawn down to the one moment that decided it.",
+  shopUrl: ETSY_SHOP_URL,
+  title: seasonal.title,
+  lede: seasonal.lede,
   items: homeCoverItems,
 };
 writeFileSync(join(OUT, "home-covers.json"), JSON.stringify(homeCovers, null, 2));

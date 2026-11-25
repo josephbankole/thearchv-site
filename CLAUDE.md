@@ -190,7 +190,7 @@ the three paler text tokens were darkened (the "white system" names in older not
 **The front page is rendered at build time, and the bundle enhances it.**
 `src/render/home.ts` builds the lead, the Dispatch block (three newest long reads) and the Desk Brief into the
 HTML. **The front page was cut back on 2026-10-13 (founder) to five things: the live scores
-strip, the lead (the day's story), the Dispatch block, the Desk Brief and four poster tiles.** (The Wire block joined on 2026-10-28 and the Video block, directly under the scores strip, on 2026-11-21; see the trim section below.) The Dispatch block (the three newest long reads) replaced "Today at the desk" the same day (founder: it repeated the football leagues). Each scores-strip match links to `/scores/?match=<id>`, which opens that match's details.
+strip, the lead (the day's story), the Dispatch block, the Desk Brief and four poster tiles.** (The four poster tiles became four seasonal shop tiles on 2026-11-25, see "The front-page shop section" below. The Wire block joined on 2026-10-28 and the Video block, directly under the scores strip, on 2026-11-21; see the trim section below.) The Dispatch block (the three newest long reads) replaced "Today at the desk" the same day (founder: it repeated the football leagues). Each scores-strip match links to `/scores/?match=<id>`, which opens that match's details.
 The three desk bands, the app block, the legends wall, the long-reads accordion, the FAQ and the
 partnership form are off it; see "The front page after the 2026-10-13 trim" below for where each
 went.
@@ -313,7 +313,7 @@ posters at the bottom of the page, the rest can live in sub pages."
   /about/ now. "Read the finals" and "The ARCHV explains" lists: `/finals/` and `/explainers/`,
   linked from the front-page footer. The poster grids: `/posters/`
   (`scripts/build-posters-page.mjs`, tiles from `scripts/data/poster-tiles.json`, indexable, in
-  the sitemap); the front page keeps four tiles in index.html (keep in step with the JSON).
+  the sitemap); since 2026-11-25 it holds only posters still on sale (the four skyline final posters on shop.thearchv.ca; the five Manchester United Women Etsy listings were found unavailable that day and removed), and the front page no longer reads it.
 - **Old anchors still resolve.** The iOS app's fallback share links point at `thearchv.ca/#transfer-desk`,
   `#world-cup` and `#football-leagues` (`thearchv-app/TheARCHV/Models.swift`, `siteURL`). Those ids
   are gone from the page, so `src/ui/movedAnchors.ts` (run first in `boot()`) `location.replace`s
@@ -360,7 +360,7 @@ posters at the bottom of the page, the rest can live in sub pages."
 
 - **The video block sits directly under the scores strip, above the lead (founder, 2026-11-21).**
   So the front page is now seven blocks: scores strip, Video, lead, The Wire, the Dispatch block,
-  the Desk Brief, four posters. Marker `<!--archv:videos-->`, rendered by `renderHomeVideos()` in
+  the Desk Brief, four seasonal shop tiles (four posters until 2026-11-25). Marker `<!--archv:videos-->`, rendered by `renderHomeVideos()` in
   `scripts/videos/lib.mjs` (the whole `<section>` or nothing): "Watch", three long-form videos,
   and "Shorts", six. Each card is a plain link to YouTube with our own copy of the thumbnail, the
   title and the date; no view counts shown, ever (they lag, and YouTube's policy wants a shown
@@ -1046,10 +1046,31 @@ posters' 600x900 storefront thumbnails, `public/shop/quote-good-enough-old-enoug
 `public/shop/quote-only-the-best.webp` (the Busby thumbnail, committed 12 Oct 2026). No art of a
 held poster is committed, thumbnails and contact sheets included.
 
-`scripts/storefront-items.json` feeds the app's `dist/feed/storefront.json` and lists the two
-posters. The old tee, tote, mug and sticker sheet are out of it: the tote's listing became the poster,
-and the rest of the merch and the finals tees were deactivated on Etsy, never deleted. A quote
-poster goes into the feed only once its listing is live and its art clears the rule below.
+`scripts/storefront-items.json` feeds the app's `dist/feed/storefront.json`. **Since 2026-11-25 it lists
+the shop.thearchv.ca range (the nine Christmas 2026 sweatshirts and the four skyline final posters,
+names and CA$ prices copied from https://shop.thearchv.ca/products.json) and its `shopUrl` is
+https://shop.thearchv.ca.** Both quote-poster listings (4517424545 and the Busby 4594017483) were among
+the fourteen Etsy listings deactivated that day, so they and their thumbnails are gone from the site;
+the history above is the record. A quote poster goes into the feed again only once a listing is live
+and its art clears the rule below.
+
+**The front-page shop section (founder, 25 Nov 2026: "the websites from the archv section should be
+removed as well since its stale, we can instead highlight our seasonal items and link to the shop,
+same with the app").** The old "From the archive." block (four Etsy poster tiles) is now four product
+tiles from shop.thearchv.ca, filled by `renderCovers()` in `src/render/home.ts` from
+`scripts/data/seasonal-tiles.json` (kicker, title, lede, the range link and the tiles carrying a
+`home` order). The section keeps `id="archive"` and the archive classes, so the CSS did not move.
+`build-feed.mjs` publishes the same four, title and lede as `/feed/home-covers.json` for the app.
+Tile images are the shop's first product photo at 900x675 WebP (square photo centred on its own
+white ground), metadata checked empty (exiftool; `clean_file.py` has no WebP branch and corrupts a
+WebP it is given, so never run it on one). App behaviour, read from the app repo on 2026-11-25:
+1.6.3 trusts etsy.com and shop.thearchv.ca purchase links, so it shows the seasonal covers and the
+shop storefront; 1.6.2 trusts etsy.com only, so it drops every shop item and draws no covers section
+and no storefront shelf (no crash), and its Buy Here falls back to the built-in Etsy link.
+`home-covers.json` keeps the Etsy shop as `shopUrl` because both builds label that link "All prints
+in the Etsy shop"; move it with the app build that renames the label.
+`scripts/test/home-feeds.test.mjs` checks the block, both feeds, and that no built page or feed
+links any of the fourteen deactivated listings.
 Storefront and fallback Etsy links use the Share & Save form, `https://thearchvca.etsy.com/listing/<id>`
 (D-2026-10-04b), so a sale that starts from the site or the app earns the fee credit. `index.html` carries
 Pinterest's `p:domain_verify` meta for the thearchv.ca claim; leave it in place or the claim drops.

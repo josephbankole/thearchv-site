@@ -321,7 +321,7 @@ const html = `${documentShell({
         question pages on the NFL, Formula 1, tennis, golf and basketball, the long reads, a glossary,
         and an archive of 18 finals, ten of them World Cup finals from Mexico 1970 to MetLife 2026.</p>
         <p>Everything reads free on the web. The same stories reach the iPhone app, which has no
-        paywall and no in-app purchases. Its Buy Here buttons open the poster shop on Etsy.</p>
+        paywall and no in-app purchases. Its Buy Here buttons open our shop at shop.thearchv.ca, or our Etsy shop on older versions of the app.</p>
       </section>
 
       <section class="about__section">

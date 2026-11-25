@@ -31,7 +31,7 @@ import { entrySources } from '../lib/entryGates';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
 import { entryArt, photoCreditHtml } from './illustrated';
-import posterTiles from '../../scripts/data/poster-tiles.json';
+import seasonal from '../../scripts/data/seasonal-tiles.json';
 
 /* ---------- escaping ---------- */
 // Every interpolated field below comes from src/data/*.ts, committed by the daily desk job
@@ -269,25 +269,30 @@ export function renderReads(): string {
    "Today at the desk" block already states lower down. Marker, markup and `.topbar` CSS went with
    it. */
 
-/* ---------- the posters (2026-10-28) ----------
-   Four Manchester United poster tiles at the foot of the page. Until 2026-10-28 they were written
-   by hand in index.html and only kept in step with scripts/data/poster-tiles.json by a comment; now
-   they come from the tiles carrying a `home` order (1 to 4) in that file, and build-feed.mjs
-   publishes the same four as /feed/home-covers.json for the app, so one edit rotates both.
-   The markup is exactly what index.html carried (scripts/test/home-feeds.test.mjs holds the built
-   block to the pre-change bytes): the attribute escape leaves apostrophes alone, as the hand-written
-   alts did, and a women's tile appends " (Women)" to its label, as "London 2024 (Women)" read.
-   Every tile in poster-tiles.json is a Manchester United poster, so the `aria-label` and
-   `data-shop="united-posters"` around this block in index.html stay literal. */
+/* ---------- the shop section (2026-10-28; seasonal since 2026-11-25) ----------
+   The front page's last section. Until 2026-11-25 it held four Manchester United poster tiles that
+   linked to Etsy listings; the founder took that stale block off ("we can instead highlight our
+   seasonal items and link to the shop") the day the Etsy shop was cut back. It now shows four
+   products from https://shop.thearchv.ca, read from scripts/data/seasonal-tiles.json: the tiles
+   carrying a `home` order (1 to 4), each linking to its product page, plus a link to the whole
+   range and one to /posters/. build-feed.mjs publishes the same four, the title and the lede as
+   /feed/home-covers.json for the app, so one edit to that file rotates both.
+   The grid keeps the archive section's classes and the 900x675 tile size, so nothing in the CSS
+   moved. Shop links open in the same window, as every Shop link on the site does since
+   2026-11-24, and carry data-shop so analytics counts them as shop_click (store 'shopify'). */
 const HOME_COVERS = 4;
-const STORE = 'https://thearchvca.etsy.com';
+export const SHOP_HOST = 'https://shop.thearchv.ca';
 const attr = (s: unknown): string =>
   String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-type PosterTile = { group: string; listing: string; image: string; label: string; alt: string; home?: number };
+type SeasonalTile = { handle: string; name: string; image: string; alt: string; home?: number };
+type Seasonal = { kicker: string; title: string; lede: string; collection: { label: string; url: string }; tiles: SeasonalTile[] };
+const season = seasonal as Seasonal;
 
-export function homeTiles(): PosterTile[] {
-  return (posterTiles.tiles as PosterTile[])
+export const productUrl = (t: SeasonalTile): string => `${SHOP_HOST}/products/${t.handle}`;
+
+export function homeTiles(): SeasonalTile[] {
+  return season.tiles
     .filter((t) => typeof t.home === 'number')
     .sort((a, b) => (a.home as number) - (b.home as number))
     .slice(0, HOME_COVERS);
@@ -296,13 +301,35 @@ export function homeTiles(): PosterTile[] {
 export function renderCovers(): string {
   const tiles = homeTiles();
   if (tiles.length !== HOME_COVERS) {
-    // Same rule as the markers: a front page with three posters is a defect, not a layout.
-    throw new Error(`[home] expected ${HOME_COVERS} poster tiles with a home order, found ${tiles.length}`);
+    // Same rule as the markers: a front page with three tiles is a defect, not a layout.
+    throw new Error(`[home] expected ${HOME_COVERS} seasonal tiles with a home order, found ${tiles.length}`);
   }
-  return tiles
-    .map((t) => {
-      const label = t.group === 'women' ? `${t.label} (Women)` : t.label;
-      return `<li><a href="${attr(`${STORE}/listing/${t.listing}`)}" target="_blank" rel="noopener noreferrer" data-shop="united-posters"><img src="${attr(t.image)}" alt="${attr(t.alt)}" loading="lazy" width="900" height="675" /><span>${attr(label)}</span></a></li>`;
-    })
+  for (const t of tiles) {
+    if (!/^[a-z0-9-]+$/.test(t.handle) || !t.name || !t.alt || !t.image.startsWith('/shop/')) {
+      throw new Error(`[home] incomplete seasonal tile: ${JSON.stringify(t)}`);
+    }
+  }
+  if (!season.collection.url.startsWith(`${SHOP_HOST}/`)) {
+    throw new Error(`[home] the range link must be on ${SHOP_HOST}: ${season.collection.url}`);
+  }
+  const items = tiles
+    .map(
+      (t) =>
+        `<li><a href="${attr(productUrl(t))}" data-shop="seasonal"><img src="${attr(t.image)}" alt="${attr(t.alt)}" loading="lazy" width="900" height="675" /><span>${attr(t.name)}</span></a></li>`,
+    )
     .join('\n              ');
+  return `<div class="wrap">
+          <p class="section-index">${attr(season.kicker)}</p>
+          <h2 class="archive__title" data-reveal>${attr(season.title)}</h2>
+          <p class="archive__lede" data-reveal>${attr(season.lede)}</p>
+        </div>
+        <div class="wrap archive__covers">
+          <ul class="archive__covers-grid" aria-label="${attr(season.title.replace(/\.$/, ''))}" data-stagger>
+              ${items}
+          </ul>
+          <p class="archive__covers-links">
+            <a class="archive__covers-all" href="${attr(season.collection.url)}" data-shop="seasonal-all">${attr(season.collection.label)}</a>
+            <a class="archive__covers-all" href="/posters/">See all the posters</a>
+          </p>
+        </div>`;
 }

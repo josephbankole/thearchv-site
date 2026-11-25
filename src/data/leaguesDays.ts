@@ -7,6 +7,19 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-25",
+    day: "Wednesday",
+    headline: "Pochettino calls Manchester United's situation fragile and the team strong before Sporting in the Champions League",
+    dek: "Mauricio Pochettino said in Lisbon on Tuesday 24 November that Manchester United's situation is fragile but the team is strong, before their Champions League game at Sporting. United are 19th in the Premier League after 11 games.",
+    body: "Mauricio Pochettino said Manchester United's situation is fragile but the team is strong, speaking in Lisbon on Tuesday 24 November before United's Champions League game at Sporting on Wednesday night (dpa).\n\n\"The situation is fragile,\" Pochettino said. \"We are not fragile. We are a strong team, they showed that last season when they finished third and now we are playing in the Champions League.\" He added: \"Sometimes things happen in football for different reasons. We need to identify why and already we are working on it. I think we are going to turn round the situation.\" (dpa, 24 November).\n\nSporting head coach Paulo Fonseca would not accept that there was a fragility to United either, dpa reported.\n\nThe case against is Pochettino's first game. Liverpool beat United 4-0 at Anfield on Sunday 22 November after Leny Yoro was sent off in the eighth minute, and Liverpool were 2-0 up after 12 minutes and 40 seconds (Sky Sports). The 4-0 equals Lal Hilditch's defeat by Bolton Wanderers in October 1926 as the heaviest first-game loss for a United manager (beIN SPORTS).\n\nUnited are 19th on eight points from 11 games, one above bottom side Crystal Palace, their lowest total after 11 league games since 1972-73 counting three points a win (beIN SPORTS). The third-place finish Pochettino cited came last season under Michael Carrick, and it is the reason United are in the Champions League this season.\n\nSources: dpa; Sky Sports; beIN SPORTS.",
+    status: "verified",
+    publishedAt: "2026-11-25T06:31:05-05:00",
+    index: "noindex",
+    seoTitle: "Pochettino: Manchester United situation fragile, team strong",
+    sources: [{"outlet":"dpa","url":"https://sports.yahoo.com/soccer/articles/pochettino-man-uniteds-situation-fragile-213333140.html","published":"2026-11-24"},{"outlet":"Sky Sports","url":"https://www.skysports.com/football/news/13611979/liverpool-4-0-man-utd-mauricio-pochettino-endures-nightmare-start-as-leny-yoros-early-red-card-sparks-collapse","published":"2026-11-22"},{"outlet":"beIN SPORTS","url":"https://www.beinsports.com/en-us/soccer/premier-league/articles/yoro-sending-off-against-liverpool-completely-unfair-says-pochettino-2026-11-22","published":"2026-11-22"}],
+    tier: "reported",
+  },
+  {
     date: "2026-11-23",
     day: "Monday",
     headline: "Liverpool 4-0 Manchester United: Pochettino's first game turned on Leny Yoro's eighth-minute red card",

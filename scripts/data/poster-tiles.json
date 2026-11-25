@@ -1,5 +1,5 @@
 {
-  "_note": "The Manchester United poster tiles shown on /posters/ (scripts/build-posters-page.mjs). One tile per poster still on sale. `url` is where the tile links: the four final posters redrawn with the skyline art (25 Nov 2026) are sold on https://shop.thearchv.ca and link to their product pages there, with the shop's own product photo at 900x675 under public/shop/; the Manchester United Women posters still link to their Etsy listing's Share & Save link (https://thearchvca.etsy.com/listing/<id>, D-2026-10-04b), with the listing photo. `listing` is the Etsy listing id the tile was first made from. Fourteen Etsy listings were deactivated on 25 Nov 2026 and their tiles removed; never add a tile whose link is not live. Keep in step with src/data/posters.ts (the app's poster feed). The front page no longer reads this file: its tiles are the seasonal shop range in scripts/data/seasonal-tiles.json. `art` (gap4-5, 2026-11-15) records what the printed artwork itself carries, read off the file under public/posters/: every club name, every player name on a shirt or the goal timeline, and the quoted headline line (null when the poster has none). It is a record for the founder's ruling on the match posters, which is still open (CLAUDE.md, The quote posters and the app storefront), not a clearance: `ruling` stays \"pending\" until he decides. Nothing renders it.",
+  "_note": "The Manchester United poster tiles shown on /posters/ (scripts/build-posters-page.mjs). One tile per poster still on sale. `url` is where the tile links: the four final posters redrawn with the skyline art (25 Nov 2026) are sold on https://shop.thearchv.ca and link to their product pages there, with the shop's own product photo at 900x675 under public/shop/ Nothing else is on sale: the five Manchester United Women Etsy listings were already unavailable on Etsy on 25 Nov 2026 (checked in a browser), so their tiles went too. `listing` is the Etsy listing id the tile was first made from. Fourteen Etsy listings were deactivated on 25 Nov 2026 and their tiles removed with the women's five; never add a tile whose link is not live. Keep in step with src/data/posters.ts (the app's poster feed). The front page no longer reads this file: its tiles are the seasonal shop range in scripts/data/seasonal-tiles.json. `art` (gap4-5, 2026-11-15) records what the printed artwork itself carries, read off the file under public/posters/: every club name, every player name on a shirt or the goal timeline, and the quoted headline line (null when the poster has none). It is a record for the founder's ruling on the match posters, which is still open (CLAUDE.md, The quote posters and the app storefront), not a clearance: `ruling` stays \"pending\" until he decides. Nothing renders it.",
   "tiles": [
     {
       "group": "men",
@@ -84,120 +84,6 @@
           "LAMPARD"
         ],
         "quoteLine": null,
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539752764",
-      "url": "https://thearchvca.etsy.com/listing/4539752764",
-      "image": "/shop/united-women-birkenhead-2018.webp",
-      "label": "Birkenhead 2018",
-      "alt": "Framed poster on a wall: Manchester United Women's 1-0 win over Liverpool in Birkenhead, 2018, three players seen from behind in navy and gold.",
-      "art": {
-        "file": "/posters/united-women/united-women-birkenhead-2018.webp",
-        "clubNames": [
-          "LIVERPOOL",
-          "UNITED WOMEN"
-        ],
-        "playerNames": [
-          "GREENWOOD",
-          "ARNOT",
-          "SIGSWORTH"
-        ],
-        "quoteLine": "ANOTHER UNITED HISTORY MAKER",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539751302",
-      "url": "https://thearchvca.etsy.com/listing/4539751302",
-      "image": "/shop/united-women-sutton-coldfield-2018.webp",
-      "label": "Sutton Coldfield 2018",
-      "alt": "Framed poster on a wall: Manchester United Women's 12-0 win at Aston Villa, Sutton Coldfield 2018, three players seen from behind in pink shirts.",
-      "art": {
-        "file": "/posters/united-women/united-women-sutton-coldfield-2018.webp",
-        "clubNames": [
-          "ASTON VILLA",
-          "UNITED WOMEN"
-        ],
-        "playerNames": [
-          "SIGSWORTH",
-          "ZELEM",
-          "GREEN",
-          "TOONE"
-        ],
-        "quoteLine": "WE'VE GONE YOUNG, WE'VE GONE EXCITING, WE'VE GONE ENTERTAINING.",
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539732851",
-      "url": "https://thearchvca.etsy.com/listing/4539732851",
-      "image": "/shop/united-women-leigh-2019.webp",
-      "label": "Leigh 2019",
-      "alt": "Framed poster on a wall: Manchester United Women's 5-0 promotion win over Aston Villa, Leigh 2019, three players seen from behind in red and black.",
-      "art": {
-        "file": "/posters/united-women/united-women-leigh-2019.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "ASTON VILLA"
-        ],
-        "playerNames": [
-          "M. TURNER",
-          "GREENWOOD",
-          "TOONE",
-          "SIGSWORTH",
-          "DEVLIN"
-        ],
-        "quoteLine": null,
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539731211",
-      "url": "https://thearchvca.etsy.com/listing/4539731211",
-      "image": "/shop/united-women-manchester-2019.webp",
-      "label": "Manchester 2019",
-      "alt": "Framed poster on a wall: Manchester United Women v Manchester City, the first WSL Manchester derby, 2019, three players seen from behind in red and black.",
-      "art": {
-        "file": "/posters/united-women/united-women-manchester-2019.webp",
-        "clubNames": [
-          "MANCHESTER CITY",
-          "UNITED WOMEN"
-        ],
-        "playerNames": [
-          "GROENEN",
-          "ZELEM",
-          "ROSS",
-          "WEIR"
-        ],
-        "quoteLine": null,
-        "ruling": "pending"
-      }
-    },
-    {
-      "group": "women",
-      "listing": "4539743978",
-      "url": "https://thearchvca.etsy.com/listing/4539743978",
-      "image": "/shop/united-women-manchester-2022.webp",
-      "label": "Manchester 2022",
-      "alt": "Framed poster on a wall: Manchester United Women's 3-1 win over Everton at Old Trafford, 2022, two players seen from behind.",
-      "art": {
-        "file": "/posters/united-women/united-women-manchester-2022.webp",
-        "clubNames": [
-          "UNITED WOMEN",
-          "EVERTON"
-        ],
-        "playerNames": [
-          "RUSSO",
-          "ZELEM",
-          "EMSLIE"
-        ],
-        "quoteLine": "I'M PROUD OF THEM FOR TURNING UP.",
         "ruling": "pending"
       }
     }

@@ -38,10 +38,12 @@ const coverLi = (t) =>
   `<li><a href="${attr(productUrl(t))}" data-shop="seasonal"><img src="${attr(t.image)}" alt="${attr(t.alt)}" loading="lazy" width="900" height="675" /><span>${attr(t.name)}</span></a></li>`;
 const coversBlock = (items) => items.map((t) => `              ${coverLi(t)}\n`).join("");
 
-// The fourteen Etsy listings deactivated on 2026-11-25. No built page and no feed may link one.
+// The Etsy listings that are not live since 2026-11-25. No built page and no feed may link one.
 const DEAD_LISTINGS = [
   "4527680418", "4527296455", "4594017483", "4517396908", "4517398702", "4517399720", "4521778670",
   "4521798833", "4521798166", "4521795943", "4521790986", "4521787127", "4527673755", "4517424545",
+  // The five Manchester United Women listings, already unavailable on Etsy on 2026-11-25.
+  "4539752764", "4539751302", "4539732851", "4539731211", "4539743978",
 ];
 
 test("home-covers.json: the seasonal home tiles in home order, shop product links, thearchv.ca images, real alts", () => {

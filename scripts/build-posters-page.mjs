@@ -9,9 +9,10 @@
    DATA. scripts/data/poster-tiles.json (in the repo, so the build reads nothing outside it). Each
    tile is one poster still on sale and links to its own `url`: since 25 Nov 2026 the four final
    posters with the skyline art link to their product pages on https://shop.thearchv.ca, with the
-   shop's photo at 900x675 under public/shop/, and the Manchester United Women posters link to their
-   Etsy listing's Share & Save link (https://thearchvca.etsy.com/listing/<id>, D-2026-10-04b). The
-   fourteen Etsy listings deactivated that day are off the page. Keep in step with
+   shop's photo at 900x675 under public/shop/. The fourteen Etsy listings deactivated that day are
+   off the page, and so are the five Manchester United Women posters, whose Etsy listings were
+   already unavailable. A tile may still link one live Etsy listing's Share & Save link
+   (https://thearchvca.etsy.com/listing/<id>, D-2026-10-04b). Keep in step with
    src/data/posters.ts, whose header holds the inclusion rules (README.md, Commerce). No quote
    posters are tiled: the art rule in CLAUDE.md ("The quote posters") holds.
 
@@ -35,15 +36,14 @@ const SHOP_POSTERS = "https://shop.thearchv.ca/collections/final-posters";
 
 const TITLE = "Manchester United posters · The ARCHV";
 const DESCRIPTION =
-  "Manchester United and Manchester United Women posters from The ARCHV, one match to a poster, starting with the 1968 European Cup final at Wembley.";
+  "Manchester United final posters from The ARCHV, one match to a poster, from the 1968 European Cup final at Wembley to the 2008 Champions League final in Moscow.";
 const LEDE =
-  "Manchester United and Manchester United Women, one match to a poster, printed to order and shipped by our print partner.";
+  "Manchester United finals, one match to a poster, printed to order and shipped by our print partner.";
 
 const { tiles } = JSON.parse(readFileSync(join(ROOT, "scripts", "data", "poster-tiles.json"), "utf8"));
 const men = tiles.filter((t) => t.group === "men");
-const women = tiles.filter((t) => t.group === "women");
-if (!men.length || !women.length) {
-  throw new Error(`[build-posters-page] expected men's and women's tiles, found ${men.length} and ${women.length}`);
+if (!men.length || men.length !== tiles.length) {
+  throw new Error(`[build-posters-page] expected only men's tiles, found ${men.length} of ${tiles.length}`);
 }
 // A tile links to a product page on our shop or to one Etsy listing, nothing else.
 const LINK = /^https:\/\/(shop\.thearchv\.ca\/products\/[a-z0-9-]+|thearchvca\.etsy\.com\/listing\/\d{8,12})$/;
@@ -128,7 +128,6 @@ const html = `${documentShell({
       <h1>Posters</h1>
       <p class="lede">${esc(LEDE)}</p>
 ${grid("covers-men", `Manchester United, ${span(men)}`, men)}
-${grid("covers-women", `Manchester United Women, ${span(women)}`, women)}
       <p class="posters__links"><a class="posters__shop" href="${SHOP_POSTERS}">The final posters in our shop</a>
       <a class="posters__shop" href="${ETSY}" target="_blank" rel="noopener noreferrer">All prints in the Etsy shop</a></p>
     </section>
@@ -140,4 +139,4 @@ ${grid("covers-women", `Manchester United Women, ${span(women)}`, women)}
 
 mkdirSync(join(OUT, "posters"), { recursive: true });
 writeFileSync(join(OUT, "posters", "index.html"), html);
-console.log(`[build-posters-page] wrote /posters/ (${men.length} men's + ${women.length} women's tiles) to ${OUT}`);
+console.log(`[build-posters-page] wrote /posters/ (${men.length} tiles) to ${OUT}`);

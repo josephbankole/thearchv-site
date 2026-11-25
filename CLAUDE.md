@@ -313,7 +313,7 @@ posters at the bottom of the page, the rest can live in sub pages."
   /about/ now. "Read the finals" and "The ARCHV explains" lists: `/finals/` and `/explainers/`,
   linked from the front-page footer. The poster grids: `/posters/`
   (`scripts/build-posters-page.mjs`, tiles from `scripts/data/poster-tiles.json`, indexable, in
-  the sitemap); since 2026-11-25 it holds only posters still on sale (the four skyline final posters on shop.thearchv.ca, the women's posters still on Etsy), and the front page no longer reads it.
+  the sitemap); since 2026-11-25 it holds only posters still on sale (the four skyline final posters on shop.thearchv.ca; the five Manchester United Women Etsy listings were found unavailable that day and removed), and the front page no longer reads it.
 - **Old anchors still resolve.** The iOS app's fallback share links point at `thearchv.ca/#transfer-desk`,
   `#world-cup` and `#football-leagues` (`thearchv-app/TheARCHV/Models.swift`, `siteURL`). Those ids
   are gone from the page, so `src/ui/movedAnchors.ts` (run first in `boot()`) `location.replace`s

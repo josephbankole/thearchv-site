@@ -33,10 +33,8 @@ npm run preview    # serve the production build on :4173
 ```
 
 The poster + OG images are committed under `public/`, so a clean `npm install && npm run build`
-works without the source art. The build never regenerates them: the 1080x1350 previews in
-`public/posters/united-women/` and the 900x675 women's tiles in `public/shop/united-women-*.webp`
-were exported once from the poster files in `fifa.archv/ARCHIVE-PACKS`; the four men's previews in
-`public/posters/united-men/` and every other tile in `public/shop/` were made on 25 Nov 2026 from the
+works without the source art. The build never regenerates them: the four 1080x1350 previews in
+`public/posters/united-men/` and every tile in `public/shop/` were made on 25 Nov 2026 from the
 product photos on shop.thearchv.ca.
 
 ## Activate the partnerships form
@@ -79,9 +77,9 @@ verified entries under the one trusted, named source rule (canon D-2026-10-23a).
 Since 25 Nov 2026 the homepage's last section shows four products from the seasonal range on our
 Shopify store, https://shop.thearchv.ca (fulfilled by Printful), from `scripts/data/seasonal-tiles.json`.
 `/posters/` shows the posters still on sale: the four skyline final posters, linked to their
-shop.thearchv.ca product pages, and five Manchester United Women posters still on Etsy
-(`thearchvca.etsy.com`). Fourteen Etsy listings were deactivated that day and nothing links them.
-`src/data/posters.ts` lists the same nine for the app's poster feed, `/feed/posters.json`. No fake
+shop.thearchv.ca product pages. Fourteen Etsy listings were deactivated that day, the five
+Manchester United Women Etsy listings were already unavailable, and nothing links any of them.
+`src/data/posters.ts` lists the same four for the app's poster feed, `/feed/posters.json`. No fake
 links ship.
 
 ## Player headshots — brand illustrations only

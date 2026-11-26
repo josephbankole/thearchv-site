@@ -36,8 +36,9 @@ import { entryArt, photoCreditHtml } from './illustrated';
    by scripts/build-thumbs.mjs (the photos/sq shelf), so every photo row has them. */
 const isPhotoSquare = (src: string): boolean => /^\/photos\/sq\/[a-z0-9-]+\.webp$/.test(src);
 const leadPhotoSrc = (src: string): string => (isPhotoSquare(src) ? `/thumbs/320${src}` : src);
-const leadPhotoSrcset = (src: string): string =>
-  isPhotoSquare(src) ? ` srcset="/thumbs/320${src} 320w, ${src} 640w" sizes="160px"` : '';
+// The square's own width is the descriptor: a few originals were small, so their square is under 640.
+const leadPhotoSrcset = (src: string, size = 640): string =>
+  isPhotoSquare(src) ? ` srcset="/thumbs/320${src} 320w, ${src} ${size}w" sizes="160px"` : '';
 
 import seasonal from '../../scripts/data/seasonal-tiles.json';
 
@@ -173,7 +174,7 @@ export function renderLead(): string {
   const art =
     leadArt && leadArt.kind === 'photo'
       ? `<figure class="lead__art lead__art--photo">
-          <img src="${esc(leadPhotoSrc(leadArt.square ?? leadArt.src))}"${leadPhotoSrcset(leadArt.square ?? leadArt.src)} alt="${esc(leadArt.alt)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
+          <img src="${esc(leadPhotoSrc(leadArt.square ?? leadArt.src))}"${leadPhotoSrcset(leadArt.square ?? leadArt.src, leadArt.squareSize)} alt="${esc(leadArt.alt)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
           ${photoCreditHtml(leadArt, esc) ? `<figcaption>${photoCreditHtml(leadArt, esc)}</figcaption>` : ''}
         </figure>`
       : leadArt && leadArt.kind !== 'club'

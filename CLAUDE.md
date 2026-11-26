@@ -690,7 +690,8 @@ use, anything else that we can find in wikimedia, use". Read as: Wikimedia Commo
 
 - **No credit (26 Nov 2026).** Every crest is a public-domain file, which needs no credit, so the
   About page carries no crest list. Only files public domain in Canada as well: the Buffalo Bills
-  and Kansas City Chiefs crests (US-only "no notice" tags) were taken off that day.
+  and Kansas City Chiefs crests (US-only "no notice" tags) were taken off that day, and the
+  Pittsburgh Steelers crest (same tag) after review.
 - **Registry.** `scripts/data/crests.json` (`archv-crests/1`): per club the Commons file page, the
   upload URL, author, licence tag and name, the sha256 of the file in `public/logos/crests/` (byte
   for byte as downloaded), and the team `names` it answers to (football-data.org's "Manchester United

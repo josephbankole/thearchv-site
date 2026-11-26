@@ -150,7 +150,10 @@ const credits = readData("heads-hd.json").entries
 const creditItem = (c) => {
   const label = esc(c.name === "Public domain" ? "public domain" : c.name);
   const licence = c.url ? `<a href="${escAttr(c.url)}" rel="license noopener">${label}</a>` : label;
-  return `<li>${esc(c.player)}: drawn from a photo by <a href="${escAttr(c.source)}">${esc(c.author)}</a>, ${licence}</li>`;
+  // CC 2.0/2.5/3.0 ask for the work's title when one is given, and every version for the credit the
+  // author asked for (identity.licence.title / .attribution in heads-hd.json, read from Commons).
+  const title = c.title ? `“${esc(c.title)}” by ` : "";
+  return `<li>${esc(c.player)}: drawn from ${c.title ? "" : "a photo by "}${title}<a href="${escAttr(c.source)}">${esc(c.attribution || c.author)}</a>, ${licence}</li>`;
 };
 /* ---------- photo credits (founder ruling, 21 Nov 2026; legal minimum 26 Nov 2026) ----------
    Founder, 26 Nov: "only add credits that are legally required". So this lists only the photos
@@ -349,7 +352,7 @@ const html = `${documentShell({
         <h2 id="standards">Editorial standards</h2>
 
         <h3>The artwork, and the photographs we credit</h3>
-        <p>Club and match images on The ARCHV are original illustration, drawn in our own house style. A player, coach or driver is shown in a free-licence photograph from Wikimedia Commons where a recent one exists, credited to its photographer with its licence, and in our own stylised drawing where it does not. The drawings are editorial commentary, never passed off as photos. We use no club crests, no kit designs and no agency photographs, and no competition marks apart from the Premier League logo, shown under its owner's terms beside the league's name. The video row on the front page is a further exception: its stills come from our own YouTube channel and show the people who present it.</p>
+        <p>Club and match images on The ARCHV are original illustration, drawn in our own house style. A player, coach or driver is shown in a free-licence photograph where a recent one exists, credited wherever its licence asks for a credit, and in our own stylised drawing where it does not. The drawings are editorial commentary, never passed off as photos. Small club crests sit beside team names in our tables and scores, from public-domain files; they are the clubs' trade marks, shown to identify the team, and The ARCHV is not affiliated with any club. We use no kit designs and no agency photographs, and no competition marks apart from the Premier League logo, shown under its owner's terms beside the league's name. The video row on the front page is a further exception: its stills come from our own YouTube channel and show the people who present it.</p>
 
         ${creditsHtml}
 

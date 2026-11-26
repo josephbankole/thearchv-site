@@ -55,6 +55,8 @@ export interface Photo {
   width: number;
   height: number;
   square: string;
+  // Pixel size of the square crop: 640, or less when the original was small.
+  squareSize?: number;
   alt: string;
 }
 
@@ -143,6 +145,7 @@ export interface EntryArt {
   square?: string;
   credit?: string;
   licence?: Licence;
+  squareSize?: number;
   share?: EntryArt | null;
 }
 
@@ -203,6 +206,7 @@ function photoArt(p: Art, share: EntryArt | null): EntryArt {
     kind: 'photo',
     src: photo.src,
     square: photo.square,
+    squareSize: photo.squareSize,
     alt: photo.alt,
     width: photo.width,
     height: photo.height,

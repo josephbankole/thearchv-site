@@ -182,6 +182,7 @@ function photoArt(p, share) {
     kind: "photo",
     src: p.photo.src,
     square: p.photo.square,
+    squareSize: p.photo.squareSize,
     alt: p.photo.alt,
     width: p.photo.width,
     height: p.photo.height,

@@ -318,24 +318,6 @@
       "checked": "2026-11-25"
     },
     {
-      "slug": "pittsburgh-steelers",
-      "club": "Pittsburgh Steelers",
-      "kind": "nfl",
-      "names": [
-        "Pittsburgh Steelers"
-      ],
-      "file": "pittsburgh-steelers.svg",
-      "filePage": "https://commons.wikimedia.org/wiki/File:Pittsburgh_Steelers_logo.svg",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Pittsburgh_Steelers_logo.svg",
-      "author": "Brighterorange",
-      "licenceTag": "PD-US-no notice",
-      "licenceName": "Public domain (US, published without notice)",
-      "licenceUrl": null,
-      "fileSha256": "d5bf31a941253c691cf1961bc4c0afcfb2c1f21f91a337827259dd5fe9b4a27f",
-      "bytes": 5479,
-      "checked": "2026-11-25"
-    },
-    {
       "slug": "san-francisco-49ers",
       "club": "San Francisco 49ers",
       "kind": "nfl",

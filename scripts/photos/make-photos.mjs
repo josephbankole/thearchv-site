@@ -87,11 +87,13 @@ for (const r of manifest) {
   crop.width = Math.min(crop.width, W - crop.left);
   crop.height = Math.min(crop.height, H - crop.top);
 
-  // Square for the circles: about 2.1 face widths, face centred a touch high.
-  const s = Math.min(W, H, fw * 2.1);
+  // Square for the circles: about 2.4 face widths, face centred a touch high. Was 2.1 and centred
+  // lower until 25 Nov 2026: the face box starts near the eyebrows, so that cut the top of the head
+  // (Messi, Rooney).
+  const s = Math.min(W, H, fw * 2.4);
   const sq = {
     left: Math.round(clamp(cx - s / 2, 0, W - s)),
-    top: Math.round(clamp(fy + fh * 0.55 - s / 2, 0, H - s)),
+    top: Math.round(clamp(fy + fh * 0.42 - s / 2, 0, H - s)),
     width: Math.round(s),
     height: Math.round(s),
   };

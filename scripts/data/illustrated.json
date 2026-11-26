@@ -12,7 +12,42 @@
       "height": 320,
       "alt": "Illustrated ARCHV portrait of Nilson Angulo of Ecuador",
       "hd": "/heads/hd/nilson-angulo.webp",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Timmy96 / Wikimedia Commons / CC0",
+      "licence": {
+        "name": "CC0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "author": "Timmy96",
+        "source": "https://commons.wikimedia.org/wiki/File:Nilson_Angulo_05092026_%282%29.jpg",
+        "checked": "2026-11-25"
+      },
+      "photo": {
+        "src": "/photos/nilson-angulo.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/nilson-angulo.webp",
+        "squareSize": 640,
+        "alt": "Nilson Angulo, photographed 2026",
+        "taken": "2026-09-05",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Nilson_Angulo_05092026_%282%29.jpg",
+        "originalSize": [
+          4440,
+          3888
+        ],
+        "crop": [
+          0,
+          0,
+          3110,
+          3888
+        ],
+        "squareCrop": [
+          0,
+          0,
+          3826,
+          3826
+        ],
+        "shareAlike": false
+      }
     },
     {
       "slug": "elijah-just",
@@ -78,7 +113,42 @@
       "height": 240,
       "alt": "Illustrated ARCHV portrait of Marcus Rashford of England",
       "hd": "/heads/hd/rashford.webp",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Marcus_Rashford_England_v_Ghana_23_June_2026-036.jpg",
+        "checked": "2026-11-25"
+      },
+      "photo": {
+        "src": "/photos/marcus-rashford.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/marcus-rashford.webp",
+        "squareSize": 640,
+        "alt": "Marcus Rashford, photographed 2026",
+        "taken": "2026-06-23",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Marcus_Rashford_England_v_Ghana_23_June_2026-036.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          0,
+          134,
+          3324,
+          4156
+        ],
+        "squareCrop": [
+          199,
+          102,
+          2493,
+          2493
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "andrey-santos",
@@ -140,7 +210,7 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "author": "Timmy96",
         "source": "https://commons.wikimedia.org/wiki/File:Carlos_Baleba_24012026_(2).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/carlos-baleba.webp",
@@ -162,10 +232,10 @@
           3441
         ],
         "squareCrop": [
-          686,
-          359,
-          2079,
-          2079
+          537,
+          81,
+          2376,
+          2376
         ],
         "shareAlike": false
       }
@@ -186,7 +256,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Elliot_Anderson_England_v_Ghana_23_June_2026-159.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/elliot-anderson.webp",
@@ -208,10 +278,10 @@
           1674
         ],
         "squareCrop": [
-          1213,
-          387,
-          879,
-          879
+          1150,
+          269,
+          1005,
+          1005
         ],
         "shareAlike": true
       }
@@ -232,7 +302,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Aurelien_Tchouameni_France_v_Senegal_16_June_2026-447_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/aurelien-tchouameni.webp",
@@ -255,9 +325,9 @@
         ],
         "squareCrop": [
           0,
-          203,
-          2148,
-          2148
+          0,
+          2455,
+          2455
         ],
         "shareAlike": true
       }
@@ -289,7 +359,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Jude_Bellingham_England_v_Panama_27_June_26-160_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/jude-bellingham.webp",
@@ -311,10 +381,10 @@
           2466
         ],
         "squareCrop": [
-          211,
-          59,
-          1348,
-          1348
+          115,
+          0,
+          1540,
+          1540
         ],
         "shareAlike": true
       }
@@ -335,7 +405,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Kylian_Mbappe_France_v_Senegal_16_June_2026-391_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/kylian-mbappe.webp",
@@ -357,10 +427,10 @@
           2751
         ],
         "squareCrop": [
-          262,
-          41,
-          1586,
-          1586
+          149,
+          0,
+          1813,
+          1813
         ],
         "shareAlike": true
       }
@@ -381,7 +451,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Leo_Messi_Argentina_v_Egypt_7_July_2026-1_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/lionel-messi.webp",
@@ -405,8 +475,8 @@
         "squareCrop": [
           0,
           0,
-          2560,
-          2560
+          2652,
+          2652
         ],
         "shareAlike": true
       }
@@ -427,7 +497,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/cristiano-ronaldo.webp",
@@ -449,10 +519,10 @@
           3515
         ],
         "squareCrop": [
-          285,
-          36,
-          2260,
-          2260
+          123,
+          0,
+          2583,
+          2583
         ],
         "shareAlike": true
       }
@@ -473,7 +543,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Erling_Haaland_France_v_Norway_26_June_26-008_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/erling-haaland.webp",
@@ -496,7 +566,7 @@
         ],
         "squareCrop": [
           0,
-          136,
+          0,
           2763,
           2763
         ],
@@ -519,7 +589,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Folarin_Balogun_USMNT_v_Belgium_Mar_28_2026-69_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/folarin-balogun.webp",
@@ -542,7 +612,7 @@
         ],
         "squareCrop": [
           0,
-          211,
+          15,
           3060,
           3060
         ],
@@ -566,7 +636,7 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "author": "Timmy96",
         "source": "https://commons.wikimedia.org/wiki/File:Ra%C3%BAl_Jim%C3%A9nez_04032026_(1).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/raul-jimenez.webp",
@@ -612,7 +682,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Bruno_Fernandes_USMNT_v_Portugal_Mar_31_2026-27_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/bruno-fernandes.webp",
@@ -635,9 +705,9 @@
         ],
         "squareCrop": [
           0,
-          295,
-          2610,
-          2610
+          30,
+          2816,
+          2816
         ],
         "shareAlike": true
       }
@@ -669,7 +739,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Diogo_Dalot_USMNT_v_Portugal_Mar_31_2026-12.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/diogo-dalot.webp",
@@ -691,10 +761,10 @@
           4138
         ],
         "squareCrop": [
-          1083,
-          328,
-          2173,
-          2173
+          850,
+          38,
+          2483,
+          2483
         ],
         "shareAlike": true
       }
@@ -715,7 +785,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "YantsImages",
         "source": "https://commons.wikimedia.org/wiki/File:Noussair_Mazraoui_at_2026_FIFA_World_Cup_by_YantsImages_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/noussair-mazraoui.webp",
@@ -737,10 +807,10 @@
           2155
         ],
         "squareCrop": [
-          288,
-          237,
-          1131,
-          1131
+          207,
+          86,
+          1293,
+          1293
         ],
         "shareAlike": true
       }
@@ -776,7 +846,42 @@
       "width": 600,
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Manchester United player Lisandro Martinez",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Lisandro_Martinez_Argentina_v_Egypt_7_July_2026-343_(cropped).jpg",
+        "checked": "2026-11-25"
+      },
+      "photo": {
+        "src": "/photos/lisandro-martinez.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/lisandro-martinez.webp",
+        "squareSize": 640,
+        "alt": "Lisandro Martinez, photographed 2026",
+        "taken": "2026-07-07",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Lisandro_Martinez_Argentina_v_Egypt_7_July_2026-343_%28cropped%29.jpg",
+        "originalSize": [
+          1648,
+          2464
+        ],
+        "crop": [
+          0,
+          0,
+          1648,
+          2060
+        ],
+        "squareCrop": [
+          12,
+          0,
+          1516,
+          1516
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "mason-mount",
@@ -882,7 +987,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Tyler_Fletcher_Scotland_v_Bolivia_6_June_2026-4.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/tyler-fletcher.webp",
@@ -904,10 +1009,10 @@
           4688
         ],
         "squareCrop": [
-          567,
-          371,
-          3063,
-          3063
+          250,
+          0,
+          3500,
+          3500
         ],
         "shareAlike": true
       }
@@ -928,7 +1033,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Senne_Lammens_USMNT_v_Belgium_Mar_28_2026-98_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/senne-lammens.webp",
@@ -950,10 +1055,10 @@
           3589
         ],
         "squareCrop": [
-          232,
-          183,
-          2363,
-          2363
+          63,
+          0,
+          2701,
+          2701
         ],
         "shareAlike": true
       }
@@ -974,7 +1079,7 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "author": "Timmy96",
         "source": "https://commons.wikimedia.org/wiki/File:Michael_Carrick_12042025_(5)_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/michael-carrick.webp",
@@ -997,7 +1102,7 @@
         ],
         "squareCrop": [
           0,
-          342,
+          236,
           1197,
           1197
         ],
@@ -1043,7 +1148,7 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "author": "Timmy96",
         "source": "https://commons.wikimedia.org/wiki/File:Alex_Scott_09052026_(6).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/alex-scott.webp",
@@ -1066,9 +1171,9 @@
         ],
         "squareCrop": [
           0,
-          52,
-          1272,
-          1272
+          0,
+          1453,
+          1453
         ],
         "shareAlike": false
       }
@@ -1090,7 +1195,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/2.0",
         "author": "All-Pro Reels",
         "source": "https://commons.wikimedia.org/wiki/File:Wayne_Rooney_(50120933433).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/wayne-rooney.webp",
@@ -1112,10 +1217,10 @@
           1849
         ],
         "squareCrop": [
-          1426,
+          1357,
           0,
-          971,
-          971
+          1109,
+          1109
         ],
         "shareAlike": true
       }
@@ -1149,7 +1254,7 @@
         "url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
         "author": "Timmy96",
         "source": "https://commons.wikimedia.org/wiki/File:Matthias_Jaissle_07112026_(2).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/matthias-jaissle.webp",
@@ -1171,10 +1276,10 @@
           2991
         ],
         "squareCrop": [
-          446,
-          82,
-          1570,
-          1570
+          334,
+          0,
+          1795,
+          1795
         ],
         "shareAlike": false
       }
@@ -1196,7 +1301,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:David_Raum_Ecuador_v_Germany_25_June_2026-117.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/david-raum.webp",
@@ -1218,10 +1323,10 @@
           4166
         ],
         "squareCrop": [
-          401,
-          336,
-          2691,
-          2691
+          208,
+          0,
+          3075,
+          3075
         ],
         "shareAlike": true
       }
@@ -1243,7 +1348,7 @@
         "url": "https://creativecommons.org/licenses/by/4.0",
         "author": "Web Summit",
         "source": "https://commons.wikimedia.org/wiki/File:Tim_Krul.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/tim-krul.webp",
@@ -1265,10 +1370,10 @@
           2179
         ],
         "squareCrop": [
-          202,
-          9,
-          1411,
-          1411
+          101,
+          0,
+          1613,
+          1613
         ],
         "shareAlike": false
       }
@@ -1314,7 +1419,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Barcex",
         "source": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Ars%C3%A8ne_Wenger_-_240422_192850.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/arsene-wenger.webp",
@@ -1336,10 +1441,10 @@
           1754
         ],
         "squareCrop": [
-          1140,
-          410,
-          921,
-          921
+          1074,
+          288,
+          1052,
+          1052
         ],
         "shareAlike": true
       }
@@ -1373,7 +1478,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Hameltion",
         "source": "https://commons.wikimedia.org/wiki/File:Bianca_Andreescu_(2026_US_Open)_06_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/bianca-andreescu.webp",
@@ -1395,10 +1500,10 @@
           2444
         ],
         "squareCrop": [
-          184,
-          359,
-          1352,
-          1352
+          88,
+          179,
+          1545,
+          1545
         ],
         "shareAlike": true
       }
@@ -1420,7 +1525,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Hameltion",
         "source": "https://commons.wikimedia.org/wiki/File:Terence_Atmane_(2024_DC_Open)_01_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/terence-atmane.webp",
@@ -1443,7 +1548,7 @@
         ],
         "squareCrop": [
           0,
-          347,
+          249,
           1240,
           1240
         ],
@@ -1467,7 +1572,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Hameltion",
         "source": "https://commons.wikimedia.org/wiki/File:Sofia_Kenin_(2025_DC_Open)_05_(edited_and_cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/sofia-kenin.webp",
@@ -1490,7 +1595,7 @@
         ],
         "squareCrop": [
           0,
-          98,
+          0,
           1491,
           1491
         ],
@@ -1538,7 +1643,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Hameltion",
         "source": "https://commons.wikimedia.org/wiki/File:Elena_Rybakina_(2025_DC_Open)_04_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/elena-rybakina.webp",
@@ -1560,10 +1665,10 @@
           3338
         ],
         "squareCrop": [
-          688,
-          367,
-          2135,
-          2135
+          400,
+          83,
+          2440,
+          2440
         ],
         "shareAlike": true
       }
@@ -1585,7 +1690,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Rick Munroe",
         "source": "https://commons.wikimedia.org/wiki/File:Coco_Gauff_Miami_Open.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/coco-gauff.webp",
@@ -1607,10 +1712,10 @@
           1788
         ],
         "squareCrop": [
-          220,
-          98,
-          983,
-          983
+          150,
+          0,
+          1123,
+          1123
         ],
         "shareAlike": true
       }
@@ -1632,14 +1737,14 @@
         "url": "https://commons.wikimedia.org/wiki/Template:PD-USGov",
         "author": "Daniel Torok (The White House)",
         "source": "https://commons.wikimedia.org/wiki/File:Jannik_Sinner_US_Open_2025_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/jannik-sinner.webp",
         "width": 796,
         "height": 995,
         "square": "/photos/sq/jannik-sinner.webp",
-        "squareSize": 522,
+        "squareSize": 597,
         "alt": "Jannik Sinner, photographed 2025",
         "taken": "2025-09-07",
         "original": "https://upload.wikimedia.org/wikipedia/commons/4/48/Jannik_Sinner_US_Open_2025_%28cropped%29.jpg",
@@ -1654,10 +1759,10 @@
           995
         ],
         "squareCrop": [
-          306,
-          101,
-          522,
-          522
+          269,
+          31,
+          597,
+          597
         ],
         "shareAlike": false
       }
@@ -1679,7 +1784,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Hameltion",
         "source": "https://commons.wikimedia.org/wiki/File:Venus_Williams_(2025_DC_Open)_crop.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/venus-williams.webp",
@@ -1702,9 +1807,9 @@
         ],
         "squareCrop": [
           0,
-          152,
-          1796,
-          1796
+          0,
+          1881,
+          1881
         ],
         "shareAlike": true
       }
@@ -1726,7 +1831,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Barcex",
         "source": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Carlos_Alcaraz_-_240422_192353.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/carlos-alcaraz.webp",
@@ -1748,10 +1853,10 @@
           1641
         ],
         "squareCrop": [
-          990,
-          164,
-          862,
-          862
+          928,
+          49,
+          985,
+          985
         ],
         "shareAlike": true
       }
@@ -1773,7 +1878,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Skyscraper2010",
         "source": "https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Auger-Aliassime,_Canada,_ATP_Basel_2025_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/felix-auger-aliassime.webp",
@@ -1795,10 +1900,10 @@
           2577
         ],
         "squareCrop": [
-          618,
-          40,
-          1613,
-          1613
+          503,
+          0,
+          1843,
+          1843
         ],
         "shareAlike": true
       }
@@ -1832,7 +1937,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Rick Munroe",
         "source": "https://commons.wikimedia.org/wiki/File:Alexander_Zverev.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/alexander-zverev.webp",
@@ -1855,9 +1960,9 @@
         ],
         "squareCrop": [
           0,
-          86,
-          862,
-          862
+          0,
+          985,
+          985
         ],
         "shareAlike": true
       }
@@ -1915,7 +2020,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Rory_McIlroy_Ryder_Cup_2025-195_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/rory-mcilroy.webp",
@@ -1938,9 +2043,9 @@
         ],
         "squareCrop": [
           0,
-          168,
-          1993,
-          1993
+          0,
+          2278,
+          2278
         ],
         "shareAlike": true
       }
@@ -1962,7 +2067,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Viktor_Hovland_Ryder_Cup_2025-205_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/viktor-hovland.webp",
@@ -1984,10 +2089,10 @@
           2989
         ],
         "squareCrop": [
-          252,
-          195,
-          1865,
-          1865
+          118,
+          0,
+          2131,
+          2131
         ],
         "shareAlike": true
       }
@@ -2021,7 +2126,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Sam_Burns_Ryder_Cup_2025-227_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/sam-burns.webp",
@@ -2043,10 +2148,10 @@
           2794
         ],
         "squareCrop": [
-          337,
-          316,
-          1798,
-          1798
+          181,
+          76,
+          2054,
+          2054
         ],
         "shareAlike": true
       }
@@ -2068,7 +2173,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Patrick_Cantlay_Ryder_Cup_2025-146_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/patrick-cantlay.webp",
@@ -2090,10 +2195,10 @@
           2693
         ],
         "squareCrop": [
-          161,
-          319,
-          1617,
-          1617
+          45,
+          104,
+          1848,
+          1848
         ],
         "shareAlike": true
       }
@@ -2127,7 +2232,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Bryan Berlin",
         "source": "https://commons.wikimedia.org/wiki/File:Scottie_Scheffler_Ryder_Cup_2025_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/scottie-scheffler.webp",
@@ -2149,10 +2254,10 @@
           2569
         ],
         "squareCrop": [
-          12,
-          154,
-          1962,
-          1962
+          0,
+          0,
+          2055,
+          2055
         ],
         "shareAlike": true
       }
@@ -2174,7 +2279,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Yu Chu Chin",
         "source": "https://commons.wikimedia.org/wiki/File:Kimi_Antonelli_at_the_Melbourne_Walk_during_the_2026_Australian_Grand_Prix_(028A7930)_cropped.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/kimi-antonelli.webp",
@@ -2214,7 +2319,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of Formula 1 driver Lando Norris",
       "verifiedBy": "Rendered 2026-09-11 with GPT Image 2 from the reference photo recorded for 'lando-norris' in scripts/data/heads-hd.json (https://commons.wikimedia.org/wiki/File:2024-08-25_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2024_STP_4016_by_Stepro_(cropped).jpg); likeness checked by eye against it.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Steffen Prößdorf / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Steffen Prößdorf",
+        "source": "https://commons.wikimedia.org/wiki/File:2026-08-22_Motorsport,_Formel_1,_Gro%C3%9Fer_Preis_der_Niederlande_2026_STP_2354_(cropped).jpg",
+        "checked": "2026-11-25"
+      },
+      "photo": {
+        "src": "/photos/lando-norris.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/lando-norris.webp",
+        "squareSize": 640,
+        "alt": "Lando Norris, photographed 2026",
+        "taken": "2026-08-22",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/8/8a/2026-08-22_Motorsport%2C_Formel_1%2C_Gro%C3%9Fer_Preis_der_Niederlande_2026_STP_2354_%28cropped%29.jpg",
+        "originalSize": [
+          1309,
+          1957
+        ],
+        "crop": [
+          0,
+          21,
+          1309,
+          1636
+        ],
+        "squareCrop": [
+          0,
+          95,
+          1309,
+          1309
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "lewis-hamilton",
@@ -2245,7 +2385,7 @@
         "url": "https://creativecommons.org/licenses/by-sa/4.0",
         "author": "Yu Chu Chin",
         "source": "https://commons.wikimedia.org/wiki/File:Max_Verstappen_at_the_Red_Bull_Fan_Zone_%E2%80%93_Crown_Riverwalk,_Melbourne_(028A7659)_-_cropped.jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/max-verstappen.webp",
@@ -2268,7 +2408,7 @@
         ],
         "squareCrop": [
           0,
-          646,
+          498,
           1867,
           1867
         ],
@@ -2292,7 +2432,7 @@
         "url": "https://creativecommons.org/licenses/by/4.0",
         "author": "Liauzh",
         "source": "https://commons.wikimedia.org/wiki/File:2026_Chinese_GP_-_Oscar_Piastri_(cropped).jpg",
-        "checked": "2026-11-21"
+        "checked": "2026-11-25"
       },
       "photo": {
         "src": "/photos/oscar-piastri.webp",
@@ -2314,10 +2454,10 @@
           1765
         ],
         "squareCrop": [
-          276,
-          414,
-          927,
-          927
+          209,
+          290,
+          1059,
+          1059
         ],
         "shareAlike": false
       }
@@ -2392,7 +2532,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Aryna Sabalenka",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 1161; master recorded for 'aryna-sabalenka' in scripts/data/heads-hd.json.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Rick Munroe / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Rick Munroe",
+        "source": "https://commons.wikimedia.org/wiki/File:Aryna_Sabalenka_Miami_Open_Final.jpg",
+        "checked": "2026-11-25"
+      },
+      "photo": {
+        "src": "/photos/aryna-sabalenka.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/aryna-sabalenka.webp",
+        "squareSize": 640,
+        "alt": "Aryna Sabalenka, photographed 2026",
+        "taken": "2026-03-28",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/5/57/Aryna_Sabalenka_Miami_Open_Final.jpg",
+        "originalSize": [
+          1044,
+          1390
+        ],
+        "crop": [
+          0,
+          0,
+          1044,
+          1305
+        ],
+        "squareCrop": [
+          73,
+          0,
+          971,
+          971
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "frances-tiafoe",
@@ -2428,7 +2603,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of tennis player Ben Shelton",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 1259; master recorded for 'ben-shelton' in scripts/data/heads-hd.json.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Skyscraper2010 / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Skyscraper2010",
+        "source": "https://commons.wikimedia.org/wiki/File:Ben_Shelton%2C_ATP_500_Basel_2025.jpg",
+        "checked": "2026-11-25"
+      },
+      "photo": {
+        "src": "/photos/ben-shelton.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/ben-shelton.webp",
+        "squareSize": 640,
+        "alt": "Ben Shelton, photographed 2025",
+        "taken": "2025-10-18",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Ben_Shelton%2C_ATP_500_Basel_2025.jpg",
+        "originalSize": [
+          4752,
+          2672
+        ],
+        "crop": [
+          1179,
+          0,
+          2138,
+          2672
+        ],
+        "squareCrop": [
+          1062,
+          0,
+          2371,
+          2371
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "sandro-tonali",
@@ -2464,7 +2674,42 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of footballer Iliman Ndiaye",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 646; master recorded for 'iliman-ndiaye' in scripts/data/heads-hd.json.",
-      "kind": "illustration"
+      "kind": "photo",
+      "credit": "Photograph: Bryan Berlin / Wikimedia Commons / CC BY-SA 4.0",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Iliman_Ndiaye_France_v_Senegal_16_June_2026-243.jpg",
+        "checked": "2026-11-25"
+      },
+      "photo": {
+        "src": "/photos/iliman-ndiaye.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/iliman-ndiaye.webp",
+        "squareSize": 640,
+        "alt": "Iliman Ndiaye, photographed 2026",
+        "taken": "2026-06-16",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Iliman_Ndiaye_France_v_Senegal_16_June_2026-243.jpg",
+        "originalSize": [
+          3334,
+          5000
+        ],
+        "crop": [
+          49,
+          121,
+          3285,
+          4106
+        ],
+        "squareCrop": [
+          870,
+          90,
+          2464,
+          2464
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "bradley-barcola",

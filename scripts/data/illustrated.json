@@ -2575,7 +2575,43 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of footballer Bruno Guimarães",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 294; master recorded for 'bruno-guimaraes' in scripts/data/heads-hd.json.",
-      "kind": "illustration"
+      "kind": "photo",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Bruno_Guimaraes_Brazil_V_Morocco_13_June_2026-78.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Bryan Berlin / WikiPortraits"
+      },
+      "credit": "Photo: Bryan Berlin / WikiPortraits, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/bruno-guimaraes.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/bruno-guimaraes.webp",
+        "squareSize": 640,
+        "alt": "Bruno Guimarães, photographed 2026",
+        "taken": "2026-06-13",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/5/53/Bruno_Guimaraes_Brazil_V_Morocco_13_June_2026-78.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          0,
+          17,
+          3333,
+          4166
+        ],
+        "squareCrop": [
+          464,
+          0,
+          2553,
+          2553
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "jose-mourinho",
@@ -3003,7 +3039,43 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of footballer Vinícius Júnior",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 55; master recorded for 'vinicius-junior' in scripts/data/heads-hd.json.",
-      "kind": "illustration"
+      "kind": "photo",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Vin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Bryan Berlin / WikiPortraits"
+      },
+      "credit": "Photo: Bryan Berlin / WikiPortraits, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/vinicius-junior.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/vinicius-junior.webp",
+        "squareSize": 640,
+        "alt": "Vinícius Júnior, photographed 2026",
+        "taken": "2026-06-13",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Vin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          277,
+          254,
+          2341,
+          2926
+        ],
+        "squareCrop": [
+          570,
+          232,
+          1756,
+          1756
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "lamine-yamal",
@@ -3039,7 +3111,43 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of footballer Bukayo Saka",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 195; master recorded for 'bukayo-saka' in scripts/data/heads-hd.json.",
-      "kind": "illustration"
+      "kind": "photo",
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Bukayo_Saka_England_v_Panama_27_June_26-149.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Bryan Berlin / WikiPortraits"
+      },
+      "credit": "Photo: Bryan Berlin / WikiPortraits, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/bukayo-saka.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/bukayo-saka.webp",
+        "squareSize": 640,
+        "alt": "Bukayo Saka, photographed 2026",
+        "taken": "2026-06-27",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Bukayo_Saka_England_v_Panama_27_June_26-149.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          1051,
+          495,
+          1089,
+          1361
+        ],
+        "squareCrop": [
+          1187,
+          484,
+          817,
+          817
+        ],
+        "shareAlike": true
+      }
     },
     {
       "slug": "bobby-charlton",
@@ -3051,7 +3159,44 @@
       "height": 600,
       "alt": "Illustrated ARCHV portrait of former Manchester United and England player Sir Bobby Charlton",
       "verifiedBy": "Banked portrait, fifa.archv/player-headshot-bank.md line 139; master recorded for 'bobby-charlton' in scripts/data/heads-hd.json.",
-      "kind": "illustration"
+      "kind": "photo",
+      "licence": {
+        "name": "CC BY 2.0",
+        "url": "https://creativecommons.org/licenses/by/2.0",
+        "author": "The Centre for School Design",
+        "source": "https://commons.wikimedia.org/wiki/File:Bobby_Charlton.jpg",
+        "checked": "2026-11-26",
+        "attribution": "The Centre for School Design",
+        "title": "Bobby Charlton"
+      },
+      "credit": "Photo: “Bobby Charlton” by The Centre for School Design, CC BY 2.0, cropped",
+      "photo": {
+        "src": "/photos/bobby-charlton.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/bobby-charlton.webp",
+        "squareSize": 640,
+        "alt": "Bobby Charlton, photographed 2010",
+        "taken": "2010-11-09",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Bobby_Charlton.jpg",
+        "originalSize": [
+          2036,
+          3054
+        ],
+        "crop": [
+          182,
+          307,
+          1709,
+          2136
+        ],
+        "squareCrop": [
+          395,
+          291,
+          1282,
+          1282
+        ],
+        "shareAlike": false
+      }
     },
     {
       "slug": "mauricio-pochettino",
@@ -3785,6 +3930,216 @@
           150,
           1529,
           1529
+        ],
+        "shareAlike": true
+      }
+    },
+    {
+      "slug": "kobbie-mainoo",
+      "name": "Kobbie Mainoo",
+      "kind": "photo",
+      "photoOnly": true,
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Kobbie_Mainoo_England_v_Panama_27_June_26-052.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Bryan Berlin / WikiPortraits"
+      },
+      "credit": "Photo: Bryan Berlin / WikiPortraits, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/kobbie-mainoo.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/kobbie-mainoo.webp",
+        "squareSize": 640,
+        "alt": "Kobbie Mainoo, photographed 2026",
+        "taken": "2026-06-27",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Kobbie_Mainoo_England_v_Panama_27_June_26-052.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          0,
+          0,
+          3333,
+          4166
+        ],
+        "squareCrop": [
+          241,
+          0,
+          3092,
+          3092
+        ],
+        "shareAlike": true
+      }
+    },
+    {
+      "slug": "harry-kane",
+      "name": "Harry Kane",
+      "kind": "photo",
+      "photoOnly": true,
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Harry_Kane_England_v_Panama_27_June_26-184.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Bryan Berlin / WikiPortraits"
+      },
+      "credit": "Photo: Bryan Berlin / WikiPortraits, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/harry-kane.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/harry-kane.webp",
+        "squareSize": 640,
+        "alt": "Harry Kane, photographed 2026",
+        "taken": "2026-06-27",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Harry_Kane_England_v_Panama_27_June_26-184.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          550,
+          189,
+          2072,
+          2590
+        ],
+        "squareCrop": [
+          809,
+          169,
+          1554,
+          1554
+        ],
+        "shareAlike": true
+      }
+    },
+    {
+      "slug": "patrice-evra",
+      "name": "Patrice Evra",
+      "kind": "photo",
+      "photoOnly": true,
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Barcex",
+        "source": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Patrice_Evra_-_240422_191127.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Barcex"
+      },
+      "credit": "Photo: Barcex, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/patrice-evra.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/patrice-evra.webp",
+        "squareSize": 640,
+        "alt": "Patrice Evra, photographed 2024",
+        "taken": "2024-04-22",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/2/22/25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Patrice_Evra_-_240422_191127.jpg",
+        "originalSize": [
+          3840,
+          5760
+        ],
+        "crop": [
+          1016,
+          137,
+          1541,
+          1926
+        ],
+        "squareCrop": [
+          1208,
+          123,
+          1156,
+          1156
+        ],
+        "shareAlike": true
+      }
+    },
+    {
+      "slug": "andres-iniesta",
+      "name": "Andrés Iniesta",
+      "kind": "photo",
+      "photoOnly": true,
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Andr%C3%A9s_Iniesta_Argentina_v_Spain_19_July_2026-034.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Bryan Berlin"
+      },
+      "credit": "Photo: Bryan Berlin, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/andres-iniesta.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/andres-iniesta.webp",
+        "squareSize": 640,
+        "alt": "Andrés Iniesta, photographed 2026",
+        "taken": "2026-07-19",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Andr%C3%A9s_Iniesta_Argentina_v_Spain_19_July_2026-034.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          911,
+          842,
+          1280,
+          1600
+        ],
+        "squareCrop": [
+          1071,
+          830,
+          960,
+          960
+        ],
+        "shareAlike": true
+      }
+    },
+    {
+      "slug": "leroy-sane",
+      "name": "Leroy Sané",
+      "kind": "photo",
+      "photoOnly": true,
+      "licence": {
+        "name": "CC BY-SA 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "author": "Bryan Berlin",
+        "source": "https://commons.wikimedia.org/wiki/File:Leroy_Sane_Ecuador_v_Germany_25_June_2026-226.jpg",
+        "checked": "2026-11-26",
+        "attribution": "Bryan Berlin / WikiPortraits"
+      },
+      "credit": "Photo: Bryan Berlin / WikiPortraits, CC BY-SA 4.0, cropped",
+      "photo": {
+        "src": "/photos/leroy-sane.webp",
+        "width": 960,
+        "height": 1200,
+        "square": "/photos/sq/leroy-sane.webp",
+        "squareSize": 640,
+        "alt": "Leroy Sané, photographed 2026",
+        "taken": "2026-06-25",
+        "original": "https://upload.wikimedia.org/wikipedia/commons/1/18/Leroy_Sane_Ecuador_v_Germany_25_June_2026-226.jpg",
+        "originalSize": [
+          3333,
+          5000
+        ],
+        "crop": [
+          835,
+          86,
+          1534,
+          1917
+        ],
+        "squareCrop": [
+          1026,
+          72,
+          1150,
+          1150
         ],
         "shareAlike": true
       }

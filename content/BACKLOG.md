@@ -45,7 +45,7 @@ Every fact = 2 reputable sources (ESPN/BBC/FIFA/official/Romano), cited inline i
 When drafting a finals page, also add a crawlable homepage link: insert `<li><a href="/finals/<slug>/">Page title</a></li>` into the `archive__reads-list` block in index.html (the static "Read the finals, in full" list). The deploy publishes the new page and the homepage link together. Same idea for explainers/United later once those hubs exist.
 
 ## C5 — World Cup evergreen cluster (D92, ride the live window with durable pages, NOT fixtures)
-Peg to live storylines via /Users/josephbankole/Claude/fifa.archv/wc2026-storyline-tracker.md. Illustrated, verify-first, 2,250-3,000 words. These re-spike every 4 years.
+Peg to live storylines via ../../wc2026-storyline-tracker.md (fifa.archv/, outside this repo). Illustrated, verify-first, 2,250-3,000 words. These re-spike every 4 years.
 - [drafted] explainers/biggest-world-cup-upsets — the upsets canon (hand-built 2026-06-16, homepage-linked)
 - [drafted] explainers/most-world-cup-titles — every winner (drafted 2026-07-15, rides the 13 Jul "all four semi-finalists are past champions + top-four ranked" storyline; Spain 2-0 France 14 Jul, Argentina v England 15 Jul)
 - [todo] explainers/world-cup-hosts-history — hosts + 2026 three-nation first

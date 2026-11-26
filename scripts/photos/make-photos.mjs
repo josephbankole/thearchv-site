@@ -24,11 +24,14 @@
 
    Usage:
      node scripts/photos/make-photos.mjs --manifest <manifest-verified.json> \
-       --originals <dir> --faces <faces.jsonl> [--only slug,slug] [--checked 2026-11-21]
+       --originals <dir> --faces <faces.jsonl> [--only slug,slug] [--checked 2026-11-21] [--create]
+   --create adds a photo-only row (kind "photo", photoOnly true, no illustration) for a verified
+   person with no registry row (founder, 25 Nov 2026). Without it such a person is skipped.
    Rows with found !== true are skipped. A row with no original on disk or no face found is
    reported and left on its illustration. */
 import sharp from "sharp";
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
+import { creditText, NO_CREDIT } from "../shared/photo-credit.mjs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { join, dirname, basename, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -46,6 +49,21 @@ const manifest = JSON.parse(readFileSync(arg("manifest"), "utf8"));
 const originals = arg("originals");
 const checked = arg("checked", new Date().toISOString().slice(0, 10));
 const only = arg("only") ? new Set(arg("only").split(",")) : null;
+const create = process.argv.includes("--create");
+// Registry names for photo-only rows where the manifest's display name is not what the copy says.
+const NAME_FIX = { "javier-hernandez": "Javier Hernández" };
+// Never wired, whatever a manifest says (26 Nov 2026): Jannik Sinner's file is a White House
+// photograph whose embedded notice limits it to personal use by its subject and forbids changes,
+// and its public-domain status is US-only. He keeps his illustration.
+const EXCLUDE = new Set(["jannik-sinner"]);
+// What each licence legally requires us to print (26 Nov 2026, founder: "only add credits that are
+// legally required"), read from Commons by hand into scripts/data/photo-attribution.json: the credit
+// the author asked for (else the author), the title for CC 2.0/3.0 files, any copyright notice the
+// file carries. CC0 and public-domain files need no credit, so they get none.
+const ATTR_FILE = join(ROOT, "scripts", "data", "photo-attribution.json");
+const ATTR = existsSync(ATTR_FILE) ? JSON.parse(readFileSync(ATTR_FILE, "utf8")) : {};
+
+const ALIASES = { "javier-hernandez": ["Chicharito"] };
 const faces = new Map(
   readFileSync(arg("faces"), "utf8").split("\n").filter(Boolean).map((l) => {
     const j = JSON.parse(l);
@@ -63,9 +81,19 @@ const done = [];
 const skipped = [];
 for (const r of manifest) {
   if (r.found !== true) continue;
+  if (EXCLUDE.has(r.slug)) { skipped.push(`${r.slug}: excluded (see EXCLUDE)`); continue; }
   if (only && !only.has(r.slug)) continue;
-  const row = registry.players.find((p) => p.slug === r.slug);
-  if (!row) { skipped.push(`${r.slug}: no registry row`); continue; }
+  let row = registry.players.find((p) => p.slug === r.slug);
+  if (!row && create) {
+    // A photo-only row (founder, 25 Nov 2026: "Yes, add them"): someone we never drew. The registry
+    // name must be the plain full name the desk writes (manifest names can carry a nickname), and a
+    // bare mononym is never registered (CLAUDE.md: "Bare mononyms are left out on purpose").
+    const name = (NAME_FIX[r.slug] ?? r.name).trim();
+    if (!/\s/.test(name)) { skipped.push(`${r.slug}: "${name}" is a bare mononym, not registered`); continue; }
+    row = { slug: r.slug, name, ...(ALIASES[r.slug] ? { aliases: ALIASES[r.slug] } : {}), kind: "photo", photoOnly: true };
+    registry.players.push(row);
+  }
+  if (!row) { skipped.push(`${r.slug}: no registry row (pass --create for a photo-only row)`); continue; }
   const file = files.get(r.slug);
   if (!file) { skipped.push(`${r.slug}: original not downloaded`); continue; }
   const f = faces.get(r.slug)?.faces?.[0];
@@ -101,16 +129,34 @@ for (const r of manifest) {
 
   const outMain = join(OUT, `${r.slug}.webp`);
   const outSq = join(OUT, "sq", `${r.slug}.webp`);
+  // Keep the author and licence notices with every copy (CC 2.0/3.0: keep existing notices intact).
+  // sharp drops the original's metadata on re-encode, so the notice is written back as EXIF.
+  const a0 = ATTR[r.slug] ?? {};
+  const exif = { IFD0: {
+    Artist: String(a0.exifArtist || r.author).trim(),
+    Copyright: `${a0.exifCopyright || r.author}. ${r.licenceName}${r.licenceUrl ? ` ${r.licenceUrl}` : ""}. Cropped from ${r.filePage}`.trim(),
+  } };
   const main = await img.clone().extract(crop).resize({ height: LONG, width: Math.round(LONG / 1.25), fit: "fill", withoutEnlargement: true })
-    .webp({ quality: 82, effort: 6 }).toFile(outMain);
+    .withExif(exif).webp({ quality: 82, effort: 6 }).toFile(outMain);
   const sqo = await img.clone().extract(sq).resize({ width: SQ, height: SQ, fit: "fill", withoutEnlargement: true })
-    .webp({ quality: 82, effort: 6 }).toFile(outSq);
+    .withExif(exif).webp({ quality: 82, effort: 6 }).toFile(outSq);
 
   const year = String(r.dateTaken ?? "").slice(0, 4);
   const author = r.author.trim();
   row.kind = "photo";
-  row.credit = `Photograph: ${author} / Wikimedia Commons / ${r.licenceName}`;
+  const a = ATTR[r.slug] ?? {};
+  const free = NO_CREDIT(r.licenceName);
   row.licence = { name: r.licenceName, url: r.licenceUrl, author, source: r.filePage, checked };
+  if (free) {
+    delete row.credit;
+  } else {
+    // The plain-text credit; photoCreditHtml() in both readers builds the linked form from the same
+    // fields: attribution linked to the file page, licence linked to its deed.
+    row.licence.attribution = (a.attribution || author).trim();
+    if (a.title) row.licence.title = a.title;
+    if (a.copyright) row.licence.copyright = a.copyright;
+    row.credit = creditText(row.licence);
+  }
   row.photo = {
     src: `/photos/${r.slug}.webp`,
     width: main.width,
@@ -127,6 +173,16 @@ for (const r of manifest) {
   };
   done.push(`${r.slug} ${main.width}x${main.height} sq ${sqo.width}`);
 }
+// An excluded person who already has a photo row goes back to the illustration, files and all.
+for (const p of registry.players) {
+  if (!EXCLUDE.has(p.slug) || p.kind !== "photo") continue;
+  for (const f of [p.photo?.src, p.photo?.square]) if (f && existsSync(join(ROOT, "public", f))) unlinkSync(join(ROOT, "public", f));
+  delete p.photo; delete p.credit; delete p.licence; p.kind = "illustration";
+  done.push(`${p.slug} reverted to its illustration`);
+}
+// A photo-only row created above whose original or face was missing never got a photo: drop it,
+// so the registry never holds a row with nothing to draw.
+registry.players = registry.players.filter((p) => !(p.photoOnly && !p.photo));
 for (const p of registry.players) if (!p.kind) p.kind = "illustration";
 for (const c of registry.clubs) if (!c.kind) c.kind = "illustration";
 writeFileSync(REGISTRY, JSON.stringify(registry, null, 2) + "\n");

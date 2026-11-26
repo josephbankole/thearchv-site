@@ -22,6 +22,7 @@
 
    Runs in `npm run build` straight after check-illustrated-parity.mjs, and on its own as
    `npm run check-provenance`. */
+import { creditText, NO_CREDIT } from "./shared/photo-credit.mjs";
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -110,13 +111,27 @@ export function photoRowProblems(illustrated, exists = () => true) {
     if (hostOf(p.photo?.original) !== "upload.wikimedia.org") out.push(`${who}: original ${p.photo?.original} is not on upload.wikimedia.org`);
     else if (photoKey(p.photo.original) !== photoKey(lic.source)) out.push(`${who}: original ${p.photo.original} is not the file the licence source names`);
     if (/\b(NC|ND)\b|non-?commercial|no ?deriv/i.test(lic.name ?? "")) out.push(`${who}: licence ${lic.name} does not allow this use`);
-    if (p.credit !== `Photograph: ${lic.author} / Wikimedia Commons / ${lic.name}`) out.push(`${who}: credit "${p.credit}" is not the house credit line`);
+    // Only CC0, CC BY and CC BY-SA (26 Nov 2026): a bare "Public domain" tag can be US-only (a US
+    // government photo, a work published without notice) and not hold in Canada.
+    if (!/^(CC0 1\.0|CC0|CC BY(-SA)? [234]\.0)$/.test(lic.name ?? "")) out.push(`${who}: licence ${lic.name} is not CC0, CC BY or CC BY-SA`);
+    // The credit is what the licence requires and nothing more (scripts/shared/photo-credit.mjs).
+    if (NO_CREDIT(lic.name)) {
+      if (p.credit || lic.attribution) out.push(`${who}: a ${lic.name} photo needs no credit, so it carries none`);
+    } else {
+      if (typeof lic.attribution !== "string" || !lic.attribution.trim()) out.push(`${who}: ${lic.name} requires a credit, and no attribution is recorded`);
+      else if (p.credit !== creditText(lic)) out.push(`${who}: credit "${p.credit}" is not the licence credit "${creditText(lic)}"`);
+      if (/ [23]\.0$/.test(lic.name) && lic.title === "") out.push(`${who}: empty title`);
+    }
     const ph = p.photo ?? {};
     if (!/^\/photos\/[a-z0-9-]+\.webp$/.test(ph.src ?? "")) out.push(`${who}: photo src ${ph.src} is not on the photo shelf`);
     if (!/^\/photos\/sq\/[a-z0-9-]+\.webp$/.test(ph.square ?? "")) out.push(`${who}: square ${ph.square} is not on the photo shelf`);
     for (const f of [ph.src, ph.square]) if (f && !exists(f)) out.push(`${who}: ${f} is missing from public/`);
     if (!ph.alt || /illustrat/i.test(ph.alt)) out.push(`${who}: photo alt "${ph.alt}" must say it is a photograph, not an illustration`);
-    if (!p.src || !p.alt) out.push(`${who}: a photo row keeps its illustration (src, alt) for share cards`);
+    if (p.photoOnly) {
+      // Someone we never drew (25 Nov 2026): no illustration fields at all, so nothing can mistake
+      // the photo for a shareable file.
+      for (const k of ["src", "alt", "hd"]) if (p[k]) out.push(`${who}: a photoOnly row must not carry ${k}`);
+    } else if (!p.src || !p.alt) out.push(`${who}: a photo row keeps its illustration (src, alt) for share cards`);
   }
   return out;
 }

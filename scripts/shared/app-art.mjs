@@ -140,7 +140,7 @@ export function withAppArt(entry) {
    All strings, so a strict Codable decoder that does not know them ignores them and one that
    does reads them as optional Strings. `image` is untouched and stays the illustration: the app
    draws it in its share poster, which leaves the app, and a photo never goes there. An app that
-   shows `photo` must show `photoCredit` with it. */
+   shows `photo` must show `photoCredit` with it when it is not empty. */
 export function appPhoto(image) {
   const p = PLAYERS.find((r) => r.kind === "photo" && r.photo && r.hd === image);
   if (!p) return {};
@@ -148,7 +148,9 @@ export function appPhoto(image) {
     photo: p.photo.src,
     photoSquare: p.photo.square,
     photoAlt: p.photo.alt,
-    photoCredit: p.credit,
+    // "" for a CC0 photo, whose licence asks for no credit (26 Nov 2026); the key stays so the
+    // seven fields always come as a set.
+    photoCredit: p.credit ?? "",
     photoLicence: p.licence.name,
     photoLicenceUrl: p.licence.url,
     photoSource: p.licence.source,

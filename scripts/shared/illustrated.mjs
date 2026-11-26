@@ -138,7 +138,9 @@ export function entryArt(entry) {
   const text = `${entry.headline ?? ""} ${entry.dek ?? ""}`;
   const player = firstPlayerIn(text, PLAYERS, `${text} ${entry.body ?? ""}`);
   if (player) {
-    const drawn = { kind: "player", src: player.src, alt: player.alt, width: player.width, height: player.height };
+    // A photo-only row (no illustration exists) has nothing to share off-site: share is null, so a
+    // share card falls back to the house card and the app's `image` stays empty for that story.
+    const drawn = player.photoOnly ? null : { kind: "player", src: player.src, alt: player.alt, width: player.width, height: player.height };
     return player.kind === "photo" ? photoArt(player, drawn) : drawn;
   }
   const club = clubInText(text);
@@ -154,6 +156,12 @@ export function entryArt(entry) {
    and the app's `image` field. Read `share` there, never `src`. A photo is never redistributed
    off-site, and scripts/check-photo-wall.mjs fails the build if one is.
 
+   PHOTO-ONLY ROWS (founder, 25 Nov 2026: "Yes, add them"). A verified Commons photo of someone we
+   never drew is a row with kind "photo", photoOnly true and no src, alt, width, height or hd. On
+   the site the photo shows as for any photo row; its `share` is null, so share cards, JSON-LD and
+   the app carry nothing for that face (never the photo). Matching is by full name and aliases as
+   for every row. MIRRORED in src/render/illustrated.ts.
+
    A filed entry image counts as the same person when it is that row's own file or shares the stem
    of its app-grade head (/heads/<stem>.webp and /heads/hd/<stem>.webp), which is the identity rule
    scripts/shared/app-art.mjs already relies on. MIRRORED in src/render/illustrated.ts. */
@@ -163,7 +171,7 @@ export function playerForImage(src) {
   if (!src) return null;
   const stem = stemOf(src);
   return (
-    PLAYERS.find((p) => p.src === src || p.hd === src) ??
+    PLAYERS.find((p) => (p.src && p.src === src) || (p.hd && p.hd === src)) ??
     (src.startsWith("/heads/") ? PLAYERS.find((p) => p.hd && stemOf(p.hd) === stem) : null) ??
     null
   );
@@ -174,6 +182,7 @@ function photoArt(p, share) {
     kind: "photo",
     src: p.photo.src,
     square: p.photo.square,
+    squareSize: p.photo.squareSize,
     alt: p.photo.alt,
     width: p.photo.width,
     height: p.photo.height,
@@ -186,10 +195,15 @@ function photoArt(p, share) {
 /** The art a file that leaves the site may carry: the illustration behind a photo, else the art. */
 export const shareArt = (art) => (art && art.kind === "photo" ? art.share : art);
 
-/** The visible credit line for a photo, with the author linked to the Commons file page and the
-    licence name to its deed. `esc` is the caller's HTML escaper. Empty for anything but a photo. */
+/** The visible credit line for a photo, only where the licence requires one (26 Nov 2026; see
+    scripts/shared/photo-credit.mjs): "Photo: <attribution>, <licence>, cropped", the attribution
+    linked to the file page, the licence to its deed, the title in front for CC 2.0/3.0. Empty for
+    a CC0 or public-domain photo and for anything that is not a photo. `esc` is the caller's
+    escaper. MIRRORED in src/render/illustrated.ts. */
 export function photoCreditHtml(art, esc) {
-  if (!art || art.kind !== "photo") return "";
+  if (!art || art.kind !== "photo" || !art.credit || !art.licence?.attribution) return "";
   const l = art.licence;
-  return `Photograph: <a href="${esc(l.source)}" rel="noopener">${esc(l.author)}</a> / Wikimedia Commons / <a href="${esc(l.url)}" rel="license noopener">${esc(l.name)}</a>`;
+  const title = l.title ? `“${esc(l.title)}” by ` : "";
+  const copy = l.copyright ? `, ${esc(l.copyright)}` : "";
+  return `Photo: ${title}<a href="${esc(l.source)}" rel="noopener">${esc(l.attribution)}</a>${copy}, <a href="${esc(l.url)}" rel="license noopener">${esc(l.name)}</a>, cropped`;
 }

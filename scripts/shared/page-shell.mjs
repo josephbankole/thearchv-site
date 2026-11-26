@@ -20,7 +20,7 @@ import { TEAM_CREST_CSS } from "./crests.mjs";
    trade-mark sentence and the Premier League notice follow the founder's logo ruling of 21 Nov
    2026: the notice goes with every use of the Premier League logo, so it rides on the
    THIRD_PARTY_LOGOS switch in logos.mjs. */
-export const LEGAL_LINE = `The ARCHV is an independent football-history publication. Team and league names and logos are trade marks of their owners, shown for identification in news reporting; The ARCHV is independent and not affiliated with or endorsed by any club, league or governing body. Player illustrations are original stylised artwork; player photographs are free-licence files from Wikimedia Commons, credited on the <a href="/about/#photo-credits">photo credits</a> list. ${THIRD_PARTY_LOGOS ? `${PL_NOTICE} ` : ""}© 2026 The ARCHV.`;
+export const LEGAL_LINE = `The ARCHV is an independent football-history publication. Team and league names and logos are trade marks of their owners, shown for identification in news reporting; The ARCHV is independent and not affiliated with or endorsed by any club, league or governing body. Player illustrations are original stylised artwork. <a href="/about/#photo-credits">Photo credits</a>. ${THIRD_PARTY_LOGOS ? `${PL_NOTICE} ` : ""}© 2026 The ARCHV.`;
 
 export const SITE = "https://thearchv.ca";
 export const POSTHOG_KEY = "phc_kg8nXCp4TJMcRjBQAVZTQoubijYWeBRMHU9PHYgiUagm";

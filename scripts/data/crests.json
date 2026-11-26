@@ -174,24 +174,6 @@
       "checked": "2026-11-25"
     },
     {
-      "slug": "buffalo-bills",
-      "club": "Buffalo Bills",
-      "kind": "nfl",
-      "names": [
-        "Buffalo Bills"
-      ],
-      "file": "buffalo-bills.svg",
-      "filePage": "https://commons.wikimedia.org/wiki/File:Buffalo_Bills_logo_1974-present.svg",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Buffalo_Bills_logo_1974-present.svg",
-      "author": "Logo by Stevens Wright, vectorization by Based5290",
-      "licenceTag": "PD-US-no notice",
-      "licenceName": "Public domain (US, published without notice)",
-      "licenceUrl": null,
-      "fileSha256": "df357c101de528965bfdad731dbd2923182dae40e95d42ddf6b74b638e12106f",
-      "bytes": 9995,
-      "checked": "2026-11-25"
-    },
-    {
       "slug": "cincinnati-bengals",
       "club": "Cincinnati Bengals",
       "kind": "nfl",
@@ -264,24 +246,6 @@
       "checked": "2026-11-25"
     },
     {
-      "slug": "kansas-city-chiefs",
-      "club": "Kansas City Chiefs",
-      "kind": "nfl",
-      "names": [
-        "Kansas City Chiefs"
-      ],
-      "file": "kansas-city-chiefs.svg",
-      "filePage": "https://commons.wikimedia.org/wiki/File:Kansas_City_Chiefs_logo.svg",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Kansas_City_Chiefs_logo.svg",
-      "author": "Kansas City Chiefs",
-      "licenceTag": "PD-US-no-notice",
-      "licenceName": "Public domain (US, published without notice)",
-      "licenceUrl": null,
-      "fileSha256": "37babd334452218aff6c59474c1e7faae63678df2e9c30af7222899be2ed088a",
-      "bytes": 6593,
-      "checked": "2026-11-25"
-    },
-    {
       "slug": "los-angeles-chargers",
       "club": "Los Angeles Chargers",
       "kind": "nfl",
@@ -351,24 +315,6 @@
       "licenceUrl": null,
       "fileSha256": "afb3e75c79a8ed9a784f493a1ec1f6be1fcbbcaed50a250a3d09e44b4fbf8a2f",
       "bytes": 3235,
-      "checked": "2026-11-25"
-    },
-    {
-      "slug": "pittsburgh-steelers",
-      "club": "Pittsburgh Steelers",
-      "kind": "nfl",
-      "names": [
-        "Pittsburgh Steelers"
-      ],
-      "file": "pittsburgh-steelers.svg",
-      "filePage": "https://commons.wikimedia.org/wiki/File:Pittsburgh_Steelers_logo.svg",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Pittsburgh_Steelers_logo.svg",
-      "author": "Brighterorange",
-      "licenceTag": "PD-US-no notice",
-      "licenceName": "Public domain (US, published without notice)",
-      "licenceUrl": null,
-      "fileSha256": "d5bf31a941253c691cf1961bc4c0afcfb2c1f21f91a337827259dd5fe9b4a27f",
-      "bytes": 5479,
       "checked": "2026-11-25"
     },
     {

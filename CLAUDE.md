@@ -297,9 +297,9 @@ posters at the bottom of the page, the rest can live in sub pages."
   the reader's local time, else the next day's fixtures. It polls every 30 seconds only while a
   match is live (or due within two minutes before / fifteen after kickoff) and the tab is visible.
   Its status wording mirrors `scripts/shared/scores-client.js` (the inline client on /scores/):
-  change one, change the other. Text only, no crests. The track carries `overflow-y: hidden` (trap 3).
-  The 21 Nov 2026 logo ruling (below) does not reach the strip: it prints no competition label, so
-  it carries no logo.
+  change one, change the other. The track carries `overflow-y: hidden` (trap 3). It prints no
+  competition label, so it carries no competition logo; since 25 Nov 2026 a 16px club crest sits in
+  front of a team's name when the crest registry has one (see "Club crests" below).
 - **Where each removed section went.** Football Leagues, Transfer Desk and International Football
   bands: `/desk/leagues/`, `/desk/transfer/`, `/desk/world-cup/` (lane indexes; all three are in
   the masthead menu). The Legends: `/legends/`. Long reads: `/reads/`. Quick answers (FAQ): the six
@@ -625,6 +625,9 @@ Design of record: `docs/wire-design-2026-09-26/design-final.md`. Code: `scripts/
 
 ## Third-party logos: the Premier League logo (founder ruling, 21 Nov 2026)
 
+(Club crests from Wikimedia Commons joined on 25 Nov 2026 under the same switch; see "Club crests"
+below. The footer's trade-mark sentence covers both.)
+
 His words: "downloaded, we are ok to use them" (the official set from https://logo.premierleague.com,
 `PL_Digital_Positive.zip`). This supersedes "no competition logos" for the Premier League logo only.
 
@@ -651,9 +654,34 @@ His words: "downloaded, we are ok to use them" (the official set from https://lo
   `/logos/` is referenced from posters, the shop, `dist/feed/`, RSS, sitemaps, og or twitter meta, or
   any page at all while the switch is off. `scripts/test/logos.test.mjs` (in `test:home`) covers the
   helper and the table renderer both ways.
-- **Still off:** club crests and every other league until a later pass (Wikimedia Commons files only,
-  with file page, author and licence recorded); Formula 1, NBA and WNBA logos (their pages require a
-  written licence; names in text only). Nothing goes to the app until the founder is asked again.
+- **Never:** Formula 1, NBA and WNBA logos, or any mark whose owner's own page says a written licence
+  is needed (names in text only). Nothing goes to the app until the founder is asked again (Apple can
+  ask for proof of rights there).
+
+## Club crests (founder ruling, 21 Nov 2026 evening; D-2026-11-21b; built 25 Nov 2026)
+
+His words: "we wont be doing emails, anything that specifically says you need a written license, dont
+use, anything else that we can find in wikimedia, use". Read as: Wikimedia Commons files only.
+
+- **Registry.** `scripts/data/crests.json` (`archv-crests/1`): per club the Commons file page, the
+  upload URL, author, licence tag and name, the sha256 of the file in `public/logos/crests/` (byte
+  for byte as downloaded), and the team `names` it answers to (football-data.org's "Manchester United
+  FC", API-Football's "Manchester United", short forms). Never an en.wikipedia non-free upload, never
+  NC or ND, never a fan redraw. The research and the rejected clubs are in
+  `../photo-sourcing-2026-11-21/logos-commons.json`. A club with no Commons file has no crest.
+- **Readers.** `scripts/shared/crests.mjs` (`crestImg()`, `crestMap()`, `normTeam()`), MIRRORED in
+  `src/lib/crests.ts` for the homepage strip and in `crestKey()` inside `scores-client.js`, whose
+  table `scores-script.mjs` embeds at `// @crests` (so the CSP hash covers it). Matching is exact
+  after normalising case, accents, `&` and spacing; a miss draws nothing. `logos.test.mjs` fails if
+  the three normalisers or the two switches drift.
+- **Where.** Beside the name only: `/tables/` standings and match rows (and the sport hubs' tables
+  strips), `/scores/` match rows, the homepage scores strip. 16 to 18px, `alt=""` (the name is right
+  there), unaltered. `check-wire-links.mjs` allows `img.team-crest` in tables content and nowhere in
+  the Wire.
+- **Switch and gate.** `THIRD_PARTY_LOGOS` in `logos.mjs` AND `src/lib/crests.ts` turns every crest
+  off with the Premier League logo. `check-logos.mjs` checks each crest's sha256, Commons file page and
+  licence fields, and fails on any logo reference from posters, the shop, feeds, sitemaps, search,
+  share-card meta, the sport icons or `/app/`.
 
 ## The live scores page, /scores/ (2026-10-13; match panels 2026-10-19)
 
@@ -1018,7 +1046,9 @@ and approved by the founder on that audit, which always archives its predecessor
 `_superseded/` first; carve-out founder-approved 2026-08-05, and the same day's
 Alex Scott case shows why the audit comes first: the candidate failed it); no club
 crests, kits or FIFA marks anywhere, and no photos other than the credited free-licence Commons
-photographs under "Photographs" above (founder ruling, 21 Nov 2026).
+photographs under "Photographs" above (founder ruling, 21 Nov 2026) and the Commons club crests and
+Premier League logo under "Club crests" and "Third-party logos" (D-2026-11-21b), which sit beside a
+team or competition name and never on anything sold or shared out.
 
 The ARCHV club badges in `public/media/illustrated/` are not an exception to that last line.
 They are our own typographic disc, designed here, and the set is Leeds United, Manchester

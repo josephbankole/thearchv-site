@@ -47,6 +47,7 @@ import {
 } from "./shared/page-shell.mjs";
 import { scoresClientSource } from "./shared/scores-script.mjs";
 import { plLogo, PL_LOGO, COMP_LOGO_CSS } from "./shared/logos.mjs";
+import { TEAM_CREST_CSS } from "./shared/crests.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.env.CONTENT_OUT || join(ROOT, "dist");
@@ -90,6 +91,7 @@ function styles() {
     .scores__group { margin: 0 0 2rem; }
     .scores__group h2 { margin: 0 0 .2rem; color: var(--ink); font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: 1.5rem; line-height: 1.2; }
     ${COMP_LOGO_CSS}
+    ${TEAM_CREST_CSS}
     .scores__day { margin: 1rem 0 .3rem; color: var(--ink-muted); font-family: var(--font-mono); font-size: .75rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
     .scores__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
     .scores__item { border-bottom: 1px solid var(--rule); }

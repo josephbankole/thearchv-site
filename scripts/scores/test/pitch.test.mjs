@@ -83,6 +83,8 @@ test("scoresClientSource refuses a missing include line, a closing script tag an
       writeFileSync(join(dir, "scripts", "shared", "scores-pitch.js"), pitch);
     };
     writeFileSync(join(dir, TEAM_COLOURS_FILE), readFileSync(join(ROOT, TEAM_COLOURS_FILE)));
+    // The crest table (D-2026-11-21b) is embedded too, so the copy needs the registry to match.
+    writeFileSync(join(dir, "scripts", "data", "crests.json"), readFileSync(join(ROOT, "scripts", "data", "crests.json")));
     put(CLIENT_SRC, PITCH_SRC);
     assert.equal(scoresClientSource(dir), scoresClientSource(ROOT));
     put(CLIENT_SRC.replace(PITCH_INCLUDE, ""), PITCH_SRC);

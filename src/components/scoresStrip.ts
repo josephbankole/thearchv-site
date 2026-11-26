@@ -11,15 +11,17 @@
 //
 // WHAT IT SHOWS. Live matches first, then today's results and fixtures in the reader's local time;
 // when nothing is live and nothing is on today, the next day that has fixtures. One row of text
-// items (no crests: the feed carries none and img-src stays 'self' data:), built with textContent
+// items (crests come from our own registry, never the feed, and img-src stays 'self' data:), built with textContent
 // only, so nothing from the feed is ever parsed as markup.
 //
 // LOGOS (founder ruling, 21 Nov 2026). The Premier League logo is now licensed for the site, small
 // and beside the words "Premier League" where a page already names the competition, behind the
 // THIRD_PARTY_LOGOS switch in scripts/shared/logos.mjs (it shows on the /scores/ group heading and
 // the /tables/ Premier League table title). This strip prints no competition label, so it carries
-// no logo: one is not invented here. Text only stays the rule for this strip, and for every crest
-// and every logo that is not licensed.
+// no competition logo. CLUB CRESTS (same ruling, D-2026-11-21b): a 16px Wikimedia Commons crest
+// sits in front of a team's name when scripts/data/crests.json has one for that exact name
+// (src/lib/crests.ts, behind the same switch). Self-hosted, so img-src 'self' still holds. No crest
+// in the registry, no image: never a guessed one.
 //
 // WHAT IT NEVER DOES. It never removes the "All scores" link: that link is server-rendered in
 // index.html, pinned outside the scrolling track, and stays when the feed is empty, slow or down.
@@ -44,6 +46,8 @@
 // stuck figure even while the rest of the feed keeps moving: it loses the live dot, reads "Feed
 // paused" and stops holding the strip on the 30-second poll. Same limit and rule as staleLive() in
 // scripts/shared/scores-client.js and ScoresFreshness.liveMaxSinceKickoff in the app.
+import { crestEl } from '../lib/crests';
+
 const FEED = 'https://fpsfnhjxczzyqurzbqpt.supabase.co/storage/v1/object/public/live/scores.json';
 const POLL_MS = 30_000;
 const RETRY_MS = 60_000;
@@ -163,6 +167,14 @@ function el(tag: string, cls: string, text?: string): HTMLElement {
   return e;
 }
 
+// A team's name with its Commons crest in front when the registry has one (src/lib/crests.ts).
+function team(name: string | undefined): HTMLElement {
+  const t = el('span', 'scores-strip__team', name ?? '');
+  const c = crestEl(name);
+  if (c) t.prepend(c);
+  return t;
+}
+
 function item(m: Match): HTMLLIElement {
   const live = !!m.status?.live;
   const li = document.createElement('li');
@@ -178,9 +190,9 @@ function item(m: Match): HTMLLIElement {
   const played = a != null && b != null;
 
   const teams = el('span', 'scores-strip__teams');
-  teams.appendChild(el('span', 'scores-strip__team', m.home?.name ?? ''));
+  teams.appendChild(team(m.home?.name));
   teams.appendChild(el('b', 'scores-strip__score', played ? `${a}–${b}` : 'v'));
-  teams.appendChild(el('span', 'scores-strip__team', m.away?.name ?? ''));
+  teams.appendChild(team(m.away?.name));
   link.appendChild(teams);
 
   const status = el('span', 'scores-strip__status');

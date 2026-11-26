@@ -75,3 +75,43 @@ test("check-logos: with the switch off, a dist with no logo markup passes", () =
 test("the shipped logo file is byte for byte the download", () => {
   assert.deepEqual(checkFiles(), []);
 });
+
+// ---- Club crests (D-2026-11-21b): one switch, one normaliser, mirrored in the homepage bundle.
+import { readFileSync } from "node:fs";
+import { normTeam, crestImg, loadCrests } from "../shared/crests.mjs";
+import { scoresClientSource } from "../shared/scores-script.mjs";
+
+const ROOTDIR = join(import.meta.dirname, "..", "..");
+
+test("crests: the homepage mirror carries the same switch and the same normaliser", () => {
+  const ts = readFileSync(join(ROOTDIR, "src", "lib", "crests.ts"), "utf8");
+  assert.match(ts, new RegExp(`export const THIRD_PARTY_LOGOS = ${THIRD_PARTY_LOGOS};`));
+  const client = readFileSync(join(ROOTDIR, "scripts", "shared", "scores-client.js"), "utf8");
+  // The three normalisers must give the same answer on awkward names.
+  const body = ts.match(/export const normTeam = \(s: unknown\): string =>\s*([\s\S]*?);\n/)[1];
+  const tsNorm = new Function("s", `return ${body};`);
+  const cBody = client.match(/function crestKey\(s\) \{\s*return ([\s\S]*?);\n\s*\}/)[1];
+  const cNorm = new Function("s", `return ${cBody};`);
+  for (const n of ["Brighton & Hove Albion FC", "FC Bayern München", "Fenerbahçe SK", "FK Bodø/Glimt", "ŠK Slovan Bratislava", "  Real Betis Balompié "]) {
+    assert.equal(tsNorm(n), normTeam(n), n);
+    assert.equal(cNorm(n), normTeam(n), n);
+  }
+});
+
+test("crests: every registry row is a Commons file with licence and names, and crestImg is decorative", () => {
+  const { reg } = loadCrests();
+  for (const c of reg.crests) {
+    assert.match(c.filePage, /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/, c.slug);
+    assert.ok(c.names.length, c.slug);
+    const img = crestImg(c.names[0], { enabled: true });
+    assert.match(img, /^<img class="team-crest" src="\/logos\/crests\/[a-z0-9-]+\.(svg|png)" alt="" /);
+    assert.equal(crestImg(c.names[0], { enabled: false }), "");
+  }
+  assert.equal(crestImg("No Such Club FC", { enabled: true }), "");
+});
+
+test("crests: the /scores/ client carries the crest table (or null) inside the hashed text", () => {
+  const src = scoresClientSource(ROOTDIR);
+  assert.ok(!src.includes("// @crests"));
+  assert.match(src, /var CRESTS = (null|\{[^\n]*\});\n/);
+});

@@ -9,6 +9,7 @@
    nothing to show returns '' so no empty section ever ships. */
 import { esc, escAttr } from "../../shared/page-shell.mjs";
 import { plLogo } from "../../shared/logos.mjs";
+import { crestImg } from "../../shared/crests.mjs";
 import { SOURCES, SPORT_KEYS, currentEdition, blockVisible, daysBetween, rankOne, upcomingRows } from "./schema.mjs";
 
 // '' for a date it cannot read: content never throws the build (the sanitiser drops bad dates first).
@@ -124,7 +125,13 @@ function renderTableRows(b, compact) {
       groupRow = `${i ? "</tbody>\n        <tbody>\n          " : ""}<tr class="tblock__group"><th scope="rowgroup" colspan="${b.columns.length}">${esc(r.group || "")}</th></tr>\n          `;
     }
     const tds = b.columns.map((c) => {
-      const v = c.key === "team" || c.key === "name" ? (compact && r.short ? r.short : r.name) : r.cells?.[c.key];
+      if (c.key === "team" || c.key === "name") {
+        // The club's Commons crest (crests.mjs, D-2026-11-21b) in front of the name, found by the
+        // full name the feed gives; '' when the registry has none or the switch is off.
+        const v = compact && r.short ? r.short : r.name;
+        return `<td>${crestImg(r.name)}${cell(v)}</td>`;
+      }
+      const v = r.cells?.[c.key];
       return c.align === "end" ? `<td class="num">${cell(v)}</td>` : `<td>${cell(v)}</td>`;
     }).join("");
     return `${groupRow}<tr${r.highlight ? ' class="is-highlight"' : ""}>${tds}</tr>`;
@@ -142,7 +149,7 @@ function renderMatchRows(b) {
   const items = b.rows.map((r) => {
     const score = b.kind === "results" && Number.isFinite(r.homeScore) && Number.isFinite(r.awayScore) ? `<span class="tblock__score">${r.homeScore} to ${r.awayScore}</span>` : `<span class="tblock__v">v</span>`;
     const meta = [shortWhen(r), r.competition, r.round].filter(Boolean).map(esc).join(" &middot; ");
-    return `<li class="tblock__match"><span class="tblock__meta">${meta}</span><span class="tblock__teams"><span>${esc(r.home || "")}</span> ${score} <span>${esc(r.away || "")}</span></span></li>`;
+    return `<li class="tblock__match"><span class="tblock__meta">${meta}</span><span class="tblock__teams"><span>${crestImg(r.home)}${esc(r.home || "")}</span> ${score} <span>${crestImg(r.away)}${esc(r.away || "")}</span></span></li>`;
   });
   return `<ul class="tblock__matches">
         ${items.join("\n        ")}

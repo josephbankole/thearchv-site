@@ -9,7 +9,9 @@
    - an <img> appears inside the Wire or tables content (no publisher thumbnails, logos or crests).
      One licensed exception (founder ruling, 21 Nov 2026): the Premier League logo from
      scripts/shared/logos.mjs, as the first child of a table title (h3.tblock__title), is allowed;
-     the same image anywhere else in these regions, the Wire above all, still fails;
+     the same image anywhere else in these regions, the Wire above all, still fails. Club crests
+     (D-2026-11-21b, scripts/shared/crests.mjs): an img.team-crest from /logos/crests/ is allowed in
+     TABLES content only (the /tables/ page and the sport hubs' tables strips), never in the Wire;
    - the wire CSS region in page-shell.mjs, or in src/style.css once the homepage carries the Wire
      block (2026-10-28), gains an animation, marquee or headline clamp.
    The homepage block is checked like a sport strip when it is there; with no current edition it
@@ -61,6 +63,9 @@ export function wireCssProblems(text, label, required = true) {
 // A table title opening with the licensed Premier League logo (plLogo() in scripts/shared/logos.mjs).
 const LICENSED_TITLE_LOGO = /(<h3 class="tblock__title"[^>]*>)<img class="comp-logo" src="\/logos\/premier-league\/[A-Za-z0-9_.-]+\.png"[^>]*\/?>/g;
 
+// A club crest beside a team name in a table or match row (crestImg() in scripts/shared/crests.mjs).
+const LICENSED_CREST = /<img class="team-crest" src="\/logos\/crests\/[a-z0-9-]+\.(?:svg|png)" alt=""[^>]*\/?>/g;
+
 function checkPage(label, file, regions) {
   if (!existsSync(file)) { errors.push(`${label}: missing ${file}`); return 0; }
   const html = readFileSync(file, "utf8");
@@ -69,13 +74,14 @@ function checkPage(label, file, regions) {
     links++;
     for (const p of wireLinkProblems(m[0])) errors.push(`${label}: ${p}`);
   }
-  for (const [start, end] of regions) {
+  for (const [start, end, crests] of regions) {
     const i = html.indexOf(start);
     if (i < 0) continue;
     const j = end ? html.indexOf(end, i) : -1;
     const stop = j < 0 ? html.indexOf("</main>", i) : j;
     const region = html.slice(i, stop < 0 ? undefined : stop);
-    const rest = region.replace(LICENSED_TITLE_LOGO, "$1");
+    let rest = region.replace(LICENSED_TITLE_LOGO, "$1");
+    if (crests) rest = rest.replace(LICENSED_CREST, "");
     if (/<img\b/i.test(rest)) errors.push(`${label}: <img> inside Wire or tables content`);
     if (/<marquee\b/i.test(region)) errors.push(`${label}: <marquee> inside Wire or tables content`);
   }
@@ -85,9 +91,9 @@ function checkPage(label, file, regions) {
 if (isMain(import.meta.url)) {
   let links = 0;
   links += checkPage("/wire/", join(DIST, "wire", "index.html"), [["<main", "</main>"]]);
-  links += checkPage("/tables/", join(DIST, "tables", "index.html"), [["<main", "</main>"]]);
+  links += checkPage("/tables/", join(DIST, "tables", "index.html"), [["<main", "</main>", true]]);
   for (const s of SPORTS.filter((s) => s.urlBase)) {
-    links += checkPage(`/${s.urlBase}/`, join(DIST, s.urlBase, "index.html"), [['class="wire wire--strip"', 'class="wire__more"><a href="/wire/'], ['class="tables tables--strip"', 'class="wire__more"><a href="/tables/']]);
+    links += checkPage(`/${s.urlBase}/`, join(DIST, s.urlBase, "index.html"), [['class="wire wire--strip"', 'class="wire__more"><a href="/wire/'], ['class="tables tables--strip"', 'class="wire__more"><a href="/tables/', true]]);
   }
 
   const homeFile = join(DIST, "index.html");

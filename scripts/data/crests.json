@@ -1,0 +1,411 @@
+{
+  "schema": "archv-crests/1",
+  "ruling": "D-2026-11-21b (founder, 21 Nov 2026): Wikimedia Commons files only, never F1, NBA or WNBA, never a mark whose owner requires a written licence. Research: fifa.archv/photo-sourcing-2026-11-21/logos-commons.json",
+  "switch": "THIRD_PARTY_LOGOS in scripts/shared/logos.mjs and src/lib/crests.ts",
+  "crests": [
+    {
+      "slug": "como",
+      "club": "Como 1907",
+      "kind": "football",
+      "names": [
+        "Como 1907",
+        "Como"
+      ],
+      "file": "como.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Calcio_Como_-_logo_(Italy,_2019-).svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/99/Calcio_Como_-_logo_%28Italy%2C_2019-%29.svg",
+      "author": "Como 1907 srl",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "8af8fa536a88d66700fe9be89250df2ec79f030dd5d8c27400617283f1be2bb3",
+      "bytes": 10759,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "borussia-dortmund",
+      "club": "Borussia Dortmund",
+      "kind": "football",
+      "names": [
+        "Borussia Dortmund"
+      ],
+      "file": "borussia-dortmund.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Borussia_Dortmund_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
+      "author": "Lispir (Lispir)",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "e517d63b08b5310310a867b8412a9cdb7d4f8e45cfed07e3d7e2e78e41b639c9",
+      "bytes": 3071,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "bayern-munich",
+      "club": "FC Bayern München",
+      "kind": "football",
+      "names": [
+        "FC Bayern München",
+        "Bayern München",
+        "Bayern Munich"
+      ],
+      "file": "bayern-munich.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:FC_Bayern_M%C3%BCnchen_logo_(2024).svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg",
+      "author": "FC Bayern Munich",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "d76ad7bc2e4e504acd7d4f5b16d3601541e707714cb448f7ad2ec9b3bc7fe86f",
+      "bytes": 6805,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "stuttgart",
+      "club": "VfB Stuttgart",
+      "kind": "football",
+      "names": [
+        "VfB Stuttgart"
+      ],
+      "file": "stuttgart.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:VfB_Stuttgart_1893_Logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/VfB_Stuttgart_1893_Logo.svg",
+      "author": "VfB Stuttgart",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "b784d59cefe44bd9a2b7c8d879cc48ce410bc04ddcf68fff1c578f37837c3cc6",
+      "bytes": 12311,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "inter",
+      "club": "FC Internazionale Milano",
+      "kind": "football",
+      "names": [
+        "FC Internazionale Milano",
+        "Inter"
+      ],
+      "file": "inter.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:FC_Internazionale_Milano_2021.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
+      "author": "FC Internazionale Milano S.p.A. / Bureau Borsche",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "6fb4c9bb1b3297c6d72ed87206caa5f0c77576d379595f374fef089382e230b6",
+      "bytes": 1028,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "napoli",
+      "club": "SSC Napoli",
+      "kind": "football",
+      "names": [
+        "SSC Napoli",
+        "Napoli"
+      ],
+      "file": "napoli.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:SSC_Napoli_2025_(white_and_azure).svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/SSC_Napoli_2025_%28white_and_azure%29.svg",
+      "author": "Logo: SSC Napoli S.p.A. Upload: The White Lion",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "78bb07a4ed7b3d8d4bda2f36298b7096744b846c91d2565230a90099ed9a28f4",
+      "bytes": 6165,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "feyenoord",
+      "club": "Feyenoord Rotterdam",
+      "kind": "football",
+      "names": [
+        "Feyenoord Rotterdam",
+        "Feyenoord"
+      ],
+      "file": "feyenoord.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Feyenoord_logo_since_2024.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Feyenoord_logo_since_2024.svg",
+      "author": "Feyenoord Rotterdam N.V.",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "09bdab98a3e108ce0b7415ea8429d6f98ee629f8e06ee0a4695c54b95b1dfe3a",
+      "bytes": 7330,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "slavia-praha",
+      "club": "SK Slavia Praha",
+      "kind": "football",
+      "names": [
+        "SK Slavia Praha",
+        "Slavia Praha"
+      ],
+      "file": "slavia-praha.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:SK_Slavia_Praha_full_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2b/SK_Slavia_Praha_full_logo.svg",
+      "author": "SK Slavia Praha & eSports.cz, s.r.o. & JT Design",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "1503f92fa4fd2414cbd95ec12a555235e36c8526a4477ab124a92660759edd10",
+      "bytes": 2025,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "slovan-bratislava",
+      "club": "ŠK Slovan Bratislava",
+      "kind": "football",
+      "names": [
+        "ŠK Slovan Bratislava",
+        "Slovan Bratislava"
+      ],
+      "file": "slovan-bratislava.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:SK_Slovan_Bratislava_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/01/SK_Slovan_Bratislava_logo.svg",
+      "author": "ŠK Slovan Bratislava",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "3ce45c6fa495ab8035273647ac051256f57ab92b69998edd74011fbe020566f7",
+      "bytes": 20389,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "buffalo-bills",
+      "club": "Buffalo Bills",
+      "kind": "nfl",
+      "names": [
+        "Buffalo Bills"
+      ],
+      "file": "buffalo-bills.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Buffalo_Bills_logo_1974-present.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Buffalo_Bills_logo_1974-present.svg",
+      "author": "Logo by Stevens Wright, vectorization by Based5290",
+      "licenceTag": "PD-US-no notice",
+      "licenceName": "Public domain (US, published without notice)",
+      "licenceUrl": null,
+      "fileSha256": "df357c101de528965bfdad731dbd2923182dae40e95d42ddf6b74b638e12106f",
+      "bytes": 9995,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "cincinnati-bengals",
+      "club": "Cincinnati Bengals",
+      "kind": "nfl",
+      "names": [
+        "Cincinnati Bengals"
+      ],
+      "file": "cincinnati-bengals.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Cincinnati_Bengals_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/81/Cincinnati_Bengals_logo.svg",
+      "author": "Cincinnati Bengals",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "ea9dd831e4b669839eaf2379ae6ea2f14e11ba744075e70e010f8720db1f1593",
+      "bytes": 2002,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "dallas-cowboys",
+      "club": "Dallas Cowboys",
+      "kind": "nfl",
+      "names": [
+        "Dallas Cowboys"
+      ],
+      "file": "dallas-cowboys.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Dallas_Cowboys.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/15/Dallas_Cowboys.svg",
+      "author": "Opertinicy",
+      "licenceTag": "pd-shape",
+      "licenceName": "Public domain (simple shapes)",
+      "licenceUrl": null,
+      "fileSha256": "ec3d0499cd11ba6cf60cca8a37bc188f64794cfce9f51544d1526971a75e7bb2",
+      "bytes": 397,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "green-bay-packers",
+      "club": "Green Bay Packers",
+      "kind": "nfl",
+      "names": [
+        "Green Bay Packers"
+      ],
+      "file": "green-bay-packers.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Green_Bay_Packers_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/50/Green_Bay_Packers_logo.svg",
+      "author": "This vector image was created with Adobe Illustrator by Daris Bayliss, and then manually edited by Green Bay Packers.",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "8c15f9d8e337f5d2244b85a5ead37b9a76a03e68c40bb7a7026a52578d5f95a8",
+      "bytes": 1174,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "indianapolis-colts",
+      "club": "Indianapolis Colts",
+      "kind": "nfl",
+      "names": [
+        "Indianapolis Colts"
+      ],
+      "file": "indianapolis-colts.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Indianapolis_Colts_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/Indianapolis_Colts_logo.svg",
+      "author": "Indianapolis Colts",
+      "licenceTag": "PD-ineligible",
+      "licenceName": "Public domain (below the threshold of originality)",
+      "licenceUrl": null,
+      "fileSha256": "0b2f28f6f9b98f299c7a9939f111090bb8a0ae748a3ba046649ce9ef64712324",
+      "bytes": 4310,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "kansas-city-chiefs",
+      "club": "Kansas City Chiefs",
+      "kind": "nfl",
+      "names": [
+        "Kansas City Chiefs"
+      ],
+      "file": "kansas-city-chiefs.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Kansas_City_Chiefs_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Kansas_City_Chiefs_logo.svg",
+      "author": "Kansas City Chiefs",
+      "licenceTag": "PD-US-no-notice",
+      "licenceName": "Public domain (US, published without notice)",
+      "licenceUrl": null,
+      "fileSha256": "37babd334452218aff6c59474c1e7faae63678df2e9c30af7222899be2ed088a",
+      "bytes": 6593,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "los-angeles-chargers",
+      "club": "Los Angeles Chargers",
+      "kind": "nfl",
+      "names": [
+        "Los Angeles Chargers"
+      ],
+      "file": "los-angeles-chargers.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Los_Angeles_Chargers_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Los_Angeles_Chargers_logo.svg",
+      "author": "Los Angeles Chargers",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "ac4f7ca053eccdc815090bdf1b3448f00027176474845fee4d2df3c156dfeb52",
+      "bytes": 1275,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "new-orleans-saints",
+      "club": "New Orleans Saints",
+      "kind": "nfl",
+      "names": [
+        "New Orleans Saints"
+      ],
+      "file": "new-orleans-saints.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:New_Orleans_Saints_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/50/New_Orleans_Saints_logo.svg",
+      "author": "New Orleans Saints",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "d60da303f4cbb557e5973aa0ac30c71de0505927b5da3f5180acc5dd33e63be4",
+      "bytes": 5132,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "new-york-giants",
+      "club": "New York Giants",
+      "kind": "nfl",
+      "names": [
+        "New York Giants"
+      ],
+      "file": "new-york-giants.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:New_York_Giants_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/New_York_Giants_logo.svg",
+      "author": "Opertinicy at en.wikipedia",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "6abe4c098c4f0747e794597fc19944d45217805c9b2a2118c9b432d0468666be",
+      "bytes": 3496,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "new-york-jets",
+      "club": "New York Jets",
+      "kind": "nfl",
+      "names": [
+        "New York Jets"
+      ],
+      "file": "new-york-jets.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:New_York_Jets_2024.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/69/New_York_Jets_2024.svg",
+      "author": "New York Jets",
+      "licenceTag": "PD-logo",
+      "licenceName": "Public domain (logo)",
+      "licenceUrl": null,
+      "fileSha256": "afb3e75c79a8ed9a784f493a1ec1f6be1fcbbcaed50a250a3d09e44b4fbf8a2f",
+      "bytes": 3235,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "pittsburgh-steelers",
+      "club": "Pittsburgh Steelers",
+      "kind": "nfl",
+      "names": [
+        "Pittsburgh Steelers"
+      ],
+      "file": "pittsburgh-steelers.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Pittsburgh_Steelers_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Pittsburgh_Steelers_logo.svg",
+      "author": "Brighterorange",
+      "licenceTag": "PD-US-no notice",
+      "licenceName": "Public domain (US, published without notice)",
+      "licenceUrl": null,
+      "fileSha256": "d5bf31a941253c691cf1961bc4c0afcfb2c1f21f91a337827259dd5fe9b4a27f",
+      "bytes": 5479,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "san-francisco-49ers",
+      "club": "San Francisco 49ers",
+      "kind": "nfl",
+      "names": [
+        "San Francisco 49ers"
+      ],
+      "file": "san-francisco-49ers.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:San_Francisco_49ers_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/San_Francisco_49ers_logo.svg",
+      "author": "San Francisco 49ers, User:Stepshep",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "d3ae8fd9ca796f940e6215df987a2949bdc5825a23f589105afee71bef3c7d9d",
+      "bytes": 3571,
+      "checked": "2026-11-25"
+    },
+    {
+      "slug": "washington-commanders",
+      "club": "Washington Commanders",
+      "kind": "nfl",
+      "names": [
+        "Washington Commanders"
+      ],
+      "file": "washington-commanders.svg",
+      "filePage": "https://commons.wikimedia.org/wiki/File:Washington_Commanders_logo.svg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Washington_Commanders_logo.svg",
+      "author": "Washington Commanders",
+      "licenceTag": "PD-textlogo",
+      "licenceName": "Public domain (text logo)",
+      "licenceUrl": null,
+      "fileSha256": "b8aea1084019477c8a2d839e200f9ef83f54e1ff5c655a42b435d59b44c7eece",
+      "bytes": 822,
+      "checked": "2026-11-25"
+    }
+  ]
+}

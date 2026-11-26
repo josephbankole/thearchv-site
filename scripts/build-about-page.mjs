@@ -36,6 +36,7 @@ import {
   ROBOTS_NOINDEX_FOLLOW, cspMeta, scriptHash, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   ORG_REF, ORG_NODE, AUTHOR_NAME, AUTHOR_PERSONAL_URL,
 } from "./shared/page-shell.mjs";
+import { THIRD_PARTY_LOGOS } from "./shared/logos.mjs";
 import { correctionsRows, correctionItem, correctionDay, reportCorrections } from "./shared/corrections-log.mjs";
 import {
   BIO, AUTHOR_ROLE, PERSON_NODE, portrait, deskWork, recentCard, linkList,
@@ -177,6 +178,27 @@ ${photoRows.map((p) => `            ${photoItem(p)}`).join("\n")}
         </details>`
   : "";
 
+/* ---------- crest credits (D-2026-11-21b, 25 Nov 2026) ----------
+   Every club crest the site shows beside a team name, from scripts/data/crests.json: Wikimedia
+   Commons files, each with its author and licence. Off with the logo switch. */
+const crestRows = THIRD_PARTY_LOGOS
+  ? readData("crests.json").crests.slice().sort((a, b) => a.club.localeCompare(b.club, "en-GB"))
+  : [];
+const crestItem = (c) => {
+  const licence = c.licenceUrl ? `<a href="${escAttr(c.licenceUrl)}" rel="license noopener">${esc(c.licenceName)}</a>` : esc(c.licenceName);
+  return `<li>${esc(c.club)}: ${licence}, ${esc(c.author)}, <a href="${escAttr(c.filePage)}">file on Wikimedia Commons</a></li>`;
+};
+const crestCreditsHtml = crestRows.length
+  ? `<h3 id="crest-credits">Club crests</h3>
+        <p>Club crests are shown small beside a team's name in our tables and scores, for identification only. Each is a file from Wikimedia Commons, used unaltered; the crests are trade marks of their clubs, and The ARCHV is not affiliated with or endorsed by any of them. They never appear on posters, in the shop or on the cards a page shares to other sites.</p>
+        <details class="log-older credits">
+          <summary>Crests and licences (${crestRows.length})</summary>
+          <ul>
+${crestRows.map((c) => `            ${crestItem(c)}`).join("\n")}
+          </ul>
+        </details>`
+  : "";
+
 const creditsHtml = (credits.length
   ? `<h3 id="portrait-credits">Portrait credits</h3>
         <p>Some of our portraits are made from a reference photograph published on Wikimedia Commons under an open licence. The photographer and the licence of each one are listed here.</p>
@@ -186,7 +208,7 @@ const creditsHtml = (credits.length
 ${credits.map((c) => `            ${creditItem(c)}`).join("\n")}
           </ul>
         </details>`
-  : "") + (photoCreditsHtml ? `\n\n        ${photoCreditsHtml}` : "");
+  : "") + (photoCreditsHtml ? `\n\n        ${photoCreditsHtml}` : "") + (crestCreditsHtml ? `\n\n        ${crestCreditsHtml}` : "");
 
 /* ---------- Joseph Bankole: the derived lists ---------- */
 const recentBlock = recent.length

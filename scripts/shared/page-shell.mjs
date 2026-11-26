@@ -13,6 +13,7 @@ import { readFileSync } from "node:fs";
 import { SPORT_ICON_ALT, sportGlyph } from "../icons/markup.mjs";
 import { marginArt } from "./margin-art.mjs";
 import { THIRD_PARTY_LOGOS, PL_NOTICE, COMP_LOGO_CSS } from "./logos.mjs";
+import { TEAM_CREST_CSS } from "./crests.mjs";
 
 /* The footer legal line, one source for every static footer (footer() here, and the hand-built
    footers in build-content.mjs and build-day-pages.mjs; index.html carries a hand copy). The
@@ -1456,6 +1457,7 @@ export function pageStyles() {
     .footer__tag { color: var(--cream); margin: .5rem 0; }
     .footer__legal { color: var(--cream-faint-text); font-size: .74rem; line-height: 1.5; max-width: 60rem; }
     ${COMP_LOGO_CSS}
+    ${TEAM_CREST_CSS}
 
     /* glossary (UNIT 1) + standards (UNIT 2, now the /about/ page): evergreen static surfaces */
     .glossary { padding: 1.5rem 0 1rem; }

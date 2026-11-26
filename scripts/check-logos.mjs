@@ -8,7 +8,10 @@
    - from ANY page or file at all while THIRD_PARTY_LOGOS in scripts/shared/logos.mjs is false,
      which is what proves the switch really takes every logo off.
    It also checks that each logo file in public/logos/ still matches the sha256 recorded in
-   scripts/data/logos.json: the terms allow resizing only, so the file must stay as downloaded.
+   scripts/data/logos.json, and each club crest in public/logos/crests/ the sha256 in
+   scripts/data/crests.json (Wikimedia Commons files, D-2026-11-21b, with file page, author and
+   licence recorded; never NC or ND, never an en.wikipedia upload): resize only, the file stays as
+   downloaded. The sport icons (dist/sport-icons/) and the app pages never reference a logo.
 
    `checkDist(dir, { enabled })` is exported for scripts/test/logos.test.mjs. */
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
@@ -20,7 +23,7 @@ import { THIRD_PARTY_LOGOS, LOGO_DIR } from "./shared/logos.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const TEXT = new Set([".html", ".json", ".xml", ".txt", ".js", ".css", ".svg", ".webmanifest"]);
 // Places a logo may never be referenced from, switch on or off.
-const NEVER = [/^posters\//, /^shop\//, /^feed\//, /^feed\.xml$/, /^rss/, /sitemap[^/]*\.xml$/, /^search-index\.json$/, /^news-sitemap/];
+const NEVER = [/^posters\//, /^shop\//, /^feed\//, /^sport-icons\//, /^app\//, /^feed\.xml$/, /^rss/, /sitemap[^/]*\.xml$/, /^search-index\.json$/, /^news-sitemap/];
 const SHARE_META = /<meta\b[^>]*(?:property|name)="(?:og:image|twitter:image)[^"]*"[^>]*>/gi;
 
 function walk(dir, out = []) {
@@ -58,6 +61,19 @@ export function checkFiles(root = ROOT) {
     if (!existsSync(p)) { errors.push(`${l.file}: missing`); continue; }
     const sha = createHash("sha256").update(readFileSync(p)).digest("hex");
     if (sha !== l.fileSha256) errors.push(`${l.file}: changed since download (sha256 ${sha}); the terms allow resizing only`);
+  }
+  const crests = JSON.parse(readFileSync(join(root, "scripts/data/crests.json"), "utf8"));
+  if (crests.schema !== "archv-crests/1") errors.push("scripts/data/crests.json: schema is not archv-crests/1");
+  for (const c of crests.crests) {
+    const p = join(root, "public/logos/crests", c.file || "");
+    if (!c.file || !existsSync(p)) { errors.push(`crest ${c.slug}: file missing`); continue; }
+    const sha = createHash("sha256").update(readFileSync(p)).digest("hex");
+    if (sha !== c.fileSha256) errors.push(`crest ${c.slug}: changed since download (sha256 ${sha})`);
+    if (!/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/.test(c.filePage || "")) errors.push(`crest ${c.slug}: file page is not on Wikimedia Commons`);
+    if (!/^https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\//.test(c.imageUrl || "")) errors.push(`crest ${c.slug}: image is not a Commons upload`);
+    if (!c.licenceName || !c.licenceTag || !c.author) errors.push(`crest ${c.slug}: licence name, tag and author must be recorded`);
+    if (/\b(NC|ND)\b|non-?commercial|no-?deriv/i.test(`${c.licenceName} ${c.licenceTag}`)) errors.push(`crest ${c.slug}: NC or ND licence`);
+    if (!Array.isArray(c.names) || !c.names.length) errors.push(`crest ${c.slug}: no names to match`);
   }
   return errors;
 }

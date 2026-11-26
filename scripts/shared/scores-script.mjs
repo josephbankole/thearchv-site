@@ -19,11 +19,28 @@
    - no "<!--", because verify-csp-pages.mjs strips HTML comments before hashing and would then hash
      something other than what the browser runs, and report a false mismatch.
    The table is written with every "<" escaped as <, so no team name can bring either in. */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import { crestMap } from "./crests.mjs";
+import { THIRD_PARTY_LOGOS } from "./logos.mjs";
 
 export const PITCH_INCLUDE = "  // @include scores-pitch.js\n";
 export const TEAM_COLOURS_LINE = "  var TEAM_COLOURS = null; // @team-colours\n";
+// CLUB CRESTS (D-2026-11-21b). The client's `var CRESTS = null; // @crests` line becomes
+// { "<normalised team name>": "/logos/crests/<file>" } from scripts/data/crests.json, or null with
+// THIRD_PARTY_LOGOS off, so the switch takes every crest off /scores/ too. Paths are checked here.
+export const CRESTS_LINE = "  var CRESTS = null; // @crests\n";
+export function crestsEmbed(root, enabled = THIRD_PARTY_LOGOS) {
+  if (!enabled) return null;
+  // A root with no registry (the temp roots in scripts/scores/test/) embeds null; the real build
+  // cannot get here without the file, because check-logos.mjs reads it and fails when it is missing.
+  if (!existsSync(join(root, "scripts", "data", "crests.json"))) return null;
+  const m = crestMap(root);
+  for (const [k, v] of Object.entries(m)) {
+    if (!/^[a-z0-9 ]+$/.test(k) || !/^\/logos\/crests\/[a-z0-9-]+\.(?:svg|png)$/.test(v)) throw new Error(`[scores-script] bad crest entry ${k} -> ${v}`);
+  }
+  return m;
+}
 export const TEAM_COLOURS_FILE = join("scripts", "data", "team-colours.json");
 
 // The same check as hexColour() in supabase/functions/scores-poll/map.ts and pitchHex() in
@@ -85,7 +102,12 @@ export function scoresClientSource(root) {
   }
   // One line of JSON (stringify escapes every newline), so it cannot hold the include line below.
   const json = JSON.stringify(teamColoursEmbed(root)).replace(/</g, "\\u003c");
-  const parts = lines.join(`  var TEAM_COLOURS = ${json};\n`).split(PITCH_INCLUDE);
+  const withColours = lines.join(`  var TEAM_COLOURS = ${json};\n`);
+  const cl = withColours.split(CRESTS_LINE);
+  if (cl.length !== 2) {
+    throw new Error(`[scores-script] scores-client.js must hold the line ${JSON.stringify(CRESTS_LINE)} exactly once (found ${cl.length - 1}).`);
+  }
+  const parts = cl.join(`  var CRESTS = ${JSON.stringify(crestsEmbed(root))};\n`).split(PITCH_INCLUDE);
   if (parts.length !== 2) {
     throw new Error(`[scores-script] scores-client.js must hold the line ${JSON.stringify(PITCH_INCLUDE)} exactly once (found ${parts.length - 1}).`);
   }

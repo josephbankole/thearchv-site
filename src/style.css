@@ -802,6 +802,8 @@ section { padding-block: clamp(5rem, 12vh, 10rem); }
 .scores-strip__link:hover .scores-strip__team { text-decoration: underline; text-underline-offset: 2px; }
 .scores-strip__link:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
 .scores-strip__team { color: var(--ink); }
+/* Club crest in front of a team name (D-2026-11-21b): 16px, unaltered, decorative; no transform (trap 3). */
+.scores-strip__team .team-crest { display: inline-block; width: 16px; height: 16px; object-fit: contain; vertical-align: -2px; margin-right: 0.3rem; }
 .scores-strip__score { margin: 0 0.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .scores-strip__status { font-size: 0.76rem; font-variant-numeric: tabular-nums; color: var(--ink-muted); }
 .scores-strip__item.is-live .scores-strip__status { color: var(--accent-ink); font-weight: 700; }

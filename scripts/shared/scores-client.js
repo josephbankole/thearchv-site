@@ -62,6 +62,10 @@
   // replaces this line with the table from scripts/data/team-colours.json (scores-script.mjs);
   // pitchSideColors() in scores-pitch.js reads it. Null here means neutral shirts, as before.
   var TEAM_COLOURS = null; // @team-colours
+  // Club crests (D-2026-11-21b): the build replaces this line with { "<normalised name>": "<path>" }
+  // from scripts/data/crests.json (Wikimedia Commons files, self-hosted), or null with the logo switch
+  // off. A team with no entry gets no image; nothing is guessed. scores-script.mjs.
+  var CRESTS = null; // @crests
 
   // @include scores-pitch.js
 
@@ -198,11 +202,29 @@
     var p = m.penalties;
     if (p && p.home != null && p.away != null) mid.appendChild(h('span', 'scores__pens', p.home + '-' + p.away + ' pens'));
     el.appendChild(st);
-    el.appendChild(h('span', 'scores__home', m.home.name));
+    el.appendChild(teamName('scores__home', m.home.name));
     el.appendChild(mid);
-    el.appendChild(h('span', 'scores__away', m.away.name));
+    el.appendChild(teamName('scores__away', m.away.name));
     el.appendChild(h('span', 'scores__caret'));
     return el;
+  }
+
+  // Same normaliser as normTeam() in scripts/shared/crests.mjs (a test holds them together).
+  function crestKey(s) {
+    return String(s == null ? '' : s).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+  // A team's name, with its crest in front when the build's table has one. Decorative: alt is empty
+  // because the name is right beside it.
+  function teamName(cls, name) {
+    var span = h('span', cls, name);
+    var src = CRESTS && Object.prototype.hasOwnProperty.call(CRESTS, crestKey(name)) ? CRESTS[crestKey(name)] : null;
+    if (src) {
+      var img = h('img', 'team-crest');
+      img.src = src; img.alt = ''; img.setAttribute('aria-hidden', 'true'); img.width = 16; img.height = 16;
+      span.insertBefore(img, span.firstChild);
+    }
+    return span;
   }
 
   function render() {

@@ -13,6 +13,10 @@
    just outside the scope of a search/answer-engine audit. It is still scanned and reported
    separately so a change there is never silently invisible.
 
+   One more deliberate empty alt (D-2026-11-21b, 25 Nov 2026): the club crest beside a team's name
+   (img.team-crest, from scripts/shared/crests.mjs), which carries alt="" AND aria-hidden="true"
+   because the team's name is printed right beside it. Only that exact pairing on that class passes.
+
    Usage: node scripts/check-img-alt.mjs           (report + non-zero exit on any in-scope hit)
           node scripts/check-img-alt.mjs --quiet   (summary line only) */
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -48,7 +52,7 @@ function auditFile(path) {
     const altMatch = attrs.match(ALT_RE);
     const alt = altMatch ? altMatch[1] ?? altMatch[2] ?? "" : null;
     if (alt === null) hits.push({ tag: m[0], reason: "missing alt attribute" });
-    else if (alt.trim() === "") hits.push({ tag: m[0], reason: "empty alt attribute" });
+    else if (alt.trim() === "" && !(/\bclass="team-crest"/.test(m[1]) && /\baria-hidden="true"/.test(m[1]) && alt === "")) hits.push({ tag: m[0], reason: "empty alt attribute" });
   }
   return { total, hits };
 }

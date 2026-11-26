@@ -10,6 +10,7 @@
 //
 // Secrets used: ANTHROPIC_API_KEY (required), TRIAGE_SECRET (optional but recommended: guards this
 // paid endpoint so only the webhook can call it).
+import { safeEqual } from "../_shared/safe_equal.ts";
 import { json, adminClient } from "../_shared/cors.ts";
 import { triageTicket } from "../_shared/triage.ts";
 import { triageDeps } from "../_shared/triage_db.ts";
@@ -21,7 +22,7 @@ Deno.serve(async (req) => {
   // secret (security sweep 2026-07-22) — this paid endpoint stayed open once already when
   // TRIAGE_SECRET was unset 2026-06-19..07-03; an absent secret now refuses instead of no-ops.
   const guard = Deno.env.get("TRIAGE_SECRET");
-  if (!guard || req.headers.get("x-triage-secret") !== guard) {
+  if (!guard || !safeEqual(req.headers.get("x-triage-secret"), guard)) {
     return json({ error: "unauthorized" }, 401);
   }
 

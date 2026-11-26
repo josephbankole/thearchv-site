@@ -6,6 +6,7 @@
 // The DB-side rate caps remain the backstop; this header is a tripwire, not a vault.
 // (Soft mode existed only while pre-19 TestFlight builds were live in the wild.)
 import { type Env, json, realEnv } from "./http.ts";
+import { safeEqual } from "./safe_equal.ts";
 
 export function checkAppSecret(req: Request, fnName: string, env: Env = realEnv): Response | null {
   const expected = env("ARCHV_APP_SECRET");
@@ -17,7 +18,7 @@ export function checkAppSecret(req: Request, fnName: string, env: Env = realEnv)
   }
 
   const provided = req.headers.get("x-archv-app");
-  if (provided !== expected) {
+  if (!safeEqual(provided, expected)) {
     if (!provided) console.log(JSON.stringify({ fn: fnName, rejected: "missing-header" }));
     return json({ error: "unauthorized" }, 401);
   }
@@ -43,6 +44,6 @@ export function checkAppSecretSoft(req: Request, fnName: string, env: Env = real
     console.log(JSON.stringify({ fn: fnName, allowed: "missing-header" }));
     return null;
   }
-  if (provided !== expected) return json({ error: "unauthorized" }, 401);
+  if (!safeEqual(provided, expected)) return json({ error: "unauthorized" }, 401);
   return null;
 }

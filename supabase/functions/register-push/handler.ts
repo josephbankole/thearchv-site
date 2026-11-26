@@ -13,6 +13,7 @@
 import { corsHeaders, type Env, json } from "../_shared/http.ts";
 import { checkAppSecretSoft } from "../_shared/appGuard.ts";
 import { resolveSport, unknownSportKey } from "../_shared/sports.ts";
+import { clientIp } from "../android-waitlist/client_ip.ts";
 
 // The shape of an APNs device token. The shipped iOS client produces exactly 64 lowercase hex
 // characters from the 32-byte token Apple hands it
@@ -25,6 +26,22 @@ import { resolveSport, unknownSportKey } from "../_shared/sports.ts";
 // one and you must change the other.
 const APNS_TOKEN_RE = /^[0-9a-f]{64,200}$/;
 
+// Per-IP hourly cap on FIRST registrations, ahead of the global 60 an hour trigger (security
+// review 2026-11-25, V11). Without it one source could spend every slot the whole install base
+// shares. Only a new token claims a slot: updates (opt-out, opt-in, cold-start refresh) never
+// touch it, so a user's opt-out can never be refused by it. A household or office shares an IP,
+// and one phone registers once, so 10 new tokens an hour from one address is far above real use.
+// The counter is the same DB table and RPC android-waitlist uses (waitlist_rate_claim,
+// 20261115180000), keyed "push-ip:<sha256 of the IP>", so no raw address is stored and the
+// hourly prune job already clears it. Fails OPEN on an RPC error or a missing IP: the global
+// trigger stays the backstop and a limiter outage must not stop registrations.
+export const PER_IP_NEW_TOKENS_PER_HOUR = 10;
+
+async function ipKey(ip: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip));
+  return "push-ip:" + Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 export type PushRow = Record<string, unknown>;
 
 // The three writes this endpoint makes, behind a narrow interface so the handler can be tested
@@ -34,6 +51,9 @@ export type PushTokenStore = {
   exists(token: string): Promise<{ exists: boolean; error?: string }>;
   update(token: string, row: PushRow): Promise<{ error?: string }>;
   upsert(row: PushRow): Promise<{ error?: string }>;
+  // One slot of the per-IP hourly counter. true = within the cap. Optional so a store without a
+  // limiter (older tests) skips the per-IP check, exactly as a missing IP does.
+  claimIp?(key: string, limit: number): Promise<boolean>;
 };
 
 export async function handleRegisterPush(
@@ -93,6 +113,13 @@ export async function handleRegisterPush(
 
   // The upsert keeps onConflict so a row that lands between the lookup and the write still
   // resolves to an update rather than a duplicate-key error.
+  if (!lookup.exists && deps.store.claimIp) {
+    const ip = clientIp(req.headers);
+    if (ip && !(await deps.store.claimIp(await ipKey(ip), PER_IP_NEW_TOKENS_PER_HOUR))) {
+      return json({ error: "rate limited, please try again later" }, 429);
+    }
+  }
+
   const { error } = lookup.exists ? await deps.store.update(token, row) : await deps.store.upsert(row);
   if (error) {
     // The DB-side rate caps (push_tokens_rate_cap trigger) abort the insert with this marker.

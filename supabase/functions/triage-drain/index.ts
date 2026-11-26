@@ -11,6 +11,7 @@
 //
 // Guarded the same way as daily-push's pg_cron caller: x-triage-secret matched against the
 // TRIAGE_SECRET vault secret (see cron.job for the daily-push / push_secret pattern this mirrors).
+import { safeEqual } from "../_shared/safe_equal.ts";
 import { json, adminClient } from "../_shared/cors.ts";
 import { triageTicket } from "../_shared/triage.ts";
 import { drainQueueFilter, triageDeps } from "../_shared/triage_db.ts";
@@ -20,7 +21,7 @@ const BATCH_SIZE = 10;
 Deno.serve(async (req) => {
   // Fail CLOSED (security sweep 2026-07-22): an unset TRIAGE_SECRET must refuse, not run open.
   const guard = Deno.env.get("TRIAGE_SECRET");
-  if (!guard || req.headers.get("x-triage-secret") !== guard) {
+  if (!guard || !safeEqual(req.headers.get("x-triage-secret"), guard)) {
     return json({ error: "unauthorized" }, 401);
   }
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);

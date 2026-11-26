@@ -18,6 +18,7 @@
 // The run itself (every sport's guard, record, claim and fan-out, and the deletion cap) is in
 // run.ts behind injected dependencies, and run_test.ts drives it against fakes. This file reads
 // the inputs and wires the service-role client in.
+import { safeEqual } from "../_shared/safe_equal.ts";
 import { adminClient, json } from "../_shared/cors.ts";
 import { DEFAULT_SPORT, type SportKey } from "../_shared/sports.ts";
 import { describeError } from "./fanout.ts";
@@ -31,7 +32,7 @@ type Supabase = ReturnType<typeof adminClient>;
 Deno.serve(async (req) => {
   // Fail CLOSED (security sweep 2026-07-22): an unset PUSH_SECRET must refuse, not run open.
   const guard = Deno.env.get("PUSH_SECRET");
-  if (!guard || req.headers.get("x-push-secret") !== guard) {
+  if (!guard || !safeEqual(req.headers.get("x-push-secret"), guard)) {
     return json({ error: "unauthorized" }, 401);
   }
 

@@ -28,6 +28,7 @@
 //   APIFOOTBALL_SEASON  overrides the season (the year it starts in); default is worked out from the date
 //   PUBLISH_PLAYERS     "1" puts the per-player lines (map.ts `players`) in the match files; anything
 //                       else leaves them null. Read once per call, here.
+import { safeEqual } from "../_shared/safe_equal.ts";
 import { adminClient, json } from "../_shared/cors.ts";
 import { makeApiGet } from "./api.ts";
 import { runBackfill } from "./backfill.ts";
@@ -64,7 +65,7 @@ async function bodyOf(req: Request): Promise<Record<string, unknown>> {
 Deno.serve(async (req) => {
   // Fail CLOSED, as daily-push does: an unset PUSH_SECRET must refuse, not run open.
   const guard = Deno.env.get("PUSH_SECRET");
-  if (!guard || req.headers.get("x-push-secret") !== guard) {
+  if (!guard || !safeEqual(req.headers.get("x-push-secret"), guard)) {
     return json({ error: "unauthorized" }, 401);
   }
   const apiKey = Deno.env.get("APIFOOTBALL_KEY");

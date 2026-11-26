@@ -36,6 +36,7 @@
 //
 // Guarded with x-push-secret, matched against the PUSH_SECRET vault secret — the same pattern
 // daily-push's pg_cron caller uses.
+import { safeEqual } from "../_shared/safe_equal.ts";
 import { adminClient, json } from "../_shared/cors.ts";
 import { pushRunFailing } from "../_shared/push_run.ts";
 import { feedName, leadFromFeed, statesFrom } from "../_shared/push_guard.ts";
@@ -85,7 +86,7 @@ const DEBOUNCE_MS = 6 * 60 * 60 * 1000;
 Deno.serve(async (req) => {
   // Fail CLOSED (security sweep 2026-07-22): an unset PUSH_SECRET must refuse, not run open.
   const guard = Deno.env.get("PUSH_SECRET");
-  if (!guard || req.headers.get("x-push-secret") !== guard) {
+  if (!guard || !safeEqual(req.headers.get("x-push-secret"), guard)) {
     return json({ error: "unauthorized" }, 401);
   }
 

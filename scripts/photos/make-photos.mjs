@@ -24,7 +24,9 @@
 
    Usage:
      node scripts/photos/make-photos.mjs --manifest <manifest-verified.json> \
-       --originals <dir> --faces <faces.jsonl> [--only slug,slug] [--checked 2026-11-21]
+       --originals <dir> --faces <faces.jsonl> [--only slug,slug] [--checked 2026-11-21] [--create]
+   --create adds a photo-only row (kind "photo", photoOnly true, no illustration) for a verified
+   person with no registry row (founder, 25 Nov 2026). Without it such a person is skipped.
    Rows with found !== true are skipped. A row with no original on disk or no face found is
    reported and left on its illustration. */
 import sharp from "sharp";
@@ -46,6 +48,10 @@ const manifest = JSON.parse(readFileSync(arg("manifest"), "utf8"));
 const originals = arg("originals");
 const checked = arg("checked", new Date().toISOString().slice(0, 10));
 const only = arg("only") ? new Set(arg("only").split(",")) : null;
+const create = process.argv.includes("--create");
+// Registry names for photo-only rows where the manifest's display name is not what the copy says.
+const NAME_FIX = { "javier-hernandez": "Javier Hernández" };
+const ALIASES = { "javier-hernandez": ["Chicharito"] };
 const faces = new Map(
   readFileSync(arg("faces"), "utf8").split("\n").filter(Boolean).map((l) => {
     const j = JSON.parse(l);
@@ -64,8 +70,17 @@ const skipped = [];
 for (const r of manifest) {
   if (r.found !== true) continue;
   if (only && !only.has(r.slug)) continue;
-  const row = registry.players.find((p) => p.slug === r.slug);
-  if (!row) { skipped.push(`${r.slug}: no registry row`); continue; }
+  let row = registry.players.find((p) => p.slug === r.slug);
+  if (!row && create) {
+    // A photo-only row (founder, 25 Nov 2026: "Yes, add them"): someone we never drew. The registry
+    // name must be the plain full name the desk writes (manifest names can carry a nickname), and a
+    // bare mononym is never registered (CLAUDE.md: "Bare mononyms are left out on purpose").
+    const name = (NAME_FIX[r.slug] ?? r.name).trim();
+    if (!/\s/.test(name)) { skipped.push(`${r.slug}: "${name}" is a bare mononym, not registered`); continue; }
+    row = { slug: r.slug, name, ...(ALIASES[r.slug] ? { aliases: ALIASES[r.slug] } : {}), kind: "photo", photoOnly: true };
+    registry.players.push(row);
+  }
+  if (!row) { skipped.push(`${r.slug}: no registry row (pass --create for a photo-only row)`); continue; }
   const file = files.get(r.slug);
   if (!file) { skipped.push(`${r.slug}: original not downloaded`); continue; }
   const f = faces.get(r.slug)?.faces?.[0];
@@ -127,6 +142,9 @@ for (const r of manifest) {
   };
   done.push(`${r.slug} ${main.width}x${main.height} sq ${sqo.width}`);
 }
+// A photo-only row created above whose original or face was missing never got a photo: drop it,
+// so the registry never holds a row with nothing to draw.
+registry.players = registry.players.filter((p) => !(p.photoOnly && !p.photo));
 for (const p of registry.players) if (!p.kind) p.kind = "illustration";
 for (const c of registry.clubs) if (!c.kind) c.kind = "illustration";
 writeFileSync(REGISTRY, JSON.stringify(registry, null, 2) + "\n");

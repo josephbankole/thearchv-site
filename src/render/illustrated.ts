@@ -29,6 +29,9 @@ export interface Art {
   aliasUnless?: string[];
   // "photo" when the row carries a free-licence Commons photograph (founder ruling, 21 Nov 2026).
   kind?: 'illustration' | 'photo';
+  // True on a photo row for someone we never drew (25 Nov 2026): src, alt, width, height and hd are
+  // absent, and entryArt() gives share: null. See scripts/shared/illustrated.mjs.
+  photoOnly?: boolean;
   credit?: string;
   licence?: Licence;
   photo?: Photo;
@@ -135,7 +138,7 @@ export interface EntryArt {
   square?: string;
   credit?: string;
   licence?: Licence;
-  share?: EntryArt;
+  share?: EntryArt | null;
 }
 
 interface ArtEntry {
@@ -167,7 +170,8 @@ export function entryArt(entry: ArtEntry): EntryArt | null {
   const text = `${entry.headline ?? ''} ${entry.dek ?? ''}`;
   const player = firstPlayerIn(text, PLAYERS, `${text} ${entry.body ?? ''}`);
   if (player) {
-    const drawn: EntryArt = { kind: 'player', src: player.src, alt: player.alt, width: player.width, height: player.height };
+    // A photo-only row has no illustration to share: share is null (MIRRORED, see illustrated.mjs).
+    const drawn: EntryArt | null = player.photoOnly ? null : { kind: 'player', src: player.src, alt: player.alt, width: player.width, height: player.height };
     return player.kind === 'photo' ? photoArt(player, drawn) : drawn;
   }
   const club = clubInText(text);
@@ -182,13 +186,13 @@ export function playerForImage(src: string): Art | null {
   if (!src) return null;
   const stem = stemOf(src);
   return (
-    PLAYERS.find((p) => p.src === src || p.hd === src) ??
+    PLAYERS.find((p) => (p.src && p.src === src) || (p.hd && p.hd === src)) ??
     (src.startsWith('/heads/') ? PLAYERS.find((p) => p.hd && stemOf(p.hd) === stem) : null) ??
     null
   );
 }
 
-function photoArt(p: Art, share: EntryArt): EntryArt {
+function photoArt(p: Art, share: EntryArt | null): EntryArt {
   const photo = p.photo!;
   return {
     kind: 'photo',

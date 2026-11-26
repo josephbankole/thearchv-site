@@ -279,6 +279,16 @@ head. The originals stay for the app feed, share cards and article art.
   `app-contract.test.mjs` checks the fields come as a set and stay on the shelf.
 - **Where there is no photo, the illustration stays.** Do not commission a new illustration for a
   person who has a photo row, and do not remove an illustration a photo row still points at.
+- **Photo-only rows (founder, 25 Nov 2026: "Yes, add them").** A verified Commons photo of someone
+  we never drew is a row with `kind: "photo"`, `photoOnly: true` and NO `src`, `alt`, `width`,
+  `height` or `hd`. It shows on the site like any photo row; `entryArt()` gives it `share: null`, so
+  share cards fall back to the house card, JSON-LD carries no image for it, and the app (which reads
+  only rows with `hd`) shows the crest or the next banked face. That means on a story that names a
+  photo-only person first, the site and the app can show different people; accepted, because the
+  app may never carry the photo. Bare mononyms are never registered (Pele stays out).
+  `make-photos.mjs --create` writes these rows; `check-portrait-provenance.mjs`,
+  `check-app-heads.mjs` and `check-illustrated-parity.mjs` hold the shape and the null share. The
+  runner for the remaining downloads is `../photo-sourcing-2026-11-21/finish-photos.sh`.
 
 ## The front page after the 2026-10-13 trim
 

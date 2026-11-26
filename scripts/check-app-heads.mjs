@@ -30,6 +30,8 @@ for (const f of onDisk) {
   else if (!appGrade(`/heads/hd/${f}`)) failures.push(`public/heads/hd/${f} fails the 600px square gate`);
 }
 for (const p of PLAYERS) {
+  // A photo-only row (25 Nov 2026) has no illustration and so no app portrait, by design.
+  if (p.photoOnly) { if (p.hd || p.src) failures.push(`registry player ${p.slug} is photoOnly but carries an illustration path`); continue; }
   if (!p.hd) failures.push(`registry player ${p.slug} has no hd path`);
   else if (!appGrade(p.hd)) failures.push(`registry player ${p.slug}: ${p.hd} fails the gate`);
 }

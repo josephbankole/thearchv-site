@@ -116,7 +116,11 @@ export function photoRowProblems(illustrated, exists = () => true) {
     if (!/^\/photos\/sq\/[a-z0-9-]+\.webp$/.test(ph.square ?? "")) out.push(`${who}: square ${ph.square} is not on the photo shelf`);
     for (const f of [ph.src, ph.square]) if (f && !exists(f)) out.push(`${who}: ${f} is missing from public/`);
     if (!ph.alt || /illustrat/i.test(ph.alt)) out.push(`${who}: photo alt "${ph.alt}" must say it is a photograph, not an illustration`);
-    if (!p.src || !p.alt) out.push(`${who}: a photo row keeps its illustration (src, alt) for share cards`);
+    if (p.photoOnly) {
+      // Someone we never drew (25 Nov 2026): no illustration fields at all, so nothing can mistake
+      // the photo for a shareable file.
+      for (const k of ["src", "alt", "hd"]) if (p[k]) out.push(`${who}: a photoOnly row must not carry ${k}`);
+    } else if (!p.src || !p.alt) out.push(`${who}: a photo row keeps its illustration (src, alt) for share cards`);
   }
   return out;
 }

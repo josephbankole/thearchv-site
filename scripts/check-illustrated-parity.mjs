@@ -261,6 +261,16 @@ for (const [fn, name, got, want] of EXPECT) {
   if (got !== want) failures.push({ fn, fixtureName: `${name} (expected ${want})`, input: name, a: got, b: want, keys: [] });
 }
 
+/* Photo-only rows (founder, 25 Nov 2026): someone we never drew resolves to the photo on the site
+   and to NOTHING off it. Both readers must give share: null, or a share card or the app could be
+   handed a file that is not ours to redistribute. Checked for every such row in the registry. */
+for (const p of mjs.PLAYERS.filter((r) => r.photoOnly)) {
+  const entry = { headline: `${p.name} in the news`, dek: "" };
+  const a = mjs.entryArt(entry), b = ts.entryArt(entry);
+  compare("entryArt", `photo-only ${p.slug}`, entry, a, b);
+  if (!a || a.kind !== "photo" || a.share !== null) failures.push({ fn: "entryArt", fixtureName: `photo-only ${p.slug} must resolve to its photo with share null`, input: entry, a, b: "photo, share null", keys: [] });
+}
+
 /* The alias fields are hand-written, so their shape is checked: arrays of non-empty strings, and
    no alias may be another row's full name or alias (one name, one face). */
 const owner = new Map();

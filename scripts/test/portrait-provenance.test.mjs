@@ -67,16 +67,26 @@ test("a photo row is a Commons file with its licence, credit and files, never NC
   const { photoRowProblems } = await import("../check-portrait-provenance.mjs");
   const row = {
     slug: "x", name: "X", src: "/heads/hd/x.webp", alt: "Illustrated ARCHV portrait of X", kind: "photo",
-    credit: "Photograph: A / Wikimedia Commons / CC BY-SA 4.0",
-    licence: { name: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0", author: "A", source: "https://commons.wikimedia.org/wiki/File:X_(1).jpg", checked: "2026-11-21" },
+    credit: "Photo: A / Studio, CC BY-SA 4.0, cropped",
+    licence: { name: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0", author: "A", attribution: "A / Studio", source: "https://commons.wikimedia.org/wiki/File:X_(1).jpg", checked: "2026-11-21" },
     photo: { src: "/photos/x.webp", square: "/photos/sq/x.webp", alt: "X, photographed 2026", original: "https://upload.wikimedia.org/wikipedia/commons/a/ab/X_%281%29.jpg" },
   };
   const run = (r, exists) => photoRowProblems({ players: [r] }, exists);
   assert.deepEqual(run(row), []);
-  assert.equal(run({ ...row, licence: { ...row.licence, name: "CC BY-NC-SA 4.0" }, credit: "Photograph: A / Wikimedia Commons / CC BY-NC-SA 4.0" }).length, 1);
+  // NC fails twice: not an allowed licence, and NC/ND terms.
+  assert.equal(run({ ...row, licence: { ...row.licence, name: "CC BY-NC-SA 4.0" }, credit: "Photo: A / Studio, CC BY-NC-SA 4.0, cropped" }).length, 2);
   assert.equal(run({ ...row, licence: { ...row.licence, source: "https://www.manutd.com/x" } }).length, 2);
   assert.equal(run({ ...row, photo: { ...row.photo, original: "https://example.com/X.jpg" } }).length, 1);
   assert.equal(run({ ...row, credit: "Photo: A" }).length, 1);
+  // Only what the licence requires (26 Nov 2026): CC0 carries no credit; a credit on it fails.
+  const cc0 = { ...row, credit: undefined, licence: { name: "CC0", url: "https://creativecommons.org/publicdomain/zero/1.0/", author: "A", source: row.licence.source, checked: "2026-11-26" } };
+  assert.deepEqual(run(cc0), []);
+  assert.equal(run({ ...cc0, credit: "Photo: A, CC0, cropped" }).length, 1);
+  // A US-only public-domain tag is refused.
+  assert.equal(run({ ...cc0, licence: { ...cc0.licence, name: "Public domain" } }).length, 1);
+  // CC 2.0/3.0 with a title: the title leads the credit.
+  const t = { ...row, licence: { ...row.licence, name: "CC BY 2.0", title: "Match day", copyright: "©Agency" }, credit: "Photo: “Match day” by A / Studio, ©Agency, CC BY 2.0, cropped" };
+  assert.deepEqual(run(t), []);
   assert.equal(run({ ...row, photo: { ...row.photo, alt: "Illustrated ARCHV portrait of X" } }).length, 1);
   assert.equal(run(row, () => false).length, 2, "missing files fail");
   assert.equal(run({ ...row, kind: "illustration" }).length, 1, "photo fields on an illustration row fail");

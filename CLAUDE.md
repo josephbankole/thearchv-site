@@ -259,12 +259,27 @@ head. The originals stay for the app feed, share cards and article art.
   resolves to `kind: "photo"` with `src` (4:5), `square`, `alt` ("<Name>, photographed <year>"),
   `credit`, `licence` and `share` (the illustration, or the desk's filed image). Card circles and
   the 96px article circle draw `square`.
-- **Credit.** Wherever a photo draws at reading size (the article figure, the front-page lead) a
-  visible line under it: "Photograph: <author> / Wikimedia Commons / <licence>", author linked to
-  the Commons file page, licence to its deed (`photoCreditHtml()`). The 64px card circles carry no
-  credit of their own; `/about/#photo-credits` lists every photo (author, licence, file, and for
-  CC BY-SA that the crop is shared under the same licence), and `LEGAL_LINE` (every static footer)
-  and the `index.html` footer link to it.
+- **Credit: only what the licence requires (founder, 26 Nov 2026: "only add credits that are
+  legally required, if we dont need to add wiki commons details then remove it").** Read against
+  the CC 2.0, 3.0 and 4.0 legal codes and checked by three independent reviewers that day.
+  CC0 photos carry NO credit anywhere (no `credit` field, not on the About list, `photoCredit: ""`
+  in the app feed). CC BY and CC BY-SA photos carry "Photo: <attribution>, <licence>, cropped"
+  (`creditText()` in `scripts/shared/photo-credit.mjs`): the attribution is the credit the author
+  asked for on Commons (e.g. "Bryan Berlin / WikiPortraits"), linked to the file page; any
+  copyright notice the file carries follows it ("©SPORTSFILE"); CC 2.0/3.0 files put the title in
+  front; the licence links to its deed. "Wikimedia Commons" is not required and is not printed.
+  The per-photo fields live in `scripts/data/photo-attribution.json` (read from each Commons page
+  and the original's EXIF on 26 Nov). The caption shows under a photo at reading size (article
+  circle, front-page lead) and is omitted when empty; `/about/#photo-credits` lists only the
+  photos that need a credit, and is the credit for the uncaptioned 64px card circles, linked from
+  every footer. Only CC0, CC BY and CC BY-SA files are allowed: a bare "Public domain" tag can be
+  US-only (Jannik Sinner's White House photo was taken off for this, and its embedded notice
+  limits it to personal use). `check-portrait-provenance.mjs` enforces all of it.
+- **Notices stay with every copy.** The CC 2.0/3.0 licences ask that existing copyright and
+  licence notices stay intact. sharp drops metadata on re-encode, so `make-photos.mjs` writes the
+  original's Artist and Copyright (plus the licence and the file page) back as EXIF on both crops,
+  and `build-thumbs.mjs` keeps EXIF on the `photos/sq` thumbs. **Never run the remove-ai-marks strip
+  (`clean_file.py`, `exiftool -all=`) on `public/photos/` or its thumbs.**
 - **The wall.** A file that leaves the site never carries a photo: og and twitter cards, JSON-LD,
   RSS, sitemaps, posters, the shop, storefront and posters feeds, the sport icons, and the app's
   `image` field (it goes on the app's share poster). Share cards use `shareArt(art)`, and
@@ -673,6 +688,9 @@ His words: "downloaded, we are ok to use them" (the official set from https://lo
 His words: "we wont be doing emails, anything that specifically says you need a written license, dont
 use, anything else that we can find in wikimedia, use". Read as: Wikimedia Commons files only.
 
+- **No credit (26 Nov 2026).** Every crest is a public-domain file, which needs no credit, so the
+  About page carries no crest list. Only files public domain in Canada as well: the Buffalo Bills
+  and Kansas City Chiefs crests (US-only "no notice" tags) were taken off that day.
 - **Registry.** `scripts/data/crests.json` (`archv-crests/1`): per club the Commons file page, the
   upload URL, author, licence tag and name, the sha256 of the file in `public/logos/crests/` (byte
   for byte as downloaded), and the team `names` it answers to (football-data.org's "Manchester United

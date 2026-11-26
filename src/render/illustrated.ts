@@ -43,6 +43,11 @@ export interface Licence {
   author: string;
   source: string;
   checked: string;
+  // Only on files whose licence requires a credit (26 Nov 2026): the credit the author asked for,
+  // the title for CC 2.0/3.0 files, a copyright notice the file carries.
+  attribution?: string;
+  title?: string;
+  copyright?: string;
 }
 
 export interface Photo {
@@ -207,9 +212,13 @@ function photoArt(p: Art, share: EntryArt | null): EntryArt {
   };
 }
 
-/** The visible credit line for a photo; empty for anything else. `esc` is the caller's escaper. */
+/** The visible credit line for a photo, only where the licence requires one; empty for CC0,
+    public domain and non-photos. MIRRORED from scripts/shared/illustrated.mjs (see there). */
 export function photoCreditHtml(art: EntryArt | null, esc: (s: string) => string): string {
-  if (!art || art.kind !== 'photo' || !art.licence) return '';
+  if (!art || art.kind !== 'photo' || !art.credit || !art.licence || !art.licence.attribution) return '';
   const l = art.licence;
-  return `Photograph: <a href="${esc(l.source)}" rel="noopener">${esc(l.author)}</a> / Wikimedia Commons / <a href="${esc(l.url)}" rel="license noopener">${esc(l.name)}</a>`;
+  const who = art.licence.attribution;
+  const title = l.title ? `“${esc(l.title)}” by ` : '';
+  const copy = l.copyright ? `, ${esc(l.copyright)}` : '';
+  return `Photo: ${title}<a href="${esc(l.source)}" rel="noopener">${esc(who)}</a>${copy}, <a href="${esc(l.url)}" rel="license noopener">${esc(l.name)}</a>, cropped`;
 }

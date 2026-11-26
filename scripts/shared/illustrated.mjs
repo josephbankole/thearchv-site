@@ -194,10 +194,15 @@ function photoArt(p, share) {
 /** The art a file that leaves the site may carry: the illustration behind a photo, else the art. */
 export const shareArt = (art) => (art && art.kind === "photo" ? art.share : art);
 
-/** The visible credit line for a photo, with the author linked to the Commons file page and the
-    licence name to its deed. `esc` is the caller's HTML escaper. Empty for anything but a photo. */
+/** The visible credit line for a photo, only where the licence requires one (26 Nov 2026; see
+    scripts/shared/photo-credit.mjs): "Photo: <attribution>, <licence>, cropped", the attribution
+    linked to the file page, the licence to its deed, the title in front for CC 2.0/3.0. Empty for
+    a CC0 or public-domain photo and for anything that is not a photo. `esc` is the caller's
+    escaper. MIRRORED in src/render/illustrated.ts. */
 export function photoCreditHtml(art, esc) {
-  if (!art || art.kind !== "photo") return "";
+  if (!art || art.kind !== "photo" || !art.credit || !art.licence?.attribution) return "";
   const l = art.licence;
-  return `Photograph: <a href="${esc(l.source)}" rel="noopener">${esc(l.author)}</a> / Wikimedia Commons / <a href="${esc(l.url)}" rel="license noopener">${esc(l.name)}</a>`;
+  const title = l.title ? `“${esc(l.title)}” by ` : "";
+  const copy = l.copyright ? `, ${esc(l.copyright)}` : "";
+  return `Photo: ${title}<a href="${esc(l.source)}" rel="noopener">${esc(l.attribution)}</a>${copy}, <a href="${esc(l.url)}" rel="license noopener">${esc(l.name)}</a>, cropped`;
 }

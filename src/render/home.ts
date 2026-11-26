@@ -31,6 +31,14 @@ import { entrySources } from '../lib/entryGates';
 import { transferDays } from '../data/transferDays';
 import { worldCupDays } from '../data/worldCupDays';
 import { entryArt, photoCreditHtml } from './illustrated';
+/* The lead photo is a 160px circle (2026-11-26, load time): a phone at 2x takes the 320px thumb
+   (about 10 KB) and only a 3x screen takes the 640px square. Thumbs for public/photos/sq/ are made
+   by scripts/build-thumbs.mjs (the photos/sq shelf), so every photo row has them. */
+const isPhotoSquare = (src: string): boolean => /^\/photos\/sq\/[a-z0-9-]+\.webp$/.test(src);
+const leadPhotoSrc = (src: string): string => (isPhotoSquare(src) ? `/thumbs/320${src}` : src);
+const leadPhotoSrcset = (src: string): string =>
+  isPhotoSquare(src) ? ` srcset="/thumbs/320${src} 320w, ${src} 640w" sizes="160px"` : '';
+
 import seasonal from '../../scripts/data/seasonal-tiles.json';
 
 /* ---------- escaping ---------- */
@@ -165,8 +173,8 @@ export function renderLead(): string {
   const art =
     leadArt && leadArt.kind === 'photo'
       ? `<figure class="lead__art lead__art--photo">
-          <img src="${esc(leadArt.square ?? leadArt.src)}" alt="${esc(leadArt.alt)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
-          <figcaption>${photoCreditHtml(leadArt, esc)}</figcaption>
+          <img src="${esc(leadPhotoSrc(leadArt.square ?? leadArt.src))}"${leadPhotoSrcset(leadArt.square ?? leadArt.src)} alt="${esc(leadArt.alt)}" width="160" height="160" loading="eager" fetchpriority="high" decoding="async" />
+          ${photoCreditHtml(leadArt, esc) ? `<figcaption>${photoCreditHtml(leadArt, esc)}</figcaption>` : ''}
         </figure>`
       : leadArt && leadArt.kind !== 'club'
       ? `<figure class="lead__art">

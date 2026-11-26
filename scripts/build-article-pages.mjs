@@ -10,6 +10,7 @@
    Also extends dist/sitemap.xml through shared/sitemap.mjs: it appends every article URL to
    whatever sitemap already exists in dist at this point (built by build-content.mjs, then extended
    by the lane, reads, section and search generators), so this must run last in the chain. */
+import { thumbSrcAttrs } from "./shared/thumbs.mjs";
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -478,8 +479,8 @@ function render(entry, section, hasCard, hasWide, moreFrom, decision) {
     ? art.kind === "photo"
       ? `
       <figure class="article__fig article__fig--photo">
-        <img src="${escAttr(art.square)}" alt="${escAttr(art.alt)}" width="96" height="96" loading="eager" decoding="async" />
-        <figcaption class="article__credit">${photoCreditHtml(art, escAttr)}</figcaption>
+        <img${thumbSrcAttrs(art.square, 96)} alt="${escAttr(art.alt)}" width="96" height="96" loading="eager" decoding="async" />
+        ${photoCreditHtml(art, escAttr) ? `<figcaption class="article__credit">${photoCreditHtml(art, escAttr)}</figcaption>` : ""}
       </figure>`
       : `
       <figure class="article__fig">

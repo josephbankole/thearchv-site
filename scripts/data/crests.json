@@ -174,24 +174,6 @@
       "checked": "2026-11-25"
     },
     {
-      "slug": "buffalo-bills",
-      "club": "Buffalo Bills",
-      "kind": "nfl",
-      "names": [
-        "Buffalo Bills"
-      ],
-      "file": "buffalo-bills.svg",
-      "filePage": "https://commons.wikimedia.org/wiki/File:Buffalo_Bills_logo_1974-present.svg",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Buffalo_Bills_logo_1974-present.svg",
-      "author": "Logo by Stevens Wright, vectorization by Based5290",
-      "licenceTag": "PD-US-no notice",
-      "licenceName": "Public domain (US, published without notice)",
-      "licenceUrl": null,
-      "fileSha256": "df357c101de528965bfdad731dbd2923182dae40e95d42ddf6b74b638e12106f",
-      "bytes": 9995,
-      "checked": "2026-11-25"
-    },
-    {
       "slug": "cincinnati-bengals",
       "club": "Cincinnati Bengals",
       "kind": "nfl",
@@ -261,24 +243,6 @@
       "licenceUrl": null,
       "fileSha256": "0b2f28f6f9b98f299c7a9939f111090bb8a0ae748a3ba046649ce9ef64712324",
       "bytes": 4310,
-      "checked": "2026-11-25"
-    },
-    {
-      "slug": "kansas-city-chiefs",
-      "club": "Kansas City Chiefs",
-      "kind": "nfl",
-      "names": [
-        "Kansas City Chiefs"
-      ],
-      "file": "kansas-city-chiefs.svg",
-      "filePage": "https://commons.wikimedia.org/wiki/File:Kansas_City_Chiefs_logo.svg",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Kansas_City_Chiefs_logo.svg",
-      "author": "Kansas City Chiefs",
-      "licenceTag": "PD-US-no-notice",
-      "licenceName": "Public domain (US, published without notice)",
-      "licenceUrl": null,
-      "fileSha256": "37babd334452218aff6c59474c1e7faae63678df2e9c30af7222899be2ed088a",
-      "bytes": 6593,
       "checked": "2026-11-25"
     },
     {

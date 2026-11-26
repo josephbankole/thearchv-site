@@ -39,7 +39,10 @@ for (const shelf of THUMB_SHELVES) {
     }
     for (const [w, out] of outs) {
       mkdirSync(dirname(out), { recursive: true });
-      await sharp(buf).resize(w, w, { fit: "cover" }).webp({ quality: 80, effort: 6 }).toFile(out);
+      // A photo's thumbs keep its author and licence notice (EXIF written by make-photos.mjs):
+      // the CC 2.0/3.0 licences ask that existing notices stay with every copy (26 Nov 2026).
+      const img = sharp(buf).resize(w, w, { fit: "cover" });
+      await (shelf === "photos/sq" ? img.keepExif() : img).webp({ quality: 80, effort: 6 }).toFile(out);
     }
     made++;
   }

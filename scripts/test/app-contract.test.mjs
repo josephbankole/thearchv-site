@@ -179,7 +179,9 @@ export function photoProblems(e, where) {
     if (!/^\/photos\/[a-z0-9-]+\.webp$/.test(e.photo)) out.push(`${where}.photo: not on the photo shelf: ${e.photo}`);
     if (!/^\/photos\/sq\/[a-z0-9-]+\.webp$/.test(e.photoSquare ?? "")) out.push(`${where}.photoSquare: not on the photo shelf`);
     if (!e.image) out.push(`${where}: photo without its illustration in image`);
-    if (!/^Photograph: .+ \/ Wikimedia Commons \/ .+$/.test(e.photoCredit ?? "")) out.push(`${where}.photoCredit: not a credit line`);
+    // Only what the licence requires (26 Nov 2026): empty for CC0, else "Photo: …, <licence>, cropped".
+    if (/^CC0\b/.test(e.photoLicence ?? "")) { if (e.photoCredit !== "") out.push(`${where}.photoCredit: a CC0 photo carries no credit`); }
+    else if (!/^Photo: .+, CC BY(-SA)? [234]\.0, cropped$/.test(e.photoCredit ?? "")) out.push(`${where}.photoCredit: not a credit line`);
     if (!/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/.test(e.photoSource ?? "")) out.push(`${where}.photoSource: not a Commons file page`);
     if (/\b(NC|ND)\b/.test(e.photoLicence ?? "")) out.push(`${where}.photoLicence: ${e.photoLicence} is not allowed`);
   }
@@ -201,7 +203,7 @@ test("photo fields, where present, are a full set beside the illustration (21 No
   for (const [i, e] of [today.lead, ...(today.wrap ?? [])].filter(Boolean).entries()) list.push(...photoProblems(e, `today[${i}]`));
   assertClean(list);
   const good = { image: "/heads/hd/x.webp", photo: "/photos/x.webp", photoSquare: "/photos/sq/x.webp", photoAlt: "X, photographed 2026",
-    photoCredit: "Photograph: A / Wikimedia Commons / CC BY 4.0", photoLicence: "CC BY 4.0", photoLicenceUrl: "https://creativecommons.org/licenses/by/4.0", photoSource: "https://commons.wikimedia.org/wiki/File:X.jpg" };
+    photoCredit: "Photo: A, CC BY 4.0, cropped", photoLicence: "CC BY 4.0", photoLicenceUrl: "https://creativecommons.org/licenses/by/4.0", photoSource: "https://commons.wikimedia.org/wiki/File:X.jpg" };
   assert.deepEqual(photoProblems(good, "g"), []);
   assert.ok(photoProblems({ ...good, photoCredit: undefined }, "g").length > 0, "a photo with no credit must fail");
   assert.ok(photoProblems({ ...good, image: "/photos/x.webp" }, "g").length > 0, "a photo in image must fail");

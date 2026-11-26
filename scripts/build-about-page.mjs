@@ -36,7 +36,7 @@ import {
   ROBOTS_NOINDEX_FOLLOW, cspMeta, scriptHash, MASTHEAD_SCRIPT_HASH, POSTHOG_SCRIPT_HASH,
   ORG_REF, ORG_NODE, AUTHOR_NAME, AUTHOR_PERSONAL_URL,
 } from "./shared/page-shell.mjs";
-import { THIRD_PARTY_LOGOS } from "./shared/logos.mjs";
+import { photoCreditHtml } from "./shared/illustrated.mjs";
 import { correctionsRows, correctionItem, correctionDay, reportCorrections } from "./shared/corrections-log.mjs";
 import {
   BIO, AUTHOR_ROLE, PERSON_NODE, portrait, deskWork, recentCard, linkList,
@@ -150,65 +150,36 @@ const credits = readData("heads-hd.json").entries
 const creditItem = (c) => {
   const label = esc(c.name === "Public domain" ? "public domain" : c.name);
   const licence = c.url ? `<a href="${escAttr(c.url)}" rel="license noopener">${label}</a>` : label;
-  return `<li>${esc(c.player)}: photo by ${esc(c.author)}, ${licence}, <a href="${escAttr(c.source)}">source on Wikimedia Commons</a></li>`;
+  return `<li>${esc(c.player)}: drawn from a photo by <a href="${escAttr(c.source)}">${esc(c.author)}</a>, ${licence}</li>`;
 };
-/* ---------- photo credits (founder ruling, 21 Nov 2026) ----------
-   Every Commons photograph the site shows, read from the kind "photo" rows of illustrated.json
-   (check-portrait-provenance.mjs makes sure each records its licence, author and file page). The
-   64px card circles are too small for a credit of their own, so this list is their credit, and
-   the footer's legal line links here. A CC BY-SA photo is cropped, and the crop is an adaptation
-   shared under the same licence, which the list says. */
+/* ---------- photo credits (founder ruling, 21 Nov 2026; legal minimum 26 Nov 2026) ----------
+   Founder, 26 Nov: "only add credits that are legally required". So this lists only the photos
+   whose licence asks for a credit (CC BY and CC BY-SA), in the form photoCreditHtml() prints under
+   a large photo: the credit the author asked for, linked to the file, the licence linked to its
+   deed, and that the photo was cropped. CC0 photos and the public-domain club crests need no
+   credit and are not listed (there is no crest list any more). The 64px card circles carry no
+   caption, so this list, linked from every footer, is their credit. */
 const photoRows = readData("illustrated.json").players
-  .filter((p) => p.kind === "photo" && p.photo && p.licence)
+  .filter((p) => p.kind === "photo" && p.photo && p.credit)
   .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
-const photoItem = (p) => {
-  const l = p.licence;
-  const licence = l.url ? `<a href="${escAttr(l.url)}" rel="license noopener">${esc(l.name)}</a>` : esc(l.name);
-  const sa = p.photo.shareAlike ? "; cropped, and the crop is shared under the same licence" : "; cropped";
-  return `<li>${esc(p.name)}: photograph by ${esc(l.author)}, ${licence}, <a href="${escAttr(l.source)}">file on Wikimedia Commons</a>${sa}</li>`;
-};
+const photoItem = (p) => `<li>${esc(p.name)}: ${photoCreditHtml({ kind: "photo", credit: p.credit, licence: p.licence }, escAttr)}</li>`;
 const photoCreditsHtml = photoRows.length
   ? `<h3 id="photo-credits">Photo credits</h3>
-        <p>Where a free-licence photograph of a player, coach or driver is published on Wikimedia Commons and is recent enough to show them as they are now, we use it, with credit. Where there is none, the page keeps our illustration. Each photograph is cropped to head and shoulders and otherwise unaltered. Photographs never appear on posters, in the shop or on the cards a page shares to other sites. The photographer, licence and file of each one are listed here.</p>
-        <details class="log-older credits" open>
-          <summary>Photographers and licences (${photoRows.length})</summary>
-          <ul>
-${photoRows.map((p) => `            ${photoItem(p)}`).join("\n")}
-          </ul>
-        </details>`
-  : "";
-
-/* ---------- crest credits (D-2026-11-21b, 25 Nov 2026) ----------
-   Every club crest the site shows beside a team name, from scripts/data/crests.json: Wikimedia
-   Commons files, each with its author and licence. Off with the logo switch. */
-const crestRows = THIRD_PARTY_LOGOS
-  ? readData("crests.json").crests.slice().sort((a, b) => a.club.localeCompare(b.club, "en-GB"))
-  : [];
-const crestItem = (c) => {
-  const licence = c.licenceUrl ? `<a href="${escAttr(c.licenceUrl)}" rel="license noopener">${esc(c.licenceName)}</a>` : esc(c.licenceName);
-  return `<li>${esc(c.club)}: ${licence}, ${esc(c.author)}, <a href="${escAttr(c.filePage)}">file on Wikimedia Commons</a></li>`;
-};
-const crestCreditsHtml = crestRows.length
-  ? `<h3 id="crest-credits">Club crests</h3>
-        <p>Club crests are shown small beside a team's name in our tables and scores, for identification only. Each is a file from Wikimedia Commons, used unaltered; the crests are trade marks of their clubs, and The ARCHV is not affiliated with or endorsed by any of them. They never appear on posters, in the shop or on the cards a page shares to other sites.</p>
-        <details class="log-older credits">
-          <summary>Crests and licences (${crestRows.length})</summary>
-          <ul>
-${crestRows.map((c) => `            ${crestItem(c)}`).join("\n")}
-          </ul>
-        </details>`
+        <ul class="credits-list">
+${photoRows.map((p) => `          ${photoItem(p)}`).join("\n")}
+        </ul>`
   : "";
 
 const creditsHtml = (credits.length
   ? `<h3 id="portrait-credits">Portrait credits</h3>
-        <p>Some of our portraits are made from a reference photograph published on Wikimedia Commons under an open licence. The photographer and the licence of each one are listed here.</p>
+        <p>Some of our illustrations are drawn from a photo under an open licence that asks for credit.</p>
         <details class="log-older credits">
           <summary>Photographers and licences (${credits.length})</summary>
           <ul>
 ${credits.map((c) => `            ${creditItem(c)}`).join("\n")}
           </ul>
         </details>`
-  : "") + (photoCreditsHtml ? `\n\n        ${photoCreditsHtml}` : "") + (crestCreditsHtml ? `\n\n        ${crestCreditsHtml}` : "");
+  : "") + (photoCreditsHtml ? `\n\n        ${photoCreditsHtml}` : "");
 
 /* ---------- Joseph Bankole: the derived lists ---------- */
 const recentBlock = recent.length

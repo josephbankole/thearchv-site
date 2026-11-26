@@ -100,7 +100,11 @@ for (const r of manifest) {
   if (!f) { skipped.push(`${r.slug}: no face found in the original`); continue; }
   if (!/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/.test(r.filePage)) { skipped.push(`${r.slug}: file page is not on Commons`); continue; }
 
-  const img = sharp(readFileSync(file)).rotate();
+  // Decode once to a metadata-free PNG first. withExif() merges with whatever EXIF the input carries,
+  // so cropping straight from the camera file copied its whole EXIF block (about 18 KB, with an
+  // embedded preview) into every crop and thumb (found 26 Nov 2026). From the clean buffer, only the
+  // two notice fields below are written.
+  const img = sharp(await sharp(readFileSync(file)).rotate().png().toBuffer());
   const { width: W0, height: H0, orientation } = await sharp(file).metadata();
   const [W, H] = orientation >= 5 ? [H0, W0] : [W0, H0];
   const fx = f[0] * W, fy = f[1] * H, fw = f[2] * W, fh = f[3] * H;

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-25T10:49:39.763Z",
+  "updatedAt": "2026-11-26T10:49:29.788Z",
   "sports": {
     "football": {
       "blocks": [
@@ -9,12 +9,12 @@
           "kind": "standings",
           "league": "premier-league",
           "title": "Premier League table",
-          "asOf": "2026-11-25",
-          "fetchedAt": "2026-11-25T10:49:39.763Z",
+          "asOf": "2026-11-26",
+          "fetchedAt": "2026-11-26T10:49:29.788Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-25",
+          "lastFreshAsOf": "2026-11-26",
           "through": null,
           "throughLabel": null,
           "compactRows": 6,
@@ -268,12 +268,12 @@
           "kind": "standings",
           "league": "champions-league",
           "title": "Champions League: league phase",
-          "asOf": "2026-11-25",
-          "fetchedAt": "2026-11-25T10:49:39.763Z",
+          "asOf": "2026-11-26",
+          "fetchedAt": "2026-11-26T10:49:29.788Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-25",
+          "lastFreshAsOf": "2026-11-26",
           "through": null,
           "throughLabel": null,
           "compactRows": 8,
@@ -311,91 +311,71 @@
           ],
           "rows": [
             {
-              "name": "Real Madrid CF",
-              "short": "Real Madrid",
-              "cells": {
-                "pos": 1,
-                "p": 5,
-                "gd": 10,
-                "pts": 15
-              }
-            },
-            {
               "name": "Paris Saint-Germain FC",
               "short": "PSG",
               "cells": {
-                "pos": 2,
+                "pos": 1,
                 "p": 4,
                 "gd": 15,
                 "pts": 12
               }
             },
             {
-              "name": "Como 1907",
-              "short": "Como",
+              "name": "Real Madrid CF",
+              "short": "Real Madrid",
               "cells": {
-                "pos": 3,
-                "p": 5,
-                "gd": 14,
-                "pts": 12
-              }
-            },
-            {
-              "name": "Real Betis Balompié",
-              "short": "Real Betis",
-              "cells": {
-                "pos": 4,
-                "p": 5,
-                "gd": 4,
-                "pts": 12
-              }
-            },
-            {
-              "name": "Arsenal FC",
-              "short": "Arsenal",
-              "cells": {
-                "pos": 5,
-                "p": 5,
-                "gd": 5,
-                "pts": 11
-              }
-            },
-            {
-              "name": "Manchester City FC",
-              "short": "Man City",
-              "cells": {
-                "pos": 6,
-                "p": 5,
-                "gd": 5,
-                "pts": 10
-              }
-            },
-            {
-              "name": "Borussia Dortmund",
-              "short": "Dortmund",
-              "cells": {
-                "pos": 7,
-                "p": 5,
-                "gd": 2,
-                "pts": 10
-              }
-            },
-            {
-              "name": "FC Barcelona",
-              "short": "Barça",
-              "cells": {
-                "pos": 8,
+                "pos": 2,
                 "p": 4,
-                "gd": 8,
-                "pts": 9
+                "gd": 6,
+                "pts": 12
               }
             },
             {
               "name": "Aston Villa FC",
               "short": "Aston Villa",
               "cells": {
-                "pos": 9,
+                "pos": 3,
                 "p": 5,
+                "gd": 6,
+                "pts": 10
+              }
+            },
+            {
+              "name": "Arsenal FC",
+              "short": "Arsenal",
+              "cells": {
+                "pos": 4,
+                "p": 4,
+                "gd": 5,
+                "pts": 10
+              }
+            },
+            {
+              "name": "Como 1907",
+              "short": "Como",
+              "cells": {
+                "pos": 5,
+                "p": 4,
+                "gd": 13,
+                "pts": 9
+              }
+            },
+            {
+              "name": "FC Barcelona",
+              "short": "Barça",
+              "cells": {
+                "pos": 6,
+                "p": 4,
+                "gd": 8,
+                "pts": 9
+              }
+            },
+            {
+              "name": "Manchester City FC",
+              "short": "Man City",
+              "cells": {
+                "pos": 7,
+                "p": 4,
                 "gd": 5,
                 "pts": 9
               }
@@ -404,7 +384,7 @@
               "name": "Liverpool FC",
               "short": "Liverpool",
               "cells": {
-                "pos": 10,
+                "pos": 8,
                 "p": 4,
                 "gd": 4,
                 "pts": 9
@@ -414,7 +394,7 @@
               "name": "Club Brugge KV",
               "short": "Club Brugge",
               "cells": {
-                "pos": 11,
+                "pos": 9,
                 "p": 4,
                 "gd": 4,
                 "pts": 9
@@ -424,19 +404,29 @@
               "name": "Sporting Clube de Portugal",
               "short": "Sporting CP",
               "cells": {
-                "pos": 12,
+                "pos": 10,
                 "p": 4,
                 "gd": 4,
                 "pts": 9
               }
             },
             {
-              "name": "Galatasaray SK",
-              "short": "Galatasaray",
+              "name": "Real Betis Balompié",
+              "short": "Real Betis",
               "cells": {
-                "pos": 13,
-                "p": 5,
-                "gd": 0,
+                "pos": 11,
+                "p": 4,
+                "gd": 2,
+                "pts": 9
+              }
+            },
+            {
+              "name": "Borussia Dortmund",
+              "short": "Dortmund",
+              "cells": {
+                "pos": 12,
+                "p": 4,
+                "gd": 2,
                 "pts": 9
               }
             },
@@ -444,7 +434,7 @@
               "name": "FC Bayern München",
               "short": "Bayern",
               "cells": {
-                "pos": 14,
+                "pos": 13,
                 "p": 4,
                 "gd": 7,
                 "pts": 8
@@ -454,19 +444,29 @@
               "name": "VfB Stuttgart",
               "short": "Stuttgart",
               "cells": {
-                "pos": 15,
+                "pos": 14,
                 "p": 4,
                 "gd": 3,
                 "pts": 7
               }
             },
             {
-              "name": "FK Bodø/Glimt",
-              "short": "Bodø/Glimt",
+              "name": "LASK Linz",
+              "short": "LASK",
+              "cells": {
+                "pos": 15,
+                "p": 5,
+                "gd": 1,
+                "pts": 7
+              }
+            },
+            {
+              "name": "Galatasaray SK",
+              "short": "Galatasaray",
               "cells": {
                 "pos": 16,
                 "p": 5,
-                "gd": -4,
+                "gd": -1,
                 "pts": 7
               }
             },
@@ -481,43 +481,13 @@
               }
             },
             {
-              "name": "LASK Linz",
-              "short": "LASK",
-              "cells": {
-                "pos": 18,
-                "p": 5,
-                "gd": 0,
-                "pts": 6
-              }
-            },
-            {
               "name": "Manchester United FC",
               "short": "Man Utd",
               "highlight": true,
               "cells": {
-                "pos": 19,
+                "pos": 18,
                 "p": 4,
                 "gd": 0,
-                "pts": 6
-              }
-            },
-            {
-              "name": "FC Porto",
-              "short": "Porto",
-              "cells": {
-                "pos": 20,
-                "p": 5,
-                "gd": 0,
-                "pts": 6
-              }
-            },
-            {
-              "name": "RB Leipzig",
-              "short": "RB Leipzig",
-              "cells": {
-                "pos": 21,
-                "p": 5,
-                "gd": -4,
                 "pts": 6
               }
             },
@@ -525,8 +495,18 @@
               "name": "Fenerbahçe SK",
               "short": "Fenerbahçe",
               "cells": {
-                "pos": 22,
+                "pos": 19,
                 "p": 4,
+                "gd": -5,
+                "pts": 5
+              }
+            },
+            {
+              "name": "FK Bodø/Glimt",
+              "short": "Bodø/Glimt",
+              "cells": {
+                "pos": 20,
+                "p": 5,
                 "gd": -5,
                 "pts": 5
               }
@@ -535,7 +515,7 @@
               "name": "AS Roma",
               "short": "Roma",
               "cells": {
-                "pos": 23,
+                "pos": 21,
                 "p": 4,
                 "gd": 2,
                 "pts": 4
@@ -545,7 +525,7 @@
               "name": "FK Shakhtar Donetsk",
               "short": "Shakhtar",
               "cells": {
-                "pos": 24,
+                "pos": 22,
                 "p": 4,
                 "gd": 0,
                 "pts": 4
@@ -555,7 +535,7 @@
               "name": "Viking FK",
               "short": "Viking",
               "cells": {
-                "pos": 25,
+                "pos": 23,
                 "p": 4,
                 "gd": -1,
                 "pts": 4
@@ -565,19 +545,9 @@
               "name": "Club Atlético de Madrid",
               "short": "Atleti",
               "cells": {
-                "pos": 26,
+                "pos": 24,
                 "p": 4,
                 "gd": -1,
-                "pts": 4
-              }
-            },
-            {
-              "name": "SSC Napoli",
-              "short": "Napoli",
-              "cells": {
-                "pos": 27,
-                "p": 5,
-                "gd": -5,
                 "pts": 4
               }
             },
@@ -585,15 +555,55 @@
               "name": "PSV",
               "short": "PSV",
               "cells": {
-                "pos": 28,
-                "p": 5,
-                "gd": -5,
+                "pos": 25,
+                "p": 4,
+                "gd": -1,
                 "pts": 4
+              }
+            },
+            {
+              "name": "FC Porto",
+              "short": "Porto",
+              "cells": {
+                "pos": 26,
+                "p": 4,
+                "gd": -1,
+                "pts": 3
+              }
+            },
+            {
+              "name": "SSC Napoli",
+              "short": "Napoli",
+              "cells": {
+                "pos": 27,
+                "p": 4,
+                "gd": -5,
+                "pts": 3
               }
             },
             {
               "name": "Villarreal CF",
               "short": "Villarreal",
+              "cells": {
+                "pos": 28,
+                "p": 4,
+                "gd": -6,
+                "pts": 3
+              }
+            },
+            {
+              "name": "PAE AEK",
+              "short": "AEK Athens",
+              "cells": {
+                "pos": 29,
+                "p": 4,
+                "gd": -6,
+                "pts": 3
+              }
+            },
+            {
+              "name": "RB Leipzig",
+              "short": "RB Leipzig",
               "cells": {
                 "pos": 29,
                 "p": 4,
@@ -605,19 +615,9 @@
               "name": "Sabah FK",
               "short": "Sabah",
               "cells": {
-                "pos": 30,
+                "pos": 31,
                 "p": 4,
                 "gd": -6,
-                "pts": 3
-              }
-            },
-            {
-              "name": "PAE AEK",
-              "short": "AEK Athens",
-              "cells": {
-                "pos": 31,
-                "p": 5,
-                "gd": -7,
                 "pts": 3
               }
             },
@@ -626,8 +626,8 @@
               "short": "Feyenoord",
               "cells": {
                 "pos": 32,
-                "p": 5,
-                "gd": -8,
+                "p": 4,
+                "gd": -7,
                 "pts": 3
               }
             },
@@ -636,8 +636,8 @@
               "short": "RC Lens",
               "cells": {
                 "pos": 33,
-                "p": 5,
-                "gd": -14,
+                "p": 4,
+                "gd": -12,
                 "pts": 3
               }
             },
@@ -666,8 +666,8 @@
               "short": "Slovan Bratislava",
               "cells": {
                 "pos": 36,
-                "p": 5,
-                "gd": -18,
+                "p": 4,
+                "gd": -16,
                 "pts": 0
               }
             }
@@ -687,25 +687,17 @@
           "kind": "fixtures",
           "league": null,
           "title": "Manchester United: next",
-          "asOf": "2026-11-25",
-          "fetchedAt": "2026-11-25T10:49:39.763Z",
+          "asOf": "2026-11-26",
+          "fetchedAt": "2026-11-26T10:49:29.788Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-25",
+          "lastFreshAsOf": "2026-11-26",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
-            {
-              "date": "2026-11-25",
-              "kickoff": "2026-11-25T20:00:00Z",
-              "home": "Sporting CP",
-              "away": "Man Utd",
-              "competition": "Champions League",
-              "round": "League phase, matchday 5"
-            },
             {
               "date": "2026-11-28",
               "kickoff": "2026-11-28T15:00:00Z",
@@ -721,6 +713,14 @@
               "away": "Man Utd",
               "competition": "Premier League",
               "round": "Matchday 13"
+            },
+            {
+              "date": "2026-12-05",
+              "kickoff": "2026-12-05T15:00:00Z",
+              "home": "Man Utd",
+              "away": "Coventry",
+              "competition": "Premier League",
+              "round": "Matchday 14"
             }
           ],
           "source": {
@@ -738,17 +738,27 @@
           "kind": "results",
           "league": null,
           "title": "Manchester United: results",
-          "asOf": "2026-11-25",
-          "fetchedAt": "2026-11-25T10:49:39.763Z",
+          "asOf": "2026-11-26",
+          "fetchedAt": "2026-11-26T10:49:29.788Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-25",
-          "through": "2026-11-22",
+          "lastFreshAsOf": "2026-11-26",
+          "through": "2026-11-25",
           "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
+            {
+              "date": "2026-11-25",
+              "kickoff": "2026-11-25T20:00:00Z",
+              "home": "Sporting CP",
+              "away": "Man Utd",
+              "competition": "Champions League",
+              "round": "League phase, matchday 5",
+              "homeScore": 2,
+              "awayScore": 2
+            },
             {
               "date": "2026-11-22",
               "kickoff": "2026-11-22T16:30:00Z",
@@ -768,16 +778,6 @@
               "round": "Matchday 10",
               "homeScore": 4,
               "awayScore": 4
-            },
-            {
-              "date": "2026-11-03",
-              "kickoff": "2026-11-03T20:00:00Z",
-              "home": "Man Utd",
-              "away": "Roma",
-              "competition": "Champions League",
-              "round": "League phase, matchday 4",
-              "homeScore": 3,
-              "awayScore": 2
             }
           ],
           "source": {
@@ -799,13 +799,13 @@
           "kind": "standings",
           "league": "nfl",
           "title": "NFL standings",
-          "asOf": "2026-11-25",
-          "fetchedAt": "2026-11-25T10:49:39.763Z",
+          "asOf": "2026-11-26",
+          "fetchedAt": "2026-11-26T10:49:29.788Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-25",
-          "through": "2026-11-23",
+          "lastFreshAsOf": "2026-11-26",
+          "through": "2026-11-25",
           "throughLabel": null,
           "compactRows": 1,
           "columns": [
@@ -1076,9 +1076,9 @@
               "group": "NFC North",
               "cells": {
                 "w": 6,
-                "l": 4,
+                "l": 5,
                 "t": 0,
-                "pct": ".600"
+                "pct": ".545"
               }
             },
             {
@@ -1135,10 +1135,10 @@
               "name": "Los Angeles Rams",
               "group": "NFC West",
               "cells": {
-                "w": 6,
+                "w": 7,
                 "l": 4,
                 "t": 0,
-                "pct": ".600"
+                "pct": ".636"
               }
             },
             {
@@ -1177,25 +1177,17 @@
           "kind": "fixtures",
           "league": "nfl",
           "title": "NFL: week 12",
-          "asOf": "2026-11-25",
-          "fetchedAt": "2026-11-25T10:49:39.763Z",
+          "asOf": "2026-11-26",
+          "fetchedAt": "2026-11-26T10:49:29.788Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-25",
+          "lastFreshAsOf": "2026-11-26",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
-            {
-              "date": "2026-11-25",
-              "kickoff": "2026-11-26T01:00:00.000Z",
-              "home": "Los Angeles Rams",
-              "away": "Green Bay Packers",
-              "competition": "NFL",
-              "round": "Week 12"
-            },
             {
               "date": "2026-11-26",
               "kickoff": "2026-11-26T18:00:00.000Z",
@@ -1255,6 +1247,14 @@
             {
               "date": "2026-11-29",
               "kickoff": "2026-11-29T18:00:00.000Z",
+              "home": "Jacksonville Jaguars",
+              "away": "Tennessee Titans",
+              "competition": "NFL",
+              "round": "Week 12"
+            },
+            {
+              "date": "2026-11-29",
+              "kickoff": "2026-11-29T18:00:00.000Z",
               "home": "Miami Dolphins",
               "away": "New York Jets",
               "competition": "NFL",
@@ -1265,14 +1265,6 @@
               "kickoff": "2026-11-29T18:00:00.000Z",
               "home": "Minnesota Vikings",
               "away": "Atlanta Falcons",
-              "competition": "NFL",
-              "round": "Week 12"
-            },
-            {
-              "date": "2026-11-29",
-              "kickoff": "2026-11-29T18:00:00.000Z",
-              "home": "Jacksonville Jaguars",
-              "away": "Tennessee Titans",
               "competition": "NFL",
               "round": "Week 12"
             },
@@ -1332,12 +1324,12 @@
           "kind": "results",
           "league": "nfl",
           "title": "NFL: week 11 results",
-          "asOf": "2026-11-25",
-          "fetchedAt": "2026-11-25T10:49:39.763Z",
+          "asOf": "2026-11-26",
+          "fetchedAt": "2026-11-26T10:49:29.788Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-25",
+          "lastFreshAsOf": "2026-11-26",
           "through": "2026-11-23",
           "throughLabel": null,
           "compactRows": null,
@@ -1436,22 +1428,22 @@
             {
               "date": "2026-11-22",
               "kickoff": "2026-11-22T21:25:00.000Z",
-              "home": "New York Giants",
-              "away": "Jacksonville Jaguars",
-              "competition": "NFL",
-              "round": "Week 11",
-              "homeScore": 23,
-              "awayScore": 18
-            },
-            {
-              "date": "2026-11-22",
-              "kickoff": "2026-11-22T21:25:00.000Z",
               "home": "Denver Broncos",
               "away": "Las Vegas Raiders",
               "competition": "NFL",
               "round": "Week 11",
               "homeScore": 38,
               "awayScore": 24
+            },
+            {
+              "date": "2026-11-22",
+              "kickoff": "2026-11-22T21:25:00.000Z",
+              "home": "New York Giants",
+              "away": "Jacksonville Jaguars",
+              "competition": "NFL",
+              "round": "Week 11",
+              "homeScore": 23,
+              "awayScore": 18
             },
             {
               "date": "2026-11-22",

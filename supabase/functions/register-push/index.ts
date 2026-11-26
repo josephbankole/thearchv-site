@@ -19,6 +19,15 @@ Deno.serve((req) => {
       const { error } = await supabase.from("push_tokens").upsert(row, { onConflict: "token" });
       return error ? { error: error.message } : {};
     },
+    async claimIp(key, limit) {
+      // Fails open: a limiter error lets the registration through to the global trigger.
+      const { data, error } = await supabase.rpc("waitlist_rate_claim", { p_key: key, p_limit: limit });
+      if (error) {
+        console.error("register-push: waitlist_rate_claim failed", error.message);
+        return true;
+      }
+      return data !== false;
+    },
   };
   return handleRegisterPush(req, { env: realEnv, store });
 });

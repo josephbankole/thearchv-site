@@ -122,3 +122,55 @@ Deno.test("sport is resolved and only stored when sent", async () => {
   await quietly(() => handleRegisterPush(post({ device_id: "d1", token: TOKEN }), { env, store: g.store }));
   assertEquals("sport" in (g.rows.get(TOKEN) ?? {}), false);
 });
+
+// --- per-IP cap on first registrations (V11) ---------------------------------
+
+function limitedStore(allowed: number, known: string[] = []) {
+  const f = fakeStore({ known });
+  const claims = new Map<string, number>();
+  f.store.claimIp = (key, limit) => {
+    f.calls.push("claimIp");
+    const n = (claims.get(key) ?? 0) + 1;
+    claims.set(key, n);
+    return Promise.resolve(n <= Math.min(limit, allowed));
+  };
+  return { ...f, claims };
+}
+
+const postFrom = (ip: string, body: unknown) =>
+  new Request("https://example.test/register-push", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-archv-app": SECRET, "cf-connecting-ip": ip },
+    body: JSON.stringify(body),
+  });
+
+Deno.test("per-IP: a new token claims a slot and is upserted while within the cap", async () => {
+  const f = limitedStore(10);
+  const res = await quietly(() => handleRegisterPush(postFrom("203.0.113.7", { device_id: "d1", token: TOKEN }), { env, store: f.store }));
+  assertEquals(res.status, 200);
+  assertEquals(f.calls, ["exists", "claimIp", "upsert"]);
+  assertEquals([...f.claims.keys()][0].startsWith("push-ip:"), true);
+  assertEquals([...f.claims.keys()][0].includes("203.0.113.7"), false, "raw IP must not be the key");
+});
+
+Deno.test("per-IP: over the cap is 429 and writes nothing", async () => {
+  const f = limitedStore(0);
+  const res = await quietly(() => handleRegisterPush(postFrom("203.0.113.7", { device_id: "d1", token: TOKEN }), { env, store: f.store }));
+  assertEquals(res.status, 429);
+  assertEquals(f.calls, ["exists", "claimIp"]);
+  assertEquals(f.rows.size, 0);
+});
+
+Deno.test("per-IP: an update for a known token never claims a slot, even with the IP over its cap", async () => {
+  const f = limitedStore(0, [TOKEN]);
+  const res = await quietly(() => handleRegisterPush(postFrom("203.0.113.7", { device_id: "d1", token: TOKEN, opt_in: false }), { env, store: f.store }));
+  assertEquals(res.status, 200);
+  assertEquals(f.calls, ["exists", "update"]);
+});
+
+Deno.test("per-IP: no usable IP skips the per-IP check", async () => {
+  const f = limitedStore(0);
+  const res = await quietly(() => handleRegisterPush(post({ device_id: "d1", token: TOKEN }), { env, store: f.store }));
+  assertEquals(res.status, 200);
+  assertEquals(f.calls, ["exists", "upsert"]);
+});

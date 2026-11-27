@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-26T10:49:29.788Z",
+  "updatedAt": "2026-11-27T10:49:37.469Z",
   "sports": {
     "football": {
       "blocks": [
@@ -9,12 +9,12 @@
           "kind": "standings",
           "league": "premier-league",
           "title": "Premier League table",
-          "asOf": "2026-11-26",
-          "fetchedAt": "2026-11-26T10:49:29.788Z",
+          "asOf": "2026-11-27",
+          "fetchedAt": "2026-11-27T10:49:37.469Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-26",
+          "lastFreshAsOf": "2026-11-27",
           "through": null,
           "throughLabel": null,
           "compactRows": 6,
@@ -268,12 +268,12 @@
           "kind": "standings",
           "league": "champions-league",
           "title": "Champions League: league phase",
-          "asOf": "2026-11-26",
-          "fetchedAt": "2026-11-26T10:49:29.788Z",
+          "asOf": "2026-11-27",
+          "fetchedAt": "2026-11-27T10:49:37.469Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-26",
+          "lastFreshAsOf": "2026-11-27",
           "through": null,
           "throughLabel": null,
           "compactRows": 8,
@@ -687,12 +687,12 @@
           "kind": "fixtures",
           "league": null,
           "title": "Manchester United: next",
-          "asOf": "2026-11-26",
-          "fetchedAt": "2026-11-26T10:49:29.788Z",
+          "asOf": "2026-11-27",
+          "fetchedAt": "2026-11-27T10:49:37.469Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-26",
+          "lastFreshAsOf": "2026-11-27",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
@@ -738,12 +738,12 @@
           "kind": "results",
           "league": null,
           "title": "Manchester United: results",
-          "asOf": "2026-11-26",
-          "fetchedAt": "2026-11-26T10:49:29.788Z",
+          "asOf": "2026-11-27",
+          "fetchedAt": "2026-11-27T10:49:37.469Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-26",
+          "lastFreshAsOf": "2026-11-27",
           "through": "2026-11-25",
           "throughLabel": null,
           "compactRows": null,
@@ -799,13 +799,13 @@
           "kind": "standings",
           "league": "nfl",
           "title": "NFL standings",
-          "asOf": "2026-11-26",
-          "fetchedAt": "2026-11-26T10:49:29.788Z",
+          "asOf": "2026-11-27",
+          "fetchedAt": "2026-11-27T10:49:37.469Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-26",
-          "through": "2026-11-25",
+          "lastFreshAsOf": "2026-11-27",
+          "through": "2026-11-26",
           "throughLabel": null,
           "compactRows": 1,
           "columns": [
@@ -845,10 +845,10 @@
               "name": "Buffalo Bills",
               "group": "AFC East",
               "cells": {
-                "w": 9,
+                "w": 10,
                 "l": 1,
                 "t": 0,
-                "pct": ".900"
+                "pct": ".909"
               }
             },
             {
@@ -976,9 +976,9 @@
               "group": "AFC West",
               "cells": {
                 "w": 8,
-                "l": 2,
+                "l": 3,
                 "t": 0,
-                "pct": ".800"
+                "pct": ".727"
               }
             },
             {
@@ -1012,16 +1012,6 @@
               }
             },
             {
-              "name": "Dallas Cowboys",
-              "group": "NFC East",
-              "cells": {
-                "w": 5,
-                "l": 6,
-                "t": 0,
-                "pct": ".455"
-              }
-            },
-            {
               "name": "Washington Commanders",
               "group": "NFC East",
               "cells": {
@@ -1032,23 +1022,33 @@
               }
             },
             {
+              "name": "Dallas Cowboys",
+              "group": "NFC East",
+              "cells": {
+                "w": 5,
+                "l": 7,
+                "t": 0,
+                "pct": ".417"
+              }
+            },
+            {
               "name": "Philadelphia Eagles",
               "group": "NFC East",
               "cells": {
-                "w": 3,
+                "w": 4,
                 "l": 7,
                 "t": 0,
-                "pct": ".300"
+                "pct": ".364"
               }
             },
             {
               "name": "Chicago Bears",
               "group": "NFC North",
               "cells": {
-                "w": 8,
+                "w": 9,
                 "l": 2,
                 "t": 0,
-                "pct": ".800"
+                "pct": ".818"
               }
             },
             {
@@ -1056,9 +1056,9 @@
               "group": "NFC North",
               "cells": {
                 "w": 8,
-                "l": 2,
+                "l": 3,
                 "t": 0,
-                "pct": ".800"
+                "pct": ".727"
               }
             },
             {
@@ -1177,41 +1177,17 @@
           "kind": "fixtures",
           "league": "nfl",
           "title": "NFL: week 12",
-          "asOf": "2026-11-26",
-          "fetchedAt": "2026-11-26T10:49:29.788Z",
+          "asOf": "2026-11-27",
+          "fetchedAt": "2026-11-27T10:49:37.469Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-26",
+          "lastFreshAsOf": "2026-11-27",
           "through": null,
           "throughLabel": null,
           "compactRows": null,
           "columns": [],
           "rows": [
-            {
-              "date": "2026-11-26",
-              "kickoff": "2026-11-26T18:00:00.000Z",
-              "home": "Detroit Lions",
-              "away": "Chicago Bears",
-              "competition": "NFL",
-              "round": "Week 12"
-            },
-            {
-              "date": "2026-11-26",
-              "kickoff": "2026-11-26T21:30:00.000Z",
-              "home": "Dallas Cowboys",
-              "away": "Philadelphia Eagles",
-              "competition": "NFL",
-              "round": "Week 12"
-            },
-            {
-              "date": "2026-11-26",
-              "kickoff": "2026-11-27T01:20:00.000Z",
-              "home": "Buffalo Bills",
-              "away": "Kansas City Chiefs",
-              "competition": "NFL",
-              "round": "Week 12"
-            },
             {
               "date": "2026-11-27",
               "kickoff": "2026-11-27T20:00:00.000Z",
@@ -1324,12 +1300,12 @@
           "kind": "results",
           "league": "nfl",
           "title": "NFL: week 11 results",
-          "asOf": "2026-11-26",
-          "fetchedAt": "2026-11-26T10:49:29.788Z",
+          "asOf": "2026-11-27",
+          "fetchedAt": "2026-11-27T10:49:37.469Z",
           "status": "fresh",
           "heldReason": null,
           "heldDays": 0,
-          "lastFreshAsOf": "2026-11-26",
+          "lastFreshAsOf": "2026-11-27",
           "through": "2026-11-23",
           "throughLabel": null,
           "compactRows": null,

@@ -7,6 +7,20 @@ import type { DayEntry } from './worldCupDays';
 
 export const leaguesDays: DayEntry[] = [
   {
+    date: "2026-11-27",
+    day: "Friday",
+    headline: "Manchester United draw 2-2 at Sporting, and the Opta model now gives them a 27.5% chance of relegation",
+    dek: "Opta gives Manchester United a 27.5% chance of relegation from the Premier League, the fifth-highest in the division, after 8 points from 11 games. United drew 2-2 at Sporting in the Champions League on Wednesday and host Brentford on Saturday.",
+    body: "Opta gives Manchester United a 27.5% chance of being relegated from the Premier League this season, just over one in four, according to BBC Sport. Only Crystal Palace, Sunderland, Ipswich and Coventry are rated more likely to go down.\n\nUnited have 8 points from 11 league games, their worst start to a league season since 1972 (BBC Sport). The underlying numbers are mixed. United have taken more shots than any side in the Premier League and their expected goals figure is in the top five, but they convert 7% of their chances and concede from 16% of their opponents' (BBC Sport).\n\nIn the Champions League on Wednesday, United drew 2-2 at Sporting in Lisbon. Bruno Fernandes scored twice in the first five minutes of the second half, a penalty and a shot that bounced off a divot past goalkeeper Kaique, before Senne Lammens spilled a high ball for Luis Suarez to equalise with his second goal (Sky Sports). Lammens had earlier given away a penalty 75 seconds after saving one. A goal by Amad was ruled out before half-time and a Kaique own goal soon after the equaliser was disallowed for a foul by Patrick Dorgu (Sky Sports).\n\nYouri Tielemans was sent off in stoppage time and misses the home game with RB Leipzig on 8 December. United have had four players sent off in their past five games (BBC Sport).\n\nMauricio Pochettino is still looking for his first win as head coach after a 4-0 defeat at Liverpool and the draw in Lisbon. Brentford visit Old Trafford on Saturday 28 November, kick-off 15:00 UK time (Sky Sports).\n\nSources: BBC Sport; Sky Sports.",
+    status: "verified",
+    publishedAt: "2026-11-27T06:34:14-05:00",
+    index: "noindex",
+    seoTitle: "Manchester United relegation chance: Opta says 27.5%",
+    sources: [{"outlet":"BBC Sport","url":"https://www.bbc.co.uk/sport/football/articles/cj4gndepk312o","published":"2026-11-25"},{"outlet":"Sky Sports","url":"https://www.skysports.com/football/sporting-lisbon-vs-manchester-united/report/5722422440954158232","published":"2026-11-25"}],
+    tier: "confirmed",
+    expires: "2026-11-28",
+  },
+  {
     date: "2026-11-25",
     day: "Wednesday",
     headline: "Pochettino calls Manchester United's situation fragile and the team strong before Sporting in the Champions League",
